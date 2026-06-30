@@ -1,9 +1,30 @@
 import { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput } from 'react-native';
 import { palette } from '@/constants/Colors';
 import { useProfile } from '@/core/ProfileContext';
-import { buildPlan, type Objective, type Phase } from '@/core/engine-controller';
+import { useAuth } from '@/core/AuthContext';
+import { saveProfile as saveProfileDb } from '@/core/profileDb';
+import { type Profile } from '@/core/interview-controller';
+import { buildPlan, type Objective, type Phase, type Progress } from '@/core/engine-controller';
 import NavBar from '@/components/NavBar';
+
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+function daysBetween(a: Date, b: Date): number {
+  return Math.round((a.getTime() - b.getTime()) / 86_400_000);
+}
+
+// "Completed 12 May · 3 days late" / "· on time" / "· 2 days early", measured against
+// the step's own scheduled due date when there is one.
+function completionLine(obj: Objective): string {
+  const on = obj.completedOn!;
+  const dateStr = on.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  if (obj.timing.state !== 'scheduled') return `Completed ${dateStr}`;
+  const delta = daysBetween(on, obj.timing.due);
+  const mag = Math.abs(delta);
+  const rel = delta === 0 ? 'on time' : `${mag} day${mag === 1 ? '' : 's'} ${delta > 0 ? 'late' : 'early'}`;
+  return `Completed ${dateStr} · ${rel}`;
+}
 
 const PHASE_LABELS: Record<Phase, string> = {
   before_you_go: 'Before you go',
@@ -121,8 +142,25 @@ function ConsulateBanner({ profile }: { profile: Record<string, unknown> }) {
 }
 
 export default function PlanScreen() {
-  const { profile } = useProfile();
+  const { profile, setProfile } = useProfile();
+  const { user } = useAuth();
   const [selected, setSelected] = useState<Objective | null>(null);
+  const [dateInput, setDateInput] = useState('');
+
+  async function setProgress(id: string, pr: Progress | null) {
+    const prev = (profile?.progress as Record<string, Progress> | undefined) ?? {};
+    const nextProgress = { ...prev };
+    if (pr) nextProgress[id] = pr; else delete nextProgress[id];
+    const next: Profile = { ...profile, progress: nextProgress };
+    setProfile(next);
+    if (user) await saveProfileDb(user.id, next);
+  }
+
+  function markDone(id: string, completedOn?: string) {
+    setProgress(id, { state: 'done', ...(completedOn ? { completedOn } : {}) });
+    setDateInput('');
+    setSelected(null);
+  }
 
   if (!profile) {
     return (
@@ -141,6 +179,7 @@ export default function PlanScreen() {
 
   const penaltyCount = objectives.filter(o => o.severity === 'penalty').length;
   const requiredCount = objectives.filter(o => o.severity === 'required').length;
+  const doneCount = objectives.filter(o => o.done).length;
   const titleById = new Map(objectives.map(o => [o.id, o.title]));
 
   return (
@@ -164,6 +203,12 @@ export default function PlanScreen() {
               <Text style={styles.statLabel}>penalty risk</Text>
             </View>
           )}
+          {doneCount > 0 && (
+            <View style={styles.statChip}>
+              <Text style={[styles.statNum, { color: palette.olive }]}>{doneCount}</Text>
+              <Text style={styles.statLabel}>done</Text>
+            </View>
+          )}
         </View>
 
         <ConsulateBanner profile={profile} />
@@ -177,35 +222,48 @@ export default function PlanScreen() {
               <Text style={styles.phaseCount}>{items.length}</Text>
             </View>
             {items.map(obj => {
-              const isPenalty = obj.severity === 'penalty';
+              const isPenalty = obj.severity === 'penalty' && !obj.done;
+              const barColor = obj.done ? palette.olive : SEV_COLOR[obj.severity];
               return (
                 <TouchableOpacity
                   key={obj.id}
-                  style={[styles.card, isPenalty && styles.cardPenalty]}
+                  style={[styles.card, isPenalty && styles.cardPenalty, obj.done && styles.cardDone]}
                   activeOpacity={0.7}
                   onPress={() => setSelected(obj)}
                 >
-                  <View style={[styles.severityBar, { backgroundColor: SEV_COLOR[obj.severity] }]} />
+                  <View style={[styles.severityBar, { backgroundColor: barColor }]} />
                   <View style={styles.cardBody}>
                     <View style={styles.cardTop}>
-                      <Text style={[styles.cardTitle, isPenalty && styles.cardTitlePenalty]} numberOfLines={3}>
+                      <Text style={[styles.cardTitle, isPenalty && styles.cardTitlePenalty, obj.done && styles.cardTitleDone]} numberOfLines={3}>
                         {obj.title}
                       </Text>
-                      <View style={[styles.sevBadge, { backgroundColor: SEV_COLOR[obj.severity] + '18' }]}>
-                        <Text style={[styles.sevBadgeText, { color: SEV_COLOR[obj.severity] }]}>
-                          {SEV_LABEL[obj.severity]}
-                        </Text>
-                      </View>
+                      {obj.done ? (
+                        <View style={[styles.sevBadge, { backgroundColor: palette.olive + '18' }]}>
+                          <Text style={[styles.sevBadgeText, { color: palette.olive }]}>✓ Done</Text>
+                        </View>
+                      ) : (
+                        <View style={[styles.sevBadge, { backgroundColor: SEV_COLOR[obj.severity] + '18' }]}>
+                          <Text style={[styles.sevBadgeText, { color: SEV_COLOR[obj.severity] }]}>
+                            {SEV_LABEL[obj.severity]}
+                          </Text>
+                        </View>
+                      )}
                     </View>
                     <View style={styles.cardMeta}>
-                      <Text style={[styles.cardTiming, isPenalty && styles.cardTimingPenalty]}>
-                        {formatTiming(obj)}
-                      </Text>
-                      <View style={styles.sourceDot}>
-                        <View style={[styles.sourceDotMark, { backgroundColor: SOURCE_COLOR[obj.source] }]} />
-                        <Text style={styles.sourceDotText}>{SOURCE_SHORT[obj.source]}</Text>
-                      </View>
-                      <Text style={styles.cardCategory}>{obj.category}</Text>
+                      {obj.done ? (
+                        <Text style={[styles.cardTiming, { color: palette.olive }]}>{completionLine(obj)}</Text>
+                      ) : (
+                        <>
+                          <Text style={[styles.cardTiming, isPenalty && styles.cardTimingPenalty]}>
+                            {formatTiming(obj)}
+                          </Text>
+                          <View style={styles.sourceDot}>
+                            <View style={[styles.sourceDotMark, { backgroundColor: SOURCE_COLOR[obj.source] }]} />
+                            <Text style={styles.sourceDotText}>{SOURCE_SHORT[obj.source]}</Text>
+                          </View>
+                          <Text style={styles.cardCategory}>{obj.category}</Text>
+                        </>
+                      )}
                     </View>
                   </View>
                 </TouchableOpacity>
@@ -262,6 +320,43 @@ export default function PlanScreen() {
                 <View style={[styles.sourceNote, { borderLeftColor: SOURCE_COLOR[selected.source] }]}>
                   <Text style={styles.sourceNoteText}>{SOURCE_BLURB[selected.source]}</Text>
                 </View>
+
+                <Text style={styles.sheetSectionLabel}>ACTION TAKEN</Text>
+                {selected.done ? (
+                  <View style={styles.doneRow}>
+                    <Text style={styles.doneRowText}>✓ {completionLine(selected)}</Text>
+                    <TouchableOpacity onPress={() => { setProgress(selected.id, null); setSelected(null); }}>
+                      <Text style={styles.undoText}>Undo</Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <>
+                    <TouchableOpacity style={styles.doneBtn} onPress={() => markDone(selected.id, new Date().toISOString().slice(0, 10))}>
+                      <Text style={styles.doneBtnText}>✓ I’ve done this</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.dateHint}>Did it on a different day? Enter the date — downstream deadlines will re-flow from it.</Text>
+                    <View style={styles.dateRow}>
+                      <TextInput
+                        style={styles.dateInput}
+                        value={dateInput}
+                        onChangeText={setDateInput}
+                        placeholder="YYYY-MM-DD"
+                        placeholderTextColor={palette.muted}
+                        autoCapitalize="none"
+                      />
+                      <TouchableOpacity
+                        style={[styles.dateSaveBtn, !ISO_DATE.test(dateInput) && styles.dateSaveBtnDisabled]}
+                        disabled={!ISO_DATE.test(dateInput)}
+                        onPress={() => markDone(selected.id, dateInput)}
+                      >
+                        <Text style={styles.dateSaveBtnText}>Save date</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.comingSoonRow}>
+                      <Text style={styles.comingSoonText}>Something changed? Telling Lola what you learned is coming soon.</Text>
+                    </View>
+                  </>
+                )}
 
                 <TouchableOpacity style={styles.sheetClose} onPress={() => setSelected(null)}>
                   <Text style={styles.sheetCloseText}>Close</Text>
@@ -354,4 +449,24 @@ const styles = StyleSheet.create({
   sheetClose:    { backgroundColor: palette.indigo, borderRadius: 12, paddingVertical: 14,
                    alignItems: 'center', marginTop: 24, marginBottom: 8 },
   sheetCloseText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, color: palette.cal },
+
+  cardDone:      { backgroundColor: '#F6F7F3' },
+  cardTitleDone: { color: palette.olive },
+
+  doneBtn:       { backgroundColor: palette.olive, borderRadius: 12, paddingVertical: 13, alignItems: 'center', marginBottom: 12 },
+  doneBtnText:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, color: palette.cal },
+  dateHint:      { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: palette.muted, lineHeight: 19, marginBottom: 8 },
+  dateRow:       { flexDirection: 'row', gap: 8, alignItems: 'center' },
+  dateInput:     { flex: 1, backgroundColor: '#FFFFFF', borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10,
+                   fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.indigo,
+                   borderWidth: 1, borderColor: '#E0DCD4' },
+  dateSaveBtn:   { backgroundColor: palette.olive, borderRadius: 10, paddingHorizontal: 16, paddingVertical: 11, justifyContent: 'center' },
+  dateSaveBtnDisabled: { backgroundColor: palette.muted, opacity: 0.5 },
+  dateSaveBtnText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cal },
+  comingSoonRow: { backgroundColor: '#F2EDE6', borderRadius: 8, padding: 12, marginTop: 14 },
+  comingSoonText:{ fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: palette.muted, lineHeight: 19 },
+  doneRow:       { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+                   backgroundColor: palette.olive + '14', borderRadius: 10, padding: 14 },
+  doneRowText:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.olive, flex: 1 },
+  undoText:      { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cobalt, marginLeft: 12 },
 });

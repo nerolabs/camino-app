@@ -46,9 +46,33 @@ Last updated: 2026-06-30.
       unverified) in each card's meta row, alongside the full chip in the detail drawer.
 - [x] **Fixed the `ExternalLink.tsx` `tsc` error** — cast `href` to `Href`. `tsc --noEmit`
       is now fully green.
+- [x] **Conversation-aware interview** — `phraseQuestion` + `extractAnswer` now receive the full
+      transcript. Lola stops greeting on every turn ("Hey!"/"Hola!"), asks natural follow-ups,
+      reuses context (mentioning a "wife" → the spouse question becomes a confirmation), and the
+      extractor infers downstream values from earlier answers. Verified live.
+- [x] **Clarify reprompt no longer leaks internals** — an unparseable answer now re-asks in Lola's
+      voice via the friendly static question, instead of surfacing the extractor's raw "…you'd like
+      me to extract?" string (`app/interview.tsx`).
+- [x] **Living roadmap — foundation** (deterministic, invariant-safe). Per-obligation `progress`
+      stored on the profile; engine reads it. "Action taken" section in the plan drawer: mark done
+      (today) or **done on a specific date**. Done items render olive with a ✓ badge and a
+      "Completed DATE · N days late/early" line; a "done" stat chip appears. **The living part:**
+      a real completion date re-anchors downstream `relative_to_obligation` steps to the actual
+      date (firm, not estimated) — verified live (empadronamiento filed 20 days late → tarjeta &
+      Modelo 030 re-flowed from 14 Apr est. → 4 May firm). No LLM in the engine; the plan stays a
+      pure function of the profile. (`core/engine-controller.ts`, `app/plan.tsx`)
 
 ## 🔜 Next (candidates, not yet started)
 
+- [ ] **Living roadmap — layer 2 (the LLM half).** The "Something changed? …coming soon" row in the
+      plan drawer is a stub. Build the freeform "I learned X that changes the plan" box: an
+      Extractor-style call maps the free text to a **profile-field delta** (e.g. "we had a baby" →
+      `has_children=true`), then `derive()` + `buildPlan()` re-run and Lola narrates the diff. The
+      model emits typed profile values only — it must never author plan items/deadlines (invariants
+      1, 3, 4). The deterministic foundation (progress model, re-anchor-on-actuals) is already in.
+- [ ] **Re-anchor more anchors from actuals** — completing `empadronamiento`/`residencia` could feed
+      `padron_done`/`residency_established`, so residency-relative items also go firm. Today only
+      direct `relative_to_obligation` steps re-flow from a real completion date.
 - [ ] **Capture `residency_established` as a known-later field** — let users update it post-move
       so residency-anchored items become firm instead of estimated. (Needs a post-move edit flow.)
 - [ ] **Re-add backlog items once sourced** — `sworn-translation`, `convenio-especial`,

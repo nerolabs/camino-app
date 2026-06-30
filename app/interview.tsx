@@ -20,12 +20,33 @@ const client = new Anthropic({
 
 type Turn = { role: 'lola' | 'user'; text: string };
 
-async function phraseQuestion(slot: Slot): Promise<string> {
+// Render the conversation so far as a plain transcript the model can reason over.
+// Drops the dev-persona marker line so it never leaks into a real prompt.
+function transcriptOf(turns: Turn[]): string {
+  return turns
+    .filter(t => !t.text.startsWith('Test persona:'))
+    .map(t => `${t.role === 'lola' ? 'Lola' : 'User'}: ${t.text}`)
+    .join('\n');
+}
+
+async function phraseQuestion(slot: Slot, turns: Turn[]): Promise<string> {
+  const transcript = transcriptOf(turns);
+  const midConversation = transcript.length > 0;
   const msg = await client.messages.create({
     model: 'claude-haiku-4-5-20251001',
     max_tokens: 120,
     system: `You are Lola, a warm relocation guide helping someone move to Spain.
-Ask the user ONE short, friendly question to learn: ${slot.prompt_hint}.
+${midConversation
+  ? `You are MID-conversation. Here is everything said so far:
+${transcript}
+
+Ask the NEXT question as a natural follow-up. Crucial rules:
+- Do NOT greet again — no "Hey!", "Hola!", "Hi!". You've already met.
+- Briefly acknowledge what they just told you when it's natural, then move on.
+- NEVER re-ask something they've already answered or clearly implied (e.g. if they mentioned "my wife", you already know a partner is coming — don't ask whether one is). Use that context to phrase this as a confirmation instead.`
+  : 'This is your very first question, so a short, warm greeting is welcome.'}
+
+Ask ONE short question to learn: ${slot.prompt_hint}.
 ${slot.sensitive ? 'Acknowledge this is personal and they only need to pick a range.' : ''}
 ${slot.options ? `Their options will be shown as buttons: ${slot.options.join(', ')}. Don't list them in your question.` : ''}
 Speak directly. One or two sentences max. No bullet points.`,
@@ -35,9 +56,10 @@ Speak directly. One or two sentences max. No bullet points.`,
 }
 
 async function extractAnswer(
-  slot: Slot, userText: string
+  slot: Slot, userText: string, turns: Turn[]
 ): Promise<{ value: unknown } | { clarify: string }> {
   const today = new Date().toISOString().slice(0, 10);
+  const transcript = transcriptOf(turns);
   const typeInstructions =
     slot.field === 'nationalities'
       ? 'Return an array of ISO 2-letter country codes. Map country names and nationalities to codes (e.g. "American" or "United States" → "US", "Spanish" or "Spain" → "ES", "British" → "GB", "Colombian" → "CO", "Japanese" → "JP"). Include ALL nationalities mentioned.'
@@ -53,12 +75,15 @@ async function extractAnswer(
     model: 'claude-haiku-4-5-20251001',
     max_tokens: 120,
     system: `You are extracting a structured value from a user's natural-language answer.
-Field: "${slot.field}" (type: ${slot.type})
+${transcript ? `Conversation so far — use it to resolve references and avoid clarifying things already established:
+${transcript}
+
+` : ''}Field: "${slot.field}" (type: ${slot.type})
 ${typeInstructions}
 Respond ONLY with valid JSON in one of these two shapes — nothing else:
   {"value": <typed value>}
   {"clarify": "<one short question if genuinely ambiguous>"}
-Do not add explanation. If you can make a reasonable inference, do so and return {"value": ...}.`,
+Do not add explanation. Lean on the conversation above: if an earlier answer already implies this value (e.g. they mentioned "my wife", so they are married), infer it and return {"value": ...} rather than clarifying.`,
     messages: [{ role: 'user', content: userText }],
   });
   try {
@@ -145,7 +170,7 @@ export default function InterviewScreen() {
     setLoading(true);
     const slot = nextSlot({});
     if (!slot) { setDone(true); setLoading(false); return; }
-    const lola = await phraseQuestion(slot);
+    const lola = await phraseQuestion(slot, []);
     setCurrentSlot(slot);
     setTurns([{ role: 'lola', text: lola }]);
     setLoading(false);
@@ -157,10 +182,17 @@ export default function InterviewScreen() {
     setLoading(true);
     setTurns(prev => [...prev, { role: 'user', text }]);
 
-    const result = await extractAnswer(currentSlot, text);
+    const result = await extractAnswer(currentSlot, text, turns);
 
     if ('clarify' in result) {
-      setTurns(prev => [...prev, { role: 'lola', text: result.clarify }]);
+      // Re-ask in Lola's voice rather than surfacing the extractor's raw clarify
+      // string, which leaks internal framing (e.g. "...you'd like me to extract?").
+      const reask = STATIC_QUESTIONS[currentSlot.field]
+        ?? `Could you tell me a little more about ${currentSlot.prompt_hint}?`;
+      setTurns(prev => [...prev, {
+        role: 'lola',
+        text: `Sorry, I didn't quite catch that. ${reask}`,
+      }]);
       setLoading(false);
       return;
     }
@@ -182,7 +214,7 @@ export default function InterviewScreen() {
       return;
     }
 
-    const lola = await phraseQuestion(next);
+    const lola = await phraseQuestion(next, [...turns, { role: 'user', text }]);
     setCurrentSlot(next);
     setTurns(prev => [...prev, { role: 'lola', text: lola }]);
     setLoading(false);

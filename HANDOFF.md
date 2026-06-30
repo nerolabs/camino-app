@@ -48,8 +48,12 @@ deadlines) is deterministic code.
 
 - `app/index.tsx` — landing page (rotating Spain photos, hero, CTA).
 - `app/interview.tsx` — Lola chat. `phraseQuestion()` + `extractAnswer()` call Haiku
-  (`claude-haiku-4-5-20251001`). `STATIC_QUESTIONS` are the non-LLM fallback phrasings.
-- `app/plan.tsx` — renders `buildPlan()` output grouped by phase.
+  (`claude-haiku-4-5-20251001`) and are **conversation-aware** — both receive the full transcript,
+  so Lola asks natural follow-ups (no per-turn greeting) and the extractor infers from earlier
+  answers. `STATIC_QUESTIONS` are the non-LLM fallback phrasings (also used for clarify reprompts).
+- `app/plan.tsx` — renders `buildPlan()` output grouped by phase. Cards open a detail drawer with
+  an **"Action taken"** section: mark done / done-on-a-date. Completion writes `progress` onto the
+  profile; the engine re-anchors downstream steps to the real date (the "living plan").
 - `app/how-it-works.tsx` — marketing explainer (deferred, not iterated recently).
 - `components/NavBar.tsx` — shared nav across all screens.
 
@@ -64,6 +68,18 @@ deadlines) is deterministic code.
   `EXPO_PUBLIC_`-prefixed var automatically (read via `process.env`, not Constants).
 
 ## What was just done (most recent first)
+
+**Conversation + living-roadmap pass:**
+- **Conversation-aware interview** — `phraseQuestion`/`extractAnswer` now take the transcript. Lola
+  stopped greeting every turn and asks follow-ups that reuse context (mention a "wife" → the spouse
+  question becomes a confirmation). Clarify reprompts re-ask in Lola's voice instead of leaking the
+  extractor's internal "…extract?" wording.
+- **Living roadmap, foundation (deterministic).** Per-obligation `progress` on the profile; an
+  "Action taken" drawer section marks a step done (today or a specific date). Done items go olive
+  with a ✓ badge + "Completed DATE · N days late/early"; a "done" stat chip shows. A real completion
+  date re-anchors downstream `relative_to_obligation` steps to the actual date (firm). No LLM in the
+  engine — `progress` is just more profile input. Next layer (the freeform "I learned X" → re-plan)
+  is stubbed in the drawer and listed in `TODO.md`.
 
 **Latest follow-up pass:**
 - Promoted `autonomo-social-security` `webinar` → `official` (catalog mix now **28/26/0**).

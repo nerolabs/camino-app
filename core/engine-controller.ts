@@ -40,10 +40,16 @@ export type Resolved =
 
 export type Phase = 'before_you_go' | 'first_weeks' | 'ongoing' | 'when_settled';
 
+// User-reported progress on an obligation, stored on the profile under `progress`.
+// The engine stays deterministic: progress is just more input. A `completedOn` date
+// re-anchors downstream obligations to what actually happened (the "living" plan).
+export type Progress = { state: 'done'; completedOn?: string; note?: string };
+
 export type Objective = {
   id: string; title: string; category: Category; severity: Severity;
   source: Source; depends_on: string[];
   timing: Resolved; phase: Phase;
+  done: boolean; completedOn: Date | null;
 };
 
 const SEV_RANK: Record<Severity, number> = { penalty: 4, required: 3, recommended: 2, info: 1 };
@@ -118,7 +124,7 @@ function nextYearlyDeadline(rrule: string, today: Date): Date {
   return today <= thisYear ? thisYear : end(today.getFullYear() + 1);
 }
 
-function resolveTiming(o: Obligation, p: Record<string, unknown>, today: Date, prior: Map<string, Resolved>): Resolved {
+function resolveTiming(o: Obligation, p: Record<string, unknown>, today: Date, prior: Map<string, Resolved>, actuals: Map<string, Date>): Resolved {
   const urgency = (p.urgency as Urgency) ?? 'soon';
   const t = o.timing;
   switch (t.kind) {
@@ -137,6 +143,10 @@ function resolveTiming(o: Obligation, p: Record<string, unknown>, today: Date, p
       return { state: 'scheduled', start, due, estimated: !a.explicit };
     }
     case 'relative_to_obligation': {
+      // If the prerequisite is actually done, anchor to its real completion date —
+      // a late/early completion ripples a firm date through to this step.
+      const actual = actuals.get(t.after);
+      if (actual) return { state: 'scheduled', start: actual, due: addDays(actual, t.offset_days), estimated: false };
       const base = prior.get(t.after);
       if (!base || base.state !== 'scheduled') return { state: 'pending_anchor', anchor: 'arrival' };
       return { state: 'scheduled', start: base.due, due: addDays(base.due, t.offset_days), estimated: true };
@@ -730,13 +740,23 @@ export const CATALOG: Obligation[] = [
 
 export function buildPlan(p: Record<string, unknown>): Objective[] {
   const today = new Date();
+  const progress = (p.progress as Record<string, Progress> | undefined) ?? {};
+  const actuals = new Map<string, Date>();
+  for (const [id, pr] of Object.entries(progress))
+    if (pr?.completedOn) actuals.set(id, new Date(pr.completedOn));
   const applicable = CATALOG.filter(o => evaluate(o.applies_if, p));
   const ordered = topoSort(applicable);
   const arrival = anchorDate('arrival', p, today)!.date;
   const resolved = new Map<string, Resolved>();
   return ordered.map(o => {
-    const timing = resolveTiming(o, p, today, resolved);
+    const timing = resolveTiming(o, p, today, resolved, actuals);
     resolved.set(o.id, timing);
-    return { id: o.id, title: o.title, category: o.category, severity: o.severity, source: o.source, depends_on: o.depends_on, timing, phase: phaseOf(timing, arrival) };
+    const pr = progress[o.id];
+    return {
+      id: o.id, title: o.title, category: o.category, severity: o.severity,
+      source: o.source, depends_on: o.depends_on, timing, phase: phaseOf(timing, arrival),
+      done: pr?.state === 'done',
+      completedOn: pr?.completedOn ? new Date(pr.completedOn) : null,
+    };
   });
 }
