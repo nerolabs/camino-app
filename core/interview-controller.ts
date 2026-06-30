@@ -6,7 +6,7 @@ export type Profile = Record<string, unknown>;
 
 export type Slot = {
   field: string;
-  type: "list" | "bool" | "band";
+  type: "list" | "bool" | "band" | "date";
   prompt_hint: string;
   options?: string[];
   sensitive?: boolean;
@@ -79,12 +79,30 @@ export const SLOTS: Slot[] = [
     prompt_hint: "whether this is a long-term move (more than 183 days a year) or a shorter extended stay",
   },
   {
+    field: "arrival_date", type: "date",
+    prompt_hint: "roughly when they plan to arrive in Spain — even an approximate month is enough to anchor real deadlines",
+  },
+  {
     field: "has_spanish_address", type: "bool",
     prompt_hint: "whether they already have a Spanish address — rented or owned",
   },
   {
     field: "owns_or_drives", type: "bool",
     prompt_hint: "whether anyone in the household will drive in Spain",
+  },
+  {
+    field: "owns_property_in_spain", type: "bool",
+    gates: ["property_purchase"],
+    prompt_hint: "whether they own or are actively planning to purchase property in Spain",
+  },
+  {
+    field: "property_purchase", type: "date",
+    required_if: { field: "owns_property_in_spain", op: "eq", value: true },
+    prompt_hint: "roughly when they completed (or expect to complete) the property purchase — anchors the notary, registry, and transfer-tax deadlines",
+  },
+  {
+    field: "has_pets", type: "bool",
+    prompt_hint: "whether any pets — dogs, cats, or ferrets — will be making this move with them",
   },
 
   // ── Round 5: sensitive / background ────────────────────────────────────────
@@ -183,6 +201,9 @@ const DERIVATIONS: Derivation[] = [
 
   { field: "visa_type", from: ["is_eu", "work_situation"],
     compute: (p) => deriveVisaType(p) },
+
+  { field: "is_self_employed_in_spain", from: ["work_situation"],
+    compute: (p) => ["contractor_freelance", "self_employed", "business_owner"].includes(p.work_situation as string) },
 ];
 
 export function derive(p: Profile): void {

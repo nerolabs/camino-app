@@ -37,11 +37,14 @@ Speak directly. One or two sentences max. No bullet points.`,
 async function extractAnswer(
   slot: Slot, userText: string
 ): Promise<{ value: unknown } | { clarify: string }> {
+  const today = new Date().toISOString().slice(0, 10);
   const typeInstructions =
     slot.field === 'nationalities'
       ? 'Return an array of ISO 2-letter country codes. Map country names and nationalities to codes (e.g. "American" or "United States" → "US", "Spanish" or "Spain" → "ES", "British" → "GB", "Colombian" → "CO", "Japanese" → "JP"). Include ALL nationalities mentioned.'
       : slot.type === 'bool'
       ? 'Return true if yes/affirmative, false if no/negative. Be generous — "we do drive", "yes we have kids", "currently in the US" etc. are true.'
+      : slot.type === 'date'
+      ? `Return an ISO date string "YYYY-MM-DD". Today is ${today}; resolve relative phrases against it ("next spring", "in about 3 months", "September" → that month). If they give only a month or season, pick the 1st of that month. If they're genuinely unsure or say "not sure / don't know", return {"value": null}.`
       : slot.options
       ? `Return the single most appropriate option string exactly as written from this list: ${slot.options.join(', ')}. Infer from context — e.g. "I work remotely for a US company" → "employed_remote", "I\'m self-employed" → "self_employed", "we live off investments" → "passive_income".`
       : 'Return the value as a string.';
@@ -79,8 +82,11 @@ const STATIC_QUESTIONS: Record<string, string> = {
   partner_is_married:                       "Are you two legally married or in a registered civil partnership?",
   has_children:                             "Any kids coming with you?",
   intends_long_stay:                        "Is this a proper long-term move — more than six months a year — or more of an extended stay?",
+  arrival_date:                             "Roughly when are you hoping to arrive? Even just a month is fine.",
   has_spanish_address:                      "Do you already have a place lined up, rented or owned?",
   owns_or_drives:                           "Will anyone be driving while you're there?",
+  owns_property_in_spain:                   "Are you planning to buy property in Spain, or have you already bought?",
+  has_pets:                                 "Any pets making this move with you?",
   foreign_assets_eur_band:                  "Slightly personal — and you only pick a range — roughly how much do you hold outside Spain?",
   us_resident:                              "Are you currently based in the US? (Consulate wait times are quite long right now.)",
   previously_ex_spanish_colony_nationality: "Are you a national of a former Spanish colony — most of Latin America, or the Philippines?",

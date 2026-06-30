@@ -1,4 +1,5 @@
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { palette } from '@/constants/Colors';
 import { useProfile } from '@/core/ProfileContext';
 import { buildPlan, type Objective, type Phase } from '@/core/engine-controller';
@@ -11,6 +12,13 @@ const PHASE_LABELS: Record<Phase, string> = {
   when_settled:  'When settled',
 };
 
+const PHASE_ICONS: Record<Phase, string> = {
+  before_you_go: '✈️',
+  first_weeks:   '📍',
+  ongoing:       '🔄',
+  when_settled:  '🏡',
+};
+
 const PHASE_ORDER: Phase[] = ['before_you_go', 'first_weeks', 'ongoing', 'when_settled'];
 
 const SEV_COLOR: Record<string, string> = {
@@ -19,6 +27,58 @@ const SEV_COLOR: Record<string, string> = {
   recommended: palette.olive,
   info:        palette.muted,
 };
+
+const SEV_LABEL: Record<string, string> = {
+  penalty:     'Penalty risk',
+  required:    'Required',
+  recommended: 'Recommended',
+  info:        'Info',
+};
+
+const SEV_BLURB: Record<string, string> = {
+  penalty:     'Missing this can trigger a financial penalty.',
+  required:    'A legal requirement for your situation.',
+  recommended: 'Strongly advised, though not strictly mandatory.',
+  info:        'Informational — a milestone to be aware of.',
+};
+
+const SOURCE_LABEL: Record<string, string> = {
+  webinar:  'From webinar',
+  domain:   'Needs sourcing',
+  official: 'Official source',
+};
+
+const SOURCE_SHORT: Record<string, string> = {
+  webinar:  'webinar',
+  domain:   'unverified',
+  official: 'official',
+};
+
+const SOURCE_BLURB: Record<string, string> = {
+  webinar:  'Drawn from a relocation webinar. Confirm the specifics for your own case.',
+  domain:   'General knowledge — not yet verified against an official government source. Treat any figures or deadlines as indicative until confirmed.',
+  official: 'Verified against an official government source (AEAT, extranjería, BOE).',
+};
+
+const SOURCE_COLOR: Record<string, string> = {
+  webinar:  palette.olive,
+  domain:   '#9A7B4F',
+  official: palette.cobalt,
+};
+
+function timingDetail(obj: Objective): string {
+  const t = obj.timing;
+  if (t.state === 'recurring') return 'This repeats every year for as long as it applies to you.';
+  if (t.state === 'pending_anchor') {
+    const evt = t.anchor === 'arrival'              ? 'you arrive in Spain'
+              : t.anchor === 'residency_established' ? 'your residency is established'
+              : t.anchor === 'property_purchase'     ? 'you complete your property purchase'
+              :                                        'an earlier step is done';
+    return `This can't be given a date until ${evt}.`;
+  }
+  if (t.estimated) return 'This date is an estimate based on typical timelines — give Lola firm dates to sharpen it.';
+  return 'A firm date based on what you told Lola.';
+}
 
 function formatTiming(obj: Objective): string {
   const t = obj.timing;
@@ -33,12 +93,40 @@ function formatTiming(obj: Objective): string {
   return `Starts once ${t.anchor.replace(/_/g, ' ')}`;
 }
 
+function PenaltyBanner({ objectives }: { objectives: Objective[] }) {
+  const penalties = objectives.filter(o => o.severity === 'penalty');
+  if (penalties.length === 0) return null;
+  return (
+    <View style={styles.penaltyBanner}>
+      <Text style={styles.penaltyBannerIcon}>⚠️</Text>
+      <Text style={styles.penaltyBannerText}>
+        {penalties.length === 1
+          ? `1 item carries a financial penalty if missed.`
+          : `${penalties.length} items carry financial penalties if missed.`}
+      </Text>
+    </View>
+  );
+}
+
+function ConsulateBanner({ profile }: { profile: Record<string, unknown> }) {
+  if (!profile.us_resident || profile.is_eu) return null;
+  return (
+    <View style={styles.alertBanner}>
+      <Text style={styles.alertBannerIcon}>🕐</Text>
+      <Text style={styles.alertBannerText}>
+        US consulate wait times are currently 8–16 weeks. Book your appointment as early as possible.
+      </Text>
+    </View>
+  );
+}
+
 export default function PlanScreen() {
   const { profile } = useProfile();
+  const [selected, setSelected] = useState<Objective | null>(null);
 
   if (!profile) {
     return (
-      <View style={styles.empty}>
+      <View style={styles.emptyWrap}>
         <Text style={styles.emptyHeading}>No roadmap yet</Text>
         <Text style={styles.emptyBody}>Complete the interview and your roadmap will appear here.</Text>
       </View>
@@ -51,52 +139,219 @@ export default function PlanScreen() {
     items: objectives.filter(o => o.phase === phase),
   })).filter(g => g.items.length > 0);
 
+  const penaltyCount = objectives.filter(o => o.severity === 'penalty').length;
+  const requiredCount = objectives.filter(o => o.severity === 'required').length;
+  const titleById = new Map(objectives.map(o => [o.id, o.title]));
+
   return (
+    <>
     <ScrollView style={styles.scroll}>
       <NavBar />
       <View style={styles.content}>
-      <Text style={styles.heading}>Your roadmap</Text>
-      <Text style={styles.sub}>{objectives.length} things to take care of</Text>
-      {/* DEBUG — remove before shipping */}
-      <Text style={{ fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted, marginBottom: 16 }}>
-        {JSON.stringify(profile, null, 2)}
-      </Text>
-
-      {byPhase.map(({ phase, items }) => (
-        <View key={phase} style={styles.section}>
-          <Text style={styles.phaseLabel}>{PHASE_LABELS[phase]}</Text>
-          {items.map(obj => (
-            <View key={obj.id} style={styles.card}>
-              <View style={[styles.severityBar, { backgroundColor: SEV_COLOR[obj.severity] }]} />
-              <View style={styles.cardBody}>
-                <Text style={styles.cardTitle}>{obj.title}</Text>
-                <Text style={styles.cardTiming}>{formatTiming(obj)}</Text>
-                <Text style={styles.cardCategory}>{obj.category}</Text>
-              </View>
+        <Text style={styles.heading}>Your roadmap</Text>
+        <View style={styles.statsRow}>
+          <View style={styles.statChip}>
+            <Text style={styles.statNum}>{objectives.length}</Text>
+            <Text style={styles.statLabel}>total steps</Text>
+          </View>
+          <View style={styles.statChip}>
+            <Text style={[styles.statNum, { color: palette.cobalt }]}>{requiredCount}</Text>
+            <Text style={styles.statLabel}>required</Text>
+          </View>
+          {penaltyCount > 0 && (
+            <View style={styles.statChip}>
+              <Text style={[styles.statNum, { color: '#C0392B' }]}>{penaltyCount}</Text>
+              <Text style={styles.statLabel}>penalty risk</Text>
             </View>
-          ))}
+          )}
         </View>
-      ))}
+
+        <ConsulateBanner profile={profile} />
+        <PenaltyBanner objectives={objectives} />
+
+        {byPhase.map(({ phase, items }) => (
+          <View key={phase} style={styles.section}>
+            <View style={styles.phaseHeader}>
+              <Text style={styles.phaseIcon}>{PHASE_ICONS[phase]}</Text>
+              <Text style={styles.phaseLabel}>{PHASE_LABELS[phase]}</Text>
+              <Text style={styles.phaseCount}>{items.length}</Text>
+            </View>
+            {items.map(obj => {
+              const isPenalty = obj.severity === 'penalty';
+              return (
+                <TouchableOpacity
+                  key={obj.id}
+                  style={[styles.card, isPenalty && styles.cardPenalty]}
+                  activeOpacity={0.7}
+                  onPress={() => setSelected(obj)}
+                >
+                  <View style={[styles.severityBar, { backgroundColor: SEV_COLOR[obj.severity] }]} />
+                  <View style={styles.cardBody}>
+                    <View style={styles.cardTop}>
+                      <Text style={[styles.cardTitle, isPenalty && styles.cardTitlePenalty]} numberOfLines={3}>
+                        {obj.title}
+                      </Text>
+                      <View style={[styles.sevBadge, { backgroundColor: SEV_COLOR[obj.severity] + '18' }]}>
+                        <Text style={[styles.sevBadgeText, { color: SEV_COLOR[obj.severity] }]}>
+                          {SEV_LABEL[obj.severity]}
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.cardMeta}>
+                      <Text style={[styles.cardTiming, isPenalty && styles.cardTimingPenalty]}>
+                        {formatTiming(obj)}
+                      </Text>
+                      <View style={styles.sourceDot}>
+                        <View style={[styles.sourceDotMark, { backgroundColor: SOURCE_COLOR[obj.source] }]} />
+                        <Text style={styles.sourceDotText}>{SOURCE_SHORT[obj.source]}</Text>
+                      </View>
+                      <Text style={styles.cardCategory}>{obj.category}</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        ))}
       </View>
     </ScrollView>
+
+    <Modal
+      visible={!!selected}
+      transparent
+      animationType="slide"
+      onRequestClose={() => setSelected(null)}
+    >
+      <Pressable style={styles.modalBackdrop} onPress={() => setSelected(null)}>
+        <Pressable style={styles.sheet} onPress={e => e.stopPropagation()}>
+          {selected && (() => {
+            const deps = selected.depends_on
+              .map(id => titleById.get(id))
+              .filter((t): t is string => !!t);
+            return (
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.sheetHandle} />
+                <View style={styles.sheetChips}>
+                  <View style={[styles.sheetChip, { backgroundColor: SEV_COLOR[selected.severity] + '18' }]}>
+                    <Text style={[styles.sheetChipText, { color: SEV_COLOR[selected.severity] }]}>{SEV_LABEL[selected.severity]}</Text>
+                  </View>
+                  <View style={[styles.sheetChip, { backgroundColor: '#F2EDE6' }]}>
+                    <Text style={[styles.sheetChipText, { color: palette.indigo, textTransform: 'capitalize' }]}>{selected.category}</Text>
+                  </View>
+                  <View style={[styles.sheetChip, { backgroundColor: SOURCE_COLOR[selected.source] + '18' }]}>
+                    <Text style={[styles.sheetChipText, { color: SOURCE_COLOR[selected.source] }]}>{SOURCE_LABEL[selected.source]}</Text>
+                  </View>
+                </View>
+
+                <Text style={styles.sheetTitle}>{selected.title}</Text>
+                <Text style={styles.sheetSevBlurb}>{SEV_BLURB[selected.severity]}</Text>
+
+                <Text style={styles.sheetSectionLabel}>WHEN</Text>
+                <Text style={styles.sheetTiming}>{formatTiming(selected)}</Text>
+                <Text style={styles.sheetBody}>{timingDetail(selected)}</Text>
+
+                {deps.length > 0 && (
+                  <>
+                    <Text style={styles.sheetSectionLabel}>BEFORE THIS, YOU'LL NEED</Text>
+                    {deps.map((d, i) => (
+                      <Text key={i} style={styles.sheetDep}>• {d}</Text>
+                    ))}
+                  </>
+                )}
+
+                <View style={[styles.sourceNote, { borderLeftColor: SOURCE_COLOR[selected.source] }]}>
+                  <Text style={styles.sourceNoteText}>{SOURCE_BLURB[selected.source]}</Text>
+                </View>
+
+                <TouchableOpacity style={styles.sheetClose} onPress={() => setSelected(null)}>
+                  <Text style={styles.sheetCloseText}>Close</Text>
+                </TouchableOpacity>
+              </ScrollView>
+            );
+          })()}
+        </Pressable>
+      </Pressable>
+    </Modal>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   scroll:        { flex: 1, backgroundColor: palette.cal },
-  content:       { padding: 24, paddingTop: 32, paddingBottom: 40 },
-  empty:         { flex: 1, backgroundColor: palette.cal, justifyContent: 'center', alignItems: 'center', padding: 32 },
+  content:       { padding: 24, paddingTop: 32, paddingBottom: 48 },
+
+  emptyWrap:     { flex: 1, backgroundColor: palette.cal, justifyContent: 'center', alignItems: 'center', padding: 32 },
   emptyHeading:  { fontFamily: 'Fraunces_600SemiBold', fontSize: 26, color: palette.indigo, marginBottom: 12 },
   emptyBody:     { fontFamily: 'HankenGrotesk_400Regular', fontSize: 16, color: palette.indigo, textAlign: 'center', lineHeight: 24 },
-  heading:       { fontFamily: 'Fraunces_600SemiBold', fontSize: 28, color: palette.indigo, marginBottom: 4 },
-  sub:           { fontFamily: 'HankenGrotesk_400Regular', fontSize: 14, color: palette.muted, marginBottom: 28 },
+
+  heading:       { fontFamily: 'Fraunces_600SemiBold', fontSize: 28, color: palette.indigo, marginBottom: 16 },
+
+  statsRow:      { flexDirection: 'row', gap: 10, marginBottom: 20 },
+  statChip:      { backgroundColor: '#FFFFFF', borderRadius: 10, paddingVertical: 10, paddingHorizontal: 14,
+                   borderWidth: 1, borderColor: '#E8E4DC', alignItems: 'center', minWidth: 72 },
+  statNum:       { fontFamily: 'Fraunces_600SemiBold', fontSize: 22, color: palette.indigo },
+  statLabel:     { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted, marginTop: 1 },
+
+  penaltyBanner: { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: '#FDF2F2',
+                   borderWidth: 1, borderColor: '#F5C6C6', borderRadius: 10,
+                   padding: 12, marginBottom: 12, gap: 10 },
+  penaltyBannerIcon: { fontSize: 16, lineHeight: 22 },
+  penaltyBannerText: { flex: 1, fontFamily: 'HankenGrotesk_500Medium', fontSize: 13,
+                       color: '#C0392B', lineHeight: 20 },
+
+  alertBanner:   { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: '#FFF8ED',
+                   borderWidth: 1, borderColor: '#F5DFA8', borderRadius: 10,
+                   padding: 12, marginBottom: 12, gap: 10 },
+  alertBannerIcon: { fontSize: 16, lineHeight: 22 },
+  alertBannerText: { flex: 1, fontFamily: 'HankenGrotesk_500Medium', fontSize: 13,
+                     color: palette.amber, lineHeight: 20 },
+
   section:       { marginBottom: 28 },
-  phaseLabel:    { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, color: palette.muted, letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 10 },
-  card:          { flexDirection: 'row', backgroundColor: '#FFFFFF', borderRadius: 12, marginBottom: 10, overflow: 'hidden',
-                   boxShadow: '0 2px 4px rgba(0,0,0,0.05)' },
+  phaseHeader:   { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 10 },
+  phaseIcon:     { fontSize: 14 },
+  phaseLabel:    { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, color: palette.muted,
+                   letterSpacing: 1.1, textTransform: 'uppercase', flex: 1 },
+  phaseCount:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted },
+
+  card:          { flexDirection: 'row', backgroundColor: '#FFFFFF', borderRadius: 12, marginBottom: 10,
+                   overflow: 'hidden', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' },
+  cardPenalty:   { backgroundColor: '#FFFAF9', boxShadow: '0 2px 6px rgba(192,57,43,0.08)' },
   severityBar:   { width: 4 },
   cardBody:      { flex: 1, padding: 14 },
-  cardTitle:     { fontFamily: 'HankenGrotesk_500Medium', fontSize: 15, color: palette.indigo, marginBottom: 4 },
-  cardTiming:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: palette.cobalt, marginBottom: 2 },
-  cardCategory:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: palette.muted, textTransform: 'capitalize' },
+  cardTop:       { flexDirection: 'row', alignItems: 'flex-start', gap: 8, marginBottom: 8 },
+  cardTitle:     { flex: 1, fontFamily: 'HankenGrotesk_500Medium', fontSize: 15, color: palette.indigo, lineHeight: 21 },
+  cardTitlePenalty: { color: '#8B1A0E' },
+  sevBadge:      { borderRadius: 6, paddingHorizontal: 7, paddingVertical: 3, flexShrink: 0 },
+  sevBadgeText:  { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 10, letterSpacing: 0.3 },
+  cardMeta:      { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  cardTiming:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: palette.cobalt, flex: 1 },
+  cardTimingPenalty: { color: '#C0392B' },
+  cardCategory:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted,
+                   textTransform: 'capitalize', backgroundColor: '#F2EDE6', borderRadius: 4,
+                   paddingHorizontal: 6, paddingVertical: 2 },
+  sourceDot:     { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  sourceDotMark: { width: 6, height: 6, borderRadius: 3 },
+  sourceDotText: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted },
+
+  modalBackdrop: { flex: 1, backgroundColor: 'rgba(21,36,59,0.45)', justifyContent: 'flex-end' },
+  sheet:         { backgroundColor: palette.cal, borderTopLeftRadius: 24, borderTopRightRadius: 24,
+                   padding: 24, paddingTop: 12, maxHeight: '85%' },
+  sheetHandle:   { alignSelf: 'center', width: 40, height: 4, borderRadius: 2,
+                   backgroundColor: '#D8D2C8', marginBottom: 18 },
+  sheetChips:    { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 12 },
+  sheetChip:     { borderRadius: 6, paddingHorizontal: 8, paddingVertical: 4 },
+  sheetChipText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, letterSpacing: 0.3 },
+  sheetTitle:    { fontFamily: 'Fraunces_600SemiBold', fontSize: 21, color: palette.indigo, lineHeight: 28, marginBottom: 6 },
+  sheetSevBlurb: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 14, color: palette.muted, lineHeight: 20, marginBottom: 8 },
+  sheetSectionLabel: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, color: palette.muted,
+                       letterSpacing: 1.1, marginTop: 18, marginBottom: 6 },
+  sheetTiming:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cobalt, marginBottom: 4 },
+  sheetBody:     { fontFamily: 'HankenGrotesk_400Regular', fontSize: 14, color: palette.indigo, lineHeight: 21 },
+  sheetDep:      { fontFamily: 'HankenGrotesk_400Regular', fontSize: 14, color: palette.indigo, lineHeight: 22 },
+  sourceNote:    { backgroundColor: '#FFFFFF', borderRadius: 8, borderLeftWidth: 3,
+                   padding: 12, marginTop: 20 },
+  sourceNoteText:{ fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: palette.indigo, lineHeight: 19 },
+  sheetClose:    { backgroundColor: palette.indigo, borderRadius: 12, paddingVertical: 14,
+                   alignItems: 'center', marginTop: 24, marginBottom: 8 },
+  sheetCloseText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, color: palette.cal },
 });
