@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your plan · Lola</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cal:#FBFAF7; --cal-2:#F4F1EA; --line:#E6E1D7;
+    --ink:#15243B; --muted:#7A7568;
+    --cobalt:#2B5AA3; --cobalt-wash:#E8EEF7;
+    --amber:#BD8318; --amber-wash:#F7EDD7;
+    --sage:#5E7355; --sage-wash:#E9EEE5;
+    --clay:#A8472F;
+    --r:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Hanken Grotesk",system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(120% 80% at 50% -10%, #EEF1F6 0%, #E4E3DC 55%, #DCDAD1 100%);
+    display:flex;align-items:center;justify-content:center;
+    padding:32px 16px;-webkit-font-smoothing:antialiased;
+  }
+  .phone{
+    width:100%;max-width:392px;background:var(--cal);
+    border-radius:30px;overflow:hidden;
+    box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 30px 60px -24px rgba(21,36,59,.45), 0 8px 24px -12px rgba(21,36,59,.3);
+  }
+  .scroll{max-height:84vh;overflow-y:auto;padding:0 20px 28px}
+  .scroll::-webkit-scrollbar{width:0}
+
+  /* masthead */
+  .masthead{
+    position:sticky;top:0;z-index:5;background:var(--cal);
+    padding:22px 0 14px;margin:0 -20px 0;
+    padding-left:20px;padding-right:20px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--line);
+  }
+  .brand{display:flex;align-items:center;gap:10px}
+  .seal{width:30px;height:30px;flex:none;position:relative}
+  .seal svg{display:block}
+  .brand b{font-family:"Fraunces";font-weight:600;font-size:19px;letter-spacing:.2px}
+  .masthead .who{font-size:11.5px;color:var(--muted);text-align:right;line-height:1.35}
+  .masthead .who span{display:block;color:var(--ink);font-weight:600}
+
+  /* Lola note */
+  .note{
+    margin-top:18px;background:var(--cobalt-wash);
+    border:1px solid #DCE5F2;border-radius:var(--r);
+    padding:15px 16px 14px;display:flex;gap:12px;
+  }
+  .ava{width:34px;height:34px;flex:none;border-radius:50%;background:var(--cobalt);
+    display:grid;place-items:center;color:#fff;font-family:"Fraunces";font-size:16px;font-weight:600}
+  .note p{font-size:14.5px;line-height:1.5;color:var(--ink)}
+  .note .sig{color:var(--cobalt);font-weight:600}
+
+  /* progress */
+  .prog{margin-top:18px}
+  .prog .row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
+  .prog .lab{font-size:12.5px;color:var(--muted);font-weight:500}
+  .prog .pct{font-family:"Fraunces";font-size:15px;font-weight:600;color:var(--amber);font-variant-numeric:tabular-nums}
+  .track{height:7px;border-radius:6px;background:var(--cal-2);overflow:hidden;border:1px solid var(--line)}
+  .fill{height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,#D7A23E,var(--amber));transition:width .9s cubic-bezier(.2,.8,.2,1)}
+
+  /* hero next step */
+  .hero{
+    margin-top:20px;border:1px solid var(--amber);border-radius:var(--r);
+    background:linear-gradient(180deg,#FFFDF8,var(--amber-wash));
+    padding:16px 16px 18px;position:relative;overflow:hidden;
+  }
+  .hero .eyebrow{font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--amber)}
+  .hero h2{font-family:"Fraunces";font-weight:600;font-size:25px;line-height:1.12;margin:7px 0 6px;letter-spacing:.1px}
+  .hero .meta{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .hero .do{
+    margin-top:14px;display:inline-flex;align-items:center;gap:8px;
+    background:var(--ink);color:#fff;border:0;cursor:pointer;
+    font-family:inherit;font-size:14px;font-weight:600;
+    padding:10px 16px;border-radius:11px;transition:transform .15s ease,opacity .2s;
+  }
+  .hero .do:active{transform:scale(.97)}
+  .hero .do.gone{display:none}
+  .hero .ph{font-size:12.5px;color:var(--ink);background:#fff;border:1px solid var(--amber-wash);
+    border-radius:9px;padding:7px 10px;margin-top:12px;line-height:1.4}
+  .hero .ph b{color:var(--cobalt)}
+
+  /* camino */
+  .camino{margin-top:26px}
+  .phase{font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--cobalt);
+    margin:22px 0 4px;padding-left:34px}
+  .steps{position:relative}
+  .steps::before{content:"";position:absolute;left:13px;top:6px;bottom:10px;width:2px;
+    background:linear-gradient(var(--cobalt),#C9D6EA);border-radius:2px}
+
+  .step{position:relative;padding:13px 2px 13px 34px;display:flex;gap:12px;align-items:flex-start}
+  .step + .step{border-top:1px solid var(--line)}
+  .node{position:absolute;left:6px;top:16px;width:16px;height:16px;border-radius:50%;
+    background:var(--cal);border:2.5px solid var(--cobalt);z-index:2;transition:.25s}
+  .step.active .node{border-color:var(--amber);box-shadow:0 0 0 4px var(--amber-wash)}
+  .step.pending .node{border-style:dashed;border-color:var(--muted)}
+  .step.done .node{background:var(--sage);border-color:var(--sage)}
+  .step.done .node::after{content:"";position:absolute;inset:0;margin:auto;width:5px;height:8px;
+    border:2px solid #fff;border-top:0;border-left:0;transform:translateY(-1px) rotate(45deg)}
+
+  .body{flex:1;min-width:0}
+  .ttl{font-size:15.5px;font-weight:600;line-height:1.25;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .step.done .ttl{color:var(--muted);text-decoration:line-through;text-decoration-color:#C9C3B6}
+  .tag{font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:2px 7px;border-radius:20px;flex:none}
+  .tag.miss{color:var(--clay);background:#F6E7E2}
+  .when{font-size:12.5px;color:var(--muted);margin-top:3px;font-variant-numeric:tabular-nums}
+  .step.pending .when{font-style:italic;color:var(--cobalt)}
+  .est{color:#9A9489}
+  .coach{margin-top:8px;font-size:12.5px;line-height:1.45;color:var(--ink);
+    background:var(--cal-2);border-left:3px solid var(--cobalt);border-radius:0 8px 8px 0;padding:7px 10px}
+  .coach b{color:var(--cobalt)}
+  .check{flex:none;width:24px;height:24px;border-radius:7px;border:1.5px solid var(--line);
+    background:#fff;cursor:pointer;margin-top:1px;display:grid;place-items:center;transition:.18s}
+  .check:hover{border-color:var(--cobalt)}
+  .step.done .check{background:var(--sage);border-color:var(--sage)}
+  .check svg{opacity:0;transition:.18s}
+  .step.done .check svg{opacity:1}
+  .step.pending .check{visibility:hidden}
+
+  /* footer */
+  .foot{margin-top:28px;border-top:1px solid var(--line);padding-top:18px}
+  .email{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;
+    background:var(--cobalt);color:#fff;border:0;cursor:pointer;font-family:inherit;
+    font-size:14.5px;font-weight:600;padding:13px;border-radius:12px;transition:transform .15s}
+  .email:active{transform:scale(.985)}
+  .fine{margin-top:14px;text-align:center;font-size:11.5px;color:var(--muted);line-height:1.5}
+  .fine b{color:var(--ink);font-weight:600}
+
+  .toast{position:fixed;left:50%;bottom:36px;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;font-size:13.5px;font-weight:500;padding:11px 18px;border-radius:30px;
+    opacity:0;pointer-events:none;transition:.3s;z-index:20;display:flex;gap:8px;align-items:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+  <div class="phone">
+    <div class="scroll">
+      <div class="masthead">
+        <div class="brand">
+          <span class="seal" aria-hidden="true">
+            <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+              <circle cx="15" cy="15" r="14" fill="#2B5AA3"/>
+              <path d="M15 6c1.6 2.6 3.8 4.8 6.4 6.4-2.6 1.6-4.8 3.8-6.4 6.4-1.6-2.6-3.8-4.8-6.4-6.4C11.2 10.8 13.4 8.6 15 6Z" fill="#fff"/>
+              <circle cx="15" cy="22.5" r="1.6" fill="#BD8318"/>
+            </svg>
+          </span>
+          <b>Lola</b>
+        </div>
+        <div class="who">your plan, for<span>the Ward family</span></div>
+      </div>
+
+      <div class="note">
+        <div class="ava" aria-hidden="true">L</div>
+        <p>You've got seven things ahead — but not all today. Today it's just one: your <b>padrón</b>. I'm holding the rest so you don't have to carry it. <span class="sig">— Lola</span></p>
+      </div>
+
+      <div class="prog">
+        <div class="row">
+          <span class="lab" id="plab">0 of 7 done — let's start with one</span>
+          <span class="pct" id="ppct">0%</span>
+        </div>
+        <div class="track"><div class="fill" id="pfill"></div></div>
+      </div>
+
+      <div class="hero">
+        <div class="eyebrow">Your next step</div>
+        <h2>Register at the town hall</h2>
+        <div class="meta">Empadronamiento · do this first · about 15 min at the Ayuntamiento</div>
+        <div class="ph">At the window, ask for: <b>“el volante de empadronamiento”</b>. Bring your passport and a rental contract — and a photocopy, Spain loves a photocopy.</div>
+        <button class="do" id="herodo">Mark padrón done ✓</button>
+      </div>
+
+      <div class="camino">
+        <!-- FIRST WEEKS -->
+        <div class="phase">Your first weeks</div>
+        <div class="steps">
+          <div class="step active" data-key="padron">
+            <span class="node"></span>
+            <div class="body">
+              <div class="ttl">Register at the town hall</div>
+              <div class="when">Empadronamiento · do first</div>
+            </div>
+            <button class="check" aria-label="Mark done"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6.5 4.7 9 10 3" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+
+          <div class="step" data-key="school">
+            <span class="node"></span>
+            <div class="body">
+              <div class="ttl">Enrol Leo in school</div>
+              <div class="when"><span class="est">around 22 Apr · estimated</span></div>
+              <div class="coach"><b>You flagged the kids.</b> His place in the system is first-class here — I'll walk you through the EOE step when we reach it.</div>
+            </div>
+            <button class="check" aria-label="Mark done"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6.5 4.7 9 10 3" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+
+          <div class="step" data-key="tie">
+            <span class="node"></span>
+            <div class="body">
+              <div class="ttl">Get your residence card (TIE)</div>
+              <div class="when"><span class="est">around 15 May · estimated</span></div>
+            </div>
+            <button class="check" aria-label="Mark done"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6.5 4.7 9 10 3" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+
+          <div class="step" data-key="salud">
+            <span class="node"></span>
+            <div class="body">
+              <div class="ttl">Apply for your health card</div>
+              <div class="when"><span class="est">around 29 May · estimated</span></div>
+              <div class="coach"><b>For the kids again.</b> Once this lands, Leo's covered for his appointments — that's the one most families want sorted fast.</div>
+            </div>
+            <button class="check" aria-label="Mark done"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6.5 4.7 9 10 3" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </div>
+
+        <!-- EVERY YEAR -->
+        <div class="phase">Every year</div>
+        <div class="steps">
+          <div class="step" data-key="m720">
+            <span class="node"></span>
+            <div class="body">
+              <div class="ttl">File Modelo 720 <span class="tag miss">Don't miss this</span></div>
+              <div class="when">window opens Jan · due 31 Mar 2027</div>
+              <div class="coach"><b>Money was your big worry — so let's be straight.</b> This declares assets held outside Spain. It carries real fines, so I'll never let it sneak up. There's nothing to do until January. I've got it.</div>
+            </div>
+            <button class="check" aria-label="Mark done"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6.5 4.7 9 10 3" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </div>
+
+        <!-- ONCE SETTLED -->
+        <div class="phase">Once you're settled</div>
+        <div class="steps">
+          <div class="step pending" data-key="dgt">
+            <span class="node"></span>
+            <div class="body">
+              <div class="ttl">Take the Spanish driving test</div>
+              <div class="when">starts once your residency is granted</div>
+            </div>
+            <button class="check" aria-label="locked"></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="foot">
+        <button class="email" id="emailbtn">
+          <svg width="17" height="17" viewBox="0 0 18 18" fill="none"><rect x="2" y="3.5" width="14" height="11" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M3 5l6 4.5L15 5" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+          Email me this plan
+        </button>
+        <p class="fine"><b>Lola keeps the map. A gestor signs the papers.</b><br>Guidance only — not legal or tax advice.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"><span>✓</span><span id="toasttxt">Plan sent to your inbox</span></div>
+
+<script>
+  const TOTAL = 6; // counts only the do-able obligations; the pending one is locked
+  const steps = [...document.querySelectorAll('.step:not(.pending)')];
+  const fill = document.getElementById('pfill');
+  const pct  = document.getElementById('ppct');
+  const plab = document.getElementById('plab');
+  const heroBtn = document.getElementById('herodo');
+
+  function refresh(){
+    const done = steps.filter(s => s.classList.contains('done')).length;
+    const p = Math.round(done / TOTAL * 100);
+    fill.style.width = p + '%';
+    pct.textContent = p + '%';
+    plab.textContent = done === 0 ? "0 of "+TOTAL+" done — let's start with one"
+                     : done === TOTAL ? "All settled. Look at you."
+                     : done + " of " + TOTAL + " done — keep going";
+    // Lola gives a proportionate nod when the first big one lands
+    const note = document.querySelector('.note p');
+    if (done >= 1 && !note.dataset.shifted){
+      note.dataset.shifted = "1";
+      note.innerHTML = "Padrón done — that's the big one that unlocks the rest. Next when you're ready: <b>Leo's school</b>. No rush. <span class='sig'>— Lola</span>";
+    }
+  }
+  function toggle(step){
+    step.classList.toggle('done');
+    if(step.classList.contains('active') && step.classList.contains('done')){
+      step.classList.remove('active'); heroBtn.classList.add('gone');
+    }
+    refresh();
+  }
+  steps.forEach(s => {
+    s.querySelector('.check').addEventListener('click', () => toggle(s));
+  });
+  heroBtn.addEventListener('click', () => {
+    const padron = document.querySelector('.step[data-key="padron"]');
+    if(!padron.classList.contains('done')) toggle(padron);
+  });
+
+  const toast = document.getElementById('toast');
+  document.getElementById('emailbtn').addEventListener('click', () => {
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'), 2200);
+  });
+</script>
+</body>
+</html>

@@ -1,19 +1,26 @@
-const tintColorLight = '#2f95dc';
-const tintColorDark = '#fff';
+export const palette = {
+  cobalt:  '#2B5AA3',
+  indigo:  '#15243B',
+  amber:   '#BD8318',
+  olive:   '#5E7355',
+  cal:     '#FBFAF7',
+  white:   '#FFFFFF',
+  muted:   '#8A9BB0',
+};
 
 export default {
   light: {
-    text: '#000',
-    background: '#fff',
-    tint: tintColorLight,
-    tabIconDefault: '#ccc',
-    tabIconSelected: tintColorLight,
+    text:             palette.indigo,
+    background:       palette.cal,
+    tint:             palette.cobalt,
+    tabIconDefault:   palette.muted,
+    tabIconSelected:  palette.cobalt,
   },
   dark: {
-    text: '#fff',
-    background: '#000',
-    tint: tintColorDark,
-    tabIconDefault: '#ccc',
-    tabIconSelected: tintColorDark,
+    text:             palette.cal,
+    background:       palette.indigo,
+    tint:             palette.cobalt,
+    tabIconDefault:   palette.muted,
+    tabIconSelected:  palette.cobalt,
   },
 };

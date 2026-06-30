@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Camino × Lola — brand</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cal:#FBFAF7; --paper-2:#F4F1EA; --line:#E6E1D7;
+    --indigo:#15243B; --cobalt:#2B5AA3; --cobalt-wash:#E8EEF7;
+    --amber:#BD8318; --amber-wash:#F7EDD7;
+    --sage:#5E7355; --clay:#A8472F; --muted:#7A7568;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Hanken Grotesk",system-ui,sans-serif;color:var(--indigo);
+    background:var(--cal);-webkit-font-smoothing:antialiased;line-height:1.5}
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 64px}
+  .serif{font-family:"Fraunces",Georgia,serif}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--cobalt)}
+  section{padding:34px 0;border-top:1px solid var(--line)}
+  h3.lab{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+
+  /* hero */
+  .hero{padding:46px 0 34px;text-align:center}
+  .mark-lg{width:84px;height:84px;margin:0 auto 22px}
+  .word{font-family:"Fraunces";font-weight:600;font-size:38px;letter-spacing:.5px}
+  .word .x{color:var(--line);font-weight:400;margin:0 10px}
+  .word .lola{color:var(--amber)}
+  .word .camino{color:var(--indigo)}
+  .tagline{font-family:"Fraunces";font-weight:500;font-size:27px;line-height:1.18;margin:26px auto 10px;max-width:15ch}
+  .sub{font-size:15px;color:var(--muted);max-width:46ch;margin:0 auto}
+
+  /* duality cards */
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .card{border-radius:16px;padding:20px 18px;border:1px solid var(--line)}
+  .card.camino{background:var(--cobalt-wash);border-color:#DCE5F2}
+  .card.lola{background:var(--amber-wash);border-color:#EFE2C6}
+  .card .mk{width:40px;height:40px;margin-bottom:12px}
+  .card h4{font-family:"Fraunces";font-weight:600;font-size:21px;margin-bottom:3px}
+  .card.camino h4{color:var(--cobalt)}
+  .card.lola h4{color:var(--amber)}
+  .card .role{font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+  .card p{font-size:13.5px;line-height:1.5}
+
+  /* palette */
+  .sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px}
+  .chip{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .chip .col{height:62px}
+  .chip .meta{padding:9px 11px}
+  .chip .nm{font-size:13px;font-weight:600}
+  .chip .hex{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .chip .use{font-size:11px;color:var(--muted);margin-top:2px}
+
+  /* type */
+  .type-row{display:flex;gap:18px;align-items:baseline;flex-wrap:wrap;padding:14px 0;border-bottom:1px dashed var(--line)}
+  .type-row:last-child{border-bottom:0}
+  .type-name{flex:none;width:128px}
+  .type-name b{font-size:14px}
+  .type-name span{display:block;font-size:11.5px;color:var(--muted)}
+  .spec-fr{font-family:"Fraunces";font-weight:500;font-size:30px;line-height:1.1;color:var(--indigo)}
+  .spec-hk{font-family:"Hanken Grotesk";font-weight:500;font-size:21px;color:var(--indigo)}
+
+  /* mark construction */
+  .marks{display:flex;gap:30px;align-items:center;flex-wrap:wrap}
+  .mark-spec{text-align:center}
+  .mark-spec .box{width:72px;height:72px;margin:0 auto 9px}
+  .mark-spec small{font-size:11.5px;color:var(--muted)}
+  .marknote{font-size:13.5px;color:var(--indigo);max-width:34ch;line-height:1.5}
+
+  /* voice */
+  .voice{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .vcol{border-radius:14px;padding:18px;border:1px solid var(--line)}
+  .vcol.sys{background:#fff}
+  .vcol.comp{background:var(--amber-wash);border-color:#EFE2C6}
+  .vcol .vh{font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin-bottom:4px}
+  .vcol.sys .vh{color:var(--cobalt)} .vcol.comp .vh{color:var(--amber)}
+  .vcol .vd{font-size:12.5px;color:var(--muted);margin-bottom:13px;line-height:1.45}
+  .line{font-size:13.5px;padding:8px 0;border-top:1px solid rgba(21,36,59,.08)}
+  .vcol.sys .line{font-family:"Hanken Grotesk";font-weight:500}
+  .vcol.comp .line{font-family:"Fraunces";font-weight:500;font-size:14.5px;line-height:1.4}
+
+  .foot{font-size:12px;color:var(--muted);text-align:center;padding-top:30px;line-height:1.6}
+  @media (max-width:560px){.duo,.voice{grid-template-columns:1fr}.word{font-size:30px}.tagline{font-size:23px}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="mark-lg" aria-hidden="true">
+      <svg viewBox="0 0 100 100" width="84" height="84">
+        <rect x="4" y="4" width="92" height="92" rx="24" fill="#2B5AA3"/>
+        <polygon points="50,16 57,43 84,50 57,57 50,84 43,57 16,50 43,43" fill="#FBFAF7"/>
+        <circle cx="50" cy="50" r="6.5" fill="#BD8318"/>
+      </svg>
+    </div>
+    <div class="word"><span class="camino serif">Camino</span><span class="x">×</span><span class="lola serif">Lola</span></div>
+    <div class="tagline serif">From overwhelmed to underway.</div>
+    <p class="sub">A guide that turns moving to a new country into a path you can actually walk — one clear step at a time, with someone beside you.</p>
+  </div>
+
+  <!-- DUALITY -->
+  <section>
+    <h3 class="lab">The brand is two things on purpose</h3>
+    <div class="duo">
+      <div class="card camino">
+        <div class="mk" aria-hidden="true">
+          <svg viewBox="0 0 100 100" width="40" height="40">
+            <rect x="4" y="4" width="92" height="92" rx="24" fill="#2B5AA3"/>
+            <polygon points="50,16 57,43 84,50 57,57 50,84 43,57 16,50 43,43" fill="#FBFAF7"/>
+            <circle cx="50" cy="50" r="6.5" fill="#BD8318"/>
+          </svg>
+        </div>
+        <div class="role">The way & the destination</div>
+        <h4 class="serif">Camino</h4>
+        <p>The calm infrastructure. The plan, the sequence, the deadlines — the path laid out and the place you're headed. Cool, trustworthy, exact.</p>
+      </div>
+      <div class="card lola">
+        <div class="mk" aria-hidden="true">
+          <svg viewBox="0 0 100 100" width="40" height="40">
+            <defs><radialGradient id="g" cx="38%" cy="32%" r="80%"><stop offset="0%" stop-color="#D7A23E"/><stop offset="100%" stop-color="#BD8318"/></radialGradient></defs>
+            <circle cx="50" cy="50" r="46" fill="url(#g)"/>
+            <polygon points="50,20 56,44 80,50 56,56 50,80 44,56 20,50 44,44" fill="#FBFAF7"/>
+            <circle cx="50" cy="50" r="6" fill="#15243B"/>
+          </svg>
+        </div>
+        <div class="role">The friend on the path</div>
+        <h4 class="serif">Lola</h4>
+        <p>The warmth. She walks it with you, narrates the why, hands you the phrase to say at the window — and never trades truth for comfort. She carries the Camino.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PALETTE -->
+  <section>
+    <h3 class="lab">Palette — Andalusian tile, whitewash, sherry</h3>
+    <div class="sw">
+      <div class="chip"><div class="col" style="background:#2B5AA3"></div><div class="meta"><div class="nm">Cobalt</div><div class="hex">#2B5AA3</div><div class="use">Camino · primary</div></div></div>
+      <div class="chip"><div class="col" style="background:#15243B"></div><div class="meta"><div class="nm">Indigo</div><div class="hex">#15243B</div><div class="use">Text · ink</div></div></div>
+      <div class="chip"><div class="col" style="background:#BD8318"></div><div class="meta"><div class="nm">Sherry amber</div><div class="hex">#BD8318</div><div class="use">Lola · accent</div></div></div>
+      <div class="chip"><div class="col" style="background:#5E7355"></div><div class="meta"><div class="nm">Olive</div><div class="hex">#5E7355</div><div class="use">Calm · done</div></div></div>
+      <div class="chip"><div class="col" style="background:#A8472F"></div><div class="meta"><div class="nm">Clay</div><div class="hex">#A8472F</div><div class="use">Alert · sparing</div></div></div>
+      <div class="chip"><div class="col" style="background:#FBFAF7;border-bottom:1px solid var(--line)"></div><div class="meta"><div class="nm">Cal</div><div class="hex">#FBFAF7</div><div class="use">Whitewash · ground</div></div></div>
+    </div>
+  </section>
+
+  <!-- TYPE -->
+  <section>
+    <h3 class="lab">Type — the voice & the interface</h3>
+    <div class="type-row">
+      <div class="type-name"><b class="serif">Fraunces</b><span>the voice · Lola, headlines</span></div>
+      <div class="spec-fr">I'll walk you through it.</div>
+    </div>
+    <div class="type-row">
+      <div class="type-name"><b>Hanken Grotesk</b><span>the interface · labels, UI</span></div>
+      <div class="spec-hk">Your next step · due 15 May</div>
+    </div>
+  </section>
+
+  <!-- MARK -->
+  <section>
+    <h3 class="lab">The mark — one star, two hosts</h3>
+    <div class="marks">
+      <div class="mark-spec">
+        <div class="box"><svg viewBox="0 0 100 100" width="72" height="72"><rect x="4" y="4" width="92" height="92" rx="24" fill="#2B5AA3"/><polygon points="50,16 57,43 84,50 57,57 50,84 43,57 16,50 43,43" fill="#FBFAF7"/><circle cx="50" cy="50" r="6.5" fill="#BD8318"/></svg></div>
+        <small>Camino · tile</small>
+      </div>
+      <div class="mark-spec">
+        <div class="box"><svg viewBox="0 0 100 100" width="72" height="72"><circle cx="50" cy="50" r="46" fill="url(#g)"/><polygon points="50,20 56,44 80,50 56,56 50,80 44,56 20,50 44,44" fill="#FBFAF7"/><circle cx="50" cy="50" r="6" fill="#15243B"/></svg></div>
+        <small>Lola · avatar</small>
+      </div>
+      <p class="marknote">An azulejo compass-star: <b>navigation</b> (the journey) and <b>tile</b> (place, belonging) in one. The amber dot is the waypoint — the destination. Lola wears the same star in a warm circle: she carries the Camino.</p>
+    </div>
+  </section>
+
+  <!-- VOICE -->
+  <section>
+    <h3 class="lab">Two registers, one brand</h3>
+    <div class="voice">
+      <div class="vcol sys">
+        <div class="vh">Camino — system voice</div>
+        <div class="vd">Plain, calm, active. Labels and structure. Names what happens.</div>
+        <div class="line">Your next step</div>
+        <div class="line">Email me this plan</div>
+        <div class="line">Starts once your residency is granted</div>
+      </div>
+      <div class="vcol comp">
+        <div class="vh">Lola — companion voice</div>
+        <div class="vd">Warm, narrates the why, a little dry about the bureaucracy. Bilingual texture.</div>
+        <div class="line">"Today it's just one thing. I'm holding the rest."</div>
+        <div class="line">"Ask for the 'volante.' Bring two copies — Spain loves a photocopy."</div>
+        <div class="line">"Money's the scary one. Fair. Let's make it small."</div>
+      </div>
+    </div>
+  </section>
+
+  <p class="foot"><b>Camino</b> — working title. Guidance, not legal advice.<br>Lola keeps the map; a gestor signs the papers.</p>
+
+</div>
+</body>
+</html>

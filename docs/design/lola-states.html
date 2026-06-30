@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lola — presence without a face</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cal:#FBFAF7; --line:#E6E1D7; --indigo:#15243B; --muted:#7A7568;
+    --cobalt:#2B5AA3; --amber:#BD8318; --amber-lt:#D7A23E;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Hanken Grotesk",system-ui,sans-serif;color:var(--indigo);
+    background:radial-gradient(120% 90% at 50% 0%, #fff 0%, var(--cal) 60%);
+    -webkit-font-smoothing:antialiased;padding:30px 18px 56px}
+  .wrap{max-width:680px;margin:0 auto}
+  .serif{font-family:"Fraunces",Georgia,serif}
+
+  /* ---- the glyph ---- */
+  .stage{position:relative;display:grid;place-items:center}
+  .glow{position:absolute;width:140%;height:140%;border-radius:50%;
+    background:radial-gradient(circle, rgba(189,131,24,.45), rgba(189,131,24,0) 65%);
+    opacity:.5;transition:opacity .6s ease}
+  .ring{position:absolute;width:100%;height:100%;border-radius:50%;
+    border:2px solid rgba(189,131,24,.5);opacity:0}
+  .badge{position:relative;z-index:2;display:block}
+  .host{transform-origin:50% 50%;animation:breathe 4s ease-in-out infinite}
+  .star{transform-origin:50% 50%;transform-box:fill-box}
+  .dot{transform-origin:50% 50%;transform-box:fill-box}
+
+  @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  @keyframes breatheSlow{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes talk{0%,100%{transform:scale(1)}30%{transform:scale(1.5)}45%{transform:scale(1.1)}70%{transform:scale(1.4)}}
+  @keyframes rippleOut{0%{transform:scale(.7);opacity:.6}100%{transform:scale(1.5);opacity:0}}
+  @keyframes bloom{0%{transform:scale(.6);opacity:.7}100%{transform:scale(1.9);opacity:0}}
+  @keyframes glowPulse{0%,100%{opacity:.45}50%{opacity:.9}}
+
+  /* state: PRESENT (idle) */
+  .s-present .host{animation:breathe 4.2s ease-in-out infinite}
+  .s-present .glow{opacity:.4}
+
+  /* state: LISTENING */
+  .s-listen .host{animation:breathe 2.6s ease-in-out infinite}
+  .s-listen .glow{opacity:.55}
+  .s-listen .ring{animation:rippleOut 2.6s ease-out infinite}
+  .s-listen .ring.r2{animation-delay:1.3s}
+
+  /* state: FINDING THE WAY (thinking) */
+  .s-think .host{animation:breatheSlow 3s ease-in-out infinite}
+  .s-think .star{animation:spin 3.4s linear infinite}
+  .s-think .glow{opacity:.4}
+
+  /* state: GUIDING (speaking) */
+  .s-guide .host{animation:breathe 2.2s ease-in-out infinite}
+  .s-guide .dot{animation:talk 1.4s ease-in-out infinite}
+  .s-guide .glow{animation:glowPulse 1.4s ease-in-out infinite}
+
+  /* state: HOLDING (overwhelmed → slow, soft) */
+  .s-hold .host{animation:breatheSlow 6s ease-in-out infinite}
+  .s-hold .glow{opacity:.28}
+
+  /* state: DONE (celebrate, proportionate) */
+  .s-done .host{animation:breathe 3s ease-in-out infinite}
+  .s-done .glow{opacity:.7}
+  .s-done .ring{animation:bloom 2.4s ease-out infinite}
+  .s-done .dot{animation:talk 2.4s ease-in-out infinite}
+
+  /* ---- hero ---- */
+  .hero{text-align:center;padding:14px 0 6px}
+  .hero .stage{width:180px;height:180px;margin:0 auto}
+  .cap{margin-top:18px;min-height:54px}
+  .cap .name{font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--amber)}
+  .cap .says{font-family:"Fraunces";font-weight:500;font-size:21px;margin-top:4px}
+  .cap .moment{font-size:13px;color:var(--muted);margin-top:3px}
+
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:22px}
+  .controls button{font-family:inherit;font-size:13px;font-weight:600;color:var(--indigo);
+    background:#fff;border:1px solid var(--line);border-radius:30px;padding:8px 15px;cursor:pointer;transition:.15s}
+  .controls button:hover{border-color:var(--amber)}
+  .controls button.on{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+
+  /* ---- grid ---- */
+  h3.lab{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);
+    text-align:center;margin:46px 0 20px;border-top:1px solid var(--line);padding-top:30px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 14px}
+  .cell{text-align:center}
+  .cell .stage{width:84px;height:84px;margin:0 auto 11px}
+  .cell .t{font-size:13px;font-weight:600}
+  .cell .d{font-size:11.5px;color:var(--muted);line-height:1.4;margin-top:2px}
+
+  .foot{text-align:center;font-size:12.5px;color:var(--muted);margin-top:40px;line-height:1.6;
+    border-top:1px solid var(--line);padding-top:24px}
+  @media (max-width:480px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media (prefers-reduced-motion:reduce){.host,.star,.dot,.ring,.glow{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="stage s-present" id="hero">
+      <div class="glow"></div>
+      <div class="ring"></div><div class="ring r2"></div>
+      <svg class="badge" width="180" height="180" viewBox="0 0 100 100">
+        <defs><radialGradient id="lg" cx="38%" cy="32%" r="80%">
+          <stop offset="0%" stop-color="#D7A23E"/><stop offset="100%" stop-color="#BD8318"/>
+        </radialGradient></defs>
+        <g class="host">
+          <circle cx="50" cy="50" r="44" fill="url(#lg)"/>
+          <polygon class="star" points="50,20 56,44 80,50 56,56 50,80 44,56 20,50 44,44" fill="#FBFAF7"/>
+          <circle class="dot" cx="50" cy="50" r="5.5" fill="#15243B"/>
+        </g>
+      </svg>
+    </div>
+    <div class="cap" id="cap">
+      <div class="name">Present</div>
+      <div class="says serif">"I'm here. No rush."</div>
+      <div class="moment">Ambient — on every screen</div>
+    </div>
+    <div class="controls" id="ctrl"></div>
+  </div>
+
+  <h3 class="lab">All six, side by side</h3>
+  <div class="grid">
+    <div class="cell"><div class="stage s-present">__G__</div><div class="t">Present</div><div class="d">Idle, on every screen</div></div>
+    <div class="cell"><div class="stage s-listen"><div class="ring"></div><div class="ring r2"></div>__G__</div><div class="t">Listening</div><div class="d">You're answering</div></div>
+    <div class="cell"><div class="stage s-think">__G__</div><div class="t">Finding the way</div><div class="d">Working it out</div></div>
+    <div class="cell"><div class="stage s-guide">__G__</div><div class="t">Guiding</div><div class="d">Lola is speaking</div></div>
+    <div class="cell"><div class="stage s-hold">__G__</div><div class="t">Holding</div><div class="d">When you're overwhelmed</div></div>
+    <div class="cell"><div class="stage s-done"><div class="ring"></div>__G__</div><div class="t">Done</div><div class="d">A step completed</div></div>
+  </div>
+
+  <p class="foot">Same glyph throughout. Character comes from <b>motion, colour, and pace</b> — not eyes and a mouth.<br>Amber glow = Lola is present.</p>
+</div>
+
+<script>
+  const G = `<div class="glow"></div><svg class="badge" width="84" height="84" viewBox="0 0 100 100"><g class="host"><circle cx="50" cy="50" r="44" fill="url(#lg)"/><polygon class="star" points="50,20 56,44 80,50 56,56 50,80 44,56 20,50 44,44" fill="#FBFAF7"/><circle class="dot" cx="50" cy="50" r="5.5" fill="#15243B"/></g></svg>`;
+  document.querySelectorAll('.grid .stage').forEach(s => s.innerHTML = s.innerHTML.replace('__G__', G));
+
+  const STATES = [
+    ["present","Present",`"I'm here. No rush."`,"Ambient — on every screen"],
+    ["listen","Listening",`"Go on — I'm with you."`,"While you answer in the interview"],
+    ["think","Finding the way",`"Working it out…"`,"Reading your answer, building the plan"],
+    ["guide","Guiding",`"Here's your next step."`,"When Lola is speaking to you"],
+    ["hold","Holding",`"Just this one. I've got the rest."`,"When you're overwhelmed — note the slow-down"],
+    ["done","Done",`"That's a big one. ✓"`,"A step completed — proportionate, never confetti"],
+  ];
+  const hero = document.getElementById('hero'), cap = document.getElementById('cap'), ctrl = document.getElementById('ctrl');
+  STATES.forEach(([key,name,says,moment],i) => {
+    const b = document.createElement('button');
+    b.textContent = name; if(i===0) b.classList.add('on');
+    b.onclick = () => {
+      hero.className = 'stage s-' + key;
+      cap.innerHTML = `<div class="name">${name}</div><div class="says serif">${says}</div><div class="moment">${moment}</div>`;
+      [...ctrl.children].forEach(c=>c.classList.remove('on')); b.classList.add('on');
+    };
+    ctrl.appendChild(b);
+  });
+</script>
+</body>
+</html>

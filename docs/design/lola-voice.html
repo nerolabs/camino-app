@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hear Lola</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--cal:#FBFAF7;--line:#E6E1D7;--indigo:#15243B;--muted:#7A7568;--cobalt:#2B5AA3;--amber:#BD8318;--amber-lt:#D7A23E;--amber-wash:#F7EDD7;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Hanken Grotesk",system-ui,sans-serif;color:var(--indigo);
+    background:radial-gradient(120% 80% at 50% 0%, #fff, var(--cal) 60%);padding:26px 18px 56px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:600px;margin:0 auto}
+  .serif{font-family:"Fraunces",Georgia,serif}
+
+  .head{text-align:center;margin-bottom:8px}
+  .star{width:64px;height:64px;margin:0 auto 14px;transform-origin:50% 50%}
+  .star.speaking{animation:talk 1.3s ease-in-out infinite}
+  @keyframes talk{0%,100%{transform:scale(1)}40%{transform:scale(1.07)}}
+  .glow{transition:opacity .4s} .star.speaking .glow{opacity:1}
+  h1{font-family:"Fraunces";font-weight:600;font-size:27px}
+  .note{font-size:12.5px;color:var(--muted);max-width:42ch;margin:8px auto 0;line-height:1.5}
+
+  .controls{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;
+    margin:20px 0 6px;padding:14px;background:#fff;border:1px solid var(--line);border-radius:14px}
+  .controls label{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
+  select,input[type=range]{font-family:inherit;font-size:13px;color:var(--indigo);
+    border:1px solid var(--line);border-radius:9px;padding:6px 9px;background:var(--cal);max-width:210px}
+  input[type=range]{padding:0}
+
+  .line{display:flex;gap:13px;align-items:flex-start;padding:15px 4px;border-bottom:1px solid var(--line)}
+  .play{flex:none;width:42px;height:42px;border-radius:50%;border:0;cursor:pointer;
+    background:var(--indigo);color:#fff;display:grid;place-items:center;transition:transform .12s, background .2s}
+  .play:hover{background:var(--amber)} .play:active{transform:scale(.93)}
+  .play.on{background:var(--amber)}
+  .body{flex:1;min-width:0}
+  .moment{font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+  .txt{font-family:"Fraunces";font-weight:500;font-size:16px;line-height:1.42}
+
+  .foot{margin-top:26px;background:var(--amber-wash);border:1px solid #EFE2C6;border-radius:14px;padding:16px;font-size:13px;line-height:1.55}
+  .foot b{color:var(--indigo)}
+  .err{display:none;text-align:center;color:var(--clay,#A8472F);font-size:13px;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="star" id="star">
+      <svg width="64" height="64" viewBox="0 0 100 100">
+        <defs><radialGradient id="lg" cx="38%" cy="32%" r="80%"><stop offset="0%" stop-color="#D7A23E"/><stop offset="100%" stop-color="#BD8318"/></radialGradient></defs>
+        <circle class="glow" cx="50" cy="50" r="48" fill="#BD8318" opacity="0.25"/>
+        <circle cx="50" cy="50" r="42" fill="url(#lg)"/>
+        <polygon points="50,22 56,44 78,50 56,56 50,78 44,56 22,50 44,44" fill="#FBFAF7"/>
+        <circle cx="50" cy="50" r="5" fill="#15243B"/>
+      </svg>
+    </div>
+    <h1 class="serif">Hear Lola</h1>
+    <p class="note">Tap a line to hear it. These use your device's built-in voices as a stand-in — the real product would use a proper neural voice.</p>
+  </div>
+
+  <div class="controls">
+    <label for="voice">Voice</label>
+    <select id="voice"></select>
+    <label for="rate">Pace</label>
+    <input type="range" id="rate" min="0.7" max="1.1" step="0.05" value="0.92" />
+  </div>
+
+  <div id="lines"></div>
+
+  <p class="err" id="err">Your browser didn't expose speech voices. Try Chrome or Safari on desktop.</p>
+
+  <div class="foot">
+    <b>For production,</b> use a neural TTS with a custom voice — ElevenLabs, or Azure / Google / OpenAI voices — directed for Lola: warm, unhurried, a touch lower, with an Andalusian lilt and real Spanish pronunciation on the Spanish terms.<br><br>
+    <b>Why audio matters more here than in most apps:</b> your user is often anxious and reading in a second language. Lola reading a scary official letter aloud — calmly, in plain words — is an accessibility superpower a silent app can't match.
+  </div>
+</div>
+
+<script>
+  const LINES = [
+    ["Hello", "Hey — it's Lola. I've already mapped what's ahead, so you don't have to hold it all in your head. Ready when you are."],
+    ["The next step", "First thing: your padrón. It's just registering at the town hall — fifteen minutes, and it unlocks almost everything else. I'll walk you through the how."],
+    ["At the window", "Ask for 'el volante de empadronamiento.' Bring your passport and a photocopy — Spain loves a photocopy, bring two."],
+    ["When it's a lot", "Hey. That's a lot, I know. So today, just one thing. The rest can wait, and I'm keeping track of it. You're not behind."],
+    ["Straight talk", "Let's be straight about this one. Modelo 720 carries real fines if it's missed, so I won't let it sneak up on you. Nothing to do until January — I've got it on the calendar."],
+    ["A win", "Your residence appointment is booked. That's a big one — really. Nice work."],
+    ["Reading your post", "Want me to read this letter to you? It's from the Ayuntamiento, and it's good news — your registration went through. Nothing you need to do."],
+  ];
+
+  const lines = document.getElementById('lines');
+  const voiceSel = document.getElementById('voice');
+  const rate = document.getElementById('rate');
+  const star = document.getElementById('star');
+  const synth = window.speechSynthesis;
+  let voices = [];
+
+  LINES.forEach(([moment, txt], i) => {
+    const row = document.createElement('div'); row.className = 'line';
+    row.innerHTML = `<button class="play" data-i="${i}" aria-label="Play"><svg width="15" height="15" viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg></button>
+      <div class="body"><div class="moment">${moment}</div><div class="txt">${txt.replace(/'/g,'&rsquo;')}</div></div>`;
+    lines.appendChild(row);
+  });
+
+  function loadVoices(){
+    voices = synth.getVoices();
+    if(!voices.length){ document.getElementById('err').style.display='block'; return; }
+    voiceSel.innerHTML = '';
+    // surface Spanish + English voices first; they suit Lola best
+    const ranked = [...voices].sort((a,b)=>{
+      const s = v => (v.lang.startsWith('es')?0:v.lang.startsWith('en')?1:2);
+      return s(a)-s(b);
+    });
+    ranked.forEach(v => {
+      const o = document.createElement('option');
+      o.value = v.name; o.textContent = `${v.name} · ${v.lang}`;
+      voiceSel.appendChild(o);
+    });
+    // default: a Spanish voice if available (accent), else first
+    const es = ranked.find(v=>v.lang.startsWith('es'));
+    voiceSel.value = (es || ranked[0]).name;
+  }
+  loadVoices();
+  if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices;
+
+  let current = null;
+  function speak(i, btn){
+    synth.cancel();
+    if(current === btn){ current=null; star.classList.remove('speaking'); return; }
+    const u = new SpeechSynthesisUtterance(LINES[i][1]);
+    const v = voices.find(x=>x.name===voiceSel.value); if(v) u.voice = v;
+    u.rate = parseFloat(rate.value); u.pitch = 1.0;
+    u.onstart = ()=>{ star.classList.add('speaking'); btn.classList.add('on'); current=btn; };
+    u.onend = ()=>{ star.classList.remove('speaking'); document.querySelectorAll('.play').forEach(b=>b.classList.remove('on')); current=null; };
+    synth.speak(u);
+  }
+  document.querySelectorAll('.play').forEach(btn=>{
+    btn.onclick = ()=>{ document.querySelectorAll('.play').forEach(b=>{if(b!==btn)b.classList.remove('on');}); speak(+btn.dataset.i, btn); };
+  });
+</script>
+</body>
+</html>

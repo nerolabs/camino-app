@@ -1,0 +1,109 @@
+import { type Profile } from './interview-controller';
+
+export type Persona = {
+  name: string;
+  description: string;
+  answers: Record<string, unknown>;
+};
+
+export const TEST_PERSONAS: Persona[] = [
+  {
+    name: 'Andrew — US family, DNV',
+    description: 'US nationals, remote workers for US employer, wife has dual ES passport, kids, drives, large foreign assets',
+    answers: {
+      nationalities:                        ['US', 'ES'],
+      work_situation:                       'employed_remote',
+      employer_country_is_foreign:          true,
+      annual_income_eur_band:               '€60k+',
+      has_spouse_or_partner:                true,
+      partner_is_married:                   true,
+      has_children:                         true,
+      intends_long_stay:                    true,
+      has_spanish_address:                  true,
+      owns_or_drives:                       true,
+      foreign_assets_eur_band:              'over €700k',
+      us_resident:                          true,
+      previously_ex_spanish_colony_nationality: false,
+    },
+  },
+  {
+    name: 'James — UK retiree, NLV',
+    description: 'British, passive income, no address yet, drives, mid-range assets, NLV path',
+    answers: {
+      nationalities:                        ['GB'],
+      work_situation:                       'retired',
+      annual_income_eur_band:               '€34k–€60k',
+      has_spouse_or_partner:                true,
+      partner_is_married:                   true,
+      has_children:                         false,
+      intends_long_stay:                    true,
+      has_spanish_address:                  false,
+      owns_or_drives:                       true,
+      foreign_assets_eur_band:              '€50k–€200k',
+      us_resident:                          false,
+      previously_ex_spanish_colony_nationality: false,
+    },
+  },
+  {
+    name: 'Sofia — Colombian family, NLV',
+    description: 'Colombian (ex-colony → 2-yr citizenship track), renting, two kids, drives, passive income, modest assets',
+    answers: {
+      nationalities:                        ['CO'],
+      work_situation:                       'passive_income',
+      annual_income_eur_band:               '€28k–€34k',
+      has_spouse_or_partner:                true,
+      partner_is_married:                   true,
+      has_children:                         true,
+      intends_long_stay:                    true,
+      has_spanish_address:                  true,
+      owns_or_drives:                       true,
+      foreign_assets_eur_band:              'under €50k',
+      us_resident:                          false,
+      previously_ex_spanish_colony_nationality: true,
+    },
+  },
+  {
+    name: 'Mara — German remote worker',
+    description: 'EU national, remote employee, short rental, no car, no kids — few obligations',
+    answers: {
+      nationalities:                        ['DE'],
+      work_situation:                       'employed_remote',
+      employer_country_is_foreign:          true,
+      has_spouse_or_partner:                false,
+      has_children:                         false,
+      intends_long_stay:                    false,
+      has_spanish_address:                  true,
+      owns_or_drives:                       false,
+    },
+  },
+  {
+    name: 'Kenji — Japanese contractor, DNV',
+    description: 'Japanese freelancer (DGT agreement), long stay, drives, large assets',
+    answers: {
+      nationalities:                        ['JP'],
+      work_situation:                       'contractor_freelance',
+      annual_income_eur_band:               '€60k+',
+      has_spouse_or_partner:                false,
+      has_children:                         false,
+      intends_long_stay:                    true,
+      has_spanish_address:                  true,
+      owns_or_drives:                       true,
+      foreign_assets_eur_band:              '€200k–€700k',
+      us_resident:                          false,
+      previously_ex_spanish_colony_nationality: false,
+    },
+  },
+  {
+    name: 'Minimal — EU, short stay',
+    description: 'French national, short stay, no address, no car, no kids — fewest possible obligations',
+    answers: {
+      nationalities:                        ['FR'],
+      work_situation:                       'employed_remote',
+      has_spouse_or_partner:                false,
+      has_children:                         false,
+      intends_long_stay:                    false,
+      has_spanish_address:                  false,
+      owns_or_drives:                       false,
+    },
+  },
+];
