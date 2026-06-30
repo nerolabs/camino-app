@@ -81,8 +81,9 @@ function diffSummary(before: Objective[], after: Objective[]): string {
   if (added.length)   parts.push(`added ${added.length} step${added.length === 1 ? '' : 's'} (e.g. ${shortTitle(added[0].title)})`);
   if (removed.length) parts.push(`removed ${removed.length} step${removed.length === 1 ? '' : 's'}`);
   if (shifted)        parts.push(`${shifted} date${shifted === 1 ? '' : 's'} shifted`);
-  if (!parts.length)  return 'Thanks for the update — nothing in your plan needed to change.';
-  return `I updated your plan: ${parts.join(', ')}.`;
+  if (!parts.length)  return 'Nothing in your plan needed to change.';
+  const joined = parts.join(', ');
+  return joined.charAt(0).toUpperCase() + joined.slice(1) + '.';
 }
 
 function daysBetween(a: Date, b: Date): number {
@@ -224,7 +225,7 @@ export default function PlanScreen() {
   const [changeOpen, setChangeOpen] = useState(false);
   const [changeText, setChangeText] = useState('');
   const [thinking, setThinking] = useState(false);
-  const [changeNote, setChangeNote] = useState<string | null>(null);
+  const [changeNote, setChangeNote] = useState<{ title: string; body: string } | null>(null);
 
   function openCard(obj: Objective) {
     setSelected(obj);
@@ -255,7 +256,7 @@ export default function PlanScreen() {
     const result = await parseProfileChange(changeText, obj.title);
     setThinking(false);
     if ('error' in result) {
-      setChangeNote("Sorry — I couldn't process that just now. Please try again.");
+      setChangeNote({ title: 'Hmm, that didn’t go through', body: 'I couldn’t process that just now — please try again.' });
       return;
     }
     const changes = result.changes;
@@ -263,13 +264,13 @@ export default function PlanScreen() {
     setChangeOpen(false);
     setSelected(null);
     if (Object.keys(changes).length === 0) {
-      setChangeNote('Thanks for the update — nothing in your plan needed to change.');
+      setChangeNote({ title: 'Thanks for the update', body: 'Nothing in your plan needed to change.' });
       return;
     }
     const nextProfile: Profile = { ...profile, ...changes };
     derive(nextProfile);
     const after = buildPlan(nextProfile);
-    setChangeNote(diffSummary(currentPlan, after));
+    setChangeNote({ title: 'That was useful — I’ve remodelled your plan!', body: diffSummary(currentPlan, after) });
     setProfile(nextProfile);
     if (user) await saveProfileDb(user.id, nextProfile);
   }
@@ -325,16 +326,6 @@ export default function PlanScreen() {
 
         <ConsulateBanner profile={profile} />
         <PenaltyBanner objectives={objectives} />
-
-        {changeNote && (
-          <View style={styles.lolaBanner}>
-            <Text style={styles.lolaBannerIcon}>✦</Text>
-            <Text style={styles.lolaBannerText}>{changeNote}</Text>
-            <TouchableOpacity onPress={() => setChangeNote(null)}>
-              <Text style={styles.lolaBannerDismiss}>✕</Text>
-            </TouchableOpacity>
-          </View>
-        )}
 
         {byPhase.map(({ phase, items }) => (
           <View key={phase} style={styles.section}>
@@ -514,6 +505,26 @@ export default function PlanScreen() {
         </Pressable>
       </Pressable>
     </Modal>
+
+    <Modal
+      visible={!!changeNote}
+      transparent
+      animationType="fade"
+      onRequestClose={() => setChangeNote(null)}
+    >
+      <Pressable style={styles.celebrateBackdrop} onPress={() => setChangeNote(null)}>
+        <Pressable style={styles.celebrateCard} onPress={e => e.stopPropagation()}>
+          <View style={styles.celebrateGlyphRing}>
+            <Text style={styles.celebrateGlyph}>✦</Text>
+          </View>
+          <Text style={styles.celebrateTitle}>{changeNote?.title}</Text>
+          <Text style={styles.celebrateBody}>{changeNote?.body}</Text>
+          <TouchableOpacity style={styles.celebrateBtn} onPress={() => setChangeNote(null)}>
+            <Text style={styles.celebrateBtnText}>See my updated plan</Text>
+          </TouchableOpacity>
+        </Pressable>
+      </Pressable>
+    </Modal>
     </>
   );
 }
@@ -548,12 +559,16 @@ const styles = StyleSheet.create({
   alertBannerText: { flex: 1, fontFamily: 'HankenGrotesk_500Medium', fontSize: 13,
                      color: palette.amber, lineHeight: 20 },
 
-  lolaBanner:    { flexDirection: 'row', alignItems: 'center', backgroundColor: palette.amber + '14',
-                   borderWidth: 1, borderColor: palette.amber + '40', borderRadius: 10,
-                   padding: 12, marginBottom: 12, gap: 10 },
-  lolaBannerIcon: { fontSize: 15, color: palette.amber },
-  lolaBannerText: { flex: 1, fontFamily: 'HankenGrotesk_500Medium', fontSize: 13, color: palette.indigo, lineHeight: 20 },
-  lolaBannerDismiss: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.muted, paddingHorizontal: 4 },
+  celebrateBackdrop: { flex: 1, backgroundColor: 'rgba(21,36,59,0.55)', justifyContent: 'center', alignItems: 'center', padding: 32 },
+  celebrateCard:     { backgroundColor: palette.cal, borderRadius: 20, padding: 28, alignItems: 'center',
+                       maxWidth: 360, width: '100%', boxShadow: '0 12px 40px rgba(0,0,0,0.25)' },
+  celebrateGlyphRing:{ width: 56, height: 56, borderRadius: 28, backgroundColor: palette.amber + '1A',
+                       justifyContent: 'center', alignItems: 'center', marginBottom: 16 },
+  celebrateGlyph:    { fontSize: 26, color: palette.amber },
+  celebrateTitle:    { fontFamily: 'Fraunces_600SemiBold', fontSize: 21, color: palette.indigo, textAlign: 'center', lineHeight: 27, marginBottom: 8 },
+  celebrateBody:     { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.muted, textAlign: 'center', lineHeight: 22, marginBottom: 22 },
+  celebrateBtn:      { backgroundColor: palette.amber, borderRadius: 12, paddingVertical: 13, paddingHorizontal: 24, alignSelf: 'stretch', alignItems: 'center' },
+  celebrateBtnText:  { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, color: palette.cal },
 
   section:       { marginBottom: 28 },
   phaseHeader:   { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 10 },

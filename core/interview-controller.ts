@@ -211,6 +211,15 @@ export function derive(p: Profile): void {
     if (d.from.every(f => f in p)) p[d.field] = d.compute(p);
 }
 
+// Rough interview progress for the UI. `total` is answered + currently-applicable
+// unanswered slots; it can tick up by one when a branch opens (e.g. saying you have a
+// partner reveals the marriage question), so callers should clamp progress monotonically.
+export function interviewProgress(p: Profile): { answered: number; total: number } {
+  const answered = SLOTS.filter(s => s.field in p).length;
+  const remaining = SLOTS.filter(s => !(s.field in p) && (!s.required_if || evaluate(s.required_if, p))).length;
+  return { answered, total: answered + remaining };
+}
+
 export function nextSlot(p: Profile): Slot | null {
   const pool = SLOTS.filter(s =>
     !(s.field in p) &&

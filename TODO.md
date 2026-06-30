@@ -72,8 +72,25 @@ Last updated: 2026-06-30.
       The model emits typed profile values only; the engine still authors every obligation/date.
       Verified live: "we had a baby" → `has_children=true` → school-enrolment step added (38→39).
 
+## ✅ Done (desktop interview polish + dictation)
+
+- [x] **Tightened, centered interview for desktop** — chat is a centered ~640px column; the
+      composer now sits **directly below the conversation** (not pinned to the viewport bottom),
+      in a rounded pill. Landing copy/dev panel constrained too (`app/interview.tsx`).
+- [x] **Progress bar + time estimate** — thin olive bar under the nav: "Question N of ~M" +
+      "About X min left". `interviewProgress()` in the controller; clamped monotonic so the bar
+      never goes backwards when a branch opens.
+- [x] **Microphone dictation** — Web Speech API mic button in the composer (web/Chrome; hidden where
+      unsupported). Tap to dictate into the answer field. Verified the button renders; live
+      dictation needs the user's mic-permission grant.
+- [x] **Celebratory "plan remodelled" modal** — replaced the inline banner with a centered amber
+      popup ("That was useful — I've remodelled your plan!" + the deterministic diff). Verified live:
+      "we'll rent instead of buy" → removed 6 property steps (38 → 32) (`app/plan.tsx`).
+
 ## 🔜 Next (candidates, not yet started)
 
+- [ ] **Native dictation** — the mic uses the web SpeechRecognition API; wire `expo-speech-recognition`
+      (or similar) for iOS/Android so the mic works off-web.
 - [ ] **Re-anchor more anchors from actuals** — completing `empadronamiento`/`residencia` could feed
       `padron_done`/`residency_established`, so residency-relative items also go firm. Today only
       direct `relative_to_obligation` steps re-flow from a real completion date.

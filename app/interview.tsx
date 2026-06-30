@@ -7,7 +7,7 @@ import {
 import Anthropic from '@anthropic-ai/sdk';
 import NavBar from '@/components/NavBar';
 import { palette } from '@/constants/Colors';
-import { nextSlot, derive, type Slot, type Profile } from '@/core/interview-controller';
+import { nextSlot, derive, interviewProgress, type Slot, type Profile } from '@/core/interview-controller';
 import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
 import { saveProfile as saveProfileDb } from '@/core/profileDb';
@@ -17,6 +17,14 @@ const client = new Anthropic({
   apiKey: process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY,
   dangerouslyAllowBrowser: true,
 });
+
+// Web Speech API for dictation — web/Chrome only; gracefully absent elsewhere.
+const SpeechRecognitionImpl =
+  typeof window !== 'undefined'
+    ? ((window as unknown as Record<string, unknown>).SpeechRecognition ??
+       (window as unknown as Record<string, unknown>).webkitSpeechRecognition)
+    : undefined;
+const MIC_SUPPORTED = Platform.OS === 'web' && !!SpeechRecognitionImpl;
 
 type Turn = { role: 'lola' | 'user'; text: string };
 
@@ -134,7 +142,32 @@ export default function InterviewScreen() {
   const [started, setStarted] = useState(false);
   const [done, setDone] = useState(false);
   const [showDev, setShowDev] = useState(false);
+  const [listening, setListening] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
+  const recognitionRef = useRef<{ stop: () => void } | null>(null);
+  const progressRef = useRef(0);
+
+  function toggleMic() {
+    if (listening) { recognitionRef.current?.stop(); return; }
+    const Recognition = SpeechRecognitionImpl as new () => {
+      lang: string; interimResults: boolean; continuous: boolean;
+      onresult: (e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void;
+      onend: () => void; onerror: () => void; start: () => void; stop: () => void;
+    };
+    const rec = new Recognition();
+    rec.lang = 'en-US';
+    rec.interimResults = false;
+    rec.continuous = false;
+    rec.onresult = (e) => {
+      const transcript = Array.from(e.results).map(r => r[0].transcript).join(' ').trim();
+      setInput(prev => (prev ? prev + ' ' : '') + transcript);
+    };
+    rec.onend = () => setListening(false);
+    rec.onerror = () => setListening(false);
+    recognitionRef.current = rec;
+    setListening(true);
+    rec.start();
+  }
 
   async function loadPersona(persona: Persona) {
     const p: Profile = {};
@@ -254,6 +287,15 @@ export default function InterviewScreen() {
     );
   }
 
+  const { answered, total } = interviewProgress(profile);
+  const rawProgress = total > 0 ? answered / total : 0;
+  const progress = done ? 1 : Math.max(progressRef.current, rawProgress);
+  progressRef.current = progress;
+  const remainingQ = Math.max(total - answered, 0);
+  const timeLeft = remainingQ === 0 ? 'Almost there'
+                 : remainingQ * 15 < 60 ? 'Under a minute left'
+                 : `About ${Math.round((remainingQ * 15) / 60)} min left`;
+
   return (
     <KeyboardAvoidingView
       style={styles.flex}
@@ -261,45 +303,69 @@ export default function InterviewScreen() {
       keyboardVerticalOffset={90}
     >
       <NavBar />
+      {!done && (
+        <View style={styles.progressWrap}>
+          <View style={styles.progressRow}>
+            <Text style={styles.progressLabel}>Question {Math.min(answered + 1, total)} of ~{total}</Text>
+            <Text style={styles.progressLabel}>{timeLeft}</Text>
+          </View>
+          <View style={styles.progressTrack}>
+            <View style={[styles.progressFill, { width: `${Math.round(progress * 100)}%` }]} />
+          </View>
+        </View>
+      )}
       <ScrollView
         ref={scrollRef}
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
+        keyboardShouldPersistTaps="handled"
       >
-        {turns.map((t, i) => (
-          <View key={i} style={t.role === 'lola' ? styles.lolaBubble : styles.userBubble}>
-            <Text style={t.role === 'lola' ? styles.lolaText : styles.userText}>{t.text}</Text>
-          </View>
-        ))}
-        {loading && (
-          <View style={styles.lolaBubble}>
-            <ActivityIndicator color={palette.amber} />
-          </View>
-        )}
-      </ScrollView>
+        <View style={styles.column}>
+          {turns.map((t, i) => (
+            <View key={i} style={t.role === 'lola' ? styles.lolaBubble : styles.userBubble}>
+              <Text style={t.role === 'lola' ? styles.lolaText : styles.userText}>{t.text}</Text>
+            </View>
+          ))}
+          {loading && (
+            <View style={styles.lolaBubble}>
+              <ActivityIndicator color={palette.amber} />
+            </View>
+          )}
 
-      {!done && (
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.input}
-            value={input}
-            onChangeText={setInput}
-            placeholder="Type your answer…"
-            placeholderTextColor={palette.muted}
-            onSubmitEditing={() => submit(input)}
-            returnKeyType="send"
-            editable={!loading}
-          />
-          <TouchableOpacity
-            style={[styles.sendBtn, (!input.trim() || loading) && styles.sendBtnDisabled]}
-            onPress={() => submit(input)}
-            disabled={!input.trim() || loading}
-          >
-            <Text style={styles.sendBtnText}>→</Text>
-          </TouchableOpacity>
+          {!done && (
+            <View style={styles.inputRow}>
+              <TextInput
+                style={styles.input}
+                value={input}
+                onChangeText={setInput}
+                placeholder={listening ? 'Listening…' : 'Type your answer…'}
+                placeholderTextColor={palette.muted}
+                onSubmitEditing={() => submit(input)}
+                returnKeyType="send"
+                editable={!loading}
+              />
+              {MIC_SUPPORTED && (
+                <TouchableOpacity
+                  style={[styles.micBtn, listening && styles.micBtnActive]}
+                  onPress={toggleMic}
+                  disabled={loading}
+                  accessibilityLabel={listening ? 'Stop dictation' : 'Speak your answer'}
+                >
+                  <Text style={[styles.micIcon, listening && styles.micIconActive]}>{listening ? '■' : '🎙'}</Text>
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity
+                style={[styles.sendBtn, (!input.trim() || loading) && styles.sendBtnDisabled]}
+                onPress={() => submit(input)}
+                disabled={!input.trim() || loading}
+              >
+                <Text style={styles.sendBtnText}>→</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
-      )}
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
@@ -308,41 +374,53 @@ const styles = StyleSheet.create({
   flex:        { flex: 1, backgroundColor: palette.cal },
   center:      { flex: 1, backgroundColor: palette.cal, justifyContent: 'center', alignItems: 'center', padding: 32 },
   headline:    { fontFamily: 'Fraunces_600SemiBold', fontSize: 34, color: palette.indigo, textAlign: 'center', marginBottom: 16 },
-  sub:         { fontFamily: 'HankenGrotesk_400Regular', fontSize: 16, color: palette.indigo, textAlign: 'center', lineHeight: 24, marginBottom: 40 },
+  sub:         { fontFamily: 'HankenGrotesk_400Regular', fontSize: 16, color: palette.indigo, textAlign: 'center', lineHeight: 24, marginBottom: 40, maxWidth: 440 },
   startBtn:    { backgroundColor: palette.cobalt, borderRadius: 12, paddingVertical: 16, paddingHorizontal: 40 },
   startBtnText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cal },
+  progressWrap:  { width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 16, paddingTop: 14, paddingBottom: 2, gap: 7 },
+  progressRow:   { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  progressLabel: { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.muted },
+  progressTrack: { height: 6, borderRadius: 3, backgroundColor: '#EAE6DE', overflow: 'hidden' },
+  progressFill:  { height: 6, borderRadius: 3, backgroundColor: palette.olive },
   scroll:        { flex: 1 },
-  scrollContent: { padding: 20, paddingBottom: 16 },
+  scrollContent: { flexGrow: 1, paddingVertical: 28, paddingHorizontal: 16, alignItems: 'center' },
+  column:        { width: '100%', maxWidth: 640 },
   lolaBubble: {
     alignSelf: 'flex-start', backgroundColor: '#FFFFFF',
     borderRadius: 18, borderBottomLeftRadius: 4,
-    padding: 14, marginBottom: 12, maxWidth: '82%',
+    padding: 14, marginBottom: 12, maxWidth: '88%',
     boxShadow: '0 2px 4px rgba(0,0,0,0.06)',
   },
   userBubble: {
     alignSelf: 'flex-end', backgroundColor: palette.cobalt,
     borderRadius: 18, borderBottomRightRadius: 4,
-    padding: 14, marginBottom: 12, maxWidth: '82%',
+    padding: 14, marginBottom: 12, maxWidth: '88%',
   },
   lolaText:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.indigo, lineHeight: 22 },
   userText:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.cal,   lineHeight: 22 },
   inputRow:  {
-    flexDirection: 'row', alignItems: 'center',
-    padding: 12, borderTopWidth: 1, borderTopColor: '#E8E4DC',
-    backgroundColor: palette.cal,
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    marginTop: 12, backgroundColor: '#FFFFFF',
+    borderRadius: 28, borderWidth: 1, borderColor: '#E0DCD4',
+    paddingLeft: 6, paddingRight: 6, paddingVertical: 6,
+    boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
   },
   input: {
-    flex: 1, backgroundColor: '#FFFFFF',
-    borderRadius: 24, paddingHorizontal: 16, paddingVertical: 10,
+    flex: 1, backgroundColor: 'transparent',
+    paddingHorizontal: 14, paddingVertical: 8,
     fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.indigo,
-    borderWidth: 1, borderColor: '#E0DCD4',
+    ...(Platform.OS === 'web' ? { outlineStyle: 'none' } as object : null),
   },
-  sendBtn:         { marginLeft: 10, backgroundColor: palette.cobalt, width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center' },
+  micBtn:          { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F2EDE6' },
+  micBtnActive:    { backgroundColor: palette.amber },
+  micIcon:         { fontSize: 17, lineHeight: 22 },
+  micIconActive:   { color: palette.cal, fontSize: 13 },
+  sendBtn:         { backgroundColor: palette.cobalt, width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center' },
   sendBtnDisabled: { backgroundColor: palette.muted },
   sendBtnText:     { color: palette.cal, fontSize: 20, lineHeight: 24 },
   devToggle:       { marginTop: 32, padding: 8 },
   devToggleText:   { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: palette.muted },
-  devPanel:        { width: '100%', marginTop: 8, gap: 8 },
+  devPanel:        { width: '100%', maxWidth: 460, alignSelf: 'center', marginTop: 8, gap: 8 },
   personaBtn:      { backgroundColor: '#FFFFFF', borderRadius: 10, padding: 14, borderWidth: 1, borderColor: '#E0DCD4' },
   personaName:     { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.indigo, marginBottom: 2 },
   personaDesc:     { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: palette.muted },
