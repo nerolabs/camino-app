@@ -62,14 +62,18 @@ Last updated: 2026-06-30.
       Modelo 030 re-flowed from 14 Apr est. → 4 May firm). No LLM in the engine; the plan stays a
       pure function of the profile. (`core/engine-controller.ts`, `app/plan.tsx`)
 
+## ✅ Done (living roadmap — layer 2)
+
+- [x] **Living roadmap — layer 2 (the LLM half).** The plan drawer's "Something changed?" box now
+      takes free text ("we had a baby", "we decided to rent instead of buy"); a Haiku Extractor maps
+      it to a **profile-field delta** (fields derived from `SLOTS`, so it can't drift), then
+      `derive()` + `buildPlan()` re-run and an amber Lola banner narrates a **deterministic diff**
+      (added / removed / shifted, computed from before/after plans — Lola never invents the facts).
+      The model emits typed profile values only; the engine still authors every obligation/date.
+      Verified live: "we had a baby" → `has_children=true` → school-enrolment step added (38→39).
+
 ## 🔜 Next (candidates, not yet started)
 
-- [ ] **Living roadmap — layer 2 (the LLM half).** The "Something changed? …coming soon" row in the
-      plan drawer is a stub. Build the freeform "I learned X that changes the plan" box: an
-      Extractor-style call maps the free text to a **profile-field delta** (e.g. "we had a baby" →
-      `has_children=true`), then `derive()` + `buildPlan()` re-run and Lola narrates the diff. The
-      model emits typed profile values only — it must never author plan items/deadlines (invariants
-      1, 3, 4). The deterministic foundation (progress model, re-anchor-on-actuals) is already in.
 - [ ] **Re-anchor more anchors from actuals** — completing `empadronamiento`/`residencia` could feed
       `padron_done`/`residency_established`, so residency-relative items also go firm. Today only
       direct `relative_to_obligation` steps re-flow from a real completion date.

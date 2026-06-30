@@ -78,8 +78,11 @@ deadlines) is deterministic code.
   "Action taken" drawer section marks a step done (today or a specific date). Done items go olive
   with a ✓ badge + "Completed DATE · N days late/early"; a "done" stat chip shows. A real completion
   date re-anchors downstream `relative_to_obligation` steps to the actual date (firm). No LLM in the
-  engine — `progress` is just more profile input. Next layer (the freeform "I learned X" → re-plan)
-  is stubbed in the drawer and listed in `TODO.md`.
+  engine — `progress` is just more profile input.
+- **Living roadmap, layer 2 (LLM half).** The drawer's "Something changed?" box takes free text; a
+  Haiku Extractor (`parseProfileChange` in `app/plan.tsx`, fields built from `SLOTS`) maps it to a
+  **profile-field delta** only, then `derive()` + `buildPlan()` re-run and an amber Lola banner
+  narrates a deterministic before/after diff. The model never authors obligations or dates.
 
 **Latest follow-up pass:**
 - Promoted `autonomo-social-security` `webinar` → `official` (catalog mix now **28/26/0**).

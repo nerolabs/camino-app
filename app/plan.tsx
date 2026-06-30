@@ -1,14 +1,89 @@
 import { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput, ActivityIndicator } from 'react-native';
+import Anthropic from '@anthropic-ai/sdk';
 import { palette } from '@/constants/Colors';
 import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
 import { saveProfile as saveProfileDb } from '@/core/profileDb';
-import { type Profile } from '@/core/interview-controller';
+import { SLOTS, derive, type Profile } from '@/core/interview-controller';
 import { buildPlan, type Objective, type Phase, type Progress } from '@/core/engine-controller';
 import NavBar from '@/components/NavBar';
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+const client = new Anthropic({
+  apiKey: process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY,
+  dangerouslyAllowBrowser: true,
+});
+
+// Describe the editable profile fields straight from the interview catalog, so the
+// re-plan extractor can never drift from the slots the engine actually reads.
+function fieldGuide(): string {
+  return SLOTS.map(s => {
+    const t = s.type === 'list' ? 'array of ISO 2-letter country codes'
+            : s.type === 'bool' ? 'true or false'
+            : s.type === 'date' ? 'a YYYY-MM-DD date'
+            : s.options ? `one of: ${s.options.join(' | ')}`
+            : 'a string';
+    return `- ${s.field}: ${t} — ${s.prompt_hint}`;
+  }).join('\n');
+}
+
+// Layer 2 of the living plan: translate a free-text "here's what changed" into a
+// typed delta over PROFILE FIELDS ONLY. The model never authors plan items, dates,
+// costs, or laws — the deterministic engine re-derives the plan from the new profile.
+async function parseProfileChange(
+  freeText: string, objectiveTitle: string,
+): Promise<{ changes: Record<string, unknown> } | { error: true }> {
+  try {
+    const msg = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 300,
+      system: `The user is updating their Spain relocation plan. They're looking at this step:
+"${objectiveTitle}". They'll describe what they did or learned. Translate it into changes to
+these profile fields ONLY:
+${fieldGuide()}
+
+Respond with ONLY JSON: {"changes": { "<field>": <typed value>, ... }} containing just the
+fields that genuinely changed. If nothing maps to a field above, return {"changes": {}}.
+Never invent fields, deadlines, costs, or laws — only set the listed fields to typed values.`,
+      messages: [{ role: 'user', content: freeText }],
+    });
+    const raw = (msg.content[0] as { text: string }).text.trim();
+    const stripped = raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '').trim();
+    const parsed = JSON.parse(stripped.slice(stripped.indexOf('{'), stripped.lastIndexOf('}') + 1));
+    return { changes: (parsed.changes ?? {}) as Record<string, unknown> };
+  } catch {
+    return { error: true };
+  }
+}
+
+function shortTitle(t: string): string {
+  const clause = t.split(' — ')[0]; // titles lead with a short clause before the em-dash
+  const words = clause.split(' ');
+  return words.length <= 8 ? clause : words.slice(0, 8).join(' ') + '…';
+}
+
+// Truthful, deterministic diff of two plans — the facts Lola reports come from here.
+function diffSummary(before: Objective[], after: Objective[]): string {
+  const beforeIds = new Set(before.map(o => o.id));
+  const afterById = new Map(after.map(o => [o.id, o]));
+  const beforeById = new Map(before.map(o => [o.id, o]));
+  const added = after.filter(o => !beforeIds.has(o.id));
+  const removed = before.filter(o => !afterById.has(o.id));
+  let shifted = 0;
+  for (const o of after) {
+    const b = beforeById.get(o.id);
+    if (b && b.timing.state === 'scheduled' && o.timing.state === 'scheduled'
+        && b.timing.due.getTime() !== o.timing.due.getTime()) shifted++;
+  }
+  const parts: string[] = [];
+  if (added.length)   parts.push(`added ${added.length} step${added.length === 1 ? '' : 's'} (e.g. ${shortTitle(added[0].title)})`);
+  if (removed.length) parts.push(`removed ${removed.length} step${removed.length === 1 ? '' : 's'}`);
+  if (shifted)        parts.push(`${shifted} date${shifted === 1 ? '' : 's'} shifted`);
+  if (!parts.length)  return 'Thanks for the update — nothing in your plan needed to change.';
+  return `I updated your plan: ${parts.join(', ')}.`;
+}
 
 function daysBetween(a: Date, b: Date): number {
   return Math.round((a.getTime() - b.getTime()) / 86_400_000);
@@ -146,6 +221,17 @@ export default function PlanScreen() {
   const { user } = useAuth();
   const [selected, setSelected] = useState<Objective | null>(null);
   const [dateInput, setDateInput] = useState('');
+  const [changeOpen, setChangeOpen] = useState(false);
+  const [changeText, setChangeText] = useState('');
+  const [thinking, setThinking] = useState(false);
+  const [changeNote, setChangeNote] = useState<string | null>(null);
+
+  function openCard(obj: Objective) {
+    setSelected(obj);
+    setDateInput('');
+    setChangeOpen(false);
+    setChangeText('');
+  }
 
   async function setProgress(id: string, pr: Progress | null) {
     const prev = (profile?.progress as Record<string, Progress> | undefined) ?? {};
@@ -160,6 +246,32 @@ export default function PlanScreen() {
     setProgress(id, { state: 'done', ...(completedOn ? { completedOn } : {}) });
     setDateInput('');
     setSelected(null);
+  }
+
+  // Layer 2: free-text "what changed" → profile delta → deterministic re-plan.
+  async function submitChange(obj: Objective, currentPlan: Objective[]) {
+    if (!changeText.trim() || thinking) return;
+    setThinking(true);
+    const result = await parseProfileChange(changeText, obj.title);
+    setThinking(false);
+    if ('error' in result) {
+      setChangeNote("Sorry — I couldn't process that just now. Please try again.");
+      return;
+    }
+    const changes = result.changes;
+    setChangeText('');
+    setChangeOpen(false);
+    setSelected(null);
+    if (Object.keys(changes).length === 0) {
+      setChangeNote('Thanks for the update — nothing in your plan needed to change.');
+      return;
+    }
+    const nextProfile: Profile = { ...profile, ...changes };
+    derive(nextProfile);
+    const after = buildPlan(nextProfile);
+    setChangeNote(diffSummary(currentPlan, after));
+    setProfile(nextProfile);
+    if (user) await saveProfileDb(user.id, nextProfile);
   }
 
   if (!profile) {
@@ -214,6 +326,16 @@ export default function PlanScreen() {
         <ConsulateBanner profile={profile} />
         <PenaltyBanner objectives={objectives} />
 
+        {changeNote && (
+          <View style={styles.lolaBanner}>
+            <Text style={styles.lolaBannerIcon}>✦</Text>
+            <Text style={styles.lolaBannerText}>{changeNote}</Text>
+            <TouchableOpacity onPress={() => setChangeNote(null)}>
+              <Text style={styles.lolaBannerDismiss}>✕</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
         {byPhase.map(({ phase, items }) => (
           <View key={phase} style={styles.section}>
             <View style={styles.phaseHeader}>
@@ -229,7 +351,7 @@ export default function PlanScreen() {
                   key={obj.id}
                   style={[styles.card, isPenalty && styles.cardPenalty, obj.done && styles.cardDone]}
                   activeOpacity={0.7}
-                  onPress={() => setSelected(obj)}
+                  onPress={() => openCard(obj)}
                 >
                   <View style={[styles.severityBar, { backgroundColor: barColor }]} />
                   <View style={styles.cardBody}>
@@ -352,9 +474,34 @@ export default function PlanScreen() {
                         <Text style={styles.dateSaveBtnText}>Save date</Text>
                       </TouchableOpacity>
                     </View>
-                    <View style={styles.comingSoonRow}>
-                      <Text style={styles.comingSoonText}>Something changed? Telling Lola what you learned is coming soon.</Text>
-                    </View>
+                  </>
+                )}
+
+                <Text style={styles.sheetSectionLabel}>SOMETHING CHANGED?</Text>
+                {!changeOpen ? (
+                  <TouchableOpacity style={styles.changeRow} onPress={() => setChangeOpen(true)}>
+                    <Text style={styles.changeRowText}>Tell Lola what you did or learned — she’ll update your plan →</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <>
+                    <TextInput
+                      style={styles.changeInput}
+                      value={changeText}
+                      onChangeText={setChangeText}
+                      placeholder="e.g. We ended up having a baby — or we decided to rent instead of buy."
+                      placeholderTextColor={palette.muted}
+                      multiline
+                      editable={!thinking}
+                    />
+                    <TouchableOpacity
+                      style={[styles.changeSubmit, (thinking || !changeText.trim()) && styles.dateSaveBtnDisabled]}
+                      disabled={thinking || !changeText.trim()}
+                      onPress={() => submitChange(selected, objectives)}
+                    >
+                      {thinking
+                        ? <ActivityIndicator color={palette.cal} />
+                        : <Text style={styles.changeSubmitText}>Tell Lola</Text>}
+                    </TouchableOpacity>
                   </>
                 )}
 
@@ -400,6 +547,13 @@ const styles = StyleSheet.create({
   alertBannerIcon: { fontSize: 16, lineHeight: 22 },
   alertBannerText: { flex: 1, fontFamily: 'HankenGrotesk_500Medium', fontSize: 13,
                      color: palette.amber, lineHeight: 20 },
+
+  lolaBanner:    { flexDirection: 'row', alignItems: 'center', backgroundColor: palette.amber + '14',
+                   borderWidth: 1, borderColor: palette.amber + '40', borderRadius: 10,
+                   padding: 12, marginBottom: 12, gap: 10 },
+  lolaBannerIcon: { fontSize: 15, color: palette.amber },
+  lolaBannerText: { flex: 1, fontFamily: 'HankenGrotesk_500Medium', fontSize: 13, color: palette.indigo, lineHeight: 20 },
+  lolaBannerDismiss: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.muted, paddingHorizontal: 4 },
 
   section:       { marginBottom: 28 },
   phaseHeader:   { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 10 },
@@ -463,8 +617,13 @@ const styles = StyleSheet.create({
   dateSaveBtn:   { backgroundColor: palette.olive, borderRadius: 10, paddingHorizontal: 16, paddingVertical: 11, justifyContent: 'center' },
   dateSaveBtnDisabled: { backgroundColor: palette.muted, opacity: 0.5 },
   dateSaveBtnText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cal },
-  comingSoonRow: { backgroundColor: '#F2EDE6', borderRadius: 8, padding: 12, marginTop: 14 },
-  comingSoonText:{ fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: palette.muted, lineHeight: 19 },
+  changeRow:     { backgroundColor: palette.amber + '12', borderRadius: 8, padding: 12 },
+  changeRowText: { fontFamily: 'HankenGrotesk_500Medium', fontSize: 13, color: palette.amber, lineHeight: 19 },
+  changeInput:   { backgroundColor: '#FFFFFF', borderRadius: 10, padding: 12, minHeight: 72,
+                   fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.indigo,
+                   borderWidth: 1, borderColor: '#E0DCD4', textAlignVertical: 'top' },
+  changeSubmit:  { backgroundColor: palette.amber, borderRadius: 10, paddingVertical: 12, alignItems: 'center', marginTop: 8 },
+  changeSubmitText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, color: palette.cal },
   doneRow:       { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
                    backgroundColor: palette.olive + '14', borderRadius: 10, padding: 14 },
   doneRowText:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.olive, flex: 1 },
