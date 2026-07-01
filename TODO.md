@@ -183,16 +183,18 @@ is strictly required — a normal EAS build works.
       `EXPO_PUBLIC_API_URL=getcamino.app` baked in. **Not yet verified on-device** (user hit Android
       emulator trouble; deferred to focus on iOS). Re-test the APK later to validate native rendering
       + the interview/`api/lola` path.
-- [~] **iOS build — real-device via Apple Developer account ($99/yr).** Path chosen: install on a
-      real iPhone (ad-hoc internal first, then TestFlight for the store). Gated on:
-      1. User enrolls in the Apple Developer Program (developer.apple.com).
-      2. Apple authentication — EAS needs to auth to Apple to create certs/provisioning. Two ways:
-         (a) user runs `eas build -p ios` themselves and logs in with their Apple ID when prompted,
-         or (b) an App Store Connect **API key** (.p8) set up in EAS for non-interactive builds.
-         Claude can't enter Apple credentials, so this step is the user's.
-      3. `eas device:create` to register the iPhone (ad-hoc), then `eas build --profile preview
-         --platform ios`, install via the link on the phone. Bundle id `com.nerolabs.camino` + the
-         `caminoapp` scheme are already set.
+- [x] **iOS build + TestFlight submission — DONE (2026-07-01).** Real iPhone via TestFlight.
+      - Apple auth: **App Store Connect API key** (.p8), key id `8PM8N955UX`, team `VB9CHJM4AN`,
+        stored on EAS servers + in `~/.zshrc` env vars. Distribution cert + provisioning profile
+        created (one-time interactive `eas build`; now non-interactive for Claude).
+      - App Store Connect app created (bundle `com.nerolabs.camino`, **ASC App ID `6786412055`**,
+        wired into `eas.json` submit). Name landed as "Camino (51e654)" ("Camino" was taken) —
+        renamable in App Store Connect later.
+      - Build `4c7a1cd7` (production profile, store dist, buildNumber 3) submitted to TestFlight;
+        `ITSAppUsesNonExemptEncryption=false` set so no manual export-compliance step. Awaiting
+        Apple processing → installs via the TestFlight app.
+      - ⚠️ Prod-DB build: fine because native sign-in is a no-op right now (nothing writes to the
+        DB until native OAuth is wired).
 - [ ] **Native Google sign-in (OAuth deep-link).** Not just the redirect string — native needs the
       `WebBrowser.openAuthSessionAsync` flow + `caminoapp://` added to the Supabase redirect
       allowlist and the Google Cloud OAuth client. Sign-in is optional (interview works without it),
