@@ -3,7 +3,8 @@ import { ExpoConfig } from 'expo/config';
 
 const config: ExpoConfig = {
   name: 'Camino',
-  slug: 'camino-app',
+  slug: 'camino',
+  owner: 'nerolabs-team',
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/images/icon.png',
@@ -35,8 +36,11 @@ const config: ExpoConfig = {
     'expo-font',
   ],
   experiments: { typedRoutes: true },
-  // Note: the Anthropic key is intentionally NOT exposed here. It lives only on the
-  // server (process.env.ANTHROPIC_API_KEY) and is used by app/api/lola+api.ts.
+  extra: {
+    eas: { projectId: '5714f767-d3dc-4284-8235-33e6d7e6f381' },
+    // Note: the Anthropic key is intentionally NOT exposed here. It lives only on the
+    // server (process.env.ANTHROPIC_API_KEY) and is used by app/api/lola+api.ts.
+  },
 };
 
 export default config;
