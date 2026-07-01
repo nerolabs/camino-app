@@ -10,7 +10,13 @@ const config: ExpoConfig = {
   icon: './assets/images/icon.png',
   scheme: 'caminoapp',
   userInterfaceStyle: 'automatic',
-  ios: { supportsTablet: true, bundleIdentifier: 'com.nerolabs.camino' },
+  ios: {
+    supportsTablet: true,
+    bundleIdentifier: 'com.nerolabs.camino',
+    // App uses only standard HTTPS (exempt encryption) — declaring this avoids the manual
+    // export-compliance step in App Store Connect before each TestFlight build.
+    infoPlist: { ITSAppUsesNonExemptEncryption: false },
+  },
   android: {
     package: 'com.nerolabs.camino',
     adaptiveIcon: {
