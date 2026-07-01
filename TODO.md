@@ -149,9 +149,19 @@ Last updated: 2026-07-01.
       172.66.0.241, TXT `_cf-custom-hostname`, CNAME `_acme-challenge` (deleted Namecheap's default
       URL-redirect record that conflicted with the apex A record). Verified: https://getcamino.app
       serves the app + `/api/lola` over HTTPS. Owner account: nerolabs-team (the upgraded one).
-- [ ] **Harden the proxy before a truly public launch** — the `/api/lola` route is currently an
-      open proxy (fine for an unlisted family-test URL). Add rate limiting / origin allowlist /
-      structured ops before wide release so it can't be abused as a free Claude endpoint.
+- [~] **Harden the `/api/lola` proxy — PARTIAL (payload caps live; volume-limiting still needed).**
+      Added, verified live on getcamino.app + staging:
+      - **Payload caps ENFORCED** — ≤40 messages, ≤24k total chars, max_tokens≤1024, strict message
+        shape. Oversized → 413. This is the real per-request cost limiter.
+      - Origin/Referer allowlist + per-IP rate limit are in the code but **fail-open**: the EAS
+        Hosting (Cloudflare Workers) runtime does **not forward `Origin` or `Referer`** to the route
+        handler (confirmed live — foreign origin/referer still return 200), so the allowlist is a
+        no-op in prod (works on other runtimes). Rate limit is best-effort and skipped when no client
+        IP is available, so it never throttles legit users.
+      - [ ] **Still to do before a wide/public launch:** real volume-limiting the Workers runtime
+            can't do in-process — a **Cloudflare WAF rate-limit rule** and/or **Turnstile** challenge,
+            or a KV-backed counter. Today an abuser who finds the URL can still send many small
+            (payload-capped, cheap-Haiku) calls. Fine for an unlisted family test; not for public.
 - [ ] **Native API base URL** — set `EXPO_PUBLIC_API_URL` to the deployed origin for iOS/Android so
       `lib/lola.ts`'s relative `/api/lola` resolves off-web.
 
