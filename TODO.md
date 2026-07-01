@@ -195,10 +195,14 @@ is strictly required — a normal EAS build works.
         Apple processing → installs via the TestFlight app.
       - ⚠️ Prod-DB build: fine because native sign-in is a no-op right now (nothing writes to the
         DB until native OAuth is wired).
-- [ ] **Native Google sign-in (OAuth deep-link).** Not just the redirect string — native needs the
-      `WebBrowser.openAuthSessionAsync` flow + `caminoapp://` added to the Supabase redirect
-      allowlist and the Google Cloud OAuth client. Sign-in is optional (interview works without it),
-      so a first build can ship before this. Currently native sign-in is a benign no-op (won't crash).
+- [~] **Native Google sign-in (OAuth deep-link) — implemented, on-device test pending.**
+      `core/AuthContext.tsx` now does the native flow: `signInWithOAuth({skipBrowserRedirect})` →
+      `WebBrowser.openAuthSessionAsync` → complete the session from the `caminoapp://auth-callback`
+      redirect (handles both PKCE code-exchange and implicit token setSession). Web path unchanged.
+      `caminoapp://**` added to BOTH Supabase projects' redirect allowlists (prod + staging). No
+      Google Cloud change needed (round-trips through Supabase's existing callback). Building iOS
+      `24178b4c` (buildNumber 4) with this → TestFlight to verify on-device. Branch
+      `native-google-signin`.
 - [ ] **Native dictation** — the mic uses the web SpeechRecognition API (hidden off-web). Wire
       `expo-speech-recognition` (or similar) for iOS/Android so the mic works on device.
 - [ ] **Store submission** — `eas submit` to App Store (needs Apple acct) + Google Play (one-time
