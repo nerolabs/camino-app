@@ -215,6 +215,61 @@ is strictly required — a normal EAS build works.
 - [ ] **Store submission** — `eas submit` to App Store (needs Apple acct) + Google Play (one-time
       $25). App Store metadata / screenshots / privacy. Later, once builds are validated.
 
+## 📥 Feedback backlog (captured 2026-07-01) — suggested order below
+
+Recommended sequence (rationale in each item): **B1 quick UX/config wins → B7 analytics (time-
+sensitive: capture family-testing funnel data now) → B4 scouting obligation → B5 E2E tests → B6
+observability → B8 blog stub → B2 app icon (needs an asset decision).**
+
+### Product / UX (quick–medium)
+- [ ] **B1a — Hide dev test personas in production, keep in staging.** Currently the "Dev test
+      personas" toggle in `app/interview.tsx` always renders. Gate it on environment via a new
+      `EXPO_PUBLIC_ENV` (production vs staging), set per EAS environment + build profile + local
+      `.env`. **Optional upgrade (user offered):** a *staff* feature flag — if the signed-in
+      Supabase user id ∈ a STAFF_IDS allowlist (user + wife), show dev tools even in prod. Needs
+      the two user ids. Plan: ship env-gate now; add staff override when ids provided.
+- [ ] **B1b — Interview intro: establish Lola as an experienced companion before the chat.** The
+      landing copy ("Hola, I'm Lola…") is easy to miss. Add a brief, uncluttered intro moment on
+      `app/interview.tsx` (NOT in the chat box) — the road to Spain is easier with an experienced
+      friend; her name is Lola — then start the interview. Keep it tight (invariant: no invented
+      claims; Lola stays a guide, defers specifics to a gestor).
+- [ ] **B2 — App icon from the brand mark.** Replace the placeholder `assets/images/icon.png`
+      with the Camino "one star, two hosts" mark (`docs/design/brand.md`, "The mark"). ⚠️ Claude
+      can't design/generate the image — need either a designed PNG (1024×1024) from the user, or
+      approval to generate a simple geometric SVG→PNG version programmatically. Then wire iOS/Android
+      icon + splash + favicon.
+
+### Catalog / engine (medium)
+- [ ] **B4 — "Where to live in Spain" scouting workstream (NEW obligation).** Many users don't know
+      where they want to live. Add obligation(s): recommend a **scouting trip** and a framework for
+      **evaluating regions/cities** (cost of living, climate, healthcare access, expat/English
+      support, visa-relevant factors, schools, transport). Deterministic/engine-safe; source it
+      (webinar/official) per SOURCING.md discipline. Likely gated early in the timeline (pre-visa).
+
+### Infra / ops (large — before wider launch)
+- [ ] **B5 — Automated end-to-end test suite (on-demand + on prod pushes).** We're spot-testing;
+      time for real E2E. Cover: interview → extraction → plan generation for key personas;
+      `/api/lola` contract; sign-in; living-plan re-model. Runs locally + in CI on deploy. Consider
+      Playwright (web) + Maestro (native), and an engine-level deterministic test pass.
+- [ ] **B6 — Observability: monitoring / alerting / paging (incl. mobile).** *Answer to "does Expo
+      provide this?":* EAS gives build/deploy + basic hosting request logs, but **not** full
+      APM/alerting/paging. Recommended stack: **Sentry** (crashes/errors, web + native via
+      `@sentry/react-native`), a **uptime/health monitor + paging** (Better Stack / Grafana Cloud /
+      Pingdom) hitting the site + `/api/lola`, and structured logs. Define health per major feature
+      (interview, plan engine, Lola proxy, auth, DB).
+- [ ] **B7 — Product analytics + conversion funnel (time-sensitive — instrument before more testing).**
+      Funnel: home → interview start → interview complete → roadmap. Retention/reuse over days;
+      feature-health: % returning to the roadmap, checking off items, using post-roadmap Lola to
+      drive completion. Recommended: **PostHog** (funnels + retention + session, free tier, web via
+      `posthog-js` + native via `posthog-react-native`). Privacy-respecting; no PII in events.
+
+### Content (medium — stub now, refine later)
+- [ ] **B8 — Hidden "how-i-was-built" blog at `/how-i-was-built`.** Unlisted route (direct link
+      only; not in nav/sitemap). Narrative: started thin → expanded depth → refined UX → built real
+      dev/staging/prod pipelines → chose the right SaaS tools → obsessed over customer experience;
+      leadership lessons on why engineering leaders must adopt AI and keep skills current. Stub a
+      v1 now; revise when the product matures.
+
 ## 🔜 Next (candidates, not yet started)
 - [ ] **Re-anchor more anchors from actuals** — completing `empadronamiento`/`residencia` could feed
       `padron_done`/`residency_established`, so residency-relative items also go firm. Today only
