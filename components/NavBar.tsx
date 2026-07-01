@@ -1,14 +1,18 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
 
 export default function NavBar() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { user, signInWithGoogle, signOut } = useAuth();
 
   return (
-    <View style={styles.nav}>
+    // Pad the top by the safe-area inset so the bar clears the Dynamic Island / notch /
+    // status bar on device. On web the inset is 0, so the layout is unchanged.
+    <View style={[styles.nav, { paddingTop: insets.top + 18, paddingLeft: 24 + insets.left, paddingRight: 24 + insets.right }]}>
       <TouchableOpacity onPress={() => router.push('/')}>
         <Text style={styles.logo}>Camino: Your Road to Spain</Text>
       </TouchableOpacity>
@@ -44,7 +48,7 @@ export default function NavBar() {
 }
 
 const styles = StyleSheet.create({
-  nav:       { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 24, paddingVertical: 18, backgroundColor: palette.cal, flexWrap: 'wrap', gap: 8, borderBottomWidth: 1, borderBottomColor: '#E8E4DC' },
+  nav:       { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 18, backgroundColor: palette.cal, flexWrap: 'wrap', gap: 8, borderBottomWidth: 1, borderBottomColor: '#E8E4DC' },
   logo:      { fontFamily: 'Fraunces_600SemiBold', fontSize: 18, color: palette.indigo },
   right:     { flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
   cta:       { backgroundColor: palette.cobalt, borderRadius: 8, paddingVertical: 8, paddingHorizontal: 16 },
