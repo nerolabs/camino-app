@@ -620,7 +620,7 @@ export default function PlanScreen() {
 
 const styles = StyleSheet.create({
   scroll:        { flex: 1, backgroundColor: palette.cal },
-  content:       { padding: 24, paddingTop: 32, paddingBottom: 48 },
+  content:       { width: '100%', maxWidth: 820, alignSelf: 'center', padding: 24, paddingTop: 32, paddingBottom: 48 },
 
   emptyWrap:     { flex: 1, backgroundColor: palette.cal, justifyContent: 'center', alignItems: 'center', padding: 32 },
   emptyHeading:  { fontFamily: 'Fraunces_600SemiBold', fontSize: 26, color: palette.indigo, marginBottom: 12 },
