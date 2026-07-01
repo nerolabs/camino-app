@@ -165,10 +165,34 @@ Last updated: 2026-07-01.
 - [ ] **Native API base URL** — set `EXPO_PUBLIC_API_URL` to the deployed origin for iOS/Android so
       `lib/lola.ts`'s relative `/api/lola` resolves off-web.
 
-## 🔜 Next (candidates, not yet started)
+## 📱 Mobile (iOS / Android) — in progress
 
-- [ ] **Native dictation** — the mic uses the web SpeechRecognition API; wire `expo-speech-recognition`
-      (or similar) for iOS/Android so the mic works off-web.
+Goal: ship installable iOS + Android apps. No local simulator/emulator on this machine
+(no Xcode / Android SDK), so all native builds run in the **EAS cloud** and install on real
+devices. The app has **no custom native code** (only standard Expo modules), so no dev client
+is strictly required — a normal EAS build works.
+
+- [x] **Native-readiness code fixes.** (1) `core/AuthContext.tsx` used `typeof window` to detect
+      web, which crashes on native (RN defines a global `window` without `.location`) — switched to
+      `Platform.OS === 'web'`. (2) `EXPO_PUBLIC_API_URL=https://getcamino.app` added to the native
+      build profiles in `eas.json` (build-only, so web deploys keep same-origin `/api/lola`); native
+      has no same-origin so it needs the absolute URL. Audit found everything else already
+      `Platform.OS`-guarded (mic hidden off-web, supabase storage, index resize, etc.).
+- [ ] **First build — Android preview APK** (no paid account needed): `eas build --profile preview
+      --platform android` → sideload on an Android phone to validate rendering + interview + the
+      `/api/lola` proxy over the network. Fastest way to see it live on a device.
+- [ ] **iOS build — needs an Apple Developer account ($99/yr).** Then `eas build --profile preview
+      --platform ios` (ad-hoc/TestFlight). Any on-device iOS install requires the paid account.
+- [ ] **Native Google sign-in (OAuth deep-link).** Not just the redirect string — native needs the
+      `WebBrowser.openAuthSessionAsync` flow + `caminoapp://` added to the Supabase redirect
+      allowlist and the Google Cloud OAuth client. Sign-in is optional (interview works without it),
+      so a first build can ship before this. Currently native sign-in is a benign no-op (won't crash).
+- [ ] **Native dictation** — the mic uses the web SpeechRecognition API (hidden off-web). Wire
+      `expo-speech-recognition` (or similar) for iOS/Android so the mic works on device.
+- [ ] **Store submission** — `eas submit` to App Store (needs Apple acct) + Google Play (one-time
+      $25). App Store metadata / screenshots / privacy. Later, once builds are validated.
+
+## 🔜 Next (candidates, not yet started)
 - [ ] **Re-anchor more anchors from actuals** — completing `empadronamiento`/`residencia` could feed
       `padron_done`/`residency_established`, so residency-relative items also go firm. Today only
       direct `relative_to_obligation` steps re-flow from a real completion date.
