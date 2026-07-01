@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput, ActivityIndicator, Platform } from 'react-native';
-import Anthropic from '@anthropic-ai/sdk';
+import { askAnthropic } from '@/lib/lola';
 import { palette } from '@/constants/Colors';
 import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
@@ -10,11 +10,6 @@ import { buildPlan, type Objective, type Phase, type Progress } from '@/core/eng
 import NavBar from '@/components/NavBar';
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
-
-const client = new Anthropic({
-  apiKey: process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY,
-  dangerouslyAllowBrowser: true,
-});
 
 // Describe the editable profile fields straight from the interview catalog, so the
 // re-plan extractor can never drift from the slots the engine actually reads.
@@ -36,7 +31,7 @@ async function parseProfileChange(
   freeText: string, objectiveTitle: string,
 ): Promise<{ changes: Record<string, unknown> } | { error: true }> {
   try {
-    const msg = await client.messages.create({
+    const rawText = await askAnthropic({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 300,
       system: `The user is updating their Spain relocation plan. They're looking at this step:
@@ -49,7 +44,7 @@ fields that genuinely changed. If nothing maps to a field above, return {"change
 Never invent fields, deadlines, costs, or laws — only set the listed fields to typed values.`,
       messages: [{ role: 'user', content: freeText }],
     });
-    const raw = (msg.content[0] as { text: string }).text.trim();
+    const raw = rawText.trim();
     const stripped = raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '').trim();
     const parsed = JSON.parse(stripped.slice(stripped.indexOf('{'), stripped.lastIndexOf('}') + 1));
     return { changes: (parsed.changes ?? {}) as Record<string, unknown> };
@@ -78,8 +73,7 @@ Rules: do NOT invent specific deadlines, costs, form numbers, or legal threshold
       ...history.map(t => ({ role: (t.role === 'lola' ? 'assistant' : 'user') as 'assistant' | 'user', content: t.text })),
       { role: 'user' as const, content: question },
     ];
-    const msg = await client.messages.create({ model: 'claude-haiku-4-5-20251001', max_tokens: 280, system, messages });
-    return (msg.content[0] as { text: string }).text;
+    return await askAnthropic({ model: 'claude-haiku-4-5-20251001', max_tokens: 280, system, messages });
   } catch {
     return "Sorry — I couldn't load that just now. Try asking again in a moment.";
   }

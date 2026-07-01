@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'expo-router';
 import {
-  View, Text, ScrollView, TouchableOpacity,
-  StyleSheet, useWindowDimensions, Animated,
+  View, Text, ScrollView, TouchableOpacity, Image,
+  StyleSheet, useWindowDimensions, Animated, Platform,
 } from 'react-native';
-import { Image } from 'expo-image';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
 import { useProfile } from '@/core/ProfileContext';
@@ -45,14 +44,18 @@ function RotatingPhoto({ wide }: { wide: boolean }) {
   }, []);
 
   const containerStyle = wide ? styles.photoContainerWide : styles.photoContainerMobile;
+  // Explicit pixel height, not '100%': expo-image's wrapper collapses to height 0 in the
+  // static web build when the height comes from a percentage inside a flex child.
+  const h = wide ? 600 : 280;
+  const imgStyle = { width: '100%' as const, height: h };
 
   return (
     <View style={containerStyle}>
       {/* Base layer — current photo */}
-      <Image source={PHOTOS[current].src} style={StyleSheet.absoluteFill} contentFit="cover" />
+      <Image source={PHOTOS[current].src} style={imgStyle} resizeMode="cover" />
       {/* Fade layer — next photo */}
       <Animated.View style={[StyleSheet.absoluteFill, { opacity: fadeAnim }]}>
-        <Image source={PHOTOS[next].src} style={StyleSheet.absoluteFill} contentFit="cover" />
+        <Image source={PHOTOS[next].src} style={imgStyle} resizeMode="cover" />
       </Animated.View>
       {/* Label */}
       <View style={styles.photoLabel}>
@@ -64,8 +67,21 @@ function RotatingPhoto({ wide }: { wide: boolean }) {
 
 export default function LandingPage() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
-  const wide = width >= 768;
+  // useWindowDimensions() reports a fallback width during static (server) rendering and
+  // doesn't reliably update after hydration on web — which left the desktop hero stuck in
+  // the mobile (stacked) layout. Read the real window width on the client instead, and
+  // default to the wide layout when the width is unknown (SSR / first paint).
+  const { width: rnWidth } = useWindowDimensions();
+  const [webWidth, setWebWidth] = useState<number | null>(null);
+  useEffect(() => {
+    if (Platform.OS !== 'web') return;
+    const update = () => setWebWidth(window.innerWidth);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+  const width = Platform.OS === 'web' ? webWidth : rnWidth;
+  const wide = width == null ? true : width >= 768;
   const { user, signInWithGoogle, signOut } = useAuth();
   const { setProfile } = useProfile();
 
@@ -143,8 +159,9 @@ const styles = StyleSheet.create({
   heroDisclaimer:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: palette.muted },
 
   // Rotating photo
-  photoContainerWide:   { flex: 1, position: 'relative', minHeight: 600 },
-  photoContainerMobile: { height: 280, position: 'relative' },
+  photoFill:            { width: '100%', height: '100%' },
+  photoContainerWide:   { flex: 1, position: 'relative', height: 600, overflow: 'hidden' },
+  photoContainerMobile: { height: 280, position: 'relative', overflow: 'hidden' },
   photoLabel:           { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(21,36,59,0.5)', paddingHorizontal: 16, paddingVertical: 10 },
   photoLabelText:       { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.cal },
 

@@ -3,14 +3,16 @@ import { ExpoConfig } from 'expo/config';
 
 const config: ExpoConfig = {
   name: 'Camino',
-  slug: 'camino-app',
+  slug: 'camino',
+  owner: 'nerolabs-team',
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/images/icon.png',
   scheme: 'caminoapp',
   userInterfaceStyle: 'automatic',
-  ios: { supportsTablet: true },
+  ios: { supportsTablet: true, bundleIdentifier: 'com.nerolabs.camino' },
   android: {
+    package: 'com.nerolabs.camino',
     adaptiveIcon: {
       backgroundColor: '#E6F4FE',
       foregroundImage: './assets/images/android-icon-foreground.png',
@@ -21,7 +23,7 @@ const config: ExpoConfig = {
   },
   web: {
     bundler: 'metro',
-    output: 'static',
+    output: 'server', // 'server' enables Expo Router API routes (app/api/*+api.ts) on EAS Hosting
     favicon: './assets/images/favicon.png',
   },
   plugins: [
@@ -35,7 +37,9 @@ const config: ExpoConfig = {
   ],
   experiments: { typedRoutes: true },
   extra: {
-    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+    eas: { projectId: '5714f767-d3dc-4284-8235-33e6d7e6f381' },
+    // Note: the Anthropic key is intentionally NOT exposed here. It lives only on the
+    // server (process.env.ANTHROPIC_API_KEY) and is used by app/api/lola+api.ts.
   },
 };
 

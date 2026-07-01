@@ -3,7 +3,18 @@
 Living list of what we're tracking against. Update as work moves. Newest context at top.
 See `HANDOFF.md` for the fuller picture and `core/SOURCING.md` for obligation provenance.
 
-Last updated: 2026-06-30.
+Last updated: 2026-07-01.
+
+## 🔒 Security — TOP PRIORITY
+
+- [ ] **Verify no secrets are ever committed to the (public) GitHub repo.** Re-check before every
+      push and before sharing the repo. Standing guarantees: `.env` is gitignored; the Anthropic
+      key now lives server-side only (`app/api/lola+api.ts`). Quick audit:
+      `git ls-files | grep -iE '(^|/)\.env'` → empty, and `git grep -I 'sk-ant-' HEAD` → no matches.
+      **Last audited 2026-07-01: CLEAN** — `.env` never committed; no `sk-ant-` keys in any tracked
+      file or in full history; the one `eyJ…` match in `package-lock.json` is an npm integrity hash,
+      not a secret. Also confirm the Supabase URL/anon key are the only `EXPO_PUBLIC_` values (anon
+      key is public-safe under RLS).
 
 ## ✅ Done (this session)
 
@@ -102,6 +113,31 @@ Last updated: 2026-06-30.
       to `/` for a clean way back to the start.
 - [x] **Capped the task sheet width on desktop** — the detail drawer now maxes at 640px and centers
       (`modalBackdrop` alignItems center + `sheet` maxWidth/alignSelf), instead of spanning full width.
+
+## 🚀 Deployment (in progress)
+
+- [x] **Moved the Anthropic key server-side** — new `app/api/lola+api.ts` proxy + `lib/lola.ts`
+      client helper; interview + plan LLM calls now hit `/api/lola` (no key in the client bundle).
+      `web.output` → `'server'`; removed the key from `app.config.ts extra`. Verified the route
+      end-to-end locally (`POST /api/lola` → `{text}` 200). Added server-side `ANTHROPIC_API_KEY`
+      to local `.env`.
+- [x] **Scaffolded EAS config** — `eas.json` (development / preview / production profiles, channels,
+      environments), iOS/Android bundle IDs (`com.nerolabs.camino`), and `DEPLOY.md` runbook.
+- [ ] **User: create Expo account + `eas login` / `eas init`**, set `ANTHROPIC_API_KEY` as an EAS
+      env secret per environment, then `eas deploy --environment preview` for a family-test URL.
+      (See `DEPLOY.md`.)
+- [ ] **Separate databases per environment (IMPORTANT).** Today dev/staging/prod all share ONE
+      Supabase project — the same `EXPO_PUBLIC_SUPABASE_URL` / `ANON_KEY` were pushed to every EAS
+      environment, so test data and production data mix. Create separate Supabase projects (at least
+      staging vs production, ideally dev too), then set the differing URL/anon key per EAS
+      environment (`eas env:create ... --environment <env>`). Do this before real users.
+- [ ] **Custom domain: getcamino.app** — registered; attach to EAS Hosting production and add the
+      DNS record at the registrar (in progress).
+- [ ] **Harden the proxy before a truly public launch** — the `/api/lola` route is currently an
+      open proxy (fine for an unlisted family-test URL). Add rate limiting / origin allowlist /
+      structured ops before wide release so it can't be abused as a free Claude endpoint.
+- [ ] **Native API base URL** — set `EXPO_PUBLIC_API_URL` to the deployed origin for iOS/Android so
+      `lib/lola.ts`'s relative `/api/lola` resolves off-web.
 
 ## 🔜 Next (candidates, not yet started)
 
