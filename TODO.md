@@ -131,8 +131,11 @@ Last updated: 2026-07-01.
       environment, so test data and production data mix. Create separate Supabase projects (at least
       staging vs production, ideally dev too), then set the differing URL/anon key per EAS
       environment (`eas env:create ... --environment <env>`). Do this before real users.
-- [ ] **Custom domain: getcamino.app** — registered; attach to EAS Hosting production and add the
-      DNS record at the registrar (in progress).
+- [x] **Custom domain: getcamino.app — LIVE.** Registered at Namecheap; attached to EAS Hosting
+      production (requires a paid EAS plan — Free tier can't). DNS at Namecheap: A `@` →
+      172.66.0.241, TXT `_cf-custom-hostname`, CNAME `_acme-challenge` (deleted Namecheap's default
+      URL-redirect record that conflicted with the apex A record). Verified: https://getcamino.app
+      serves the app + `/api/lola` over HTTPS. Owner account: nerolabs-team (the upgraded one).
 - [ ] **Harden the proxy before a truly public launch** — the `/api/lola` route is currently an
       open proxy (fine for an unlisted family-test URL). Add rate limiting / origin allowlist /
       structured ops before wide release so it can't be abused as a free Claude endpoint.

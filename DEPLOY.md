@@ -41,6 +41,14 @@ eas deploy --prod --environment production
 `eas deploy` builds the web bundle + API routes and returns a URL. Verify the interview and
 the plan's "Ask Lola" both work (they call `/api/lola`).
 
+### Live URLs
+
+- **Production:** https://getcamino.app (custom domain) and https://camino.expo.app
+- Custom domains require a **paid EAS plan** (the Free tier can't attach one). Configured in the
+  Expo dashboard → Hosting → Settings → Custom domain; it prints the DNS records (A / TXT / CNAME)
+  to add at the registrar. Point the apex `@` A record at the given IP and delete any registrar
+  default URL-redirect on `@` (it conflicts).
+
 ## Phase 2 — Mobile (iOS / Android)
 
 Bundle IDs are set (`com.nerolabs.camino`). Build profiles live in `eas.json`
