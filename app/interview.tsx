@@ -4,7 +4,6 @@ import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
   StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator,
 } from 'react-native';
-import Anthropic from '@anthropic-ai/sdk';
 import NavBar from '@/components/NavBar';
 import { palette } from '@/constants/Colors';
 import { nextSlot, derive, interviewProgress, type Slot, type Profile } from '@/core/interview-controller';
@@ -12,11 +11,7 @@ import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
 import { saveProfile as saveProfileDb } from '@/core/profileDb';
 import { TEST_PERSONAS, type Persona } from '@/core/test-personas';
-
-const client = new Anthropic({
-  apiKey: process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY,
-  dangerouslyAllowBrowser: true,
-});
+import { askAnthropic } from '@/lib/lola';
 
 // Web Speech API for dictation — web/Chrome only; gracefully absent elsewhere.
 const SpeechRecognitionImpl =
@@ -40,7 +35,7 @@ function transcriptOf(turns: Turn[]): string {
 async function phraseQuestion(slot: Slot, turns: Turn[]): Promise<string> {
   const transcript = transcriptOf(turns);
   const midConversation = transcript.length > 0;
-  const msg = await client.messages.create({
+  return askAnthropic({
     model: 'claude-haiku-4-5-20251001',
     max_tokens: 120,
     system: `You are Lola, a warm relocation guide helping someone move to Spain.
@@ -60,7 +55,6 @@ ${slot.options ? `Their options will be shown as buttons: ${slot.options.join(',
 Speak directly. One or two sentences max. No bullet points.`,
     messages: [{ role: 'user', content: 'Ask me the next question.' }],
   });
-  return (msg.content[0] as { text: string }).text;
 }
 
 async function extractAnswer(
@@ -79,7 +73,7 @@ async function extractAnswer(
       ? `Return the single most appropriate option string exactly as written from this list: ${slot.options.join(', ')}. Infer from context — e.g. "I work remotely for a US company" → "employed_remote", "I\'m self-employed" → "self_employed", "we live off investments" → "passive_income".`
       : 'Return the value as a string.';
 
-  const msg = await client.messages.create({
+  const rawText = await askAnthropic({
     model: 'claude-haiku-4-5-20251001',
     max_tokens: 120,
     system: `You are extracting a structured value from a user's natural-language answer.
@@ -95,7 +89,7 @@ Do not add explanation. Lean on the conversation above: if an earlier answer alr
     messages: [{ role: 'user', content: userText }],
   });
   try {
-    const raw = (msg.content[0] as { text: string }).text.trim();
+    const raw = rawText.trim();
     // strip markdown code fences if present
     const stripped = raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '').trim();
     const start = stripped.indexOf('{');

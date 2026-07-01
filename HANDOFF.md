@@ -47,8 +47,11 @@ deadlines) is deterministic code.
 ### The screens
 
 - `app/index.tsx` — landing page (rotating Spain photos, hero, CTA).
+- **`app/api/lola+api.ts`** — server-side proxy to the Anthropic Messages API. **All LLM calls go
+  through here** via `lib/lola.ts::askAnthropic()`; the key lives only in `process.env.ANTHROPIC_API_KEY`
+  (server), never in the client bundle. Needs `web.output: 'server'` (set in `app.config.ts`).
 - `app/interview.tsx` — Lola chat. `phraseQuestion()` + `extractAnswer()` call Haiku
-  (`claude-haiku-4-5-20251001`) and are **conversation-aware** — both receive the full transcript,
+  (`claude-haiku-4-5-20251001`) **through the `/api/lola` proxy** and are **conversation-aware** — both receive the full transcript,
   so Lola asks natural follow-ups (no per-turn greeting) and the extractor infers from earlier
   answers. `STATIC_QUESTIONS` are the non-LLM fallback phrasings (also used for clarify reprompts).
 - `app/plan.tsx` — renders `buildPlan()` output grouped by phase. Cards open a detail drawer with

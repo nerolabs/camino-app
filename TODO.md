@@ -103,6 +103,24 @@ Last updated: 2026-06-30.
 - [x] **Capped the task sheet width on desktop** — the detail drawer now maxes at 640px and centers
       (`modalBackdrop` alignItems center + `sheet` maxWidth/alignSelf), instead of spanning full width.
 
+## 🚀 Deployment (in progress)
+
+- [x] **Moved the Anthropic key server-side** — new `app/api/lola+api.ts` proxy + `lib/lola.ts`
+      client helper; interview + plan LLM calls now hit `/api/lola` (no key in the client bundle).
+      `web.output` → `'server'`; removed the key from `app.config.ts extra`. Verified the route
+      end-to-end locally (`POST /api/lola` → `{text}` 200). Added server-side `ANTHROPIC_API_KEY`
+      to local `.env`.
+- [x] **Scaffolded EAS config** — `eas.json` (development / preview / production profiles, channels,
+      environments), iOS/Android bundle IDs (`com.nerolabs.camino`), and `DEPLOY.md` runbook.
+- [ ] **User: create Expo account + `eas login` / `eas init`**, set `ANTHROPIC_API_KEY` as an EAS
+      env secret per environment, then `eas deploy --environment preview` for a family-test URL.
+      (See `DEPLOY.md`.)
+- [ ] **Harden the proxy before a truly public launch** — the `/api/lola` route is currently an
+      open proxy (fine for an unlisted family-test URL). Add rate limiting / origin allowlist /
+      structured ops before wide release so it can't be abused as a free Claude endpoint.
+- [ ] **Native API base URL** — set `EXPO_PUBLIC_API_URL` to the deployed origin for iOS/Android so
+      `lib/lola.ts`'s relative `/api/lola` resolves off-web.
+
 ## 🔜 Next (candidates, not yet started)
 
 - [ ] **Native dictation** — the mic uses the web SpeechRecognition API; wire `expo-speech-recognition`
