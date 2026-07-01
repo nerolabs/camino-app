@@ -195,14 +195,99 @@ is strictly required — a normal EAS build works.
         Apple processing → installs via the TestFlight app.
       - ⚠️ Prod-DB build: fine because native sign-in is a no-op right now (nothing writes to the
         DB until native OAuth is wired).
-- [ ] **Native Google sign-in (OAuth deep-link).** Not just the redirect string — native needs the
-      `WebBrowser.openAuthSessionAsync` flow + `caminoapp://` added to the Supabase redirect
-      allowlist and the Google Cloud OAuth client. Sign-in is optional (interview works without it),
-      so a first build can ship before this. Currently native sign-in is a benign no-op (won't crash).
-- [ ] **Native dictation** — the mic uses the web SpeechRecognition API (hidden off-web). Wire
-      `expo-speech-recognition` (or similar) for iOS/Android so the mic works on device.
+- [~] **Native Google sign-in (OAuth deep-link) — implemented, on-device test pending.**
+      `core/AuthContext.tsx` now does the native flow: `signInWithOAuth({skipBrowserRedirect})` →
+      `WebBrowser.openAuthSessionAsync` → complete the session from the `caminoapp://auth-callback`
+      redirect (handles both PKCE code-exchange and implicit token setSession). Web path unchanged.
+      `caminoapp://**` added to BOTH Supabase projects' redirect allowlists (prod + staging). No
+      Google Cloud change needed (round-trips through Supabase's existing callback). Building iOS
+      `24178b4c` (buildNumber 4) with this → TestFlight to verify on-device. Branch
+      `native-google-signin`.
+- [~] **Native dictation — implemented, on-device test pending.** Platform-split
+      `hooks/useDictation` (web = browser SpeechRecognition, native = `expo-speech-recognition`,
+      Metro picks `.native` so the web bundle never imports the native module). Mic button now
+      shows + streams live transcription on iOS/Android. Config plugin adds mic + speech permission
+      strings; iOS deploymentTarget pinned 16.4 (lib minimum). In build 5 (`3f6446a8`).
+- [~] **Dynamic Island / safe-area — implemented, on-device test pending.** `SafeAreaProvider` at
+      the root + `NavBar` pads by top/left/right insets so it clears the Dynamic Island / notch /
+      status bar (reported on iPhone 17 Pro Max). Web insets are 0 → web unchanged. Dark status-bar
+      style for the light UI. In build 5 (`3f6446a8`).
 - [ ] **Store submission** — `eas submit` to App Store (needs Apple acct) + Google Play (one-time
       $25). App Store metadata / screenshots / privacy. Later, once builds are validated.
+
+## 📥 Feedback backlog (captured 2026-07-01) — suggested order below
+
+- [x] **B1a — Dev personas gated + staff flag (DONE 2026-07-01).** `core/env.ts` `showDevTools()`
+      via `EXPO_PUBLIC_ENV` (production/staging, per EAS env) + `EXPO_PUBLIC_STAFF_USER_IDS` allowlist.
+      Staff = the auth `user_id`s (NOT profiles.id — verified via SQL they differ): user
+      `3a4001e8-…`, wife `e1c8f5e9-…`, set in the production EAS env. Verified live: hidden for
+      non-staff on getcamino.app, **visible for signed-in staff on getcamino.app**, visible for all
+      on staging.
+- [x] **B1b — Lola intro (DONE 2026-07-01).** Interview landing now opens with an eyebrow
+      ("YOUR ROAD TO SPAIN"), "Hola, I'm Lola," a warm experienced-companion line, and a quieter
+      what-happens-next line. Verified live on prod + staging.
+- [ ] **B9 — Lola text-to-speech (NEW).** Speak the intro + each question in a warm woman's voice
+      with a medium Spanish accent speaking English, to make the app feel alive. Aligns with
+      `docs/design/brand.md` "Spoken voice (TTS) — production direction". `expo-speech` (built-in)
+      gives limited voice/accent control; a cloud TTS (ElevenLabs / Azure / Google) with a chosen
+      Spanish-accented-English voice, cached + played via `expo-audio`, gives real warmth. Needs a
+      voice/provider decision + likely a small server route to keep any TTS key server-side. Make it
+      toggleable (accessibility + don't autoplay audio unexpectedly).
+
+
+Recommended sequence (rationale in each item): **B1 quick UX/config wins → B7 analytics (time-
+sensitive: capture family-testing funnel data now) → B4 scouting obligation → B5 E2E tests → B6
+observability → B8 blog stub → B2 app icon (needs an asset decision).**
+
+### Product / UX (quick–medium)
+- [ ] **B1a — Hide dev test personas in production, keep in staging.** Currently the "Dev test
+      personas" toggle in `app/interview.tsx` always renders. Gate it on environment via a new
+      `EXPO_PUBLIC_ENV` (production vs staging), set per EAS environment + build profile + local
+      `.env`. **Optional upgrade (user offered):** a *staff* feature flag — if the signed-in
+      Supabase user id ∈ a STAFF_IDS allowlist (user + wife), show dev tools even in prod. Needs
+      the two user ids. Plan: ship env-gate now; add staff override when ids provided.
+- [ ] **B1b — Interview intro: establish Lola as an experienced companion before the chat.** The
+      landing copy ("Hola, I'm Lola…") is easy to miss. Add a brief, uncluttered intro moment on
+      `app/interview.tsx` (NOT in the chat box) — the road to Spain is easier with an experienced
+      friend; her name is Lola — then start the interview. Keep it tight (invariant: no invented
+      claims; Lola stays a guide, defers specifics to a gestor).
+- [ ] **B2 — App icon from the brand mark (APPROVED by user 2026-07-01).** Replace the placeholder
+      `assets/images/icon.png` with the Camino "one star, two hosts" mark (`docs/design/brand.md`,
+      "The mark"). Claude can't design a raster from scratch, so plan: build the mark as an **SVG**
+      from the brand palette + geometry, render it to the required PNGs (1024 icon, adaptive-icon
+      foreground, splash, favicon) via a small script (sharp/resvg), and wire into app.config.ts.
+      Show the user the SVG for approval before shipping in a build.
+
+### Catalog / engine (medium)
+- [ ] **B4 — "Where to live in Spain" scouting workstream (NEW obligation).** Many users don't know
+      where they want to live. Add obligation(s): recommend a **scouting trip** and a framework for
+      **evaluating regions/cities** (cost of living, climate, healthcare access, expat/English
+      support, visa-relevant factors, schools, transport). Deterministic/engine-safe; source it
+      (webinar/official) per SOURCING.md discipline. Likely gated early in the timeline (pre-visa).
+
+### Infra / ops (large — before wider launch)
+- [ ] **B5 — Automated end-to-end test suite (on-demand + on prod pushes).** We're spot-testing;
+      time for real E2E. Cover: interview → extraction → plan generation for key personas;
+      `/api/lola` contract; sign-in; living-plan re-model. Runs locally + in CI on deploy. Consider
+      Playwright (web) + Maestro (native), and an engine-level deterministic test pass.
+- [ ] **B6 — Observability: monitoring / alerting / paging (incl. mobile).** *Answer to "does Expo
+      provide this?":* EAS gives build/deploy + basic hosting request logs, but **not** full
+      APM/alerting/paging. Recommended stack: **Sentry** (crashes/errors, web + native via
+      `@sentry/react-native`), a **uptime/health monitor + paging** (Better Stack / Grafana Cloud /
+      Pingdom) hitting the site + `/api/lola`, and structured logs. Define health per major feature
+      (interview, plan engine, Lola proxy, auth, DB).
+- [ ] **B7 — Product analytics + conversion funnel (time-sensitive — instrument before more testing).**
+      Funnel: home → interview start → interview complete → roadmap. Retention/reuse over days;
+      feature-health: % returning to the roadmap, checking off items, using post-roadmap Lola to
+      drive completion. Recommended: **PostHog** (funnels + retention + session, free tier, web via
+      `posthog-js` + native via `posthog-react-native`). Privacy-respecting; no PII in events.
+
+### Content (medium — stub now, refine later)
+- [ ] **B8 — Hidden "how-i-was-built" blog at `/how-i-was-built`.** Unlisted route (direct link
+      only; not in nav/sitemap). Narrative: started thin → expanded depth → refined UX → built real
+      dev/staging/prod pipelines → chose the right SaaS tools → obsessed over customer experience;
+      leadership lessons on why engineering leaders must adopt AI and keep skills current. Stub a
+      v1 now; revise when the product matures.
 
 ## 🔜 Next (candidates, not yet started)
 - [ ] **Re-anchor more anchors from actuals** — completing `empadronamiento`/`residencia` could feed

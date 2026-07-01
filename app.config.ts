@@ -13,9 +13,15 @@ const config: ExpoConfig = {
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'com.nerolabs.camino',
-    // App uses only standard HTTPS (exempt encryption) — declaring this avoids the manual
-    // export-compliance step in App Store Connect before each TestFlight build.
-    infoPlist: { ITSAppUsesNonExemptEncryption: false },
+    infoPlist: {
+      // App uses only standard HTTPS (exempt encryption) — avoids the manual export-compliance step.
+      ITSAppUsesNonExemptEncryption: false,
+      // A linked system framework (expo-file-system) references the Photos API, so Apple's static
+      // check (ITMS-90683) requires this string even though Camino does not access your photos.
+      // TODO(public-release): revisit — drop this if we confirm no photo API path ships.
+      NSPhotoLibraryUsageDescription:
+        'Camino does not access your photo library; this entry is only required by a system framework the app links against.',
+    },
   },
   android: {
     package: 'com.nerolabs.camino',
@@ -40,6 +46,12 @@ const config: ExpoConfig = {
       backgroundColor: '#FBFAF7',
     }],
     'expo-font',
+    ['expo-speech-recognition', {
+      microphonePermission: 'Allow Camino to use the microphone so you can dictate your answers.',
+      speechRecognitionPermission: 'Allow Camino to use speech recognition to transcribe your spoken answers.',
+    }],
+    // expo-speech-recognition requires iOS 16.4+; pin the deployment target so the pod builds.
+    ['expo-build-properties', { ios: { deploymentTarget: '16.4' } }],
   ],
   experiments: { typedRoutes: true },
   extra: {

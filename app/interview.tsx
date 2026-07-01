@@ -9,17 +9,11 @@ import { palette } from '@/constants/Colors';
 import { nextSlot, derive, interviewProgress, type Slot, type Profile } from '@/core/interview-controller';
 import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
+import { showDevTools } from '@/core/env';
 import { saveProfile as saveProfileDb } from '@/core/profileDb';
 import { TEST_PERSONAS, type Persona } from '@/core/test-personas';
 import { askAnthropic } from '@/lib/lola';
-
-// Web Speech API for dictation — web/Chrome only; gracefully absent elsewhere.
-const SpeechRecognitionImpl =
-  typeof window !== 'undefined'
-    ? ((window as unknown as Record<string, unknown>).SpeechRecognition ??
-       (window as unknown as Record<string, unknown>).webkitSpeechRecognition)
-    : undefined;
-const MIC_SUPPORTED = Platform.OS === 'web' && !!SpeechRecognitionImpl;
+import { useDictation } from '@/hooks/useDictation';
 
 type Turn = { role: 'lola' | 'user'; text: string };
 
@@ -136,11 +130,12 @@ export default function InterviewScreen() {
   const [started, setStarted] = useState(false);
   const [done, setDone] = useState(false);
   const [showDev, setShowDev] = useState(false);
-  const [listening, setListening] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
-  const recognitionRef = useRef<{ stop: () => void } | null>(null);
   const progressRef = useRef(0);
   const inputRef = useRef<TextInput>(null);
+  // Voice dictation — web uses the browser SpeechRecognition API, native uses
+  // expo-speech-recognition (platform-split in hooks/useDictation). Streams into the input.
+  const dictation = useDictation(setInput);
 
   // Auto-focus the answer box each time a new question is ready, so the user can just
   // start typing (or dictating) without clicking into the field first.
@@ -152,28 +147,8 @@ export default function InterviewScreen() {
   }, [currentSlot, loading, started, done]);
 
   function toggleMic() {
-    if (listening) { recognitionRef.current?.stop(); return; }
-    const Recognition = SpeechRecognitionImpl as new () => {
-      lang: string; interimResults: boolean; continuous: boolean;
-      onresult: (e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void;
-      onend: () => void; onerror: () => void; start: () => void; stop: () => void;
-    };
-    const rec = new Recognition();
-    rec.lang = 'en-US';
-    rec.interimResults = true;   // stream partial results so text appears live as you speak
-    rec.continuous = true;       // keep listening until the user taps stop
-    const base = input ? input.trim() + ' ' : '';
-    rec.onresult = (e) => {
-      // Concatenate every result (finalized + in-progress) for a live transcript.
-      let transcript = '';
-      for (let i = 0; i < e.results.length; i++) transcript += e.results[i][0].transcript;
-      setInput(base + transcript);
-    };
-    rec.onend = () => setListening(false);
-    rec.onerror = () => setListening(false);
-    recognitionRef.current = rec;
-    setListening(true);
-    rec.start();
+    if (dictation.listening) dictation.stop();
+    else dictation.start(input);
   }
 
   async function loadPersona(persona: Persona) {
@@ -218,7 +193,7 @@ export default function InterviewScreen() {
 
   async function submit(text: string) {
     if (!currentSlot || !text.trim() || loading) return;
-    if (listening) recognitionRef.current?.stop(); // stop dictation when the answer is sent
+    if (dictation.listening) dictation.stop(); // stop dictation when the answer is sent
     setInput('');
     setLoading(true);
     setTurns(prev => [...prev, { role: 'user', text }]);
@@ -267,28 +242,38 @@ export default function InterviewScreen() {
       <ScrollView style={styles.flex}>
         <NavBar />
         <View style={styles.center}>
+          <Text style={styles.eyebrow}>YOUR ROAD TO SPAIN</Text>
           <Text style={styles.headline}>Hola, I'm Lola.</Text>
           <Text style={styles.sub}>
-            I'll help you figure out everything you need to do to move to Spain —
-            in the right order, with real deadlines.
+            Moving to Spain is a hundred small steps — visas, padrón, taxes, healthcare —
+            and they only work in the right order. I've helped others make this move, and
+            I'll walk it with you the whole way.
+          </Text>
+          <Text style={styles.subQuiet}>
+            Answer a few questions and I'll build your personal roadmap: real steps, real
+            deadlines, nothing you don't need.
           </Text>
           <TouchableOpacity style={styles.startBtn} onPress={start}>
             <Text style={styles.startBtnText}>Let's get started</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setShowDev(v => !v)} style={styles.devToggle}>
-            <Text style={styles.devToggleText}>{showDev ? 'Hide' : 'Dev'} test personas</Text>
-          </TouchableOpacity>
+          {showDevTools(user?.id) && (
+            <>
+              <TouchableOpacity onPress={() => setShowDev(v => !v)} style={styles.devToggle}>
+                <Text style={styles.devToggleText}>{showDev ? 'Hide' : 'Dev'} test personas</Text>
+              </TouchableOpacity>
 
-          {showDev && (
-            <View style={styles.devPanel}>
-              {TEST_PERSONAS.map(p => (
-                <TouchableOpacity key={p.name} style={styles.personaBtn} onPress={() => loadPersona(p)}>
-                  <Text style={styles.personaName}>{p.name}</Text>
-                  <Text style={styles.personaDesc}>{p.description}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+              {showDev && (
+                <View style={styles.devPanel}>
+                  {TEST_PERSONAS.map(p => (
+                    <TouchableOpacity key={p.name} style={styles.personaBtn} onPress={() => loadPersona(p)}>
+                      <Text style={styles.personaName}>{p.name}</Text>
+                      <Text style={styles.personaDesc}>{p.description}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </>
           )}
         </View>
       </ScrollView>
@@ -348,20 +333,20 @@ export default function InterviewScreen() {
                 style={styles.input}
                 value={input}
                 onChangeText={setInput}
-                placeholder={listening ? 'Listening…' : 'Type your answer…'}
+                placeholder={dictation.listening ? 'Listening…' : 'Type your answer…'}
                 placeholderTextColor={palette.muted}
                 onSubmitEditing={() => submit(input)}
                 returnKeyType="send"
                 editable={!loading}
               />
-              {MIC_SUPPORTED && (
+              {dictation.supported && (
                 <TouchableOpacity
-                  style={[styles.micBtn, listening && styles.micBtnActive]}
+                  style={[styles.micBtn, dictation.listening && styles.micBtnActive]}
                   onPress={toggleMic}
                   disabled={loading}
-                  accessibilityLabel={listening ? 'Stop dictation' : 'Speak your answer'}
+                  accessibilityLabel={dictation.listening ? 'Stop dictation' : 'Speak your answer'}
                 >
-                  <Text style={[styles.micIcon, listening && styles.micIconActive]}>{listening ? '■' : '🎙'}</Text>
+                  <Text style={[styles.micIcon, dictation.listening && styles.micIconActive]}>{dictation.listening ? '■' : '🎙'}</Text>
                 </TouchableOpacity>
               )}
               <TouchableOpacity
@@ -382,8 +367,10 @@ export default function InterviewScreen() {
 const styles = StyleSheet.create({
   flex:        { flex: 1, backgroundColor: palette.cal },
   center:      { flex: 1, backgroundColor: palette.cal, justifyContent: 'center', alignItems: 'center', padding: 32 },
+  eyebrow:     { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, letterSpacing: 2, color: palette.amber, textAlign: 'center', marginBottom: 12 },
   headline:    { fontFamily: 'Fraunces_600SemiBold', fontSize: 34, color: palette.indigo, textAlign: 'center', marginBottom: 16 },
-  sub:         { fontFamily: 'HankenGrotesk_400Regular', fontSize: 16, color: palette.indigo, textAlign: 'center', lineHeight: 24, marginBottom: 40, maxWidth: 440 },
+  sub:         { fontFamily: 'HankenGrotesk_400Regular', fontSize: 17, color: palette.indigo, textAlign: 'center', lineHeight: 26, marginBottom: 16, maxWidth: 460 },
+  subQuiet:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.muted, textAlign: 'center', lineHeight: 23, marginBottom: 36, maxWidth: 440 },
   startBtn:    { backgroundColor: palette.cobalt, borderRadius: 12, paddingVertical: 16, paddingHorizontal: 40 },
   startBtnText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cal },
   progressWrap:  { width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 16, paddingTop: 14, paddingBottom: 2, gap: 7 },
