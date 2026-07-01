@@ -12,14 +12,7 @@ import { useAuth } from '@/core/AuthContext';
 import { saveProfile as saveProfileDb } from '@/core/profileDb';
 import { TEST_PERSONAS, type Persona } from '@/core/test-personas';
 import { askAnthropic } from '@/lib/lola';
-
-// Web Speech API for dictation — web/Chrome only; gracefully absent elsewhere.
-const SpeechRecognitionImpl =
-  typeof window !== 'undefined'
-    ? ((window as unknown as Record<string, unknown>).SpeechRecognition ??
-       (window as unknown as Record<string, unknown>).webkitSpeechRecognition)
-    : undefined;
-const MIC_SUPPORTED = Platform.OS === 'web' && !!SpeechRecognitionImpl;
+import { useDictation } from '@/hooks/useDictation';
 
 type Turn = { role: 'lola' | 'user'; text: string };
 
@@ -136,11 +129,12 @@ export default function InterviewScreen() {
   const [started, setStarted] = useState(false);
   const [done, setDone] = useState(false);
   const [showDev, setShowDev] = useState(false);
-  const [listening, setListening] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
-  const recognitionRef = useRef<{ stop: () => void } | null>(null);
   const progressRef = useRef(0);
   const inputRef = useRef<TextInput>(null);
+  // Voice dictation — web uses the browser SpeechRecognition API, native uses
+  // expo-speech-recognition (platform-split in hooks/useDictation). Streams into the input.
+  const dictation = useDictation(setInput);
 
   // Auto-focus the answer box each time a new question is ready, so the user can just
   // start typing (or dictating) without clicking into the field first.
@@ -152,28 +146,8 @@ export default function InterviewScreen() {
   }, [currentSlot, loading, started, done]);
 
   function toggleMic() {
-    if (listening) { recognitionRef.current?.stop(); return; }
-    const Recognition = SpeechRecognitionImpl as new () => {
-      lang: string; interimResults: boolean; continuous: boolean;
-      onresult: (e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void;
-      onend: () => void; onerror: () => void; start: () => void; stop: () => void;
-    };
-    const rec = new Recognition();
-    rec.lang = 'en-US';
-    rec.interimResults = true;   // stream partial results so text appears live as you speak
-    rec.continuous = true;       // keep listening until the user taps stop
-    const base = input ? input.trim() + ' ' : '';
-    rec.onresult = (e) => {
-      // Concatenate every result (finalized + in-progress) for a live transcript.
-      let transcript = '';
-      for (let i = 0; i < e.results.length; i++) transcript += e.results[i][0].transcript;
-      setInput(base + transcript);
-    };
-    rec.onend = () => setListening(false);
-    rec.onerror = () => setListening(false);
-    recognitionRef.current = rec;
-    setListening(true);
-    rec.start();
+    if (dictation.listening) dictation.stop();
+    else dictation.start(input);
   }
 
   async function loadPersona(persona: Persona) {
@@ -218,7 +192,7 @@ export default function InterviewScreen() {
 
   async function submit(text: string) {
     if (!currentSlot || !text.trim() || loading) return;
-    if (listening) recognitionRef.current?.stop(); // stop dictation when the answer is sent
+    if (dictation.listening) dictation.stop(); // stop dictation when the answer is sent
     setInput('');
     setLoading(true);
     setTurns(prev => [...prev, { role: 'user', text }]);
@@ -348,20 +322,20 @@ export default function InterviewScreen() {
                 style={styles.input}
                 value={input}
                 onChangeText={setInput}
-                placeholder={listening ? 'Listening…' : 'Type your answer…'}
+                placeholder={dictation.listening ? 'Listening…' : 'Type your answer…'}
                 placeholderTextColor={palette.muted}
                 onSubmitEditing={() => submit(input)}
                 returnKeyType="send"
                 editable={!loading}
               />
-              {MIC_SUPPORTED && (
+              {dictation.supported && (
                 <TouchableOpacity
-                  style={[styles.micBtn, listening && styles.micBtnActive]}
+                  style={[styles.micBtn, dictation.listening && styles.micBtnActive]}
                   onPress={toggleMic}
                   disabled={loading}
-                  accessibilityLabel={listening ? 'Stop dictation' : 'Speak your answer'}
+                  accessibilityLabel={dictation.listening ? 'Stop dictation' : 'Speak your answer'}
                 >
-                  <Text style={[styles.micIcon, listening && styles.micIconActive]}>{listening ? '■' : '🎙'}</Text>
+                  <Text style={[styles.micIcon, dictation.listening && styles.micIconActive]}>{dictation.listening ? '■' : '🎙'}</Text>
                 </TouchableOpacity>
               )}
               <TouchableOpacity

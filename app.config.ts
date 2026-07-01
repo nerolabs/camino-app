@@ -40,6 +40,12 @@ const config: ExpoConfig = {
       backgroundColor: '#FBFAF7',
     }],
     'expo-font',
+    ['expo-speech-recognition', {
+      microphonePermission: 'Allow Camino to use the microphone so you can dictate your answers.',
+      speechRecognitionPermission: 'Allow Camino to use speech recognition to transcribe your spoken answers.',
+    }],
+    // expo-speech-recognition requires iOS 16.4+; pin the deployment target so the pod builds.
+    ['expo-build-properties', { ios: { deploymentTarget: '16.4' } }],
   ],
   experiments: { typedRoutes: true },
   extra: {
