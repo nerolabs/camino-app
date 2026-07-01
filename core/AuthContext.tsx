@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { Platform } from 'react-native';
 import { type Session, type User } from '@supabase/supabase-js';
 import { supabase } from './supabase';
 
@@ -32,7 +33,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function signInWithGoogle() {
-    const redirectTo = typeof window !== 'undefined'
+    // React Native also defines a global `window` (without `.location`), so detect web via
+    // Platform.OS — using `typeof window` would try window.location.origin on native and crash.
+    const redirectTo = Platform.OS === 'web'
       ? window.location.origin
       : 'caminoapp://';
     await supabase.auth.signInWithOAuth({

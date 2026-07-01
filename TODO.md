@@ -165,10 +165,44 @@ Last updated: 2026-07-01.
 - [ ] **Native API base URL** — set `EXPO_PUBLIC_API_URL` to the deployed origin for iOS/Android so
       `lib/lola.ts`'s relative `/api/lola` resolves off-web.
 
-## 🔜 Next (candidates, not yet started)
+## 📱 Mobile (iOS / Android) — in progress
 
-- [ ] **Native dictation** — the mic uses the web SpeechRecognition API; wire `expo-speech-recognition`
-      (or similar) for iOS/Android so the mic works off-web.
+Goal: ship installable iOS + Android apps. No local simulator/emulator on this machine
+(no Xcode / Android SDK), so all native builds run in the **EAS cloud** and install on real
+devices. The app has **no custom native code** (only standard Expo modules), so no dev client
+is strictly required — a normal EAS build works.
+
+- [x] **Native-readiness code fixes.** (1) `core/AuthContext.tsx` used `typeof window` to detect
+      web, which crashes on native (RN defines a global `window` without `.location`) — switched to
+      `Platform.OS === 'web'`. (2) `EXPO_PUBLIC_API_URL=https://getcamino.app` added to the native
+      build profiles in `eas.json` (build-only, so web deploys keep same-origin `/api/lola`); native
+      has no same-origin so it needs the absolute URL. Audit found everything else already
+      `Platform.OS`-guarded (mic hidden off-web, supabase storage, index resize, etc.).
+- [x] **First build — Android preview APK BUILT** (build `a538b9d7`, finished 2026-07-01). APK:
+      https://expo.dev/artifacts/eas/UhQ5NVtbsZ4rrjR3nvsqBopLRUhGvikflJOlD1IfVho.apk — staging DB +
+      `EXPO_PUBLIC_API_URL=getcamino.app` baked in. **Not yet verified on-device** (user hit Android
+      emulator trouble; deferred to focus on iOS). Re-test the APK later to validate native rendering
+      + the interview/`api/lola` path.
+- [~] **iOS build — real-device via Apple Developer account ($99/yr).** Path chosen: install on a
+      real iPhone (ad-hoc internal first, then TestFlight for the store). Gated on:
+      1. User enrolls in the Apple Developer Program (developer.apple.com).
+      2. Apple authentication — EAS needs to auth to Apple to create certs/provisioning. Two ways:
+         (a) user runs `eas build -p ios` themselves and logs in with their Apple ID when prompted,
+         or (b) an App Store Connect **API key** (.p8) set up in EAS for non-interactive builds.
+         Claude can't enter Apple credentials, so this step is the user's.
+      3. `eas device:create` to register the iPhone (ad-hoc), then `eas build --profile preview
+         --platform ios`, install via the link on the phone. Bundle id `com.nerolabs.camino` + the
+         `caminoapp` scheme are already set.
+- [ ] **Native Google sign-in (OAuth deep-link).** Not just the redirect string — native needs the
+      `WebBrowser.openAuthSessionAsync` flow + `caminoapp://` added to the Supabase redirect
+      allowlist and the Google Cloud OAuth client. Sign-in is optional (interview works without it),
+      so a first build can ship before this. Currently native sign-in is a benign no-op (won't crash).
+- [ ] **Native dictation** — the mic uses the web SpeechRecognition API (hidden off-web). Wire
+      `expo-speech-recognition` (or similar) for iOS/Android so the mic works on device.
+- [ ] **Store submission** — `eas submit` to App Store (needs Apple acct) + Google Play (one-time
+      $25). App Store metadata / screenshots / privacy. Later, once builds are validated.
+
+## 🔜 Next (candidates, not yet started)
 - [ ] **Re-anchor more anchors from actuals** — completing `empadronamiento`/`residencia` could feed
       `padron_done`/`residency_established`, so residency-relative items also go firm. Today only
       direct `relative_to_obligation` steps re-flow from a real completion date.
