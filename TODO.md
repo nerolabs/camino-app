@@ -126,11 +126,23 @@ Last updated: 2026-07-01.
 - [ ] **User: create Expo account + `eas login` / `eas init`**, set `ANTHROPIC_API_KEY` as an EAS
       env secret per environment, then `eas deploy --environment preview` for a family-test URL.
       (See `DEPLOY.md`.)
-- [ ] **Separate databases per environment (IMPORTANT).** Today dev/staging/prod all share ONE
-      Supabase project — the same `EXPO_PUBLIC_SUPABASE_URL` / `ANON_KEY` were pushed to every EAS
-      environment, so test data and production data mix. Create separate Supabase projects (at least
-      staging vs production, ideally dev too), then set the differing URL/anon key per EAS
-      environment (`eas env:create ... --environment <env>`). Do this before real users.
+- [x] **Separate databases per environment — DONE.** Created a second Supabase project
+      **`camino-staging`** (`gsnsgfobfswazqhfcstx`) with the same schema (`profiles` table + RLS
+      via SQL). Wiring:
+      - **production** (getcamino.app) → prod DB `oftrpaleqtmuvolwsocd` (unchanged).
+      - **preview / staging** (`camino--staging.expo.app`) → staging DB `gsnsgfobfswazqhfcstx`
+        (EAS `preview` env vars repointed via `eas env:update`).
+      - **local dev** (`.env`) → staging DB too, so `expo start` never writes prod data.
+      Verified the baked Supabase ref in each live bundle (staging=gsnsg, prod=oftrp).
+      ⚠️ **Gotcha found & fixed:** `EXPO_PUBLIC_*` values are baked by Metro at `expo export` time
+      and Metro's cache does NOT bust on env-value changes — so a rebuild silently shipped the
+      *old* DB. Fix: always export with `--clear` when env changes. Codified in `scripts/deploy.sh`
+      + `npm run deploy:staging` / `deploy:production` (pull EAS env → clear cache → export →
+      deploy → clean up). Use these instead of manual export/deploy.
+      - [ ] **Staging auth (sign-in) not yet configured** — the staging Supabase project needs its
+            Site URL / redirect allowlist set and Google OAuth enabled (client id/secret + add the
+            staging callback in Google Cloud). Until then, staging sign-in won't work; the interview
+            still runs (sign-in is optional). Prod auth is unaffected.
 - [x] **Custom domain: getcamino.app — LIVE.** Registered at Namecheap; attached to EAS Hosting
       production (requires a paid EAS plan — Free tier can't). DNS at Namecheap: A `@` →
       172.66.0.241, TXT `_cf-custom-hostname`, CNAME `_acme-challenge` (deleted Namecheap's default

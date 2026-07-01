@@ -41,6 +41,31 @@ eas deploy --prod --environment production
 `eas deploy` builds the web bundle + API routes and returns a URL. Verify the interview and
 the plan's "Ask Lola" both work (they call `/api/lola`).
 
+### Use the deploy scripts (don't run export/deploy by hand)
+
+```
+npm run deploy:staging      # -> preview env + staging DB, alias camino--staging.expo.app
+npm run deploy:production    # -> production env + prod DB, getcamino.app
+```
+
+⚠️ **Why:** `EXPO_PUBLIC_*` values (Supabase URL/key) are inlined into the client bundle by
+Metro at `expo export` time, and **Metro's cache does not bust when only env values change**.
+A plain `expo export` after switching environments silently ships the *previous* database. The
+scripts (`scripts/deploy.sh`) do it safely: pull that EAS environment's vars → **clear the Metro
+cache** → export → deploy → clean up `.env.local`. If you ever export by hand, pass `--clear`.
+
+### Environments / databases
+
+| Env | URL | Supabase project |
+|---|---|---|
+| production | getcamino.app / camino.expo.app | `oftrpaleqtmuvolwsocd` (real data) |
+| preview / staging | camino--staging.expo.app | `gsnsgfobfswazqhfcstx` (camino-staging, test data) |
+| local dev | `expo start` | `gsnsgfobfswazqhfcstx` (staging — never writes prod) |
+
+Staging auth (Google sign-in) still needs configuring in the camino-staging Supabase project
+(Site URL + redirect allowlist + Google OAuth). Until then staging sign-in won't work; the
+interview runs without it.
+
 ### Live URLs
 
 - **Production:** https://getcamino.app (custom domain) and https://camino.expo.app
