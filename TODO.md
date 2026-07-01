@@ -139,10 +139,11 @@ Last updated: 2026-07-01.
       *old* DB. Fix: always export with `--clear` when env changes. Codified in `scripts/deploy.sh`
       + `npm run deploy:staging` / `deploy:production` (pull EAS env → clear cache → export →
       deploy → clean up). Use these instead of manual export/deploy.
-      - [ ] **Staging auth (sign-in) not yet configured** — the staging Supabase project needs its
-            Site URL / redirect allowlist set and Google OAuth enabled (client id/secret + add the
-            staging callback in Google Cloud). Until then, staging sign-in won't work; the interview
-            still runs (sign-in is optional). Prod auth is unaffected.
+      - [x] **Staging auth (sign-in) — DONE.** Set the staging Supabase Site URL
+            (`https://camino--staging.expo.app`) + redirect allowlist (staging + localhost:8081),
+            reused the same Google OAuth client id/secret as prod, added the staging callback
+            (`https://gsnsgfobfswazqhfcstx.supabase.co/auth/v1/callback`) in Google Cloud, and
+            enabled the Google provider. Verified Google sign-in works live on staging.
 - [x] **Custom domain: getcamino.app — LIVE.** Registered at Namecheap; attached to EAS Hosting
       production (requires a paid EAS plan — Free tier can't). DNS at Namecheap: A `@` →
       172.66.0.241, TXT `_cf-custom-hostname`, CNAME `_acme-challenge` (deleted Namecheap's default
