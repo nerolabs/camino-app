@@ -126,6 +126,13 @@ Last updated: 2026-07-01.
 - [ ] **User: create Expo account + `eas login` / `eas init`**, set `ANTHROPIC_API_KEY` as an EAS
       env secret per environment, then `eas deploy --environment preview` for a family-test URL.
       (See `DEPLOY.md`.)
+- [ ] **Separate databases per environment (IMPORTANT).** Today dev/staging/prod all share ONE
+      Supabase project — the same `EXPO_PUBLIC_SUPABASE_URL` / `ANON_KEY` were pushed to every EAS
+      environment, so test data and production data mix. Create separate Supabase projects (at least
+      staging vs production, ideally dev too), then set the differing URL/anon key per EAS
+      environment (`eas env:create ... --environment <env>`). Do this before real users.
+- [ ] **Custom domain: getcamino.app** — registered; attach to EAS Hosting production and add the
+      DNS record at the registrar (in progress).
 - [ ] **Harden the proxy before a truly public launch** — the `/api/lola` route is currently an
       open proxy (fine for an unlisted family-test URL). Add rate limiting / origin allowlist /
       structured ops before wide release so it can't be abused as a free Claude endpoint.
