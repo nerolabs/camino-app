@@ -203,8 +203,15 @@ is strictly required — a normal EAS build works.
       Google Cloud change needed (round-trips through Supabase's existing callback). Building iOS
       `24178b4c` (buildNumber 4) with this → TestFlight to verify on-device. Branch
       `native-google-signin`.
-- [ ] **Native dictation** — the mic uses the web SpeechRecognition API (hidden off-web). Wire
-      `expo-speech-recognition` (or similar) for iOS/Android so the mic works on device.
+- [~] **Native dictation — implemented, on-device test pending.** Platform-split
+      `hooks/useDictation` (web = browser SpeechRecognition, native = `expo-speech-recognition`,
+      Metro picks `.native` so the web bundle never imports the native module). Mic button now
+      shows + streams live transcription on iOS/Android. Config plugin adds mic + speech permission
+      strings; iOS deploymentTarget pinned 16.4 (lib minimum). In build 5 (`3f6446a8`).
+- [~] **Dynamic Island / safe-area — implemented, on-device test pending.** `SafeAreaProvider` at
+      the root + `NavBar` pads by top/left/right insets so it clears the Dynamic Island / notch /
+      status bar (reported on iPhone 17 Pro Max). Web insets are 0 → web unchanged. Dark status-bar
+      style for the light UI. In build 5 (`3f6446a8`).
 - [ ] **Store submission** — `eas submit` to App Store (needs Apple acct) + Google Play (one-time
       $25). App Store metadata / screenshots / privacy. Later, once builds are validated.
 
