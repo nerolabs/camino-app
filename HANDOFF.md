@@ -69,6 +69,20 @@ deadlines) is deterministic code.
 
 ## What was just done (most recent first)
 
+**Desktop interview polish + dictation pass:**
+- Interview chat is now a **centered ~640px column** with the composer **directly below the
+  conversation** (not docked to the viewport bottom). Added a **progress bar + time estimate**
+  under the nav (`interviewProgress()` in the controller, clamped monotonic). Added a **mic
+  dictation** button (Web Speech API; web/Chrome, hidden where unsupported).
+- The layer-2 re-plan now surfaces a **centered celebratory modal** ("That was useful — I've
+  remodelled your plan!" + the deterministic diff) instead of the inline banner (`app/plan.tsx`).
+- **Chat-first task drawer** — the plan card's detail sheet was rebuilt around a context-aware Lola
+  coach (`askLola` in `app/plan.tsx`): she opens with how to tackle the step and answers threaded
+  follow-ups (advisory only — plain text, defers exact figures to a gestor, never authors plan
+  data). Actions are now compact (small "✓ Mark done" chip, not a full-width button); WHEN /
+  prerequisites / provenance collapse behind "Details". ⚠️ This is technically a **3rd LLM surface**
+  beyond the canonical two — keep it advisory; flag in any invariants review.
+
 **Conversation + living-roadmap pass:**
 - **Conversation-aware interview** — `phraseQuestion`/`extractAnswer` now take the transcript. Lola
   stopped greeting every turn and asks follow-ups that reuse context (mention a "wife" → the spouse

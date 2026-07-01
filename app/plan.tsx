@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput, ActivityIndicator } from 'react-native';
+import { useState, useRef } from 'react';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput, ActivityIndicator, Platform } from 'react-native';
 import Anthropic from '@anthropic-ai/sdk';
 import { palette } from '@/constants/Colors';
 import { useProfile } from '@/core/ProfileContext';
@@ -58,6 +58,33 @@ Never invent fields, deadlines, costs, or laws — only set the listed fields to
   }
 }
 
+// Context-aware task coach. Lola explains HOW to accomplish a specific step and answers
+// follow-ups. Advisory only — she must not invent deadlines/costs/laws beyond the step text
+// (invariant 3); the engine still owns every date. This is the sheet's "living" element.
+const TASK_INTRO = 'In 2–3 short sentences, how should I approach this step? Give me a practical starting point.';
+
+async function askLola(
+  obj: Objective, profile: Record<string, unknown>,
+  history: { role: 'lola' | 'user'; text: string }[], question: string,
+): Promise<string> {
+  try {
+    const visa = profile.visa_type ? ` The user is on the ${String(profile.visa_type)} path.` : '';
+    const system = `You are Lola, a warm, practical guide helping someone move to Spain. Help them with THIS step of their plan:
+"${obj.title}" (category: ${obj.category}).${visa}
+Explain HOW to get it done in practice — the concrete steps, who usually handles it (often a gestor or lawyer), and what to prepare. Warm, plain, concise: 2–4 short sentences, and a short list only if it genuinely helps.
+Write in plain text only — no markdown, asterisks, bold, or headers; if you list steps, use short "– " dashes.
+Rules: do NOT invent specific deadlines, costs, form numbers, or legal thresholds beyond what's already stated in the step above — for exact figures or dates, tell them to confirm with a gestor or the official source. Never make a required or penalty step sound optional. You keep the map; a gestor signs the papers.`;
+    const messages = [
+      ...history.map(t => ({ role: (t.role === 'lola' ? 'assistant' : 'user') as 'assistant' | 'user', content: t.text })),
+      { role: 'user' as const, content: question },
+    ];
+    const msg = await client.messages.create({ model: 'claude-haiku-4-5-20251001', max_tokens: 280, system, messages });
+    return (msg.content[0] as { text: string }).text;
+  } catch {
+    return "Sorry — I couldn't load that just now. Try asking again in a moment.";
+  }
+}
+
 function shortTitle(t: string): string {
   const clause = t.split(' — ')[0]; // titles lead with a short clause before the em-dash
   const words = clause.split(' ');
@@ -81,8 +108,9 @@ function diffSummary(before: Objective[], after: Objective[]): string {
   if (added.length)   parts.push(`added ${added.length} step${added.length === 1 ? '' : 's'} (e.g. ${shortTitle(added[0].title)})`);
   if (removed.length) parts.push(`removed ${removed.length} step${removed.length === 1 ? '' : 's'}`);
   if (shifted)        parts.push(`${shifted} date${shifted === 1 ? '' : 's'} shifted`);
-  if (!parts.length)  return 'Thanks for the update — nothing in your plan needed to change.';
-  return `I updated your plan: ${parts.join(', ')}.`;
+  if (!parts.length)  return 'Nothing in your plan needed to change.';
+  const joined = parts.join(', ');
+  return joined.charAt(0).toUpperCase() + joined.slice(1) + '.';
 }
 
 function daysBetween(a: Date, b: Date): number {
@@ -224,13 +252,38 @@ export default function PlanScreen() {
   const [changeOpen, setChangeOpen] = useState(false);
   const [changeText, setChangeText] = useState('');
   const [thinking, setThinking] = useState(false);
-  const [changeNote, setChangeNote] = useState<string | null>(null);
+  const [changeNote, setChangeNote] = useState<{ title: string; body: string } | null>(null);
+  const [dateOpen, setDateOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [taskChat, setTaskChat] = useState<{ role: 'lola' | 'user'; text: string }[]>([]);
+  const [taskInput, setTaskInput] = useState('');
+  const [taskThinking, setTaskThinking] = useState(false);
+  const activeTaskRef = useRef<string | null>(null);
 
-  function openCard(obj: Objective) {
+  async function openCard(obj: Objective) {
     setSelected(obj);
-    setDateInput('');
-    setChangeOpen(false);
-    setChangeText('');
+    setDateInput(''); setDateOpen(false);
+    setChangeOpen(false); setChangeText('');
+    setDetailsOpen(false);
+    setTaskInput(''); setTaskChat([]);
+    activeTaskRef.current = obj.id;
+    setTaskThinking(true);
+    const intro = await askLola(obj, profile ?? {}, [], TASK_INTRO);
+    if (activeTaskRef.current !== obj.id) return; // a different card was opened meanwhile
+    setTaskChat([{ role: 'lola', text: intro }]);
+    setTaskThinking(false);
+  }
+
+  async function submitTaskQuestion(obj: Objective) {
+    if (!taskInput.trim() || taskThinking) return;
+    const q = taskInput.trim();
+    const history = taskChat;
+    setTaskInput('');
+    setTaskChat(prev => [...prev, { role: 'user', text: q }]);
+    setTaskThinking(true);
+    const answer = await askLola(obj, profile ?? {}, history, q);
+    setTaskChat(prev => [...prev, { role: 'lola', text: answer }]);
+    setTaskThinking(false);
   }
 
   async function setProgress(id: string, pr: Progress | null) {
@@ -255,7 +308,7 @@ export default function PlanScreen() {
     const result = await parseProfileChange(changeText, obj.title);
     setThinking(false);
     if ('error' in result) {
-      setChangeNote("Sorry — I couldn't process that just now. Please try again.");
+      setChangeNote({ title: 'Hmm, that didn’t go through', body: 'I couldn’t process that just now — please try again.' });
       return;
     }
     const changes = result.changes;
@@ -263,13 +316,13 @@ export default function PlanScreen() {
     setChangeOpen(false);
     setSelected(null);
     if (Object.keys(changes).length === 0) {
-      setChangeNote('Thanks for the update — nothing in your plan needed to change.');
+      setChangeNote({ title: 'Thanks for the update', body: 'Nothing in your plan needed to change.' });
       return;
     }
     const nextProfile: Profile = { ...profile, ...changes };
     derive(nextProfile);
     const after = buildPlan(nextProfile);
-    setChangeNote(diffSummary(currentPlan, after));
+    setChangeNote({ title: 'That was useful — I’ve remodelled your plan!', body: diffSummary(currentPlan, after) });
     setProfile(nextProfile);
     if (user) await saveProfileDb(user.id, nextProfile);
   }
@@ -325,16 +378,6 @@ export default function PlanScreen() {
 
         <ConsulateBanner profile={profile} />
         <PenaltyBanner objectives={objectives} />
-
-        {changeNote && (
-          <View style={styles.lolaBanner}>
-            <Text style={styles.lolaBannerIcon}>✦</Text>
-            <Text style={styles.lolaBannerText}>{changeNote}</Text>
-            <TouchableOpacity onPress={() => setChangeNote(null)}>
-              <Text style={styles.lolaBannerDismiss}>✕</Text>
-            </TouchableOpacity>
-          </View>
-        )}
 
         {byPhase.map(({ phase, items }) => (
           <View key={phase} style={styles.section}>
@@ -411,84 +454,105 @@ export default function PlanScreen() {
             return (
               <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.sheetHandle} />
-                <View style={styles.sheetChips}>
-                  <View style={[styles.sheetChip, { backgroundColor: SEV_COLOR[selected.severity] + '18' }]}>
-                    <Text style={[styles.sheetChipText, { color: SEV_COLOR[selected.severity] }]}>{SEV_LABEL[selected.severity]}</Text>
-                  </View>
-                  <View style={[styles.sheetChip, { backgroundColor: '#F2EDE6' }]}>
-                    <Text style={[styles.sheetChipText, { color: palette.indigo, textTransform: 'capitalize' }]}>{selected.category}</Text>
-                  </View>
-                  <View style={[styles.sheetChip, { backgroundColor: SOURCE_COLOR[selected.source] + '18' }]}>
-                    <Text style={[styles.sheetChipText, { color: SOURCE_COLOR[selected.source] }]}>{SOURCE_LABEL[selected.source]}</Text>
-                  </View>
-                </View>
 
                 <Text style={styles.sheetTitle}>{selected.title}</Text>
-                <Text style={styles.sheetSevBlurb}>{SEV_BLURB[selected.severity]}</Text>
-
-                <Text style={styles.sheetSectionLabel}>WHEN</Text>
-                <Text style={styles.sheetTiming}>{formatTiming(selected)}</Text>
-                <Text style={styles.sheetBody}>{timingDetail(selected)}</Text>
-
-                {deps.length > 0 && (
-                  <>
-                    <Text style={styles.sheetSectionLabel}>BEFORE THIS, YOU'LL NEED</Text>
-                    {deps.map((d, i) => (
-                      <Text key={i} style={styles.sheetDep}>• {d}</Text>
-                    ))}
-                  </>
-                )}
-
-                <View style={[styles.sourceNote, { borderLeftColor: SOURCE_COLOR[selected.source] }]}>
-                  <Text style={styles.sourceNoteText}>{SOURCE_BLURB[selected.source]}</Text>
+                <View style={styles.sheetPills}>
+                  <View style={styles.pill}><Text style={[styles.pillText, { color: selected.done ? palette.olive : palette.cobalt }]}>{selected.done ? completionLine(selected) : formatTiming(selected)}</Text></View>
+                  <View style={styles.pill}>
+                    <View style={[styles.pillDot, { backgroundColor: SOURCE_COLOR[selected.source] }]} />
+                    <Text style={styles.pillText}>{SOURCE_SHORT[selected.source]}</Text>
+                  </View>
                 </View>
 
-                <Text style={styles.sheetSectionLabel}>ACTION TAKEN</Text>
-                {selected.done ? (
-                  <View style={styles.doneRow}>
-                    <Text style={styles.doneRowText}>✓ {completionLine(selected)}</Text>
-                    <TouchableOpacity onPress={() => { setProgress(selected.id, null); setSelected(null); }}>
-                      <Text style={styles.undoText}>Undo</Text>
+                {/* ── Lola task coach (the living element) ───────────────── */}
+                <View style={styles.thread}>
+                  {taskChat.map((t, i) => (
+                    <View key={i} style={t.role === 'lola' ? styles.threadLola : styles.threadUser}>
+                      <Text style={t.role === 'lola' ? styles.threadLolaText : styles.threadUserText}>{t.text}</Text>
+                    </View>
+                  ))}
+                  {taskThinking && (
+                    <View style={styles.threadLola}><ActivityIndicator color={palette.amber} /></View>
+                  )}
+                </View>
+
+                <View style={styles.askRow}>
+                  <TextInput
+                    style={styles.askInput}
+                    value={taskInput}
+                    onChangeText={setTaskInput}
+                    placeholder="Ask Lola about this step…"
+                    placeholderTextColor={palette.muted}
+                    onSubmitEditing={() => submitTaskQuestion(selected)}
+                    returnKeyType="send"
+                    editable={!taskThinking}
+                  />
+                  <TouchableOpacity
+                    style={[styles.askSend, (!taskInput.trim() || taskThinking) && styles.askSendDisabled]}
+                    onPress={() => submitTaskQuestion(selected)}
+                    disabled={!taskInput.trim() || taskThinking}
+                  >
+                    <Text style={styles.askSendText}>↑</Text>
+                  </TouchableOpacity>
+                </View>
+
+                {/* ── Compact actions ────────────────────────────────────── */}
+                <View style={styles.actionsRow}>
+                  {selected.done ? (
+                    <>
+                      <View style={styles.donePill}><Text style={styles.donePillText}>✓ Done</Text></View>
+                      <TouchableOpacity onPress={() => { setProgress(selected.id, null); setSelected(null); }}>
+                        <Text style={styles.linkBtn}>Undo</Text>
+                      </TouchableOpacity>
+                    </>
+                  ) : (
+                    <>
+                      <TouchableOpacity style={styles.doneChip} onPress={() => markDone(selected.id, new Date().toISOString().slice(0, 10))}>
+                        <Text style={styles.doneChipText}>✓ Mark done</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => setDateOpen(v => !v)}>
+                        <Text style={styles.linkBtn}>on a date</Text>
+                      </TouchableOpacity>
+                    </>
+                  )}
+                  <View style={{ flex: 1 }} />
+                  <TouchableOpacity onPress={() => setDetailsOpen(v => !v)}>
+                    <Text style={styles.linkBtn}>{detailsOpen ? 'Hide details' : 'Details'}</Text>
+                  </TouchableOpacity>
+                </View>
+
+                {dateOpen && !selected.done && (
+                  <View style={styles.dateRow}>
+                    <TextInput
+                      style={styles.dateInput}
+                      value={dateInput}
+                      onChangeText={setDateInput}
+                      placeholder="YYYY-MM-DD — downstream dates re-flow from this"
+                      placeholderTextColor={palette.muted}
+                      autoCapitalize="none"
+                    />
+                    <TouchableOpacity
+                      style={[styles.dateSaveBtn, !ISO_DATE.test(dateInput) && styles.dateSaveBtnDisabled]}
+                      disabled={!ISO_DATE.test(dateInput)}
+                      onPress={() => markDone(selected.id, dateInput)}
+                    >
+                      <Text style={styles.dateSaveBtnText}>Save</Text>
                     </TouchableOpacity>
                   </View>
-                ) : (
-                  <>
-                    <TouchableOpacity style={styles.doneBtn} onPress={() => markDone(selected.id, new Date().toISOString().slice(0, 10))}>
-                      <Text style={styles.doneBtnText}>✓ I’ve done this</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.dateHint}>Did it on a different day? Enter the date — downstream deadlines will re-flow from it.</Text>
-                    <View style={styles.dateRow}>
-                      <TextInput
-                        style={styles.dateInput}
-                        value={dateInput}
-                        onChangeText={setDateInput}
-                        placeholder="YYYY-MM-DD"
-                        placeholderTextColor={palette.muted}
-                        autoCapitalize="none"
-                      />
-                      <TouchableOpacity
-                        style={[styles.dateSaveBtn, !ISO_DATE.test(dateInput) && styles.dateSaveBtnDisabled]}
-                        disabled={!ISO_DATE.test(dateInput)}
-                        onPress={() => markDone(selected.id, dateInput)}
-                      >
-                        <Text style={styles.dateSaveBtnText}>Save date</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </>
                 )}
 
-                <Text style={styles.sheetSectionLabel}>SOMETHING CHANGED?</Text>
+                {/* ── Something changed → re-plan ─────────────────────────── */}
                 {!changeOpen ? (
-                  <TouchableOpacity style={styles.changeRow} onPress={() => setChangeOpen(true)}>
-                    <Text style={styles.changeRowText}>Tell Lola what you did or learned — she’ll update your plan →</Text>
+                  <TouchableOpacity onPress={() => setChangeOpen(true)}>
+                    <Text style={styles.changeLink}>Something changed? Tell Lola to update your plan →</Text>
                   </TouchableOpacity>
                 ) : (
-                  <>
+                  <View style={styles.changeBox}>
                     <TextInput
                       style={styles.changeInput}
                       value={changeText}
                       onChangeText={setChangeText}
-                      placeholder="e.g. We ended up having a baby — or we decided to rent instead of buy."
+                      placeholder="e.g. We decided to rent instead of buy."
                       placeholderTextColor={palette.muted}
                       multiline
                       editable={!thinking}
@@ -498,19 +562,55 @@ export default function PlanScreen() {
                       disabled={thinking || !changeText.trim()}
                       onPress={() => submitChange(selected, objectives)}
                     >
-                      {thinking
-                        ? <ActivityIndicator color={palette.cal} />
-                        : <Text style={styles.changeSubmitText}>Tell Lola</Text>}
+                      {thinking ? <ActivityIndicator color={palette.cal} /> : <Text style={styles.changeSubmitText}>Tell Lola</Text>}
                     </TouchableOpacity>
-                  </>
+                  </View>
                 )}
 
-                <TouchableOpacity style={styles.sheetClose} onPress={() => setSelected(null)}>
-                  <Text style={styles.sheetCloseText}>Close</Text>
+                {/* ── Collapsible details ────────────────────────────────── */}
+                {detailsOpen && (
+                  <View style={styles.detailsBox}>
+                    <Text style={styles.sheetSectionLabel}>WHEN</Text>
+                    <Text style={styles.sheetTiming}>{formatTiming(selected)}</Text>
+                    <Text style={styles.sheetBody}>{timingDetail(selected)}</Text>
+                    {deps.length > 0 && (
+                      <>
+                        <Text style={styles.sheetSectionLabel}>BEFORE THIS, YOU'LL NEED</Text>
+                        {deps.map((d, i) => (<Text key={i} style={styles.sheetDep}>• {d}</Text>))}
+                      </>
+                    )}
+                    <View style={[styles.sourceNote, { borderLeftColor: SOURCE_COLOR[selected.source] }]}>
+                      <Text style={styles.sourceNoteText}>{SOURCE_BLURB[selected.source]}</Text>
+                    </View>
+                  </View>
+                )}
+
+                <TouchableOpacity style={styles.sheetCloseLink} onPress={() => setSelected(null)}>
+                  <Text style={styles.sheetCloseLinkText}>Close</Text>
                 </TouchableOpacity>
               </ScrollView>
             );
           })()}
+        </Pressable>
+      </Pressable>
+    </Modal>
+
+    <Modal
+      visible={!!changeNote}
+      transparent
+      animationType="fade"
+      onRequestClose={() => setChangeNote(null)}
+    >
+      <Pressable style={styles.celebrateBackdrop} onPress={() => setChangeNote(null)}>
+        <Pressable style={styles.celebrateCard} onPress={e => e.stopPropagation()}>
+          <View style={styles.celebrateGlyphRing}>
+            <Text style={styles.celebrateGlyph}>✦</Text>
+          </View>
+          <Text style={styles.celebrateTitle}>{changeNote?.title}</Text>
+          <Text style={styles.celebrateBody}>{changeNote?.body}</Text>
+          <TouchableOpacity style={styles.celebrateBtn} onPress={() => setChangeNote(null)}>
+            <Text style={styles.celebrateBtnText}>See my updated plan</Text>
+          </TouchableOpacity>
         </Pressable>
       </Pressable>
     </Modal>
@@ -548,12 +648,16 @@ const styles = StyleSheet.create({
   alertBannerText: { flex: 1, fontFamily: 'HankenGrotesk_500Medium', fontSize: 13,
                      color: palette.amber, lineHeight: 20 },
 
-  lolaBanner:    { flexDirection: 'row', alignItems: 'center', backgroundColor: palette.amber + '14',
-                   borderWidth: 1, borderColor: palette.amber + '40', borderRadius: 10,
-                   padding: 12, marginBottom: 12, gap: 10 },
-  lolaBannerIcon: { fontSize: 15, color: palette.amber },
-  lolaBannerText: { flex: 1, fontFamily: 'HankenGrotesk_500Medium', fontSize: 13, color: palette.indigo, lineHeight: 20 },
-  lolaBannerDismiss: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.muted, paddingHorizontal: 4 },
+  celebrateBackdrop: { flex: 1, backgroundColor: 'rgba(21,36,59,0.55)', justifyContent: 'center', alignItems: 'center', padding: 32 },
+  celebrateCard:     { backgroundColor: palette.cal, borderRadius: 20, padding: 28, alignItems: 'center',
+                       maxWidth: 360, width: '100%', boxShadow: '0 12px 40px rgba(0,0,0,0.25)' },
+  celebrateGlyphRing:{ width: 56, height: 56, borderRadius: 28, backgroundColor: palette.amber + '1A',
+                       justifyContent: 'center', alignItems: 'center', marginBottom: 16 },
+  celebrateGlyph:    { fontSize: 26, color: palette.amber },
+  celebrateTitle:    { fontFamily: 'Fraunces_600SemiBold', fontSize: 21, color: palette.indigo, textAlign: 'center', lineHeight: 27, marginBottom: 8 },
+  celebrateBody:     { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.muted, textAlign: 'center', lineHeight: 22, marginBottom: 22 },
+  celebrateBtn:      { backgroundColor: palette.amber, borderRadius: 12, paddingVertical: 13, paddingHorizontal: 24, alignSelf: 'stretch', alignItems: 'center' },
+  celebrateBtnText:  { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, color: palette.cal },
 
   section:       { marginBottom: 28 },
   phaseHeader:   { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 10 },
@@ -587,11 +691,12 @@ const styles = StyleSheet.create({
                    padding: 24, paddingTop: 12, maxHeight: '85%' },
   sheetHandle:   { alignSelf: 'center', width: 40, height: 4, borderRadius: 2,
                    backgroundColor: '#D8D2C8', marginBottom: 18 },
-  sheetChips:    { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 12 },
-  sheetChip:     { borderRadius: 6, paddingHorizontal: 8, paddingVertical: 4 },
-  sheetChipText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, letterSpacing: 0.3 },
-  sheetTitle:    { fontFamily: 'Fraunces_600SemiBold', fontSize: 21, color: palette.indigo, lineHeight: 28, marginBottom: 6 },
-  sheetSevBlurb: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 14, color: palette.muted, lineHeight: 20, marginBottom: 8 },
+  sheetTitle:    { fontFamily: 'Fraunces_600SemiBold', fontSize: 21, color: palette.indigo, lineHeight: 28, marginBottom: 10 },
+  sheetPills:    { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 16 },
+  pill:          { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: '#FFFFFF',
+                   borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5 },
+  pillDot:       { width: 6, height: 6, borderRadius: 3 },
+  pillText:      { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.muted },
   sheetSectionLabel: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, color: palette.muted,
                        letterSpacing: 1.1, marginTop: 18, marginBottom: 6 },
   sheetTiming:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cobalt, marginBottom: 4 },
@@ -600,32 +705,50 @@ const styles = StyleSheet.create({
   sourceNote:    { backgroundColor: '#FFFFFF', borderRadius: 8, borderLeftWidth: 3,
                    padding: 12, marginTop: 20 },
   sourceNoteText:{ fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: palette.indigo, lineHeight: 19 },
-  sheetClose:    { backgroundColor: palette.indigo, borderRadius: 12, paddingVertical: 14,
-                   alignItems: 'center', marginTop: 24, marginBottom: 8 },
-  sheetCloseText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, color: palette.cal },
 
   cardDone:      { backgroundColor: '#F6F7F3' },
   cardTitleDone: { color: palette.olive },
 
-  doneBtn:       { backgroundColor: palette.olive, borderRadius: 12, paddingVertical: 13, alignItems: 'center', marginBottom: 12 },
-  doneBtnText:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, color: palette.cal },
-  dateHint:      { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: palette.muted, lineHeight: 19, marginBottom: 8 },
-  dateRow:       { flexDirection: 'row', gap: 8, alignItems: 'center' },
+  // ── Chat-first task sheet ──────────────────────────────────────────────
+  thread:        { gap: 8, marginBottom: 12, minHeight: 40 },
+  threadLola:    { alignSelf: 'flex-start', backgroundColor: '#FFFFFF', borderRadius: 16, borderBottomLeftRadius: 4,
+                   padding: 12, maxWidth: '92%', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' },
+  threadUser:    { alignSelf: 'flex-end', backgroundColor: palette.cobalt, borderRadius: 16, borderBottomRightRadius: 4,
+                   padding: 12, maxWidth: '92%' },
+  threadLolaText:{ fontFamily: 'HankenGrotesk_400Regular', fontSize: 14, color: palette.indigo, lineHeight: 21 },
+  threadUserText:{ fontFamily: 'HankenGrotesk_400Regular', fontSize: 14, color: palette.cal, lineHeight: 21 },
+  askRow:        { flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: '#FFFFFF',
+                   borderRadius: 24, borderWidth: 1, borderColor: '#E0DCD4', paddingLeft: 14, paddingRight: 5, paddingVertical: 5 },
+  askInput:      { flex: 1, fontFamily: 'HankenGrotesk_400Regular', fontSize: 14, color: palette.indigo, paddingVertical: 6,
+                   ...(Platform.OS === 'web' ? { outlineStyle: 'none' } as object : null) },
+  askSend:       { backgroundColor: palette.amber, width: 34, height: 34, borderRadius: 17, justifyContent: 'center', alignItems: 'center' },
+  askSendDisabled: { backgroundColor: palette.muted, opacity: 0.5 },
+  askSendText:   { color: palette.cal, fontSize: 17, lineHeight: 20 },
+
+  actionsRow:    { flexDirection: 'row', alignItems: 'center', gap: 14, marginTop: 16 },
+  doneChip:      { backgroundColor: palette.olive, borderRadius: 20, paddingHorizontal: 16, paddingVertical: 9 },
+  doneChipText:  { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cal },
+  donePill:      { backgroundColor: palette.olive + '18', borderRadius: 20, paddingHorizontal: 14, paddingVertical: 8 },
+  donePillText:  { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.olive },
+  linkBtn:       { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.cobalt },
+
+  dateRow:       { flexDirection: 'row', gap: 8, alignItems: 'center', marginTop: 12 },
   dateInput:     { flex: 1, backgroundColor: '#FFFFFF', borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10,
-                   fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.indigo,
+                   fontFamily: 'HankenGrotesk_400Regular', fontSize: 14, color: palette.indigo,
                    borderWidth: 1, borderColor: '#E0DCD4' },
   dateSaveBtn:   { backgroundColor: palette.olive, borderRadius: 10, paddingHorizontal: 16, paddingVertical: 11, justifyContent: 'center' },
   dateSaveBtnDisabled: { backgroundColor: palette.muted, opacity: 0.5 },
   dateSaveBtnText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cal },
-  changeRow:     { backgroundColor: palette.amber + '12', borderRadius: 8, padding: 12 },
-  changeRowText: { fontFamily: 'HankenGrotesk_500Medium', fontSize: 13, color: palette.amber, lineHeight: 19 },
-  changeInput:   { backgroundColor: '#FFFFFF', borderRadius: 10, padding: 12, minHeight: 72,
+
+  changeLink:    { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.amber, marginTop: 18 },
+  changeBox:     { marginTop: 14 },
+  changeInput:   { backgroundColor: '#FFFFFF', borderRadius: 10, padding: 12, minHeight: 64,
                    fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.indigo,
                    borderWidth: 1, borderColor: '#E0DCD4', textAlignVertical: 'top' },
   changeSubmit:  { backgroundColor: palette.amber, borderRadius: 10, paddingVertical: 12, alignItems: 'center', marginTop: 8 },
   changeSubmitText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, color: palette.cal },
-  doneRow:       { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-                   backgroundColor: palette.olive + '14', borderRadius: 10, padding: 14 },
-  doneRowText:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.olive, flex: 1 },
-  undoText:      { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cobalt, marginLeft: 12 },
+
+  detailsBox:    { marginTop: 18, borderTopWidth: 1, borderTopColor: '#EAE6DE', paddingTop: 2 },
+  sheetCloseLink:{ alignItems: 'center', paddingVertical: 16, marginTop: 10 },
+  sheetCloseLinkText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, color: palette.muted },
 });
