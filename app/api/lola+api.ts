@@ -8,10 +8,17 @@
  *
  * Contract: POST { system?, messages, model?, max_tokens? } -> { text }.
  *
- * Hardening (so this can't be abused as a free Claude endpoint):
- *  - Origin allowlist: browser requests from other sites are rejected.
- *  - Per-IP rate limit: best-effort fixed window (see note on the limiter).
- *  - Payload caps: bounded message count + total input size + max_tokens.
+ * Hardening (so this can't be abused as a free Claude endpoint). These are layered and
+ * fail-open so they never block legitimate users:
+ *  - Payload caps: bounded message count + total input size + max_tokens. Always enforced
+ *    (verified live) — this is the real per-request cost limiter.
+ *  - Origin/Referer allowlist: rejects browser requests that positively identify as coming
+ *    from another site. On the EAS Hosting (Cloudflare Workers) runtime the Origin header is
+ *    not forwarded to the handler, so this is a no-op there and a real check elsewhere.
+ *  - Per-IP rate limit: best-effort fixed window, and only when the runtime gives us a
+ *    client IP (otherwise skipped, so users never share one bucket). Per-isolate on Workers,
+ *    so it caps sustained single-source abuse rather than being a global exact counter.
+ *    A hard global limit would need Cloudflare KV / a WAF rate-limit rule (future).
  */
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
@@ -41,15 +48,29 @@ const ALLOWED_ORIGINS = new Set([
   ...(process.env.ALLOWED_ORIGINS ?? '').split(',').map(s => s.trim()).filter(Boolean),
 ]);
 
-function originAllowed(origin: string | null): boolean {
-  if (!origin) return true;                       // no Origin (native / same-origin edge) → allow, rely on other limits
-  if (ALLOWED_ORIGINS.has(origin)) return true;
+// Accepts either an Origin (https://host) or a Referer (https://host/path) and checks
+// the normalized origin, so both header shapes work.
+function isAllowed(value: string): boolean {
   try {
-    const host = new URL(origin).hostname;
-    return host === 'localhost' || host === '127.0.0.1'; // any localhost port for dev
+    const url = new URL(value);
+    if (ALLOWED_ORIGINS.has(url.origin)) return true;
+    return url.hostname === 'localhost' || url.hostname === '127.0.0.1'; // any localhost port for dev
   } catch {
     return false;
   }
+}
+
+// Reject only when we have a positive signal (Origin or Referer) that the request came
+// from a DIFFERENT site. When neither header is present — which is the case on the EAS
+// Hosting / Cloudflare Workers runtime, and for native apps — we allow and rely on the
+// payload caps + rate limit. (So this blocks casual cross-origin browser abuse where the
+// runtime forwards the header, and is a harmless no-op where it doesn't.)
+function requestOriginRejected(request: Request): boolean {
+  const origin = request.headers.get('origin');
+  if (origin) return !isAllowed(origin);
+  const referer = request.headers.get('referer');
+  if (referer) return !isAllowed(referer);
+  return false;
 }
 
 // Best-effort per-IP fixed-window limiter. NOTE: on Cloudflare Workers each isolate has
@@ -58,6 +79,9 @@ function originAllowed(origin: string | null): boolean {
 // checks. A globally exact limit would need Cloudflare KV / a rate-limiting rule.
 const hits = new Map<string, { count: number; resetAt: number }>();
 function rateLimited(ip: string): boolean {
+  // If the runtime doesn't forward a client IP, DON'T rate-limit — otherwise every
+  // request shares one 'unknown' bucket and legit users would throttle each other.
+  if (ip === 'unknown') return false;
   const now = Date.now();
   const rec = hits.get(ip);
   if (!rec || now >= rec.resetAt) {
@@ -79,7 +103,7 @@ type Message = { role: 'user' | 'assistant'; content: string };
 
 export async function POST(request: Request) {
   try {
-    if (!originAllowed(request.headers.get('origin'))) {
+    if (requestOriginRejected(request)) {
       return Response.json({ error: 'forbidden origin' }, { status: 403 });
     }
     if (rateLimited(clientIp(request))) {
