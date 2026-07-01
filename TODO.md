@@ -178,11 +178,21 @@ is strictly required — a normal EAS build works.
       build profiles in `eas.json` (build-only, so web deploys keep same-origin `/api/lola`); native
       has no same-origin so it needs the absolute URL. Audit found everything else already
       `Platform.OS`-guarded (mic hidden off-web, supabase storage, index resize, etc.).
-- [ ] **First build — Android preview APK** (no paid account needed): `eas build --profile preview
-      --platform android` → sideload on an Android phone to validate rendering + interview + the
-      `/api/lola` proxy over the network. Fastest way to see it live on a device.
-- [ ] **iOS build — needs an Apple Developer account ($99/yr).** Then `eas build --profile preview
-      --platform ios` (ad-hoc/TestFlight). Any on-device iOS install requires the paid account.
+- [x] **First build — Android preview APK BUILT** (build `a538b9d7`, finished 2026-07-01). APK:
+      https://expo.dev/artifacts/eas/UhQ5NVtbsZ4rrjR3nvsqBopLRUhGvikflJOlD1IfVho.apk — staging DB +
+      `EXPO_PUBLIC_API_URL=getcamino.app` baked in. **Not yet verified on-device** (user hit Android
+      emulator trouble; deferred to focus on iOS). Re-test the APK later to validate native rendering
+      + the interview/`api/lola` path.
+- [~] **iOS build — real-device via Apple Developer account ($99/yr).** Path chosen: install on a
+      real iPhone (ad-hoc internal first, then TestFlight for the store). Gated on:
+      1. User enrolls in the Apple Developer Program (developer.apple.com).
+      2. Apple authentication — EAS needs to auth to Apple to create certs/provisioning. Two ways:
+         (a) user runs `eas build -p ios` themselves and logs in with their Apple ID when prompted,
+         or (b) an App Store Connect **API key** (.p8) set up in EAS for non-interactive builds.
+         Claude can't enter Apple credentials, so this step is the user's.
+      3. `eas device:create` to register the iPhone (ad-hoc), then `eas build --profile preview
+         --platform ios`, install via the link on the phone. Bundle id `com.nerolabs.camino` + the
+         `caminoapp` scheme are already set.
 - [ ] **Native Google sign-in (OAuth deep-link).** Not just the redirect string — native needs the
       `WebBrowser.openAuthSessionAsync` flow + `caminoapp://` added to the Supabase redirect
       allowlist and the Google Cloud OAuth client. Sign-in is optional (interview works without it),
