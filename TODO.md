@@ -217,11 +217,12 @@ is strictly required — a normal EAS build works.
 
 ## 📥 Feedback backlog (captured 2026-07-01) — suggested order below
 
-- [x] **B1a — Dev personas gated (DONE 2026-07-01).** `core/env.ts` `showDevTools()` via
-      `EXPO_PUBLIC_ENV` (production/staging, set per EAS env) + `EXPO_PUBLIC_STAFF_USER_IDS`
-      allowlist. Verified live: hidden on getcamino.app, visible on staging. **Pending:** the two
-      staff Supabase user ids to populate `EXPO_PUBLIC_STAFF_USER_IDS` in the production EAS env
-      (so user + wife see dev tools in prod).
+- [x] **B1a — Dev personas gated + staff flag (DONE 2026-07-01).** `core/env.ts` `showDevTools()`
+      via `EXPO_PUBLIC_ENV` (production/staging, per EAS env) + `EXPO_PUBLIC_STAFF_USER_IDS` allowlist.
+      Staff = the auth `user_id`s (NOT profiles.id — verified via SQL they differ): user
+      `3a4001e8-…`, wife `e1c8f5e9-…`, set in the production EAS env. Verified live: hidden for
+      non-staff on getcamino.app, **visible for signed-in staff on getcamino.app**, visible for all
+      on staging.
 - [x] **B1b — Lola intro (DONE 2026-07-01).** Interview landing now opens with an eyebrow
       ("YOUR ROAD TO SPAIN"), "Hola, I'm Lola," a warm experienced-companion line, and a quieter
       what-happens-next line. Verified live on prod + staging.
