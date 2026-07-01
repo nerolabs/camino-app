@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
@@ -140,6 +140,16 @@ export default function InterviewScreen() {
   const scrollRef = useRef<ScrollView>(null);
   const recognitionRef = useRef<{ stop: () => void } | null>(null);
   const progressRef = useRef(0);
+  const inputRef = useRef<TextInput>(null);
+
+  // Auto-focus the answer box each time a new question is ready, so the user can just
+  // start typing (or dictating) without clicking into the field first.
+  useEffect(() => {
+    if (started && !done && !loading && currentSlot) {
+      const t = setTimeout(() => inputRef.current?.focus(), 50);
+      return () => clearTimeout(t);
+    }
+  }, [currentSlot, loading, started, done]);
 
   function toggleMic() {
     if (listening) { recognitionRef.current?.stop(); return; }
@@ -150,11 +160,14 @@ export default function InterviewScreen() {
     };
     const rec = new Recognition();
     rec.lang = 'en-US';
-    rec.interimResults = false;
-    rec.continuous = false;
+    rec.interimResults = true;   // stream partial results so text appears live as you speak
+    rec.continuous = true;       // keep listening until the user taps stop
+    const base = input ? input.trim() + ' ' : '';
     rec.onresult = (e) => {
-      const transcript = Array.from(e.results).map(r => r[0].transcript).join(' ').trim();
-      setInput(prev => (prev ? prev + ' ' : '') + transcript);
+      // Concatenate every result (finalized + in-progress) for a live transcript.
+      let transcript = '';
+      for (let i = 0; i < e.results.length; i++) transcript += e.results[i][0].transcript;
+      setInput(base + transcript);
     };
     rec.onend = () => setListening(false);
     rec.onerror = () => setListening(false);
@@ -205,6 +218,7 @@ export default function InterviewScreen() {
 
   async function submit(text: string) {
     if (!currentSlot || !text.trim() || loading) return;
+    if (listening) recognitionRef.current?.stop(); // stop dictation when the answer is sent
     setInput('');
     setLoading(true);
     setTurns(prev => [...prev, { role: 'user', text }]);
@@ -330,6 +344,7 @@ export default function InterviewScreen() {
           {!done && (
             <View style={styles.inputRow}>
               <TextInput
+                ref={inputRef}
                 style={styles.input}
                 value={input}
                 onChangeText={setInput}
