@@ -9,6 +9,7 @@ import { palette } from '@/constants/Colors';
 import { nextSlot, derive, interviewProgress, type Slot, type Profile } from '@/core/interview-controller';
 import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
+import { showDevTools } from '@/core/env';
 import { saveProfile as saveProfileDb } from '@/core/profileDb';
 import { TEST_PERSONAS, type Persona } from '@/core/test-personas';
 import { askAnthropic } from '@/lib/lola';
@@ -241,28 +242,38 @@ export default function InterviewScreen() {
       <ScrollView style={styles.flex}>
         <NavBar />
         <View style={styles.center}>
+          <Text style={styles.eyebrow}>YOUR ROAD TO SPAIN</Text>
           <Text style={styles.headline}>Hola, I'm Lola.</Text>
           <Text style={styles.sub}>
-            I'll help you figure out everything you need to do to move to Spain —
-            in the right order, with real deadlines.
+            Moving to Spain is a hundred small steps — visas, padrón, taxes, healthcare —
+            and they only work in the right order. I've helped others make this move, and
+            I'll walk it with you the whole way.
+          </Text>
+          <Text style={styles.subQuiet}>
+            Answer a few questions and I'll build your personal roadmap: real steps, real
+            deadlines, nothing you don't need.
           </Text>
           <TouchableOpacity style={styles.startBtn} onPress={start}>
             <Text style={styles.startBtnText}>Let's get started</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setShowDev(v => !v)} style={styles.devToggle}>
-            <Text style={styles.devToggleText}>{showDev ? 'Hide' : 'Dev'} test personas</Text>
-          </TouchableOpacity>
+          {showDevTools(user?.id) && (
+            <>
+              <TouchableOpacity onPress={() => setShowDev(v => !v)} style={styles.devToggle}>
+                <Text style={styles.devToggleText}>{showDev ? 'Hide' : 'Dev'} test personas</Text>
+              </TouchableOpacity>
 
-          {showDev && (
-            <View style={styles.devPanel}>
-              {TEST_PERSONAS.map(p => (
-                <TouchableOpacity key={p.name} style={styles.personaBtn} onPress={() => loadPersona(p)}>
-                  <Text style={styles.personaName}>{p.name}</Text>
-                  <Text style={styles.personaDesc}>{p.description}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+              {showDev && (
+                <View style={styles.devPanel}>
+                  {TEST_PERSONAS.map(p => (
+                    <TouchableOpacity key={p.name} style={styles.personaBtn} onPress={() => loadPersona(p)}>
+                      <Text style={styles.personaName}>{p.name}</Text>
+                      <Text style={styles.personaDesc}>{p.description}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </>
           )}
         </View>
       </ScrollView>
@@ -356,8 +367,10 @@ export default function InterviewScreen() {
 const styles = StyleSheet.create({
   flex:        { flex: 1, backgroundColor: palette.cal },
   center:      { flex: 1, backgroundColor: palette.cal, justifyContent: 'center', alignItems: 'center', padding: 32 },
+  eyebrow:     { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, letterSpacing: 2, color: palette.amber, textAlign: 'center', marginBottom: 12 },
   headline:    { fontFamily: 'Fraunces_600SemiBold', fontSize: 34, color: palette.indigo, textAlign: 'center', marginBottom: 16 },
-  sub:         { fontFamily: 'HankenGrotesk_400Regular', fontSize: 16, color: palette.indigo, textAlign: 'center', lineHeight: 24, marginBottom: 40, maxWidth: 440 },
+  sub:         { fontFamily: 'HankenGrotesk_400Regular', fontSize: 17, color: palette.indigo, textAlign: 'center', lineHeight: 26, marginBottom: 16, maxWidth: 460 },
+  subQuiet:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.muted, textAlign: 'center', lineHeight: 23, marginBottom: 36, maxWidth: 440 },
   startBtn:    { backgroundColor: palette.cobalt, borderRadius: 12, paddingVertical: 16, paddingHorizontal: 40 },
   startBtnText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cal },
   progressWrap:  { width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 16, paddingTop: 14, paddingBottom: 2, gap: 7 },
