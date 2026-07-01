@@ -620,7 +620,7 @@ export default function PlanScreen() {
 
 const styles = StyleSheet.create({
   scroll:        { flex: 1, backgroundColor: palette.cal },
-  content:       { padding: 24, paddingTop: 32, paddingBottom: 48 },
+  content:       { width: '100%', maxWidth: 820, alignSelf: 'center', padding: 24, paddingTop: 32, paddingBottom: 48 },
 
   emptyWrap:     { flex: 1, backgroundColor: palette.cal, justifyContent: 'center', alignItems: 'center', padding: 32 },
   emptyHeading:  { fontFamily: 'Fraunces_600SemiBold', fontSize: 26, color: palette.indigo, marginBottom: 12 },
@@ -686,8 +686,9 @@ const styles = StyleSheet.create({
   sourceDotMark: { width: 6, height: 6, borderRadius: 3 },
   sourceDotText: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted },
 
-  modalBackdrop: { flex: 1, backgroundColor: 'rgba(21,36,59,0.45)', justifyContent: 'flex-end' },
-  sheet:         { backgroundColor: palette.cal, borderTopLeftRadius: 24, borderTopRightRadius: 24,
+  modalBackdrop: { flex: 1, backgroundColor: 'rgba(21,36,59,0.45)', justifyContent: 'flex-end', alignItems: 'center' },
+  sheet:         { width: '100%', maxWidth: 640, alignSelf: 'center',
+                   backgroundColor: palette.cal, borderTopLeftRadius: 24, borderTopRightRadius: 24,
                    padding: 24, paddingTop: 12, maxHeight: '85%' },
   sheetHandle:   { alignSelf: 'center', width: 40, height: 4, borderRadius: 2,
                    backgroundColor: '#D8D2C8', marginBottom: 18 },

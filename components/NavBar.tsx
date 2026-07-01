@@ -13,6 +13,9 @@ export default function NavBar() {
         <Text style={styles.logo}>Camino: Your Road to Spain</Text>
       </TouchableOpacity>
       <View style={styles.right}>
+        <TouchableOpacity onPress={() => router.push('/')} style={styles.ghost}>
+          <Text style={styles.ghostText}>Home</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push('/how-it-works')} style={styles.ghost}>
           <Text style={styles.ghostText}>How it works</Text>
         </TouchableOpacity>

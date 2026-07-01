@@ -94,6 +94,15 @@ Last updated: 2026-06-30.
       collapse). Verified live incl. follow-up Q&A. Note: this is a 3rd LLM surface (advisory only,
       never authors plan data) — flag for the invariants review.
 
+## ✅ Done (roadmap width + nav)
+
+- [x] **Centered the roadmap on desktop** — `plan.tsx` content is now a max-width 820px column
+      (`alignSelf: center`), matching the interview's centered layout. Stats chips kept.
+- [x] **Added a "Home" nav link** to the left of "How it works" (`components/NavBar.tsx`), routing
+      to `/` for a clean way back to the start.
+- [x] **Capped the task sheet width on desktop** — the detail drawer now maxes at 640px and centers
+      (`modalBackdrop` alignItems center + `sheet` maxWidth/alignSelf), instead of spanning full width.
+
 ## 🔜 Next (candidates, not yet started)
 
 - [ ] **Native dictation** — the mic uses the web SpeechRecognition API; wire `expo-speech-recognition`
