@@ -86,6 +86,13 @@ Last updated: 2026-06-30.
 - [x] **Celebratory "plan remodelled" modal** — replaced the inline banner with a centered amber
       popup ("That was useful — I've remodelled your plan!" + the deterministic diff). Verified live:
       "we'll rent instead of buy" → removed 6 property steps (38 → 32) (`app/plan.tsx`).
+- [x] **Chat-first task drawer redesign** — rebuilt the messy detail sheet around a **context-aware
+      Lola coach**: on open she explains how to tackle the step (plain text, defers specifics to a
+      gestor — invariant 3), and the user can ask threaded follow-ups (`askLola` in `app/plan.tsx`).
+      Cluttered sections replaced with compact pills + a compact action row (the full-width "I've
+      done this" button is now a small "✓ Mark done" chip; "on a date"/"Details" are links; details
+      collapse). Verified live incl. follow-up Q&A. Note: this is a 3rd LLM surface (advisory only,
+      never authors plan data) — flag for the invariants review.
 
 ## 🔜 Next (candidates, not yet started)
 
