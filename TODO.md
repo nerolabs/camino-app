@@ -3,7 +3,18 @@
 Living list of what we're tracking against. Update as work moves. Newest context at top.
 See `HANDOFF.md` for the fuller picture and `core/SOURCING.md` for obligation provenance.
 
-Last updated: 2026-06-30.
+Last updated: 2026-07-01.
+
+## 🔒 Security — TOP PRIORITY
+
+- [ ] **Verify no secrets are ever committed to the (public) GitHub repo.** Re-check before every
+      push and before sharing the repo. Standing guarantees: `.env` is gitignored; the Anthropic
+      key now lives server-side only (`app/api/lola+api.ts`). Quick audit:
+      `git ls-files | grep -iE '(^|/)\.env'` → empty, and `git grep -I 'sk-ant-' HEAD` → no matches.
+      **Last audited 2026-07-01: CLEAN** — `.env` never committed; no `sk-ant-` keys in any tracked
+      file or in full history; the one `eyJ…` match in `package-lock.json` is an npm integrity hash,
+      not a secret. Also confirm the Supabase URL/anon key are the only `EXPO_PUBLIC_` values (anon
+      key is public-safe under RLS).
 
 ## ✅ Done (this session)
 
