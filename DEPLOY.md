@@ -48,11 +48,19 @@ npm run deploy:staging      # -> preview env + staging DB, alias camino--staging
 npm run deploy:production    # -> production env + prod DB, getcamino.app
 ```
 
-⚠️ **Why:** `EXPO_PUBLIC_*` values (Supabase URL/key) are inlined into the client bundle by
-Metro at `expo export` time, and **Metro's cache does not bust when only env values change**.
-A plain `expo export` after switching environments silently ships the *previous* database. The
-scripts (`scripts/deploy.sh`) do it safely: pull that EAS environment's vars → **clear the Metro
-cache** → export → deploy → clean up `.env.local`. If you ever export by hand, pass `--clear`.
+⚠️ **Why:** `EXPO_PUBLIC_*` values (Supabase URL/key, `EXPO_PUBLIC_ENV`) are inlined into the
+client bundle by Metro at `expo export` time. Two traps: (1) Metro's cache does not bust when only
+env values change, and (2) the local dev `.env` (which holds **staging**) can win over the pulled
+target-env values. The script defends against both: `eas env:pull` the target environment →
+**`source` those vars into the shell** (Metro reads `process.env` at the highest priority, above
+every `.env` file) → clear `dist` + `node_modules/.cache` → `export --clear` → deploy → remove
+`.env.local`. It prints `[deploy] Baking: EXPO_PUBLIC_ENV=… SUPABASE=…` — **eyeball that line**.
+
+> 🐞 Real incident (2026-07-01): running `deploy:staging` then `deploy:production` back-to-back
+> baked the **staging** Supabase into the production bundle (prod briefly pointed at the staging
+> DB). Fixed by sourcing the pulled env into the shell. Always verify the baked ref after deploy:
+> `curl -s https://getcamino.app/interview | grep -oE '/_expo/static/js/web/[^"]+\.js'` then grep
+> the bundle for the Supabase project ref (`oftrp…` = prod, `gsnsg…` = staging).
 
 ### Environments / databases
 

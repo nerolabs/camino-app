@@ -23,11 +23,20 @@ esac
 echo "[deploy] Pulling '${EAS_ENV}' env vars into .env.local (EXPO_PUBLIC_ + secrets)..."
 npx eas-cli env:pull "${EAS_ENV}" --path .env.local --non-interactive
 
-echo "[deploy] Supabase project that will be baked in:"
-grep -E 'EXPO_PUBLIC_SUPABASE_URL' .env.local || true
+# Load the pulled values into the actual shell environment. Metro inlines EXPO_PUBLIC_* from
+# process.env with the HIGHEST priority — above every .env file — so this guarantees the target
+# environment's values win over the local dev .env (which holds staging), instead of relying on
+# .env-file precedence or a clean Metro cache. Without this, a plain `expo export` could bake the
+# wrong database (observed: prod deployed with the staging Supabase after a back-to-back deploy).
+set -a
+# shellcheck source=/dev/null
+source .env.local
+set +a
 
-echo "[deploy] Exporting web bundle with a CLEARED Metro cache (critical -- see header)..."
-rm -rf dist
+echo "[deploy] Baking: EXPO_PUBLIC_ENV=${EXPO_PUBLIC_ENV:-<unset>}  SUPABASE=${EXPO_PUBLIC_SUPABASE_URL:-<unset>}"
+
+echo "[deploy] Exporting web bundle with fully cleared caches (critical -- see header)..."
+rm -rf dist node_modules/.cache
 npx expo export --platform web --clear
 
 echo "[deploy] Deploying to ${TARGET} ..."

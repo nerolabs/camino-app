@@ -217,6 +217,23 @@ is strictly required — a normal EAS build works.
 
 ## 📥 Feedback backlog (captured 2026-07-01) — suggested order below
 
+- [x] **B1a — Dev personas gated (DONE 2026-07-01).** `core/env.ts` `showDevTools()` via
+      `EXPO_PUBLIC_ENV` (production/staging, set per EAS env) + `EXPO_PUBLIC_STAFF_USER_IDS`
+      allowlist. Verified live: hidden on getcamino.app, visible on staging. **Pending:** the two
+      staff Supabase user ids to populate `EXPO_PUBLIC_STAFF_USER_IDS` in the production EAS env
+      (so user + wife see dev tools in prod).
+- [x] **B1b — Lola intro (DONE 2026-07-01).** Interview landing now opens with an eyebrow
+      ("YOUR ROAD TO SPAIN"), "Hola, I'm Lola," a warm experienced-companion line, and a quieter
+      what-happens-next line. Verified live on prod + staging.
+- [ ] **B9 — Lola text-to-speech (NEW).** Speak the intro + each question in a warm woman's voice
+      with a medium Spanish accent speaking English, to make the app feel alive. Aligns with
+      `docs/design/brand.md` "Spoken voice (TTS) — production direction". `expo-speech` (built-in)
+      gives limited voice/accent control; a cloud TTS (ElevenLabs / Azure / Google) with a chosen
+      Spanish-accented-English voice, cached + played via `expo-audio`, gives real warmth. Needs a
+      voice/provider decision + likely a small server route to keep any TTS key server-side. Make it
+      toggleable (accessibility + don't autoplay audio unexpectedly).
+
+
 Recommended sequence (rationale in each item): **B1 quick UX/config wins → B7 analytics (time-
 sensitive: capture family-testing funnel data now) → B4 scouting obligation → B5 E2E tests → B6
 observability → B8 blog stub → B2 app icon (needs an asset decision).**
@@ -233,11 +250,12 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       `app/interview.tsx` (NOT in the chat box) — the road to Spain is easier with an experienced
       friend; her name is Lola — then start the interview. Keep it tight (invariant: no invented
       claims; Lola stays a guide, defers specifics to a gestor).
-- [ ] **B2 — App icon from the brand mark.** Replace the placeholder `assets/images/icon.png`
-      with the Camino "one star, two hosts" mark (`docs/design/brand.md`, "The mark"). ⚠️ Claude
-      can't design/generate the image — need either a designed PNG (1024×1024) from the user, or
-      approval to generate a simple geometric SVG→PNG version programmatically. Then wire iOS/Android
-      icon + splash + favicon.
+- [ ] **B2 — App icon from the brand mark (APPROVED by user 2026-07-01).** Replace the placeholder
+      `assets/images/icon.png` with the Camino "one star, two hosts" mark (`docs/design/brand.md`,
+      "The mark"). Claude can't design a raster from scratch, so plan: build the mark as an **SVG**
+      from the brand palette + geometry, render it to the required PNGs (1024 icon, adaptive-icon
+      foreground, splash, favicon) via a small script (sharp/resvg), and wire into app.config.ts.
+      Show the user the SVG for approval before shipping in a build.
 
 ### Catalog / engine (medium)
 - [ ] **B4 — "Where to live in Spain" scouting workstream (NEW obligation).** Many users don't know
