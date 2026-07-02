@@ -3,28 +3,25 @@
 These 16 videos were transcribed (yt-dlp subtitles) and mined to seed the obligation catalog.
 Recovered from an earlier session transcript (2026-07-02).
 
-⚠️ **No per-obligation → video mapping exists yet.** To populate each obligation's staff-only
-`webinar_url` accurately, we need to know which video each obligation came from. Options:
-1. You provide the mapping (obligation id → video URL, ideally with a timestamp).
-2. Attribute by topic (I can propose a mapping from video content → obligations for your review).
-3. Link all webinar-derived obligations to this list/playlist generally (least precise).
+✅ **Per-obligation → video mapping DONE (2026-07-02).** All 16 transcripts were re-fetched, read,
+and 43/55 obligations mapped to their topic-dedicated webinar with transcript-verified timestamps.
+Each obligation's staff-only `webinar_url` links directly into the relevant moment of the video.
+See `core/SOURCING.md` "Webinar → obligation mapping (batch 2)" for the full attribution table.
 
-Until then the `webinar_url` field + staff button are wired but unpopulated.
-
-## The 16 videos
-- https://www.youtube.com/watch?v=2A19YnqiO4g
-- https://www.youtube.com/watch?v=8zyT1TG9S5E
-- https://www.youtube.com/watch?v=9RUa0LsfFCQ
-- https://www.youtube.com/watch?v=C_UxMIqTd0Q
-- https://www.youtube.com/watch?v=HP55mfxt52U
-- https://www.youtube.com/watch?v=NwecXut5e24
-- https://www.youtube.com/watch?v=OnLKyPbpALY
-- https://www.youtube.com/watch?v=SqmxlLuJ_bY
-- https://www.youtube.com/watch?v=U6_AOU1JdAE
-- https://www.youtube.com/watch?v=b1E-RQIdv4A
-- https://www.youtube.com/watch?v=gEY3Xkqs6so
-- https://www.youtube.com/watch?v=gtruvbQhphE
-- https://www.youtube.com/watch?v=tQvPYhH99Nw
-- https://www.youtube.com/watch?v=tZJk56EH1ms
-- https://www.youtube.com/watch?v=uH927kx3igU
-- https://www.youtube.com/watch?v=vAeqa_xdrTY
+## The 16 videos (with titles + primary obligations mapped)
+- 2A19YnqiO4g — Mistakes Americans Make in Spain → `dgt-exchange`, `dgt-exam`
+- 8zyT1TG9S5E — Buying a Home in Spain → property purchase obligations
+- 9RUa0LsfFCQ — Living in Madrid (regional insight)
+- C_UxMIqTd0Q — Living in Malaga → `empadronamiento`, `nie`
+- HP55mfxt52U — Spain Taxes 101 → `beckham-law`, `autonomo-social-security`, `register-autonomo`, `wealth-tax`, `modelo-720`, `exit-tax-return`, `tax-planning-consultation`
+- NwecXut5e24 — Living in Catalonia (regional insight)
+- OnLKyPbpALY — Spain Healthcare & Health Insurance → `tarjeta-sanitaria`, `student-visa-health-insurance`
+- SqmxlLuJ_bY — Digital Nomad Visa → `dnv-*` document obligations + renewal
+- U6_AOU1JdAE — Retiring in Spain → `pet-import`
+- b1E-RQIdv4A — Living in Valencia (regional insight)
+- gEY3Xkqs6so — Cost of Living Across Spain → `scout-where-to-live`
+- gtruvbQhphE — How to Move to Spain: Key Steps (onboarding overview)
+- tQvPYhH99Nw — Renting in Spain (rental context)
+- tZJk56EH1ms — Non-Lucrative Visa → `nlv-*` document obligations + renewal
+- uH927kx3igU — Spain Visas 101 → `choose-visa-type`, `consulate-appointment`, `criminal-background-check`, `medical-certificate`, `apostille-documents`
+- vAeqa_xdrTY — Spain Citizenship 101 → `citizenship-track-standard`, `citizenship-track-latam`, `citizenship-application`, `dele-a2-exam`, `ccse-exam`

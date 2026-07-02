@@ -19,11 +19,12 @@ Last updated: 2026-07-01.
 ## 🥇 Priority order (set by user 2026-07-02)
 
 1. **Security** (above) — always first.
-2. **Webinar → obligation mapping (ACTIVE).** Re-unpack the 16 webinar transcripts and map each
-   obligation to its source video **with deep transcript data** (ideally a timestamp). Populate the
-   `webinar_url` — **as supplementary info, kept even when an official `source_url` exists.**
-   Staff-only for now; with testing + a potential **MovingToSpain.com** partnership this becomes
-   user-facing/usable content. (This is the `webinar_url` population task under B10.)
+2. ~~**Webinar → obligation mapping.**~~ **DONE (2026-07-02).** All 16 transcripts captured;
+   mapped **43/55 obligations** to their source video with transcript-verified timestamps.
+   `webinar_url` is supplementary (kept even when `source_url` exists), staff-only for now, and
+   becomes user-facing content with a potential **MovingToSpain.com** partnership. The 12 unmapped
+   are tax-form technicalities + admin items the webinars don't cover specifically enough to cite.
+   See `core/SOURCING.md` "batch 2". **→ Next active item is #3.**
 3. **Re-add backlog obligations** (`core/OBLIGATIONS_BACKLOG.md`: `sworn-translation`,
    `convenio-especial`, `modelo-390`, `citizenship-jura`) once sourced — **second priority.**
 4. **Full deep cross-check / testing pass of ALL obligations** — **top priority, but only AFTER the
@@ -324,13 +325,11 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             renewals, tarjeta-sanitaria, bank account, pet-import, property steps, etc.), each with a
             canonical `source_url`. Advisory items (`tax-planning-consultation`, `exit-tax-return`,
             `consulate-appointment` soft estimate) likely stay `webinar`/reclassify, not "official".
-      - [ ] **Populate `webinar_url` — blocked on the obligation→video mapping.** Found the 16
-            webinar YouTube URLs (recovered from an earlier session transcript → saved to
-            `docs/webinar-sources.md`), BUT there's no record of which video each obligation came
-            from, and attributing one would be a guess. **Decision needed:** (a) you give the mapping
-            (obligation id → URL + timestamp), (b) I propose a topic-based mapping for your review, or
-            (c) link all webinar-derived obligations to the list generally. Field + staff button are
-            wired; they render the moment a `webinar_url` is set.
+      - [x] **Populate `webinar_url` — DONE (2026-07-02).** Re-fetched all 16 transcripts (yt-dlp
+            + Chrome cookies), read each, and mapped **43/55 obligations** to their topic-dedicated
+            webinar with transcript-verified timestamps (option b, evidence-based). Kept as
+            supplementary even where `source_url` exists. 12 unmapped = tax-form technicalities +
+            admin items not covered specifically enough. See `core/SOURCING.md` "batch 2".
 - [ ] **B11 — Repo structure: `camino/` vs `camino-app/` (2026-07-02 question).** Two dirs exist —
       likely `camino/` = project memory/docs (the canonical CLAUDE.md, design thesis, invariants)
       and `camino-app/` = the Expo app code, from starting in desktop Claude then moving to the CLI.
