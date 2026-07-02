@@ -180,6 +180,10 @@ function phaseOf(r: Resolved, arrival: Date): Phase {
 // ── Shared conditions ──────────────────────────────────────────────────────────
 const NON_EU: Condition = { field: 'is_eu', op: 'eq', value: false };
 const HAS_ADDRESS: Condition = { field: 'has_spanish_address', op: 'eq', value: true };
+// The citizenship track (language/culture exams, application, jura, eligibility clock) only applies
+// if the user actually wants to naturalise — many people just renew their residence indefinitely.
+// Gated on the `wants_citizenship` interview slot (non-EU long-stay movers).
+const WANTS_CITIZENSHIP: Condition = { field: 'wants_citizenship', op: 'eq', value: true };
 
 // ── Catalog ────────────────────────────────────────────────────────────────────
 export const CATALOG: Obligation[] = [
@@ -195,7 +199,10 @@ export const CATALOG: Obligation[] = [
     title: 'Decide where in Spain to live before you commit — if you’re unsure, plan a scouting trip and spend real time in 2–3 candidate areas, weighing cost of living, healthcare access, climate, transport links, expat/English-speaking support, and (if relevant) schools before you sign a lease or buy',
     category: 'admin', severity: 'recommended',
     source: 'recommendation',
-    applies_if: { not: { field: 'owns_property_in_spain', op: 'eq', value: true } },
+    applies_if: { all: [
+      { not: { field: 'owns_property_in_spain', op: 'eq', value: true } },
+      { field: 'knows_where_to_live', op: 'eq', value: false },
+    ] },
     depends_on: [],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -270 },
   },
@@ -447,6 +454,7 @@ export const CATALOG: Obligation[] = [
     applies_if: {
       all: [
         NON_EU,
+        WANTS_CITIZENSHIP,
         { field: 'is_ex_colony_national', op: 'eq', value: false },
       ],
     },
@@ -459,7 +467,10 @@ export const CATALOG: Obligation[] = [
     title: 'Citizenship eligibility: 2 years (ex-Spanish-colony nationals)',
     category: 'residency', severity: 'info',
     source: 'official',
-    applies_if: { field: 'is_ex_colony_national', op: 'eq', value: true },
+    applies_if: { all: [
+      WANTS_CITIZENSHIP,
+      { field: 'is_ex_colony_national', op: 'eq', value: true },
+    ] },
     depends_on: ['residencia'],
     timing: { kind: 'relative_to_event', anchor: 'residency_established', offset_days: 730 },
   },
@@ -836,6 +847,7 @@ export const CATALOG: Obligation[] = [
     source: 'official',
     applies_if: { all: [
       NON_EU,
+      WANTS_CITIZENSHIP,
       { field: 'is_ex_colony_national', op: 'eq', value: false },
     ] },
     depends_on: ['residencia'],
@@ -847,7 +859,7 @@ export const CATALOG: Obligation[] = [
     title: 'Pass CCSE constitutional and sociocultural knowledge exam (Instituto Cervantes) — required for naturalization',
     category: 'admin', severity: 'required',
     source: 'official',
-    applies_if: NON_EU,
+    applies_if: { all: [NON_EU, WANTS_CITIZENSHIP] },
     depends_on: ['residencia'],
     timing: { kind: 'relative_to_event', anchor: 'residency_established', offset_days: 1825 },
   },
@@ -858,7 +870,7 @@ export const CATALOG: Obligation[] = [
     category: 'residency', severity: 'required',
     source: 'official',
     source_url: 'https://www.mjusticia.gob.es/es/ciudadania/tramites/nacionalidad-residencia',
-    applies_if: NON_EU,
+    applies_if: { all: [NON_EU, WANTS_CITIZENSHIP] },
     depends_on: ['citizenship-track-standard', 'citizenship-track-latam', 'ccse-exam'],
     timing: { kind: 'relative_to_event', anchor: 'residency_established', offset_days: 3650 },
   },
@@ -868,7 +880,7 @@ export const CATALOG: Obligation[] = [
     category: 'residency', severity: 'required',
     source: 'official',
     source_url: 'https://www.mjusticia.gob.es/es/ciudadania/tramites/nacionalidad-residencia',
-    applies_if: NON_EU,
+    applies_if: { all: [NON_EU, WANTS_CITIZENSHIP] },
     depends_on: ['citizenship-application'],
     timing: { kind: 'relative_to_obligation', after: 'citizenship-application', offset_days: 365 },
   },

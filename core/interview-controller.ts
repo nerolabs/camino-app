@@ -101,6 +101,12 @@ export const SLOTS: Slot[] = [
     prompt_hint: "roughly when they completed (or expect to complete) the property purchase — anchors the notary, registry, and transfer-tax deadlines",
   },
   {
+    // Only relevant to movers who don't already own a place; gates the (advisory) scouting step.
+    field: "knows_where_to_live", type: "bool",
+    required_if: { not: { field: "owns_property_in_spain", op: "eq", value: true } },
+    prompt_hint: "whether they already know which city or region in Spain they'll settle in, or are still deciding where to live",
+  },
+  {
     field: "has_pets", type: "bool",
     prompt_hint: "whether any pets — dogs, cats, or ferrets — will be making this move with them",
   },
@@ -121,6 +127,17 @@ export const SLOTS: Slot[] = [
     field: "previously_ex_spanish_colony_nationality", type: "bool",
     required_if: { field: "is_eu", op: "eq", value: false },
     prompt_hint: "whether they hold nationality from a former Spanish colony (most Latin American countries, Philippines) — this affects citizenship timelines",
+  },
+  {
+    // Decides whether the citizenship track applies at all vs. just rolling residence renewals.
+    // Only relevant to non-EU long-stay movers (EU citizens don't naturalise this way; short stays
+    // never reach it).
+    field: "wants_citizenship", type: "bool",
+    required_if: { all: [
+      { field: "is_eu", op: "eq", value: false },
+      { field: "intends_long_stay", op: "eq", value: true },
+    ] },
+    prompt_hint: "whether, longer term, they hope to become a Spanish citizen — or plan to just keep renewing their residence to stay. Frame it as: some people aim for citizenship, others are happy renewing their residence indefinitely; there's no wrong answer",
   },
 ];
 

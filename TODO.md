@@ -292,8 +292,10 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       schools). Advisory (`recommended`), early in `before_you_go`, gated to movers who don't own
       Spanish property. Asserts no deadlines/costs/laws (invariant 3 safe); `source: 'domain'`,
       logged in SOURCING.md. Engine-tested + live on web; in the next native build.
-      - [ ] *Optional follow-ups:* an interview slot ("do you know where you'll live?") for tighter
-            gating; make it more prominent/first if the severity-sort buries it too much; deepen the
+      - [x] **Tighter gating DONE 2026-07-02.** New `knows_where_to_live` interview slot (asked only
+            when they don't own property); `scout-where-to-live` now gated on `not owns_property` +
+            `knows_where_to_live === false`, so it only shows to movers still deciding. Verified.
+      - [ ] *Still optional:* make it more prominent/first if the severity-sort buries it; deepen the
             in-drawer Lola coaching for region evaluation.
 
 ### Infra / ops (large — before wider launch)
@@ -434,23 +436,16 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       prompts so she speaks the user's language, and TTS voice/locale (`/api/tts`) may need a
       per-language voice; (e) locale-aware dates/currency in the plan. Note the invariant: engine
       stays deterministic — translation is a presentation layer, never changes which obligations apply
-      or their timing. Sizable; sequence after the feature set stabilizes.
-- [ ] **Citizenship vs. rolling-renewal — stop assuming everyone naturalises (user feedback 2026-07-02).**
-      Today the catalog assumes every non-EU mover pursues Spanish citizenship: `dele-a2-exam`,
-      `ccse-exam`, `citizenship-application`, `citizenship-jura` are all `required` gated only on
-      `NON_EU` (+ `!is_ex_colony_national` for the DELE/standard track), and `citizenship-track-*`
-      shows the eligibility clock. But many people just **renew their residence indefinitely**
-      (NLV/DNV renewal → `permanent-residence` at 5 yrs) and never naturalise. **The current
-      interview only asks `intends_long_stay` (long vs short move) — there is NO question about
-      citizenship intent**, so the citizenship track is force-applied. Fix (deterministic, in the
-      engine): add an interview slot **`wants_citizenship`** (bool), asked when `NON_EU` +
-      `intends_long_stay` — e.g. *"Longer term, do you hope to become a Spanish citizen, or plan to
-      keep renewing your residence to stay?"* — then add `wants_citizenship === true` to the
-      `applies_if` of `citizenship-track-standard`, `citizenship-track-latam`, `dele-a2-exam`,
-      `ccse-exam`, `citizenship-application`, `citizenship-jura`. The renewal path
-      (`nlv-renewal`/`dnv-renewal`/`permanent-residence`) stays for all long-stay movers. Remember
-      `SLOTS` is the single source of the interview, and `auditCatalog()` fails the build if an
-      `applies_if` references a field with no slot — so the slot must be added alongside.
+      or their timing. **Sequence LAST (user: "localization should come at the very end")** — after
+      all features, native parity, tests, and the obligation cross-check are settled.
+- [x] **Citizenship vs. rolling-renewal — DONE 2026-07-02.** Added the `wants_citizenship` interview
+      slot (bool, asked when `NON_EU` + `intends_long_stay`), and gated the whole citizenship track on
+      `wants_citizenship === true`: `citizenship-track-standard`, `citizenship-track-latam`,
+      `dele-a2-exam`, `ccse-exam`, `citizenship-application`, `citizenship-jura` (via a new
+      `WANTS_CITIZENSHIP` condition). The renewal path (`nlv-renewal`/`dnv-renewal`/
+      `permanent-residence`) stays for all long-stay movers. Verified both ways: naturaliser sees the
+      track; rolling-renewer sees none of it but keeps permanent-residence. Interview asks the new Q
+      at the right time (after long-stay + non-EU known).
 - [ ] **Final-polish: audit the full obligation list + the questions that gate them (user feedback
       2026-07-02).** Produce a human-readable view of every obligation and the interview branching
       (which `applies_if` fields / slots drive it) so the branching is easy to follow and review.
