@@ -168,6 +168,21 @@ const HAS_ADDRESS: Condition = { field: 'has_spanish_address', op: 'eq', value: 
 // ── Catalog ────────────────────────────────────────────────────────────────────
 export const CATALOG: Obligation[] = [
 
+  // ── Deciding where to live ───────────────────────────────────────────────────
+  // Advisory: many movers haven't chosen a region yet. Shown to anyone who doesn't already
+  // own property in Spain (the clearest "location decided" signal). Asserts no deadlines,
+  // costs, or laws — only evaluation dimensions — so it stays within invariant 3. Lola's
+  // in-drawer coaching elaborates on how to weigh each area.
+  {
+    id: 'scout-where-to-live',
+    title: 'Decide where in Spain to live before you commit — if you’re unsure, plan a scouting trip and spend real time in 2–3 candidate areas, weighing cost of living, healthcare access, climate, transport links, expat/English-speaking support, and (if relevant) schools before you sign a lease or buy',
+    category: 'admin', severity: 'recommended',
+    source: 'domain',
+    applies_if: { not: { field: 'owns_property_in_spain', op: 'eq', value: true } },
+    depends_on: [],
+    timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -270 },
+  },
+
   // ── Pre-departure: visa path ────────────────────────────────────────────────
   {
     id: 'choose-visa-type',

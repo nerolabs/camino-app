@@ -92,3 +92,13 @@ Gated off the NLV path: NLV holders are required to carry private health insuran
 **not** entitled to the public health card (tarjeta sanitaria) on arrival. The obligation now
 applies to anyone with a Spanish address **except** `visa_type === 'nlv'`. Still `source:
 'webinar'` — the gating is a process correction, not a new citable figure.
+
+## `scout-where-to-live` — advisory obligation (2026-07-02)
+
+New obligation recommending a **scouting trip** and a framework for **choosing where to live**
+(cost of living, healthcare access, climate, transport, expat/English support, schools). Kept as
+`source: 'domain'` deliberately: it asserts **no deadlines, costs, or laws** — only evaluation
+*dimensions* — so it does not require an official citation and stays within invariant 3. Shown to
+anyone who does not already `owns_property_in_spain`. This reintroduces a single `domain` item to
+the catalog by design (advisory, not a citable fact); the audit queue for *factual* claims is
+still empty. Catalog now **29 `webinar` / 26 `official` / 1 `domain`**.
