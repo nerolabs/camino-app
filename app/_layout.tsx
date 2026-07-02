@@ -8,6 +8,7 @@ import { Fraunces_400Regular, Fraunces_600SemiBold } from '@expo-google-fonts/fr
 import { HankenGrotesk_400Regular, HankenGrotesk_500Medium, HankenGrotesk_600SemiBold } from '@expo-google-fonts/hanken-grotesk';
 import { ProfileProvider } from '@/core/ProfileContext';
 import { AuthProvider } from '@/core/AuthContext';
+import { initAnalytics } from '@/lib/analytics';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -21,6 +22,7 @@ export default function RootLayout() {
 
   useEffect(() => { if (error) throw error; }, [error]);
   useEffect(() => { if (loaded) SplashScreen.hideAsync(); }, [loaded]);
+  useEffect(() => { initAnalytics(); }, []); // web: PostHog; native: no-op for now
 
   if (!loaded) return null;
 

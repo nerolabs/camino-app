@@ -14,6 +14,7 @@ import { saveProfile as saveProfileDb } from '@/core/profileDb';
 import { TEST_PERSONAS, type Persona } from '@/core/test-personas';
 import { askAnthropic } from '@/lib/lola';
 import { useDictation } from '@/hooks/useDictation';
+import { capture } from '@/lib/analytics';
 
 type Turn = { role: 'lola' | 'user'; text: string };
 
@@ -181,6 +182,7 @@ export default function InterviewScreen() {
   }
 
   async function start() {
+    capture('interview_started');
     setStarted(true);
     setLoading(true);
     const slot = nextSlot({});
@@ -220,6 +222,7 @@ export default function InterviewScreen() {
     const next = nextSlot(next_profile);
     if (!next) {
       await persist(next_profile);
+      capture('interview_completed', { answered: interviewProgress(next_profile).answered });
       setTurns(prev => [...prev, {
         role: 'lola',
         text: "That's everything I need — your roadmap is ready.",
