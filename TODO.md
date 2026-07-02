@@ -141,9 +141,9 @@ Last updated: 2026-07-01.
       to local `.env`.
 - [x] **Scaffolded EAS config** — `eas.json` (development / preview / production profiles, channels,
       environments), iOS/Android bundle IDs (`com.nerolabs.camino`), and `DEPLOY.md` runbook.
-- [ ] **User: create Expo account + `eas login` / `eas init`**, set `ANTHROPIC_API_KEY` as an EAS
-      env secret per environment, then `eas deploy --environment preview` for a family-test URL.
-      (See `DEPLOY.md`.)
+- [x] ~~**User: create Expo account + `eas login` / `eas init`**~~ — **DONE (long since).** EAS
+      account + project live (`@nerolabs-team/camino`); all secrets set per environment; web deploys
+      + iOS builds run non-interactively.
 - [x] **Separate databases per environment — DONE.** Created a second Supabase project
       **`camino-staging`** (`gsnsgfobfswazqhfcstx`) with the same schema (`profiles` table + RLS
       via SQL). Wiring:
@@ -180,8 +180,8 @@ Last updated: 2026-07-01.
             can't do in-process — a **Cloudflare WAF rate-limit rule** and/or **Turnstile** challenge,
             or a KV-backed counter. Today an abuser who finds the URL can still send many small
             (payload-capped, cheap-Haiku) calls. Fine for an unlisted family test; not for public.
-- [ ] **Native API base URL** — set `EXPO_PUBLIC_API_URL` to the deployed origin for iOS/Android so
-      `lib/lola.ts`'s relative `/api/lola` resolves off-web.
+- [x] ~~**Native API base URL**~~ — **DONE.** `EXPO_PUBLIC_API_URL: "https://getcamino.app"` set in
+      every `eas.json` build profile, so native `/api/lola` + `/api/tts` resolve off-web.
 
 ## 📱 Mobile (iOS / Android) — in progress
 
@@ -213,7 +213,7 @@ is strictly required — a normal EAS build works.
         Apple processing → installs via the TestFlight app.
       - ⚠️ Prod-DB build: fine because native sign-in is a no-op right now (nothing writes to the
         DB until native OAuth is wired).
-- [~] **Native Google sign-in (OAuth deep-link) — implemented, on-device test pending.**
+- [x] **Native Google sign-in (OAuth deep-link) — DONE (verified on device, build 7).**
       `core/AuthContext.tsx` now does the native flow: `signInWithOAuth({skipBrowserRedirect})` →
       `WebBrowser.openAuthSessionAsync` → complete the session from the `caminoapp://auth-callback`
       redirect (handles both PKCE code-exchange and implicit token setSession). Web path unchanged.
@@ -221,17 +221,19 @@ is strictly required — a normal EAS build works.
       Google Cloud change needed (round-trips through Supabase's existing callback). Building iOS
       `24178b4c` (buildNumber 4) with this → TestFlight to verify on-device. Branch
       `native-google-signin`.
-- [~] **Native dictation — implemented, on-device test pending.** Platform-split
+- [x] **Native dictation — DONE (verified on device, build 7).** Platform-split
       `hooks/useDictation` (web = browser SpeechRecognition, native = `expo-speech-recognition`,
       Metro picks `.native` so the web bundle never imports the native module). Mic button now
       shows + streams live transcription on iOS/Android. Config plugin adds mic + speech permission
       strings; iOS deploymentTarget pinned 16.4 (lib minimum). In build 5 (`3f6446a8`).
-- [~] **Dynamic Island / safe-area — implemented, on-device test pending.** `SafeAreaProvider` at
+- [x] **Dynamic Island / safe-area — DONE (verified on device, build 7).** `SafeAreaProvider` at
       the root + `NavBar` pads by top/left/right insets so it clears the Dynamic Island / notch /
       status bar (reported on iPhone 17 Pro Max). Web insets are 0 → web unchanged. Dark status-bar
       style for the light UI. In build 5 (`3f6446a8`).
-- [ ] **Store submission** — `eas submit` to App Store (needs Apple acct) + Google Play (one-time
-      $25). App Store metadata / screenshots / privacy. Later, once builds are validated.
+- [~] **Store submission — TestFlight DONE; full public submission pending.** iOS builds auto-submit
+      to **TestFlight** (ASC App ID 6786412055) and are testable on device. Still to do for public
+      release: App Store metadata / screenshots / privacy nutrition + review submission; **Google
+      Play** ($25 one-time) deferred to the very end (no Android device to test).
 
 ## 📥 Feedback backlog (captured 2026-07-01) — suggested order below
 
@@ -261,7 +263,10 @@ is strictly required — a normal EAS build works.
             (mute persists as `'0'`) and unlocks on the "Let's get started" click, so Lola speaks with
             no separate "sound on" tap. Moved the toggle out of the composer to a **"🔊 Voice on/off"
             pill** under the nav (composer holds only input/mic/send).
-      - [ ] **Native voice** — expo-audio + `/api/tts` (fast follow; needs a rebuild).
+      - [x] **Native voice — DONE 2026-07-02, in TestFlight build 8.** `hooks/useLolaVoice.native.ts`
+            uses `expo-audio` (on by default, `playsInSilentMode`); streams the new GET `/api/tts?text=`
+            variant (expo-audio plays a URL, not a body). On-device verify once build 8 finishes Apple
+            processing.
 
 
 Recommended sequence (rationale in each item): **B1 quick UX/config wins → B7 analytics (time-
@@ -269,17 +274,10 @@ sensitive: capture family-testing funnel data now) → B4 scouting obligation �
 observability → B8 blog stub → B2 app icon (needs an asset decision).**
 
 ### Product / UX (quick–medium)
-- [ ] **B1a — Hide dev test personas in production, keep in staging.** Currently the "Dev test
-      personas" toggle in `app/interview.tsx` always renders. Gate it on environment via a new
-      `EXPO_PUBLIC_ENV` (production vs staging), set per EAS environment + build profile + local
-      `.env`. **Optional upgrade (user offered):** a *staff* feature flag — if the signed-in
-      Supabase user id ∈ a STAFF_IDS allowlist (user + wife), show dev tools even in prod. Needs
-      the two user ids. Plan: ship env-gate now; add staff override when ids provided.
-- [ ] **B1b — Interview intro: establish Lola as an experienced companion before the chat.** The
-      landing copy ("Hola, I'm Lola…") is easy to miss. Add a brief, uncluttered intro moment on
-      `app/interview.tsx` (NOT in the chat box) — the road to Spain is easier with an experienced
-      friend; her name is Lola — then start the interview. Keep it tight (invariant: no invented
-      claims; Lola stays a guide, defers specifics to a gestor).
+- [x] ~~**B1a — Hide dev test personas in production**~~ — **DONE** (see the reconciled B1a entry above:
+      now the DB-backed `profiles.is_staff` flag, which superseded the env-gate/allowlist plan).
+- [x] ~~**B1b — Interview intro**~~ — **DONE** (see the reconciled B1b entry above: eyebrow +
+      "Hola, I'm Lola" + warm companion line, live on prod + staging).
 - [x] **B2 — App icon from the brand mark (DONE 2026-07-01).** White 8-pointed azulejo compass-star
       on a cobalt tile with an amber waypoint dot. `scripts/gen-icon.mjs` renders the full set from
       one SVG (`assets/images/icon-source.svg`): iOS/store icon (flattened opaque — Apple rejects
@@ -313,9 +311,10 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       - [x] **Backend** — `lib/sentryServer.ts` posts a minimal event envelope via fetch (Node/CF
             SDKs don't fit the EAS Hosting Workers runtime); wired into `/api/lola` + `/api/tts`
             catch + upstream-error paths, tagged `platform=server`.
-      - [ ] **Native** — `@sentry/react-native` + its Expo config plugin (crashes, app-start,
-            navigation perf). Needs `SENTRY_AUTH_TOKEN` (secret) in EAS for source-map upload and a
-            native rebuild to go live. (`lib/monitoring.native.ts` is a no-op stub until then.)
+      - [x] **Native Sentry — DONE 2026-07-02, in TestFlight build 8.** `@sentry/react-native` + its
+            Expo plugin + Sentry Metro wrapper; `lib/monitoring.native.ts` does a real `Sentry.init`
+            (same project, tagged `platform=ios` + env). `SENTRY_AUTH_TOKEN` set in EAS → source maps
+            uploaded during the build (readable traces). On-device verify once build 8 processes.
       - [x] **Alerting + uptime DONE 2026-07-02.** Issue alert "high priority issues" → email
             (verified: fired on the test error). **Sentry Uptime monitor** on `https://getcamino.app`
             (GET every 1 min, environment=production, 3 consecutive fails → issue → email). Downtime
@@ -358,14 +357,10 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             webinar with transcript-verified timestamps (option b, evidence-based). Kept as
             supplementary even where `source_url` exists. 12 unmapped = tax-form technicalities +
             admin items not covered specifically enough. See `core/SOURCING.md` "batch 2".
-- [~] **B11 — Repo structure — COMBINED into camino-app (2026-07-02); one manual step left.** User
-      chose the combine option. **Done:** folded the thesis + four invariants into `docs/THESIS.md`,
-      updated `CLAUDE.md` / `HANDOFF.md` / `TODO.md` to point there instead of `../camino/CLAUDE.md`.
-      camino-app is now the single source of truth. **Left to you:** archive the `nerolabs/camino`
-      GitHub repo (I couldn't — `gh` isn't installed and I won't handle your token). Do it via
-      GitHub → the camino repo → Settings → "Archive this repository", or `gh repo archive nerolabs/camino`
-      if you install gh. (Local `../camino/` checkout is untouched on disk — vestigial, safe to
-      remove manually.) Investigation notes below for the record.
+- [x] **B11 — Repo structure — DONE 2026-07-02: combined into camino-app.** Folded the thesis + four
+      invariants into `docs/THESIS.md`; repointed `CLAUDE.md` / `HANDOFF.md` / `TODO.md` there.
+      **User archived the `nerolabs/camino` GitHub repo** (the last manual step). camino-app is now
+      the single source of truth. (Local `../camino/` checkout is vestigial — safe to delete anytime.)
 - [x] ~~**B11 — investigation (superseded by the resolution above).**~~
       Findings: two separate GitHub repos. `nerolabs/camino` (`../camino/`) is the original
       **design-seed/thesis repo**, frozen since Jun 30 ("skeleton + brand identity"): CLAUDE.md
@@ -411,6 +406,16 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             "nearly sixty… large majority officially cited"). Still open: a real blog surface later.
 
 ## 🔜 Next (candidates, not yet started)
+- [ ] **"Show our homework" — a second, detailed how-i-was-built page (user feedback 2026-07-02).**
+      A companion to the narrative essay (`app/how-i-was-built.tsx`): a build log that walks **each
+      roadmap item in the order we took the work on**, as a table with columns **Feature | Work
+      completed | Key decisions made**. It's the receipts/appendix to the story — e.g. rows for the
+      catalog grounding pass, the source→official/recommendation taxonomy, the staff DB flag, the
+      Web-Audio TTS autoplay fix, Sentry web+backend+native, etc., each with the notable decisions
+      (why Web Audio over HTMLAudio, why one Sentry project tagged vs three, why `recommendation` as
+      a source value…). Source it from this TODO's completed items + git history so it stays honest.
+      Own route (e.g. `/how-i-was-built/log` or a section on the page); keep it unlisted like the
+      essay (robots-disallowed, not in nav).
 - [ ] **Context-aware "what changed" sample text (user feedback 2026-07-02).** The `changeBox`
       placeholder in `app/plan.tsx:602` is hardcoded `"e.g. We decided to rent instead of buy."` —
       only apt for a property step. Make it relevant to the **step the user has open** (`selected`):
