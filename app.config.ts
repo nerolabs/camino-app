@@ -54,6 +54,14 @@ const config: ExpoConfig = {
     }],
     // expo-speech-recognition requires iOS 16.4+; pin the deployment target so the pod builds.
     ['expo-build-properties', { ios: { deploymentTarget: '16.4' } }],
+    // Native Sentry (crash/error reporting + source-map upload during EAS Build). Source-map
+    // upload needs SENTRY_AUTH_TOKEN as an EAS secret; without it the build still succeeds but
+    // stack traces stay minified. DSN + init live in lib/monitoring.native.ts.
+    ['@sentry/react-native/expo', {
+      url: 'https://sentry.io/',
+      organization: 'camino-ko',
+      project: 'camino',
+    }],
   ],
   experiments: { typedRoutes: true },
   extra: {
