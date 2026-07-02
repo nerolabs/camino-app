@@ -21,6 +21,8 @@
  *    A hard global limit would need Cloudflare KV / a WAF rate-limit rule (future).
  */
 
+import { captureServerError } from '@/lib/sentryServer';
+
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
 
@@ -157,6 +159,9 @@ export async function POST(request: Request) {
     if (!res.ok) {
       const detail = await res.text();
       console.error('Anthropic upstream error', res.status, detail);
+      await captureServerError(new Error(`Anthropic upstream ${res.status}`), {
+        route: '/api/lola', extra: { status: res.status, detail: detail.slice(0, 500) },
+      });
       return Response.json({ error: 'upstream error' }, { status: 502 });
     }
 
@@ -164,6 +169,7 @@ export async function POST(request: Request) {
     return Response.json({ text: data.content?.[0]?.text ?? '' });
   } catch (e) {
     console.error('lola route error', e);
+    await captureServerError(e, { route: '/api/lola', method: 'POST' });
     return Response.json({ error: 'internal error' }, { status: 500 });
   }
 }

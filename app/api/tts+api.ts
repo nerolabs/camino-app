@@ -8,6 +8,8 @@
  * Hardening mirrors /api/lola: origin/referer allowlist, per-IP rate limit, text length cap.
  */
 
+import { captureServerError } from '@/lib/sentryServer';
+
 const ELEVEN_BASE = 'https://api.elevenlabs.io/v1/text-to-speech';
 // Warm, natural accented English needs the multilingual model. Voice is chosen per-account.
 const MODEL = process.env.ELEVENLABS_MODEL ?? 'eleven_multilingual_v2';
@@ -101,6 +103,9 @@ export async function POST(request: Request) {
     if (!res.ok || !res.body) {
       const detail = await res.text().catch(() => '');
       console.error('ElevenLabs error', res.status, detail);
+      await captureServerError(new Error(`ElevenLabs upstream ${res.status}`), {
+        route: '/api/tts', extra: { status: res.status, detail: detail.slice(0, 500) },
+      });
       return Response.json({ error: 'tts upstream error' }, { status: 502 });
     }
 
@@ -110,6 +115,7 @@ export async function POST(request: Request) {
     });
   } catch (e) {
     console.error('tts route error', e);
+    await captureServerError(e, { route: '/api/tts', method: 'POST' });
     return Response.json({ error: 'internal error' }, { status: 500 });
   }
 }

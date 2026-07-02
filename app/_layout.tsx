@@ -11,6 +11,7 @@ import { AuthProvider, useAuth } from '@/core/AuthContext';
 import { loadProfileRow } from '@/core/profileDb';
 import { derive } from '@/core/interview-controller';
 import { initAnalytics } from '@/lib/analytics';
+import { initMonitoring } from '@/lib/monitoring';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -42,6 +43,7 @@ export default function RootLayout() {
   useEffect(() => { if (error) throw error; }, [error]);
   useEffect(() => { if (loaded) SplashScreen.hideAsync(); }, [loaded]);
   useEffect(() => { initAnalytics(); }, []); // web: PostHog; native: no-op for now
+  useEffect(() => { initMonitoring(); }, []); // web: Sentry (errors + Web Vitals); native: no-op for now
 
   if (!loaded) return null;
 
