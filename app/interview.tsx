@@ -191,6 +191,7 @@ export default function InterviewScreen() {
 
   async function start() {
     capture('interview_started');
+    voice.unlock(); // within this click gesture, so the first spoken turn can auto-play (autoplay policy)
     setStarted(true);
     setLoading(true);
     const slot = nextSlot({});
