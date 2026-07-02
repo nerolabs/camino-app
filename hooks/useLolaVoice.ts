@@ -1,17 +1,24 @@
 import { useCallback, useRef, useState } from 'react';
 
-// Web: fetch Lola's spoken audio from /api/tts (ElevenLabs, key server-side) and play it.
-// Off by default — no surprise audio; the user opts in. Native counterpart is a no-op stub.
+// Web: fetch Lola's spoken audio from /api/tts (ElevenLabs, key server-side) and play it through
+// the Web Audio API. Off by default — no surprise audio; the user opts in. Native = no-op stub.
+//
+// Why Web Audio (not `new Audio().play()`): the first clip plays AFTER the async /api/tts fetch,
+// too late to count as gesture-initiated, so HTMLAudioElement autoplay is blocked (the voice
+// wouldn't start until you toggled off/on). An AudioContext, once resumed inside a user gesture
+// (the speaker toggle / "Let's get started"), stays unlocked for the session — so every later
+// turn plays automatically. That's the fix.
 
 const API_BASE = process.env.EXPO_PUBLIC_API_URL ?? '';
 const STORAGE_KEY = 'lola-voice-enabled';
 
-// A tiny silent WAV. Playing this on the shared <audio> element *during a user gesture* "unlocks"
-// it, so the next real clip — which plays after an async /api/tts fetch, too late to count as
-// gesture-initiated — isn't blocked by the browser autoplay policy. This is why the voice used to
-// need a toggle off/on to start: the first fetched clip was blocked; the cached retry played.
-const SILENT_WAV =
-  'data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ4AAAAAAAAAAAAAAAAAAAAAAA==';
+type AudioCtor = typeof AudioContext;
+function audioContextCtor(): AudioCtor | null {
+  if (typeof window === 'undefined') return null;
+  return window.AudioContext
+    ?? (window as unknown as { webkitAudioContext?: AudioCtor }).webkitAudioContext
+    ?? null;
+}
 
 export type LolaVoice = {
   supported: boolean;
@@ -23,43 +30,45 @@ export type LolaVoice = {
 };
 
 export function useLolaVoice(): LolaVoice {
-  const supported = typeof window !== 'undefined' && typeof Audio !== 'undefined';
+  const supported = audioContextCtor() != null;
   const [enabled, setEnabled] = useState(() =>
     typeof window !== 'undefined' && window.localStorage.getItem(STORAGE_KEY) === '1');
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const cache = useRef<Map<string, string>>(new Map()); // text -> object URL (same text = same audio)
+
+  const ctxRef = useRef<AudioContext | null>(null);
+  const srcRef = useRef<AudioBufferSourceNode | null>(null);
+  const cache = useRef<Map<string, AudioBuffer>>(new Map()); // text -> decoded audio
   const lastRef = useRef<string>('');
 
-  // One reusable <audio> element. Reusing a single element that a gesture has unlocked is what
-  // lets later fetched clips play without tripping autoplay — a fresh `new Audio()` each time does not.
-  const getAudio = useCallback((): HTMLAudioElement | null => {
-    if (!supported) return null;
-    if (!audioRef.current) audioRef.current = new Audio();
-    return audioRef.current;
-  }, [supported]);
-
-  const stop = useCallback(() => {
-    if (audioRef.current) audioRef.current.pause();
+  const getCtx = useCallback((): AudioContext | null => {
+    if (ctxRef.current) return ctxRef.current;
+    const Ctor = audioContextCtor();
+    if (!Ctor) return null;
+    ctxRef.current = new Ctor();
+    return ctxRef.current;
   }, []);
 
-  // Call from inside a user gesture (button press / toggle) to prime playback. Cheap and idempotent.
+  const stop = useCallback(() => {
+    if (srcRef.current) {
+      try { srcRef.current.stop(); } catch { /* already stopped */ }
+      srcRef.current = null;
+    }
+  }, []);
+
+  // Call from inside a user gesture (speaker toggle, "Let's get started"): create + resume the
+  // AudioContext so later fetched clips can play. Cheap and idempotent.
   const unlock = useCallback(() => {
-    const a = getAudio();
-    if (!a) return;
-    try {
-      a.src = SILENT_WAV;
-      a.play()?.then(() => { a.pause(); a.currentTime = 0; }).catch(() => {});
-    } catch { /* best-effort */ }
-  }, [getAudio]);
+    const ctx = getCtx();
+    if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => {});
+  }, [getCtx]);
 
   const toggle = useCallback(() => {
     setEnabled((prev) => {
       const next = !prev;
       if (typeof window !== 'undefined') window.localStorage.setItem(STORAGE_KEY, next ? '1' : '0');
-      if (next) unlock(); // enabling is a gesture — bless the audio element right now
-      else stop();
+      if (!next) stop();
       return next;
     });
+    unlock(); // resume the context within this gesture (kept out of the state updater — no side effects there)
   }, [stop, unlock]);
 
   const speak = useCallback(async (text: string) => {
@@ -68,32 +77,30 @@ export function useLolaVoice(): LolaVoice {
     lastRef.current = t;
     stop();
     try {
-      let url = cache.current.get(t);
-      if (!url) {
+      const ctx = getCtx();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') await ctx.resume().catch(() => {});
+      let buf = cache.current.get(t);
+      if (!buf) {
         const res = await fetch(`${API_BASE}/api/tts`, {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ text: t }),
         });
         if (!res.ok) { lastRef.current = ''; return; }
-        url = URL.createObjectURL(await res.blob());
-        cache.current.set(t, url);
+        buf = await ctx.decodeAudioData(await res.arrayBuffer());
+        cache.current.set(t, buf);
       }
-      const a = getAudio();
-      if (!a) return;
-      a.src = url;
-      a.currentTime = 0;
-      try {
-        await a.play();
-      } catch {
-        // Blocked (no gesture unlock yet) — clear lastRef so a later gesture/turn can retry this text.
-        lastRef.current = '';
-      }
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      srcRef.current = src;
+      src.start();
     } catch {
-      /* audio is a nicety — never let it break the flow */
+      // Fetch/decode/play failed — clear lastRef so a later gesture/turn can retry this text.
       lastRef.current = '';
     }
-  }, [supported, enabled, stop, getAudio]);
+  }, [supported, enabled, stop, getCtx]);
 
   return { supported, enabled, toggle, unlock, speak, stop };
 }
