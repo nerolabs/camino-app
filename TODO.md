@@ -296,11 +296,14 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             seed them). Verified events reach PostHog EU (POST → 200). Finish the funnel then.
 
 ### Content (medium — stub now, refine later)
-- [ ] **B8 — Hidden "how-i-was-built" blog at `/how-i-was-built`.** Unlisted route (direct link
-      only; not in nav/sitemap). Narrative: started thin → expanded depth → refined UX → built real
-      dev/staging/prod pipelines → chose the right SaaS tools → obsessed over customer experience;
-      leadership lessons on why engineering leaders must adopt AI and keep skills current. Stub a
-      v1 now; revise when the product matures.
+- [x] **B8 — Hidden "how-i-was-built" blog (DONE 2026-07-02, first pass).** `app/how-i-was-built.tsx`,
+      unlisted (not in the NavBar; direct link only) — live at `getcamino.app/how-i-was-built`.
+      Best-effort leadership narrative: idea from the move → architecture-first invariants → thin
+      end-to-end thread → depth via webinar mining + grounding → local web MVP/MLP → EAS
+      dev/staging/prod + separate DBs + safe pipelines → telemetry → living TODO → why leading AI
+      projects still needs taste/architecture/judgment.
+      - [ ] *Follow-ups:* still appears in the auto `/_sitemap` (exclude if we want it fully hidden);
+            revise the copy as the product matures; consider a real blog surface later.
 
 ## 🔜 Next (candidates, not yet started)
 - [ ] **Re-anchor more anchors from actuals** — completing `empadronamiento`/`residencia` could feed
