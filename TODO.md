@@ -16,6 +16,20 @@ Last updated: 2026-07-01.
       not a secret. Also confirm the Supabase URL/anon key are the only `EXPO_PUBLIC_` values (anon
       key is public-safe under RLS).
 
+## 🥇 Priority order (set by user 2026-07-02)
+
+1. **Security** (above) — always first.
+2. **Webinar → obligation mapping (ACTIVE).** Re-unpack the 16 webinar transcripts and map each
+   obligation to its source video **with deep transcript data** (ideally a timestamp). Populate the
+   `webinar_url` — **as supplementary info, kept even when an official `source_url` exists.**
+   Staff-only for now; with testing + a potential **MovingToSpain.com** partnership this becomes
+   user-facing/usable content. (This is the `webinar_url` population task under B10.)
+3. **Re-add backlog obligations** (`core/OBLIGATIONS_BACKLOG.md`: `sworn-translation`,
+   `convenio-especial`, `modelo-390`, `citizenship-jura`) once sourced — **second priority.**
+4. **Full deep cross-check / testing pass of ALL obligations** — **top priority, but only AFTER the
+   webinar content is captured to obligations.** Obligations are still changing, so this final
+   verification pass is saved for near the end (source accuracy, dates, links, webinar↔official).
+
 ## ✅ Done (this session)
 
 - [x] **Plan view redesign** — removed debug dump; stats chips, consulate/penalty banners,
