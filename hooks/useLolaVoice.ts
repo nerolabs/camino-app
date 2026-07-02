@@ -31,8 +31,12 @@ export type LolaVoice = {
 
 export function useLolaVoice(): LolaVoice {
   const supported = audioContextCtor() != null;
+  // On by default, so Lola speaks without a separate "turn on sound" click — the audio unlocks on
+  // the "Let's get started" gesture (see unlock(), called from the interview's start()). Browsers
+  // require *some* gesture before audio; this rides the one the user already makes. Anyone who
+  // mutes (persisted as '0') stays muted.
   const [enabled, setEnabled] = useState(() =>
-    typeof window !== 'undefined' && window.localStorage.getItem(STORAGE_KEY) === '1');
+    typeof window !== 'undefined' && window.localStorage.getItem(STORAGE_KEY) !== '0');
 
   const ctxRef = useRef<AudioContext | null>(null);
   const srcRef = useRef<AudioBufferSourceNode | null>(null);
