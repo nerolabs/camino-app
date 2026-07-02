@@ -178,6 +178,7 @@ export const CATALOG: Obligation[] = [
   // in-drawer coaching elaborates on how to weigh each area.
   {
     id: 'scout-where-to-live',
+    webinar_url: 'https://www.youtube.com/watch?v=gEY3Xkqs6so&t=414s',
     title: 'Decide where in Spain to live before you commit — if you’re unsure, plan a scouting trip and spend real time in 2–3 candidate areas, weighing cost of living, healthcare access, climate, transport links, expat/English-speaking support, and (if relevant) schools before you sign a lease or buy',
     category: 'admin', severity: 'recommended',
     source: 'domain',
@@ -189,6 +190,7 @@ export const CATALOG: Obligation[] = [
   // ── Pre-departure: visa path ────────────────────────────────────────────────
   {
     id: 'choose-visa-type',
+    webinar_url: 'https://www.youtube.com/watch?v=uH927kx3igU&t=124s',
     title: 'Identify your visa category',
     category: 'visa', severity: 'required',
     source: 'webinar',
@@ -198,6 +200,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'consulate-appointment',
+    webinar_url: 'https://www.youtube.com/watch?v=uH927kx3igU&t=43s',
     title: 'Book consulate appointment (allow 8–16 weeks lead time in the US)',
     category: 'visa', severity: 'required',
     source: 'webinar',
@@ -207,6 +210,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'criminal-background-check',
+    webinar_url: 'https://www.youtube.com/watch?v=uH927kx3igU&t=580s',
     title: 'Obtain a national criminal-record check, apostilled and translated into Spanish — must be issued within 90 days of applying, so allow several weeks (US: an FBI-approved channeler speeds it up)',
     category: 'visa', severity: 'required',
     source: 'official',
@@ -216,6 +220,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'medical-certificate',
+    webinar_url: 'https://www.youtube.com/watch?v=uH927kx3igU&t=1015s',
     title: 'Obtain a medical certificate (issued within 90 days, on official letterhead, translated into Spanish) confirming no diseases per the International Health Regulations',
     category: 'visa', severity: 'required',
     source: 'official',
@@ -227,6 +232,7 @@ export const CATALOG: Obligation[] = [
   // ── NLV-specific ────────────────────────────────────────────────────────────
   {
     id: 'nlv-income-proof',
+    webinar_url: 'https://www.youtube.com/watch?v=tZJk56EH1ms&t=161s',
     title: 'Gather proof of passive income — €28,800/yr for the main applicant plus €7,200/yr per dependent (400% of IPREM; figures track IPREM each year)',
     category: 'visa', severity: 'required',
     source: 'official',
@@ -236,6 +242,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'nlv-health-insurance',
+    webinar_url: 'https://www.youtube.com/watch?v=tZJk56EH1ms&t=277s',
     title: 'Purchase private health insurance from a Spanish-authorized insurer — full coverage with no co-pays and no waiting periods (NLV requirement)',
     category: 'health', severity: 'required',
     source: 'official',
@@ -247,6 +254,7 @@ export const CATALOG: Obligation[] = [
   // ── DNV-specific ────────────────────────────────────────────────────────────
   {
     id: 'dnv-remote-work-proof',
+    webinar_url: 'https://www.youtube.com/watch?v=SqmxlLuJ_bY&t=135s',
     title: 'Gather employment contract / client agreements showing remote work permission',
     category: 'visa', severity: 'required',
     source: 'official',
@@ -257,6 +265,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'dnv-income-proof',
+    webinar_url: 'https://www.youtube.com/watch?v=SqmxlLuJ_bY&t=144s',
     title: 'Gather proof of remote income — about €34,000/yr (200% of Spain\'s minimum wage) plus ~€13,000 for a spouse and ~€4,000 per child; thresholds rise when the minimum wage does',
     category: 'visa', severity: 'required',
     source: 'official',
@@ -266,6 +275,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'dnv-coverage-certificate',
+    webinar_url: 'https://www.youtube.com/watch?v=SqmxlLuJ_bY&t=556s',
     title: 'Obtain a social-security certificate of coverage (e.g. US/Spain totalization, UK A1) from your home country — or otherwise register with Spanish Social Security',
     category: 'visa', severity: 'required',
     source: 'official',
@@ -281,6 +291,7 @@ export const CATALOG: Obligation[] = [
     category: 'admin', severity: 'required',
     source: 'official',
     source_url: 'https://administracion.gob.es/pagFront/buscadortramites/detalleTramite.htm?idT=32988',
+    webinar_url: 'https://www.youtube.com/watch?v=C_UxMIqTd0Q&t=462s',
     applies_if: HAS_ADDRESS,
     depends_on: [],
     timing: { kind: 'asap' },
@@ -291,6 +302,7 @@ export const CATALOG: Obligation[] = [
     category: 'admin', severity: 'required',
     source: 'official',
     source_url: 'https://www.policia.es/_es/extranjeria_extranjeros.php',
+    webinar_url: 'https://www.youtube.com/watch?v=C_UxMIqTd0Q&t=716s',
     applies_if: NON_EU,
     depends_on: [],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: 30 },
@@ -306,6 +318,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'tarjeta-sanitaria',
+    webinar_url: 'https://www.youtube.com/watch?v=OnLKyPbpALY&t=152s',
     title: 'Apply for the public health card (tarjeta sanitaria) once you contribute to Social Security or qualify for public cover — NLV holders keep their private insurance instead',
     category: 'health', severity: 'required',
     source: 'official',
@@ -321,12 +334,14 @@ export const CATALOG: Obligation[] = [
     title: 'Notify home country tax authority of change of tax residence',
     category: 'tax', severity: 'recommended',
     source: 'webinar',
+    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=736s',
     applies_if: { field: 'is_tax_resident', op: 'eq', value: true },
     depends_on: [],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -30 },
   },
   {
     id: 'modelo-720',
+    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=93s',
     title: 'File Modelo 720 (foreign-assets declaration) if any category of overseas assets exceeds €50,000 — filed 1 Jan–31 Mar; reformed flat-rate penalties apply since the 2022 EU court ruling struck down the old proportional regime',
     category: 'tax', severity: 'penalty',
     source: 'official',
@@ -343,6 +358,7 @@ export const CATALOG: Obligation[] = [
   // ── Driving ─────────────────────────────────────────────────────────────────
   {
     id: 'dgt-exchange',
+    webinar_url: 'https://www.youtube.com/watch?v=2A19YnqiO4g&t=3743s',
     title: 'Exchange your driving licence under your country\'s bilateral agreement — a medical check, no driving test; your foreign licence is valid only ~6 months after you gain residency',
     category: 'mobility', severity: 'required',
     source: 'official',
@@ -357,6 +373,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'dgt-exam',
+    webinar_url: 'https://www.youtube.com/watch?v=2A19YnqiO4g&t=3743s',
     title: 'Pass Spanish driving test (theory + practical)',
     category: 'mobility', severity: 'required',
     source: 'official',
@@ -398,6 +415,7 @@ export const CATALOG: Obligation[] = [
   // ── Citizenship milestones (info only) ──────────────────────────────────────
   {
     id: 'citizenship-track-standard',
+    webinar_url: 'https://www.youtube.com/watch?v=vAeqa_xdrTY&t=194s',
     title: 'Citizenship eligibility: 10 years of legal residency required',
     category: 'residency', severity: 'info',
     source: 'official',
@@ -412,6 +430,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'citizenship-track-latam',
+    webinar_url: 'https://www.youtube.com/watch?v=vAeqa_xdrTY&t=617s',
     title: 'Citizenship eligibility: 2 years (ex-Spanish-colony nationals)',
     category: 'residency', severity: 'info',
     source: 'official',
@@ -426,12 +445,14 @@ export const CATALOG: Obligation[] = [
     title: 'Consult a cross-border tax specialist before moving — time asset disposals to minimise Spanish tax exposure',
     category: 'tax', severity: 'recommended',
     source: 'webinar',
+    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=267s',
     applies_if: { field: 'intends_long_stay', op: 'eq', value: true },
     depends_on: [],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -180 },
   },
   {
     id: 'apostille-documents',
+    webinar_url: 'https://www.youtube.com/watch?v=uH927kx3igU&t=580s',
     title: 'Apostille civil documents for consulate (birth certificate, marriage certificate, and other foreign official documents)',
     category: 'admin', severity: 'required',
     source: 'webinar',
@@ -443,6 +464,7 @@ export const CATALOG: Obligation[] = [
   // ── Visa-path extra documents ─────────────────────────────────────────────
   {
     id: 'nlv-letter-of-intent',
+    webinar_url: 'https://www.youtube.com/watch?v=tZJk56EH1ms&t=231s',
     title: 'Prepare letter of intent for NLV consulate application (reasons for move, intended region, source of income)',
     category: 'visa', severity: 'required',
     source: 'webinar',
@@ -452,6 +474,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'nlv-non-work-declaration',
+    webinar_url: 'https://www.youtube.com/watch?v=tZJk56EH1ms&t=161s',
     title: 'Provide notarized declaration of intent not to work in Spain (NLV applicants of working age)',
     category: 'visa', severity: 'recommended',
     source: 'webinar',
@@ -464,6 +487,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'dnv-qualification-proof',
+    webinar_url: 'https://www.youtube.com/watch?v=SqmxlLuJ_bY&t=144s',
     title: 'Obtain apostilled university degree or official proof of 3+ years professional experience (DNV requirement)',
     category: 'visa', severity: 'required',
     source: 'official',
@@ -474,6 +498,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'dnv-company-activity-proof',
+    webinar_url: 'https://www.youtube.com/watch?v=SqmxlLuJ_bY&t=215s',
     title: 'Obtain employer/client certificate of incorporation showing 1+ years of business activity (DNV)',
     category: 'visa', severity: 'required',
     source: 'official',
@@ -484,6 +509,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'dnv-employer-permission-letter',
+    webinar_url: 'https://www.youtube.com/watch?v=SqmxlLuJ_bY&t=215s',
     title: 'Obtain employer letter authorizing you to work remotely from Spain, describing your role (DNV employed workers)',
     category: 'visa', severity: 'required',
     source: 'official',
@@ -536,6 +562,7 @@ export const CATALOG: Obligation[] = [
     category: 'tax', severity: 'recommended',
     source: 'official',
     source_url: 'https://sede.agenciatributaria.gob.es/Sede/irpf/tengo-que-presentar-declaracion/regimen-fiscal-aplicable-trabajadores-desplazados/regimen-especial.html',
+    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=123s',
     applies_if: { all: [
       { field: 'visa_type', op: 'eq', value: 'dnv' },
       { field: 'work_situation', op: 'eq', value: 'employed_remote' },
@@ -556,6 +583,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'wealth-tax',
+    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=93s',
     title: 'File annual wealth-tax return (Modelo 714) during the renta period — applies when net assets exceed the €700,000 state allowance (regions vary; e.g. €500k in Catalonia), with a further ~€300k exemption for your main home',
     category: 'tax', severity: 'penalty',
     source: 'official',
@@ -570,6 +598,7 @@ export const CATALOG: Obligation[] = [
   // ── Autónomo / self-employed ──────────────────────────────────────────────
   {
     id: 'register-autonomo',
+    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=111s',
     title: 'Register as self-employed: file Modelo 036 with Hacienda, then register with Social Security (RETA) the same day or within 60 days (Modelo 037 was abolished in 2025)',
     category: 'admin', severity: 'required',
     source: 'official',
@@ -582,6 +611,7 @@ export const CATALOG: Obligation[] = [
     title: 'Pay monthly autónomo Social Security (RETA) contributions — €87/month reduced rate first year, then income-based',
     category: 'tax', severity: 'penalty',
     source: 'official',
+    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=103s',
     applies_if: { field: 'is_self_employed_in_spain', op: 'eq', value: true },
     depends_on: ['register-autonomo'],
     timing: { kind: 'absolute_recurring', rrule: 'FREQ=YEARLY;BYMONTH=12' },
@@ -617,6 +647,7 @@ export const CATALOG: Obligation[] = [
   // ── Healthcare ────────────────────────────────────────────────────────────
   {
     id: 'student-visa-health-insurance',
+    webinar_url: 'https://www.youtube.com/watch?v=OnLKyPbpALY&t=420s',
     title: 'Purchase visa-compliant private health insurance (no copays, no waiting periods, repatriation included) — student visa requirement',
     category: 'health', severity: 'required',
     source: 'webinar',
@@ -628,6 +659,7 @@ export const CATALOG: Obligation[] = [
   // ── Residency renewals ────────────────────────────────────────────────────
   {
     id: 'nlv-renewal',
+    webinar_url: 'https://www.youtube.com/watch?v=tZJk56EH1ms&t=677s',
     title: 'Renew non-lucrative residence permit — apply 60 days before expiry, show continued passive income and health insurance',
     category: 'residency', severity: 'required',
     source: 'webinar',
@@ -637,6 +669,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'dnv-renewal',
+    webinar_url: 'https://www.youtube.com/watch?v=SqmxlLuJ_bY&t=135s',
     title: 'Renew your digital nomad residence permit before it expires — show continued remote income and means',
     category: 'residency', severity: 'required',
     source: 'webinar',
@@ -731,6 +764,7 @@ export const CATALOG: Obligation[] = [
   // ── Pet import ────────────────────────────────────────────────────────────
   {
     id: 'pet-import',
+    webinar_url: 'https://www.youtube.com/watch?v=U6_AOU1JdAE&t=3044s',
     title: 'Import your pet: microchip, valid rabies vaccination (given at least 21 days before travel), and — arriving from a non-EU country like the US — an EU animal health certificate issued by an authorised vet within 10 days of entry',
     category: 'admin', severity: 'required',
     source: 'official',
@@ -743,6 +777,7 @@ export const CATALOG: Obligation[] = [
   // ── Citizenship application steps ─────────────────────────────────────────
   {
     id: 'dele-a2-exam',
+    webinar_url: 'https://www.youtube.com/watch?v=vAeqa_xdrTY&t=1511s',
     title: 'Pass DELE A2 Spanish language exam (Instituto Cervantes) — required for naturalization',
     category: 'admin', severity: 'required',
     source: 'official',
@@ -755,6 +790,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'ccse-exam',
+    webinar_url: 'https://www.youtube.com/watch?v=vAeqa_xdrTY&t=1601s',
     title: 'Pass CCSE constitutional and sociocultural knowledge exam (Instituto Cervantes) — required for naturalization',
     category: 'admin', severity: 'required',
     source: 'official',
@@ -764,6 +800,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'citizenship-application',
+    webinar_url: 'https://www.youtube.com/watch?v=vAeqa_xdrTY&t=194s',
     title: 'Submit your naturalisation (nationality by residence) application to the Ministry of Justice',
     category: 'residency', severity: 'required',
     source: 'official',

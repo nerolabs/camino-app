@@ -158,3 +158,34 @@ staff-only for now.
 
 Remaining: fetch the other 12 transcripts incrementally, read for accurate per-obligation
 attribution + timestamps, and populate the rest.
+
+## Webinar → obligation mapping (2026-07-02, batch 2 — all 16 transcripts captured)
+
+The throttle reset and **all 16 transcripts** are now cached. Full title set:
+Buying a Home (8zyT), Mistakes Americans Make (2A19), Living in Madrid (9RUa), Malaga (C_UxMIqTd0Q),
+Spain Taxes 101 (HP55), Living in Catalonia (NwecXut5e24), Healthcare & Insurance (OnLKyPbpALY),
+Digital Nomad Visa (SqmxlLuJ_bY), Retiring in Spain (U6_AOU1JdAE), Living in Valencia (b1E-RQIdv4A),
+Cost of Living (gEY3Xkqs6so), How to Move to Spain – Key Steps (gtruvbQhphE), Renting (tQvPYhH99Nw),
+Non-Lucrative Visa (tZJk56EH1ms), Spain Visas 101 (uH927kx3igU), Citizenship 101 (vAeqa_xdrTY).
+
+Mapped **37 more obligations** to their topic-dedicated webinar with transcript-verified timestamps
+(all **supplementary** / staff-only, kept even where an official `source_url` exists):
+- **Admin/tax (Spain Taxes 101, HP55):** empadronamiento*, nie* (via Malaga C_UxMIqTd0Q), beckham-law,
+  autonomo-social-security, register-autonomo, wealth-tax, modelo-720, exit-tax-return,
+  tax-planning-consultation.
+- **Visas 101 (uH927kx3igU):** choose-visa-type, consulate-appointment, criminal-background-check,
+  medical-certificate, apostille-documents.
+- **DNV (SqmxlLuJ_bY):** dnv-remote-work-proof, dnv-income-proof, dnv-coverage-certificate,
+  dnv-employer-permission-letter, dnv-company-activity-proof, dnv-qualification-proof, dnv-renewal.
+- **NLV (tZJk56EH1ms):** nlv-income-proof, nlv-health-insurance, nlv-letter-of-intent,
+  nlv-non-work-declaration, nlv-renewal.
+- **Healthcare (OnLKyPbpALY):** tarjeta-sanitaria, student-visa-health-insurance.
+- **Citizenship 101 (vAeqa_xdrTY):** citizenship-track-standard, citizenship-track-latam,
+  citizenship-application, dele-a2-exam, ccse-exam.
+- **Regional/misc:** scout-where-to-live (Cost of Living gEY3Xkqs6so), dgt-exchange + dgt-exam
+  (Mistakes 2A19), pet-import (Retiring U6).
+
+Total: **43/55 obligations** now carry a supplementary `webinar_url`. The 12 left unmapped are
+tax-form technicalities (modelo-030/100/130/303/200, ibi-property-tax, nonresident-property-tax) and
+admin items (residencia, digital-certificate, escolarizacion, family-reunification,
+permanent-residence) that the webinars don't cover with enough specificity to cite honestly.
