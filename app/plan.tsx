@@ -13,17 +13,31 @@ import { isStaff } from '@/core/env';
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
-// Describe the editable profile fields straight from the interview catalog, so the
-// re-plan extractor can never drift from the slots the engine actually reads.
+// "Known-later" anchor dates the interview can't ask up front (you don't know them until you're
+// in Spain), but which the engine reads to turn estimated timings into firm ones. Surfacing them
+// here lets the post-move "what changed" flow set them directly (e.g. "my TIE was issued on …"),
+// in addition to being auto-filled when the matching obligation is marked done (see the engine's
+// ANCHOR_FROM_COMPLETION). Explicit dates always win.
+const KNOWN_LATER_FIELDS: { field: string; hint: string }[] = [
+  { field: 'residency_established',
+    hint: 'a YYYY-MM-DD date — the day your Spanish residency was formally established (your TIE residence card issued). Setting this turns residency-timed steps (citizenship track, permanent residence, exams) from estimates into firm dates' },
+  { field: 'padron_done',
+    hint: 'a YYYY-MM-DD date — the day you completed your empadronamiento (padrón registration)' },
+];
+
+// Describe the editable profile fields straight from the interview catalog (plus the known-later
+// anchor dates), so the re-plan extractor can never drift from the fields the engine actually reads.
 function fieldGuide(): string {
-  return SLOTS.map(s => {
+  const slots = SLOTS.map(s => {
     const t = s.type === 'list' ? 'array of ISO 2-letter country codes'
             : s.type === 'bool' ? 'true or false'
             : s.type === 'date' ? 'a YYYY-MM-DD date'
             : s.options ? `one of: ${s.options.join(' | ')}`
             : 'a string';
     return `- ${s.field}: ${t} — ${s.prompt_hint}`;
-  }).join('\n');
+  });
+  const known = KNOWN_LATER_FIELDS.map(k => `- ${k.field}: ${k.hint}`);
+  return [...slots, ...known].join('\n');
 }
 
 // Layer 2 of the living plan: translate a free-text "here's what changed" into a

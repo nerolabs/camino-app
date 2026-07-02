@@ -393,8 +393,13 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       Verified: `ccse-exam` flipped `estimated=true`→`false` and re-dated off the actual residencia
       completion. (`padron_done` has no consumer obligation yet — wired + future-proof; activates the
       moment one anchors to it. Wants a regression test when B5 lands.)
-- [ ] **Capture `residency_established` as a known-later field** — let users update it post-move
-      so residency-anchored items become firm instead of estimated. (Needs a post-move edit flow.)
+- [x] **Capture `residency_established` as a known-later field — DONE 2026-07-02.** Two paths now
+      firm it up post-move: (1) marking the `residencia` step done with a date (via the engine's
+      `ANCHOR_FROM_COMPLETION`, above), and (2) the per-step "what changed" free-text flow — added
+      `residency_established` + `padron_done` to `fieldGuide()` as `KNOWN_LATER_FIELDS`, so a user
+      can say "my TIE was issued on 2027-02-01" and the extractor sets the anchor directly. Pending
+      residency-timed items already render "starts once your residency is established", so the path
+      is discoverable. Explicit dates always win over completion-derived ones.
 - [x] ~~**Re-add backlog items once sourced**~~ — **DONE 2026-07-02.** All 4 (`sworn-translation`,
       `convenio-especial`, `modelo-390`, `citizenship-jura`) verified + re-added as `official`.
 - [x] ~~**More webinars / ~100-obligation target**~~ — **struck 2026-07-02.** No more webinars are
