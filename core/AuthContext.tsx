@@ -5,6 +5,7 @@ import * as Linking from 'expo-linking';
 import * as QueryParams from 'expo-auth-session/build/QueryParams';
 import { type Session, type User } from '@supabase/supabase-js';
 import { supabase } from './supabase';
+import { identify, resetAnalytics } from '@/lib/analytics';
 
 // Lets the auth browser session close cleanly after the OAuth redirect (no-op harm on native).
 WebBrowser.maybeCompleteAuthSession();
@@ -45,10 +46,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      if (session?.user) identify(session.user.id);
       setLoading(false);
     });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
+      // Tie analytics events to the user once known; unlink on sign-out.
+      if (session?.user) identify(session.user.id);
+      else if (event === 'SIGNED_OUT') resetAnalytics();
     });
     return () => subscription.unsubscribe();
   }, []);

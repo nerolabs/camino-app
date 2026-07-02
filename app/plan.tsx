@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput, ActivityIndicator, Platform } from 'react-native';
 import { askAnthropic } from '@/lib/lola';
 import { palette } from '@/constants/Colors';
@@ -8,6 +8,7 @@ import { saveProfile as saveProfileDb } from '@/core/profileDb';
 import { SLOTS, derive, type Profile } from '@/core/interview-controller';
 import { buildPlan, type Objective, type Phase, type Progress } from '@/core/engine-controller';
 import NavBar from '@/components/NavBar';
+import { capture } from '@/lib/analytics';
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -254,7 +255,10 @@ export default function PlanScreen() {
   const [taskThinking, setTaskThinking] = useState(false);
   const activeTaskRef = useRef<string | null>(null);
 
+  useEffect(() => { capture('roadmap_viewed'); }, []); // funnel endpoint: reached the roadmap
+
   async function openCard(obj: Objective) {
+    capture('task_opened', { objective_id: obj.id });
     setSelected(obj);
     setDateInput(''); setDateOpen(false);
     setChangeOpen(false); setChangeText('');
@@ -275,6 +279,7 @@ export default function PlanScreen() {
     setTaskInput('');
     setTaskChat(prev => [...prev, { role: 'user', text: q }]);
     setTaskThinking(true);
+    capture('task_coach_asked', { objective_id: obj.id }); // feature health: using post-roadmap Lola
     const answer = await askLola(obj, profile ?? {}, history, q);
     setTaskChat(prev => [...prev, { role: 'lola', text: answer }]);
     setTaskThinking(false);
@@ -291,6 +296,7 @@ export default function PlanScreen() {
 
   function markDone(id: string, completedOn?: string) {
     setProgress(id, { state: 'done', ...(completedOn ? { completedOn } : {}) });
+    capture('roadmap_item_completed', { objective_id: id, back_dated: !!completedOn });
     setDateInput('');
     setSelected(null);
   }
@@ -316,6 +322,7 @@ export default function PlanScreen() {
     const nextProfile: Profile = { ...profile, ...changes };
     derive(nextProfile);
     const after = buildPlan(nextProfile);
+    capture('plan_remodelled', { changed_fields: Object.keys(changes) });
     setChangeNote({ title: 'That was useful — I’ve remodelled your plan!', body: diffSummary(currentPlan, after) });
     setProfile(nextProfile);
     if (user) await saveProfileDb(user.id, nextProfile);
