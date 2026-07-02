@@ -1,14 +1,14 @@
 # Camino — Session Handoff
 
 Quick-start context for a fresh Claude Code session working on the **camino-app**
-(the Expo app). The canonical project memory — thesis, design invariants, roadmap —
-lives in the sibling repo at `../camino/CLAUDE.md`. **Read that first.**
+(the Expo app). The canonical project memory — thesis, design invariants — now lives
+in this repo at `./docs/THESIS.md`. **Read that first.**
 
-Last updated: 2026-06-30.
+Last updated: 2026-07-02.
 
 ## Where things live
 
-- `../camino/CLAUDE.md` — **source of truth.** What Camino is, the four-piece design,
+- `./docs/THESIS.md` — **source of truth.** What Camino is, the four-piece design,
   the invariants you must not break. Read it before touching anything load-bearing.
 - `~/Desktop/camino-app/` (here) — the Expo Router app (iOS / Android / web).
 - `core/` — the framework-agnostic domain layer (engine + interview). Pure, no UI.
@@ -199,6 +199,6 @@ precise statutory figures (`nlv-income-proof` €28,800/€7,200, `dnv-income-pr
 
 - TypeScript strict. `core/` is pure and side-effect-free — keep it that way.
 - The catalog is **data**, not code. New obligations are CATALOG entries, never engine logic.
-- Don't break the four invariants in `../camino/CLAUDE.md`. If a change would, stop and flag it.
+- Don't break the four invariants in `./docs/THESIS.md`. If a change would, stop and flag it.
 - Expo SDK is pinned — read https://docs.expo.dev/versions/v56.0.0/ before writing Expo code.
 - Run the legacy core demos: `npm run engine`, `npm run interview`.

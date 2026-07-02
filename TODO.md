@@ -333,7 +333,13 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             webinar with transcript-verified timestamps (option b, evidence-based). Kept as
             supplementary even where `source_url` exists. 12 unmapped = tax-form technicalities +
             admin items not covered specifically enough. See `core/SOURCING.md` "batch 2".
-- [~] **B11 — Repo structure: `camino/` vs `camino-app/` — INVESTIGATED (2026-07-02), awaiting decision.**
+- [x] **B11 — Repo structure — RESOLVED (2026-07-02): combined into camino-app.** User chose the
+      combine option. Folded the thesis + four invariants into `docs/THESIS.md`, updated
+      `CLAUDE.md` / `HANDOFF.md` / `TODO.md` to point there instead of `../camino/CLAUDE.md`, and
+      archived the `nerolabs/camino` GitHub repo. camino-app is now the single source of truth.
+      (Local `../camino/` checkout left untouched on disk — vestigial, safe to remove manually.)
+      Investigation notes below for the record.
+- [x] ~~**B11 — investigation (superseded by the resolution above).**~~
       Findings: two separate GitHub repos. `nerolabs/camino` (`../camino/`) is the original
       **design-seed/thesis repo**, frozen since Jun 30 ("skeleton + brand identity"): CLAUDE.md
       (thesis + four invariants), a 257-line `core/engine.ts` walking skeleton (~7 obligations) +
@@ -389,7 +395,7 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
 
 - _(none open — `tsc --noEmit` is green.)_
 
-## Invariants (do not break — see ../camino/CLAUDE.md)
+## Invariants (do not break — see ./docs/THESIS.md)
 
 1. Engine is deterministic — no LLM in plan-building.
 2. Interview is derived from the catalog (every `applies_if` field has a slot or derivation).
