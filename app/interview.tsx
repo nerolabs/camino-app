@@ -308,6 +308,18 @@ export default function InterviewScreen() {
       keyboardVerticalOffset={90}
     >
       <NavBar />
+      {voice.supported && started && (
+        <View style={styles.voiceBar}>
+          <TouchableOpacity
+            style={styles.voiceToggle}
+            onPress={voice.toggle}
+            accessibilityLabel={voice.enabled ? 'Turn Lola’s voice off' : 'Turn Lola’s voice on'}
+          >
+            <Text style={styles.voiceToggleIcon}>{voice.enabled ? '🔊' : '🔇'}</Text>
+            <Text style={styles.voiceToggleText}>{voice.enabled ? 'Voice on' : 'Voice off'}</Text>
+          </TouchableOpacity>
+        </View>
+      )}
       {!done && (
         <View style={styles.progressWrap}>
           <View style={styles.progressRow}>
@@ -351,15 +363,6 @@ export default function InterviewScreen() {
                 returnKeyType="send"
                 editable={!loading}
               />
-              {voice.supported && (
-                <TouchableOpacity
-                  style={[styles.micBtn, voice.enabled && styles.micBtnActive]}
-                  onPress={voice.toggle}
-                  accessibilityLabel={voice.enabled ? 'Mute Lola’s voice' : 'Hear Lola speak'}
-                >
-                  <Text style={[styles.micIcon, voice.enabled && styles.micIconActive]}>{voice.enabled ? '🔊' : '🔈'}</Text>
-                </TouchableOpacity>
-              )}
               {dictation.supported && (
                 <TouchableOpacity
                   style={[styles.micBtn, dictation.listening && styles.micBtnActive]}
@@ -394,6 +397,10 @@ const styles = StyleSheet.create({
   subQuiet:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.muted, textAlign: 'center', lineHeight: 23, marginBottom: 36, maxWidth: 440 },
   startBtn:    { backgroundColor: palette.cobalt, borderRadius: 12, paddingVertical: 16, paddingHorizontal: 40 },
   startBtnText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cal },
+  voiceBar:        { width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 16, paddingTop: 12, flexDirection: 'row', justifyContent: 'flex-end' },
+  voiceToggle:     { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 5, paddingHorizontal: 10, borderRadius: 16, backgroundColor: '#F2EDE6' },
+  voiceToggleIcon: { fontSize: 14, lineHeight: 18 },
+  voiceToggleText: { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.muted },
   progressWrap:  { width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 16, paddingTop: 14, paddingBottom: 2, gap: 7 },
   progressRow:   { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   progressLabel: { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.muted },
