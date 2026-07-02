@@ -299,7 +299,27 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             seed them). Verified events reach PostHog EU (POST → 200). Finish the funnel then.
 
 ### Catalog grounding (ongoing, high-value)
-- [ ] **B10 — Promote `webinar`-sourced obligations to `official` (2026-07-02 feedback).** Webinars
+- [~] **B10 — Promote `webinar`→`official` — IN PROGRESS (2026-07-02).** Infra done: `source_url`
+      (canonical official link, shown to all users as "View the official source →" in the roadmap
+      drawer) + `webinar_url` (**staff-only** button, gated by `isStaff`, to cross-check webinar vs.
+      official — a future Moving To Spain partnership/upsell hook). **Batch 1 promoted 6** (digital
+      certificate, Beckham, empadronamiento, citizenship, permanent residence, ITP) with citations
+      + corrections (Beckham post-2023 scope + Modelo 149; ITP 6–11% regional) — logged in
+      `core/SOURCING.md`. Mix now **32 official / 22 webinar / 1 domain**.
+      - [ ] **Continue the remaining ~22 webinar items** in batches (NIE, apostille, NLV/DNV docs +
+            renewals, tarjeta-sanitaria, bank account, pet-import, property steps, etc.), each with a
+            canonical `source_url`. Advisory items (`tax-planning-consultation`, `exit-tax-return`,
+            `consulate-appointment` soft estimate) likely stay `webinar`/reclassify, not "official".
+      - [ ] **Populate `webinar_url` (needs YouTube URLs from user).** The catalog was mined from
+            transcripts but there's no obligation→video mapping in code. Provide per-obligation
+            YouTube links (or a Moving To Spain playlist) and I'll fill them in; the staff button
+            already renders when set.
+- [ ] **B11 — Repo structure: `camino/` vs `camino-app/` (2026-07-02 question).** Two dirs exist —
+      likely `camino/` = project memory/docs (the canonical CLAUDE.md, design thesis, invariants)
+      and `camino-app/` = the Expo app code, from starting in desktop Claude then moving to the CLI.
+      Decide: keep separate (docs-brain vs code) or fold `camino/`'s docs into `camino-app/docs` and
+      deprecate one. **Investigate what's in `../camino/` and recommend before merging/deleting
+      anything** (don't delete a docs repo blindly). Webinars
       were great for *ideation*; researching each obligation against official Spanish government
       sources and flipping it to `source: 'official'` (with corrections) strengthens the app's
       credibility and effectiveness. This is the same sourcing pass already done for the 14 `domain`

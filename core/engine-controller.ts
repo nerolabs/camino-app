@@ -30,7 +30,9 @@ type Timing =
 type Obligation = {
   id: string; title: string; category: Category; severity: Severity;
   source: Source;
-  source_url?: string; // canonical official source, surfaced as a link in the roadmap
+  source_url?: string;  // canonical official source, surfaced as a link in the roadmap (all users)
+  webinar_url?: string; // original webinar (YouTube) the content was mined from — staff-only, for
+                        // cross-checking official vs. webinar; also a future partnership/upsell hook
   applies_if: Condition; depends_on: string[]; timing: Timing;
 };
 
@@ -48,7 +50,7 @@ export type Progress = { state: 'done'; completedOn?: string; note?: string };
 
 export type Objective = {
   id: string; title: string; category: Category; severity: Severity;
-  source: Source; source_url?: string; depends_on: string[];
+  source: Source; source_url?: string; webinar_url?: string; depends_on: string[];
   timing: Resolved; phase: Phase;
   done: boolean; completedOn: Date | null;
 };
@@ -274,9 +276,10 @@ export const CATALOG: Obligation[] = [
   // ── In-Spain admin ──────────────────────────────────────────────────────────
   {
     id: 'empadronamiento',
-    title: 'Empadronamiento (padrón municipal — register on local census)',
+    title: 'Empadronamiento (padrón municipal — register on your town’s census)',
     category: 'admin', severity: 'required',
-    source: 'webinar',
+    source: 'official',
+    source_url: 'https://administracion.gob.es/pagFront/buscadortramites/detalleTramite.htm?idT=32988',
     applies_if: HAS_ADDRESS,
     depends_on: [],
     timing: { kind: 'asap' },
@@ -501,9 +504,10 @@ export const CATALOG: Obligation[] = [
   // ── Digital identity ──────────────────────────────────────────────────────
   {
     id: 'digital-certificate',
-    title: 'Obtain a digital certificate to file taxes online and receive official government notifications',
+    title: 'Obtain a digital certificate (FNMT) to file taxes online and receive official government notifications',
     category: 'admin', severity: 'recommended',
-    source: 'webinar',
+    source: 'official',
+    source_url: 'https://www.sede.fnmt.gob.es/certificados/persona-fisica',
     applies_if: { field: 'is_tax_resident', op: 'eq', value: true },
     depends_on: ['nie'],
     timing: { kind: 'relative_to_obligation', after: 'nie', offset_days: 30 },
@@ -521,9 +525,10 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'beckham-law',
-    title: 'Apply for the Beckham Law special tax regime — a flat 24% income-tax rate available to qualifying employed workers (not freelancers); confirm the filing deadline and form with a tax adviser',
+    title: 'Apply for the Beckham Law special regime (Modelo 149) — a flat 24% tax on Spanish-source income up to €600,000 for up to six years, for qualifying inbound workers (employees and, since 2023, many remote workers and entrepreneurs; usually not standard autónomos). The election has a strict filing window (~6 months from starting your activity) — confirm eligibility and timing with a tax adviser',
     category: 'tax', severity: 'recommended',
-    source: 'webinar',
+    source: 'official',
+    source_url: 'https://sede.agenciatributaria.gob.es/Sede/irpf/tengo-que-presentar-declaracion/regimen-fiscal-aplicable-trabajadores-desplazados/regimen-especial.html',
     applies_if: { all: [
       { field: 'visa_type', op: 'eq', value: 'dnv' },
       { field: 'work_situation', op: 'eq', value: 'employed_remote' },
@@ -634,9 +639,10 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'permanent-residence',
-    title: 'Apply for long-term (permanent) residence after 5 years of continuous legal residence',
+    title: 'Apply for long-term residence after 5 years of continuous legal residence',
     category: 'residency', severity: 'recommended',
-    source: 'webinar',
+    source: 'official',
+    source_url: 'https://administracion.gob.es/pag_Home/en/Tu-espacio-europeo/derechos-obligaciones/ciudadanos/residencia/obtencion-residencia/residencia-permanente.html',
     applies_if: { all: [NON_EU, { field: 'intends_long_stay', op: 'eq', value: true }] },
     depends_on: ['residencia'],
     timing: { kind: 'relative_to_event', anchor: 'residency_established', offset_days: 1825 },
@@ -672,9 +678,9 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'property-transfer-tax',
-    title: 'Pay property transfer tax (ITP) on a resale property — roughly 7–10% of the price depending on the region',
+    title: 'Pay property transfer tax (ITP) on a resale property — roughly 6–11% of the price, set by each autonomous community',
     category: 'tax', severity: 'penalty',
-    source: 'webinar',
+    source: 'official',
     applies_if: { field: 'owns_property_in_spain', op: 'eq', value: true },
     depends_on: ['completion-deed-notary'],
     timing: { kind: 'relative_to_event', anchor: 'property_purchase', offset_days: 30 },
@@ -745,9 +751,10 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'citizenship-application',
-    title: 'Submit naturalization application to the Subdirección General de Nacionalidad y Estado Civil',
+    title: 'Submit your naturalisation (nationality by residence) application to the Ministry of Justice',
     category: 'residency', severity: 'required',
-    source: 'webinar',
+    source: 'official',
+    source_url: 'https://www.mjusticia.gob.es/es/ciudadania/tramites/nacionalidad-residencia',
     applies_if: NON_EU,
     depends_on: ['citizenship-track-standard', 'citizenship-track-latam', 'ccse-exam'],
     timing: { kind: 'relative_to_event', anchor: 'residency_established', offset_days: 3650 },
@@ -770,7 +777,7 @@ export function buildPlan(p: Record<string, unknown>): Objective[] {
     const pr = progress[o.id];
     return {
       id: o.id, title: o.title, category: o.category, severity: o.severity,
-      source: o.source, source_url: o.source_url, depends_on: o.depends_on, timing, phase: phaseOf(timing, arrival),
+      source: o.source, source_url: o.source_url, webinar_url: o.webinar_url, depends_on: o.depends_on, timing, phase: phaseOf(timing, arrival),
       done: pr?.state === 'done',
       completedOn: pr?.completedOn ? new Date(pr.completedOn) : null,
     };

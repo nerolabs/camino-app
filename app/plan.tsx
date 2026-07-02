@@ -9,6 +9,7 @@ import { SLOTS, derive, type Profile } from '@/core/interview-controller';
 import { buildPlan, type Objective, type Phase, type Progress } from '@/core/engine-controller';
 import NavBar from '@/components/NavBar';
 import { capture } from '@/lib/analytics';
+import { isStaff } from '@/core/env';
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -587,6 +588,12 @@ export default function PlanScreen() {
                           <Text style={styles.sourceLinkText}>View the official source →</Text>
                         </TouchableOpacity>
                       )}
+                      {/* Staff-only: cross-check the official source against the original webinar. Hidden from users. */}
+                      {isStaff(user?.id) && selected.webinar_url && (
+                        <TouchableOpacity onPress={() => Linking.openURL(selected.webinar_url!)} style={styles.sourceLink}>
+                          <Text style={styles.staffLinkText}>▶ Webinar source (staff only)</Text>
+                        </TouchableOpacity>
+                      )}
                     </View>
                   </View>
                 )}
@@ -714,6 +721,7 @@ const styles = StyleSheet.create({
   sourceNoteText:{ fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: palette.indigo, lineHeight: 19 },
   sourceLink:    { marginTop: 8 },
   sourceLinkText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.cobalt },
+  staffLinkText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.amber },
 
   cardDone:      { backgroundColor: '#F6F7F3' },
   cardTitleDone: { color: palette.olive },

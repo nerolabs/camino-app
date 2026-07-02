@@ -102,3 +102,25 @@ New obligation recommending a **scouting trip** and a framework for **choosing w
 anyone who does not already `owns_property_in_spain`. This reintroduces a single `domain` item to
 the catalog by design (advisory, not a citable fact); the audit queue for *factual* claims is
 still empty. Catalog now **29 `webinar` / 26 `official` / 1 `domain`**.
+
+## B10 — webinar → official promotion pass (2026-07-02, batch 1)
+
+Researching webinar-sourced obligations against official sources and flipping to `source: 'official'`
+with a canonical `source_url` (surfaced as a "View the official source" link in the roadmap).
+Corrections noted. Also added `webinar_url` (staff-only) to keep the original YouTube for
+cross-checking (URLs TBD — need per-obligation mapping from the user).
+
+| id | official source | note / correction |
+|---|---|---|
+| `digital-certificate` | sede.fnmt.gob.es/certificados/persona-fisica | FNMT is the issuer; free for any DNI/NIE holder. |
+| `beckham-law` | sede.agenciatributaria.gob.es …/regimen-especial.html | **Corrected:** 24% flat up to €600k for 6 yrs; since 2023 also covers remote workers/entrepreneurs (was "employed only"); usually not standard autónomos; election via Modelo 149 within ~6 months. |
+| `empadronamiento` | administracion.gob.es …/detalleTramite idT=32988 | Managed by each ayuntamiento. |
+| `citizenship-application` | mjusticia.gob.es/es/ciudadania/tramites/nacionalidad-residencia | Ministry of Justice online (Modelo 790 fee). |
+| `permanent-residence` | administracion.gob.es …/residencia-permanente.html | 5 yrs continuous legal residence (absence limits apply). |
+| `property-transfer-tax` | (regional — set per CCAA, no single national page) | **Corrected:** range 6–11% (was 7–10%); rate set by each autonomous community. `source_url` omitted (regional). |
+
+Source mix after batch 1: **32 official / 22 webinar / 1 domain**. Remaining webinar items to work
+through in later batches: nie, apostille-documents, consulate-appointment (soft estimate — may stay
+webinar), NLV/DNV docs + renewals, tarjeta-sanitaria, spanish-bank-account, pet-import, student-visa
+insurance, property (due diligence/notary/registry/community fees), tax-planning-consultation +
+exit-tax-return (advisory — likely reclassify, not "official").
