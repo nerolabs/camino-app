@@ -9,7 +9,6 @@ import { SLOTS, derive, type Profile } from '@/core/interview-controller';
 import { buildPlan, type Objective, type Phase, type Progress } from '@/core/engine-controller';
 import NavBar from '@/components/NavBar';
 import { capture } from '@/lib/analytics';
-import { isStaff } from '@/core/env';
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -176,11 +175,6 @@ const SEV_BLURB: Record<string, string> = {
   info:        'Informational — a milestone to be aware of.',
 };
 
-const SOURCE_LABEL: Record<string, string> = {
-  official:       'Official requirement',
-  recommendation: 'Camino recommendation',
-};
-
 const SOURCE_SHORT: Record<string, string> = {
   official:       'official',
   recommendation: 'recommended',
@@ -251,7 +245,7 @@ function ConsulateBanner({ profile }: { profile: Record<string, unknown> }) {
 }
 
 export default function PlanScreen() {
-  const { profile, setProfile } = useProfile();
+  const { profile, setProfile, isStaff } = useProfile();
   const { user } = useAuth();
   const [selected, setSelected] = useState<Objective | null>(null);
   const [dateInput, setDateInput] = useState('');
@@ -386,6 +380,17 @@ export default function PlanScreen() {
               <Text style={styles.statLabel}>done</Text>
             </View>
           )}
+        </View>
+
+        <View style={styles.legend}>
+          <View style={styles.legendItem}>
+            <View style={[styles.legendDot, { backgroundColor: SOURCE_COLOR.official }]} />
+            <Text style={styles.legendText}>Official requirement</Text>
+          </View>
+          <View style={styles.legendItem}>
+            <View style={[styles.legendDot, { backgroundColor: SOURCE_COLOR.recommendation }]} />
+            <Text style={styles.legendText}>Camino recommendation</Text>
+          </View>
         </View>
 
         <ConsulateBanner profile={profile} />
@@ -598,8 +603,8 @@ export default function PlanScreen() {
                           <Text style={styles.sourceLinkText}>View the official source →</Text>
                         </TouchableOpacity>
                       )}
-                      {/* Staff-only: cross-check the official source against the original webinar. Hidden from users. */}
-                      {isStaff(user?.id) && selected.webinar_url && (
+                      {/* Staff-only: cross-check the source against the original webinar (with timestamp). Hidden from users. */}
+                      {isStaff && selected.webinar_url && (
                         <TouchableOpacity onPress={() => Linking.openURL(selected.webinar_url!)} style={styles.sourceLink}>
                           <Text style={styles.staffLinkText}>▶ Webinar source (staff only)</Text>
                         </TouchableOpacity>
@@ -656,6 +661,10 @@ const styles = StyleSheet.create({
                    borderWidth: 1, borderColor: '#E8E4DC', alignItems: 'center', minWidth: 72 },
   statNum:       { fontFamily: 'Fraunces_600SemiBold', fontSize: 22, color: palette.indigo },
   statLabel:     { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted, marginTop: 1 },
+  legend:        { flexDirection: 'row', flexWrap: 'wrap', gap: 16, marginTop: -6, marginBottom: 20 },
+  legendItem:    { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  legendDot:     { width: 8, height: 8, borderRadius: 4 },
+  legendText:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: palette.muted },
 
   penaltyBanner: { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: '#FDF2F2',
                    borderWidth: 1, borderColor: '#F5C6C6', borderRadius: 10,

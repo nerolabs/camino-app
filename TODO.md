@@ -235,12 +235,17 @@ is strictly required — a normal EAS build works.
 
 ## 📥 Feedback backlog (captured 2026-07-01) — suggested order below
 
-- [x] **B1a — Dev personas gated + staff flag (DONE 2026-07-01).** `core/env.ts` `showDevTools()`
-      via `EXPO_PUBLIC_ENV` (production/staging, per EAS env) + `EXPO_PUBLIC_STAFF_USER_IDS` allowlist.
-      Staff = the auth `user_id`s (NOT profiles.id — verified via SQL they differ): user
-      `3a4001e8-…`, wife `e1c8f5e9-…`, set in the production EAS env. Verified live: hidden for
-      non-staff on getcamino.app, **visible for signed-in staff on getcamino.app**, visible for all
-      on staging.
+- [x] **B1a — Dev personas + staff gating — MOVED TO DB FLAG (2026-07-02).** Retired the hardcoded
+      `EXPO_PUBLIC_STAFF_USER_IDS` allowlist and the env-based `showDevTools`. Staff is now the
+      **`profiles.is_staff`** column (defaults false, admin-set), read via `loadProfileRow()` →
+      `ProfileContext` (`useProfile().isStaff`). Dev personas (interview) **and** the ▶ Webinar
+      cross-check link (roadmap drawer) both gate on it. Ready for extended testers — grant staff
+      with a one-line SQL upsert. **Setup + hardening SQL in `docs/STAFF.md` (run on both DBs).**
+      Old note (env approach, superseded): staff were the auth `user_id`s set in the production EAS
+      env; profiles.id ≠ auth user_id (verified via SQL).
+      - [ ] **You:** run the `is_staff` migration on staging + production (see `docs/STAFF.md`), then
+            grant your + testers' accounts staff. Optional: delete the now-unused
+            `EXPO_PUBLIC_STAFF_USER_IDS` EAS env var.
 - [x] **B1b — Lola intro (DONE 2026-07-01).** Interview landing now opens with an eyebrow
       ("YOUR ROAD TO SPAIN"), "Hola, I'm Lola," a warm experienced-companion line, and a quieter
       what-happens-next line. Verified live on prod + staging.

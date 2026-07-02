@@ -7,7 +7,7 @@ import {
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
 import { useProfile } from '@/core/ProfileContext';
-import { loadProfile } from '@/core/profileDb';
+import { loadProfileRow } from '@/core/profileDb';
 import { derive } from '@/core/interview-controller';
 import NavBar from '@/components/NavBar';
 
@@ -83,12 +83,13 @@ export default function LandingPage() {
   const width = Platform.OS === 'web' ? webWidth : rnWidth;
   const wide = width == null ? true : width >= 768;
   const { user, signInWithGoogle, signOut } = useAuth();
-  const { setProfile } = useProfile();
+  const { setProfile, setIsStaff } = useProfile();
 
   useEffect(() => {
-    if (!user) return;
-    loadProfile(user.id).then(saved => {
-      if (saved) { derive(saved); setProfile(saved); }
+    if (!user) { setIsStaff(false); return; }
+    loadProfileRow(user.id).then(({ answers, isStaff }) => {
+      setIsStaff(isStaff);
+      if (answers) { derive(answers); setProfile(answers); }
     });
   }, [user]);
 

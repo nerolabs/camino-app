@@ -9,7 +9,6 @@ import { palette } from '@/constants/Colors';
 import { nextSlot, derive, interviewProgress, type Slot, type Profile } from '@/core/interview-controller';
 import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
-import { showDevTools } from '@/core/env';
 import { saveProfile as saveProfileDb } from '@/core/profileDb';
 import { TEST_PERSONAS, type Persona } from '@/core/test-personas';
 import { askAnthropic } from '@/lib/lola';
@@ -118,7 +117,7 @@ const STATIC_QUESTIONS: Record<string, string> = {
 export default function InterviewScreen() {
   const router = useRouter();
   const { user } = useAuth();
-  const { setProfile: saveProfile } = useProfile();
+  const { setProfile: saveProfile, isStaff } = useProfile();
 
   async function persist(p: Profile) {
     saveProfile(p);
@@ -269,7 +268,7 @@ export default function InterviewScreen() {
             <Text style={styles.startBtnText}>Let's get started</Text>
           </TouchableOpacity>
 
-          {showDevTools(user?.id) && (
+          {isStaff && (
             <>
               <TouchableOpacity onPress={() => setShowDev(v => !v)} style={styles.devToggle}>
                 <Text style={styles.devToggleText}>{showDev ? 'Hide' : 'Dev'} test personas</Text>
