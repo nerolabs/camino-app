@@ -327,7 +327,10 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       `roadmap_item_completed`, `task_opened`, `task_coach_asked`, `plan_remodelled`; autocapture
       pageviews; `identify()` on sign-in; person profiles for retention. Key/host in EAS
       preview+production only (dev sends nothing); every event stamped with `environment`.
-      - [ ] **Native analytics (posthog-react-native)** — fast follow; needs the RN SDK + a rebuild.
+      - [x] **Native analytics — DONE 2026-07-02, in TestFlight build 9.** `lib/analytics.native.ts`
+            uses `posthog-react-native` → same PostHog project + funnel events as web, `environment`
+            super-property, `captureAppLifecycleEvents` (app open/background). Key/host from EAS env.
+            On-device verify once build 9 processes (events appear under `platform`-tagged / native).
       - [ ] **Build the PostHog insights** — funnel (pageview `/` → interview_started →
             interview_completed → roadmap_viewed), retention on roadmap_viewed, feature-health
             (% completing items / using task coach). Filter to `environment = production`.
