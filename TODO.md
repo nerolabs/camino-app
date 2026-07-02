@@ -411,6 +411,31 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             "nearly sixty… large majority officially cited"). Still open: a real blog surface later.
 
 ## 🔜 Next (candidates, not yet started)
+- [ ] **Citizenship vs. rolling-renewal — stop assuming everyone naturalises (user feedback 2026-07-02).**
+      Today the catalog assumes every non-EU mover pursues Spanish citizenship: `dele-a2-exam`,
+      `ccse-exam`, `citizenship-application`, `citizenship-jura` are all `required` gated only on
+      `NON_EU` (+ `!is_ex_colony_national` for the DELE/standard track), and `citizenship-track-*`
+      shows the eligibility clock. But many people just **renew their residence indefinitely**
+      (NLV/DNV renewal → `permanent-residence` at 5 yrs) and never naturalise. **The current
+      interview only asks `intends_long_stay` (long vs short move) — there is NO question about
+      citizenship intent**, so the citizenship track is force-applied. Fix (deterministic, in the
+      engine): add an interview slot **`wants_citizenship`** (bool), asked when `NON_EU` +
+      `intends_long_stay` — e.g. *"Longer term, do you hope to become a Spanish citizen, or plan to
+      keep renewing your residence to stay?"* — then add `wants_citizenship === true` to the
+      `applies_if` of `citizenship-track-standard`, `citizenship-track-latam`, `dele-a2-exam`,
+      `ccse-exam`, `citizenship-application`, `citizenship-jura`. The renewal path
+      (`nlv-renewal`/`dnv-renewal`/`permanent-residence`) stays for all long-stay movers. Remember
+      `SLOTS` is the single source of the interview, and `auditCatalog()` fails the build if an
+      `applies_if` references a field with no slot — so the slot must be added alongside.
+- [ ] **Final-polish: audit the full obligation list + the questions that gate them (user feedback
+      2026-07-02).** Produce a human-readable view of every obligation and the interview branching
+      (which `applies_if` fields / slots drive it) so the branching is easy to follow and review.
+      A generated **ERD isn't the right shape** (this is rules/conditions, not entity relationships);
+      better options: (a) a generated Markdown/CSV table — obligation × the fields its `applies_if`
+      tests, plus severity/source/timing; (b) a decision-tree / flow diagram (Mermaid `flowchart`)
+      from `SLOTS` → derivations → obligations; (c) per-persona "what applies" snapshots. Recommend
+      (a)+(b): both are generatable straight from `SLOTS` + `CATALOG`, kept in sync by codegen. Pairs
+      with the "full deep cross-check" pass (priority #4).
 - [x] **Re-anchor more anchors from actuals — DONE 2026-07-02.** New `ANCHOR_FROM_COMPLETION` map in
       the engine: completing `empadronamiento` fills the `padron_done` anchor and completing
       `residencia` fills `residency_established` (explicit profile dates still win). So marking those

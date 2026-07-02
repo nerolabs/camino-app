@@ -232,7 +232,7 @@ const CATALOG: Obligation[] = [
   { id: "dgt-exam", title: "Spanish driving test (theory + practical)", category: "mobility", severity: "required",
     applies_if: { all: [{ field: "owns_or_drives", op: "eq", value: true }, { not: { field: "nationality_has_dgt_agreement", op: "eq", value: true } }] },
     depends_on: ["residencia"], timing: { kind: "relative_to_event", anchor: "residency_established", offset_days: 183 } },
-  { id: "escolarizacion", title: "Enrol child in school", category: "family", severity: "required",
+  { id: "escolarizacion", title: "Enroll child in school", category: "family", severity: "required",
     applies_if: { field: "has_children", op: "eq", value: true }, depends_on: ["empadronamiento"],
     timing: { kind: "relative_to_obligation", after: "empadronamiento", offset_days: 7 } },
 ];

@@ -267,7 +267,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'convenio-especial',
-    title: 'Enrol in the Convenio Especial to buy into public healthcare — available after 1 year of continuous residence + empadronamiento; monthly premium €60 (under 65) or €157 (65+)',
+    title: 'Enroll in the Convenio Especial to buy into public healthcare — available after 1 year of continuous residence + empadronamiento; monthly premium €60 (under 65) or €157 (65+)',
     category: 'health', severity: 'recommended',
     source: 'official',
     source_url: 'https://www.sanidad.gob.es/servCiudadanos/internacional/convenioEspecial.htm',
@@ -415,7 +415,7 @@ export const CATALOG: Obligation[] = [
   // ── Family ──────────────────────────────────────────────────────────────────
   {
     id: 'escolarizacion',
-    title: 'Enrol your child in school — the ordinary admission window runs in spring (≈March–May) for the September start; arriving off-cycle uses the "fuera de plazo" process',
+    title: 'Enroll your child in school — the ordinary admission window runs in spring (≈March–May) for the September start; arriving off-cycle uses the "fuera de plazo" process',
     category: 'family', severity: 'required',
     source: 'official',
     applies_if: { field: 'has_children', op: 'eq', value: true },

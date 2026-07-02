@@ -46,7 +46,7 @@ const CATALOG: Obligation[] = [
     applies_if:{ all:[{ field:"owns_or_drives", op:"eq", value:true }, { field:"nationality_has_dgt_agreement", op:"eq", value:true }] }, depends_on:["residencia"] },
   { id:"dgt-exam", title:"Spanish driving test", severity:"required",
     applies_if:{ all:[{ field:"owns_or_drives", op:"eq", value:true }, { not:{ field:"nationality_has_dgt_agreement", op:"eq", value:true }}] }, depends_on:["residencia"] },
-  { id:"escolarizacion", title:"Enrol child in school", severity:"required",
+  { id:"escolarizacion", title:"Enroll child in school", severity:"required",
     applies_if:{ field:"has_children", op:"eq", value:true }, depends_on:["empadronamiento"] },
 ];
 
