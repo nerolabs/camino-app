@@ -226,13 +226,16 @@ is strictly required — a normal EAS build works.
 - [x] **B1b — Lola intro (DONE 2026-07-01).** Interview landing now opens with an eyebrow
       ("YOUR ROAD TO SPAIN"), "Hola, I'm Lola," a warm experienced-companion line, and a quieter
       what-happens-next line. Verified live on prod + staging.
-- [ ] **B9 — Lola text-to-speech (NEW).** Speak the intro + each question in a warm woman's voice
-      with a medium Spanish accent speaking English, to make the app feel alive. Aligns with
-      `docs/design/brand.md` "Spoken voice (TTS) — production direction". `expo-speech` (built-in)
-      gives limited voice/accent control; a cloud TTS (ElevenLabs / Azure / Google) with a chosen
-      Spanish-accented-English voice, cached + played via `expo-audio`, gives real warmth. Needs a
-      voice/provider decision + likely a small server route to keep any TTS key server-side. Make it
-      toggleable (accessibility + don't autoplay audio unexpectedly).
+- [x] **B9 — Lola text-to-speech (web) DONE 2026-07-02.** `/api/tts` proxies **ElevenLabs**
+      (key server-side, same hardening as `/api/lola`) → `audio/mpeg`, cached. Client: platform-split
+      `hooks/useLolaVoice` (web plays via `Audio` + in-memory cache; native = no-op stub). Opt-in 🔊
+      toggle next to the mic (off by default — no surprise audio); speaks each new Lola turn.
+      Voice = **Kate 2** (warm, Spanish accent), swappable via `ELEVENLABS_VOICE_ID`. Needs the
+      ElevenLabs **Starter** plan (free tier blocks library voices via API). Verified live: prod +
+      staging return real audio; user confirmed she speaks.
+      - [ ] **Native voice** — expo-audio + `/api/tts` (fast follow; needs a rebuild).
+      - [ ] Optional: speak the intro on the landing (currently the toggle lives in the composer,
+            which appears after "Let's get started").
 
 
 Recommended sequence (rationale in each item): **B1 quick UX/config wins → B7 analytics (time-
