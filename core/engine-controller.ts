@@ -30,6 +30,7 @@ type Timing =
 type Obligation = {
   id: string; title: string; category: Category; severity: Severity;
   source: Source;
+  source_url?: string; // canonical official source, surfaced as a link in the roadmap
   applies_if: Condition; depends_on: string[]; timing: Timing;
 };
 
@@ -47,7 +48,7 @@ export type Progress = { state: 'done'; completedOn?: string; note?: string };
 
 export type Objective = {
   id: string; title: string; category: Category; severity: Severity;
-  source: Source; depends_on: string[];
+  source: Source; source_url?: string; depends_on: string[];
   timing: Resolved; phase: Phase;
   done: boolean; completedOn: Date | null;
 };
@@ -769,7 +770,7 @@ export function buildPlan(p: Record<string, unknown>): Objective[] {
     const pr = progress[o.id];
     return {
       id: o.id, title: o.title, category: o.category, severity: o.severity,
-      source: o.source, depends_on: o.depends_on, timing, phase: phaseOf(timing, arrival),
+      source: o.source, source_url: o.source_url, depends_on: o.depends_on, timing, phase: phaseOf(timing, arrival),
       done: pr?.state === 'done',
       completedOn: pr?.completedOn ? new Date(pr.completedOn) : null,
     };

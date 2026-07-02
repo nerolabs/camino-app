@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput, ActivityIndicator, Platform, Linking } from 'react-native';
 import { askAnthropic } from '@/lib/lola';
 import { palette } from '@/constants/Colors';
 import { useProfile } from '@/core/ProfileContext';
@@ -582,6 +582,11 @@ export default function PlanScreen() {
                     )}
                     <View style={[styles.sourceNote, { borderLeftColor: SOURCE_COLOR[selected.source] }]}>
                       <Text style={styles.sourceNoteText}>{SOURCE_BLURB[selected.source]}</Text>
+                      {selected.source_url && (
+                        <TouchableOpacity onPress={() => Linking.openURL(selected.source_url!)} style={styles.sourceLink}>
+                          <Text style={styles.sourceLinkText}>View the official source →</Text>
+                        </TouchableOpacity>
+                      )}
                     </View>
                   </View>
                 )}
@@ -707,6 +712,8 @@ const styles = StyleSheet.create({
   sourceNote:    { backgroundColor: '#FFFFFF', borderRadius: 8, borderLeftWidth: 3,
                    padding: 12, marginTop: 20 },
   sourceNoteText:{ fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: palette.indigo, lineHeight: 19 },
+  sourceLink:    { marginTop: 8 },
+  sourceLinkText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.cobalt },
 
   cardDone:      { backgroundColor: '#F6F7F3' },
   cardTitleDone: { color: palette.olive },
