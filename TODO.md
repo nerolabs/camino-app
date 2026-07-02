@@ -276,11 +276,16 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       `@sentry/react-native`), a **uptime/health monitor + paging** (Better Stack / Grafana Cloud /
       Pingdom) hitting the site + `/api/lola`, and structured logs. Define health per major feature
       (interview, plan engine, Lola proxy, auth, DB).
-- [ ] **B7 — Product analytics + conversion funnel (time-sensitive — instrument before more testing).**
-      Funnel: home → interview start → interview complete → roadmap. Retention/reuse over days;
-      feature-health: % returning to the roadmap, checking off items, using post-roadmap Lola to
-      drive completion. Recommended: **PostHog** (funnels + retention + session, free tier, web via
-      `posthog-js` + native via `posthog-react-native`). Privacy-respecting; no PII in events.
+- [x] **B7 — Product analytics (web) DONE 2026-07-01.** PostHog (EU, project 214229) via
+      `posthog-js`, `lib/analytics.ts` (native = no-op stub). Live on prod + staging (verified
+      events POST → 200). Events: `interview_started`, `interview_completed`, `roadmap_viewed`,
+      `roadmap_item_completed`, `task_opened`, `task_coach_asked`, `plan_remodelled`; autocapture
+      pageviews; `identify()` on sign-in; person profiles for retention. Key/host in EAS
+      preview+production only (dev sends nothing); every event stamped with `environment`.
+      - [ ] **Native analytics (posthog-react-native)** — fast follow; needs the RN SDK + a rebuild.
+      - [ ] **Build the PostHog insights** — funnel (pageview `/` → interview_started →
+            interview_completed → roadmap_viewed), retention on roadmap_viewed, feature-health
+            (% completing items / using task coach). Filter dashboards to `environment = production`.
 
 ### Content (medium — stub now, refine later)
 - [ ] **B8 — Hidden "how-i-was-built" blog at `/how-i-was-built`.** Unlisted route (direct link
