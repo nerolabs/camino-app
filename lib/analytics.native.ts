@@ -1,7 +1,34 @@
-// Native analytics stub — no-op for now (posthog-react-native is a fast follow). Keeps the same
-// interface as lib/analytics.ts so app code stays platform-agnostic and native builds don't break.
+// Native analytics (iOS/Android) via posthog-react-native. Mirrors lib/analytics.ts so the shared
+// funnel events (interview_started/completed, roadmap_viewed, …) fire identically on native.
+//
+// Key/host come from the EAS environment (preview/production), so a dev build with no key is silent.
+// Every event carries an `environment` super-property, matching web, so dashboards filter to real
+// users. Same PostHog project as web — native events just carry platform context automatically.
+import PostHog from 'posthog-react-native';
+import { APP_ENV } from '@/core/env';
 
-export function initAnalytics() {}
-export function capture(_event: string, _props?: Record<string, unknown>) {}
-export function identify(_userId: string, _props?: Record<string, unknown>) {}
-export function resetAnalytics() {}
+const KEY = process.env.EXPO_PUBLIC_POSTHOG_KEY;
+const HOST = process.env.EXPO_PUBLIC_POSTHOG_HOST ?? 'https://eu.i.posthog.com';
+let posthog: PostHog | null = null;
+
+export function initAnalytics() {
+  if (posthog || !KEY) return;
+  posthog = new PostHog(KEY, {
+    host: HOST,
+    captureAppLifecycleEvents: true, // app opened/backgrounded — native engagement signal
+  });
+  posthog.register({ environment: APP_ENV }); // stamped on every event
+}
+
+// props are JSON-serializable analytics values in practice; cast to satisfy PostHog's JsonType.
+export function capture(event: string, props?: Record<string, unknown>) {
+  posthog?.capture(event, props as Record<string, any>);
+}
+
+export function identify(userId: string, props?: Record<string, unknown>) {
+  posthog?.identify(userId, props as Record<string, any>);
+}
+
+export function resetAnalytics() {
+  posthog?.reset();
+}

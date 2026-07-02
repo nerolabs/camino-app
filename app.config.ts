@@ -62,6 +62,9 @@ const config: ExpoConfig = {
       organization: 'camino-ko',
       project: 'camino',
     }],
+    // Peer of posthog-react-native (device-locale context for native analytics). NOT app i18n —
+    // that's a separate, later effort.
+    'expo-localization',
   ],
   experiments: { typedRoutes: true },
   extra: {
