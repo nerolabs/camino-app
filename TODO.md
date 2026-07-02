@@ -320,14 +320,17 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
 - [~] **B10 — Promote `webinar`→`official` — IN PROGRESS (2026-07-02).** Infra done: `source_url`
       (canonical official link, shown to all users as "View the official source →" in the roadmap
       drawer) + `webinar_url` (**staff-only** button, gated by `isStaff`, to cross-check webinar vs.
-      official — a future Moving To Spain partnership/upsell hook). **Batch 1 promoted 6** (digital
-      certificate, Beckham, empadronamiento, citizenship, permanent residence, ITP) with citations
-      + corrections (Beckham post-2023 scope + Modelo 149; ITP 6–11% regional) — logged in
-      `core/SOURCING.md`. Mix now **32 official / 22 webinar / 1 domain**.
-      - [ ] **Continue the remaining ~22 webinar items** in batches (NIE, apostille, NLV/DNV docs +
-            renewals, tarjeta-sanitaria, bank account, pet-import, property steps, etc.), each with a
-            canonical `source_url`. Advisory items (`tax-planning-consultation`, `exit-tax-return`,
-            `consulate-appointment` soft estimate) likely stay `webinar`/reclassify, not "official".
+      official — a future Moving To Spain partnership/upsell hook). Promoted 13 in earlier batches +
+      re-added 4 backlog items as official. **Mix now 44 official / 15 webinar / 1 domain.**
+      - [x] **Grounding pass DONE (2026-07-02).** Researched all 15 remaining webinar items against
+            official sources and **promoted 9** to `official` with `source_url` + title corrections
+            (community-fees→LPH art.9; land-registry→corrected to *voluntary*/recommended;
+            nlv-renewal→corrected window to 60-before/90-after; apostille→Hague/issuing-country;
+            dnv-renewal→Startups Law; completion-deed-notary; student-visa-insurance; nlv-letter-of-
+            intent; nlv-non-work-declaration). **Mix now 52 official / 6 webinar / 1 domain.** The 6
+            remaining are advisory/practical, not statutory (choose-visa-type, consulate-appointment,
+            exit-tax-return, tax-planning-consultation, spanish-bank-account, property-legal-due-
+            diligence) — kept `webinar` honestly. See `core/SOURCING.md` "B10 grounding pass".
       - [x] **Populate `webinar_url` — DONE (2026-07-02).** Re-fetched all 16 transcripts (yt-dlp
             + Chrome cookies), read each, and mapped **43/55 obligations** to their topic-dedicated
             webinar with transcript-verified timestamps (option b, evidence-based). Kept as
@@ -388,10 +391,11 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       direct `relative_to_obligation` steps re-flow from a real completion date.
 - [ ] **Capture `residency_established` as a known-later field** — let users update it post-move
       so residency-anchored items become firm instead of estimated. (Needs a post-move edit flow.)
-- [ ] **Re-add backlog items once sourced** — `sworn-translation`, `convenio-especial`,
-      `modelo-390`, `citizenship-jura` (see `core/OBLIGATIONS_BACKLOG.md`).
-- [ ] **More webinars** (when available) — health insurance, schooling, banking detail — toward
-      the ~100-obligation target.
+- [x] ~~**Re-add backlog items once sourced**~~ — **DONE 2026-07-02.** All 4 (`sworn-translation`,
+      `convenio-especial`, `modelo-390`, `citizenship-jura`) verified + re-added as `official`.
+- [x] ~~**More webinars / ~100-obligation target**~~ — **struck 2026-07-02.** No more webinars are
+      coming, so 100+ is no longer a requirement. The catalog is scoped to what we can source
+      honestly (59 obligations, mostly official). Breadth grows only if new primary sources appear.
 
 ## 🐞 Known issues
 

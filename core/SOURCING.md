@@ -83,8 +83,43 @@ estimates — not specific legal figures needing a cite: `choose-visa-type`,
 
 ## Catalog source mix
 
-After promoting `autonomo-social-security` → `official`, the catalog stands at
-**28 `webinar` / 26 `official`** (0 `domain` — the audit queue is empty).
+**Current (2026-07-02, after the B10 grounding pass): 52 `official` / 6 `webinar` / 1 `domain`.**
+(Historical note: an earlier milestone read 28 `webinar` / 26 `official` after promoting
+`autonomo-social-security`.)
+
+## B10 grounding pass — 9 promoted `webinar` → `official` (2026-07-02)
+
+Researched each remaining webinar obligation against official Spanish sources and promoted the
+9 that map to a citable statutory/procedural rule; corrected details in the title where the
+webinar draft was imprecise:
+
+- **`community-fees`** → BOE, Ley 49/1960 de Propiedad Horizontal, art. 9(1)(e) (statutory duty of
+  every owner to pay comunidad fees). `https://www.boe.es/buscar/act.php?id=BOE-A-1960-10906`
+- **`completion-deed-notary`** → administración.gob.es (Notarías y Registros). The notarial
+  *escritura pública* is the standard legal formalisation of the sale; mandatory with a mortgage.
+- **`land-registry-registration`** → same admin.gob.es page. **Correction:** registration is
+  **voluntary** in Spain (mandatory only with a mortgage) → severity `required` → **`recommended`**,
+  title now says "technically voluntary… but strongly recommended (court-protected title)".
+- **`apostille-documents`** → Ministerio de Justicia, Legalización única / Apostilla de la Haya
+  (1961 Hague Convention). Nuance added: each document is apostilled **in its issuing country**.
+- **`nlv-renewal`** → Min. de Inclusión, "Hoja 7". **Correction:** window is **60 days before
+  expiry → up to 90 days after** (late = minor infraction, fine ≤ €500), not just "60 days before".
+- **`dnv-renewal`** → Min. de Inclusión / UGE-CE, Startups Law (Ley 28/2022): renewable for 2-year
+  periods while qualifying conditions hold.
+- **`student-visa-health-insurance`** → national student-visa requirement (exteriores): insurer
+  authorised in Spain, SNS-equivalent cover, no copays/waiting, repatriation. Promoted to
+  `official`; no clean canonical URL attached (documented here instead — same pattern as
+  `nlv-health-insurance`).
+- **`nlv-letter-of-intent`** and **`nlv-non-work-declaration`** → Min. de Inclusión, "Hoja 6"
+  (initial NLV authorisation requirements). `…/w/autorizacion-inicial-de-residencia-temporal-no-lucrativa`
+
+**Left as `webinar` on purpose (6)** — these are recommendations or practical steps, not Spanish
+statutory obligations, so there is no `.gob.es` law to cite: `choose-visa-type` (orientation),
+`consulate-appointment` (the "8–16 weeks" lead time is a soft, country-specific estimate),
+`exit-tax-return` (depends on the *home* country's tax authority), `tax-planning-consultation`
+(professional advice), `spanish-bank-account` (practical, not a legal duty),
+`property-legal-due-diligence` (recommended professional advice). Honest to keep them flagged
+`webinar` rather than dress them up as official.
 
 ## `tarjeta-sanitaria` applicability (2026-06-30)
 
