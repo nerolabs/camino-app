@@ -139,3 +139,22 @@ soft estimates / advisory / process items to work through or reclassify next.
 
 Webinar YouTube corpus captured in `docs/webinar-sources.md` (16 videos); no per-obligation mapping
 yet — needed to populate the staff-only `webinar_url`.
+
+## Webinar → obligation mapping (2026-07-02, batch 1)
+
+Re-unpacked the transcripts (yt-dlp + Chrome cookies). Got 4/16 videos before YouTube throttled
+(intermittent — the rest are fetchable incrementally). Titles recovered:
+- 8zyT1TG9S5E — "Buying a Home in Spain"
+- 2A19YnqiO4g — "Mistakes Americans Make in Spain"
+- 9RUa0LsfFCQ — "Living in Madrid"
+- C_UxMIqTd0Q — "Living in Malaga"
+
+**Mapped (batch 1):** the property-purchase obligations → "Buying a Home in Spain" (8zyT), with
+timestamps found in the transcript (bank account 3:11, community fees 3:37, notary 4:43):
+`spanish-bank-account`, `community-fees`, `completion-deed-notary`, `property-legal-due-diligence`,
+`land-registry-registration`, and `property-transfer-tax` (kept as **supplementary** — it already
+has an official `source_url`, per user: webinar stays even when official). `webinar_url` is
+staff-only for now.
+
+Remaining: fetch the other 12 transcripts incrementally, read for accurate per-obligation
+attribution + timestamps, and populate the rest.

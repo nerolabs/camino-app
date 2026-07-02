@@ -502,6 +502,7 @@ export const CATALOG: Obligation[] = [
     title: 'Open a Spanish bank account (can be done remotely as a non-resident before arrival)',
     category: 'banking', severity: 'required',
     source: 'webinar',
+    webinar_url: 'https://www.youtube.com/watch?v=8zyT1TG9S5E&t=191', // "Buying a Home in Spain" — bank account
     applies_if: NON_EU,
     depends_on: ['nie'],
     timing: { kind: 'asap' },
@@ -660,6 +661,7 @@ export const CATALOG: Obligation[] = [
     title: 'Engage a Spanish property lawyer for due diligence (title search, debts, planning, habitation licence)',
     category: 'property', severity: 'required',
     source: 'webinar',
+    webinar_url: 'https://www.youtube.com/watch?v=8zyT1TG9S5E', // "Buying a Home in Spain"
     applies_if: { field: 'owns_property_in_spain', op: 'eq', value: true },
     depends_on: ['nie'],
     timing: { kind: 'asap' },
@@ -669,6 +671,7 @@ export const CATALOG: Obligation[] = [
     title: 'Sign completion deed (escritura de compraventa) before a notary and pay the balance',
     category: 'property', severity: 'required',
     source: 'webinar',
+    webinar_url: 'https://www.youtube.com/watch?v=8zyT1TG9S5E&t=283', // "Buying a Home in Spain" — signing before a notary
     applies_if: { field: 'owns_property_in_spain', op: 'eq', value: true },
     depends_on: ['property-legal-due-diligence'],
     timing: { kind: 'relative_to_event', anchor: 'property_purchase', offset_days: 0 },
@@ -678,6 +681,7 @@ export const CATALOG: Obligation[] = [
     title: 'Register the escritura at the Land Registry (Registro de la Propiedad)',
     category: 'property', severity: 'required',
     source: 'webinar',
+    webinar_url: 'https://www.youtube.com/watch?v=8zyT1TG9S5E', // "Buying a Home in Spain"
     applies_if: { field: 'owns_property_in_spain', op: 'eq', value: true },
     depends_on: ['completion-deed-notary'],
     timing: { kind: 'relative_to_event', anchor: 'property_purchase', offset_days: 30 },
@@ -687,6 +691,7 @@ export const CATALOG: Obligation[] = [
     title: 'Pay property transfer tax (ITP) on a resale property — roughly 6–11% of the price, set by each autonomous community',
     category: 'tax', severity: 'penalty',
     source: 'official',
+    webinar_url: 'https://www.youtube.com/watch?v=8zyT1TG9S5E', // supplementary: "Buying a Home in Spain"
     applies_if: { field: 'owns_property_in_spain', op: 'eq', value: true },
     depends_on: ['completion-deed-notary'],
     timing: { kind: 'relative_to_event', anchor: 'property_purchase', offset_days: 30 },
@@ -705,6 +710,7 @@ export const CATALOG: Obligation[] = [
     title: 'Pay community of owners (comunidad de propietarios) fees for shared building maintenance',
     category: 'property', severity: 'required',
     source: 'webinar',
+    webinar_url: 'https://www.youtube.com/watch?v=8zyT1TG9S5E&t=217', // "Buying a Home in Spain" — community fees
     applies_if: { field: 'owns_property_in_spain', op: 'eq', value: true },
     depends_on: ['completion-deed-notary'],
     timing: { kind: 'absolute_recurring', rrule: 'FREQ=YEARLY;BYMONTH=12' },
