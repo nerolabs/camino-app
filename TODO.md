@@ -312,10 +312,10 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       - [ ] **Native** — `@sentry/react-native` + its Expo config plugin (crashes, app-start,
             navigation perf). Needs `SENTRY_AUTH_TOKEN` (secret) in EAS for source-map upload and a
             native rebuild to go live. (`lib/monitoring.native.ts` is a no-op stub until then.)
-      - [ ] **Alerting / paging + uptime** — configure Sentry alert rules (currently "high priority
-            issues" default), and add an uptime monitor hitting the site + `/api/lola` (Better Stack /
-            Grafana Cloud / Sentry Uptime). Optional: backend latency tracing (transactions), not just
-            errors. See `docs/MONITORING.md`.
+      - [x] **Alerting + uptime DONE 2026-07-02.** Issue alert "high priority issues" → email
+            (verified: fired on the test error). **Sentry Uptime monitor** on `https://getcamino.app`
+            (GET every 1 min, environment=production, 3 consecutive fails → issue → email). Downtime
+            now pages. Optional later: backend latency tracing (transactions), not just errors.
 - [x] **B7 — Product analytics (web) DONE 2026-07-01.** PostHog (EU, project 214229) via
       `posthog-js`, `lib/analytics.ts` (native = no-op stub). Live on prod + staging (verified
       events POST → 200). Events: `interview_started`, `interview_completed`, `roadmap_viewed`,
