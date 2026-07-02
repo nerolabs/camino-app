@@ -8,6 +8,7 @@ import { saveProfile as saveProfileDb } from '@/core/profileDb';
 import { SLOTS, derive, type Profile } from '@/core/interview-controller';
 import { buildPlan, type Objective, type Phase, type Progress } from '@/core/engine-controller';
 import NavBar from '@/components/NavBar';
+import Footer from '@/components/Footer';
 import { capture } from '@/lib/analytics';
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -264,7 +265,6 @@ export default function PlanScreen() {
   const [thinking, setThinking] = useState(false);
   const [changeNote, setChangeNote] = useState<{ title: string; body: string } | null>(null);
   const [dateOpen, setDateOpen] = useState(false);
-  const [detailsOpen, setDetailsOpen] = useState(false);
   const [taskChat, setTaskChat] = useState<{ role: 'lola' | 'user'; text: string }[]>([]);
   const [taskInput, setTaskInput] = useState('');
   const [taskThinking, setTaskThinking] = useState(false);
@@ -277,7 +277,6 @@ export default function PlanScreen() {
     setSelected(obj);
     setDateInput(''); setDateOpen(false);
     setChangeOpen(false); setChangeText('');
-    setDetailsOpen(false);
     setTaskInput(''); setTaskChat([]);
     activeTaskRef.current = obj.id;
     setTaskThinking(true);
@@ -347,14 +346,18 @@ export default function PlanScreen() {
     // Signed in but no profile in memory yet = still hydrating (SessionSync is fetching it after a
     // reload). Show a loading note instead of the "no roadmap" empty state, which would be wrong.
     return (
-      <View style={styles.emptyWrap}>
-        <Text style={styles.emptyHeading}>{user ? 'Loading your roadmap…' : 'No roadmap yet'}</Text>
-        <Text style={styles.emptyBody}>
-          {user
-            ? 'One moment while we fetch your plan.'
-            : 'Complete the interview and your roadmap will appear here.'}
-        </Text>
-      </View>
+      <ScrollView style={styles.scroll} contentContainerStyle={{ flexGrow: 1 }}>
+        <NavBar />
+        <View style={styles.emptyWrap}>
+          <Text style={styles.emptyHeading}>{user ? 'Loading your roadmap…' : 'No roadmap yet'}</Text>
+          <Text style={styles.emptyBody}>
+            {user
+              ? 'One moment while we fetch your plan.'
+              : 'Complete the interview and your roadmap will appear here.'}
+          </Text>
+        </View>
+        <Footer />
+      </ScrollView>
     );
   }
 
@@ -470,6 +473,7 @@ export default function PlanScreen() {
           </View>
         ))}
       </View>
+      <Footer />
     </ScrollView>
 
     <Modal
@@ -491,10 +495,24 @@ export default function PlanScreen() {
                 <Text style={styles.sheetTitle}>{selected.title}</Text>
                 <View style={styles.sheetPills}>
                   <View style={styles.pill}><Text style={[styles.pillText, { color: selected.done ? palette.olive : palette.cobalt }]}>{selected.done ? completionLine(selected) : formatTiming(selected)}</Text></View>
-                  <View style={styles.pill}>
-                    <View style={[styles.pillDot, { backgroundColor: SOURCE_COLOR[selected.source] }]} />
-                    <Text style={styles.pillText}>{SOURCE_SHORT[selected.source]}</Text>
-                  </View>
+                  {/* Source pill — tappable when there's a canonical source to open (new tab on web). */}
+                  {selected.source_url ? (
+                    <TouchableOpacity style={styles.pillLink} onPress={() => openExternal(selected.source_url!)}>
+                      <View style={[styles.pillDot, { backgroundColor: SOURCE_COLOR[selected.source] }]} />
+                      <Text style={styles.pillLinkText}>{SOURCE_SHORT[selected.source]} ↗</Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <View style={styles.pill}>
+                      <View style={[styles.pillDot, { backgroundColor: SOURCE_COLOR[selected.source] }]} />
+                      <Text style={styles.pillText}>{SOURCE_SHORT[selected.source]}</Text>
+                    </View>
+                  )}
+                  {/* Staff-only: corresponding webinar button — opens the YouTube source at its timestamp. */}
+                  {isStaff && selected.webinar_url && (
+                    <TouchableOpacity style={styles.pillWebinar} onPress={() => openExternal(selected.webinar_url!)}>
+                      <Text style={styles.pillWebinarText}>▶ webinar ↗</Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
 
                 {/* ── Lola task coach (the living element) ───────────────── */}
@@ -548,10 +566,6 @@ export default function PlanScreen() {
                       </TouchableOpacity>
                     </>
                   )}
-                  <View style={{ flex: 1 }} />
-                  <TouchableOpacity onPress={() => setDetailsOpen(v => !v)}>
-                    <Text style={styles.linkBtn}>{detailsOpen ? 'Hide details' : 'Details'}</Text>
-                  </TouchableOpacity>
                 </View>
 
                 {dateOpen && !selected.done && (
@@ -600,9 +614,8 @@ export default function PlanScreen() {
                   </View>
                 )}
 
-                {/* ── Collapsible details ────────────────────────────────── */}
-                {detailsOpen && (
-                  <View style={styles.detailsBox}>
+                {/* ── Step details (timing, prerequisites, source) — always shown ── */}
+                <View style={styles.detailsBox}>
                     <Text style={styles.sheetSectionLabel}>WHEN</Text>
                     <Text style={styles.sheetTiming}>{formatTiming(selected)}</Text>
                     <Text style={styles.sheetBody}>{timingDetail(selected)}</Text>
@@ -612,22 +625,12 @@ export default function PlanScreen() {
                         {deps.map((d, i) => (<Text key={i} style={styles.sheetDep}>• {d}</Text>))}
                       </>
                     )}
+                    {/* Explanation of the source tag. The actionable links live in the header pills
+                        (official / webinar), so they're visible without opening details. */}
                     <View style={[styles.sourceNote, { borderLeftColor: SOURCE_COLOR[selected.source] }]}>
                       <Text style={styles.sourceNoteText}>{SOURCE_BLURB[selected.source]}</Text>
-                      {selected.source_url && (
-                        <TouchableOpacity onPress={() => openExternal(selected.source_url!)} style={styles.sourceLink}>
-                          <Text style={styles.sourceLinkText}>View the official source →</Text>
-                        </TouchableOpacity>
-                      )}
-                      {/* Staff-only: cross-check the source against the original webinar (with timestamp). Hidden from users. */}
-                      {isStaff && selected.webinar_url && (
-                        <TouchableOpacity onPress={() => openExternal(selected.webinar_url!)} style={styles.sourceLink}>
-                          <Text style={styles.staffLinkText}>▶ Webinar source (staff only)</Text>
-                        </TouchableOpacity>
-                      )}
                     </View>
-                  </View>
-                )}
+                </View>
 
                 <TouchableOpacity style={styles.sheetCloseLink} onPress={() => setSelected(null)}>
                   <Text style={styles.sheetCloseLinkText}>Close</Text>
@@ -746,6 +749,12 @@ const styles = StyleSheet.create({
                    borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5 },
   pillDot:       { width: 6, height: 6, borderRadius: 3 },
   pillText:      { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.muted },
+  pillLink:      { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: '#EEF3FA',
+                   borderWidth: 1, borderColor: palette.cobalt, borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5 },
+  pillLinkText:  { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, color: palette.cobalt },
+  pillWebinar:   { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: '#FBF3E2',
+                   borderWidth: 1, borderColor: palette.amber, borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5 },
+  pillWebinarText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, color: palette.amber },
   sheetSectionLabel: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, color: palette.muted,
                        letterSpacing: 1.1, marginTop: 18, marginBottom: 6 },
   sheetTiming:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cobalt, marginBottom: 4 },
@@ -754,9 +763,6 @@ const styles = StyleSheet.create({
   sourceNote:    { backgroundColor: '#FFFFFF', borderRadius: 8, borderLeftWidth: 3,
                    padding: 12, marginTop: 20 },
   sourceNoteText:{ fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: palette.indigo, lineHeight: 19 },
-  sourceLink:    { marginTop: 8 },
-  sourceLinkText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.cobalt },
-  staffLinkText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.amber },
 
   cardDone:      { backgroundColor: '#F6F7F3' },
   cardTitleDone: { color: palette.olive },

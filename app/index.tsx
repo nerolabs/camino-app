@@ -7,6 +7,7 @@ import {
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
 import NavBar from '@/components/NavBar';
+import Footer from '@/components/Footer';
 
 const PHOTOS = [
   { src: require('@/assets/images/spain-gothic-quarter-barcelona.jpg'), label: 'Gothic Quarter, Barcelona' },
@@ -120,11 +121,7 @@ export default function LandingPage() {
         </Text>
       </View>
 
-      {/* ── Footer ──────────────────────────────────────── */}
-      <View style={styles.footer}>
-        <Text style={styles.footerLogo}>Camino</Text>
-        <Text style={styles.footerNote}>Guidance only — not legal or tax advice.</Text>
-      </View>
+      <Footer />
 
     </ScrollView>
   );
@@ -159,9 +156,4 @@ const styles = StyleSheet.create({
   // Strip
   strip:     { backgroundColor: palette.cobalt, paddingVertical: 14, paddingHorizontal: 24 },
   stripText: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: 'rgba(255,255,255,0.8)', textAlign: 'center' },
-
-  // Footer
-  footer:     { backgroundColor: palette.indigo, paddingVertical: 32, paddingHorizontal: 24, alignItems: 'center', gap: 8 },
-  footerLogo: { fontFamily: 'Fraunces_600SemiBold', fontSize: 18, color: palette.cal },
-  footerNote: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: 'rgba(251,250,247,0.5)' },
 });
