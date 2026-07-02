@@ -6,9 +6,6 @@ import {
 } from 'react-native';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
-import { useProfile } from '@/core/ProfileContext';
-import { loadProfileRow } from '@/core/profileDb';
-import { derive } from '@/core/interview-controller';
 import NavBar from '@/components/NavBar';
 
 const PHOTOS = [
@@ -83,15 +80,8 @@ export default function LandingPage() {
   const width = Platform.OS === 'web' ? webWidth : rnWidth;
   const wide = width == null ? true : width >= 768;
   const { user, signInWithGoogle, signOut } = useAuth();
-  const { setProfile, setIsStaff } = useProfile();
-
-  useEffect(() => {
-    if (!user) { setIsStaff(false); return; }
-    loadProfileRow(user.id).then(({ answers, isStaff }) => {
-      setIsStaff(isStaff);
-      if (answers) { derive(answers); setProfile(answers); }
-    });
-  }, [user]);
+  // Profile + staff flag are loaded at the root (SessionSync in app/_layout.tsx), so they're
+  // available on every route and survive reloads — no per-screen loading here.
 
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>

@@ -175,6 +175,16 @@ const SEV_BLURB: Record<string, string> = {
   info:        'Informational — a milestone to be aware of.',
 };
 
+// Open an external URL. On web, a new tab (so the user keeps their roadmap open); Linking.openURL
+// would navigate the current tab away. On native, hand off to the OS browser.
+function openExternal(url: string) {
+  if (Platform.OS === 'web') {
+    if (typeof window !== 'undefined') window.open(url, '_blank', 'noopener,noreferrer');
+  } else {
+    Linking.openURL(url);
+  }
+}
+
 const SOURCE_SHORT: Record<string, string> = {
   official:       'official',
   recommendation: 'recommended',
@@ -334,10 +344,16 @@ export default function PlanScreen() {
   }
 
   if (!profile) {
+    // Signed in but no profile in memory yet = still hydrating (SessionSync is fetching it after a
+    // reload). Show a loading note instead of the "no roadmap" empty state, which would be wrong.
     return (
       <View style={styles.emptyWrap}>
-        <Text style={styles.emptyHeading}>No roadmap yet</Text>
-        <Text style={styles.emptyBody}>Complete the interview and your roadmap will appear here.</Text>
+        <Text style={styles.emptyHeading}>{user ? 'Loading your roadmap…' : 'No roadmap yet'}</Text>
+        <Text style={styles.emptyBody}>
+          {user
+            ? 'One moment while we fetch your plan.'
+            : 'Complete the interview and your roadmap will appear here.'}
+        </Text>
       </View>
     );
   }
@@ -599,13 +615,13 @@ export default function PlanScreen() {
                     <View style={[styles.sourceNote, { borderLeftColor: SOURCE_COLOR[selected.source] }]}>
                       <Text style={styles.sourceNoteText}>{SOURCE_BLURB[selected.source]}</Text>
                       {selected.source_url && (
-                        <TouchableOpacity onPress={() => Linking.openURL(selected.source_url!)} style={styles.sourceLink}>
+                        <TouchableOpacity onPress={() => openExternal(selected.source_url!)} style={styles.sourceLink}>
                           <Text style={styles.sourceLinkText}>View the official source →</Text>
                         </TouchableOpacity>
                       )}
                       {/* Staff-only: cross-check the source against the original webinar (with timestamp). Hidden from users. */}
                       {isStaff && selected.webinar_url && (
-                        <TouchableOpacity onPress={() => Linking.openURL(selected.webinar_url!)} style={styles.sourceLink}>
+                        <TouchableOpacity onPress={() => openExternal(selected.webinar_url!)} style={styles.sourceLink}>
                           <Text style={styles.staffLinkText}>▶ Webinar source (staff only)</Text>
                         </TouchableOpacity>
                       )}
