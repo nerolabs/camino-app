@@ -253,11 +253,15 @@ is strictly required — a normal EAS build works.
       `hooks/useLolaVoice` (web plays via `Audio` + in-memory cache; native = no-op stub). Opt-in 🔊
       toggle next to the mic (off by default — no surprise audio); speaks each new Lola turn.
       Voice = **Kate 2** (warm, Spanish accent), swappable via `ELEVENLABS_VOICE_ID`. Needs the
-      ElevenLabs **Starter** plan (free tier blocks library voices via API). Verified live: prod +
-      staging return real audio; user confirmed she speaks.
+      ElevenLabs **Starter** plan (free tier blocks library voices via API).
+      - [x] **Autoplay DONE 2026-07-02 (user-confirmed "works!").** Rewrote `useLolaVoice` to play via
+            the **Web Audio API** (create + `AudioContext.resume()` inside the user gesture, then
+            fetch→`decodeAudioData`→`BufferSource`) — the old `new Audio().play()` was blocked by the
+            autoplay policy because the clip plays after the async fetch. Voice now **on by default**
+            (mute persists as `'0'`) and unlocks on the "Let's get started" click, so Lola speaks with
+            no separate "sound on" tap. Moved the toggle out of the composer to a **"🔊 Voice on/off"
+            pill** under the nav (composer holds only input/mic/send).
       - [ ] **Native voice** — expo-audio + `/api/tts` (fast follow; needs a rebuild).
-      - [ ] Optional: speak the intro on the landing (currently the toggle lives in the composer,
-            which appears after "Let's get started").
 
 
 Recommended sequence (rationale in each item): **B1 quick UX/config wins → B7 analytics (time-
