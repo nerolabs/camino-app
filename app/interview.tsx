@@ -14,6 +14,7 @@ import { saveProfile as saveProfileDb } from '@/core/profileDb';
 import { TEST_PERSONAS, type Persona } from '@/core/test-personas';
 import { askAnthropic } from '@/lib/lola';
 import { useDictation } from '@/hooks/useDictation';
+import { useLolaVoice } from '@/hooks/useLolaVoice';
 import { capture } from '@/lib/analytics';
 
 type Turn = { role: 'lola' | 'user'; text: string };
@@ -137,6 +138,14 @@ export default function InterviewScreen() {
   // Voice dictation — web uses the browser SpeechRecognition API, native uses
   // expo-speech-recognition (platform-split in hooks/useDictation). Streams into the input.
   const dictation = useDictation(setInput);
+  // Lola's spoken voice (web /api/tts → ElevenLabs). Off by default; speaks new Lola turns.
+  const voice = useLolaVoice();
+
+  // Speak each new Lola message when voice is on (skips the dev-persona marker).
+  useEffect(() => {
+    const last = turns[turns.length - 1];
+    if (last?.role === 'lola' && !last.text.startsWith('Test persona:')) voice.speak(last.text);
+  }, [turns, voice.speak]);
 
   // Auto-focus the answer box each time a new question is ready, so the user can just
   // start typing (or dictating) without clicking into the field first.
@@ -342,6 +351,15 @@ export default function InterviewScreen() {
                 returnKeyType="send"
                 editable={!loading}
               />
+              {voice.supported && (
+                <TouchableOpacity
+                  style={[styles.micBtn, voice.enabled && styles.micBtnActive]}
+                  onPress={voice.toggle}
+                  accessibilityLabel={voice.enabled ? 'Mute Lola’s voice' : 'Hear Lola speak'}
+                >
+                  <Text style={[styles.micIcon, voice.enabled && styles.micIconActive]}>{voice.enabled ? '🔊' : '🔈'}</Text>
+                </TouchableOpacity>
+              )}
               {dictation.supported && (
                 <TouchableOpacity
                   style={[styles.micBtn, dictation.listening && styles.micBtnActive]}
