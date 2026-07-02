@@ -295,6 +295,17 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             /etc. become selectable once real usage fires them (or complete one full interview to
             seed them). Verified events reach PostHog EU (POST → 200). Finish the funnel then.
 
+### Catalog grounding (ongoing, high-value)
+- [ ] **B10 — Promote `webinar`-sourced obligations to `official` (2026-07-02 feedback).** Webinars
+      were great for *ideation*; researching each obligation against official Spanish government
+      sources and flipping it to `source: 'official'` (with corrections) strengthens the app's
+      credibility and effectiveness. This is the same sourcing pass already done for the 14 `domain`
+      items — extend it to the ~29 remaining `webinar` items. For each: verify the claim
+      (deadlines/costs/laws) against sede.agenciatributaria / extranjería / official portals, correct
+      anything wrong, log the citation in `core/SOURCING.md`, and update the `source` tag. Do it in
+      batches; anything unverifiable → `OBLIGATIONS_BACKLOG.md`, never guess (invariant 3). Track the
+      catalog source mix as it shifts toward all-official.
+
 ### Content (medium — stub now, refine later)
 - [x] **B8 — Hidden "how-i-was-built" blog (DONE 2026-07-02, first pass).** `app/how-i-was-built.tsx`,
       unlisted (not in the NavBar; direct link only) — live at `getcamino.app/how-i-was-built`.
