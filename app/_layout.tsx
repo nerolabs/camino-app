@@ -37,6 +37,7 @@ export default function RootLayout() {
             <Stack.Screen name="how-it-works" />
             <Stack.Screen name="interview" />
             <Stack.Screen name="plan" />
+            <Stack.Screen name="how-i-was-built" />{/* unlisted: direct link only, not in nav */}
           </Stack>
         </ProfileProvider>
       </AuthProvider>
