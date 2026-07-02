@@ -333,12 +333,28 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             webinar with transcript-verified timestamps (option b, evidence-based). Kept as
             supplementary even where `source_url` exists. 12 unmapped = tax-form technicalities +
             admin items not covered specifically enough. See `core/SOURCING.md` "batch 2".
-- [ ] **B11 — Repo structure: `camino/` vs `camino-app/` (2026-07-02 question).** Two dirs exist —
-      likely `camino/` = project memory/docs (the canonical CLAUDE.md, design thesis, invariants)
-      and `camino-app/` = the Expo app code, from starting in desktop Claude then moving to the CLI.
-      Decide: keep separate (docs-brain vs code) or fold `camino/`'s docs into `camino-app/docs` and
-      deprecate one. **Investigate what's in `../camino/` and recommend before merging/deleting
-      anything** (don't delete a docs repo blindly). Webinars
+- [~] **B11 — Repo structure: `camino/` vs `camino-app/` — INVESTIGATED (2026-07-02), awaiting decision.**
+      Findings: two separate GitHub repos. `nerolabs/camino` (`../camino/`) is the original
+      **design-seed/thesis repo**, frozen since Jun 30 ("skeleton + brand identity"): CLAUDE.md
+      (thesis + four invariants), a 257-line `core/engine.ts` walking skeleton (~7 obligations) +
+      `interview.ts`, `design/` (Lola persona, report prototype), `docs/BUILD.md`. `nerolabs/camino-app`
+      (this repo) is the **live product** (875-line engine, 59 obligations, full Expo app, active today).
+      **Three facts that matter:** (1) camino/'s `design/*` + `docs/BUILD.md` are **byte-identical
+      copies already present in camino-app** → redundant. (2) camino/`core/engine.ts` is a **stale
+      ancestor** of `core/engine-controller.ts` → risk of editing the wrong engine. (3) The ONLY
+      load-bearing dependency is `camino-app/CLAUDE.md` line 7 pointing agents to `../camino/CLAUDE.md`
+      as "canonical project memory" — **and that file is stale/misleading** ("Status: walking skeleton
+      (pass 1)… ~7 obligations. The native app is not scaffolded yet — immediate next task"). All false now.
+      **Recommendation: keep the repos separate but fix the staleness (don't delete anything).**
+      (a) Trim `camino/CLAUDE.md` to the timeless thesis + invariants; replace the stale "Status" /
+      "Immediate next task" sections with a one-liner → "current state lives in camino-app/HANDOFF.md".
+      (b) Add a "SUPERSEDED — see camino-app/core/engine-controller.ts" banner to camino/`core/engine.ts`
+      + `interview.ts` (or move them to `camino/archive/`). **Alternative:** fold the thesis into
+      `camino-app/docs/THESIS.md`, stop pointing at `../camino`, archive the `nerolabs/camino` repo
+      (cleaner single source of truth, but touches the canonical-memory pointer — bigger change).
+      **Awaiting user's pick before editing the other repo.**
+      ---
+      Old note (still valid, unrelated to structure): webinars
       were great for *ideation*; researching each obligation against official Spanish government
       sources and flipping it to `source: 'official'` (with corrections) strengthens the app's
       credibility and effectiveness. This is the same sourcing pass already done for the 14 `domain`
