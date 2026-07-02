@@ -251,12 +251,12 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       `app/interview.tsx` (NOT in the chat box) — the road to Spain is easier with an experienced
       friend; her name is Lola — then start the interview. Keep it tight (invariant: no invented
       claims; Lola stays a guide, defers specifics to a gestor).
-- [ ] **B2 — App icon from the brand mark (APPROVED by user 2026-07-01).** Replace the placeholder
-      `assets/images/icon.png` with the Camino "one star, two hosts" mark (`docs/design/brand.md`,
-      "The mark"). Claude can't design a raster from scratch, so plan: build the mark as an **SVG**
-      from the brand palette + geometry, render it to the required PNGs (1024 icon, adaptive-icon
-      foreground, splash, favicon) via a small script (sharp/resvg), and wire into app.config.ts.
-      Show the user the SVG for approval before shipping in a build.
+- [x] **B2 — App icon from the brand mark (DONE 2026-07-01).** White 8-pointed azulejo compass-star
+      on a cobalt tile with an amber waypoint dot. `scripts/gen-icon.mjs` renders the full set from
+      one SVG (`assets/images/icon-source.svg`): iOS/store icon (flattened opaque — Apple rejects
+      alpha), Android adaptive foreground/background(cobalt)/monochrome, splash, favicon. User-approved
+      preview (`docs/design/icon-preview.*`). Favicon live on web; icon in TestFlight **build 7**.
+      Regenerate anytime with `node scripts/gen-icon.mjs`.
 
 ### Catalog / engine (medium)
 - [ ] **B4 — "Where to live in Spain" scouting workstream (NEW obligation).** Many users don't know
