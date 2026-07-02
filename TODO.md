@@ -25,8 +25,11 @@ Last updated: 2026-07-01.
    becomes user-facing content with a potential **MovingToSpain.com** partnership. The 12 unmapped
    are tax-form technicalities + admin items the webinars don't cover specifically enough to cite.
    See `core/SOURCING.md` "batch 2". **→ Next active item is #3.**
-3. **Re-add backlog obligations** (`core/OBLIGATIONS_BACKLOG.md`: `sworn-translation`,
-   `convenio-especial`, `modelo-390`, `citizenship-jura`) once sourced — **second priority.**
+3. ~~**Re-add backlog obligations.**~~ **DONE (2026-07-02).** All 4 (`sworn-translation`,
+   `convenio-especial`, `modelo-390`, `citizenship-jura`) verified against official `.gob.es`
+   sources (with detail corrections) and re-added as `source: 'official'` + `source_url`.
+   Catalog **55 → 59** (44 official / 15 webinar). Smoke-tested in `buildPlan` — no cycles.
+   See `core/SOURCING.md` "Backlog re-add". **→ Next active item is #4 (deep cross-check).**
 4. **Full deep cross-check / testing pass of ALL obligations** — **top priority, but only AFTER the
    webinar content is captured to obligations.** Obligations are still changing, so this final
    verification pass is saved for near the end (source accuracy, dates, links, webinar↔official).

@@ -189,3 +189,30 @@ Total: **43/55 obligations** now carry a supplementary `webinar_url`. The 12 lef
 tax-form technicalities (modelo-030/100/130/303/200, ibi-property-tax, nonresident-property-tax) and
 admin items (residencia, digital-certificate, escolarizacion, family-reunification,
 permanent-residence) that the webinars don't cover with enough specificity to cite honestly.
+
+## Backlog re-add — 4 obligations restored with official sources (2026-07-02)
+
+The four obligations pulled to `OBLIGATIONS_BACKLOG.md` on 2026-06-30 (unverified domain knowledge)
+were each verified against an official `.gob.es` source and re-added to the live catalog as
+`source: 'official'` with a `source_url`. Catalog grows **55 → 59** (44 official / 15 webinar).
+
+- **`sworn-translation`** — MAEC:
+  `https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Traductores-Interpretes-Jurados.aspx`.
+  Verified: foreign↔Spanish translations are official only if by a MAEC-appointed *traductor jurado*.
+  Depends on `apostille-documents`.
+- **`convenio-especial`** — Ministerio de Sanidad:
+  `https://www.sanidad.gob.es/servCiudadanos/internacional/convenioEspecial.htm`.
+  Verified figures added to the title: ≥1 year continuous residence + empadronamiento; monthly
+  premium **€60 (<65) / €157 (65+)** (Orden TAS/2865/2003). NLV-scoped.
+- **`modelo-390`** — AEAT:
+  `https://sede.agenciatributaria.gob.es/Sede/iva/modelo-390-iva-declaracion-resumen-anual.html`.
+  Verified: informative annual VAT recap of the year's Modelo 303, filed in the **first 30 days of
+  January**, electronic only. `severity: penalty`, depends on `modelo-303`.
+- **`citizenship-jura`** — Ministerio de Justicia:
+  `https://www.mjusticia.gob.es/es/ciudadania/tramites/nacionalidad-residencia`.
+  Correction: the jura/promesa (art. 23 Código Civil) must be done **within 180 days of the grant
+  notification** or the concession lapses (caducidad) — title now states this. Depends on
+  `citizenship-application`.
+
+All four verified present in `buildPlan` output for a NON-EU NLV self-employed profile (phases:
+before_you_go / when_settled / ongoing / when_settled respectively) — no dependency cycles.

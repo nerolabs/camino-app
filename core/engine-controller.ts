@@ -250,6 +250,16 @@ export const CATALOG: Obligation[] = [
     depends_on: ['choose-visa-type'],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -45 },
   },
+  {
+    id: 'convenio-especial',
+    title: 'Enrol in the Convenio Especial to buy into public healthcare — available after 1 year of continuous residence + empadronamiento; monthly premium €60 (under 65) or €157 (65+)',
+    category: 'health', severity: 'recommended',
+    source: 'official',
+    source_url: 'https://www.sanidad.gob.es/servCiudadanos/internacional/convenioEspecial.htm',
+    applies_if: { field: 'visa_type', op: 'eq', value: 'nlv' },
+    depends_on: ['nlv-health-insurance'],
+    timing: { kind: 'relative_to_event', anchor: 'residency_established', offset_days: 365 },
+  },
 
   // ── DNV-specific ────────────────────────────────────────────────────────────
   {
@@ -460,6 +470,16 @@ export const CATALOG: Obligation[] = [
     depends_on: ['choose-visa-type'],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -90 },
   },
+  {
+    id: 'sworn-translation',
+    title: 'Obtain certified sworn translations (traductor jurado) of all apostilled foreign documents into Spanish — only a MAEC-appointed sworn translator gives them official validity',
+    category: 'admin', severity: 'required',
+    source: 'official',
+    source_url: 'https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Traductores-Interpretes-Jurados.aspx',
+    applies_if: NON_EU,
+    depends_on: ['apostille-documents'],
+    timing: { kind: 'relative_to_obligation', after: 'apostille-documents', offset_days: 7 },
+  },
 
   // ── Visa-path extra documents ─────────────────────────────────────────────
   {
@@ -635,6 +655,16 @@ export const CATALOG: Obligation[] = [
     timing: { kind: 'absolute_recurring', rrule: 'FREQ=YEARLY;BYMONTH=1,4,7,10' },
   },
   {
+    id: 'modelo-390',
+    title: 'File the annual VAT summary declaration (Modelo 390) — informative recap of the year’s Modelo 303 filings, due in the first 30 days of January, electronic only',
+    category: 'tax', severity: 'penalty',
+    source: 'official',
+    source_url: 'https://sede.agenciatributaria.gob.es/Sede/iva/modelo-390-iva-declaracion-resumen-anual.html',
+    applies_if: { field: 'is_self_employed_in_spain', op: 'eq', value: true },
+    depends_on: ['modelo-303'],
+    timing: { kind: 'absolute_recurring', rrule: 'FREQ=YEARLY;BYMONTH=1' },
+  },
+  {
     id: 'modelo-200',
     title: 'File annual corporation tax return (Modelo 200) for a Spanish-registered company — due 25 July',
     category: 'tax', severity: 'penalty',
@@ -808,6 +838,16 @@ export const CATALOG: Obligation[] = [
     applies_if: NON_EU,
     depends_on: ['citizenship-track-standard', 'citizenship-track-latam', 'ccse-exam'],
     timing: { kind: 'relative_to_event', anchor: 'residency_established', offset_days: 3650 },
+  },
+  {
+    id: 'citizenship-jura',
+    title: 'Complete the jura/promesa (oath of fidelity to the King and obedience to the Constitution, art. 23 Código Civil) at the Registro Civil — must be done within 180 days of the grant notification or the concession lapses',
+    category: 'residency', severity: 'required',
+    source: 'official',
+    source_url: 'https://www.mjusticia.gob.es/es/ciudadania/tramites/nacionalidad-residencia',
+    applies_if: NON_EU,
+    depends_on: ['citizenship-application'],
+    timing: { kind: 'relative_to_obligation', after: 'citizenship-application', offset_days: 365 },
   },
 ];
 

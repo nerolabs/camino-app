@@ -1,12 +1,20 @@
-# Obligations backlog — pulled pending sourcing
+# Obligations backlog — CLEARED (all re-added 2026-07-02)
 
-These are **real, correct Spanish obligations** that were drafted during the webinar
-mining pass but pulled from the live `CATALOG` because the underlying claim does **not**
-appear in any of the 15 mined webinar transcripts. They are model/domain knowledge.
+These four obligations were pulled from the live `CATALOG` on 2026-06-30 because the claim
+wasn't grounded in any mined webinar. On **2026-07-02** each was verified against an official
+`.gob.es` source (details corrected where the draft was wrong) and re-added with
+`source: 'official'` + `source_url`. Nothing here is pending anymore — kept for provenance.
 
-**Re-add each once it has a citable source** (official: AEAT, extranjería, BOE, or a new
-mined webinar that covers it). When re-adding, set `source: 'official'` (or `'webinar'`)
-on the entry — see the `Source` type in `engine-controller.ts`.
+| id | official source | correction applied on re-add |
+|----|-----------------|------------------------------|
+| `sworn-translation` | MAEC (exteriores.gob.es) — sworn-translator registry | title notes only a MAEC-appointed *traductor jurado* confers official validity |
+| `convenio-especial` | Ministerio de Sanidad (sanidad.gob.es) | added the real figures: ≥1 yr continuous residence + padrón; €60/mo under 65, €157/mo 65+ |
+| `modelo-390` | AEAT sede | confirmed: informative recap of the year's Modelo 303, first 30 days of January, electronic only |
+| `citizenship-jura` | Ministerio de Justicia (mjusticia.gob.es) | title now states the real rule: jura within **180 days** of the grant notification (art. 23 CC) or the concession lapses |
+
+The original drafts + rationale are preserved below.
+
+---
 
 Pulled on 2026-06-30.
 
