@@ -310,10 +310,13 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             renewals, tarjeta-sanitaria, bank account, pet-import, property steps, etc.), each with a
             canonical `source_url`. Advisory items (`tax-planning-consultation`, `exit-tax-return`,
             `consulate-appointment` soft estimate) likely stay `webinar`/reclassify, not "official".
-      - [ ] **Populate `webinar_url` (needs YouTube URLs from user).** The catalog was mined from
-            transcripts but there's no obligation→video mapping in code. Provide per-obligation
-            YouTube links (or a Moving To Spain playlist) and I'll fill them in; the staff button
-            already renders when set.
+      - [ ] **Populate `webinar_url` — blocked on the obligation→video mapping.** Found the 16
+            webinar YouTube URLs (recovered from an earlier session transcript → saved to
+            `docs/webinar-sources.md`), BUT there's no record of which video each obligation came
+            from, and attributing one would be a guess. **Decision needed:** (a) you give the mapping
+            (obligation id → URL + timestamp), (b) I propose a topic-based mapping for your review, or
+            (c) link all webinar-derived obligations to the list generally. Field + staff button are
+            wired; they render the moment a `webinar_url` is set.
 - [ ] **B11 — Repo structure: `camino/` vs `camino-app/` (2026-07-02 question).** Two dirs exist —
       likely `camino/` = project memory/docs (the canonical CLAUDE.md, design thesis, invariants)
       and `camino-app/` = the Expo app code, from starting in desktop Claude then moving to the CLI.

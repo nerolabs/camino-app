@@ -124,3 +124,18 @@ through in later batches: nie, apostille-documents, consulate-appointment (soft 
 webinar), NLV/DNV docs + renewals, tarjeta-sanitaria, spanish-bank-account, pet-import, student-visa
 insurance, property (due diligence/notary/registry/community fees), tax-planning-consultation +
 exit-tax-return (advisory — likely reclassify, not "official").
+
+## B10 batch 2 (2026-07-02) — 7 more promoted
+
+| id | official source | note / correction |
+|---|---|---|
+| `nie` | policia.es/_es/extranjeria_extranjeros.php | Form EX-15; Policía Nacional / Oficina de Extranjería. |
+| `tarjeta-sanitaria` | sanidad.gob.es …/tarjetaSanitariaSNS/home.htm | Issued by the CCAA once healthcare right is recognised. |
+| `pet-import` | mapa.gob.es …/viajar-perros-gatos-hurones | **Corrected:** rabies valid ≥21 days after 1st dose; from a non-EU country (US) an EU animal health certificate within 10 days of entry (intra-EU uses an EU pet passport). |
+| `dnv-remote-work-proof` · `dnv-qualification-proof` · `dnv-company-activity-proof` · `dnv-employer-permission-letter` | inclusion.gob.es …/unidadgrandesempresas/teletrabajadores | UGE Teletrabajadores (Ley 14/2013 as amended by Ley 28/2022). |
+
+Source mix after batch 2: **39 official / 15 webinar / 1 domain**. Remaining webinar (15) are mostly
+soft estimates / advisory / process items to work through or reclassify next.
+
+Webinar YouTube corpus captured in `docs/webinar-sources.md` (16 videos); no per-obligation mapping
+yet — needed to populate the staff-only `webinar_url`.
