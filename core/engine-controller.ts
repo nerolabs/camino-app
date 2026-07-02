@@ -99,6 +99,16 @@ function topoSort(obs: Obligation[]): Obligation[] {
 // residence-card application + card issued. Used only when the user hasn't given a real date.
 const RESIDENCY_EST_DAYS_FROM_ARRIVAL = 75;
 
+// Completing certain obligations establishes a real anchor date for everything timed relative to
+// it: finishing empadronamiento sets `padron_done`; getting your residence card sets
+// `residency_established`. So marking these done doesn't just tick a box — it re-flows every
+// downstream residency-/padrón-anchored item from an actual date (estimated → firm). An explicit
+// profile date always wins; a completion only fills an anchor the user hasn't given directly.
+const ANCHOR_FROM_COMPLETION: Record<string, AnchorKind> = {
+  empadronamiento: 'padron_done',
+  residencia: 'residency_established',
+};
+
 // Returns the anchor's date plus whether it's an explicit user-provided date (true) or an
 // engine estimate (false). estimate-derived dates flow through as estimated: true.
 function anchorDate(a: AnchorKind, p: Record<string, unknown>, today: Date): { date: Date; explicit: boolean } | null {
@@ -865,12 +875,19 @@ export function buildPlan(p: Record<string, unknown>): Objective[] {
   const actuals = new Map<string, Date>();
   for (const [id, pr] of Object.entries(progress))
     if (pr?.completedOn) actuals.set(id, new Date(pr.completedOn));
-  const applicable = CATALOG.filter(o => evaluate(o.applies_if, p));
+  // A completed obligation can establish a timing anchor for downstream items (see
+  // ANCHOR_FROM_COMPLETION). Fill only anchors the user hasn't given an explicit date for.
+  const pa: Record<string, unknown> = { ...p };
+  for (const [obligationId, anchorField] of Object.entries(ANCHOR_FROM_COMPLETION)) {
+    const done = actuals.get(obligationId);
+    if (done && !pa[anchorField]) pa[anchorField] = done.toISOString();
+  }
+  const applicable = CATALOG.filter(o => evaluate(o.applies_if, pa));
   const ordered = topoSort(applicable);
-  const arrival = anchorDate('arrival', p, today)!.date;
+  const arrival = anchorDate('arrival', pa, today)!.date;
   const resolved = new Map<string, Resolved>();
   return ordered.map(o => {
-    const timing = resolveTiming(o, p, today, resolved, actuals);
+    const timing = resolveTiming(o, pa, today, resolved, actuals);
     resolved.set(o.id, timing);
     const pr = progress[o.id];
     return {

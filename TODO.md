@@ -386,9 +386,13 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             revise the copy as the product matures; consider a real blog surface later.
 
 ## 🔜 Next (candidates, not yet started)
-- [ ] **Re-anchor more anchors from actuals** — completing `empadronamiento`/`residencia` could feed
-      `padron_done`/`residency_established`, so residency-relative items also go firm. Today only
-      direct `relative_to_obligation` steps re-flow from a real completion date.
+- [x] **Re-anchor more anchors from actuals — DONE 2026-07-02.** New `ANCHOR_FROM_COMPLETION` map in
+      the engine: completing `empadronamiento` fills the `padron_done` anchor and completing
+      `residencia` fills `residency_established` (explicit profile dates still win). So marking those
+      done re-flows every residency-/padrón-anchored item from a **real** date (estimated → firm).
+      Verified: `ccse-exam` flipped `estimated=true`→`false` and re-dated off the actual residencia
+      completion. (`padron_done` has no consumer obligation yet — wired + future-proof; activates the
+      moment one anchors to it. Wants a regression test when B5 lands.)
 - [ ] **Capture `residency_established` as a known-later field** — let users update it post-move
       so residency-anchored items become firm instead of estimated. (Needs a post-move edit flow.)
 - [x] ~~**Re-add backlog items once sourced**~~ — **DONE 2026-07-02.** All 4 (`sworn-translation`,
