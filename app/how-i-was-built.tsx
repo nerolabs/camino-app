@@ -2,14 +2,15 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { palette } from '@/constants/Colors';
 import NavBar from '@/components/NavBar';
 
-// Unlisted route: not linked from the nav. Direct link only. A first-pass, best-effort
-// narrative of how Camino was built — to be revised as the product matures.
+// Unlisted route: not linked from the nav. Direct link only. A narrative of how Camino was
+// built — revised as the product matures.
 
 type Block = { h: string; p: string[] };
 
 const DEK =
   'A relocation-planning app, and a case study in leading an engineering project when your ' +
-  'most productive teammate is an AI. This is a first pass — a working draft of the story.';
+  'most productive teammate is an AI — architecture first, truth over flash, and infrastructure ' +
+  'only once the product had earned it.';
 
 const SECTIONS: Block[] = [
   {
@@ -50,9 +51,10 @@ const SECTIONS: Block[] = [
     h: 'Depth from real sources',
     p: [
       'Then we earned the substance. We mined relocation-webinar transcripts to expand the ' +
-      'catalog from a couple of dozen obligations to fifty-plus — and then did the unglamorous ' +
-      'grounding pass: verifying each against official sources, tagging every item with its ' +
-      'provenance, and pulling anything we couldn’t stand behind into a backlog.',
+      'catalog from a couple of dozen obligations to nearly sixty — then did the unglamorous ' +
+      'grounding pass: verifying each against official government sources until the large ' +
+      'majority carried a canonical citation, tagging every item with its provenance, and ' +
+      'pulling anything we couldn’t stand behind into a backlog until we could.',
       'That discipline caught real errors. A tax-form penalty we’d absorbed from secondary ' +
       'sources had actually been struck down; a form we listed had been abolished. The point of ' +
       '“Lola never invents” isn’t modesty — it’s that a relocation plan people act on has to be ' +

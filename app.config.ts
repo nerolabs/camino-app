@@ -39,7 +39,9 @@ const config: ExpoConfig = {
     favicon: './assets/images/favicon.png',
   },
   plugins: [
-    'expo-router',
+    // sitemap:false removes the auto-injected /_sitemap route index (which otherwise lists every
+    // route, including the unlisted /how-i-was-built blog). Expo Router has no per-route exclusion.
+    ['expo-router', { sitemap: false }],
     ['expo-splash-screen', {
       image: './assets/images/splash-icon.png',
       resizeMode: 'contain',

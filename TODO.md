@@ -382,8 +382,11 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       end-to-end thread → depth via webinar mining + grounding → local web MVP/MLP → EAS
       dev/staging/prod + separate DBs + safe pipelines → telemetry → living TODO → why leading AI
       projects still needs taste/architecture/judgment.
-      - [ ] *Follow-ups:* still appears in the auto `/_sitemap` (exclude if we want it fully hidden);
-            revise the copy as the product matures; consider a real blog surface later.
+      - [x] *Follow-ups DONE 2026-07-02:* disabled the auto `/_sitemap` (`sitemap:false` on the
+            expo-router plugin — Expo has no per-route exclude) so the unlisted blog no longer shows
+            in the route index; added `public/robots.txt` disallowing `/how-i-was-built` to keep it
+            out of search; refreshed the copy (dropped the "first pass/draft" hedging, catalog now
+            "nearly sixty… large majority officially cited"). Still open: a real blog surface later.
 
 ## 🔜 Next (candidates, not yet started)
 - [x] **Re-anchor more anchors from actuals — DONE 2026-07-02.** New `ANCHOR_FROM_COMPLETION` map in
