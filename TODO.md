@@ -411,6 +411,25 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             "nearly sixty… large majority officially cited"). Still open: a real blog surface later.
 
 ## 🔜 Next (candidates, not yet started)
+- [ ] **Context-aware "what changed" sample text (user feedback 2026-07-02).** The `changeBox`
+      placeholder in `app/plan.tsx:602` is hardcoded `"e.g. We decided to rent instead of buy."` —
+      only apt for a property step. Make it relevant to the **step the user has open** (`selected`):
+      derive a sample from the obligation's `category` (property → rent-vs-buy; visa → "we switched
+      from the NLV to the digital-nomad visa"; family → "my partner isn't moving with me"; tax → "my
+      income changed"; etc.), via a small `category → hint` map, or an optional per-obligation
+      `changeHint` field, or (heavier) an LLM-phrased hint. Low-effort, nice polish; the flow already
+      knows `selected`.
+- [ ] **Localization / i18n (user feedback 2026-07-02) — big cross-cutting effort.** "Localize the
+      hell out of this" for a complete app experience. Scope: (a) an i18n layer (`expo-localization`
+      for locale detection + a lib like `i18next`/`react-intl`) and extract every UI string to
+      message catalogs; (b) **Spanish first** (the domain audience), then others; (c) the deterministic
+      **obligation catalog** (`CATALOG` titles) is user-facing content that must be translated too —
+      decide: parallel translated title fields vs a translation layer keyed by obligation id; (d)
+      **Lola's LLM** — pass the target language into the `/api/lola` + question-phrasing system
+      prompts so she speaks the user's language, and TTS voice/locale (`/api/tts`) may need a
+      per-language voice; (e) locale-aware dates/currency in the plan. Note the invariant: engine
+      stays deterministic — translation is a presentation layer, never changes which obligations apply
+      or their timing. Sizable; sequence after the feature set stabilizes.
 - [ ] **Citizenship vs. rolling-renewal — stop assuming everyone naturalises (user feedback 2026-07-02).**
       Today the catalog assumes every non-EU mover pursues Spanish citizenship: `dele-a2-exam`,
       `ccse-exam`, `citizenship-application`, `citizenship-jura` are all `required` gated only on
