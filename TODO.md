@@ -317,20 +317,23 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             seed them). Verified events reach PostHog EU (POST → 200). Finish the funnel then.
 
 ### Catalog grounding (ongoing, high-value)
-- [~] **B10 — Promote `webinar`→`official` — IN PROGRESS (2026-07-02).** Infra done: `source_url`
-      (canonical official link, shown to all users as "View the official source →" in the roadmap
-      drawer) + `webinar_url` (**staff-only** button, gated by `isStaff`, to cross-check webinar vs.
-      official — a future Moving To Spain partnership/upsell hook). Promoted 13 in earlier batches +
-      re-added 4 backlog items as official. **Mix now 44 official / 15 webinar / 1 domain.**
-      - [x] **Grounding pass DONE (2026-07-02).** Researched all 15 remaining webinar items against
-            official sources and **promoted 9** to `official` with `source_url` + title corrections
-            (community-fees→LPH art.9; land-registry→corrected to *voluntary*/recommended;
-            nlv-renewal→corrected window to 60-before/90-after; apostille→Hague/issuing-country;
+- [x] **B10 — source grounding + taxonomy — DONE (2026-07-02).** Every catalog item now carries a
+      user-facing `source`: **`official`** (a codified government requirement, verified + `source_url`
+      shown as "View the official source →") or **`recommendation`** (Camino's practical advice, no
+      law to cite). `severity` stays the orthogonal "how important" signal; `webinar_url` stays the
+      staff-only cross-check link. **Final mix: 54 official / 5 recommendation.** Drawer/dot UI updated
+      (retired the "From webinar"/"Needs sourcing"/"unverified" labels). See `core/SOURCING.md`.
+      - [x] **Grounding pass DONE.** Researched all remaining items; **promoted 9** to `official` with
+            `source_url` + title corrections (community-fees→LPH art.9; land-registry→corrected to
+            *voluntary*/recommended; nlv-renewal→60-before/90-after; apostille→Hague/issuing-country;
             dnv-renewal→Startups Law; completion-deed-notary; student-visa-insurance; nlv-letter-of-
-            intent; nlv-non-work-declaration). **Mix now 52 official / 6 webinar / 1 domain.** The 6
-            remaining are advisory/practical, not statutory (choose-visa-type, consulate-appointment,
-            exit-tax-return, tax-planning-consultation, spanish-bank-account, property-legal-due-
-            diligence) — kept `webinar` honestly. See `core/SOURCING.md` "B10 grounding pass".
+            intent; nlv-non-work-declaration).
+      - [x] **Taxonomy DONE.** Retired `webinar`/`domain` source values. 5 genuinely-advisory items →
+            `recommendation` (scout-where-to-live, tax-planning-consultation, exit-tax-return,
+            spanish-bank-account, property-legal-due-diligence; last two also severity required→
+            recommended). The 2 required-but-uncited steps were *sourced* not downgraded:
+            choose-visa-type → inclusión authorisations catalog, consulate-appointment → MAEC cita
+            previa (both `official`, still `required`).
       - [x] **Populate `webinar_url` — DONE (2026-07-02).** Re-fetched all 16 transcripts (yt-dlp
             + Chrome cookies), read each, and mapped **43/55 obligations** to their topic-dedicated
             webinar with transcript-verified timestamps (option b, evidence-based). Kept as

@@ -83,9 +83,27 @@ estimates — not specific legal figures needing a cite: `choose-visa-type`,
 
 ## Catalog source mix
 
-**Current (2026-07-02, after the B10 grounding pass): 52 `official` / 6 `webinar` / 1 `domain`.**
-(Historical note: an earlier milestone read 28 `webinar` / 26 `official` after promoting
-`autonomo-social-security`.)
+**Current (2026-07-02, after the source-taxonomy change): 54 `official` / 5 `recommendation`.**
+(History: an earlier milestone read 28 `webinar` / 26 `official`; the B10 grounding pass reached
+52 `official` / 6 `webinar` / 1 `domain` before the taxonomy was simplified — see next section.)
+
+## Source taxonomy simplified: `official` | `recommendation` (2026-07-02)
+
+Retired the mining-era `webinar` / `domain` source values. Now that grounding is done, the honest
+user-facing distinction is **official requirement vs. Camino recommendation** (provenance history
+lives in this file; `webinar_url` staff links are unaffected). `severity` stays orthogonal (how
+important), so a recommendation can be strongly or gently suggested.
+
+- **`recommendation` (5):** `scout-where-to-live` (was `domain`), `tax-planning-consultation`,
+  `exit-tax-return`, `spanish-bank-account`, `property-legal-due-diligence` (last four were
+  `webinar`). These are practical advice, not codified law — no official `source_url`. Note:
+  `spanish-bank-account` and `property-legal-due-diligence` were also downgraded `required` →
+  `recommended` so severity matches their advisory nature.
+- **The two required-but-uncited process steps were sourced instead of downgraded** (they're
+  genuinely mandatory, just not tied to a figure): `choose-visa-type` → Min. de Inclusión
+  authorisations catalog (`…/migraciones/autorizaciones`); `consulate-appointment` → MAEC cita
+  previa (`sede.maec.gob.es/pagina/index/directorio/citaprevia`). Both now `official`, still
+  `required`.
 
 ## B10 grounding pass — 9 promoted `webinar` → `official` (2026-07-02)
 

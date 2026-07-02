@@ -9,13 +9,16 @@ type Category = 'visa' | 'residency' | 'tax' | 'health' | 'mobility' | 'banking'
 type AnchorKind = 'arrival' | 'residency_established' | 'padron_done' | 'property_purchase';
 type Urgency = 'immediate' | 'soon' | 'exploratory';
 
-// Provenance of each obligation, so we can audit what's grounded vs. needs sourcing:
-//   'webinar'  — the obligation (and the specifics in its title) are grounded in a mined
-//                webinar transcript.
-//   'domain'   — model/domain knowledge (e.g. Modelo form numbers, statutory deadlines)
-//                not found verbatim in any transcript; correct, but needs an official cite.
-//   'official' — verified against an official government source (AEAT, extranjería, BOE).
-type Source = 'webinar' | 'domain' | 'official';
+// The nature of each item, so the UI can tell users what they're looking at (and so we can audit
+// grounding). Two values, after the sourcing pass:
+//   'official'        — a codified government requirement, verified against an official source
+//                       (AEAT, extranjería, BOE, …) and carrying a `source_url`.
+//   'recommendation'  — Camino's own practical advice (e.g. a scouting trip, hiring a lawyer,
+//                       consulting a tax specialist). Not a legal requirement, so no official
+//                       `source_url`; `severity` still conveys how strongly we suggest it.
+// (Provenance during mining used to distinguish 'webinar' vs 'domain'; that history now lives in
+// core/SOURCING.md. A `webinar_url` may still be attached to either kind as a staff reference.)
+type Source = 'official' | 'recommendation';
 
 type Condition =
   | { all: Condition[] } | { any: Condition[] } | { not: Condition }
@@ -191,7 +194,7 @@ export const CATALOG: Obligation[] = [
     webinar_url: 'https://www.youtube.com/watch?v=gEY3Xkqs6so&t=414s',
     title: 'Decide where in Spain to live before you commit — if you’re unsure, plan a scouting trip and spend real time in 2–3 candidate areas, weighing cost of living, healthcare access, climate, transport links, expat/English-speaking support, and (if relevant) schools before you sign a lease or buy',
     category: 'admin', severity: 'recommended',
-    source: 'domain',
+    source: 'recommendation',
     applies_if: { not: { field: 'owns_property_in_spain', op: 'eq', value: true } },
     depends_on: [],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -270 },
@@ -201,9 +204,10 @@ export const CATALOG: Obligation[] = [
   {
     id: 'choose-visa-type',
     webinar_url: 'https://www.youtube.com/watch?v=uH927kx3igU&t=124s',
-    title: 'Identify your visa category',
+    title: 'Identify your visa category — match your situation to a Spanish residence/visa type (non-lucrative, digital nomad, work, study, family)',
     category: 'visa', severity: 'required',
-    source: 'webinar',
+    source: 'official',
+    source_url: 'https://www.inclusion.gob.es/en/web/migraciones/autorizaciones',
     applies_if: NON_EU,
     depends_on: [],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -180 },
@@ -211,9 +215,10 @@ export const CATALOG: Obligation[] = [
   {
     id: 'consulate-appointment',
     webinar_url: 'https://www.youtube.com/watch?v=uH927kx3igU&t=43s',
-    title: 'Book consulate appointment (allow 8–16 weeks lead time in the US)',
+    title: 'Book consulate appointment to lodge your visa application (allow 8–16 weeks lead time in the US) — appointments are booked through the consulate’s cita previa system',
     category: 'visa', severity: 'required',
-    source: 'webinar',
+    source: 'official',
+    source_url: 'https://sede.maec.gob.es/pagina/index/directorio/citaprevia',
     applies_if: NON_EU,
     depends_on: ['choose-visa-type'],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -150 },
@@ -353,7 +358,7 @@ export const CATALOG: Obligation[] = [
     id: 'exit-tax-return',
     title: 'Notify home country tax authority of change of tax residence',
     category: 'tax', severity: 'recommended',
-    source: 'webinar',
+    source: 'recommendation',
     webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=736s',
     applies_if: { field: 'is_tax_resident', op: 'eq', value: true },
     depends_on: [],
@@ -464,7 +469,7 @@ export const CATALOG: Obligation[] = [
     id: 'tax-planning-consultation',
     title: 'Consult a cross-border tax specialist before moving — time asset disposals to minimise Spanish tax exposure',
     category: 'tax', severity: 'recommended',
-    source: 'webinar',
+    source: 'recommendation',
     webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=267s',
     applies_if: { field: 'intends_long_stay', op: 'eq', value: true },
     depends_on: [],
@@ -559,8 +564,8 @@ export const CATALOG: Obligation[] = [
   {
     id: 'spanish-bank-account',
     title: 'Open a Spanish bank account (can be done remotely as a non-resident before arrival)',
-    category: 'banking', severity: 'required',
-    source: 'webinar',
+    category: 'banking', severity: 'recommended',
+    source: 'recommendation',
     webinar_url: 'https://www.youtube.com/watch?v=8zyT1TG9S5E&t=191', // "Buying a Home in Spain" — bank account
     applies_if: NON_EU,
     depends_on: ['nie'],
@@ -737,8 +742,8 @@ export const CATALOG: Obligation[] = [
   {
     id: 'property-legal-due-diligence',
     title: 'Engage a Spanish property lawyer for due diligence (title search, debts, planning, habitation licence)',
-    category: 'property', severity: 'required',
-    source: 'webinar',
+    category: 'property', severity: 'recommended',
+    source: 'recommendation',
     webinar_url: 'https://www.youtube.com/watch?v=8zyT1TG9S5E', // "Buying a Home in Spain"
     applies_if: { field: 'owns_property_in_spain', op: 'eq', value: true },
     depends_on: ['nie'],

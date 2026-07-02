@@ -177,27 +177,23 @@ const SEV_BLURB: Record<string, string> = {
 };
 
 const SOURCE_LABEL: Record<string, string> = {
-  webinar:  'From webinar',
-  domain:   'Needs sourcing',
-  official: 'Official source',
+  official:       'Official requirement',
+  recommendation: 'Camino recommendation',
 };
 
 const SOURCE_SHORT: Record<string, string> = {
-  webinar:  'webinar',
-  domain:   'unverified',
-  official: 'official',
+  official:       'official',
+  recommendation: 'recommended',
 };
 
 const SOURCE_BLURB: Record<string, string> = {
-  webinar:  'Drawn from a relocation webinar. Confirm the specifics for your own case.',
-  domain:   'General knowledge — not yet verified against an official government source. Treat any figures or deadlines as indicative until confirmed.',
-  official: 'Verified against an official government source (AEAT, extranjería, BOE).',
+  official:       'Verified against an official government source (AEAT, extranjería, BOE).',
+  recommendation: 'Camino’s practical recommendation — not a legal requirement. How strongly we suggest it is shown by its priority; confirm the specifics for your own case.',
 };
 
 const SOURCE_COLOR: Record<string, string> = {
-  webinar:  palette.olive,
-  domain:   '#9A7B4F',
-  official: palette.cobalt,
+  official:       palette.cobalt,
+  recommendation: '#9A7B4F',
 };
 
 function timingDetail(obj: Objective): string {
