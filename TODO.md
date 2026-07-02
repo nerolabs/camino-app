@@ -285,7 +285,11 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       - [ ] **Native analytics (posthog-react-native)** — fast follow; needs the RN SDK + a rebuild.
       - [ ] **Build the PostHog insights** — funnel (pageview `/` → interview_started →
             interview_completed → roadmap_viewed), retention on roadmap_viewed, feature-health
-            (% completing items / using task coach). Filter dashboards to `environment = production`.
+            (% completing items / using task coach). Filter to `environment = production`.
+            **Note:** PostHog's step picker only lists events it has already ingested. As of setup,
+            only `$pageview` + `interview_started` had fired; `interview_completed`/`roadmap_viewed`
+            /etc. become selectable once real usage fires them (or complete one full interview to
+            seed them). Verified events reach PostHog EU (POST → 200). Finish the funnel then.
 
 ### Content (medium — stub now, refine later)
 - [ ] **B8 — Hidden "how-i-was-built" blog at `/how-i-was-built`.** Unlisted route (direct link
