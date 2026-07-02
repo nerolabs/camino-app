@@ -259,11 +259,15 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       Regenerate anytime with `node scripts/gen-icon.mjs`.
 
 ### Catalog / engine (medium)
-- [ ] **B4 — "Where to live in Spain" scouting workstream (NEW obligation).** Many users don't know
-      where they want to live. Add obligation(s): recommend a **scouting trip** and a framework for
-      **evaluating regions/cities** (cost of living, climate, healthcare access, expat/English
-      support, visa-relevant factors, schools, transport). Deterministic/engine-safe; source it
-      (webinar/official) per SOURCING.md discipline. Likely gated early in the timeline (pre-visa).
+- [x] **B4 — "Where to live in Spain" scouting obligation (DONE 2026-07-02).** Added
+      `scout-where-to-live` (`core/engine-controller.ts`): recommends a scouting trip + a framework
+      to evaluate regions (cost of living, healthcare, climate, transport, expat/English support,
+      schools). Advisory (`recommended`), early in `before_you_go`, gated to movers who don't own
+      Spanish property. Asserts no deadlines/costs/laws (invariant 3 safe); `source: 'domain'`,
+      logged in SOURCING.md. Engine-tested + live on web; in the next native build.
+      - [ ] *Optional follow-ups:* an interview slot ("do you know where you'll live?") for tighter
+            gating; make it more prominent/first if the severity-sort buries it too much; deepen the
+            in-drawer Lola coaching for region evaluation.
 
 ### Infra / ops (large — before wider launch)
 - [ ] **B5 — Automated end-to-end test suite (on-demand + on prod pushes).** We're spot-testing;
