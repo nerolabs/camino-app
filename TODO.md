@@ -333,12 +333,14 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             webinar with transcript-verified timestamps (option b, evidence-based). Kept as
             supplementary even where `source_url` exists. 12 unmapped = tax-form technicalities +
             admin items not covered specifically enough. See `core/SOURCING.md` "batch 2".
-- [x] **B11 — Repo structure — RESOLVED (2026-07-02): combined into camino-app.** User chose the
-      combine option. Folded the thesis + four invariants into `docs/THESIS.md`, updated
-      `CLAUDE.md` / `HANDOFF.md` / `TODO.md` to point there instead of `../camino/CLAUDE.md`, and
-      archived the `nerolabs/camino` GitHub repo. camino-app is now the single source of truth.
-      (Local `../camino/` checkout left untouched on disk — vestigial, safe to remove manually.)
-      Investigation notes below for the record.
+- [~] **B11 — Repo structure — COMBINED into camino-app (2026-07-02); one manual step left.** User
+      chose the combine option. **Done:** folded the thesis + four invariants into `docs/THESIS.md`,
+      updated `CLAUDE.md` / `HANDOFF.md` / `TODO.md` to point there instead of `../camino/CLAUDE.md`.
+      camino-app is now the single source of truth. **Left to you:** archive the `nerolabs/camino`
+      GitHub repo (I couldn't — `gh` isn't installed and I won't handle your token). Do it via
+      GitHub → the camino repo → Settings → "Archive this repository", or `gh repo archive nerolabs/camino`
+      if you install gh. (Local `../camino/` checkout is untouched on disk — vestigial, safe to
+      remove manually.) Investigation notes below for the record.
 - [x] ~~**B11 — investigation (superseded by the resolution above).**~~
       Findings: two separate GitHub repos. `nerolabs/camino` (`../camino/`) is the original
       **design-seed/thesis repo**, frozen since Jun 30 ("skeleton + brand identity"): CLAUDE.md
