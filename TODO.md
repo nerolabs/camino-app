@@ -243,9 +243,8 @@ is strictly required — a normal EAS build works.
       with a one-line SQL upsert. **Setup + hardening SQL in `docs/STAFF.md` (run on both DBs).**
       Old note (env approach, superseded): staff were the auth `user_id`s set in the production EAS
       env; profiles.id ≠ auth user_id (verified via SQL).
-      - [ ] **You:** run the `is_staff` migration on staging + production (see `docs/STAFF.md`), then
-            grant your + testers' accounts staff. Optional: delete the now-unused
-            `EXPO_PUBLIC_STAFF_USER_IDS` EAS env var.
+      - [x] **DONE 2026-07-02:** migration run on staging + production; testers granted staff; the
+            now-unused `EXPO_PUBLIC_STAFF_USER_IDS` EAS env var deleted from production. Fully DB-driven.
 - [x] **B1b — Lola intro (DONE 2026-07-01).** Interview landing now opens with an eyebrow
       ("YOUR ROAD TO SPAIN"), "Hola, I'm Lola," a warm experienced-companion line, and a quieter
       what-happens-next line. Verified live on prod + staging.
