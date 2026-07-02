@@ -299,12 +299,23 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       time for real E2E. Cover: interview → extraction → plan generation for key personas;
       `/api/lola` contract; sign-in; living-plan re-model. Runs locally + in CI on deploy. Consider
       Playwright (web) + Maestro (native), and an engine-level deterministic test pass.
-- [ ] **B6 — Observability: monitoring / alerting / paging (incl. mobile).** *Answer to "does Expo
-      provide this?":* EAS gives build/deploy + basic hosting request logs, but **not** full
-      APM/alerting/paging. Recommended stack: **Sentry** (crashes/errors, web + native via
-      `@sentry/react-native`), a **uptime/health monitor + paging** (Better Stack / Grafana Cloud /
-      Pingdom) hitting the site + `/api/lola`, and structured logs. Define health per major feature
-      (interview, plan engine, Lola proxy, auth, DB).
+- [~] **B6 — Observability (Sentry). Web + backend DONE 2026-07-02; native + alerts next.**
+      One Sentry project (**camino**, org **camino-ko**, DE region), tagged by platform
+      (web/ios/android/server) + environment (production/staging). DSN in EAS preview + production.
+      - [x] **Web** — `lib/monitoring.ts` (@sentry/browser): JS errors + `browserTracing` (page-load
+            / Web Vitals = time-to-load). `initMonitoring()` in `_layout`, DSN-gated (local dev
+            silent). **Verified live**: staging POSTed an event → 200, landed in Issues tagged
+            `environment=staging` + `platform=web`.
+      - [x] **Backend** — `lib/sentryServer.ts` posts a minimal event envelope via fetch (Node/CF
+            SDKs don't fit the EAS Hosting Workers runtime); wired into `/api/lola` + `/api/tts`
+            catch + upstream-error paths, tagged `platform=server`.
+      - [ ] **Native** — `@sentry/react-native` + its Expo config plugin (crashes, app-start,
+            navigation perf). Needs `SENTRY_AUTH_TOKEN` (secret) in EAS for source-map upload and a
+            native rebuild to go live. (`lib/monitoring.native.ts` is a no-op stub until then.)
+      - [ ] **Alerting / paging + uptime** — configure Sentry alert rules (currently "high priority
+            issues" default), and add an uptime monitor hitting the site + `/api/lola` (Better Stack /
+            Grafana Cloud / Sentry Uptime). Optional: backend latency tracing (transactions), not just
+            errors. See `docs/MONITORING.md`.
 - [x] **B7 — Product analytics (web) DONE 2026-07-01.** PostHog (EU, project 214229) via
       `posthog-js`, `lib/analytics.ts` (native = no-op stub). Live on prod + staging (verified
       events POST → 200). Events: `interview_started`, `interview_completed`, `roadmap_viewed`,
