@@ -20,14 +20,24 @@ user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS bui
 2. **Step drawer unscrollable on iOS**: the sheet's ScrollView was wrapped in a Pressable, which
    claimed the drag gesture. Backdrop is now an absolute-fill Pressable BEHIND a plain-View
    sheet. (Pattern note: never wrap a native ScrollView in a touchable.)
-3. **Apple sign-in (Sentry CAMINO-4, build 18)**: error CHANGED 1000 "unknown" → 1001 "canceled";
-   sheet was up ~9s and the app was BACKGROUNDED at event time — consistent with an Apple-ID
-   interstitial (likely the 2FA-required prompt bouncing to Settings), not app config. User to
-   check Apple-ID 2FA + try a second Apple ID on build 19.
+3. **Apple sign-in — the 2FA theory is DEAD** (user uses SIWA fine in other apps → their Apple
+   ID has 2FA). Systematically excluded: 2FA ✗, Apple system status ✗ (SIWA green), ASC
+   agreements ✗ (Free Apps Agreement active Jul 2026–Jul 2027), App ID config ✗ (SIWA checked,
+   "Enable as a primary App ID", no stray settings, team Proxim.us VB9CHJM4AN), entitlement in
+   IPA ✓ (verified earlier). Remaining suspect: **stale SIWA provisioning on Apple's side** —
+   the widely-reported remedy applied 2026-07-03 ~21:33: capability toggled OFF → saved →
+   re-enabled as primary → saved (invalidates profiles by design). **Build 20** (`4b6193bf`)
+   kicked immediately after so EAS re-mints a fresh profile against the re-provisioned
+   capability. **Test Apple sign-in on build 20.** If it STILL fails: try a second Apple ID
+   (account-state vs app), and consider filing with Apple (all config is provably correct).
 
-**User to test on build 19:** email one-time code, drawer scrolling, Apple sign-in (after the
-2FA check). Supabase dashboard was mid-incident (black pages) — the email OTP length setting
-was never read/changed; the app is now length-agnostic so it doesn't matter.
+**User to test on build 20:** email one-time code, drawer scrolling (fixed in 19's code, also
+in 20), Apple sign-in after the capability re-provision. Build 19 failing on Apple was expected
+— it predates the re-toggle.
+
+**ALSO SPOTTED in ASC (App Store release prep):** the DSA **trader status** must be completed
+(ASC → Business banner) or EU distribution is blocked — Spain IS the market. Add to the
+submission checklist (user action, needs their trader info).
 
 ---
 
