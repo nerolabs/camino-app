@@ -21,6 +21,8 @@ const SECTIONS: Section[] = [
   {
     h: 'Just shipped',
     items: [
+      { title: 'Passwordless email sign-in', note: 'A link (or 6-digit code) lands in your inbox and signs you in — no password to invent, works across devices.' },
+      { title: '“Email me my roadmap”', note: 'One field on your fresh roadmap: saves it, creates your account silently, and the emailed link brings you back signed in.' },
       { title: 'Overdue tracking', note: 'Steps past their date now say so, in red — and Lola helps you re-flow the plan instead of letting it quietly rot.' },
       { title: 'Sample plan', note: 'See a real, full roadmap (Susan & Tom’s) before answering a single question.' },
       { title: 'Sign in with Apple + a cleaner sign-in dialog', note: 'One tap on iOS; Google everywhere.' },
@@ -30,8 +32,7 @@ const SECTIONS: Section[] = [
   {
     h: 'In progress',
     items: [
-      { title: 'Email that keeps you moving', note: 'A weekly roundup of what’s overdue and what’s coming up — never more than a handful of tasks, each with a concrete tip. Plus sign-in by email link, no password to invent.' },
-      { title: '“Email me my roadmap”', note: 'Finish the interview, get your plan in your inbox — and a link that’s always signed in.' },
+      { title: 'The weekly roundup', note: 'What’s overdue and what’s coming up, never more than a handful of tasks, each with a concrete tip — plus a welcome email when you join. Final wiring underway.' },
     ],
   },
   {

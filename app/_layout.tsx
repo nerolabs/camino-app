@@ -9,8 +9,9 @@ import { Fraunces_400Regular, Fraunces_600SemiBold } from '@expo-google-fonts/fr
 import { HankenGrotesk_400Regular, HankenGrotesk_500Medium, HankenGrotesk_600SemiBold } from '@expo-google-fonts/hanken-grotesk';
 import { ProfileProvider, useProfile } from '@/core/ProfileContext';
 import { AuthProvider, useAuth } from '@/core/AuthContext';
-import { loadProfileRow } from '@/core/profileDb';
-import { derive } from '@/core/interview-controller';
+import { loadProfileRow, saveProfile as saveProfileDb } from '@/core/profileDb';
+import { supabase } from '@/core/supabase';
+import { derive, type Profile } from '@/core/interview-controller';
 import { initAnalytics } from '@/lib/analytics';
 import { initMonitoring } from '@/lib/monitoring';
 
@@ -27,10 +28,35 @@ function SessionSync() {
   const { setProfile, setIsStaff } = useProfile();
   useEffect(() => {
     if (!user) { setIsStaff(false); return; }
-    loadProfileRow(user.id).then(({ answers, isStaff }) => {
+    (async () => {
+      // "Email me my roadmap": a brand-new account carries the signed-out interview answers
+      // in auth metadata (set at signInWithOtp time). Adopt them into the profiles table on
+      // first sign-in — this is what makes the emailed link work from ANY device — then clear
+      // the metadata copy so it can't shadow later edits.
+      const md = (user.user_metadata ?? {}) as Record<string, unknown>;
+      const pending = md.pending_profile as Profile | undefined;
+      if (pending && typeof pending === 'object') {
+        await saveProfileDb(user.id, pending).catch(() => {});
+        supabase.auth.updateUser({ data: { pending_profile: null } }).catch(() => {});
+      }
+
+      const { answers, isStaff } = await loadProfileRow(user.id);
       setIsStaff(isStaff);
       if (answers) { derive(answers); setProfile(answers); }
-    });
+
+      // Welcome email, once ever — the server re-checks welcomed_at with the service role,
+      // so multi-device races and repeated app-opens collapse to a single send.
+      if (!md.welcomed_at) {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          const API_BASE = process.env.EXPO_PUBLIC_API_URL ?? '';
+          fetch(`${API_BASE}/api/email/welcome`, {
+            method: 'POST',
+            headers: { authorization: `Bearer ${session.access_token}` },
+          }).catch(() => {});
+        }
+      }
+    })();
   }, [user]);
   return null;
 }

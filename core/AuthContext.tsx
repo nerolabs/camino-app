@@ -8,6 +8,7 @@ import { supabase } from './supabase';
 import { capture, identify, resetAnalytics } from '@/lib/analytics';
 import { captureError } from '@/lib/monitoring';
 import { signInWithApple as appleFlow, appleSignInAvailable } from '@/lib/appleSignIn';
+import { type Profile } from './interview-controller';
 
 // Lets the auth browser session close cleanly after the OAuth redirect (no-op harm on native).
 WebBrowser.maybeCompleteAuthSession();
@@ -34,6 +35,11 @@ type AuthContextValue = {
   signInWithGoogle: () => Promise<void>;
   signInWithApple: () => Promise<void>; // iOS only — no-op elsewhere (appleSignInAvailable gates UI)
   appleSignInAvailable: boolean;
+  // Passwordless email (magic link + 6-digit code). `pendingProfile` rides along as auth
+  // metadata for brand-new accounts ("email me my roadmap"): SessionSync adopts it on first
+  // sign-in, so the link works even when clicked on a different device.
+  signInWithEmail: (email: string, pendingProfile?: Profile) => Promise<void>;
+  verifyEmailCode: (email: string, code: string) => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -42,6 +48,8 @@ const AuthContext = createContext<AuthContextValue>({
   signInWithGoogle: async () => {},
   signInWithApple: async () => {},
   appleSignInAvailable: false,
+  signInWithEmail: async () => {},
+  verifyEmailCode: async () => {},
   signOut: async () => {},
 });
 
@@ -62,6 +70,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       else if (event === 'SIGNED_OUT') resetAnalytics();
     });
     return () => subscription.unsubscribe();
+  }, []);
+
+  // Native: complete sessions arriving via cold/warm deep links — a magic-link email opens
+  // caminoapp://auth-callback directly from Mail, with no in-app browser session for
+  // openAuthSessionAsync to return through (unlike the Google flow above).
+  useEffect(() => {
+    if (Platform.OS === 'web') return; // web: detectSessionInUrl handles the redirect
+    const complete = (url: string | null) => {
+      if (url && url.includes('auth-callback')) completeSessionFromUrl(url).catch(() => {});
+    };
+    Linking.getInitialURL().then(complete);
+    const sub = Linking.addEventListener('url', ({ url }) => complete(url));
+    return () => sub.remove();
   }, []);
 
   async function signInWithGoogle() {
@@ -106,12 +127,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  async function signInWithEmail(email: string, pendingProfile?: Profile) {
+    // Web lands on /plan (allowlisted in Supabase redirect URLs); native reuses the same
+    // caminoapp://auth-callback deep link as the Google flow.
+    const emailRedirectTo = Platform.OS === 'web'
+      ? `${window.location.origin}/plan`
+      : Linking.createURL('auth-callback');
+    const { error } = await supabase.auth.signInWithOtp({
+      email: email.trim(),
+      options: {
+        shouldCreateUser: true, // "email me my roadmap" silently creates the account
+        emailRedirectTo,
+        // data is only applied to NEW users by Supabase, so an existing account's saved
+        // roadmap can never be clobbered from a signed-out screen.
+        ...(pendingProfile ? { data: { pending_profile: pendingProfile } } : {}),
+      },
+    });
+    if (error) throw error;
+  }
+
+  async function verifyEmailCode(email: string, code: string) {
+    // The 6-digit fallback: works cross-device, in simulators, and when mail apps
+    // mangle links. Session lands via onAuthStateChange like every other method.
+    const { error } = await supabase.auth.verifyOtp({ email: email.trim(), token: code.trim(), type: 'email' });
+    if (error) throw error;
+  }
+
   async function signOut() {
     await supabase.auth.signOut();
   }
 
   return (
-    <AuthContext.Provider value={{ session, user: session?.user ?? null, loading, signInWithGoogle, signInWithApple, appleSignInAvailable, signOut }}>
+    <AuthContext.Provider value={{ session, user: session?.user ?? null, loading, signInWithGoogle, signInWithApple, appleSignInAvailable, signInWithEmail, verifyEmailCode, signOut }}>
       {children}
     </AuthContext.Provider>
   );

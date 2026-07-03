@@ -3,15 +3,19 @@ import { Alert, Text, TouchableOpacity, Modal, Pressable, StyleSheet } from 'rea
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
+import EmailSignIn from '@/components/EmailSignIn';
 
 // Signed-out auth control (native). The NavBar shows a single "Sign in" link — the inline Apple
 // button wrecked the nav layout (build-15 finding) — and tapping it opens a dialog offering the
-// OFFICIAL Apple button (App Review guideline 4.8 + Apple's branded-button rule) plus Google.
-// Android gets the same dialog minus Apple (4.8 doesn't apply there).
+// OFFICIAL Apple button (App Review guideline 4.8 + Apple's branded-button rule), Google, and
+// passwordless email. Android gets the same dialog minus Apple (4.8 doesn't apply there).
 
 export default function SignInButtons() {
   const { signInWithGoogle, signInWithApple, appleSignInAvailable } = useAuth();
   const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState<'providers' | 'email'>('providers');
+
+  const close = () => { setOpen(false); setMode('providers'); };
 
   // Never swallow sign-in failures (the silent .catch hid the build-16 Apple failure).
   // AuthContext has already logged to Sentry + PostHog; here we tell the human.
@@ -27,31 +31,40 @@ export default function SignInButtons() {
         <Text style={styles.ghostText}>Sign in</Text>
       </TouchableOpacity>
 
-      <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
-        <Pressable style={styles.overlay} onPress={() => setOpen(false)}>
+      <Modal visible={open} transparent animationType="fade" onRequestClose={close}>
+        <Pressable style={styles.overlay} onPress={close}>
           {/* Stop card taps from closing the dialog */}
           <Pressable style={styles.card} onPress={() => {}}>
             <Text style={styles.title}>Sign in to Camino</Text>
             <Text style={styles.sub}>Save your roadmap and pick it up on any device.</Text>
 
-            {appleSignInAvailable && (
-              <AppleAuthentication.AppleAuthenticationButton
-                buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-                buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-                cornerRadius={10}
-                style={styles.appleBtn}
-                onPress={() => { setOpen(false); signInWithApple().catch(failed('Apple')); }}
-              />
+            {mode === 'providers' ? (
+              <>
+                {appleSignInAvailable && (
+                  <AppleAuthentication.AppleAuthenticationButton
+                    buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+                    buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+                    cornerRadius={10}
+                    style={styles.appleBtn}
+                    onPress={() => { close(); signInWithApple().catch(failed('Apple')); }}
+                  />
+                )}
+                <TouchableOpacity
+                  style={styles.googleBtn}
+                  onPress={() => { close(); signInWithGoogle().catch(failed('Google')); }}
+                >
+                  <Text style={styles.googleBtnText}>Continue with Google</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.emailBtn} onPress={() => setMode('email')}>
+                  <Text style={styles.emailBtnText}>Continue with email</Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <EmailSignIn context="dialog" onVerified={close} />
             )}
-            <TouchableOpacity
-              style={styles.googleBtn}
-              onPress={() => { setOpen(false); signInWithGoogle().catch(failed('Google')); }}
-            >
-              <Text style={styles.googleBtnText}>Continue with Google</Text>
-            </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setOpen(false)}>
-              <Text style={styles.cancel}>Cancel</Text>
+            <TouchableOpacity onPress={mode === 'email' ? () => setMode('providers') : close}>
+              <Text style={styles.cancel}>{mode === 'email' ? '← All sign-in options' : 'Cancel'}</Text>
             </TouchableOpacity>
           </Pressable>
         </Pressable>
@@ -71,5 +84,7 @@ const styles = StyleSheet.create({
   appleBtn:      { width: '100%', height: 48 },
   googleBtn:     { width: '100%', height: 48, borderRadius: 10, backgroundColor: palette.cobalt, alignItems: 'center', justifyContent: 'center' },
   googleBtnText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cal },
+  emailBtn:      { width: '100%', height: 48, borderRadius: 10, borderWidth: 1.5, borderColor: palette.cobalt, alignItems: 'center', justifyContent: 'center' },
+  emailBtnText:  { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cobalt },
   cancel:        { fontFamily: 'HankenGrotesk_500Medium', fontSize: 14, color: palette.muted, textAlign: 'center', paddingVertical: 8 },
 });

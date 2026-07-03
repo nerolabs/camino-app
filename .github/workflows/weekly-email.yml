@@ -1,0 +1,32 @@
+# Fires the weekly email run (roundups + interview nudges) by hitting the production
+# API route. The route is idempotent-ish (per-user last_roundup_at / nudged_at gates),
+# so a manual re-run after a partial failure is safe.
+#
+# Requires repo secret CRON_SECRET = the same value set in the EAS production environment.
+name: Weekly email
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Mondays 06:00 UTC (08:00 Madrid in summer)
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Which deployment to hit'
+        type: choice
+        default: production
+        options: [production, staging]
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger weekly send
+        run: |
+          BASE="https://getcamino.app"
+          if [ "${{ github.event.inputs.target }}" = "staging" ]; then
+            BASE="https://camino--staging.expo.app"
+          fi
+          HTTP=$(curl -sS -o /tmp/resp.json -w '%{http_code}' -X POST "$BASE/api/email/weekly" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
+          cat /tmp/resp.json
+          [ "$HTTP" = "200" ] || { echo "weekly send failed with HTTP $HTTP"; exit 1; }

@@ -201,6 +201,16 @@ const ROWS: Row[] = [
     ],
   },
   {
+    feature: 'The email loop, part one',
+    work: 'Passwordless sign-in (magic link + 6-digit code) joined the dialog; a signed-out roadmap can be emailed to yourself — which quietly creates your account, with the roadmap riding along; a welcome email greets new users; and a weekly roundup engine (overdue + upcoming, capped at five, deterministic per-item tips) waits on its cron.',
+    decisions: [
+      'Email over app-store notifications as the retention loop: everyone has an inbox, and every email doubles as a no-password door back into the roadmap.',
+      'The roundup is a pure function of the profile — the same engine math as the roadmap, so the email can never disagree with the app.',
+      'Nothing pressing this week → no email. A roundup with nothing to say is spam.',
+      'Sending is Resend on our own domain; all bookkeeping (welcomed, nudged, opted out) lives in auth metadata, so no schema migration.',
+    ],
+  },
+  {
     feature: 'The public roadmap',
     work: 'This section gained a third page: the product roadmap, updated with every release — shipped, in progress, next, and the things we\'ve said no to.',
     decisions: [

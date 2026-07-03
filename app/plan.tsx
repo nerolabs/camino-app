@@ -9,12 +9,39 @@ import { buildPlan, isOverdue, type Objective, type Progress } from '@/core/engi
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { capture } from '@/lib/analytics';
+import EmailSignIn from '@/components/EmailSignIn';
 import { parseProfileChange, askLola, TASK_INTRO, changeHint } from '@/lib/plan-coach';
 import {
   ISO_DATE, diffSummary, completionLine, formatTiming, timingDetail, openExternal,
   PHASE_LABELS, PHASE_ICONS, PHASE_ORDER, SEV_COLOR, SEV_LABEL, SEV_BLURB,
   SOURCE_SHORT, SOURCE_BLURB, SOURCE_COLOR,
 } from '@/lib/plan-format';
+
+// Signed-out users just watched their roadmap appear — the capture moment. One email field:
+// it saves the roadmap, creates the account (silently — the profile rides in auth metadata
+// until the first sign-in adopts it), and the emailed link signs them in from any device.
+function EmailCaptureCard({ profile }: { profile: Profile }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <View style={styles.emailCard}>
+      <Text style={styles.emailCardTitle}>Don’t lose this roadmap</Text>
+      <Text style={styles.emailCardBody}>
+        We’ll email it to you — the link signs you in on any device, no password to invent. You’ll
+        also get a short weekly roundup of what’s due while your move is underway.
+      </Text>
+      {open ? (
+        <EmailSignIn context="plan_page" pendingProfile={profile} sendLabel="Email me my roadmap" />
+      ) : (
+        <TouchableOpacity
+          style={styles.emailCardBtn}
+          onPress={() => { setOpen(true); capture('email_me_roadmap_opened'); }}
+        >
+          <Text style={styles.emailCardBtnText}>Email me my roadmap</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+}
 
 function PenaltyBanner({ objectives }: { objectives: Objective[] }) {
   const penalties = objectives.filter(o => o.severity === 'penalty');
@@ -201,6 +228,8 @@ export default function PlanScreen() {
             </View>
           )}
         </View>
+
+        {!user && <EmailCaptureCard profile={profile} />}
 
         <View style={styles.legend}>
           <View style={styles.legendItem}>
@@ -493,6 +522,14 @@ const styles = StyleSheet.create({
   legendItem:    { flexDirection: 'row', alignItems: 'center', gap: 6 },
   legendDot:     { width: 8, height: 8, borderRadius: 4 },
   legendText:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: palette.muted },
+
+  emailCard:        { backgroundColor: palette.white, borderWidth: 1.5, borderColor: palette.cobalt,
+                      borderRadius: 14, padding: 18, marginBottom: 20, gap: 10 },
+  emailCardTitle:   { fontFamily: 'Fraunces_600SemiBold', fontSize: 19, color: palette.indigo },
+  emailCardBody:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 14, lineHeight: 21, color: palette.indigo },
+  emailCardBtn:     { alignSelf: 'flex-start', backgroundColor: palette.cobalt, borderRadius: 10,
+                      paddingVertical: 12, paddingHorizontal: 20 },
+  emailCardBtnText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, color: palette.cal },
 
   penaltyBanner: { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: '#FDF2F2',
                    borderWidth: 1, borderColor: '#F5C6C6', borderRadius: 10,

@@ -455,7 +455,11 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
 2. **Overdue-state handling** (feeds the weekly email): overdue = scheduled due date in the past and
    not done. Roadmap shows a red overdue treatment + stat chip; step sheet nudges "mark it done or
    tell Lola what changed."
-3. **The email loop (welcome + weekly roundup) — built on passwordless email (user spec 2026-07-03):**
+3. **The email loop — CODE SHIPPED 2026-07-03 (magic-link auth + email-me-my-roadmap + welcome +
+   weekly-roundup engine + cron workflow). Remaining to switch on: user adds
+   SUPABASE_SERVICE_ROLE_KEY + CRON_SECRET to EAS prod/preview envs, CRON_SECRET to GitHub repo
+   secrets, pastes the Resend key into Supabase custom SMTP (both projects), then Claude restyles
+   the Supabase auth-email templates (blocked until SMTP is on). Original spec:**
    - **Passwordless (magic-link) sign-up is the foundation** — Supabase `signInWithOtp`. Add
      "Continue with email" to the new sign-in dialog (alongside Apple + Google). Every email we
      send then doubles as a no-password door back into their roadmap.
