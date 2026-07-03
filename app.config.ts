@@ -11,7 +11,9 @@ const config: ExpoConfig = {
   scheme: 'caminoapp',
   userInterfaceStyle: 'automatic',
   ios: {
-    supportsTablet: true,
+    // iPad off for the first release (user decision 2026-07-03): no iPad screenshots or
+    // review overhead until the phone experience has earned its keep.
+    supportsTablet: false,
     bundleIdentifier: 'com.nerolabs.camino',
     usesAppleSignIn: true, // Sign in with Apple (App Review guideline 4.8 — required alongside Google)
     // Universal links: getcamino.app links in our emails open the APP (signed in) instead of a

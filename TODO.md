@@ -491,8 +491,15 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       due-within-7-days + nextUp, date semantics mirror `isOverdue`, buckets preserve plan order)
       + a toggle on /plan (This week · N overdue | Full roadmap). 4 tests. Verified on staging
       with a real roadmap.
-   2. **Roadmap PDF export** — for the fridge door, or the gestor. ← NEXT
-   3. **Region-aware steps** — region slot; some bureaucracy differs by comunidad.
+   2. **Roadmap PDF export — SHIPPED 2026-07-03.** `lib/reportHtml.ts` (pure plan→HTML report,
+      THESIS piece 4: hero next step, estimated vs firm, dateless pending steps, official URLs
+      printed; 4 tests) + platform-split `lib/exportPdf` (web → print dialog, native →
+      expo-print + share sheet) + "⤓ PDF" on /plan. Native rides build 23.
+   3. **Region-aware steps** — region slot; some bureaucracy differs by comunidad. ← NEXT
+
+   Also shipped 2026-07-03: **Report a problem** (menu → dialog → /api/feedback → Resend to
+   team inbox with platform/version/route context; verified end-to-end) and **iPad OFF** for
+   the first release (supportsTablet: false — no iPad screenshots/review overhead).
 6. **App Store submission — gated (user decision 2026-07-03)** on the three features above PLUS
    significant family testing / edge-case cleanup. See docs/APP_STORE.md for the pack.
 7. *(later)* per-step problem-report link.

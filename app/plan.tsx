@@ -7,6 +7,8 @@ import { saveProfile as saveProfileDb } from '@/core/profileDb';
 import { derive, type Profile } from '@/core/interview-controller';
 import { buildPlan, isOverdue, type Objective, type Progress } from '@/core/engine-controller';
 import { thisWeek } from '@/core/this-week';
+import { reportHtml } from '@/lib/reportHtml';
+import { exportPdf } from '@/lib/exportPdf';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { capture } from '@/lib/analytics';
@@ -255,20 +257,33 @@ export default function PlanScreen() {
       <View style={styles.content}>
         <Text style={styles.heading}>Your roadmap</Text>
 
-        <View style={styles.viewToggle}>
+        <View style={styles.toolbarRow}>
+          <View style={styles.viewToggle}>
+            <TouchableOpacity
+              style={[styles.viewToggleBtn, view === 'week' && styles.viewToggleBtnActive]}
+              onPress={() => { setView('week'); capture('plan_view_toggled', { view: 'week' }); }}
+            >
+              <Text style={[styles.viewToggleText, view === 'week' && styles.viewToggleTextActive]}>
+                This week{week.overdue.length > 0 ? ` · ${week.overdue.length} overdue` : ''}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.viewToggleBtn, view === 'all' && styles.viewToggleBtnActive]}
+              onPress={() => { setView('all'); capture('plan_view_toggled', { view: 'all' }); }}
+            >
+              <Text style={[styles.viewToggleText, view === 'all' && styles.viewToggleTextActive]}>Full roadmap</Text>
+            </TouchableOpacity>
+          </View>
+          {/* The report: a pure function of the plan (THESIS piece 4). Web → print dialog
+              ("Save as PDF"); native → real PDF into the share sheet. */}
           <TouchableOpacity
-            style={[styles.viewToggleBtn, view === 'week' && styles.viewToggleBtnActive]}
-            onPress={() => { setView('week'); capture('plan_view_toggled', { view: 'week' }); }}
+            onPress={() => {
+              capture('plan_pdf_exported');
+              exportPdf(reportHtml(objectives)).catch(() => {});
+            }}
+            accessibilityLabel="Export your roadmap as a PDF"
           >
-            <Text style={[styles.viewToggleText, view === 'week' && styles.viewToggleTextActive]}>
-              This week{week.overdue.length > 0 ? ` · ${week.overdue.length} overdue` : ''}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.viewToggleBtn, view === 'all' && styles.viewToggleBtnActive]}
-            onPress={() => { setView('all'); capture('plan_view_toggled', { view: 'all' }); }}
-          >
-            <Text style={[styles.viewToggleText, view === 'all' && styles.viewToggleTextActive]}>Full roadmap</Text>
+            <Text style={styles.exportLink}>⤓ PDF</Text>
           </TouchableOpacity>
         </View>
 
@@ -573,8 +588,12 @@ const styles = StyleSheet.create({
 
   heading:       { fontFamily: 'Fraunces_600SemiBold', fontSize: 28, color: palette.indigo, marginBottom: 16 },
 
+  toolbarRow:    { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+                   marginBottom: 16, gap: 10 },
+  exportLink:    { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.cobalt,
+                   paddingVertical: 8, paddingHorizontal: 6 },
   viewToggle:    { flexDirection: 'row', backgroundColor: '#EEE9E0', borderRadius: 10, padding: 3,
-                   alignSelf: 'flex-start', marginBottom: 16 },
+                   alignSelf: 'flex-start' },
   viewToggleBtn: { paddingVertical: 7, paddingHorizontal: 14, borderRadius: 8 },
   viewToggleBtnActive: { backgroundColor: '#FFFFFF', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' },
   viewToggleText:{ fontFamily: 'HankenGrotesk_500Medium', fontSize: 13, color: palette.muted },

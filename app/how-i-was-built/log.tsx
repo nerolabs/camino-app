@@ -303,6 +303,17 @@ const ROWS: Row[] = [
       'Universal links are configuration, not code: an entitlement plus a JSON file the domain serves — and Apple caches that file on install, so it only kicks in from the next build.',
     ],
   },
+  {
+    feature: 'The printable roadmap + a way to talk back',
+    date: '3 Jul 2026',
+    work: 'The roadmap became a report: one tap renders a clean, print-ready PDF — hero next step, estimated vs firm dates, dateless steps that say what they\'re waiting for, official source URLs printed for the gestor. And a "Report a problem" line joined the menu: one text box, straight to the team inbox with platform, version and route attached. iPad support switched off for the first release.',
+    decisions: [
+      'The report is a pure function of the plan (the fourth thesis piece, finally shipped) — same honesty rules as the app: estimated says estimated, waiting says waiting, nothing invented.',
+      'One HTML generator serves both platforms: the browser\'s own print dialog on web, a real shared PDF file on iOS — no PDF library shipped to anyone.',
+      'Feedback goes to email, not a dashboard: at family-testing scale, the inbox IS the triage queue, and the recipient is hardcoded so the route can\'t be abused as a mail relay.',
+      'iPad off for launch: fewer screenshots, fewer review surfaces, nothing the phone experience doesn\'t already prove.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

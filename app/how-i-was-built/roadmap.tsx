@@ -21,6 +21,8 @@ const SECTIONS: Section[] = [
   {
     h: 'Just shipped',
     items: [
+      { title: 'Roadmap PDF export', date: '3 Jul 2026', note: 'One tap turns your roadmap into a clean printable report — estimated vs firm dates, official sources included. For the fridge door, or the gestor.' },
+      { title: 'Report a problem', date: '3 Jul 2026', note: 'A quiet line in the menu, one text box, straight to us. Every report makes the roadmap better.' },
       { title: '“This week” view', date: '3 Jul 2026', note: 'One tap on your roadmap and you see just what needs your attention now — what’s slipped and what’s due in the next seven days. A clear week says so, honestly.' },
       { title: 'A free guide for every step', date: '3 Jul 2026', note: 'Sixty public pages — one per step in the catalog, each with when it’s due, why it matters, and the official source. The same facts your roadmap is built from, open to everyone.' },
       { title: 'One calmer nav everywhere', date: '3 Jul 2026', note: 'Desktop now matches mobile: browsing lives in the ☰ menu, the bar keeps just the actions.' },
@@ -36,7 +38,7 @@ const SECTIONS: Section[] = [
   {
     h: 'In progress',
     items: [
-      { title: 'Roadmap PDF export', note: 'For the fridge door, or the gestor.' },
+      { title: 'Family testing & edge-case cleanup', note: 'Real relatives, real phones, real bug reports — the app earns its release the honest way.' },
     ],
   },
   {

@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
 import SignInButtons from '@/components/SignInButtons';
+import FeedbackDialog from '@/components/FeedbackDialog';
 
 // One nav for every width (user decision 2026-07-03: desktop gets the burger too — parity with
 // mobile, and Sign out declutters into the menu). Actions stay on the bar (Sign in / CTA / ☰);
@@ -18,6 +19,7 @@ export default function NavBar() {
   const { user, signOut } = useAuth();
   const { width } = useWindowDimensions();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   const go = (path: string) => { setMenuOpen(false); router.push(path as never); };
 
@@ -60,15 +62,17 @@ export default function NavBar() {
             {!user && <MenuLink label="Sample plan" onPress={() => go('/sample-plan')} />}
             {/* The build story went public 3 Jul 2026 (user decision) — essay, log, roadmap. */}
             <MenuLink label="How I was built" onPress={() => go('/how-i-was-built')} />
+            <View style={styles.menuDivider} />
+            {/* Subtle but always at hand — one tap from anywhere (user request 2026-07-03). */}
+            <MenuLink label="Report a problem" onPress={() => { setMenuOpen(false); setFeedbackOpen(true); }} />
             {user && (
-              <>
-                <View style={styles.menuDivider} />
-                <MenuLink label="Sign out" onPress={() => { setMenuOpen(false); signOut(); }} />
-              </>
+              <MenuLink label="Sign out" onPress={() => { setMenuOpen(false); signOut(); }} />
             )}
           </Pressable>
         </Pressable>
       </Modal>
+
+      <FeedbackDialog visible={feedbackOpen} onClose={() => setFeedbackOpen(false)} />
     </View>
   );
 }

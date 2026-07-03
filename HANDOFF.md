@@ -43,7 +43,14 @@ user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS bui
    logged-out browser tab (the reported bug; magic links on desktop already worked).
    Universal links ship in **BUILD 22** — Apple caches the AASA per install, so it takes a
    fresh install of 22+ to activate. Drawer-scroll fix confirmed by user on build 20.
-   **Family testing should use build 22.**
+
+6. **PDF export + feedback + iPad off (2026-07-03 latest, BUILD 23):** the printable roadmap
+   (`lib/reportHtml.ts` pure generator + `lib/exportPdf` platform twins, "⤓ PDF" on /plan,
+   4 tests); "Report a problem" in the menu (`components/FeedbackDialog` → `/api/feedback` →
+   Resend to nerolabs@gmail.com with platform/version/route; VERIFIED end-to-end — test email
+   received); `supportsTablet: false` (user decision — no iPad for v1). **Family testing
+   should use build 23** (supersedes 22; also carries universal links etc.).
+   Remaining pre-release feature: **region-aware steps** (region slot) ← NEXT.
 
 **ALSO SPOTTED in ASC (App Store release prep):** the DSA **trader status** must be completed
 (ASC → Business banner) or EU distribution is blocked — Spain IS the market. Add to the
