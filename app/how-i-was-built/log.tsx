@@ -202,7 +202,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'The email loop, part one',
-    work: 'Passwordless sign-in (magic link + 6-digit code) joined the dialog; a signed-out roadmap can be emailed to yourself — which quietly creates your account, with the roadmap riding along; a welcome email greets new users; and a weekly roundup engine (overdue + upcoming, capped at five, deterministic per-item tips) waits on its cron.',
+    work: 'Passwordless sign-in (magic link + one-time code) joined the dialog; a signed-out roadmap can be emailed to yourself — which quietly creates your account, with the roadmap riding along; a welcome email greets new users; and a weekly roundup engine (overdue + upcoming, capped at five, deterministic per-item tips) waits on its cron.',
     decisions: [
       'Email over app-store notifications as the retention loop: everyone has an inbox, and every email doubles as a no-password door back into the roadmap.',
       'The roundup is a pure function of the profile — the same engine math as the roadmap, so the email can never disagree with the app.',
@@ -244,6 +244,14 @@ const ROWS: Row[] = [
       'It\'s a filter over the same deterministic plan, not a second plan — the buckets keep the dependency-safe order, never re-sorted by date.',
       'Due today is "this week", not overdue — the same midnight-grace rule as everywhere else, one predicate shared with the red treatment and the weekly email.',
       'Steps still waiting on a milestone (no honest date) are never shown as "next up" — no fabricated urgency.',
+    ],
+  },
+  {
+    feature: 'Family-testing fixes, round one',
+    work: 'Real devices found what simulators don\'t: the emailed sign-in code is 8 digits but the app said — and silently truncated to — 6, so codes could never verify; and the step drawer wouldn\'t scroll on iOS, hiding Lola\'s answers.',
+    decisions: [
+      'Never hardcode another system\'s format: the code length is the auth provider\'s choice, so the app now accepts whatever arrives and the copy just says "one-time code".',
+      'The drawer bug was a wrapper stealing the scroll gesture — the tap-to-close backdrop now sits behind the sheet instead of around it.',
     ],
   },
 ];

@@ -370,8 +370,12 @@ export default function PlanScreen() {
       animationType="slide"
       onRequestClose={() => setSelected(null)}
     >
-      <Pressable style={styles.modalBackdrop} onPress={() => setSelected(null)}>
-        <Pressable style={styles.sheet} onPress={e => e.stopPropagation()}>
+      {/* Backdrop is an absolute-fill Pressable BEHIND a plain-View sheet — wrapping the sheet's
+          ScrollView in a Pressable made the whole drawer unscrollable on iOS (the touchable
+          claimed the drag gesture; build-18 device finding). Tap-out still closes. */}
+      <View style={styles.modalBackdrop}>
+        <Pressable style={StyleSheet.absoluteFill} onPress={() => setSelected(null)} />
+        <View style={styles.sheet}>
           {selected && (() => {
             const deps = selected.depends_on
               .map(id => titleById.get(id))
@@ -532,8 +536,8 @@ export default function PlanScreen() {
               </ScrollView>
             );
           })()}
-        </Pressable>
-      </Pressable>
+        </View>
+      </View>
     </Modal>
 
     <Modal

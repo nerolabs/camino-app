@@ -6,8 +6,10 @@ import { capture } from '@/lib/analytics';
 import { type Profile } from '@/core/interview-controller';
 
 // Passwordless email flow, shared by the sign-in dialogs (web + native) and the plan page's
-// "Email me my roadmap". Two phases: enter email → link sent (with the 6-digit code as a
+// "Email me my roadmap". Two phases: enter email → link sent (with the one-time code as a
 // fallback that works cross-device and in simulators). No password exists anywhere.
+// The code's LENGTH is Supabase's choice (currently 8; historically 6) — never hardcode it:
+// a maxLength={6} silently truncated real 8-digit codes and verification could never succeed.
 
 type Props = {
   // When set, a brand-new account is seeded with this profile (rides in auth metadata;
@@ -61,17 +63,17 @@ export default function EmailSignIn({ pendingProfile, context, sendLabel, onVeri
       <View style={styles.wrap}>
         <Text style={styles.sentTitle}>Check your inbox 📬</Text>
         <Text style={styles.sub}>
-          We sent a sign-in link to {email.trim()}. Tap it on this device — or enter the 6-digit
+          We sent a sign-in link to {email.trim()}. Tap it on this device — or enter the one-time
           code from the same email:
         </Text>
         <TextInput
           style={styles.input}
           value={code}
           onChangeText={setCode}
-          placeholder="123456"
+          placeholder="12345678"
           placeholderTextColor={palette.muted}
           keyboardType="number-pad"
-          maxLength={6}
+          maxLength={10}
           autoComplete="one-time-code"
           textContentType="oneTimeCode"
         />

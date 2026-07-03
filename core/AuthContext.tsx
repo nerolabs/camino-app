@@ -35,7 +35,7 @@ type AuthContextValue = {
   signInWithGoogle: () => Promise<void>;
   signInWithApple: () => Promise<void>; // iOS only — no-op elsewhere (appleSignInAvailable gates UI)
   appleSignInAvailable: boolean;
-  // Passwordless email (magic link + 6-digit code). `pendingProfile` rides along as auth
+  // Passwordless email (magic link + one-time code). `pendingProfile` rides along as auth
   // metadata for brand-new accounts ("email me my roadmap"): SessionSync adopts it on first
   // sign-in, so the link works even when clicked on a different device.
   signInWithEmail: (email: string, pendingProfile?: Profile) => Promise<void>;
@@ -147,7 +147,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function verifyEmailCode(email: string, code: string) {
-    // The 6-digit fallback: works cross-device, in simulators, and when mail apps
+    // The one-time-code fallback: works cross-device, in simulators, and when mail apps
     // mangle links. Session lands via onAuthStateChange like every other method.
     const { error } = await supabase.auth.verifyOtp({ email: email.trim(), token: code.trim(), type: 'email' });
     if (error) throw error;

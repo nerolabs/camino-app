@@ -7,7 +7,7 @@ cal ground, Georgia masthead, Helvetica body, cobalt button, 560px column).
 
 Where they go: Supabase dashboard → project → **Authentication → Emails → Templates** →
 "Magic link or OTP" / "Confirm sign up" (Subject + Body/Source). Both include the
-`{{ .ConfirmationURL }}` button **and** the 6-digit `{{ .Token }}` so a link requested on
+`{{ .ConfirmationURL }}` button **and** the one-time `{{ .Token }}` code (length is Supabase's choice — currently 8 digits) so a link requested on
 one device can be completed on another (the app's EmailSignIn dialog accepts the code).
 
 Auth emails are transactional: no unsubscribe footer (that's only for the weekly roundup).

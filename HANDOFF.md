@@ -87,7 +87,7 @@ correctly, in a real Gmail inbox. Welcome fired on a real Google sign-in at getc
 - **Production Supabase** (`oftrpaleqtmuvolwsocd`): custom SMTP **ON** (host `smtp.resend.com`,
   port 465, user `resend`, sender `lola@getcamino.app` / "Lola from Camino"; password = Resend
   key, pasted by user). Auth email templates **styled + saved**: Magic-link/OTP and Confirm-signup
-  (Camino brand, button + 6-digit `{{ .Token }}` for cross-device). Redirect allowlist already
+  (Camino brand, button + one-time `{{ .Token }}` code for cross-device). Redirect allowlist already
   covers `getcamino.app/**` + `caminoapp://**`.
 - **Staging Supabase** (`gsnsgfobfswazqhfcstx`): redirect allowlist OK. Custom SMTP **ON** +
   both auth templates styled (2026-07-03; source of truth `docs/design/supabase-auth-emails.md`).
@@ -143,7 +143,7 @@ the unified hamburger nav. Android deferred to the very end; localization sequen
   / `nudged_at` / `last_roundup_at` / `weekly_optout` / `pending_profile`) — no schema migration.
 - `lib/serverEmail.ts` (Resend HTTP), `lib/emailTemplates.ts` (hand-rolled inline-style HTML for
   welcome/roundup/nudge), `lib/emailTokens.ts` (Web-Crypto HMAC unsubscribe tokens).
-- `components/EmailSignIn.tsx` — shared passwordless flow (email → link sent → 6-digit fallback),
+- `components/EmailSignIn.tsx` — shared passwordless flow (email → link sent → one-time-code fallback),
   used by both sign-in dialogs + the plan page's "email me my roadmap" card.
 - `components/SignInButtons.{tsx,native.tsx}` — "Sign in" → dialog. Web: Google + email. Native:
   Apple (official button, guideline 4.8) + Google + email. Failures now Alert + log (no silent catch).
