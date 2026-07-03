@@ -232,6 +232,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'criminal-background-check',
+    source_url: 'https://www.inclusion.gob.es/en/web/migraciones/w/autorizacion-inicial-de-residencia-temporal-no-lucrativa',
     webinar_url: 'https://www.youtube.com/watch?v=uH927kx3igU&t=580s',
     title: 'Obtain a national criminal-record check, apostilled and translated into Spanish — must be issued within 90 days of applying, so allow several weeks (US: an FBI-approved channeler speeds it up)',
     category: 'visa', severity: 'required',
@@ -242,6 +243,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'medical-certificate',
+    source_url: 'https://www.inclusion.gob.es/en/web/migraciones/w/autorizacion-inicial-de-residencia-temporal-no-lucrativa',
     webinar_url: 'https://www.youtube.com/watch?v=uH927kx3igU&t=1015s',
     title: 'Obtain a medical certificate (issued within 90 days, on official letterhead, translated into Spanish) confirming no diseases per the International Health Regulations',
     category: 'visa', severity: 'required',
@@ -254,6 +256,7 @@ export const CATALOG: Obligation[] = [
   // ── NLV-specific ────────────────────────────────────────────────────────────
   {
     id: 'nlv-income-proof',
+    source_url: 'https://www.inclusion.gob.es/en/web/migraciones/w/autorizacion-inicial-de-residencia-temporal-no-lucrativa',
     webinar_url: 'https://www.youtube.com/watch?v=tZJk56EH1ms&t=161s',
     title: 'Gather proof of passive income — €28,800/yr for the main applicant plus €7,200/yr per dependent (400% of IPREM; figures track IPREM each year)',
     category: 'visa', severity: 'required',
@@ -264,6 +267,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'nlv-health-insurance',
+    source_url: 'https://www.inclusion.gob.es/en/web/migraciones/w/autorizacion-inicial-de-residencia-temporal-no-lucrativa',
     webinar_url: 'https://www.youtube.com/watch?v=tZJk56EH1ms&t=277s',
     title: 'Purchase private health insurance from a Spanish-authorized insurer — full coverage with no co-pays and no waiting periods (NLV requirement)',
     category: 'health', severity: 'required',
@@ -297,6 +301,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'dnv-income-proof',
+    source_url: 'https://www.inclusion.gob.es/en/web/unidadgrandesempresas/teletrabajadores',
     webinar_url: 'https://www.youtube.com/watch?v=SqmxlLuJ_bY&t=144s',
     title: 'Gather proof of remote income — about €34,000/yr (200% of Spain\'s minimum wage) plus ~€13,000 for a spouse and ~€4,000 per child; thresholds rise when the minimum wage does',
     category: 'visa', severity: 'required',
@@ -307,6 +312,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'dnv-coverage-certificate',
+    source_url: 'https://www.inclusion.gob.es/en/web/unidadgrandesempresas/teletrabajadores',
     webinar_url: 'https://www.youtube.com/watch?v=SqmxlLuJ_bY&t=556s',
     title: 'Obtain a social-security certificate of coverage (e.g. US/Spain totalization, UK A1) from your home country — or otherwise register with Spanish Social Security',
     category: 'visa', severity: 'required',
@@ -340,7 +346,25 @@ export const CATALOG: Obligation[] = [
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: 30 },
   },
   {
+    // The EU-citizen counterpart of the TIE: EU/EEA nationals staying >3 months must register in
+    // the Registro Central de Extranjeros. Found missing in the 2026-07-03 audit (an EU long-stay
+    // profile previously had no registration step at all). Gated on the household being EU +
+    // long-stay; Spanish nationals themselves don't need it — the title says so.
+    id: 'eu-registration-certificate',
+    title: 'Register in the Central Register of Foreign Nationals and get your EU citizen registration certificate (certificado de registro, form EX-18) — required for EU/EEA nationals staying more than 3 months; apply in person within 3 months of entry (not needed for Spanish nationals)',
+    category: 'admin', severity: 'required',
+    source: 'official',
+    source_url: 'https://www.inclusion.gob.es/en/web/migraciones/w/65.-certificado-de-registro-de-ciudadano-de-la-union-europea',
+    applies_if: { all: [
+      { field: 'is_eu', op: 'eq', value: true },
+      { field: 'intends_long_stay', op: 'eq', value: true },
+    ] },
+    depends_on: [],
+    timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: 90 },
+  },
+  {
     id: 'residencia',
+    source_url: 'https://www.interior.gob.es/opencms/es/servicios-al-ciudadano/tramites-y-gestiones/extranjeria/regimen-general/tarjeta-de-identidad-de-extranjero/',
     title: 'Apply for your residence card (TIE) — start the process (fingerprinting/huella) within 30 days of entry; appointment waits can run several weeks in big cities',
     category: 'residency', severity: 'required',
     source: 'official',
@@ -373,6 +397,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'modelo-720',
+    source_url: 'https://sede.agenciatributaria.gob.es/Sede/procedimientoini/GI34.shtml',
     webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=93s',
     title: 'File Modelo 720 (foreign-assets declaration) if any category of overseas assets exceeds €50,000 — filed 1 Jan–31 Mar; reformed flat-rate penalties apply since the 2022 EU court ruling struck down the old proportional regime',
     category: 'tax', severity: 'penalty',
@@ -390,6 +415,7 @@ export const CATALOG: Obligation[] = [
   // ── Driving ─────────────────────────────────────────────────────────────────
   {
     id: 'dgt-exchange',
+    source_url: 'https://sede.dgt.gob.es/es/permisos-de-conducir/canjes-de-permisos/canjes-de-permisos-extranjeros/',
     webinar_url: 'https://www.youtube.com/watch?v=2A19YnqiO4g&t=3743s',
     title: 'Exchange your driving licence under your country\'s bilateral agreement — a medical check, no driving test; your foreign licence is valid only ~6 months after you gain residency',
     category: 'mobility', severity: 'required',
@@ -405,6 +431,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'dgt-exam',
+    source_url: 'https://www.dgt.es/nuestros-servicios/permisos-de-conducir/obtener-un-nuevo-permiso-de-conducir/requisitos-preparacion-y-presentacion-a-examen/',
     webinar_url: 'https://www.youtube.com/watch?v=2A19YnqiO4g&t=3743s',
     title: 'Pass Spanish driving test (theory + practical)',
     category: 'mobility', severity: 'required',
@@ -422,6 +449,7 @@ export const CATALOG: Obligation[] = [
   // ── Family ──────────────────────────────────────────────────────────────────
   {
     id: 'escolarizacion',
+    source_url: 'https://educagob.educacionfpydeportes.gob.es/ensenanzas/primaria/informacion-general/acceso.html',
     title: 'Enroll your child in school — the ordinary admission window runs in spring (≈March–May) for the September start; arriving off-cycle uses the "fuera de plazo" process',
     category: 'family', severity: 'required',
     source: 'official',
@@ -431,6 +459,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'family-reunification',
+    source_url: 'https://www.inclusion.gob.es/en/web/migraciones/w/autorizacion-de-residencia-temporal-por-reagrupacion-familiar',
     title: 'Apply for family reunification (reagrupación familiar) — available after ~1 year of legal residence with a renewed permit; needs an adequate-housing report and means (≈150% IPREM + 50% per extra member). Not needed if family applied together initially.',
     category: 'residency', severity: 'required',
     source: 'official',
@@ -450,6 +479,7 @@ export const CATALOG: Obligation[] = [
   // ── Citizenship milestones (info only) ──────────────────────────────────────
   {
     id: 'citizenship-track-standard',
+    source_url: 'https://www.mjusticia.gob.es/es/ciudadania/tramites/nacionalidad-residencia',
     webinar_url: 'https://www.youtube.com/watch?v=vAeqa_xdrTY&t=194s',
     title: 'Citizenship eligibility: 10 years of legal residency required',
     category: 'residency', severity: 'info',
@@ -466,6 +496,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'citizenship-track-latam',
+    source_url: 'https://www.mjusticia.gob.es/es/ciudadania/tramites/nacionalidad-residencia',
     webinar_url: 'https://www.youtube.com/watch?v=vAeqa_xdrTY&t=617s',
     title: 'Citizenship eligibility: 2 years (ex-Spanish-colony nationals)',
     category: 'residency', severity: 'info',
@@ -604,6 +635,7 @@ export const CATALOG: Obligation[] = [
   // ── Tax registration ──────────────────────────────────────────────────────
   {
     id: 'modelo-030',
+    source_url: 'https://sede.agenciatributaria.gob.es/Sede/procedimientoini/G321.shtml',
     title: 'File Modelo 030 to register with Hacienda as a new Spanish tax resident (census of tax obligations)',
     category: 'tax', severity: 'recommended',
     source: 'official',
@@ -629,6 +661,7 @@ export const CATALOG: Obligation[] = [
   // ── Annual income tax (tax residents) ─────────────────────────────────────
   {
     id: 'modelo-100',
+    source_url: 'https://sede.agenciatributaria.gob.es/Sede/procedimientoini/G229.shtml',
     title: 'File annual Spanish income tax return (Modelo 100 / IRPF) — window 2 April to 30 June, penalty for late filing',
     category: 'tax', severity: 'penalty',
     source: 'official',
@@ -638,6 +671,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'wealth-tax',
+    source_url: 'https://sede.agenciatributaria.gob.es/Sede/procedimientoini/G611.shtml',
     webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=93s',
     title: 'File annual wealth-tax return (Modelo 714) during the renta period — applies when net assets exceed the €700,000 state allowance (regions vary; e.g. €500k in Catalonia), with a further ~€300k exemption for your main home',
     category: 'tax', severity: 'penalty',
@@ -653,6 +687,7 @@ export const CATALOG: Obligation[] = [
   // ── Autónomo / self-employed ──────────────────────────────────────────────
   {
     id: 'register-autonomo',
+    source_url: 'https://sede.agenciatributaria.gob.es/Sede/procedimientoini/G322.shtml',
     webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=111s',
     title: 'Register as self-employed: file Modelo 036 with Hacienda, then register with Social Security (RETA) the same day or within 60 days (Modelo 037 was abolished in 2025)',
     category: 'admin', severity: 'required',
@@ -663,6 +698,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'autonomo-social-security',
+    source_url: 'https://portal.seg-social.gob.es/wps/portal/importass/importass/Categorias/Altas,+bajas+y+modificaciones/Altas+y+afiliacion+de+trabajadores/Alta_trabajo_autonomo',
     title: 'Pay monthly autónomo Social Security (RETA) contributions — €87/month reduced rate first year, then income-based',
     category: 'tax', severity: 'penalty',
     source: 'official',
@@ -673,6 +709,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'modelo-130',
+    source_url: 'https://sede.agenciatributaria.gob.es/Sede/procedimientoini/G601.shtml',
     title: 'File quarterly IRPF provisional income tax payments (Modelo 130) — due Jan/Apr/Jul/Oct',
     category: 'tax', severity: 'penalty',
     source: 'official',
@@ -682,6 +719,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'modelo-303',
+    source_url: 'https://sede.agenciatributaria.gob.es/Sede/procedimientoini/G414.shtml',
     title: 'File quarterly VAT returns (Modelo 303) — due Jan/Apr/Jul/Oct (required even if zero VAT charged)',
     category: 'tax', severity: 'penalty',
     source: 'official',
@@ -701,6 +739,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'modelo-200',
+    source_url: 'https://sede.agenciatributaria.gob.es/Sede/procedimientoini/GE04.shtml',
     title: 'File annual corporation tax return (Modelo 200) for a Spanish-registered company — due 25 July',
     category: 'tax', severity: 'penalty',
     source: 'official',
@@ -712,6 +751,7 @@ export const CATALOG: Obligation[] = [
   // ── Healthcare ────────────────────────────────────────────────────────────
   {
     id: 'student-visa-health-insurance',
+    source_url: 'https://www.inclusion.gob.es/en/web/migraciones/w/estancia-por-estudios',
     webinar_url: 'https://www.youtube.com/watch?v=OnLKyPbpALY&t=420s',
     title: 'Purchase visa-compliant private health insurance (from an insurer authorised in Spain, SNS-equivalent cover, no copays, no waiting periods, repatriation included) — a national student-visa requirement',
     category: 'health', severity: 'required',
@@ -790,6 +830,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'property-transfer-tax',
+    source_url: 'https://administracion.gob.es/pag_Home/Tu-espacio-europeo/derechos-obligaciones/ciudadanos/residencia/compraventa-bienes-inmuebles/impuestos.html',
     title: 'Pay property transfer tax (ITP) on a resale property — roughly 6–11% of the price, set by each autonomous community',
     category: 'tax', severity: 'penalty',
     source: 'official',
@@ -800,6 +841,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'ibi-property-tax',
+    source_url: 'https://boe.es/buscar/act.php?id=BOE-A-2004-4214',
     title: 'Pay the annual municipal property tax on your home to the town hall (IBI) — billing month varies by municipality',
     category: 'tax', severity: 'penalty',
     source: 'official',
@@ -820,6 +862,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'nonresident-property-tax',
+    source_url: 'https://sede.agenciatributaria.gob.es/Sede/no-residentes/irnr-sin-establecimiento-permanente/modelo-210-irnr-sin-establecimiento-permanente.html',
     title: 'File non-resident imputed income tax (Modelo 210) on a Spanish property you don\'t rent out — based on cadastral value, due by 31 Dec of the following year, while not yet tax resident',
     category: 'tax', severity: 'penalty',
     source: 'official',
@@ -847,6 +890,7 @@ export const CATALOG: Obligation[] = [
   // ── Citizenship application steps ─────────────────────────────────────────
   {
     id: 'dele-a2-exam',
+    source_url: 'https://examenes.cervantes.es/es/dele/examenes/a2',
     webinar_url: 'https://www.youtube.com/watch?v=vAeqa_xdrTY&t=1511s',
     title: 'Pass DELE A2 Spanish language exam (Instituto Cervantes) — required for naturalization',
     category: 'admin', severity: 'required',
@@ -863,6 +907,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'ccse-exam',
+    source_url: 'https://examenes.cervantes.es/es/presentacion/nacionalidad',
     webinar_url: 'https://www.youtube.com/watch?v=vAeqa_xdrTY&t=1601s',
     title: 'Pass CCSE constitutional and sociocultural knowledge exam (Instituto Cervantes) — required for naturalization',
     category: 'admin', severity: 'required',

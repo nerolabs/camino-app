@@ -87,16 +87,50 @@ estimates — not specific legal figures needing a cite: `choose-visa-type`,
 (History: an earlier milestone read 28 `webinar` / 26 `official`; the B10 grounding pass reached
 52 `official` / 6 `webinar` / 1 `domain` before the taxonomy was simplified — see next section.)
 
-### ⚠️ Correction (2026-07-03 audit): tag ≠ citation
+### ⚠️ Correction (2026-07-03 audit): tag ≠ citation — RESOLVED same day
 
-A full audit found that **28 of the 54 `official` items carry no `source_url`** — earlier passes
-(especially the original domain→official queue: the Modelo forms, DGT, residencia, DELE/CCSE,
-NLV/DNV doc items…) verified claims and logged notes here, but never attached the canonical URL
-to the catalog entry, so the app shows "verified against an official source" with no link to
-check. `npm run audit` now warns on every such item, and a **one-by-one re-verification pass**
-is underway to attach (and re-confirm) each citation. The same audit also flagged a missing
-obligation: **EU-registration certificate** (Certificado de registro de ciudadano de la Unión,
-required for EU nationals staying >90 days) — to be added with a source in that pass.
+A full audit found that **28 of the 54 `official` items carried no `source_url`** — earlier passes
+verified claims and logged notes here but never attached the canonical URL to the catalog entry,
+so the app showed "verified against an official source" with no link to check. `npm run audit`
+now fails-soft on any such item (it reported 28; it reports **0** after the pass below).
+
+## Re-verification pass — all 28 missing citations attached (2026-07-03)
+
+Each item re-verified against its issuing authority and given its canonical URL:
+
+- **AEAT sede (procedure pages, `procedimientoini/*`):** modelo-030 → G321 · modelo-100 → G229 ·
+  modelo-130 → G601 · modelo-303 → G414 · modelo-200 → GE04 · modelo-720 → GI34 ·
+  wealth-tax (Modelo 714) → G611 · register-autonomo (Modelo 036 censal) → G322 ·
+  nonresident-property-tax → Modelo 210 IRNR gestiones page.
+- **Seguridad Social:** autonomo-social-security → Importass "Alta en trabajo autónomo" (RETA;
+  alta due same day activity starts, filable up to 60 days ahead — mandatory electronic).
+- **Extranjería / Inclusión:** criminal-background-check, medical-certificate, nlv-income-proof,
+  nlv-health-insurance → Hoja 6 (NLV initial authorisation — lists all four requirements) ·
+  dnv-income-proof, dnv-coverage-certificate → UGE teletrabajadores page ·
+  family-reunification → Hoja 8 (reagrupación familiar) ·
+  student-visa-health-insurance → Hoja 1 (estancia por estudios: insurer authorised in Spain,
+  SNS-equivalent cover) · residencia (TIE) → interior.gob.es TIE page.
+- **DGT:** dgt-exchange → sede.dgt canje de permisos extranjeros (non-EU licences valid only
+  6 months after residence; exchange requires a bilateral agreement) · dgt-exam → dgt.es
+  requisitos/presentación a examen.
+- **Citizenship:** citizenship-track-standard + citizenship-track-latam → mjusticia nacionalidad
+  por residencia (10-year / 2-year Ibero-American rules) · dele-a2-exam →
+  examenes.cervantes.es DELE A2 · ccse-exam → examenes.cervantes.es nacionalidad (CCSE).
+- **Property:** property-transfer-tax → administracion.gob.es compraventa-impuestos (state
+  explainer; ITP is 100% ceded to regions, rates vary ~6–13%) · ibi-property-tax →
+  BOE RDL 2/2004 (TRLRHL — the statutory basis of the IBI; the tax itself is municipal).
+- **Education:** escolarizacion → educagob (Ministerio de Educación) primary-admission page
+  (also covers late/off-cycle incorporation of foreign pupils, LOE art. 84).
+
+## New obligation: `eu-registration-certificate` (2026-07-03)
+
+The audit's persona check exposed that an EU long-stay profile had **no registration step at
+all**. Added: EU/EEA nationals staying >3 months must register in person in the Registro Central
+de Extranjeros within 3 months of entry (form EX-18, fee 790-012; certificate valid 5 years).
+Source: Hoja 65, `…/w/65.-certificado-de-registro-de-ciudadano-de-la-union-europea` (also on
+sede.policia.gob.es). Gated `is_eu` + `intends_long_stay`; title notes Spanish nationals
+themselves don't need it (household-level profile granularity). **Catalog: 59 → 60** —
+mix **55 `official` (all with `source_url`) / 5 `recommendation`, 0 uncited.**
 
 ## Source taxonomy simplified: `official` | `recommendation` (2026-07-02)
 

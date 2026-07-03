@@ -30,9 +30,13 @@ Last updated: 2026-07-01.
    sources (with detail corrections) and re-added as `source: 'official'` + `source_url`.
    Catalog **55 → 59** (44 official / 15 webinar). Smoke-tested in `buildPlan` — no cycles.
    See `core/SOURCING.md` "Backlog re-add". **→ Next active item is #4 (deep cross-check).**
-4. **Full deep cross-check / testing pass of ALL obligations** — **top priority, but only AFTER the
-   webinar content is captured to obligations.** Obligations are still changing, so this final
-   verification pass is saved for near the end (source accuracy, dates, links, webinar↔official).
+4. ~~**Full deep cross-check / testing pass of ALL obligations**~~ — **substantially DONE 2026-07-03**
+   via the Fable audit + re-verification pass: every `applies_if` field audited against the
+   interview (invariant 2, now `npm run audit` + a deploy gate), all 28 uncited `official` items
+   re-verified one-by-one and given canonical URLs, catalog bugs fixed (DELE/PH, unmarried-partner
+   reunification), missing `eu-registration-certificate` added. **Catalog: 60 obligations —
+   55 official (100% cited) / 5 recommendation.** Remaining for launch-final QA: click-test every
+   source link renders the right page (manual spot-check), and E2E flows (B5).
 
 ## ✅ Done (this session)
 
