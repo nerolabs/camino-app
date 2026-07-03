@@ -3,11 +3,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
+import SignInButtons from '@/components/SignInButtons';
 
 export default function NavBar() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { user, signInWithGoogle, signOut } = useAuth();
+  const { user, signOut } = useAuth();
 
   return (
     // Top safe-area (Dynamic Island / notch) is handled by the ROOT layout's SafeAreaView —
@@ -41,9 +42,8 @@ export default function NavBar() {
           </>
         ) : (
           <>
-            <TouchableOpacity onPress={signInWithGoogle} style={styles.ghost}>
-              <Text style={styles.ghostText}>Sign in</Text>
-            </TouchableOpacity>
+            {/* Platform-split: web = Google; iOS = official Apple button + Google (guideline 4.8). */}
+            <SignInButtons />
             <TouchableOpacity onPress={() => router.push('/interview')} style={styles.cta}>
               <Text style={styles.ctaText}>Get your roadmap</Text>
             </TouchableOpacity>

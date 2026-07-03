@@ -96,7 +96,13 @@ drop raw PNGs into `docs/store-assets/`.
 
 ## Remaining checklist
 
-- [ ] **Sign in with Apple** (guideline 4.8) — build + verify, then update review notes. **[JOINT]**
+- [~] **Sign in with Apple** (guideline 4.8) — **code DONE 2026-07-03** (`lib/appleSignIn.native.ts`
+      via Supabase `signInWithIdToken`; official Apple button in the NavBar on iOS; entitlement via
+      `usesAppleSignIn` + the expo-apple-authentication plugin — EAS syncs the capability at build).
+      **[YOU] Supabase dashboard, BOTH projects (staging gsnsg… + production oftrp…):**
+      Authentication → Providers → Apple → enable, and add `com.nerolabs.camino` under
+      **Authorized Client IDs**. (Native-only flow — no Apple secret needed.) Then build 12 + verify
+      on device.
 - [ ] App Store icon 1024×1024 — we already generate an opaque icon; confirm the marketing icon
       reads well at small sizes. *(exists via `scripts/gen-icon.mjs`)*
 - [ ] Screenshots per above. **[YOU capture / I polish]**

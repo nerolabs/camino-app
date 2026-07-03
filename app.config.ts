@@ -13,6 +13,7 @@ const config: ExpoConfig = {
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'com.nerolabs.camino',
+    usesAppleSignIn: true, // Sign in with Apple (App Review guideline 4.8 — required alongside Google)
     infoPlist: {
       // App uses only standard HTTPS (exempt encryption) — avoids the manual export-compliance step.
       ITSAppUsesNonExemptEncryption: false,
@@ -65,6 +66,8 @@ const config: ExpoConfig = {
     // Peer of posthog-react-native (device-locale context for native analytics). NOT app i18n —
     // that's a separate, later effort.
     'expo-localization',
+    // Sign in with Apple (adds the entitlement; EAS syncs the capability at build time).
+    'expo-apple-authentication',
   ],
   experiments: { typedRoutes: true },
   extra: {

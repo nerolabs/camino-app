@@ -6,6 +6,7 @@ import * as QueryParams from 'expo-auth-session/build/QueryParams';
 import { type Session, type User } from '@supabase/supabase-js';
 import { supabase } from './supabase';
 import { identify, resetAnalytics } from '@/lib/analytics';
+import { signInWithApple as appleFlow, appleSignInAvailable } from '@/lib/appleSignIn';
 
 // Lets the auth browser session close cleanly after the OAuth redirect (no-op harm on native).
 WebBrowser.maybeCompleteAuthSession();
@@ -30,12 +31,16 @@ type AuthContextValue = {
   user: User | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
+  signInWithApple: () => Promise<void>; // iOS only — no-op elsewhere (appleSignInAvailable gates UI)
+  appleSignInAvailable: boolean;
   signOut: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue>({
   session: null, user: null, loading: true,
   signInWithGoogle: async () => {},
+  signInWithApple: async () => {},
+  appleSignInAvailable: false,
   signOut: async () => {},
 });
 
@@ -84,12 +89,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  async function signInWithApple() {
+    try {
+      await appleFlow(); // session lands via onAuthStateChange
+    } catch (e: unknown) {
+      // The user closing Apple's sheet throws ERR_REQUEST_CANCELED — that's not an error.
+      if ((e as { code?: string })?.code === 'ERR_REQUEST_CANCELED') return;
+      throw e;
+    }
+  }
+
   async function signOut() {
     await supabase.auth.signOut();
   }
 
   return (
-    <AuthContext.Provider value={{ session, user: session?.user ?? null, loading, signInWithGoogle, signOut }}>
+    <AuthContext.Provider value={{ session, user: session?.user ?? null, loading, signInWithGoogle, signInWithApple, appleSignInAvailable, signOut }}>
       {children}
     </AuthContext.Provider>
   );
