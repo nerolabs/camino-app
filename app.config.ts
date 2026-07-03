@@ -14,6 +14,11 @@ const config: ExpoConfig = {
     supportsTablet: true,
     bundleIdentifier: 'com.nerolabs.camino',
     usesAppleSignIn: true, // Sign in with Apple (App Review guideline 4.8 — required alongside Google)
+    // Universal links: getcamino.app links in our emails open the APP (signed in) instead of a
+    // logged-out browser tab. Pairs with public/.well-known/apple-app-site-association (the
+    // AASA file lists which paths deep-link). Apple fetches the AASA via its CDN on install,
+    // so AASA changes need a fresh install to take effect on a device.
+    associatedDomains: ['applinks:getcamino.app'],
     infoPlist: {
       // App uses only standard HTTPS (exempt encryption) — avoids the manual export-compliance step.
       ITSAppUsesNonExemptEncryption: false,

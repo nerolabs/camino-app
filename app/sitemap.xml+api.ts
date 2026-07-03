@@ -1,7 +1,7 @@
 /**
  * GET /sitemap.xml — generated from the catalog so it can never drift from the real
- * guide pages. Only public, indexable routes belong here (never /how-i-was-built —
- * that stays robots-disallowed, and /plan and /interview are app surfaces, not content).
+ * guide pages. Only public, indexable routes belong here (/plan and /interview are app
+ * surfaces, not content). /how-i-was-built went public 3 Jul 2026 (user decision).
  */
 import { CATALOG } from '@/core/engine-controller';
 import { siteOrigin } from '@/lib/serverEmail';
@@ -10,6 +10,7 @@ export function GET(request: Request): Response {
   const base = siteOrigin(request);
   const urls = [
     '/', '/how-it-works', '/sample-plan', '/guide',
+    '/how-i-was-built', '/how-i-was-built/log', '/how-i-was-built/roadmap',
     ...CATALOG.map(o => `/guide/${o.id}`),
   ];
   const xml =

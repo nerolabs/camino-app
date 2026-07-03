@@ -4,7 +4,7 @@ import { palette } from '@/constants/Colors';
 import NavBar from '@/components/NavBar';
 
 // The product roadmap — the outward-facing twin of TODO.md's "Product roadmap" section.
-// Unlisted like the rest of /how-i-was-built/ (robots-disallowed, direct link only): companion
+// Public since 3 Jul 2026 (user decision): linked from the nav menu and in the sitemap; companion
 // to the build story (how it got here) and the build log (the receipts).
 //
 // ⚠️ MAINTENANCE CONTRACT: update this page AND /how-i-was-built/log with EVERY PR, so what we
@@ -12,7 +12,7 @@ import NavBar from '@/components/NavBar';
 // this page is its user-readable rendering (no internal jargon, honest about what we're NOT
 // building and why).
 
-type Item = { title: string; note?: string };
+type Item = { title: string; note?: string; date?: string };
 type Section = { h: string; intro?: string; items: Item[] };
 
 const UPDATED = 'July 2026';
@@ -21,16 +21,16 @@ const SECTIONS: Section[] = [
   {
     h: 'Just shipped',
     items: [
-      { title: '“This week” view', note: 'One tap on your roadmap and you see just what needs your attention now — what’s slipped and what’s due in the next seven days. A clear week says so, honestly.' },
-      { title: 'A free guide for every step', note: 'Sixty public pages — one per step in the catalog, each with when it’s due, why it matters, and the official source. The same facts your roadmap is built from, open to everyone.' },
-      { title: 'One calmer nav everywhere', note: 'Desktop now matches mobile: browsing lives in the ☰ menu, the bar keeps just the actions.' },
-      { title: 'The weekly roundup + welcome email', note: 'What’s overdue and what’s coming up, never more than a handful of tasks, each with a concrete tip. A welcome note when you join, one-click unsubscribe, and silence when there’s nothing pressing.' },
-      { title: 'Passwordless email sign-in', note: 'A link (or one-time code) lands in your inbox and signs you in — no password to invent, works across devices.' },
-      { title: '“Email me my roadmap”', note: 'One field on your fresh roadmap: saves it, creates your account silently, and the emailed link brings you back signed in.' },
-      { title: 'Overdue tracking', note: 'Steps past their date now say so, in red — and Lola helps you re-flow the plan instead of letting it quietly rot.' },
-      { title: 'Sample plan', note: 'See a real, full roadmap (Susan & Tom’s) before answering a single question.' },
-      { title: 'Sign in with Apple + a cleaner sign-in dialog', note: 'One tap on iOS; Google everywhere.' },
-      { title: 'iOS app in TestFlight', note: 'Full parity with the web: voice, dictation, the living roadmap.' },
+      { title: '“This week” view', date: '3 Jul 2026', note: 'One tap on your roadmap and you see just what needs your attention now — what’s slipped and what’s due in the next seven days. A clear week says so, honestly.' },
+      { title: 'A free guide for every step', date: '3 Jul 2026', note: 'Sixty public pages — one per step in the catalog, each with when it’s due, why it matters, and the official source. The same facts your roadmap is built from, open to everyone.' },
+      { title: 'One calmer nav everywhere', date: '3 Jul 2026', note: 'Desktop now matches mobile: browsing lives in the ☰ menu, the bar keeps just the actions.' },
+      { title: 'The weekly roundup + welcome email', date: '3 Jul 2026', note: 'What’s overdue and what’s coming up, never more than a handful of tasks, each with a concrete tip. A welcome note when you join, one-click unsubscribe, and silence when there’s nothing pressing.' },
+      { title: 'Passwordless email sign-in', date: '3 Jul 2026', note: 'A link (or one-time code) lands in your inbox and signs you in — no password to invent, works across devices.' },
+      { title: '“Email me my roadmap”', date: '3 Jul 2026', note: 'One field on your fresh roadmap: saves it, creates your account silently, and the emailed link brings you back signed in.' },
+      { title: 'Overdue tracking', date: '3 Jul 2026', note: 'Steps past their date now say so, in red — and Lola helps you re-flow the plan instead of letting it quietly rot.' },
+      { title: 'Sample plan', date: '3 Jul 2026', note: 'See a real, full roadmap (Susan & Tom’s) before answering a single question.' },
+      { title: 'Sign in with Apple + a cleaner sign-in dialog', date: '3 Jul 2026', note: 'One tap on iOS; Google everywhere.' },
+      { title: 'iOS app in TestFlight', date: '1 Jul 2026', note: 'Full parity with the web: voice, dictation, the living roadmap.' },
     ],
   },
   {
@@ -84,7 +84,7 @@ export default function Roadmap() {
             {s.intro && <Text style={styles.intro}>{s.intro}</Text>}
             {s.items.map((it) => (
               <View key={it.title} style={styles.item}>
-                <Text style={styles.itemTitle}>{it.title}</Text>
+                <Text style={styles.itemTitle}>{it.title}{it.date ? <Text style={styles.itemDate}>  ·  {it.date}</Text> : null}</Text>
                 {it.note && <Text style={styles.itemNote}>{it.note}</Text>}
               </View>
             ))}
@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
   intro:     { fontFamily: 'HankenGrotesk_400Regular', fontSize: 16, lineHeight: 25, color: palette.muted, fontStyle: 'italic', marginBottom: 12 },
   item:      { marginBottom: 14 },
   itemTitle: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 17, lineHeight: 26, color: palette.indigo },
+  itemDate:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: palette.muted },
   itemNote:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, lineHeight: 24, color: palette.muted, marginTop: 2 },
   link:      { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, lineHeight: 23, color: palette.cobalt, marginBottom: 16 },
 });

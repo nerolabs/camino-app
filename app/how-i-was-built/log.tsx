@@ -7,14 +7,15 @@ import Footer from '@/components/Footer';
 
 // "Show our homework" — the receipts behind the essay at /how-i-was-built. Every roadmap item in
 // the order we actually took the work on, with what shipped and the decisions that shaped it.
-// Unlisted like the essay (robots disallows the /how-i-was-built prefix; not in the nav).
+// Public since 3 Jul 2026 (user decision): linked from the nav menu and in the sitemap.
 // Sourced from TODO.md's completed items + the git history, so it stays honest.
 
-type Row = { feature: string; work: string; decisions: string[] };
+type Row = { feature: string; date: string; work: string; decisions: string[] };
 
 const ROWS: Row[] = [
   {
     feature: 'The walking skeleton',
+    date: '30 Jun 2026',
     work: 'A deterministic plan engine (~7 obligations), a catalog-derived interview, Lola\'s persona prompt, and a report prototype — the whole pipeline end to end before any real app existed.',
     decisions: [
       'Model obligations, not journeys: ~100 finite atomic units generate the thousands of individual journeys for free.',
@@ -24,6 +25,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'The Expo app + auth + storage',
+    date: '1 Jul 2026',
     work: 'Expo Router app targeting web, iOS, and Android from one codebase; Supabase Google sign-in; profiles saved per-user under RLS.',
     decisions: [
       'One codebase, three platforms — platform differences isolated into .native.ts twin modules Metro resolves automatically.',
@@ -32,6 +34,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Server-side LLM proxy',
+    date: '1 Jul 2026',
     work: 'All Anthropic calls moved behind /api/lola (Expo API route on the hosting platform\'s Workers runtime); the client bundle no longer contains any key.',
     decisions: [
       'Secrets live only in server env vars — a browser bundle is public by definition.',
@@ -40,6 +43,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Catalog expansion by webinar mining',
+    date: '2 Jul 2026',
     work: 'Fifteen relocation-webinar transcripts mined by five parallel agents; the catalog grew from ~20 to 54 obligations across tax, property, visas, healthcare, and citizenship.',
     decisions: [
       'Every obligation carries a provenance tag from day one, enforced by the type system.',
@@ -48,6 +52,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'The living plan',
+    date: '2 Jul 2026',
     work: 'Mark steps done (today or back-dated); completions re-anchor downstream deadlines to what actually happened; a free-text "something changed" box re-plans deterministically.',
     decisions: [
       'Progress is just more profile input — the engine stays a pure function.',
@@ -56,6 +61,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Deploy pipeline + environments',
+    date: '1 Jul 2026',
     work: 'EAS Hosting with development / staging / production environments, a custom domain, and a deploy script that pulls each environment\'s vars and clears bundler caches.',
     decisions: [
       'One early build silently baked the staging database into production — the fix became a permanent guard: the deploy script sources the pulled env, wipes caches, and prints exactly what it baked.',
@@ -64,6 +70,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'iOS to TestFlight',
+    date: '1 Jul 2026',
     work: 'Native builds through EAS with an App Store Connect API key (fully non-interactive), through review rejections to installable TestFlight builds; native Google sign-in, dictation, and Dynamic Island safe-areas verified on device.',
     decisions: [
       'Machine-drivable release infrastructure over click-ops: the API key lets any session cut a build.',
@@ -72,6 +79,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Staff tooling & gating',
+    date: '2 Jul 2026',
     work: 'Dev test personas and internal cross-check links, first gated by environment + a user-id allowlist, later replaced by a server-owned is_staff flag on the profiles table.',
     decisions: [
       'Feature flags belong in the database, not hardcoded into client bundles — extended testers get access with one SQL update.',
@@ -80,6 +88,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Brand into product',
+    date: '2 Jul 2026',
     work: 'The azulejo compass-star became the app icon set (iOS, adaptive Android, splash, favicon), generated from a single SVG by a script.',
     decisions: [
       'One source of truth, regenerated on demand — no hand-exported icon zoo.',
@@ -88,6 +97,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Product analytics',
+    date: '2 Jul 2026',
     work: 'PostHog on web and later native: a funnel from first visit through interview to roadmap, feature-health events, person profiles.',
     decisions: [
       'Every event stamped with its environment so our own testing never pollutes real usage.',
@@ -96,6 +106,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Lola\'s voice',
+    date: '2 Jul 2026',
     work: 'ElevenLabs TTS behind /api/tts (key server-side), a warm Spanish-accented English voice, on by default, with a visible mute pill.',
     decisions: [
       'Two failed autoplay fixes are part of the record: browsers block audio without a user gesture. The real fix rides the gesture users already make ("Let\'s get started") to unlock a Web Audio context for the whole session.',
@@ -104,6 +115,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Official sourcing & the source taxonomy',
+    date: '2 Jul 2026',
     work: 'Every webinar-derived claim researched against government sources; corrections applied (regional tax ranges, renewal windows, a voluntary-not-mandatory registry); the taxonomy simplified to official | recommendation.',
     decisions: [
       'A tag is not a citation — "official" ultimately came to require a canonical URL the user can check.',
@@ -113,6 +125,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Observability',
+    date: '2 Jul 2026',
     work: 'Sentry across web, the API routes, and native iOS — one project tagged by platform and environment — plus an uptime monitor that pages on downtime, and daily budget caps on the paid API routes.',
     decisions: [
       'One Sentry project with tags beats three projects to manage.',
@@ -121,6 +134,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Native parity',
+    date: '2 Jul 2026',
     work: 'Three TestFlight builds brought iOS level with web: spoken Lola (expo-audio streaming a GET variant of the TTS route), native crash reporting with readable stack traces, native analytics.',
     decisions: [
       'Each build verified on a real device before being called done.',
@@ -129,6 +143,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Citizenship vs. renewal — asking instead of assuming',
+    date: '2 Jul 2026',
     work: 'A new interview question (do you hope to become a citizen, or keep renewing residence?) now gates the entire citizenship track; a second new question gates the scouting trip to people still choosing a region.',
     decisions: [
       'The engine had silently assumed everyone naturalises — a big assumption belongs to the user, deterministically, not to the catalog.',
@@ -136,6 +151,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'The cold-eyed audit',
+    date: '3 Jul 2026',
     work: 'A full fresh-eyes review of architecture, catalog, and interview found real bugs: a language-exam rule mishandling Filipino applicants, two interview answers collected but never read, the drift-check invariant living in dead code, and 28 "official" items with no citation attached.',
     decisions: [
       'Auditing your own product is scheduled work, not luck.',
@@ -145,6 +161,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'The re-verification pass',
+    date: '3 Jul 2026',
     work: 'All 28 uncited official obligations re-verified one by one against their issuing authorities (tax agency procedure pages, ministry information sheets, the BOE, the DGT, the Instituto Cervantes) and given canonical links; a missing EU-registration obligation was discovered and added.',
     decisions: [
       'The catalog reached 60 obligations: 55 official — every single one citable — and 5 honest recommendations.',
@@ -153,6 +170,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'The test suite & CI',
+    date: '3 Jul 2026',
     work: 'A deterministic engine suite (15 tests, ~140 ms) runs in CI on every push and inside the deploy gate; API contract tests and a Playwright smoke suite run against the deployed staging site.',
     decisions: [
       'Fast, offline, deterministic tests gate deploys; anything paid or networked is opt-in so CI never burns tokens.',
@@ -161,6 +179,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'The sample plan',
+    date: '3 Jul 2026',
     work: 'A public, read-only roadmap for a fictional couple — built by the real engine on a canned profile — with tap-to-expand deterministic detail and interview CTAs.',
     decisions: [
       'Show the payoff before asking for the interview\'s effort.',
@@ -170,6 +189,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Sign in with Apple',
+    date: '3 Jul 2026',
     work: 'The official Apple button on iOS, exchanging Apple\'s identity token directly for a session — no password, no web redirect. Three failed builds taught us Apple\'s provisioning model the hard way.',
     decisions: [
       'Provisioning profiles are immutable snapshots of capabilities — enabling a capability means re-minting the profile, not editing it. The playbook is now written down.',
@@ -178,6 +198,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Overdue, honestly',
+    date: '3 Jul 2026',
     work: 'Steps past their due date now say so in red — on the card, in the stats, and in the step sheet, which nudges: mark it done with the real date, or tell Lola what changed and the plan re-flows.',
     decisions: [
       'One deterministic predicate defines "overdue" everywhere — the roadmap today, the weekly email next.',
@@ -186,6 +207,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'The keyboard, third time',
+    date: '3 Jul 2026',
     work: 'The interview composer clipped behind the iOS keyboard through two attempted fixes. The framework\'s keyboard-avoidance component was removed entirely, replaced by a hook that pads by the exact overlap the OS reports.',
     decisions: [
       'When a framework abstraction guesses geometry and guesses wrong twice, stop tuning it — use the number the OS actually gives you.',
@@ -194,6 +216,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'A calmer nav',
+    date: '3 Jul 2026',
     work: 'Signing in became one link that opens a dialog (Apple + Google, email next); narrow screens got a hamburger menu holding the browse links, leaving the bar to the two actions that matter.',
     decisions: [
       'Actions live on the bar, browsing lives in the menu — and future content sections have a home waiting.',
@@ -202,6 +225,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'The email loop, part one',
+    date: '3 Jul 2026',
     work: 'Passwordless sign-in (magic link + one-time code) joined the dialog; a signed-out roadmap can be emailed to yourself — which quietly creates your account, with the roadmap riding along; a welcome email greets new users; and a weekly roundup engine (overdue + upcoming, capped at five, deterministic per-item tips) waits on its cron.',
     decisions: [
       'Email over app-store notifications as the retention loop: everyone has an inbox, and every email doubles as a no-password door back into the roadmap.',
@@ -212,6 +236,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'The public roadmap',
+    date: '3 Jul 2026',
     work: 'This section gained a third page: the product roadmap, updated with every release — shipped, in progress, next, and the things we\'ve said no to.',
     decisions: [
       'Saying no is part of the roadmap: no document vault (we refuse to be a honeypot for passports), no second country yet, no features on spec.',
@@ -220,6 +245,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'The email loop, live',
+    date: '3 Jul 2026',
     work: 'The welcome email and weekly roundup went live end-to-end: server keys landed, both environments redeployed, a real weekly run fired from the scheduler, and real emails read in a real inbox. The live test caught two bugs no unit test saw: email links leaked the hosting platform\'s per-deploy URL instead of getcamino.app, and one sign-in sent the welcome email three times.',
     decisions: [
       'Test the loop by receiving the email, not by reading the code — both bugs were only visible in an actual inbox.',
@@ -229,6 +255,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Sixty free guides',
+    date: '3 Jul 2026',
     work: 'Every catalog obligation got a public page (/guide/<id>): when it\'s due, why it matters, what comes first, the official source, and a category tip — plus a grouped index, prerendered HTML titles and descriptions for search engines, and a sitemap. The nav also unified: desktop now gets the same ☰ menu as mobile, with Sign out inside.',
     decisions: [
       'The catalog is the single source: pages are generated from the same data the engine plans with, so a guide can never disagree with a roadmap.',
@@ -239,6 +266,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'The "This week" view',
+    date: '3 Jul 2026',
     work: 'The roadmap gained a second lens: a toggle that filters to just what needs attention now — what\'s slipped past, and what\'s due in the next seven days. A clear week gets an honest "nothing needs you this week", with the next dated step so you know what\'s coming.',
     decisions: [
       'It\'s a filter over the same deterministic plan, not a second plan — the buckets keep the dependency-safe order, never re-sorted by date.',
@@ -248,6 +276,7 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Family-testing fixes, round one',
+    date: '3 Jul 2026',
     work: 'Real devices found what simulators don\'t: the emailed sign-in code is 8 digits but the app said — and silently truncated to — 6, so codes could never verify; and the step drawer wouldn\'t scroll on iOS, hiding Lola\'s answers.',
     decisions: [
       'Never hardcode another system\'s format: the code length is the auth provider\'s choice, so the app now accepts whatever arrives and the copy just says "one-time code".',
@@ -256,11 +285,22 @@ const ROWS: Row[] = [
   },
   {
     feature: 'Sign in with Apple, solved',
+    date: '3 Jul 2026',
     work: 'A five-build mystery: Apple\'s own sign-in sheet rejected only this app, while every layer we could check was provably correct — the entitlement inside the signed binary, the App ID capability, fresh provisioning profiles, the auth provider config, active developer agreements. The failure lived in none of them: Apple\'s server-side provisioning for the App ID had gone stale. Toggling the capability off and back on forced a re-provision, and sign-in started working — even on the older builds.',
     decisions: [
       'Eliminate by evidence, not vibes: each layer was verified with an artifact (the IPA\'s own entitlements, the portal config, the agreement dates) before moving to the next.',
       'The decisive clue was that an OLD build started working the moment the capability was re-provisioned — proof the broken state lived on Apple\'s servers, not in anything we shipped.',
       'When every checkable layer is correct and the platform still fails, re-provision before you rewrite.',
+    ],
+  },
+  {
+    feature: 'The homework goes public + links that open the app',
+    date: '3 Jul 2026',
+    work: 'This whole section — the essay, this log, the roadmap — left the unlisted shadows: it\'s in the nav menu and the sitemap now, and every entry carries its ship date. And the links in Camino\'s emails gained universal links, so tapping "Open your roadmap" on an iPhone opens the app (signed in) instead of a logged-out browser tab.',
+    decisions: [
+      'Building in the open was already the point — hiding the receipts behind a direct link stopped making sense once the guides made content the front door.',
+      'Dates on every entry keep the log honest about pace: this product went from empty repo to sixty guides in four days, and the record should show it.',
+      'Universal links are configuration, not code: an entitlement plus a JSON file the domain serves — and Apple caches that file on install, so it only kicks in from the next build.',
     ],
   },
 ];
@@ -291,6 +331,7 @@ export default function BuildLogScreen() {
             <View style={styles.rowHeader}>
               <Text style={styles.rowNum}>{String(i + 1).padStart(2, '0')}</Text>
               <Text style={styles.rowFeature}>{row.feature}</Text>
+              <Text style={styles.rowDate}>{row.date}</Text>
             </View>
             <Text style={styles.label}>WORK COMPLETED</Text>
             <Text style={styles.work}>{row.work}</Text>
@@ -323,6 +364,7 @@ const styles = StyleSheet.create({
   rowHeader:  { flexDirection: 'row', alignItems: 'baseline', gap: 10, marginBottom: 10 },
   rowNum:     { fontFamily: 'Fraunces_600SemiBold', fontSize: 15, color: palette.amber },
   rowFeature: { fontFamily: 'Fraunces_600SemiBold', fontSize: 20, color: palette.indigo, flexShrink: 1 },
+  rowDate:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: palette.muted, marginLeft: 'auto' },
   label:      { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 10, letterSpacing: 1.2, color: palette.muted, marginTop: 10, marginBottom: 4 },
   work:       { fontFamily: 'HankenGrotesk_400Regular', fontSize: 14, lineHeight: 21, color: palette.indigo },
   decision:   { fontFamily: 'HankenGrotesk_400Regular', fontSize: 14, lineHeight: 21, color: palette.indigo, marginBottom: 4 },

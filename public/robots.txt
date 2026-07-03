@@ -1,5 +1,3 @@
 User-agent: *
-# The "how I was built" essay is an unlisted, direct-link-only page — keep it out of search.
-Disallow: /how-i-was-built
 
 Sitemap: https://getcamino.app/sitemap.xml

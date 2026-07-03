@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["VB9CHJM4AN.com.nerolabs.camino"],
+        "components": [
+          { "/": "/plan" },
+          { "/": "/interview" },
+          { "/": "/guide/*" },
+          { "/": "/guide" }
+        ]
+      }
+    ]
+  }
+}

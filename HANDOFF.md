@@ -32,9 +32,18 @@ user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS bui
 
 4. **Guides alert on native** (build-19 finding): expo-router/head on iOS is the Apple Handoff
    integration and alerts without an `origin` config. Head is now a platform-split
-   `components/SeoHead` (web re-exports it, native renders nothing). Fixed in **build 21**
-   (`0fc2f1dd` submission) — the one build that has EVERYTHING: OTP fix, drawer fix, no alert,
-   re-provisioned Apple. **Family testing should use build 21+.**
+   `components/SeoHead` (web re-exports it, native renders nothing). Fixed in build 21.
+
+5. **Batch of user requests (2026-07-03 late):** /how-i-was-built is PUBLIC (robots un-gated,
+   in the sitemap (67 URLs) and the nav menu as "How I was built"); every roadmap/log entry
+   now carries its ship date (derived from git history — the whole product is 30 Jun → 3 Jul);
+   and **universal links**: `ios.associatedDomains: ['applinks:getcamino.app']` +
+   `public/.well-known/apple-app-site-association` (served, content-type application/json,
+   paths /plan /interview /guide*) so email links open the APP signed-in instead of a
+   logged-out browser tab (the reported bug; magic links on desktop already worked).
+   Universal links ship in **BUILD 22** — Apple caches the AASA per install, so it takes a
+   fresh install of 22+ to activate. Drawer-scroll fix confirmed by user on build 20.
+   **Family testing should use build 22.**
 
 **ALSO SPOTTED in ASC (App Store release prep):** the DSA **trader status** must be completed
 (ASC → Business banner) or EU distribution is blocked — Spain IS the market. Add to the

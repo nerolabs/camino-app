@@ -58,6 +58,8 @@ export default function NavBar() {
             <MenuLink label="Guides" onPress={() => go('/guide')} />
             {/* The payoff before the ask — visible to visitors who haven't committed yet. */}
             {!user && <MenuLink label="Sample plan" onPress={() => go('/sample-plan')} />}
+            {/* The build story went public 3 Jul 2026 (user decision) — essay, log, roadmap. */}
+            <MenuLink label="How I was built" onPress={() => go('/how-i-was-built')} />
             {user && (
               <>
                 <View style={styles.menuDivider} />
