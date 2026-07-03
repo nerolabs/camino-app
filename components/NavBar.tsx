@@ -6,11 +6,10 @@ import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
 import SignInButtons from '@/components/SignInButtons';
 
-// Two nav layouts, split on viewport width (not platform — an iPad web/native view earns the
-// full bar; a narrow desktop window earns the burger):
-//   • wide (≥768px): logo + inline links, as before.
-//   • compact: logo + [Sign in] + CTA + ☰. Browse links (Home / How it works / Sample plan —
-//     and, later, the SEO content sections) live in the burger menu; actions stay on the bar.
+// One nav for every width (user decision 2026-07-03: desktop gets the burger too — parity with
+// mobile, and Sign out declutters into the menu). Actions stay on the bar (Sign in / CTA / ☰);
+// browsing (Home / How it works / Sample plan — and, later, the SEO content sections) plus
+// Sign out live in the burger menu. Only the logo text responds to width.
 const WIDE = 768;
 
 export default function NavBar() {
@@ -18,19 +17,9 @@ export default function NavBar() {
   const insets = useSafeAreaInsets();
   const { user, signOut } = useAuth();
   const { width } = useWindowDimensions();
-  const compact = width < WIDE;
   const [menuOpen, setMenuOpen] = useState(false);
 
   const go = (path: string) => { setMenuOpen(false); router.push(path as never); };
-
-  const browseLinks = (
-    <>
-      <MenuLink label="Home" onPress={() => go('/')} compact={compact} />
-      <MenuLink label="How it works" onPress={() => go('/how-it-works')} compact={compact} />
-      {/* The payoff before the ask — visible to visitors who haven't committed yet. */}
-      {!user && <MenuLink label="Sample plan" onPress={() => go('/sample-plan')} compact={compact} />}
-    </>
-  );
 
   return (
     // Top safe-area (Dynamic Island / notch) is handled by the ROOT layout's SafeAreaView —
@@ -38,23 +27,14 @@ export default function NavBar() {
     // sliding under the island. Left/right insets still matter in landscape.
     <View style={[styles.nav, { paddingTop: 18, paddingLeft: 24 + insets.left, paddingRight: 24 + insets.right }]}>
       <TouchableOpacity onPress={() => router.push('/')}>
-        <Text style={styles.logo}>{compact ? 'Camino' : 'Camino: Your Road to Spain'}</Text>
+        <Text style={styles.logo}>{width < WIDE ? 'Camino' : 'Camino: Your Road to Spain'}</Text>
       </TouchableOpacity>
 
       <View style={styles.right}>
-        {!compact && browseLinks}
-
         {user ? (
-          <>
-            <TouchableOpacity onPress={() => router.push('/plan')} style={styles.cta}>
-              <Text style={styles.ctaText}>My roadmap</Text>
-            </TouchableOpacity>
-            {!compact && (
-              <TouchableOpacity onPress={signOut} style={styles.ghost}>
-                <Text style={styles.ghostText}>Sign out</Text>
-              </TouchableOpacity>
-            )}
-          </>
+          <TouchableOpacity onPress={() => router.push('/plan')} style={styles.cta}>
+            <Text style={styles.ctaText}>My roadmap</Text>
+          </TouchableOpacity>
         ) : (
           <>
             {/* Platform-split: web = Google; iOS = dialog with Apple + Google (guideline 4.8). */}
@@ -65,36 +45,35 @@ export default function NavBar() {
           </>
         )}
 
-        {compact && (
-          <TouchableOpacity onPress={() => setMenuOpen(true)} style={styles.burger} accessibilityLabel="Menu">
-            <Text style={styles.burgerText}>☰</Text>
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity onPress={() => setMenuOpen(true)} style={styles.burger} accessibilityLabel="Menu">
+          <Text style={styles.burgerText}>☰</Text>
+        </TouchableOpacity>
       </View>
 
-      {compact && (
-        <Modal visible={menuOpen} transparent animationType="fade" onRequestClose={() => setMenuOpen(false)}>
-          <Pressable style={styles.overlay} onPress={() => setMenuOpen(false)}>
-            <Pressable style={[styles.menu, { marginTop: 12 + insets.top, marginRight: 16 + insets.right }]} onPress={() => {}}>
-              {browseLinks}
-              {user && (
-                <>
-                  <View style={styles.menuDivider} />
-                  <MenuLink label="Sign out" onPress={() => { setMenuOpen(false); signOut(); }} compact />
-                </>
-              )}
-            </Pressable>
+      <Modal visible={menuOpen} transparent animationType="fade" onRequestClose={() => setMenuOpen(false)}>
+        <Pressable style={styles.overlay} onPress={() => setMenuOpen(false)}>
+          <Pressable style={[styles.menu, { marginTop: 12 + insets.top, marginRight: 16 + insets.right }]} onPress={() => {}}>
+            <MenuLink label="Home" onPress={() => go('/')} />
+            <MenuLink label="How it works" onPress={() => go('/how-it-works')} />
+            {/* The payoff before the ask — visible to visitors who haven't committed yet. */}
+            {!user && <MenuLink label="Sample plan" onPress={() => go('/sample-plan')} />}
+            {user && (
+              <>
+                <View style={styles.menuDivider} />
+                <MenuLink label="Sign out" onPress={() => { setMenuOpen(false); signOut(); }} />
+              </>
+            )}
           </Pressable>
-        </Modal>
-      )}
+        </Pressable>
+      </Modal>
     </View>
   );
 }
 
-function MenuLink({ label, onPress, compact }: { label: string; onPress: () => void; compact: boolean }) {
+function MenuLink({ label, onPress }: { label: string; onPress: () => void }) {
   return (
-    <TouchableOpacity onPress={onPress} style={compact ? styles.menuItem : styles.ghost}>
-      <Text style={compact ? styles.menuItemText : styles.ghostText}>{label}</Text>
+    <TouchableOpacity onPress={onPress} style={styles.menuItem}>
+      <Text style={styles.menuItemText}>{label}</Text>
     </TouchableOpacity>
   );
 }
@@ -105,8 +84,6 @@ const styles = StyleSheet.create({
   right:        { flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
   cta:          { backgroundColor: palette.cobalt, borderRadius: 8, paddingVertical: 8, paddingHorizontal: 16 },
   ctaText:      { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cal },
-  ghost:        { paddingVertical: 8, paddingHorizontal: 10 },
-  ghostText:    { fontFamily: 'HankenGrotesk_500Medium', fontSize: 14, color: palette.cobalt },
 
   burger:       { paddingVertical: 6, paddingHorizontal: 8 },
   burgerText:   { fontSize: 22, color: palette.indigo, lineHeight: 26 },
