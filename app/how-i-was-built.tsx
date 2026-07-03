@@ -90,8 +90,25 @@ const SECTIONS: Block[] = [
       'You can’t improve what you can’t see. We wired product telemetry — a conversion funnel from ' +
       'first visit to a finished roadmap, and feature-health signals like whether people come back ' +
       'and actually check steps off. Every event is stamped with its environment so real usage ' +
-      'never mixes with our own testing. Monitoring and alerting are next; a product that people ' +
-      'depend on deserves to page someone when it’s hurting.',
+      'never mixes with our own testing. Then we gave it a nervous system: error and performance ' +
+      'monitoring across web, backend, and native in one place, tagged by platform, with an uptime ' +
+      'monitor that pages us if the site or the API goes dark. A product people depend on deserves ' +
+      'to wake someone up when it’s hurting.',
+    ],
+  },
+  {
+    h: 'Parity, then a cold-eyed audit',
+    p: [
+      'Once the web experience had earned its shape, we brought the iOS app to full parity — ' +
+      'native sign-in, dictation, Lola’s spoken voice, crash reporting, analytics — three ' +
+      'TestFlight builds, each verified on a real device before we called it done.',
+      'Then we did something teams skip: we stopped building and audited everything with fresh ' +
+      'eyes. The audit found real problems — a language-exam rule that mis-handled Filipino ' +
+      'applicants, an interview question whose answer was collected and then silently thrown away, ' +
+      'a drift-check that had quietly become dead code. Each fix came with a regression persona, ' +
+      'and the contract between the interview and the catalog is now enforced by a script that ' +
+      'runs before every deploy. Finding your own bugs before users do isn’t luck — it’s a ' +
+      'scheduled activity.',
     ],
   },
   {

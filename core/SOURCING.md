@@ -87,6 +87,17 @@ estimates — not specific legal figures needing a cite: `choose-visa-type`,
 (History: an earlier milestone read 28 `webinar` / 26 `official`; the B10 grounding pass reached
 52 `official` / 6 `webinar` / 1 `domain` before the taxonomy was simplified — see next section.)
 
+### ⚠️ Correction (2026-07-03 audit): tag ≠ citation
+
+A full audit found that **28 of the 54 `official` items carry no `source_url`** — earlier passes
+(especially the original domain→official queue: the Modelo forms, DGT, residencia, DELE/CCSE,
+NLV/DNV doc items…) verified claims and logged notes here, but never attached the canonical URL
+to the catalog entry, so the app shows "verified against an official source" with no link to
+check. `npm run audit` now warns on every such item, and a **one-by-one re-verification pass**
+is underway to attach (and re-confirm) each citation. The same audit also flagged a missing
+obligation: **EU-registration certificate** (Certificado de registro de ciudadano de la Unión,
+required for EU nationals staying >90 days) — to be added with a source in that pass.
+
 ## Source taxonomy simplified: `official` | `recommendation` (2026-07-02)
 
 Retired the mining-era `webinar` / `domain` source values. Now that grounding is done, the honest
