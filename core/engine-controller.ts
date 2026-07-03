@@ -30,7 +30,7 @@ type Timing =
   | { kind: 'relative_to_event'; anchor: AnchorKind; offset_days: number }
   | { kind: 'relative_to_obligation'; after: string; offset_days: number };
 
-type Obligation = {
+export type Obligation = {
   id: string; title: string; category: Category; severity: Severity;
   source: Source;
   source_url?: string;  // canonical official source, surfaced as a link in the roadmap (all users)

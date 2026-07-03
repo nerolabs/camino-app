@@ -21,6 +21,8 @@ const SECTIONS: Section[] = [
   {
     h: 'Just shipped',
     items: [
+      { title: 'A free guide for every step', note: 'Sixty public pages — one per step in the catalog, each with when it’s due, why it matters, and the official source. The same facts your roadmap is built from, open to everyone.' },
+      { title: 'One calmer nav everywhere', note: 'Desktop now matches mobile: browsing lives in the ☰ menu, the bar keeps just the actions.' },
       { title: 'The weekly roundup + welcome email', note: 'What’s overdue and what’s coming up, never more than a handful of tasks, each with a concrete tip. A welcome note when you join, one-click unsubscribe, and silence when there’s nothing pressing.' },
       { title: 'Passwordless email sign-in', note: 'A link (or 6-digit code) lands in your inbox and signs you in — no password to invent, works across devices.' },
       { title: '“Email me my roadmap”', note: 'One field on your fresh roadmap: saves it, creates your account silently, and the emailed link brings you back signed in.' },
@@ -39,7 +41,7 @@ const SECTIONS: Section[] = [
   {
     h: 'Next',
     items: [
-      { title: 'A free guide for every obligation', note: 'Sixty public pages — one per step in the catalog, each with the official source. The same facts your roadmap is built from, open to everyone.' },
+      { title: 'The App Store release', note: 'The iOS app is in TestFlight now; the public App Store listing is the next milestone.' },
     ],
   },
   {

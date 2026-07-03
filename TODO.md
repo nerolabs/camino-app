@@ -479,9 +479,13 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
    - Infra decisions needed: sender (Resend is the likely pick), scheduler (GitHub Actions cron
      hitting an API route, or Supabase pg_cron/Edge Function), unsubscribe + email prefs column.
      Native magic-link redirect can reuse the existing `caminoapp://` deep-link session flow.
-4. **60 free SEO pages** — one public page per obligation (`/guide/<id>`) generated from the
-   catalog: title, timing, official source link, interview CTA. Same pattern as the sample plan;
-   satisfying + quick since the content already exists.
+4. **60 free SEO pages — SHIPPED 2026-07-03, live on prod.** `/guide/<id>` (60 pages) +
+   `/guide` grouped index, all generated from the catalog (`core/guide-content.ts`): timing
+   RULE in words (never a fabricated date), severity/source blurbs, prerequisite links,
+   category tip, official source link, interview CTA, per-page `<title>`/description/canonical
+   (prerendered), `/sitemap.xml` API route generated from the catalog (64 URLs), robots.txt
+   Sitemap line, "Guides" in the nav menu. Possible later polish: JSON-LD structured data,
+   per-obligation prose descriptions (would need a curated content pass).
 5. *(later)* "This week" view · roadmap PDF export · region slot · per-step problem-report link ·
    reminders/push (entitlement playbook is documented).
 6. *(end of backlog)* **Monetization** — gestor/advisor referrals once affiliate programs are

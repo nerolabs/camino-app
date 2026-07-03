@@ -9,7 +9,35 @@ Last updated: 2026-07-03.
 
 ---
 
-## ⭐ RESUME HERE (2026-07-03 — email loop is LIVE)
+## ⭐ RESUME HERE (2026-07-03 evening — guides LIVE, build 18 in TestFlight)
+
+**Batch 2 of today (after the email loop below): the 60 SEO guide pages are LIVE on production**
+(`/guide` index + `/guide/<id>` ×60, prerendered titles/descriptions/canonicals, `/sitemap.xml`
+(64 URLs, generated from the catalog), robots Sitemap line, "Guides" in the nav menu). The nav
+also unified: ONE hamburger at every width (user decision), Sign out inside the menu. **iOS
+build 18 built + auto-submitted to TestFlight** (commit `d33d7bb`, finished 18:42Z) — it carries
+native email sign-in, the nav, and the Apple diagnostics. **User still needs to device-test it.**
+
+### Apple sign-in investigation — CLOSED on our side (2026-07-03)
+Definitive: **build 17's signed IPA contains `com.apple.developer.applesignin` = [Default]**
+(verified by downloading the EAS artifact and running `codesign -d --entitlements`). App-ID
+capability ✓ (ASC API), fresh profile ✓, Supabase Apple provider ✓ (re-confirmed in dashboard:
+Enabled, Client IDs = `com.nerolabs.camino`), client code ✓ (textbook signInAsync →
+signInWithIdToken). Everything on our side is correct → the "unknown reason" sheet rejection is
+Apple-side. **On-device next steps (user):** on build 18, confirm the Apple ID has 2FA enabled
+(hard requirement for Sign in with Apple), retry, and if still failing try a SECOND Apple ID to
+rule out account-specific state. If a second ID works, it's the account; if not, wait out
+capability propagation and retry in a day.
+
+### Also fixed this batch
+- **CI flake**: the determinism test's two buildPlan calls could straddle a millisecond tick
+  (dates differ by 1ms) — the test now freezes the clock (`vi.setSystemTime`). CI green since.
+- `shortClause()` (guide titles): titles with an em-dash inside a parenthetical would truncate
+  to an unbalanced "(" — now cuts back to before the parenthetical.
+
+---
+
+## Earlier today (2026-07-03 — email loop is LIVE)
 
 **The email loop is live and verified end-to-end in production.** User added the 3 secrets to
 EAS as `sensitive` (prod + preview), both envs redeployed, routes flipped 501 → 401. Live test:
@@ -65,41 +93,24 @@ correctly, in a real Gmail inbox. Welcome fired on a real Google sign-in at getc
   both auth templates styled (2026-07-03; source of truth `docs/design/supabase-auth-emails.md`).
 - GitHub `CRON_SECRET` repo secret: **set by user** (via the browser form I opened).
 
-### Other open threads (after email is live)
-- **Apple Sign-In still failing on iOS build 17.** Now instrumented + captured in Sentry
-  (project `camino`, org `camino-ko`): **"The authorization attempt failed for an unknown reason"**,
-  tag `flow: apple_signin`, handled, iOS 26.5.1. App-ID config is CORRECT (ASC API confirmed
-  `APPLE_ID_AUTH` + `PRIMARY_APP_CONSENT`, fresh build-17 profile). Since Apple's OWN sheet
-  rejects before our code runs, likely causes: Apple server propagation, or a stale
-  Apple-ID-app trust from builds 12–15 (user tried Settings → Sign-In & Security → remove Camino
-  → retry; still failing). Next diag ideas: confirm the Services-ID/return-URL isn't required for
-  the *native* token flow; check Supabase Apple provider "Client IDs" contains `com.nerolabs.camino`
-  on BOTH projects (verified earlier, re-confirm); try a sign-in on a SECOND Apple ID to rule out
-  account-specific state. The failure now also fires PostHog `apple_signin_failed` + an in-app Alert.
-- **iOS build 18 is pending and INTENTIONALLY not yet kicked** — hold it so ONE build carries
-  BOTH the native email sign-in (shipped in code this session) AND whatever Apple-sign-in fix we
-  land. Don't auto-build until Apple is understood.
-- **60 SEO pages** (`/guide/<id>`) — the next major feature after email (TODO.md item 4).
-
 ### Verify-clean checklist for the new session
-- `git log -1` should show `73732f5 Email loop, part one…` (+ this handoff commit on top).
 - Working tree clean. `npm test` → 26 passed / 7 skipped. `npm run audit` → 0 warnings, 9 personas.
-- Web deploy of `73732f5` is already live; `/api/email/*` routes return **501** until the env
-  vars land (that's expected, not a bug).
+- Live spot-checks: `/guide` + `/guide/nie` → 200; `/sitemap.xml` → 64 `<loc>` entries;
+  POST `/api/email/weekly` without bearer → 401. CI (GitHub Actions) green on the last push.
 
 ---
 
 ## Current state (one paragraph)
 
 Web is live at **getcamino.app** (EAS Hosting, staging + production, separate Supabase DBs). iOS
-is at **TestFlight build 17**: native Google sign-in, dictation, Lola voice (expo-audio), Sentry,
-PostHog. **Sign in with Apple is wired but failing on device (see open threads).** The catalog
-holds **60 obligations** (55 `official`, all with `source_url` / 5 `recommendation`), each mapped
-to the interview via the audited invariant-2 contract (`npm run audit`, a deploy gate). This
-session added: hamburger nav (<768px), the overdue roadmap treatment, the public roadmap page
-(`/how-i-was-built/roadmap`), and **the email loop** (passwordless magic-link auth, "email me my
-roadmap", welcome + weekly-roundup engine + cron). Android deferred to the very end; localization
-sequenced last.
+is at **TestFlight build 18** (awaiting device test): native Google + email sign-in, dictation,
+Lola voice (expo-audio), Sentry, PostHog. **Sign in with Apple is wired but failing on device —
+our side is fully verified correct; see the resume block.** The catalog holds **60 obligations**
+(55 `official`, all with `source_url` / 5 `recommendation`), each mapped to the interview via the
+audited invariant-2 contract (`npm run audit`, a deploy gate). Today shipped: **the email loop
+live end-to-end** (passwordless magic-link auth, "email me my roadmap", welcome + weekly roundup
++ cron, both Supabase SMTP configs), **the 60 public guide pages** (`/guide/*` + sitemap), and
+the unified hamburger nav. Android deferred to the very end; localization sequenced last.
 
 ## Where things live
 
@@ -120,6 +131,9 @@ sequenced last.
   overdue-first, ≤5 items, 45-day window, deterministic per-category tips, `null` when nothing
   pressing (no spam). `interviewComplete(profile)` gates roundup vs nudge.
 - `core/catalog-audit.ts` + `scripts/audit-catalog.ts` — **invariant 2, enforced.** Deploy-gated.
+- `core/guide-content.ts` + `app/guide/{index,[id]}.tsx` — **the 60 public guide pages**, pure
+  functions of the catalog (timing RULE in words, blurbs, prerequisite links, category tip, CTA).
+  `app/sitemap.xml+api.ts` generates the sitemap from the same catalog.
 - `core/test-personas.ts` — 9 staff personas, each documenting the branch it tests.
 - `app/api/lola+api.ts`, `app/api/tts+api.ts` — server proxies (Anthropic / ElevenLabs).
 - `app/api/email/{welcome,weekly,unsubscribe}+api.ts` — **email routes** (Workers runtime, Web
@@ -171,10 +185,10 @@ sequenced last.
 
 ## What's next (see TODO.md for detail)
 
-1. **Email loop: DONE** (staging SMTP + templates included). Native email sign-in rides iOS
-   build 18.
-2. **Apple sign-in fix** (open thread above) → then iOS build 18 carries email + Apple together.
-3. **60 SEO pages** (`/guide/<id>` from the catalog) — next major feature.
-4. Later: "This week" view, roadmap PDF export, region slot, reminders/push.
+1. **Email loop: DONE.** **60 guide pages: DONE.** **Build 18: submitted to TestFlight.**
+2. **User device-tests build 18** — native email sign-in + the Apple retry (2FA check / second
+   Apple ID; see resume block). Then App Store submission prep (docs/APP_STORE.md).
+3. Later: "This week" view, roadmap PDF export, region slot, reminders/push; guide-page polish
+   (JSON-LD, curated prose per obligation).
 5. App Store submission (screenshots/age-rating/copyright are user-side; see docs/APP_STORE.md).
 6. Monetization at the very end (affiliate programs first); localization last.

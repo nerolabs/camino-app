@@ -55,6 +55,7 @@ export default function NavBar() {
           <Pressable style={[styles.menu, { marginTop: 12 + insets.top, marginRight: 16 + insets.right }]} onPress={() => {}}>
             <MenuLink label="Home" onPress={() => go('/')} />
             <MenuLink label="How it works" onPress={() => go('/how-it-works')} />
+            <MenuLink label="Guides" onPress={() => go('/guide')} />
             {/* The payoff before the ask — visible to visitors who haven't committed yet. */}
             {!user && <MenuLink label="Sample plan" onPress={() => go('/sample-plan')} />}
             {user && (

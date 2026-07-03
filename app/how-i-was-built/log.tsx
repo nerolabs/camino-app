@@ -227,6 +227,16 @@ const ROWS: Row[] = [
       'The triple-send was two races stacked: the client now fires the welcome request once per sign-in, and the server claims the "already welcomed" flag before sending, rolling it back if the send fails.',
     ],
   },
+  {
+    feature: 'Sixty free guides',
+    work: 'Every catalog obligation got a public page (/guide/<id>): when it\'s due, why it matters, what comes first, the official source, and a category tip — plus a grouped index, prerendered HTML titles and descriptions for search engines, and a sitemap. The nav also unified: desktop now gets the same ☰ menu as mobile, with Sign out inside.',
+    decisions: [
+      'The catalog is the single source: pages are generated from the same data the engine plans with, so a guide can never disagree with a roadmap.',
+      'Timing is described as the RULE ("due within 30 days of arrival"), never a fabricated date — personal dates only exist in a real roadmap, which is what the page\'s CTA is for.',
+      'The sitemap is generated from the catalog too — adding an obligation automatically adds its page to search.',
+      'The unlisted "how I was built" section stays out of search; the guides are the front door.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

@@ -37,7 +37,7 @@ export type Digest = {
 
 // One practical, always-true-by-construction nudge per category. Recommendation voice —
 // process advice, never invented facts (costs, laws, dates live in the catalog + sources).
-const CATEGORY_TIP: Record<Objective['category'], string> = {
+export const CATEGORY_TIP: Record<Objective['category'], string> = {
   visa:      'Consulate appointments book out weeks ahead — secure the slot first, then assemble the paperwork.',
   residency: 'Book the cita previa now — appointment slots are the real bottleneck, not the paperwork.',
   tax:       'If in doubt, a gestor can prepare this in a day — cheap insurance against a mis-filing.',
