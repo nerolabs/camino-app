@@ -10,9 +10,10 @@ export default function NavBar() {
   const { user, signInWithGoogle, signOut } = useAuth();
 
   return (
-    // Pad the top by the safe-area inset so the bar clears the Dynamic Island / notch /
-    // status bar on device. On web the inset is 0, so the layout is unchanged.
-    <View style={[styles.nav, { paddingTop: insets.top + 18, paddingLeft: 24 + insets.left, paddingRight: 24 + insets.right }]}>
+    // Top safe-area (Dynamic Island / notch) is handled by the ROOT layout's SafeAreaView —
+    // padding here too would double-pad, and only root-level clipping stops SCROLLED content
+    // sliding under the island. Left/right insets still matter in landscape.
+    <View style={[styles.nav, { paddingTop: 18, paddingLeft: 24 + insets.left, paddingRight: 24 + insets.right }]}>
       <TouchableOpacity onPress={() => router.push('/')}>
         <Text style={styles.logo}>Camino: Your Road to Spain</Text>
       </TouchableOpacity>
@@ -23,6 +24,12 @@ export default function NavBar() {
         <TouchableOpacity onPress={() => router.push('/how-it-works')} style={styles.ghost}>
           <Text style={styles.ghostText}>How it works</Text>
         </TouchableOpacity>
+        {/* The payoff before the ask — visible to visitors who haven't committed yet. */}
+        {!user && (
+          <TouchableOpacity onPress={() => router.push('/sample-plan')} style={styles.ghost}>
+            <Text style={styles.ghostText}>Sample plan</Text>
+          </TouchableOpacity>
+        )}
         {user ? (
           <>
             <TouchableOpacity onPress={() => router.push('/plan')} style={styles.cta}>

@@ -51,6 +51,19 @@ test('how-it-works and the unlisted blog load', async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+test('sample plan renders the full read-only roadmap + interview CTA', async ({ page }) => {
+  const errors = trackErrors(page);
+  await page.goto('/sample-plan');
+  await expect(page.getByText('SAMPLE ROADMAP')).toBeVisible();
+  await expect(page.getByText(/This is Susan & Tom's plan/)).toBeVisible();
+  await expect(page.getByText('Before you go', { exact: false }).first()).toBeVisible();
+  await expect(page.getByText('Build my own roadmap →')).toBeVisible();
+  // A few signature obligations that the sample persona must surface:
+  await expect(page.getByText(/non-lucrative/i).first()).toBeVisible();
+  await expect(page.getByText(/Empadronamiento/i).first()).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
 test('robots.txt disallows the unlisted blog; sitemap route is gone', async ({ request }) => {
   const robots = await request.get('/robots.txt');
   expect(robots.status()).toBe(200);

@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import { palette } from '@/constants/Colors';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
@@ -54,13 +55,19 @@ export default function RootLayout() {
           <SessionSync />
           {/* Dark status-bar glyphs read well over the app's light cream/white surfaces. */}
           <StatusBar style="dark" />
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="how-it-works" />
-            <Stack.Screen name="interview" />
-            <Stack.Screen name="plan" />
-            <Stack.Screen name="how-i-was-built" />{/* unlisted: direct link only, not in nav */}
-          </Stack>
+          {/* Clip ALL screens below the top safe-area inset (Dynamic Island / notch) at the ROOT,
+              so scrolling content can't slide under it — padding only the NavBar wasn't enough
+              because the ScrollViews live at screen level. Web insets are 0 → web unchanged. */}
+          <SafeAreaView style={{ flex: 1, backgroundColor: palette.cal }} edges={['top']}>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="index" />
+              <Stack.Screen name="how-it-works" />
+              <Stack.Screen name="interview" />
+              <Stack.Screen name="plan" />
+              <Stack.Screen name="sample-plan" />{/* public: the payoff before the interview */}
+              <Stack.Screen name="how-i-was-built" />{/* unlisted: direct link only, not in nav */}
+            </Stack>
+          </SafeAreaView>
         </ProfileProvider>
       </AuthProvider>
     </SafeAreaProvider>

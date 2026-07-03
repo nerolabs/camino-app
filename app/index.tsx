@@ -109,6 +109,10 @@ export default function LandingPage() {
             <Text style={styles.heroCtaText}>Build my free roadmap →</Text>
           </TouchableOpacity>
           <Text style={styles.heroDisclaimer}>Free · Takes about 3 minutes · No account needed to start</Text>
+          {/* Show the payoff before the ask: a real engine-built roadmap for a sample persona. */}
+          <TouchableOpacity onPress={() => router.push('/sample-plan')}>
+            <Text style={styles.heroSampleLink}>Not sure yet? Peek at a sample roadmap first →</Text>
+          </TouchableOpacity>
         </View>
 
         <RotatingPhoto wide={wide} />
@@ -145,6 +149,7 @@ const styles = StyleSheet.create({
   heroCta:         { backgroundColor: palette.cobalt, borderRadius: 12, paddingVertical: 16, paddingHorizontal: 32, marginBottom: 14, alignSelf: 'flex-start' },
   heroCtaText:     { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cal },
   heroDisclaimer:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: palette.muted },
+  heroSampleLink:  { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cobalt, marginTop: 12 },
 
   // Rotating photo
   photoFill:            { width: '100%', height: '100%' },

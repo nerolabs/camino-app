@@ -4,10 +4,27 @@
  */
 import { auditCatalog } from '../core/catalog-audit';
 import { TEST_PERSONAS } from '../core/test-personas';
+import { sampleProfile, SAMPLE_NAME } from '../core/sample-profile';
 import { SLOTS, derive, type Profile } from '../core/interview-controller';
 import { buildPlan } from '../core/engine-controller';
 
 const { errors, warnings } = auditCatalog();
+
+// The public sample plan is validated exactly like the personas — it must only answer real slots
+// and must build a non-empty plan (it's the marketing payoff page; an empty sample is a sev-1).
+{
+  const answers = sampleProfile();
+  for (const key of Object.keys(answers)) {
+    if (!SLOTS.some(s => s.field === key)) errors.push(`sample profile (${SAMPLE_NAME}): answers unknown slot "${key}"`);
+  }
+  try {
+    const p: Profile = { ...answers };
+    derive(p);
+    if (buildPlan(p).length < 10) errors.push(`sample profile (${SAMPLE_NAME}): plan suspiciously small — the sample page would underwhelm`);
+  } catch (e) {
+    errors.push(`sample profile (${SAMPLE_NAME}): buildPlan threw — ${String(e)}`);
+  }
+}
 
 // Personas must only answer real slot fields (catch typos / fields that drifted out of the
 // interview), and every persona must produce a non-empty plan without throwing.
