@@ -2,7 +2,9 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
 import { openExternal } from '@/lib/plan-format';
 import { palette } from '@/constants/Colors';
+import Head from '@/components/SeoHead';
 import NavBar from '@/components/NavBar';
+import Footer from '@/components/Footer';
 
 // Unlisted route: not linked from the nav. Direct link only. A narrative of how Camino was
 // built — revised as the product matures.
@@ -141,6 +143,11 @@ const SECTIONS: Block[] = [
 export default function HowIWasBuilt() {
   return (
     <ScrollView style={styles.flex} contentContainerStyle={styles.scroll}>
+      <Head>
+        <title>How Camino was built | the story behind the app</title>
+        <meta name="description" content="The build story of Camino: an AI guide for moving to Spain, built in the open — the thesis, the decisions, and the receipts." />
+        <link rel="canonical" href="https://getcamino.app/how-i-was-built" />
+      </Head>
       <NavBar />
       <View style={styles.column}>
         <Text style={styles.eyebrow}>BEHIND THE BUILD</Text>
@@ -173,6 +180,7 @@ export default function HowIWasBuilt() {
           the same way we built it.
         </Text>
       </View>
+      <Footer />
     </ScrollView>
   );
 }

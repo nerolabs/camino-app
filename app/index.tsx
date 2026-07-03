@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'expo-router';
 import {
   View, Text, ScrollView, TouchableOpacity, Image,
-  StyleSheet, useWindowDimensions, Animated, Platform,
+  StyleSheet, Animated,
 } from 'react-native';
+import Head from '@/components/SeoHead';
 import { palette } from '@/constants/Colors';
-import { useAuth } from '@/core/AuthContext';
+import { useWide } from '@/lib/useWide';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 
@@ -65,27 +66,18 @@ function RotatingPhoto({ wide }: { wide: boolean }) {
 
 export default function LandingPage() {
   const router = useRouter();
-  // useWindowDimensions() reports a fallback width during static (server) rendering and
-  // doesn't reliably update after hydration on web — which left the desktop hero stuck in
-  // the mobile (stacked) layout. Read the real window width on the client instead, and
-  // default to the wide layout when the width is unknown (SSR / first paint).
-  const { width: rnWidth } = useWindowDimensions();
-  const [webWidth, setWebWidth] = useState<number | null>(null);
-  useEffect(() => {
-    if (Platform.OS !== 'web') return;
-    const update = () => setWebWidth(window.innerWidth);
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
-  const width = Platform.OS === 'web' ? webWidth : rnWidth;
-  const wide = width == null ? true : width >= 768;
-  const { user, signInWithGoogle, signOut } = useAuth();
-  // Profile + staff flag are loaded at the root (SessionSync in app/_layout.tsx), so they're
-  // available on every route and survive reloads — no per-screen loading here.
+  const wide = useWide(); // shared hydration-safe breakpoint (see lib/useWide.ts)
 
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
+      <Head>
+        <title>Camino — your personalized roadmap for moving to Spain</title>
+        <meta
+          name="description"
+          content="Camino turns moving to Spain into a step-by-step roadmap: the right visa, residency, schools, banking and bureaucracy — sequenced for your situation, every official step backed by its government source. Free, about 3 minutes."
+        />
+        <link rel="canonical" href="https://getcamino.app/" />
+      </Head>
 
       <NavBar />
 
@@ -118,12 +110,13 @@ export default function LandingPage() {
         <RotatingPhoto wide={wide} />
       </View>
 
-      {/* ── Topic strip ─────────────────────────────────── */}
-      <View style={styles.strip}>
+      {/* ── Topic strip → the guides (these topics are real pages now) ── */}
+      <TouchableOpacity style={styles.strip} onPress={() => router.push('/guide')} accessibilityLabel="Browse all guides">
         <Text style={styles.stripText}>
-          Visas · Where to live · Schools · Banking · NIE · TIE · Empadronamiento · Modelo 720 · Driving · Remote work · and more
+          Visas · Where to live · Schools · Banking · NIE · TIE · Empadronamiento · Modelo 720 · Driving · Remote work
+          <Text style={styles.stripLink}>  ·  Explore all 60 guides →</Text>
         </Text>
-      </View>
+      </TouchableOpacity>
 
       <Footer />
 
@@ -161,4 +154,5 @@ const styles = StyleSheet.create({
   // Strip
   strip:     { backgroundColor: palette.cobalt, paddingVertical: 14, paddingHorizontal: 24 },
   stripText: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: 'rgba(255,255,255,0.8)', textAlign: 'center' },
+  stripLink: { fontFamily: 'HankenGrotesk_600SemiBold', color: '#FFFFFF' },
 });

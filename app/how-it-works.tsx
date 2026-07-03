@@ -1,6 +1,10 @@
-import { View, Text, ScrollView, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRouter, Link } from 'expo-router';
+import Head from '@/components/SeoHead';
 import { palette } from '@/constants/Colors';
+import { useWide } from '@/lib/useWide';
 import NavBar from '@/components/NavBar';
+import Footer from '@/components/Footer';
 
 const STEPS = [
   {
@@ -16,7 +20,7 @@ const STEPS = [
   {
     num: '03',
     title: 'Work through it together',
-    body: 'Lola coaches you step by step. Your roadmap updates as you make decisions and your situation becomes clearer.',
+    body: 'Lola coaches you step by step. Your roadmap updates as you make decisions and your situation becomes clearer — and a short weekly email keeps what\'s due in view, never more than a handful of tasks.',
   },
 ];
 
@@ -37,11 +41,19 @@ const PROBLEMS = [
 ];
 
 export default function HowItWorksPage() {
-  const { width } = useWindowDimensions();
-  const wide = width >= 768;
+  const router = useRouter();
+  const wide = useWide(); // shared hydration-safe breakpoint (raw useWindowDimensions left desktop stuck stacked)
 
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
+      <Head>
+        <title>How Camino works — moving to Spain, in the right order</title>
+        <meta
+          name="description"
+          content="Tell Lola your situation, get a personal roadmap, work through it together. Every official step cites its government source; sequence and deadlines come built in."
+        />
+        <link rel="canonical" href="https://getcamino.app/how-it-works" />
+      </Head>
       <NavBar />
 
       <View style={styles.header}>
@@ -72,8 +84,10 @@ export default function HowItWorksPage() {
         <Text style={styles.sectionHeadline}>The full picture, not just the paperwork.</Text>
         <Text style={styles.sectionBody}>
           Most relocation guides stop at bureaucracy. Camino starts with the bigger questions
-          and works through the practical steps that follow.
+          and works through the practical steps that follow — and every official step cites the
+          government source it comes from, so you can check it yourself.
         </Text>
+        <Link href="/guide" style={styles.guidesLink}>Browse all 60 steps as free guides →</Link>
         <View style={[styles.topicGrid, wide && styles.topicGridWide]}>
           {TOPICS.map((t, i) => (
             <View key={i} style={[styles.topicCard, wide && styles.topicCardWide]}>
@@ -111,10 +125,17 @@ export default function HowItWorksPage() {
         </Text>
       </View>
 
-      <View style={styles.footer}>
-        <Text style={styles.footerNote}>Guidance only — not legal or tax advice.</Text>
+      {/* Closing CTA — the page used to explain everything and then ask for nothing. */}
+      <View style={styles.ctaSection}>
+        <Text style={styles.ctaHeadline}>Ready to see your own roadmap?</Text>
+        <TouchableOpacity style={styles.ctaBtn} onPress={() => router.push('/interview')}>
+          <Text style={styles.ctaBtnText}>Build my free roadmap →</Text>
+        </TouchableOpacity>
+        <Text style={styles.ctaNote}>Free · about 3 minutes · no account needed to start</Text>
+        <Link href="/sample-plan" style={styles.ctaSampleLink}>Not sure yet? Peek at a sample roadmap first →</Link>
       </View>
 
+      <Footer />
     </ScrollView>
   );
 }
@@ -162,6 +183,12 @@ const styles = StyleSheet.create({
   lolaAttrib:     { fontFamily: 'HankenGrotesk_500Medium', fontSize: 13, color: palette.amber, marginBottom: 20 },
   lolaBody:       { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: 'rgba(251,250,247,0.75)', textAlign: 'center', lineHeight: 24, maxWidth: 440 },
 
-  footer:     { backgroundColor: palette.indigo, paddingVertical: 24, alignItems: 'center' },
-  footerNote: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: 'rgba(251,250,247,0.4)' },
+  guidesLink: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, color: palette.cobalt, marginBottom: 24 },
+
+  ctaSection:    { alignItems: 'center', padding: 48, backgroundColor: palette.cal },
+  ctaHeadline:   { fontFamily: 'Fraunces_600SemiBold', fontSize: 26, color: palette.indigo, textAlign: 'center', marginBottom: 20 },
+  ctaBtn:        { backgroundColor: palette.cobalt, borderRadius: 12, paddingVertical: 16, paddingHorizontal: 32, marginBottom: 12 },
+  ctaBtnText:    { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cal },
+  ctaNote:       { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: palette.muted, marginBottom: 12 },
+  ctaSampleLink: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cobalt },
 });

@@ -45,6 +45,14 @@ echo "[deploy] Exporting web bundle with fully cleared caches (critical -- see h
 rm -rf dist node_modules/.cache
 npx expo export --platform web --clear
 
+# This project lives on an iCloud-synced Desktop: iCloud can drop " 2"/" 3" conflict-copy
+# directories INSIDE dist mid-export, and a deploy that uploads them shipped stale content
+# once (2026-07-03: prod-parity pages served an old bundle while the local dist was correct).
+if find dist -maxdepth 1 -name "* [0-9]" | grep -q .; then
+  echo "[deploy] Removing iCloud conflict-copy dirs from dist:"
+  find dist -maxdepth 1 -name "* [0-9]" -print -exec rm -rf {} +
+fi
+
 echo "[deploy] Deploying to ${TARGET} ..."
 npx eas-cli deploy "${DEPLOY_FLAGS[@]}"
 

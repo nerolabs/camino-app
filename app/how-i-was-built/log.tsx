@@ -2,6 +2,7 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-nati
 import { useRouter } from 'expo-router';
 import { palette } from '@/constants/Colors';
 import { openExternal } from '@/lib/plan-format';
+import Head from '@/components/SeoHead';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 
@@ -314,12 +315,27 @@ const ROWS: Row[] = [
       'iPad off for launch: fewer screenshots, fewer review surfaces, nothing the phone experience doesn\'t already prove.',
     ],
   },
+  {
+    feature: 'Polish pass: the front door catches up',
+    date: '3 Jul 2026',
+    work: 'The home and how-it-works pages predated almost everything shipped this week. Now: every public page has a real title, description and canonical URL (only the guides had them); how-it-works finally ends with a call to action, mentions the weekly email and the sourced guides, and uses the shared footer; the home topic strip links into the sixty guides it was always describing.',
+    decisions: [
+      'A page that explains everything and asks for nothing is a leak — every marketing page now ends with the same honest CTA.',
+      'One shared breakpoint hook replaced two copies of a subtle hydration workaround — the second copy had the bug the first one fixed.',
+      'The deploy script now strips iCloud conflict-copy directories from the export: one deploy silently shipped stale pages while the local build was correct.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {
   const router = useRouter();
   return (
     <ScrollView style={styles.scroll}>
+      <Head>
+        <title>The Camino build log — every feature, dated, with decisions</title>
+        <meta name="description" content="Every major piece of Camino in the order the work happened: what shipped, when, and the decisions that shaped it." />
+        <link rel="canonical" href="https://getcamino.app/how-i-was-built/log" />
+      </Head>
       <NavBar />
       <View style={styles.content}>
         <Text style={styles.eyebrow}>HOW I WAS BUILT — THE RECEIPTS</Text>
