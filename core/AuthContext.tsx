@@ -5,7 +5,8 @@ import * as Linking from 'expo-linking';
 import * as QueryParams from 'expo-auth-session/build/QueryParams';
 import { type Session, type User } from '@supabase/supabase-js';
 import { supabase } from './supabase';
-import { identify, resetAnalytics } from '@/lib/analytics';
+import { capture, identify, resetAnalytics } from '@/lib/analytics';
+import { captureError } from '@/lib/monitoring';
 import { signInWithApple as appleFlow, appleSignInAvailable } from '@/lib/appleSignIn';
 
 // Lets the auth browser session close cleanly after the OAuth redirect (no-op harm on native).
@@ -94,7 +95,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await appleFlow(); // session lands via onAuthStateChange
     } catch (e: unknown) {
       // The user closing Apple's sheet throws ERR_REQUEST_CANCELED — that's not an error.
-      if ((e as { code?: string })?.code === 'ERR_REQUEST_CANCELED') return;
+      const code = (e as { code?: string })?.code;
+      if (code === 'ERR_REQUEST_CANCELED') return;
+      // Anything else is a real failure ("Sign Up Not Completed" etc.) — make it observable.
+      // Apple's native errors carry a code (e.g. ERR_REQUEST_UNKNOWN / 1000) that names the layer
+      // that failed; Supabase signInWithIdToken errors carry a message. Log both destinations.
+      captureError(e, { flow: 'apple_signin', code });
+      capture('apple_signin_failed', { code: code ?? null, message: e instanceof Error ? e.message : String(e) });
       throw e;
     }
   }

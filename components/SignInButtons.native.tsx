@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, Pressable, StyleSheet } from 'react-native';
+import { Alert, Text, TouchableOpacity, Modal, Pressable, StyleSheet } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
@@ -12,6 +12,14 @@ import { useAuth } from '@/core/AuthContext';
 export default function SignInButtons() {
   const { signInWithGoogle, signInWithApple, appleSignInAvailable } = useAuth();
   const [open, setOpen] = useState(false);
+
+  // Never swallow sign-in failures (the silent .catch hid the build-16 Apple failure).
+  // AuthContext has already logged to Sentry + PostHog; here we tell the human.
+  const failed = (provider: string) => (e: unknown) => {
+    const code = (e as { code?: string })?.code;
+    const detail = e instanceof Error ? e.message : String(e);
+    Alert.alert(`${provider} sign-in failed`, code ? `${detail} (${code})` : detail);
+  };
 
   return (
     <>
@@ -32,12 +40,12 @@ export default function SignInButtons() {
                 buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
                 cornerRadius={10}
                 style={styles.appleBtn}
-                onPress={() => { setOpen(false); signInWithApple().catch(() => {}); }}
+                onPress={() => { setOpen(false); signInWithApple().catch(failed('Apple')); }}
               />
             )}
             <TouchableOpacity
               style={styles.googleBtn}
-              onPress={() => { setOpen(false); signInWithGoogle().catch(() => {}); }}
+              onPress={() => { setOpen(false); signInWithGoogle().catch(failed('Google')); }}
             >
               <Text style={styles.googleBtnText}>Continue with Google</Text>
             </TouchableOpacity>
