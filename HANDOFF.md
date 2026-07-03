@@ -37,16 +37,23 @@ correctly, in a real Gmail inbox. Welcome fired on a real Google sign-in at getc
 - Gmail-API readers may double-decode quoted-printable (`uid=3a…` renders as `uid:…`) — the
   emails themselves are fine; check the raw source before "fixing" links.
 
-### Still open on email (small)
-- **Staging Supabase SMTP + styled auth templates** — user pastes the Resend key (Auth → Emails
-  → SMTP settings, mirror production), then restyle the two templates like production's.
+### Still open on email (tiny)
 - nerolabs@gmail.com wasn't directly testable (not signed into Chrome); tested with the user's
   andrewnedmond@gmail.com account instead. The weekly run's `skipped:1` is expected (account
   under 24h old, or nothing pressing).
+- Production's two auth templates were styled by hand in a previous session and could NOT be
+  read back (extension DLP blocks the template body; plus a Supabase dashboard incident). The
+  repo now has canonical versions at `docs/design/supabase-auth-emails.md` — staging runs
+  exactly those; production's are the same style but may differ in wording. Optionally paste
+  the repo versions into production for exact parity.
 
 ### Env/dashboard state (don't redo)
 - EAS envs: RESEND_API_KEY / SUPABASE_SERVICE_ROLE_KEY / CRON_SECRET present as **sensitive**
   in BOTH production and preview. GitHub repo secret CRON_SECRET matches.
+- **Staging Supabase SMTP: DONE 2026-07-03** (smtp.resend.com:465, user `resend`, sender
+  lola@getcamino.app "Lola from Camino"; key pasted by user). Both auth templates styled from
+  `docs/design/supabase-auth-emails.md` and verified live: a real magic-link request from
+  camino--staging.expo.app delivered the branded email to a real inbox.
 - **Resend**: `getcamino.app` domain **verified** (eu-west-1). Free plan (1 domain, 2 req/s —
   `serverEmail`/`weekly` already spaced for it).
 - **Production Supabase** (`oftrpaleqtmuvolwsocd`): custom SMTP **ON** (host `smtp.resend.com`,
@@ -54,9 +61,8 @@ correctly, in a real Gmail inbox. Welcome fired on a real Google sign-in at getc
   key, pasted by user). Auth email templates **styled + saved**: Magic-link/OTP and Confirm-signup
   (Camino brand, button + 6-digit `{{ .Token }}` for cross-device). Redirect allowlist already
   covers `getcamino.app/**` + `caminoapp://**`.
-- **Staging Supabase** (`gsnsgfobfswazqhfcstx`): redirect allowlist OK. ⚠️ **SMTP NOT yet
-  configured, templates NOT yet styled** — do this when convenient (mirror production; the
-  Chrome UX flow: Auth → Emails → SMTP Settings, then the two templates).
+- **Staging Supabase** (`gsnsgfobfswazqhfcstx`): redirect allowlist OK. Custom SMTP **ON** +
+  both auth templates styled (2026-07-03; source of truth `docs/design/supabase-auth-emails.md`).
 - GitHub `CRON_SECRET` repo secret: **set by user** (via the browser form I opened).
 
 ### Other open threads (after email is live)
@@ -165,8 +171,8 @@ sequenced last.
 
 ## What's next (see TODO.md for detail)
 
-1. **Email-loop leftovers** — staging Supabase SMTP + styled templates (user pastes the Resend
-   key; see open items above). Native email sign-in rides iOS build 18.
+1. **Email loop: DONE** (staging SMTP + templates included). Native email sign-in rides iOS
+   build 18.
 2. **Apple sign-in fix** (open thread above) → then iOS build 18 carries email + Apple together.
 3. **60 SEO pages** (`/guide/<id>` from the catalog) — next major feature.
 4. Later: "This week" view, roadmap PDF export, region slot, reminders/push.

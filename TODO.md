@@ -462,8 +462,9 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
    Live test caught + fixed two bugs: email links leaked the per-deploy `*.expo.app` origin
    (now a canonical per-env `siteOrigin()`), and welcome triple-sent on one sign-in (client now
    fires once per user per page load; server claims `welcomed_at` BEFORE sending, rolls back on
-   send failure). **Remaining: staging Supabase custom SMTP + styled auth templates (mirror
-   production; user pastes the Resend key). Original spec:**
+   send failure). Staging Supabase SMTP + styled auth templates done too (2026-07-03, verified
+   with a live magic-link send; templates versioned in `docs/design/supabase-auth-emails.md`).
+   **Original spec:**
    - **Passwordless (magic-link) sign-up is the foundation** — Supabase `signInWithOtp`. Add
      "Continue with email" to the new sign-in dialog (alongside Apple + Google). Every email we
      send then doubles as a no-password door back into their roadmap.
