@@ -8,4 +8,11 @@ This is the Expo app. Two files give you the full picture — read both before w
    thesis, and the four invariants you must not break. (Folded in from the original
    `nerolabs/camino` seed repo, now archived — this app is the single source of truth.)
 
+## Standing rules
+
+- **With every PR / release batch:** update the two public "homework" pages so they
+  stay honest — `app/how-i-was-built/log.tsx` (add a row for what shipped and the key
+  decisions) and `app/how-i-was-built/roadmap.tsx` (move items between Just shipped /
+  In progress / Next; bump the `UPDATED` date). Source of truth: TODO.md's roadmap.
+
 @AGENTS.md

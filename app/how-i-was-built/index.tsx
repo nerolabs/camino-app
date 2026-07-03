@@ -162,6 +162,9 @@ export default function HowIWasBuilt() {
           Want the receipts? Read the build log — every roadmap item in work order, with the key
           decisions behind each →
         </Link>
+        <Link href="/how-i-was-built/roadmap" style={styles.logLink}>
+          Where it’s going next: the roadmap — updated with every release →
+        </Link>
         <Text style={styles.logLink} onPress={() => openExternal('https://github.com/nerolabs/camino-app')}>
           And the code itself is public — github.com/nerolabs/camino-app ↗
         </Text>

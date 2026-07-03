@@ -168,6 +168,46 @@ const ROWS: Row[] = [
       'The LLM coach stays off the public page — a free anonymous LLM endpoint is an abuse surface, and the plan isn\'t the visitor\'s to edit. The expanded card teases what the real thing does instead.',
     ],
   },
+  {
+    feature: 'Sign in with Apple',
+    work: 'The official Apple button on iOS, exchanging Apple\'s identity token directly for a session — no password, no web redirect. Three failed builds taught us Apple\'s provisioning model the hard way.',
+    decisions: [
+      'Provisioning profiles are immutable snapshots of capabilities — enabling a capability means re-minting the profile, not editing it. The playbook is now written down.',
+      'The native token flow needs no Apple client secret — fewer credentials to hold is a feature.',
+    ],
+  },
+  {
+    feature: 'Overdue, honestly',
+    work: 'Steps past their due date now say so in red — on the card, in the stats, and in the step sheet, which nudges: mark it done with the real date, or tell Lola what changed and the plan re-flows.',
+    decisions: [
+      'One deterministic predicate defines "overdue" everywhere — the roadmap today, the weekly email next.',
+      'Due today is NOT overdue — you get until midnight before anything turns red.',
+    ],
+  },
+  {
+    feature: 'The keyboard, third time',
+    work: 'The interview composer clipped behind the iOS keyboard through two attempted fixes. The framework\'s keyboard-avoidance component was removed entirely, replaced by a hook that pads by the exact overlap the OS reports.',
+    decisions: [
+      'When a framework abstraction guesses geometry and guesses wrong twice, stop tuning it — use the number the OS actually gives you.',
+      'The two failed fixes stay in the record: that\'s what "verified on device" is for.',
+    ],
+  },
+  {
+    feature: 'A calmer nav',
+    work: 'Signing in became one link that opens a dialog (Apple + Google, email next); narrow screens got a hamburger menu holding the browse links, leaving the bar to the two actions that matter.',
+    decisions: [
+      'Actions live on the bar, browsing lives in the menu — and future content sections have a home waiting.',
+      'The split is viewport-width, not platform: an iPad earns the full bar, a narrow desktop window earns the burger.',
+    ],
+  },
+  {
+    feature: 'The public roadmap',
+    work: 'This section gained a third page: the product roadmap, updated with every release — shipped, in progress, next, and the things we\'ve said no to.',
+    decisions: [
+      'Saying no is part of the roadmap: no document vault (we refuse to be a honeypot for passports), no second country yet, no features on spec.',
+      'Updating it every release is a standing rule, written into the repo\'s instructions.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {
