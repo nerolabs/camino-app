@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { palette } from '@/constants/Colors';
@@ -33,6 +33,7 @@ export default function SamplePlanScreen() {
   // The stateful/LLM features (mark done, re-plan, Lola's coach) are deliberately absent — they're
   // personal + would make a public page a free LLM endpoint; the expanded card teases them instead.
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const lastToggle = useRef(0); // rageclick guard: double-taps made cards flicker open/closed
 
   const byPhase = PHASE_ORDER
     .map(phase => ({ phase, items: objectives.filter(o => o.phase === phase) }))
@@ -106,6 +107,9 @@ export default function SamplePlanScreen() {
                   style={styles.card}
                   activeOpacity={0.85}
                   onPress={() => {
+                    const now = Date.now();
+                    if (now - lastToggle.current < 350) return; // ignore rapid double-taps
+                    lastToggle.current = now;
                     if (!expanded) capture('sample_plan_step_expanded', { objective_id: obj.id });
                     setExpandedId(expanded ? null : obj.id);
                   }}

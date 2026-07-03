@@ -14,7 +14,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:api": "RUN_API=1 vitest run tests/api.contract.test.ts",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "docs:catalog": "npx tsx scripts/gen-catalog-docs.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.107.0",

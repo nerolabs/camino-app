@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import NavBar from '@/components/NavBar';
 import { palette } from '@/constants/Colors';
-import { nextSlot, derive, interviewProgress, type Slot, type Profile } from '@/core/interview-controller';
+import { nextSlot, derive, interviewProgress, SLOTS, type Slot, type Profile } from '@/core/interview-controller';
 import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
 import { saveProfile as saveProfileDb } from '@/core/profileDb';
@@ -15,6 +15,7 @@ import { askAnthropic } from '@/lib/lola';
 import { useDictation } from '@/hooks/useDictation';
 import { useLolaVoice } from '@/hooks/useLolaVoice';
 import { capture } from '@/lib/analytics';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Turn = { role: 'lola' | 'user'; text: string };
 
@@ -53,8 +54,8 @@ Speak directly. One or two sentences max. No bullet points.`,
 }
 
 async function extractAnswer(
-  slot: Slot, userText: string, turns: Turn[]
-): Promise<{ value: unknown } | { clarify: string }> {
+  slot: Slot, userText: string, turns: Turn[], remaining: Slot[]
+): Promise<{ value: unknown; extras?: Record<string, unknown> } | { clarify: string }> {
   const today = new Date().toISOString().slice(0, 10);
   const transcript = transcriptOf(turns);
   const typeInstructions =
@@ -63,14 +64,23 @@ async function extractAnswer(
       : slot.type === 'bool'
       ? 'Return true if yes/affirmative, false if no/negative. Be generous — "we do drive", "yes we have kids", "currently in the US" etc. are true.'
       : slot.type === 'date'
-      ? `Return an ISO date string "YYYY-MM-DD". Today is ${today}; resolve relative phrases against it ("next spring", "in about 3 months", "September" → that month). If they give only a month or season, pick the 1st of that month. If they're genuinely unsure or say "not sure / don't know", return {"value": null}.`
+      ? `Return an ISO date string "YYYY-MM-DD". Today is ${today}; resolve relative phrases against it. BE GENEROUS — any timeframe at all resolves to a concrete date, never a clarification: "September" → the 1st of that September; "next spring" → March 1 of that year; "next year" → January 1 of next year; "in about 3 months" → today + 3 months; "sometime in 2027" → 2027-01-01; "end of the year" → December 1. An approximate anchor beats re-asking. Only if they say they genuinely don't know ("not sure", "no idea yet") return {"value": null}.`
       : slot.options
       ? `Return the single most appropriate option string exactly as written from this list: ${slot.options.join(', ')}. Infer from context — e.g. "I work remotely for a US company" → "employed_remote", "I\'m self-employed" → "self_employed", "we live off investments" → "passive_income".`
       : 'Return the value as a string.';
 
+  const remainingGuide = remaining.map(s => {
+    const t = s.type === 'list' ? 'array of ISO 2-letter country codes'
+            : s.type === 'bool' ? 'boolean'
+            : s.type === 'date' ? 'YYYY-MM-DD string'
+            : s.options ? `one of: ${s.options.join(' | ')}`
+            : 'string';
+    return `- ${s.field} (${t}): ${s.prompt_hint}`;
+  }).join('\n');
+
   const rawText = await askAnthropic({
     model: 'claude-haiku-4-5-20251001',
-    max_tokens: 120,
+    max_tokens: 350,
     system: `You are extracting a structured value from a user's natural-language answer.
 ${transcript ? `Conversation so far — use it to resolve references and avoid clarifying things already established:
 ${transcript}
@@ -78,9 +88,18 @@ ${transcript}
 ` : ''}Field: "${slot.field}" (type: ${slot.type})
 ${typeInstructions}
 Respond ONLY with valid JSON in one of these two shapes — nothing else:
-  {"value": <typed value>}
+  {"value": <typed value>, "extras": {"<other_field>": <typed value>, ...}}
   {"clarify": "<one short question if genuinely ambiguous>"}
-Do not add explanation. Lean on the conversation above: if an earlier answer already implies this value (e.g. they mentioned "my wife", so they are married), infer it and return {"value": ...} rather than clarifying.`,
+Do not add explanation. Lean on the conversation above: if an earlier answer already implies this value (e.g. they mentioned "my wife", so they are married), infer it and return {"value": ...} rather than clarifying.
+
+"extras" — OPTIONAL, for skipping questions the user has already answered in passing. These other
+fields are still unanswered:
+${remainingGuide || '(none)'}
+Include a field in "extras" ONLY when the user has clearly and explicitly provided it somewhere in
+the conversation (e.g. "just me and my wife" → has_spouse_or_partner: true, partner_is_married: true,
+has_children: false only if they said it's JUST the two of them; "just me" alone → has_spouse_or_partner: false,
+has_children: false). Never guess from vibes — omit anything not actually stated. Omit "extras"
+entirely when nothing qualifies.`,
     messages: [{ role: 'user', content: userText }],
   });
   try {
@@ -139,6 +158,7 @@ export default function InterviewScreen() {
   const dictation = useDictation(setInput);
   // Lola's spoken voice (web /api/tts → ElevenLabs). Off by default; speaks new Lola turns.
   const voice = useLolaVoice();
+  const insets = useSafeAreaInsets(); // keyboardVerticalOffset must match the root SafeAreaView's top inset
 
   // Speak each new Lola message when voice is on (skips the dev-persona marker).
   useEffect(() => {
@@ -209,9 +229,13 @@ export default function InterviewScreen() {
     setLoading(true);
     setTurns(prev => [...prev, { role: 'user', text }]);
 
-    const result = await extractAnswer(currentSlot, text, turns);
+    const remainingSlots = SLOTS.filter(s => !(s.field in profile) && s.field !== currentSlot.field);
+    const result = await extractAnswer(currentSlot, text, turns, remainingSlots);
 
     if ('clarify' in result) {
+      // Monitor these: every clarify is a real user stuck on a question the extractor fumbled.
+      // The PostHog trend on this event is the tuning loop for the extraction prompts.
+      capture('interview_clarify_needed', { field: currentSlot.field, answer: text.slice(0, 200) });
       // Re-ask in Lola's voice rather than surfacing the extractor's raw clarify
       // string, which leaks internal framing (e.g. "...you'd like me to extract?").
       const reask = STATIC_QUESTIONS[currentSlot.field]
@@ -225,6 +249,23 @@ export default function InterviewScreen() {
     }
 
     const next_profile: Profile = { ...profile, [currentSlot.field]: result.value };
+    // Opportunistic capture: apply extras the extractor is confident about, but ONLY into slots
+    // still unanswered, and only when the value type-checks against the slot's schema. This is the
+    // same single extraction surface — extras just let nextSlot() skip already-answered questions.
+    const autofilled: string[] = [];
+    if (result.extras && typeof result.extras === 'object') {
+      for (const s of remainingSlots) {
+        const v = (result.extras as Record<string, unknown>)[s.field];
+        if (v === undefined || v === null) continue;
+        const ok = s.type === 'bool' ? typeof v === 'boolean'
+                 : s.type === 'date' ? typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v)
+                 : s.type === 'list' ? Array.isArray(v) && v.every(x => typeof x === 'string')
+                 : s.options       ? typeof v === 'string' && s.options.includes(v)
+                 : typeof v === 'string';
+        if (ok) { next_profile[s.field] = v; autofilled.push(s.field); }
+      }
+      if (autofilled.length) capture('interview_slots_autofilled', { fields: autofilled, from: currentSlot.field });
+    }
     derive(next_profile);
     setProfile(next_profile);
 
@@ -305,7 +346,10 @@ export default function InterviewScreen() {
     <KeyboardAvoidingView
       style={styles.flex}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={90}
+      // Must equal the distance from the top of the SCREEN to the top of this view — that's the
+      // root SafeAreaView's top inset (Dynamic Island / notch). The old hardcoded 90 overstated
+      // it, so the composer under-padded and its bottom edge clipped behind the keyboard.
+      keyboardVerticalOffset={insets.top}
     >
       <NavBar />
       {voice.supported && started && (
