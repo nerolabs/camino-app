@@ -484,7 +484,12 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       `permanent-residence`) stays for all long-stay movers. Verified both ways: naturaliser sees the
       track; rolling-renewer sees none of it but keeps permanent-residence. Interview asks the new Q
       at the right time (after long-stay + non-EU known).
-- [ ] **Final-polish: audit the full obligation list + the questions that gate them (user feedback
+- [x] **Final-polish catalog visualization — DONE 2026-07-03.** `npm run docs:catalog` generates
+      `docs/CATALOG.md`: every interview question (+ when it's asked), every derivation, all 60
+      obligations with human-readable applies-when conditions, the reverse index (field → the
+      obligations it gates), and a Mermaid field-flow graph. Derived from SLOTS/DERIVATIONS/CATALOG
+      so it can't drift; regenerate after any catalog change. **[YOU: do the human review pass.]**
+- [x] ~~(original note)~~ **audit the full obligation list + the questions that gate them (user feedback
       2026-07-02).** Produce a human-readable view of every obligation and the interview branching
       (which `applies_if` fields / slots drive it) so the branching is easy to follow and review.
       A generated **ERD isn't the right shape** (this is rules/conditions, not entity relationships);
