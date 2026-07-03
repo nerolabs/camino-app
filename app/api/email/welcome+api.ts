@@ -11,7 +11,7 @@
  * the server re-checks, so double-fires and multi-device races collapse to one email.
  */
 import { createClient } from '@supabase/supabase-js';
-import { sendEmail } from '@/lib/serverEmail';
+import { sendEmail, siteOrigin } from '@/lib/serverEmail';
 import { welcomeEmail, unsubFooter } from '@/lib/emailTemplates';
 import { signUnsubToken } from '@/lib/emailTokens';
 import { captureServerError } from '@/lib/sentryServer';
@@ -34,18 +34,29 @@ export async function POST(request: Request): Promise<Response> {
       return Response.json({ sent: false, reason: 'already welcomed' });
     }
 
-    const origin = new URL(request.url).origin;
+    const origin = siteOrigin(request);
     const cronSecret = process.env.CRON_SECRET;
     const unsubUrl = cronSecret
       ? `${origin}/api/email/unsubscribe?uid=${user.id}&sig=${await signUnsubToken(cronSecret, user.id)}`
       : null;
 
-    await sendEmail({ to: user.email, ...welcomeEmail({ planUrl: `${origin}/plan`, unsubHtml: unsubFooter(unsubUrl) }) });
-
+    // Claim BEFORE sending: with send-first, concurrent requests (multi-tab, or several auth
+    // events on one sign-in) all passed the welcomed_at check and each sent an email. The claim
+    // isn't a true compare-and-swap, but it shrinks the race from "email round-trip" to
+    // "metadata write" — and the client also guards against same-page-load refires.
     const admin = createClient(url, service, { auth: { persistSession: false, autoRefreshToken: false } });
     await admin.auth.admin.updateUserById(user.id, {
       user_metadata: { welcomed_at: new Date().toISOString() },
     });
+
+    try {
+      await sendEmail({ to: user.email, ...welcomeEmail({ planUrl: `${origin}/plan`, unsubHtml: unsubFooter(unsubUrl) }) });
+    } catch (e) {
+      // Roll the claim back so a later sign-in can retry — otherwise a transient Resend
+      // failure would silently cost the user their welcome email forever.
+      await admin.auth.admin.updateUserById(user.id, { user_metadata: { welcomed_at: null } }).catch(() => {});
+      throw e;
+    }
 
     return Response.json({ sent: true });
   } catch (e) {

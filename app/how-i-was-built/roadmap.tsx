@@ -21,6 +21,7 @@ const SECTIONS: Section[] = [
   {
     h: 'Just shipped',
     items: [
+      { title: 'The weekly roundup + welcome email', note: 'What’s overdue and what’s coming up, never more than a handful of tasks, each with a concrete tip. A welcome note when you join, one-click unsubscribe, and silence when there’s nothing pressing.' },
       { title: 'Passwordless email sign-in', note: 'A link (or 6-digit code) lands in your inbox and signs you in — no password to invent, works across devices.' },
       { title: '“Email me my roadmap”', note: 'One field on your fresh roadmap: saves it, creates your account silently, and the emailed link brings you back signed in.' },
       { title: 'Overdue tracking', note: 'Steps past their date now say so, in red — and Lola helps you re-flow the plan instead of letting it quietly rot.' },
@@ -32,7 +33,7 @@ const SECTIONS: Section[] = [
   {
     h: 'In progress',
     items: [
-      { title: 'The weekly roundup', note: 'What’s overdue and what’s coming up, never more than a handful of tasks, each with a concrete tip — plus a welcome email when you join. Final wiring underway.' },
+      { title: 'Smoothing out Sign in with Apple', note: 'It works for most people; we’re chasing down an edge case before the next iOS build ships.' },
     ],
   },
   {

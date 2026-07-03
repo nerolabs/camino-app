@@ -9,42 +9,44 @@ Last updated: 2026-07-03.
 
 ---
 
-## ⭐ RESUME HERE (warm handoff — 2026-07-03, mid email-loop rollout)
+## ⭐ RESUME HERE (2026-07-03 — email loop is LIVE)
 
-**We just built the email loop (commit `73732f5`, pushed). Code is done, tests green (26).
-It is NOT yet live — blocked on one env-var step by the user.** Previous session's CLI UX got
-corrupted; this is a clean restart at the exact same point.
+**The email loop is live and verified end-to-end in production.** User added the 3 secrets to
+EAS as `sensitive` (prod + preview), both envs redeployed, routes flipped 501 → 401. Live test:
+forced weekly run via the GitHub Actions `workflow_dispatch` (run #1, green) → 200 with
+`{roundups:0, nudges:2, skipped:1, errors:0, users:3}`; nudge + welcome received, styled
+correctly, in a real Gmail inbox. Welcome fired on a real Google sign-in at getcamino.app
+(account andrewnedmond@gmail.com), and a page reload after the fix sent nothing (dedupe holds).
 
-### The blocker (user action, then I proceed)
-The 3 email secrets must exist in EAS as **`sensitive` visibility, NOT `secret`.** I proved
-(throwaway-var probe) that **Secret-visibility vars come through EMPTY to the web API routes** —
-`eas env:pull` (what `deploy.sh` uses) only delivers Plain-text + Sensitive values. The user
-originally added them as `secret`; I deleted those copies (they'd never have worked). They need
-re-adding **once** as sensitive (values can't be read back, so re-entry is unavoidable):
+### Two bugs the live test caught (both FIXED + redeployed both envs)
+1. **Email links leaked the per-deploy origin** (`camino--<id>.expo.app` instead of
+   getcamino.app): behind EAS Hosting's custom domain, `request.url` carries the internal
+   deploy host. Fix: `siteOrigin()` in `lib/serverEmail.ts` — canonical origin per
+   `EXPO_PUBLIC_ENV` (production → getcamino.app, staging → camino--staging.expo.app, dev →
+   request origin). Never build user-facing links from the request URL.
+2. **Welcome email sent 3× on one sign-in.** Two stacked races: the client effect keyed on the
+   `user` OBJECT re-fired per auth event (INITIAL_SESSION / SIGNED_IN / USER_UPDATED from the
+   pending_profile clear), and the server checked `welcomed_at` before sending, non-atomically.
+   Fix: module-level once-per-user guard + effect keyed on `user?.id` (`app/_layout.tsx`);
+   server now CLAIMS `welcomed_at` before the send and rolls back if Resend fails
+   (`app/api/email/welcome+api.ts`).
 
-```
-# production (unblocks the live test):
-npx eas-cli env:create --environment production --name RESEND_API_KEY --visibility sensitive --scope project --force
-npx eas-cli env:create --environment production --name SUPABASE_SERVICE_ROLE_KEY --visibility sensitive --scope project --force
-npx eas-cli env:create --environment production --name CRON_SECRET --visibility sensitive --scope project --force
-# preview (staging): same three, --environment preview, staging's own service_role key
-```
-- `CRON_SECRET` must MATCH the value already set as the GitHub repo secret (Actions → secrets).
-- `SUPABASE_SERVICE_ROLE_KEY`: each project's own `service_role` (prod key → production env,
-  staging key → preview). Supabase → Settings → API Keys → "Secret keys" (`sb_secret_…`).
-- Claude must NOT handle these values — user runs the commands / pastes when prompted.
+### Gotchas learned this batch
+- **`eas-cli deploy` can print "deploy command failed" (ECONNRESET) yet exit 0** — deploy.sh's
+  `set -e` won't catch it. If a deploy looks odd, check the dashboard/deployment URL; rerun.
+- Gmail-API readers may double-decode quoted-printable (`uid=3a…` renders as `uid:…`) — the
+  emails themselves are fine; check the raw source before "fixing" links.
 
-### Then I do (no further input needed)
-1. Redeploy web both envs: `npm run deploy:production && npm run deploy:staging` (env changes
-   only reach the routes on a fresh deploy). Verify routes flip **501 → 200/401**:
-   `curl -s -o /dev/null -w '%{http_code}' -X POST https://getcamino.app/api/email/weekly` (401
-   without the bearer = configured; 501 = still missing keys).
-2. **Live end-to-end test against the user's own account** (nerolabs@gmail.com): trigger a
-   welcome email + a forced weekly run (`curl -X POST …/api/email/weekly -H "Authorization:
-   Bearer <CRON_SECRET>"`), confirm delivery in Resend's dashboard + that the styled template
-   renders. Report before calling it done.
+### Still open on email (small)
+- **Staging Supabase SMTP + styled auth templates** — user pastes the Resend key (Auth → Emails
+  → SMTP settings, mirror production), then restyle the two templates like production's.
+- nerolabs@gmail.com wasn't directly testable (not signed into Chrome); tested with the user's
+  andrewnedmond@gmail.com account instead. The weekly run's `skipped:1` is expected (account
+  under 24h old, or nothing pressing).
 
-### Env/dashboard state already done this session (don't redo)
+### Env/dashboard state (don't redo)
+- EAS envs: RESEND_API_KEY / SUPABASE_SERVICE_ROLE_KEY / CRON_SECRET present as **sensitive**
+  in BOTH production and preview. GitHub repo secret CRON_SECRET matches.
 - **Resend**: `getcamino.app` domain **verified** (eu-west-1). Free plan (1 domain, 2 req/s —
   `serverEmail`/`weekly` already spaced for it).
 - **Production Supabase** (`oftrpaleqtmuvolwsocd`): custom SMTP **ON** (host `smtp.resend.com`,
@@ -163,8 +165,8 @@ sequenced last.
 
 ## What's next (see TODO.md for detail)
 
-1. **Finish the email loop** — env vars (blocker above) → redeploy → live test. Then style
-   staging SMTP + templates. Native email sign-in rides iOS build 18.
+1. **Email-loop leftovers** — staging Supabase SMTP + styled templates (user pastes the Resend
+   key; see open items above). Native email sign-in rides iOS build 18.
 2. **Apple sign-in fix** (open thread above) → then iOS build 18 carries email + Apple together.
 3. **60 SEO pages** (`/guide/<id>` from the catalog) — next major feature.
 4. Later: "This week" view, roadmap PDF export, region slot, reminders/push.

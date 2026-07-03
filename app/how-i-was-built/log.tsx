@@ -218,6 +218,15 @@ const ROWS: Row[] = [
       'Updating it every release is a standing rule, written into the repo\'s instructions.',
     ],
   },
+  {
+    feature: 'The email loop, live',
+    work: 'The welcome email and weekly roundup went live end-to-end: server keys landed, both environments redeployed, a real weekly run fired from the scheduler, and real emails read in a real inbox. The live test caught two bugs no unit test saw: email links leaked the hosting platform\'s per-deploy URL instead of getcamino.app, and one sign-in sent the welcome email three times.',
+    decisions: [
+      'Test the loop by receiving the email, not by reading the code — both bugs were only visible in an actual inbox.',
+      'Links in emails come from one canonical per-environment origin, never from the request URL a proxy hands you.',
+      'The triple-send was two races stacked: the client now fires the welcome request once per sign-in, and the server claims the "already welcomed" flag before sending, rolling it back if the send fails.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

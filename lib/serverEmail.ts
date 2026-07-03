@@ -6,6 +6,18 @@
 
 export const EMAIL_FROM = 'Lola from Camino <lola@getcamino.app>';
 
+/**
+ * Canonical site origin for links inside emails. Behind EAS Hosting's custom domain,
+ * `request.url` carries the per-deploy host (camino--<id>.expo.app) — it leaks
+ * infrastructure and rotates every deploy, so never put it in a user-facing link.
+ */
+export function siteOrigin(request: Request): string {
+  const env = process.env.EXPO_PUBLIC_ENV;
+  if (env === 'production') return 'https://getcamino.app';
+  if (env === 'staging') return 'https://camino--staging.expo.app';
+  return new URL(request.url).origin; // local dev
+}
+
 export type OutgoingEmail = {
   to: string;
   subject: string;

@@ -19,6 +19,13 @@ export { ErrorBoundary } from 'expo-router';
 
 SplashScreen.preventAutoHideAsync();
 
+// One welcome request per user per page load. Sign-in emits several auth events
+// (INITIAL_SESSION, SIGNED_IN, USER_UPDATED from the pending_profile clear below), each with a
+// fresh user object whose metadata still lacks welcomed_at — without this guard the effect fired
+// the welcome POST once per event, and the server's non-atomic re-check let all of them send
+// (observed: 3 welcome emails in one second).
+let welcomeRequestedFor: string | null = null;
+
 // Load the signed-in user's saved profile + staff flag at the root, so every route has them —
 // including on a direct load or a browser reload of /plan or /interview (not just the home screen,
 // where this used to live). This is why reloading the roadmap showed "No roadmap yet" and why the
@@ -44,9 +51,10 @@ function SessionSync() {
       setIsStaff(isStaff);
       if (answers) { derive(answers); setProfile(answers); }
 
-      // Welcome email, once ever — the server re-checks welcomed_at with the service role,
-      // so multi-device races and repeated app-opens collapse to a single send.
-      if (!md.welcomed_at) {
+      // Welcome email, once ever — the server re-checks welcomed_at with the service role
+      // (claiming it before the send), and the module guard above stops same-page-load refires.
+      if (!md.welcomed_at && welcomeRequestedFor !== user.id) {
+        welcomeRequestedFor = user.id;
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
           const API_BASE = process.env.EXPO_PUBLIC_API_URL ?? '';
@@ -57,7 +65,9 @@ function SessionSync() {
         }
       }
     })();
-  }, [user]);
+    // Key on the id, not the object: USER_UPDATED / TOKEN_REFRESHED hand back new user objects
+    // for the same account, and re-running this effect for those only invites duplicate work.
+  }, [user?.id]);
   return null;
 }
 

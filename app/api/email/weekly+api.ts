@@ -18,7 +18,7 @@
 import { createClient, type SupabaseClient, type User } from '@supabase/supabase-js';
 import { buildDigest, interviewComplete } from '@/core/email-digest';
 import type { Profile } from '@/core/interview-controller';
-import { sendEmail } from '@/lib/serverEmail';
+import { sendEmail, siteOrigin } from '@/lib/serverEmail';
 import { roundupEmail, nudgeEmail, unsubFooter } from '@/lib/emailTemplates';
 import { signUnsubToken } from '@/lib/emailTokens';
 import { captureServerError } from '@/lib/sentryServer';
@@ -52,7 +52,7 @@ export async function POST(request: Request): Promise<Response> {
   const token = (request.headers.get('authorization') ?? '').replace(/^Bearer\s+/i, '');
   if (token !== cronSecret) return Response.json({ error: 'unauthorized' }, { status: 401 });
 
-  const origin = new URL(request.url).origin;
+  const origin = siteOrigin(request);
   const admin = createClient(url, service, { auth: { persistSession: false, autoRefreshToken: false } });
   const counts = { roundups: 0, nudges: 0, skipped: 0, errors: 0 };
   const errors: string[] = [];
