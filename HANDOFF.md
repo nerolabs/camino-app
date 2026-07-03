@@ -68,7 +68,19 @@ user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS bui
    Growth/uniqueness queue = TODO item 9 (top pick: the public regulatory changelog);
    business/PR/personal ops = TODO item 10 (user-side: gestor consult, trademark search,
    bus-factor hour, DSA trader status).
-   **User is testing build 23 + web in the morning and will file a big bug report.**
+   **User is testing web + the latest build in the morning and will file a big bug report.**
+
+8. **Overnight incident (2026-07-04 ~00:30): builds 22/23 NEVER BUILT — test BUILD 24.**
+   Both ERRORED in Xcode: the provisioning profile lacked the **Associated Domains**
+   capability/entitlement (added for universal links in build 22's config). EAS didn't
+   re-sync because the profile was still VALID — the docs/APP_STORE.md lesson again:
+   **a capability change requires enabling it on the App ID (invalidating the profile) so
+   EAS re-mints.** Their submissions auto-canceled (that's why TestFlight sat at 21).
+   Fix applied: Associated Domains enabled on the App ID (dev portal), **build 24** kicked;
+   verified from the signed IPA: BOTH entitlements present (applesignin + associated-domains
+   applinks:getcamino.app), profile minted 22:30Z; submission 6cf5ed94 uploading to
+   TestFlight at last check. **Playbook: when adding ANY capability to app.config, flip it
+   on the App ID first (or expect the next build to fail and re-mint).**
 
 **ALSO SPOTTED in ASC (App Store release prep):** the DSA **trader status** must be completed
 (ASC → Business banner) or EU distribution is blocked — Spain IS the market. Add to the
