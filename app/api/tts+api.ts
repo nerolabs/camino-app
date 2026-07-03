@@ -65,6 +65,17 @@ function clientIp(request: Request): string {
     ?? 'unknown';
 }
 
+// Per-isolate daily budget — coarse cost-stop for ElevenLabs characters even when client IPs are
+// hidden (per-IP limiter fails open there). See the same block in lola+api.ts for the rationale.
+const DAILY_BUDGET = Number(process.env.TTS_DAILY_BUDGET ?? 2000);
+let budget = { day: '', count: 0 };
+function budgetExceeded(): boolean {
+  const day = new Date().toISOString().slice(0, 10);
+  if (budget.day !== day) budget = { day, count: 0 };
+  budget.count += 1;
+  return budget.count > DAILY_BUDGET;
+}
+
 // Synthesize `text` → audio/mpeg. Shared by POST (web sends JSON) and GET (native streams by URL,
 // since expo-audio's player fetches a URL rather than a body).
 async function ttsResponse(text: string, method: string): Promise<Response> {
@@ -108,6 +119,7 @@ export async function POST(request: Request) {
   try {
     if (requestOriginRejected(request)) return Response.json({ error: 'forbidden origin' }, { status: 403 });
     if (rateLimited(clientIp(request))) return Response.json({ error: 'rate limit exceeded' }, { status: 429 });
+    if (budgetExceeded()) return Response.json({ error: 'daily capacity reached' }, { status: 429 });
     const body = (await request.json()) as { text?: string };
     return await ttsResponse((body.text ?? '').trim(), 'POST');
   } catch (e) {
@@ -122,6 +134,7 @@ export async function GET(request: Request) {
   try {
     if (requestOriginRejected(request)) return Response.json({ error: 'forbidden origin' }, { status: 403 });
     if (rateLimited(clientIp(request))) return Response.json({ error: 'rate limit exceeded' }, { status: 429 });
+    if (budgetExceeded()) return Response.json({ error: 'daily capacity reached' }, { status: 429 });
     const text = new URL(request.url).searchParams.get('text') ?? '';
     return await ttsResponse(text.trim(), 'GET');
   } catch (e) {

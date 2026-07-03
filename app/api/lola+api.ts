@@ -101,6 +101,19 @@ function clientIp(request: Request): string {
     ?? 'unknown';
 }
 
+// Per-isolate daily budget — a coarse cost-stop that works even when the runtime hides client IPs
+// (where the per-IP limiter must fail open). Each Workers isolate counts separately, so this is a
+// cost ceiling, not an exact global limit; the true global control is a WAF/KV rate rule (tracked
+// as a pre-launch item). 5000/day per isolate is far beyond legitimate traffic at this stage.
+const DAILY_BUDGET = Number(process.env.LOLA_DAILY_BUDGET ?? 5000);
+let budget = { day: '', count: 0 };
+function budgetExceeded(): boolean {
+  const day = new Date().toISOString().slice(0, 10);
+  if (budget.day !== day) budget = { day, count: 0 };
+  budget.count += 1;
+  return budget.count > DAILY_BUDGET;
+}
+
 type Message = { role: 'user' | 'assistant'; content: string };
 
 export async function POST(request: Request) {
@@ -110,6 +123,9 @@ export async function POST(request: Request) {
     }
     if (rateLimited(clientIp(request))) {
       return Response.json({ error: 'rate limit exceeded' }, { status: 429 });
+    }
+    if (budgetExceeded()) {
+      return Response.json({ error: 'daily capacity reached' }, { status: 429 });
     }
 
     const body = (await request.json()) as {
