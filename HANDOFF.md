@@ -187,8 +187,11 @@ the unified hamburger nav. Android deferred to the very end; localization sequen
 
 1. **Email loop: DONE.** **60 guide pages: DONE.** **Build 18: submitted to TestFlight.**
 2. **User device-tests build 18** — native email sign-in + the Apple retry (2FA check / second
-   Apple ID; see resume block). Then App Store submission prep (docs/APP_STORE.md).
-3. Later: "This week" view, roadmap PDF export, region slot, reminders/push; guide-page polish
-   (JSON-LD, curated prose per obligation).
+   Apple ID; see resume block).
+3. **The three pre-release features (user priority 2026-07-03):** "This week" view → roadmap
+   PDF export → region-aware steps. All land before the App Store push, which is ALSO gated on
+   significant family testing / edge-case cleanup. **Reminders/push: STRUCK** (user decision —
+   the weekly email is the retention loop).
+4. Later: guide-page polish (JSON-LD, curated prose); per-step problem-report link.
 5. App Store submission (screenshots/age-rating/copyright are user-side; see docs/APP_STORE.md).
 6. Monetization at the very end (affiliate programs first); localization last.

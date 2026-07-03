@@ -486,10 +486,19 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
    (prerendered), `/sitemap.xml` API route generated from the catalog (64 URLs), robots.txt
    Sitemap line, "Guides" in the nav menu. Possible later polish: JSON-LD structured data,
    per-obligation prose descriptions (would need a curated content pass).
-5. *(later)* "This week" view · roadmap PDF export · region slot · per-step problem-report link ·
-   reminders/push (entitlement playbook is documented).
-6. *(end of backlog)* **Monetization** — gestor/advisor referrals once affiliate programs are
+5. **Next three features (user priority 2026-07-03) — all land BEFORE the App Store release:**
+   1. **"This week" view** — just what needs your attention now.
+   2. **Roadmap PDF export** — for the fridge door, or the gestor.
+   3. **Region-aware steps** — region slot; some bureaucracy differs by comunidad.
+6. **App Store submission — gated (user decision 2026-07-03)** on the three features above PLUS
+   significant family testing / edge-case cleanup. See docs/APP_STORE.md for the pack.
+7. *(later)* per-step problem-report link.
+8. *(end of backlog)* **Monetization** — gestor/advisor referrals once affiliate programs are
    identified; possibly paired with the MovingToSpain.com partnership.
+
+**Explicitly removed (user decision 2026-07-03, evening):** Reminders / push notifications —
+the weekly cron email IS the retention loop; weekly email updates do the job and we won't be
+another icon buzzing a pocket. (Public roadmap lists it under "not building".)
 
 **Explicitly removed (user decision 2026-07-03):** Country #2 (not now) · document vault (won't
 carry security responsibility for those documents) · household sharing (wait for real demand

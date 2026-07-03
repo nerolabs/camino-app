@@ -41,16 +41,15 @@ const SECTIONS: Section[] = [
   {
     h: 'Next',
     items: [
-      { title: 'The App Store release', note: 'The iOS app is in TestFlight now; the public App Store listing is the next milestone.' },
+      { title: '“This week” view', note: 'Just what needs your attention now.' },
+      { title: 'Roadmap PDF export', note: 'For the fridge door, or the gestor.' },
+      { title: 'Region-aware steps', note: 'Some bureaucracy differs by comunidad — the plan should know yours.' },
     ],
   },
   {
     h: 'Later',
     items: [
-      { title: '“This week” view', note: 'Just what needs your attention now.' },
-      { title: 'Roadmap PDF export', note: 'For the fridge door, or the gestor.' },
-      { title: 'Region-aware steps', note: 'Some bureaucracy differs by comunidad — the plan should know yours.' },
-      { title: 'Reminders and push notifications' },
+      { title: 'The public App Store release', note: 'The iOS app is in TestFlight now. The listing goes live after the features above land and the app has survived a lot more family testing.' },
       { title: 'Android app' },
       { title: 'Spanish first, then more languages' },
     ],
@@ -60,6 +59,7 @@ const SECTIONS: Section[] = [
     intro: 'A roadmap is also the things you say no to.',
     items: [
       { title: 'A document vault', note: 'Your passport and visa papers are exactly the documents we don’t want to be a honeypot for. We’ll point you to the right storage; we won’t be it.' },
+      { title: 'Push notifications', note: 'The weekly email already tells you what needs attention, and we’d rather not be another icon buzzing your pocket. If email ever isn’t enough, we’ll revisit.' },
       { title: 'A second country', note: 'Spain, done properly, before anywhere else.' },
       { title: 'Household sharing', note: 'Waiting until real users tell us they need it — not building it on spec.' },
     ],
