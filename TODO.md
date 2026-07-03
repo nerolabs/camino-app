@@ -234,6 +234,11 @@ is strictly required — a normal EAS build works.
       the root + `NavBar` pads by top/left/right insets so it clears the Dynamic Island / notch /
       status bar (reported on iPhone 17 Pro Max). Web insets are 0 → web unchanged. Dark status-bar
       style for the light UI. In build 5 (`3f6446a8`).
+- [x] **iOS build 11 — VERIFIED ON DEVICE 2026-07-03 (user: "everything verified").** Scroll no
+      longer slides under the Dynamic Island (root SafeAreaView fix), no double-padded headers,
+      sample plan reachable, post-audit catalog + native Sentry/analytics/voice all in. iOS is
+      fully current. (The 17 corrected webinar anchors shipped just after build 11 was cut — they
+      ride the next build; web, where staff links mostly render, already has them.)
 - [~] **Store submission — TestFlight DONE; full public submission pending.** iOS builds auto-submit
       to **TestFlight** (ASC App ID 6786412055) and are testable on device. Still to do for public
       release: App Store metadata / screenshots / privacy nutrition + review submission; **Google
