@@ -21,6 +21,7 @@ const SECTIONS: Section[] = [
   {
     h: 'Just shipped',
     items: [
+      { title: '“This week” view', note: 'One tap on your roadmap and you see just what needs your attention now — what’s slipped and what’s due in the next seven days. A clear week says so, honestly.' },
       { title: 'A free guide for every step', note: 'Sixty public pages — one per step in the catalog, each with when it’s due, why it matters, and the official source. The same facts your roadmap is built from, open to everyone.' },
       { title: 'One calmer nav everywhere', note: 'Desktop now matches mobile: browsing lives in the ☰ menu, the bar keeps just the actions.' },
       { title: 'The weekly roundup + welcome email', note: 'What’s overdue and what’s coming up, never more than a handful of tasks, each with a concrete tip. A welcome note when you join, one-click unsubscribe, and silence when there’s nothing pressing.' },
@@ -41,7 +42,6 @@ const SECTIONS: Section[] = [
   {
     h: 'Next',
     items: [
-      { title: '“This week” view', note: 'Just what needs your attention now.' },
       { title: 'Roadmap PDF export', note: 'For the fridge door, or the gestor.' },
       { title: 'Region-aware steps', note: 'Some bureaucracy differs by comunidad — the plan should know yours.' },
     ],

@@ -237,6 +237,15 @@ const ROWS: Row[] = [
       'The unlisted "how I was built" section stays out of search; the guides are the front door.',
     ],
   },
+  {
+    feature: 'The "This week" view',
+    work: 'The roadmap gained a second lens: a toggle that filters to just what needs attention now — what\'s slipped past, and what\'s due in the next seven days. A clear week gets an honest "nothing needs you this week", with the next dated step so you know what\'s coming.',
+    decisions: [
+      'It\'s a filter over the same deterministic plan, not a second plan — the buckets keep the dependency-safe order, never re-sorted by date.',
+      'Due today is "this week", not overdue — the same midnight-grace rule as everywhere else, one predicate shared with the red treatment and the weekly email.',
+      'Steps still waiting on a milestone (no honest date) are never shown as "next up" — no fabricated urgency.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

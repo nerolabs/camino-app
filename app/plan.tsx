@@ -6,6 +6,7 @@ import { useAuth } from '@/core/AuthContext';
 import { saveProfile as saveProfileDb } from '@/core/profileDb';
 import { derive, type Profile } from '@/core/interview-controller';
 import { buildPlan, isOverdue, type Objective, type Progress } from '@/core/engine-controller';
+import { thisWeek } from '@/core/this-week';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { capture } from '@/lib/analytics';
@@ -84,6 +85,9 @@ export default function PlanScreen() {
   const [taskInput, setTaskInput] = useState('');
   const [taskThinking, setTaskThinking] = useState(false);
   const activeTaskRef = useRef<string | null>(null);
+  // "This week" vs the full phased roadmap. Full is the default — the week view is the
+  // attention filter you flip to, not a place to hide the plan.
+  const [view, setView] = useState<'week' | 'all'>('all');
 
   useEffect(() => { capture('roadmap_viewed'); }, []); // funnel endpoint: reached the roadmap
 
@@ -193,6 +197,56 @@ export default function PlanScreen() {
       ? `Overdue · was due ${o.timing.due.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`
       : 'Overdue';
   const titleById = new Map(objectives.map(o => [o.id, o.title]));
+  const week = thisWeek(objectives);
+
+  const renderCard = (obj: Objective) => {
+    const isPenalty = obj.severity === 'penalty' && !obj.done;
+    const barColor = obj.done ? palette.olive : SEV_COLOR[obj.severity];
+    return (
+      <TouchableOpacity
+        key={obj.id}
+        style={[styles.card, isPenalty && styles.cardPenalty, obj.done && styles.cardDone]}
+        activeOpacity={0.7}
+        onPress={() => openCard(obj)}
+      >
+        <View style={[styles.severityBar, { backgroundColor: barColor }]} />
+        <View style={styles.cardBody}>
+          <View style={styles.cardTop}>
+            <Text style={[styles.cardTitle, isPenalty && styles.cardTitlePenalty, obj.done && styles.cardTitleDone]} numberOfLines={3}>
+              {obj.title}
+            </Text>
+            {obj.done ? (
+              <View style={[styles.sevBadge, { backgroundColor: palette.olive + '18' }]}>
+                <Text style={[styles.sevBadgeText, { color: palette.olive }]}>✓ Done</Text>
+              </View>
+            ) : (
+              <View style={[styles.sevBadge, { backgroundColor: SEV_COLOR[obj.severity] + '18' }]}>
+                <Text style={[styles.sevBadgeText, { color: SEV_COLOR[obj.severity] }]}>
+                  {SEV_LABEL[obj.severity]}
+                </Text>
+              </View>
+            )}
+          </View>
+          <View style={styles.cardMeta}>
+            {obj.done ? (
+              <Text style={[styles.cardTiming, { color: palette.olive }]}>{completionLine(obj)}</Text>
+            ) : (
+              <>
+                <Text style={[styles.cardTiming, (isPenalty || isOverdue(obj)) && styles.cardTimingPenalty]}>
+                  {isOverdue(obj) ? overdueLine(obj) : formatTiming(obj)}
+                </Text>
+                <View style={styles.sourceDot}>
+                  <View style={[styles.sourceDotMark, { backgroundColor: SOURCE_COLOR[obj.source] }]} />
+                  <Text style={styles.sourceDotText}>{SOURCE_SHORT[obj.source]}</Text>
+                </View>
+                <Text style={styles.cardCategory}>{obj.category}</Text>
+              </>
+            )}
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <>
@@ -200,6 +254,24 @@ export default function PlanScreen() {
       <NavBar />
       <View style={styles.content}>
         <Text style={styles.heading}>Your roadmap</Text>
+
+        <View style={styles.viewToggle}>
+          <TouchableOpacity
+            style={[styles.viewToggleBtn, view === 'week' && styles.viewToggleBtnActive]}
+            onPress={() => { setView('week'); capture('plan_view_toggled', { view: 'week' }); }}
+          >
+            <Text style={[styles.viewToggleText, view === 'week' && styles.viewToggleTextActive]}>
+              This week{week.overdue.length > 0 ? ` · ${week.overdue.length} overdue` : ''}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.viewToggleBtn, view === 'all' && styles.viewToggleBtnActive]}
+            onPress={() => { setView('all'); capture('plan_view_toggled', { view: 'all' }); }}
+          >
+            <Text style={[styles.viewToggleText, view === 'all' && styles.viewToggleTextActive]}>Full roadmap</Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.statsRow}>
           <View style={styles.statChip}>
             <Text style={styles.statNum}>{objectives.length}</Text>
@@ -245,63 +317,49 @@ export default function PlanScreen() {
         <ConsulateBanner profile={profile} />
         <PenaltyBanner objectives={objectives} />
 
-        {byPhase.map(({ phase, items }) => (
-          <View key={phase} style={styles.section}>
-            <View style={styles.phaseHeader}>
-              <Text style={styles.phaseIcon}>{PHASE_ICONS[phase]}</Text>
-              <Text style={styles.phaseLabel}>{PHASE_LABELS[phase]}</Text>
-              <Text style={styles.phaseCount}>{items.length}</Text>
+        {view === 'week' ? (
+          <>
+            {week.overdue.length > 0 && (
+              <View style={styles.section}>
+                <View style={styles.phaseHeader}>
+                  <Text style={[styles.phaseLabel, { color: '#C0392B' }]}>SLIPPED PAST</Text>
+                  <Text style={styles.phaseCount}>{week.overdue.length}</Text>
+                </View>
+                {week.overdue.map(renderCard)}
+              </View>
+            )}
+            {week.dueSoon.length > 0 && (
+              <View style={styles.section}>
+                <View style={styles.phaseHeader}>
+                  <Text style={styles.phaseLabel}>DUE THIS WEEK</Text>
+                  <Text style={styles.phaseCount}>{week.dueSoon.length}</Text>
+                </View>
+                {week.dueSoon.map(renderCard)}
+              </View>
+            )}
+            {week.overdue.length === 0 && week.dueSoon.length === 0 && (
+              <View style={styles.weekClear}>
+                <Text style={styles.weekClearTitle}>Nothing needs you this week.</Text>
+                <Text style={styles.weekClearBody}>
+                  {week.nextUp && week.nextUp.timing.state !== 'pending_anchor'
+                    ? `Next up: ${week.nextUp.title} — ${formatTiming(week.nextUp).toLowerCase()}.`
+                    : 'Your remaining steps are waiting on earlier milestones — the full roadmap has the whole picture.'}
+                </Text>
+              </View>
+            )}
+          </>
+        ) : (
+          byPhase.map(({ phase, items }) => (
+            <View key={phase} style={styles.section}>
+              <View style={styles.phaseHeader}>
+                <Text style={styles.phaseIcon}>{PHASE_ICONS[phase]}</Text>
+                <Text style={styles.phaseLabel}>{PHASE_LABELS[phase]}</Text>
+                <Text style={styles.phaseCount}>{items.length}</Text>
+              </View>
+              {items.map(renderCard)}
             </View>
-            {items.map(obj => {
-              const isPenalty = obj.severity === 'penalty' && !obj.done;
-              const barColor = obj.done ? palette.olive : SEV_COLOR[obj.severity];
-              return (
-                <TouchableOpacity
-                  key={obj.id}
-                  style={[styles.card, isPenalty && styles.cardPenalty, obj.done && styles.cardDone]}
-                  activeOpacity={0.7}
-                  onPress={() => openCard(obj)}
-                >
-                  <View style={[styles.severityBar, { backgroundColor: barColor }]} />
-                  <View style={styles.cardBody}>
-                    <View style={styles.cardTop}>
-                      <Text style={[styles.cardTitle, isPenalty && styles.cardTitlePenalty, obj.done && styles.cardTitleDone]} numberOfLines={3}>
-                        {obj.title}
-                      </Text>
-                      {obj.done ? (
-                        <View style={[styles.sevBadge, { backgroundColor: palette.olive + '18' }]}>
-                          <Text style={[styles.sevBadgeText, { color: palette.olive }]}>✓ Done</Text>
-                        </View>
-                      ) : (
-                        <View style={[styles.sevBadge, { backgroundColor: SEV_COLOR[obj.severity] + '18' }]}>
-                          <Text style={[styles.sevBadgeText, { color: SEV_COLOR[obj.severity] }]}>
-                            {SEV_LABEL[obj.severity]}
-                          </Text>
-                        </View>
-                      )}
-                    </View>
-                    <View style={styles.cardMeta}>
-                      {obj.done ? (
-                        <Text style={[styles.cardTiming, { color: palette.olive }]}>{completionLine(obj)}</Text>
-                      ) : (
-                        <>
-                          <Text style={[styles.cardTiming, (isPenalty || isOverdue(obj)) && styles.cardTimingPenalty]}>
-                            {isOverdue(obj) ? overdueLine(obj) : formatTiming(obj)}
-                          </Text>
-                          <View style={styles.sourceDot}>
-                            <View style={[styles.sourceDotMark, { backgroundColor: SOURCE_COLOR[obj.source] }]} />
-                            <Text style={styles.sourceDotText}>{SOURCE_SHORT[obj.source]}</Text>
-                          </View>
-                          <Text style={styles.cardCategory}>{obj.category}</Text>
-                        </>
-                      )}
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        ))}
+          ))
+        )}
       </View>
       <Footer />
     </ScrollView>
@@ -510,6 +568,18 @@ const styles = StyleSheet.create({
   emptyBody:     { fontFamily: 'HankenGrotesk_400Regular', fontSize: 16, color: palette.indigo, textAlign: 'center', lineHeight: 24 },
 
   heading:       { fontFamily: 'Fraunces_600SemiBold', fontSize: 28, color: palette.indigo, marginBottom: 16 },
+
+  viewToggle:    { flexDirection: 'row', backgroundColor: '#EEE9E0', borderRadius: 10, padding: 3,
+                   alignSelf: 'flex-start', marginBottom: 16 },
+  viewToggleBtn: { paddingVertical: 7, paddingHorizontal: 14, borderRadius: 8 },
+  viewToggleBtnActive: { backgroundColor: '#FFFFFF', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' },
+  viewToggleText:{ fontFamily: 'HankenGrotesk_500Medium', fontSize: 13, color: palette.muted },
+  viewToggleTextActive: { color: palette.indigo, fontFamily: 'HankenGrotesk_600SemiBold' },
+
+  weekClear:     { backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 14,
+                   padding: 22, alignItems: 'flex-start' },
+  weekClearTitle:{ fontFamily: 'Fraunces_600SemiBold', fontSize: 21, color: palette.olive, marginBottom: 8 },
+  weekClearBody: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, lineHeight: 22, color: palette.indigo },
 
   statsRow:      { flexDirection: 'row', gap: 10, marginBottom: 20 },
   statChip:      { backgroundColor: '#FFFFFF', borderRadius: 10, paddingVertical: 10, paddingHorizontal: 14,

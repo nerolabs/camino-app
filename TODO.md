@@ -487,8 +487,11 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
    Sitemap line, "Guides" in the nav menu. Possible later polish: JSON-LD structured data,
    per-obligation prose descriptions (would need a curated content pass).
 5. **Next three features (user priority 2026-07-03) — all land BEFORE the App Store release:**
-   1. **"This week" view** — just what needs your attention now.
-   2. **Roadmap PDF export** — for the fridge door, or the gestor.
+   1. **"This week" view — SHIPPED 2026-07-03.** `core/this-week.ts` (pure selector: overdue +
+      due-within-7-days + nextUp, date semantics mirror `isOverdue`, buckets preserve plan order)
+      + a toggle on /plan (This week · N overdue | Full roadmap). 4 tests. Verified on staging
+      with a real roadmap.
+   2. **Roadmap PDF export** — for the fridge door, or the gestor. ← NEXT
    3. **Region-aware steps** — region slot; some bureaucracy differs by comunidad.
 6. **App Store submission — gated (user decision 2026-07-03)** on the three features above PLUS
    significant family testing / edge-case cleanup. See docs/APP_STORE.md for the pack.
