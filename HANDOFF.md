@@ -9,7 +9,29 @@ Last updated: 2026-07-03.
 
 ---
 
-## ⭐ RESUME HERE (2026-07-03 evening — guides LIVE, build 18 in TestFlight)
+## ⭐ RESUME HERE (2026-07-03 night — family-testing round 1 fixed, build 19 submitted)
+
+**Latest:** the "This week" view SHIPPED (toggle on /plan, `core/this-week.ts`, 4 tests) and the
+user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS build 19**
+(`bf2e2d70`, auto-submitting to TestFlight; web already deployed):
+1. **OTP length**: Supabase emails an 8-digit code; the app said 6 and `maxLength={6}` truncated
+   it → verification could never succeed. EmailSignIn now takes up to 10 digits; all copy says
+   "one-time code". Never hardcode the provider's format.
+2. **Step drawer unscrollable on iOS**: the sheet's ScrollView was wrapped in a Pressable, which
+   claimed the drag gesture. Backdrop is now an absolute-fill Pressable BEHIND a plain-View
+   sheet. (Pattern note: never wrap a native ScrollView in a touchable.)
+3. **Apple sign-in (Sentry CAMINO-4, build 18)**: error CHANGED 1000 "unknown" → 1001 "canceled";
+   sheet was up ~9s and the app was BACKGROUNDED at event time — consistent with an Apple-ID
+   interstitial (likely the 2FA-required prompt bouncing to Settings), not app config. User to
+   check Apple-ID 2FA + try a second Apple ID on build 19.
+
+**User to test on build 19:** email one-time code, drawer scrolling, Apple sign-in (after the
+2FA check). Supabase dashboard was mid-incident (black pages) — the email OTP length setting
+was never read/changed; the app is now length-agnostic so it doesn't matter.
+
+---
+
+## Earlier (2026-07-03 evening — guides LIVE, build 18 in TestFlight)
 
 **Batch 2 of today (after the email loop below): the 60 SEO guide pages are LIVE on production**
 (`/guide` index + `/guide/<id>` ×60, prerendered titles/descriptions/canonicals, `/sitemap.xml`
