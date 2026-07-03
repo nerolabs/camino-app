@@ -65,7 +65,8 @@ export default function RootLayout() {
               <Stack.Screen name="interview" />
               <Stack.Screen name="plan" />
               <Stack.Screen name="sample-plan" />{/* public: the payoff before the interview */}
-              <Stack.Screen name="how-i-was-built" />{/* unlisted: direct link only, not in nav */}
+              <Stack.Screen name="how-i-was-built/index" />{/* unlisted: direct link only, not in nav */}
+              <Stack.Screen name="how-i-was-built/log" />{/* the "show our homework" build log */}
             </Stack>
           </SafeAreaView>
         </ProfileProvider>

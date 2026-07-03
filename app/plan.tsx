@@ -9,7 +9,7 @@ import { buildPlan, type Objective, type Progress } from '@/core/engine-controll
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { capture } from '@/lib/analytics';
-import { parseProfileChange, askLola, TASK_INTRO } from '@/lib/plan-coach';
+import { parseProfileChange, askLola, TASK_INTRO, changeHint } from '@/lib/plan-coach';
 import {
   ISO_DATE, diffSummary, completionLine, formatTiming, timingDetail, openExternal,
   PHASE_LABELS, PHASE_ICONS, PHASE_ORDER, SEV_COLOR, SEV_LABEL, SEV_BLURB,
@@ -387,7 +387,7 @@ export default function PlanScreen() {
                       style={styles.changeInput}
                       value={changeText}
                       onChangeText={setChangeText}
-                      placeholder="e.g. We decided to rent instead of buy."
+                      placeholder={changeHint(selected)}
                       placeholderTextColor={palette.muted}
                       multiline
                       editable={!thinking}

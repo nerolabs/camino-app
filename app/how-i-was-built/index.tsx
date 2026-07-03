@@ -1,4 +1,5 @@
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { Link } from 'expo-router';
 import { palette } from '@/constants/Colors';
 import NavBar from '@/components/NavBar';
 
@@ -156,6 +157,10 @@ export default function HowIWasBuilt() {
         ))}
 
         <View style={styles.rule} />
+        <Link href="/how-i-was-built/log" style={styles.logLink}>
+          Want the receipts? Read the build log — every roadmap item in work order, with the key
+          decisions behind each →
+        </Link>
         <Text style={styles.footer}>
           A first pass, written while the product is still young. We’ll revise it as Camino grows —
           the same way we built it.
@@ -177,4 +182,5 @@ const styles = StyleSheet.create({
   h:       { fontFamily: 'Fraunces_600SemiBold', fontSize: 24, lineHeight: 30, color: palette.cobalt, marginBottom: 14 },
   p:       { fontFamily: 'HankenGrotesk_400Regular', fontSize: 17, lineHeight: 28, color: palette.indigo, marginBottom: 14 },
   footer:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, lineHeight: 24, color: palette.muted, fontStyle: 'italic', marginTop: 4 },
+  logLink: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, lineHeight: 23, color: palette.cobalt, marginBottom: 16 },
 });

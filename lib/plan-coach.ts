@@ -36,6 +36,26 @@ function fieldGuide(): string {
   return [...slots, ...known].join('\n');
 }
 
+// Sample text for the "Something changed?" box, keyed by the OPEN STEP's category so the example
+// is relevant to what the user is looking at (a rent-vs-buy example on a visa step was jarring).
+// Every sample is phrased to map cleanly onto a real profile field the extractor knows — these
+// aren't just flavor, they teach the kind of sentence that actually re-plans.
+const CHANGE_HINTS: Record<string, string> = {
+  visa:      'e.g. I got a remote job, so we’re switching to the digital-nomad visa.',
+  residency: 'e.g. My residence card (TIE) was issued on 2027-02-01.',
+  tax:       'e.g. I’ll be freelancing in Spain after all, not just living off savings.',
+  health:    'e.g. We’re only staying six months, not moving permanently.',
+  mobility:  'e.g. We decided no one will drive in Spain.',
+  banking:   'e.g. Our arrival moved two months later.',
+  family:    'e.g. We got married last month.',
+  property:  'e.g. We decided to rent instead of buy.',
+  admin:     'e.g. We’re arriving in November instead of September.',
+};
+
+export function changeHint(obj: Objective): string {
+  return CHANGE_HINTS[obj.category] ?? 'e.g. Our arrival date moved to next spring.';
+}
+
 // Layer 2 of the living plan: translate a free-text "here's what changed" into a
 // typed delta over PROFILE FIELDS ONLY.
 export async function parseProfileChange(

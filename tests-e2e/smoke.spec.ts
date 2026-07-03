@@ -42,12 +42,15 @@ test('plan (signed out): real page with nav, footer, and the empty state', async
   expect(errors).toEqual([]);
 });
 
-test('how-it-works and the unlisted blog load', async ({ page }) => {
+test('how-it-works, the unlisted blog, and the build log load', async ({ page }) => {
   const errors = trackErrors(page);
   await page.goto('/how-it-works');
   await expect(page).toHaveURL(/how-it-works/);
   await page.goto('/how-i-was-built');
   await expect(page.getByText('How I was built')).toBeVisible();
+  await page.goto('/how-i-was-built/log');
+  await expect(page.getByText('The build log')).toBeVisible();
+  await expect(page.getByText('The walking skeleton')).toBeVisible();
   expect(errors).toEqual([]);
 });
 
