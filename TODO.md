@@ -455,14 +455,21 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
 2. **Overdue-state handling** (feeds the weekly email): overdue = scheduled due date in the past and
    not done. Roadmap shows a red overdue treatment + stat chip; step sheet nudges "mark it done or
    tell Lola what changed."
-3. **The email loop (welcome + weekly roundup)** — the engagement engine, per user spec:
+3. **The email loop (welcome + weekly roundup) — built on passwordless email (user spec 2026-07-03):**
+   - **Passwordless (magic-link) sign-up is the foundation** — Supabase `signInWithOtp`. Add
+     "Continue with email" to the new sign-in dialog (alongside Apple + Google). Every email we
+     send then doubles as a no-password door back into their roadmap.
+   - **"Email me my roadmap"** for signed-out users at the roadmap moment — entering the email
+     silently CREATES the account (magic link); clicking through from the email lands them signed
+     in on their saved roadmap. Funnel capture + account in one gesture.
    - **Welcome email** on signup.
-   - **Weekly roundup**: overdue items + upcoming items, **never more than 4–5 tasks**, with a
-     helpful per-item tip (deterministic, from the catalog — not LLM-invented), and a click-through
-     to the full roadmap (web now; app deep link once universal links are configured).
-   - Also **"Email me my roadmap"** for signed-out users at the roadmap moment (funnel capture).
+   - **Incomplete-interview nudge** — started but didn't finish → prompt to pick it back up.
+   - **Weekly roundup** (finished interviews): overdue items + upcoming items, **never more than
+     4–5 tasks**, a helpful per-item tip (deterministic, from the catalog — not LLM-invented), and
+     a click-through to the full roadmap (web now; app deep link once universal links are set up).
    - Infra decisions needed: sender (Resend is the likely pick), scheduler (GitHub Actions cron
      hitting an API route, or Supabase pg_cron/Edge Function), unsubscribe + email prefs column.
+     Native magic-link redirect can reuse the existing `caminoapp://` deep-link session flow.
 4. **60 free SEO pages** — one public page per obligation (`/guide/<id>`) generated from the
    catalog: title, timing, official source link, interview CTA. Same pattern as the sample plan;
    satisfying + quick since the content already exists.
