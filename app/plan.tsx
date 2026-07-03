@@ -5,7 +5,7 @@ import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
 import { saveProfile as saveProfileDb } from '@/core/profileDb';
 import { derive, type Profile } from '@/core/interview-controller';
-import { buildPlan, type Objective, type Progress } from '@/core/engine-controller';
+import { buildPlan, isOverdue, type Objective, type Progress } from '@/core/engine-controller';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { capture } from '@/lib/analytics';
@@ -158,6 +158,13 @@ export default function PlanScreen() {
   const penaltyCount = objectives.filter(o => o.severity === 'penalty').length;
   const requiredCount = objectives.filter(o => o.severity === 'required').length;
   const doneCount = objectives.filter(o => o.done).length;
+  const overdueCount = objectives.filter(o => isOverdue(o)).length;
+  // "Overdue · was due 12 Jun" — same red treatment on cards, the sheet pill, and (soon) the
+  // weekly email, all keyed off the engine's single isOverdue predicate.
+  const overdueLine = (o: Objective) =>
+    o.timing.state === 'scheduled'
+      ? `Overdue · was due ${o.timing.due.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`
+      : 'Overdue';
   const titleById = new Map(objectives.map(o => [o.id, o.title]));
 
   return (
@@ -175,6 +182,12 @@ export default function PlanScreen() {
             <Text style={[styles.statNum, { color: palette.cobalt }]}>{requiredCount}</Text>
             <Text style={styles.statLabel}>required</Text>
           </View>
+          {overdueCount > 0 && (
+            <View style={[styles.statChip, styles.statChipOverdue]}>
+              <Text style={[styles.statNum, { color: '#C0392B' }]}>{overdueCount}</Text>
+              <Text style={styles.statLabel}>overdue</Text>
+            </View>
+          )}
           {penaltyCount > 0 && (
             <View style={styles.statChip}>
               <Text style={[styles.statNum, { color: '#C0392B' }]}>{penaltyCount}</Text>
@@ -243,8 +256,8 @@ export default function PlanScreen() {
                         <Text style={[styles.cardTiming, { color: palette.olive }]}>{completionLine(obj)}</Text>
                       ) : (
                         <>
-                          <Text style={[styles.cardTiming, isPenalty && styles.cardTimingPenalty]}>
-                            {formatTiming(obj)}
+                          <Text style={[styles.cardTiming, (isPenalty || isOverdue(obj)) && styles.cardTimingPenalty]}>
+                            {isOverdue(obj) ? overdueLine(obj) : formatTiming(obj)}
                           </Text>
                           <View style={styles.sourceDot}>
                             <View style={[styles.sourceDotMark, { backgroundColor: SOURCE_COLOR[obj.source] }]} />
@@ -282,7 +295,7 @@ export default function PlanScreen() {
 
                 <Text style={styles.sheetTitle}>{selected.title}</Text>
                 <View style={styles.sheetPills}>
-                  <View style={styles.pill}><Text style={[styles.pillText, { color: selected.done ? palette.olive : palette.cobalt }]}>{selected.done ? completionLine(selected) : formatTiming(selected)}</Text></View>
+                  <View style={styles.pill}><Text style={[styles.pillText, { color: selected.done ? palette.olive : isOverdue(selected) ? '#C0392B' : palette.cobalt }]}>{selected.done ? completionLine(selected) : isOverdue(selected) ? overdueLine(selected) : formatTiming(selected)}</Text></View>
                   {/* Source pill — tappable when there's a canonical source to open (new tab on web). */}
                   {selected.source_url ? (
                     <TouchableOpacity style={styles.pillLink} onPress={() => openExternal(selected.source_url!)}>
@@ -405,7 +418,13 @@ export default function PlanScreen() {
                 {/* ── Step details (timing, prerequisites, source) — always shown ── */}
                 <View style={styles.detailsBox}>
                     <Text style={styles.sheetSectionLabel}>WHEN</Text>
-                    <Text style={styles.sheetTiming}>{formatTiming(selected)}</Text>
+                    <Text style={styles.sheetTiming}>{isOverdue(selected) ? overdueLine(selected) : formatTiming(selected)}</Text>
+                    {isOverdue(selected) && (
+                      <Text style={styles.overdueNudge}>
+                        This one's past due. Already handled it? Mark it done — even with the real date —
+                        and the plan re-flows around what actually happened. Plans changed? Tell Lola below.
+                      </Text>
+                    )}
                     <Text style={styles.sheetBody}>{timingDetail(selected)}</Text>
                     {deps.length > 0 && (
                       <>
@@ -468,6 +487,8 @@ const styles = StyleSheet.create({
                    borderWidth: 1, borderColor: '#E8E4DC', alignItems: 'center', minWidth: 72 },
   statNum:       { fontFamily: 'Fraunces_600SemiBold', fontSize: 22, color: palette.indigo },
   statLabel:     { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted, marginTop: 1 },
+  statChipOverdue:{ borderColor: '#C0392B', backgroundColor: '#FBEFED' },
+  overdueNudge:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, lineHeight: 19, color: '#C0392B', marginTop: 6 },
   legend:        { flexDirection: 'row', flexWrap: 'wrap', gap: 16, marginTop: -6, marginBottom: 20 },
   legendItem:    { flexDirection: 'row', alignItems: 'center', gap: 6 },
   legendDot:     { width: 8, height: 8, borderRadius: 4 },

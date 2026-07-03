@@ -6,7 +6,7 @@
  * every push and inside scripts/deploy.sh, so a regression can't reach a deploy.
  */
 import { describe, it, expect } from 'vitest';
-import { buildPlan, CATALOG, type Objective } from '../core/engine-controller';
+import { buildPlan, CATALOG, isOverdue, type Objective } from '../core/engine-controller';
 import { derive, nextSlot, SLOTS, type Profile } from '../core/interview-controller';
 import { auditCatalog } from '../core/catalog-audit';
 import { TEST_PERSONAS } from '../core/test-personas';
@@ -130,6 +130,32 @@ describe('gating regressions', () => {
     expect(kenji.has('dgt-exam')).toBe(false); // JP has a bilateral exchange agreement
     const itp = plan.find(o => o.id === 'property-transfer-tax')!;
     if (itp.timing.state === 'scheduled') expect(itp.timing.estimated).toBe(false);
+  });
+});
+
+// ── Overdue predicate (feeds the roadmap treatment AND the weekly email) ───────
+describe('isOverdue', () => {
+  const base = { id: 'x', title: 'x', category: 'admin', severity: 'required', source: 'official',
+                 depends_on: [], phase: 'first_weeks', done: false, completedOn: null } as unknown as Objective;
+  const at = (d: string) => new Date(d + 'T12:00:00');
+  const sched = (due: string): Objective =>
+    ({ ...base, timing: { state: 'scheduled', start: at(due), due: at(due), estimated: false } } as Objective);
+
+  it('past due date → overdue', () => {
+    expect(isOverdue(sched('2026-06-01'), at('2026-07-03'))).toBe(true);
+  });
+  it('due today → NOT overdue (grace until midnight)', () => {
+    expect(isOverdue(sched('2026-07-03'), at('2026-07-03'))).toBe(false);
+  });
+  it('future due → not overdue', () => {
+    expect(isOverdue(sched('2026-08-01'), at('2026-07-03'))).toBe(false);
+  });
+  it('done → never overdue, even with a past date', () => {
+    expect(isOverdue({ ...sched('2026-06-01'), done: true }, at('2026-07-03'))).toBe(false);
+  });
+  it('pending-anchor / recurring states → not overdue', () => {
+    const pending = { ...base, timing: { state: 'pending_anchor', anchor: 'padron_done' } } as unknown as Objective;
+    expect(isOverdue(pending, at('2026-07-03'))).toBe(false);
   });
 });
 

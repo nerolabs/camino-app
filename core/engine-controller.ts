@@ -939,6 +939,15 @@ export const CATALOG: Obligation[] = [
   },
 ];
 
+// True when a scheduled step's due date has passed (date-level, local time) and it isn't done.
+// The roadmap's red overdue treatment and the weekly-email digest both key off this one predicate,
+// so "overdue" means exactly the same thing everywhere.
+export function isOverdue(o: Objective, today: Date = new Date()): boolean {
+  if (o.done || o.timing.state !== 'scheduled') return false;
+  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  return o.timing.due.getTime() < startOfToday.getTime();
+}
+
 export function buildPlan(p: Record<string, unknown>): Objective[] {
   const today = new Date();
   const progress = (p.progress as Record<string, Progress> | undefined) ?? {};

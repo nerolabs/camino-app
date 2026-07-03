@@ -15,7 +15,7 @@ import { askAnthropic } from '@/lib/lola';
 import { useDictation } from '@/hooks/useDictation';
 import { useLolaVoice } from '@/hooks/useLolaVoice';
 import { capture } from '@/lib/analytics';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
 
 type Turn = { role: 'lola' | 'user'; text: string };
 
@@ -158,13 +158,18 @@ export default function InterviewScreen() {
   const dictation = useDictation(setInput);
   // Lola's spoken voice (web /api/tts → ElevenLabs). Off by default; speaks new Lola turns.
   const voice = useLolaVoice();
-  const insets = useSafeAreaInsets(); // keyboardVerticalOffset must match the root SafeAreaView's top inset
+  const keyboardHeight = useKeyboardHeight(); // exact OS-reported overlap — see hooks/useKeyboardHeight
 
   // Speak each new Lola message when voice is on (skips the dev-persona marker).
   useEffect(() => {
     const last = turns[turns.length - 1];
     if (last?.role === 'lola' && !last.text.startsWith('Test persona:')) voice.speak(last.text);
   }, [turns, voice.speak]);
+
+  // When the keyboard opens/resizes, keep the conversation scrolled to the composer.
+  useEffect(() => {
+    if (keyboardHeight > 0) setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 50);
+  }, [keyboardHeight]);
 
   // Auto-focus the answer box each time a new question is ready, so the user can just
   // start typing (or dictating) without clicking into the field first.
@@ -343,14 +348,10 @@ export default function InterviewScreen() {
                  : `About ${Math.round((remainingQ * 15) / 60)} min left`;
 
   return (
-    <KeyboardAvoidingView
-      style={styles.flex}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      // Must equal the distance from the top of the SCREEN to the top of this view — that's the
-      // root SafeAreaView's top inset (Dynamic Island / notch). The old hardcoded 90 overstated
-      // it, so the composer under-padded and its bottom edge clipped behind the keyboard.
-      keyboardVerticalOffset={insets.top}
-    >
+    // Exact keyboard avoidance: pad by the OS-reported overlap (hooks/useKeyboardHeight).
+    // KeyboardAvoidingView clipped the composer on device twice (builds 11 & 15) — its offset
+    // inference breaks whenever the view's position vs safe-area padding changes. This can't.
+    <View style={[styles.flex, { paddingBottom: keyboardHeight }]}>
       <NavBar />
       {voice.supported && started && (
         <View style={styles.voiceBar}>
@@ -428,7 +429,7 @@ export default function InterviewScreen() {
           )}
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 

@@ -446,6 +446,35 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             out of search; refreshed the copy (dropped the "first pass/draft" hedging, catalog now
             "nearly sixty… large majority officially cited"). Still open: a real blog surface later.
 
+## 🗺️ Product roadmap (user-reviewed 2026-07-03) — in priority order
+
+1. **[BUGS — in progress] Build-15 device findings:** (a) interview composer STILL clips behind the
+   keyboard (KeyboardAvoidingView + safe-area math is unreliable — replacing with a deterministic
+   keyboard-height hook); (b) the inline Apple button wrecks the NavBar layout — collapse to a
+   single "Sign in" that opens a dialog offering Apple + Google.
+2. **Overdue-state handling** (feeds the weekly email): overdue = scheduled due date in the past and
+   not done. Roadmap shows a red overdue treatment + stat chip; step sheet nudges "mark it done or
+   tell Lola what changed."
+3. **The email loop (welcome + weekly roundup)** — the engagement engine, per user spec:
+   - **Welcome email** on signup.
+   - **Weekly roundup**: overdue items + upcoming items, **never more than 4–5 tasks**, with a
+     helpful per-item tip (deterministic, from the catalog — not LLM-invented), and a click-through
+     to the full roadmap (web now; app deep link once universal links are configured).
+   - Also **"Email me my roadmap"** for signed-out users at the roadmap moment (funnel capture).
+   - Infra decisions needed: sender (Resend is the likely pick), scheduler (GitHub Actions cron
+     hitting an API route, or Supabase pg_cron/Edge Function), unsubscribe + email prefs column.
+4. **60 free SEO pages** — one public page per obligation (`/guide/<id>`) generated from the
+   catalog: title, timing, official source link, interview CTA. Same pattern as the sample plan;
+   satisfying + quick since the content already exists.
+5. *(later)* "This week" view · roadmap PDF export · region slot · per-step problem-report link ·
+   reminders/push (entitlement playbook is documented).
+6. *(end of backlog)* **Monetization** — gestor/advisor referrals once affiliate programs are
+   identified; possibly paired with the MovingToSpain.com partnership.
+
+**Explicitly removed (user decision 2026-07-03):** Country #2 (not now) · document vault (won't
+carry security responsibility for those documents) · household sharing (wait for real demand
+signal). Localization: held for an app update pending locale demand data.
+
 ## 🔜 Next (candidates, not yet started)
 - [x] **Sample plan — DONE 2026-07-03, live on prod (`/sample-plan`).** The payoff before the ask:
       `core/sample-profile.ts` (Susan & Tom, US retirees → NLV + dog + undecided region + citizenship
