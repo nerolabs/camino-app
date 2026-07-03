@@ -500,7 +500,17 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
    Also shipped 2026-07-03: **Report a problem** (menu → dialog → /api/feedback → Resend to
    team inbox with platform/version/route context; verified end-to-end) and **iPad OFF** for
    the first release (supportsTablet: false — no iPad screenshots/review overhead).
-6. **Polish backlog for the next push (user-approved 2026-07-03 night), in value order:**
+6. **Legal & compliance surfaces — DO FIRST, blocks the App Store submission (found in the
+   2026-07-03 multi-stakeholder review, docs/STRATEGY.md):**
+   1. **In-app account deletion** — Apple guideline 5.1.1(v) hard-rejects sign-in apps
+      without it; doubles as the GDPR right-to-erasure mechanism.
+   2. **Privacy policy page** (+ its URL into App Store Connect — required field) naming
+      processors (Supabase, Resend, PostHog, Sentry, Anthropic, ElevenLabs), retention, rights.
+   3. **Terms of service** (guidance-not-advice + liability cap) and **aviso legal** (LSSI
+      operator identity).
+   4. **Analytics consent decision**: PostHog cookieless mode (preferred — no banner, fits
+      brand) or a consent banner; Sentry too.
+7. **Polish backlog for the next push (user-approved 2026-07-03 night), in value order:**
    1. **Social share cards** — og:/twitter: meta + one branded share image; links will live in
       expat Facebook groups/WhatsApp and previews are currently bare. Cheap, high leverage.
    2. **JSON-LD on the guide pages** — Article/FAQ structured data; the SEO follow-through on
@@ -511,11 +521,34 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       where the visitor came from ("You came from the NIE guide…").
    5. **Accessibility sweep** — reduced-motion for the rotating hero, focus states, labels.
       Do before the store listing points people at the web.
-7. **App Store submission — gated (user decision 2026-07-03)** on region-aware steps PLUS
-   significant family testing / edge-case cleanup. See docs/APP_STORE.md for the pack.
-   User-side items spotted: **DSA trader status in ASC** (blocks EU distribution).
-8. *(later)* per-step problem-report link.
-9. *(end of backlog)* **Monetization** — gestor/advisor referrals once affiliate programs are
+8. **App Store submission — gated (user decision 2026-07-03)** on region-aware steps PLUS
+   significant family testing / edge-case cleanup PLUS item 6 above (account deletion +
+   privacy policy URL are hard blockers). See docs/APP_STORE.md for the pack.
+   User-side items: **DSA trader status in ASC** (blocks EU distribution).
+9. **Growth & uniqueness backlog (2026-07-03 review — full reasoning in docs/STRATEGY.md):**
+   - **Public regulatory changelog** (top pick): publish catalog diffs with sources; feeds
+     the weekly email; trust engine + most linkable asset.
+   - **"Last verified" stamps** on steps/guides.
+   - SEO expansion: question-shaped pages from catalog data + 3–5 persona sample plans.
+   - **Read-only roadmap share link** (lighter than the cut household sharing).
+   - **Timeline simulation** (arrive March vs Sept → windows/tax clock shift).
+   - Move-budget view (per-obligation official fees); cita checklists (what to bring).
+   - Partnerships: the 15 webinar creators (warm list); MovingToSpain.com (clear-eyed — now
+     partly a competitor); Product Hunt / HN launch moment (backlinks; prep the "built in 4
+     days" pre-emption paragraph first).
+10. **Business/PR/personal ops (user-side, non-coding — from docs/STRATEGY.md):**
+   - Positioning discipline: "move to Spain PROPERLY" framing; integration-forward voice;
+     never market "hack Spain" (housing-crisis climate, 2027 elections).
+   - Correction process: fix fast, publish the diff (changelog habit), never argue.
+   - Entity/tax hygiene: Camino under the LLC; **gestor consult re: US LLC managed from
+     Spain (PE/autónomo)** — the product's own advice, applied.
+   - Trademark search "Camino" (software classes) before brand spend.
+   - Referral-compensation disclosure when monetization starts; E&O insurance at revenue.
+   - **Bus factor**: credentials to password manager + trusted second person; second admin
+     on Apple + Supabase (~1 hour, biggest continuity risk).
+   - Weekly operating rhythm: Monday email, weekly release train, scheduled feedback triage.
+11. *(later)* per-step problem-report link.
+12. *(end of backlog)* **Monetization** — gestor/advisor referrals once affiliate programs are
    identified; possibly paired with the MovingToSpain.com partnership.
 
 **Explicitly removed (user decision 2026-07-03, evening):** Reminders / push notifications —

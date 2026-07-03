@@ -7,6 +7,10 @@ This is the Expo app. Two files give you the full picture — read both before w
 2. **`./docs/THESIS.md`** — the canonical design memory: what Camino is, the design
    thesis, and the four invariants you must not break. (Folded in from the original
    `nerolabs/camino` seed repo, now archived — this app is the single source of truth.)
+3. **`./docs/STRATEGY.md`** — the standing strategy & risk review (position, growth,
+   legal/PR/personal risks). Consult it whenever planning, prioritizing, or shipping
+   anything user-facing; backtest its calls as reality comes in and update it when it's
+   wrong. Its actionable queue lives in TODO.md items 6–10.
 
 ## Standing rules
 

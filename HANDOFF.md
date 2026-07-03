@@ -57,8 +57,17 @@ user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS bui
    email/guides mentions + shared Footer, home strip links to /guide, shared `lib/useWide.ts`
    breakpoint hook, deploy.sh strips iCloud conflict-copy dirs (one deploy shipped stale pages;
    verify a content marker after deploys — getcamino.app CDN caches pages ~1h).
-   **Tomorrow's push (user-approved backlog, TODO item 6):** share cards → guide JSON-LD →
-   curated guide prose → context-carrying CTAs → accessibility sweep. Plus region-aware steps.
+   **Tomorrow's push — REORDERED by the 2026-07-03 multi-stakeholder review
+   (docs/STRATEGY.md, read it):**
+   1. **Legal surfaces FIRST (TODO item 6)** — in-app account deletion (Apple 5.1.1(v)
+      HARD BLOCKER for submission) + privacy policy (+ URL into ASC) + ToS + aviso legal +
+      PostHog cookieless/consent decision.
+   2. Polish backlog (TODO item 7): share cards → guide JSON-LD → curated guide prose →
+      context CTAs → a11y sweep.
+   3. Region-aware steps (last pre-release feature).
+   Growth/uniqueness queue = TODO item 9 (top pick: the public regulatory changelog);
+   business/PR/personal ops = TODO item 10 (user-side: gestor consult, trademark search,
+   bus-factor hour, DSA trader status).
    **User is testing build 23 + web in the morning and will file a big bug report.**
 
 **ALSO SPOTTED in ASC (App Store release prep):** the DSA **trader status** must be completed
