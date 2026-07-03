@@ -351,13 +351,18 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             uses `posthog-react-native` → same PostHog project + funnel events as web, `environment`
             super-property, `captureAppLifecycleEvents` (app open/background). Key/host from EAS env.
             On-device verify once build 9 processes (events appear under `platform`-tagged / native).
-      - [ ] **Build the PostHog insights** — funnel (pageview `/` → interview_started →
-            interview_completed → roadmap_viewed), retention on roadmap_viewed, feature-health
-            (% completing items / using task coach). Filter to `environment = production`.
-            **Note:** PostHog's step picker only lists events it has already ingested. As of setup,
-            only `$pageview` + `interview_started` had fired; `interview_completed`/`roadmap_viewed`
-            /etc. become selectable once real usage fires them (or complete one full interview to
-            seed them). Verified events reach PostHog EU (POST → 200). Finish the funnel then.
+      - [x] **PostHog insights — DONE 2026-07-03.** Four saved insights, all filtered
+            `environment = production`, collected on the **"Camino health" dashboard**
+            (eu.posthog.com project 214229, dashboard 791543):
+            (1) *Core funnel*: $pageview → interview_started → interview_completed → roadmap_viewed
+            (already computing: 10 visitors → 3 starts in prod's last 30d);
+            (2) *Sample-plan funnel*: viewed → CTA → interview_started;
+            (3) *Roadmap retention*: weekly first-time → return on roadmap_viewed (8 wks);
+            (4) *Feature health* (weekly): task_opened, task_coach_asked, roadmap_item_completed,
+            plan_remodelled, sample_plan_step_expanded. Native events confirmed flowing too
+            (posthog-react-native from build 11: sample_plan_viewed, interview_started,
+            app lifecycle). Insights were built via PostHog's query-in-URL (deterministic), so the
+            exact queries are reproducible.
 
 ### Catalog grounding (ongoing, high-value)
 - [x] **B10 — source grounding + taxonomy — DONE (2026-07-02).** Every catalog item now carries a
