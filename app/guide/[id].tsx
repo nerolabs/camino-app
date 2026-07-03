@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, useRouter, Link } from 'expo-router';
-import Head from 'expo-router/head';
+import Head from '@/components/SeoHead';
 import { palette } from '@/constants/Colors';
 import {
   guideById, titleById, describeTiming, metaDescription, related, shortClause, CATEGORY_LABEL,

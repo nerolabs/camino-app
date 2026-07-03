@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter, Link } from 'expo-router';
-import Head from 'expo-router/head';
+import Head from '@/components/SeoHead';
 import { palette } from '@/constants/Colors';
 import { GUIDES, CATEGORY_LABEL, CATEGORY_ORDER, shortClause } from '@/core/guide-content';
 import { SEV_COLOR, SEV_LABEL } from '@/lib/plan-format';
