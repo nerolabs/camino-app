@@ -363,6 +363,10 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             (posthog-react-native from build 11: sample_plan_viewed, interview_started,
             app lifecycle). Insights were built via PostHog's query-in-URL (deterministic), so the
             exact queries are reproducible.
+      - [x] **"Interview quality" dashboard (2026-07-03, dashboard 791714):** clarify-failure
+            monitoring — weekly trend broken down by question `field`, plus a HogQL raw-log table
+            (timestamp · question_field · verbatim user_answer · env · platform) for analysis.
+            Feeds from `interview_clarify_needed`; native contributes from build 12 onward.
 
 ### Catalog grounding (ongoing, high-value)
 - [x] **B10 — source grounding + taxonomy — DONE (2026-07-02).** Every catalog item now carries a
