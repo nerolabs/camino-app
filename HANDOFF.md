@@ -52,6 +52,15 @@ user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS bui
    should use build 23** (supersedes 22; also carries universal links etc.).
    Remaining pre-release feature: **region-aware steps** (region slot) ← NEXT.
 
+7. **Polish pass DONE (2026-07-03 night)** — SEO meta on every public page (home/how-it-works/
+   sample-plan/homework trio; only guides had it), how-it-works gained the missing CTA + weekly-
+   email/guides mentions + shared Footer, home strip links to /guide, shared `lib/useWide.ts`
+   breakpoint hook, deploy.sh strips iCloud conflict-copy dirs (one deploy shipped stale pages;
+   verify a content marker after deploys — getcamino.app CDN caches pages ~1h).
+   **Tomorrow's push (user-approved backlog, TODO item 6):** share cards → guide JSON-LD →
+   curated guide prose → context-carrying CTAs → accessibility sweep. Plus region-aware steps.
+   **User is testing build 23 + web in the morning and will file a big bug report.**
+
 **ALSO SPOTTED in ASC (App Store release prep):** the DSA **trader status** must be completed
 (ASC → Business banner) or EU distribution is blocked — Spain IS the market. Add to the
 submission checklist (user action, needs their trader info).

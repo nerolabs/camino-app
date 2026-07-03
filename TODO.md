@@ -500,10 +500,22 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
    Also shipped 2026-07-03: **Report a problem** (menu → dialog → /api/feedback → Resend to
    team inbox with platform/version/route context; verified end-to-end) and **iPad OFF** for
    the first release (supportsTablet: false — no iPad screenshots/review overhead).
-6. **App Store submission — gated (user decision 2026-07-03)** on the three features above PLUS
+6. **Polish backlog for the next push (user-approved 2026-07-03 night), in value order:**
+   1. **Social share cards** — og:/twitter: meta + one branded share image; links will live in
+      expat Facebook groups/WhatsApp and previews are currently bare. Cheap, high leverage.
+   2. **JSON-LD on the guide pages** — Article/FAQ structured data; the SEO follow-through on
+      the 60 pages.
+   3. **Curated prose per guide** — 2–3 sentences of "what this actually is" per obligation.
+      A real content session: every sentence verified against the official source (invariant 3).
+   4. **Context-carrying CTAs** — pass the guide id into the interview so Lola can acknowledge
+      where the visitor came from ("You came from the NIE guide…").
+   5. **Accessibility sweep** — reduced-motion for the rotating hero, focus states, labels.
+      Do before the store listing points people at the web.
+7. **App Store submission — gated (user decision 2026-07-03)** on region-aware steps PLUS
    significant family testing / edge-case cleanup. See docs/APP_STORE.md for the pack.
-7. *(later)* per-step problem-report link.
-8. *(end of backlog)* **Monetization** — gestor/advisor referrals once affiliate programs are
+   User-side items spotted: **DSA trader status in ASC** (blocks EU distribution).
+8. *(later)* per-step problem-report link.
+9. *(end of backlog)* **Monetization** — gestor/advisor referrals once affiliate programs are
    identified; possibly paired with the MovingToSpain.com partnership.
 
 **Explicitly removed (user decision 2026-07-03, evening):** Reminders / push notifications —
