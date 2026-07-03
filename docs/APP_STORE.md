@@ -109,3 +109,26 @@ drop raw PNGs into `docs/store-assets/`.
 - [ ] Copyright line (`© 2026 Proxim.us / Nerolabs — pick one`), trade rep info if EU DSA prompts. **[YOU]**
 - [ ] Paste metadata + privacy answers into App Store Connect, attach build (12+ recommended so
       the keyboard fix + interview intelligence ride along), **Submit for review**. **[YOU]**
+
+## Lesson learned: adding entitlements invalidates the provisioning profile (build 12 saga)
+
+Adding `usesAppleSignIn` made three systems diverge; only the app config updated itself:
+
+1. The **app's entitlements** (from app.config.ts) — updated automatically. ✅
+2. The **App ID's capabilities** at Apple — NOT updated. EAS only syncs capabilities when it
+   *creates* credentials, never when it reuses cached ones (and `--non-interactive` never touches
+   credentials at all).
+3. The **provisioning profile** — an immutable snapshot of the App ID's capabilities at mint time.
+   Ours predated the entitlement → Xcode refused to sign (entitlements ⊄ profile).
+
+**The fix that worked** (deleting only Expo's cached profile was NOT enough — EAS re-downloaded
+the same stale profile from Apple's portal):
+1. Enable the capability on the App ID via the App Store Connect API (`APPLE_ID_AUTH` needs the
+   `APPLE_ID_AUTH_APP_CONSENT → PRIMARY_APP_CONSENT` setting or Apple 409s).
+2. Delete the stale profile **at the Apple portal** (ASC API `DELETE /v1/profiles/{id}`).
+3. Delete Expo's cached copy (expo.dev → project → credentials → iOS → provisioning profile).
+4. Rebuild — EAS mints a fresh profile that inherits the App ID's current capabilities.
+
+**Next time we add ANY entitlement (e.g. push notifications):** do steps 2–3 *before* the first
+build with the new entitlement (or run one interactive `eas build` logged in with an Apple ID,
+which capability-syncs automatically). Treat this as snapshot invalidation, not breakage.

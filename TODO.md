@@ -234,6 +234,13 @@ is strictly required — a normal EAS build works.
       the root + `NavBar` pads by top/left/right insets so it clears the Dynamic Island / notch /
       status bar (reported on iPhone 17 Pro Max). Web insets are 0 → web unchanged. Dark status-bar
       style for the light UI. In build 5 (`3f6446a8`).
+- [~] **iOS build 12 — ON TESTFLIGHT 2026-07-03, awaiting device verify.** Contents: Sign in with
+      Apple (guideline 4.8), keyboard-clipping fix, interview intelligence (multi-slot skip +
+      clarify logging + generous dates), corrected webinar anchors. Took 3 attempts: the
+      provisioning profile predated the applesignin entitlement — fixed via ASC API (capability
+      enable + portal profile delete + EAS re-mint); the dance is documented in docs/APP_STORE.md.
+      Device checklist: Apple sign-in completes (fresh account expected), composer clears keyboard,
+      multi-slot skip works, forced clarify appears in the Interview quality dashboard.
 - [x] **iOS build 11 — VERIFIED ON DEVICE 2026-07-03 (user: "everything verified").** Scroll no
       longer slides under the Dynamic Island (root SafeAreaView fix), no double-padded headers,
       sample plan reachable, post-audit catalog + native Sentry/analytics/voice all in. iOS is
