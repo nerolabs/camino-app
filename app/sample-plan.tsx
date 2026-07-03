@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { palette } from '@/constants/Colors';
@@ -6,7 +6,9 @@ import { derive } from '@/core/interview-controller';
 import { buildPlan, type Objective } from '@/core/engine-controller';
 import { sampleProfile, SAMPLE_NAME, SAMPLE_BLURB } from '@/core/sample-profile';
 import {
-  formatTiming, PHASE_LABELS, PHASE_ICONS, PHASE_ORDER, SEV_COLOR, SEV_LABEL, SOURCE_COLOR, SOURCE_SHORT,
+  formatTiming, timingDetail, openExternal,
+  PHASE_LABELS, PHASE_ICONS, PHASE_ORDER,
+  SEV_COLOR, SEV_LABEL, SEV_BLURB, SOURCE_COLOR, SOURCE_SHORT, SOURCE_BLURB,
 } from '@/lib/plan-format';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
@@ -25,6 +27,12 @@ export default function SamplePlanScreen() {
     derive(p);
     return buildPlan(p);
   }, []);
+  const titleById = useMemo(() => new Map(objectives.map(o => [o.id, o.title])), [objectives]);
+
+  // Tap-to-expand: deterministic detail only (timing, severity, prerequisites, official source).
+  // The stateful/LLM features (mark done, re-plan, Lola's coach) are deliberately absent — they're
+  // personal + would make a public page a free LLM endpoint; the expanded card teases them instead.
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const byPhase = PHASE_ORDER
     .map(phase => ({ phase, items: objectives.filter(o => o.phase === phase) }))
@@ -89,21 +97,57 @@ export default function SamplePlanScreen() {
               <Text style={styles.phaseLabel}>{PHASE_LABELS[phase]}</Text>
               <Text style={styles.phaseCount}>{items.length}</Text>
             </View>
-            {items.map((obj: Objective) => (
-              <View key={obj.id} style={styles.card}>
-                <View style={[styles.sevBar, { backgroundColor: SEV_COLOR[obj.severity] }]} />
-                <View style={styles.cardBody}>
-                  <Text style={styles.cardTitle}>{obj.title}</Text>
-                  <View style={styles.cardMeta}>
-                    <Text style={[styles.sevText, { color: SEV_COLOR[obj.severity] }]}>{SEV_LABEL[obj.severity]}</Text>
-                    <Text style={styles.metaDivider}>·</Text>
-                    <Text style={styles.timingText}>{formatTiming(obj)}</Text>
-                    <View style={[styles.srcDot, { backgroundColor: SOURCE_COLOR[obj.source] }]} />
-                    <Text style={styles.srcText}>{SOURCE_SHORT[obj.source]}</Text>
+            {items.map((obj: Objective) => {
+              const expanded = expandedId === obj.id;
+              const deps = obj.depends_on.map(d => titleById.get(d)).filter((t): t is string => !!t);
+              return (
+                <TouchableOpacity
+                  key={obj.id}
+                  style={styles.card}
+                  activeOpacity={0.85}
+                  onPress={() => {
+                    if (!expanded) capture('sample_plan_step_expanded', { objective_id: obj.id });
+                    setExpandedId(expanded ? null : obj.id);
+                  }}
+                >
+                  <View style={[styles.sevBar, { backgroundColor: SEV_COLOR[obj.severity] }]} />
+                  <View style={styles.cardBody}>
+                    <Text style={styles.cardTitle}>{obj.title}</Text>
+                    <View style={styles.cardMeta}>
+                      <Text style={[styles.sevText, { color: SEV_COLOR[obj.severity] }]}>{SEV_LABEL[obj.severity]}</Text>
+                      <Text style={styles.metaDivider}>·</Text>
+                      <Text style={styles.timingText}>{formatTiming(obj)}</Text>
+                      <View style={[styles.srcDot, { backgroundColor: SOURCE_COLOR[obj.source] }]} />
+                      <Text style={styles.srcText}>{SOURCE_SHORT[obj.source]}</Text>
+                      <Text style={styles.expandHint}>{expanded ? '▴' : '▾'}</Text>
+                    </View>
+                    {expanded && (
+                      <View style={styles.detail}>
+                        <Text style={styles.detailLabel}>WHEN</Text>
+                        <Text style={styles.detailText}>{timingDetail(obj)}</Text>
+                        <Text style={styles.detailLabel}>WHY IT'S HERE</Text>
+                        <Text style={styles.detailText}>{SEV_BLURB[obj.severity]} {SOURCE_BLURB[obj.source]}</Text>
+                        {deps.length > 0 && (
+                          <>
+                            <Text style={styles.detailLabel}>BEFORE THIS, SUSAN & TOM NEED</Text>
+                            {deps.map((d, i) => <Text key={i} style={styles.detailDep}>• {d}</Text>)}
+                          </>
+                        )}
+                        {obj.source_url && (
+                          <TouchableOpacity onPress={() => openExternal(obj.source_url!)}>
+                            <Text style={styles.detailLink}>View the official source ↗</Text>
+                          </TouchableOpacity>
+                        )}
+                        <Text style={styles.detailTease}>
+                          In your own plan, Lola coaches you through this step, you check it off, and the
+                          dates re-flow around what actually happens.
+                        </Text>
+                      </View>
+                    )}
                   </View>
-                </View>
-              </View>
-            ))}
+                </TouchableOpacity>
+              );
+            })}
           </View>
         ))}
 
@@ -163,6 +207,14 @@ const styles = StyleSheet.create({
   timingText:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted },
   srcDot:        { width: 6, height: 6, borderRadius: 3, marginLeft: 4 },
   srcText:       { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted },
+  expandHint:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted, marginLeft: 'auto' },
+
+  detail:        { marginTop: 10, paddingTop: 10, borderTopWidth: 1, borderTopColor: '#EEE9E0' },
+  detailLabel:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 10, letterSpacing: 1, color: palette.muted, marginTop: 8, marginBottom: 3 },
+  detailText:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, lineHeight: 19, color: palette.indigo },
+  detailDep:     { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, lineHeight: 19, color: palette.indigo },
+  detailLink:    { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.cobalt, marginTop: 10 },
+  detailTease:   { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, lineHeight: 18, color: palette.amber, marginTop: 10, fontStyle: 'italic' },
 
   closingCta:    { backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 14, padding: 20, marginTop: 6, alignItems: 'flex-start' },
   closingTitle:  { fontFamily: 'Fraunces_600SemiBold', fontSize: 22, color: palette.indigo, marginBottom: 8 },
