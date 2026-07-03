@@ -329,7 +329,7 @@ export const CATALOG: Obligation[] = [
     category: 'admin', severity: 'required',
     source: 'official',
     source_url: 'https://administracion.gob.es/pagFront/buscadortramites/detalleTramite.htm?idT=32988',
-    webinar_url: 'https://www.youtube.com/watch?v=C_UxMIqTd0Q&t=462s',
+    webinar_url: 'https://www.youtube.com/watch?v=gtruvbQhphE&t=3576s',
     applies_if: HAS_ADDRESS,
     depends_on: [],
     timing: { kind: 'asap' },
@@ -390,7 +390,7 @@ export const CATALOG: Obligation[] = [
     title: 'Notify home country tax authority of change of tax residence',
     category: 'tax', severity: 'recommended',
     source: 'recommendation',
-    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=736s',
+    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=401s',
     applies_if: { field: 'is_tax_resident', op: 'eq', value: true },
     depends_on: [],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -30 },
@@ -398,7 +398,7 @@ export const CATALOG: Obligation[] = [
   {
     id: 'modelo-720',
     source_url: 'https://sede.agenciatributaria.gob.es/Sede/procedimientoini/GI34.shtml',
-    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=93s',
+    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=1246s',
     title: 'File Modelo 720 (foreign-assets declaration) if any category of overseas assets exceeds €50,000 — filed 1 Jan–31 Mar; reformed flat-rate penalties apply since the 2022 EU court ruling struck down the old proportional regime',
     category: 'tax', severity: 'penalty',
     source: 'official',
@@ -497,7 +497,7 @@ export const CATALOG: Obligation[] = [
   {
     id: 'citizenship-track-latam',
     source_url: 'https://www.mjusticia.gob.es/es/ciudadania/tramites/nacionalidad-residencia',
-    webinar_url: 'https://www.youtube.com/watch?v=vAeqa_xdrTY&t=617s',
+    webinar_url: 'https://www.youtube.com/watch?v=vAeqa_xdrTY&t=1067s',
     title: 'Citizenship eligibility: 2 years (ex-Spanish-colony nationals)',
     category: 'residency', severity: 'info',
     source: 'official',
@@ -518,14 +518,14 @@ export const CATALOG: Obligation[] = [
     title: 'Consult a cross-border tax specialist before moving — time asset disposals to minimise Spanish tax exposure',
     category: 'tax', severity: 'recommended',
     source: 'recommendation',
-    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=267s',
+    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=1086s',
     applies_if: { field: 'intends_long_stay', op: 'eq', value: true },
     depends_on: [],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -180 },
   },
   {
     id: 'apostille-documents',
-    webinar_url: 'https://www.youtube.com/watch?v=uH927kx3igU&t=580s',
+    webinar_url: 'https://www.youtube.com/watch?v=uH927kx3igU&t=1538s',
     title: 'Apostille civil documents for the consulate (birth/marriage certificates and other foreign public documents) — under the 1961 Hague Convention; each document must be apostilled in the country that issued it',
     category: 'admin', severity: 'required',
     source: 'official',
@@ -573,7 +573,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'dnv-qualification-proof',
-    webinar_url: 'https://www.youtube.com/watch?v=SqmxlLuJ_bY&t=144s',
+    webinar_url: 'https://www.youtube.com/watch?v=SqmxlLuJ_bY&t=230s',
     title: 'Obtain apostilled university degree or official proof of 3+ years professional experience (DNV requirement)',
     category: 'visa', severity: 'required',
     source: 'official',
@@ -649,7 +649,7 @@ export const CATALOG: Obligation[] = [
     category: 'tax', severity: 'recommended',
     source: 'official',
     source_url: 'https://sede.agenciatributaria.gob.es/Sede/irpf/tengo-que-presentar-declaracion/regimen-fiscal-aplicable-trabajadores-desplazados/regimen-especial.html',
-    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=123s',
+    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=1643s',
     applies_if: { all: [
       { field: 'visa_type', op: 'eq', value: 'dnv' },
       { field: 'work_situation', op: 'eq', value: 'employed_remote' },
@@ -672,7 +672,7 @@ export const CATALOG: Obligation[] = [
   {
     id: 'wealth-tax',
     source_url: 'https://sede.agenciatributaria.gob.es/Sede/procedimientoini/G611.shtml',
-    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=93s',
+    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=794s',
     title: 'File annual wealth-tax return (Modelo 714) during the renta period — applies when net assets exceed the €700,000 state allowance (regions vary; e.g. €500k in Catalonia), with a further ~€300k exemption for your main home',
     category: 'tax', severity: 'penalty',
     source: 'official',
@@ -688,7 +688,7 @@ export const CATALOG: Obligation[] = [
   {
     id: 'register-autonomo',
     source_url: 'https://sede.agenciatributaria.gob.es/Sede/procedimientoini/G322.shtml',
-    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=111s',
+    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=479s',
     title: 'Register as self-employed: file Modelo 036 with Hacienda, then register with Social Security (RETA) the same day or within 60 days (Modelo 037 was abolished in 2025)',
     category: 'admin', severity: 'required',
     source: 'official',
@@ -702,7 +702,7 @@ export const CATALOG: Obligation[] = [
     title: 'Pay monthly autónomo Social Security (RETA) contributions — €87/month reduced rate first year, then income-based',
     category: 'tax', severity: 'penalty',
     source: 'official',
-    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=103s',
+    webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=479s',
     applies_if: { field: 'is_self_employed_in_spain', op: 'eq', value: true },
     depends_on: ['register-autonomo'],
     timing: { kind: 'absolute_recurring', rrule: 'FREQ=YEARLY;BYMONTH=12' },
@@ -752,7 +752,7 @@ export const CATALOG: Obligation[] = [
   {
     id: 'student-visa-health-insurance',
     source_url: 'https://www.inclusion.gob.es/en/web/migraciones/w/estancia-por-estudios',
-    webinar_url: 'https://www.youtube.com/watch?v=OnLKyPbpALY&t=420s',
+    webinar_url: 'https://www.youtube.com/watch?v=uH927kx3igU&t=1015s',
     title: 'Purchase visa-compliant private health insurance (from an insurer authorised in Spain, SNS-equivalent cover, no copays, no waiting periods, repatriation included) — a national student-visa requirement',
     category: 'health', severity: 'required',
     source: 'official',
@@ -775,7 +775,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     id: 'dnv-renewal',
-    webinar_url: 'https://www.youtube.com/watch?v=SqmxlLuJ_bY&t=135s',
+    webinar_url: 'https://www.youtube.com/watch?v=SqmxlLuJ_bY&t=1996s',
     title: 'Renew your digital nomad residence permit before it expires — renewable for 2-year periods as long as the qualifying conditions (continued remote income and means) hold; managed by the UGE-CE under the Startups Law (Ley 28/2022)',
     category: 'residency', severity: 'required',
     source: 'official',
@@ -801,7 +801,7 @@ export const CATALOG: Obligation[] = [
     title: 'Engage a Spanish property lawyer for due diligence (title search, debts, planning, habitation licence)',
     category: 'property', severity: 'recommended',
     source: 'recommendation',
-    webinar_url: 'https://www.youtube.com/watch?v=8zyT1TG9S5E', // "Buying a Home in Spain"
+    webinar_url: 'https://www.youtube.com/watch?v=8zyT1TG9S5E&t=119s', // "Buying a Home in Spain"
     applies_if: { field: 'owns_property_in_spain', op: 'eq', value: true },
     depends_on: ['nie'],
     timing: { kind: 'asap' },
@@ -823,7 +823,7 @@ export const CATALOG: Obligation[] = [
     category: 'property', severity: 'recommended',
     source: 'official',
     source_url: 'https://administracion.gob.es/pag_Home/Tu-espacio-europeo/derechos-obligaciones/ciudadanos/residencia/compraventa-bienes-inmuebles/notarias-registros-propiedad.html',
-    webinar_url: 'https://www.youtube.com/watch?v=8zyT1TG9S5E', // "Buying a Home in Spain"
+    webinar_url: 'https://www.youtube.com/watch?v=8zyT1TG9S5E&t=570s', // "Buying a Home in Spain"
     applies_if: { field: 'owns_property_in_spain', op: 'eq', value: true },
     depends_on: ['completion-deed-notary'],
     timing: { kind: 'relative_to_event', anchor: 'property_purchase', offset_days: 30 },
@@ -834,7 +834,7 @@ export const CATALOG: Obligation[] = [
     title: 'Pay property transfer tax (ITP) on a resale property — roughly 6–11% of the price, set by each autonomous community',
     category: 'tax', severity: 'penalty',
     source: 'official',
-    webinar_url: 'https://www.youtube.com/watch?v=8zyT1TG9S5E', // supplementary: "Buying a Home in Spain"
+    webinar_url: 'https://www.youtube.com/watch?v=8zyT1TG9S5E&t=720s', // supplementary: "Buying a Home in Spain"
     applies_if: { field: 'owns_property_in_spain', op: 'eq', value: true },
     depends_on: ['completion-deed-notary'],
     timing: { kind: 'relative_to_event', anchor: 'property_purchase', offset_days: 30 },
@@ -877,7 +877,7 @@ export const CATALOG: Obligation[] = [
   // ── Pet import ────────────────────────────────────────────────────────────
   {
     id: 'pet-import',
-    webinar_url: 'https://www.youtube.com/watch?v=U6_AOU1JdAE&t=3044s',
+    webinar_url: 'https://www.youtube.com/watch?v=U6_AOU1JdAE&t=3464s',
     title: 'Import your pet: microchip, valid rabies vaccination (given at least 21 days before travel), and — arriving from a non-EU country like the US — an EU animal health certificate issued by an authorised vet within 10 days of entry',
     category: 'admin', severity: 'required',
     source: 'official',

@@ -1,6 +1,7 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { palette } from '@/constants/Colors';
+import { openExternal } from '@/lib/plan-format';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 
@@ -181,9 +182,14 @@ export default function BuildLogScreen() {
           The essay tells the story; this is the homework. Every major piece of Camino in the order
           we actually took the work on — what shipped, and the decisions that shaped it.
         </Text>
-        <TouchableOpacity onPress={() => router.push('/how-i-was-built')}>
-          <Text style={styles.backLink}>← Read the essay</Text>
-        </TouchableOpacity>
+        <View style={styles.linksRow}>
+          <TouchableOpacity onPress={() => router.push('/how-i-was-built')}>
+            <Text style={styles.backLink}>← Read the essay</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => openExternal('https://github.com/nerolabs/camino-app')}>
+            <Text style={styles.backLink}>The code on GitHub ↗</Text>
+          </TouchableOpacity>
+        </View>
 
         {ROWS.map((row, i) => (
           <View key={i} style={styles.row}>
@@ -215,7 +221,8 @@ const styles = StyleSheet.create({
   eyebrow:    { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, letterSpacing: 1.5, color: palette.amber, marginBottom: 10 },
   title:      { fontFamily: 'Fraunces_600SemiBold', fontSize: 40, lineHeight: 46, color: palette.indigo, marginBottom: 12 },
   dek:        { fontFamily: 'HankenGrotesk_400Regular', fontSize: 17, lineHeight: 26, color: palette.indigo, marginBottom: 10 },
-  backLink:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cobalt, marginBottom: 28 },
+  linksRow:   { flexDirection: 'row', gap: 20, flexWrap: 'wrap', marginBottom: 28 },
+  backLink:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cobalt },
 
   row:        { backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 14, padding: 20, marginBottom: 14 },
   rowHeader:  { flexDirection: 'row', alignItems: 'baseline', gap: 10, marginBottom: 10 },

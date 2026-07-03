@@ -1,5 +1,6 @@
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
+import { openExternal } from '@/lib/plan-format';
 import { palette } from '@/constants/Colors';
 import NavBar from '@/components/NavBar';
 
@@ -161,6 +162,9 @@ export default function HowIWasBuilt() {
           Want the receipts? Read the build log — every roadmap item in work order, with the key
           decisions behind each →
         </Link>
+        <Text style={styles.logLink} onPress={() => openExternal('https://github.com/nerolabs/camino-app')}>
+          And the code itself is public — github.com/nerolabs/camino-app ↗
+        </Text>
         <Text style={styles.footer}>
           A first pass, written while the product is still young. We’ll revise it as Camino grows —
           the same way we built it.

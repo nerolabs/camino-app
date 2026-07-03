@@ -314,3 +314,29 @@ were each verified against an official `.gob.es` source and re-added to the live
 
 All four verified present in `buildPlan` output for a NON-EU NLV self-employed profile (phases:
 before_you_go / when_settled / ongoing / when_settled respectively) — no dependency cycles.
+
+## Webinar-anchor audit — 17 timestamps corrected (2026-07-03)
+
+Applied the same rigor as the source_url re-verification to the staff-only `webinar_url` links:
+every anchor's `t=` offset was checked against the cached transcript (what is actually being said
+in a [t−10s, t+55s] window). ~23 were solid; **17 were wrong or weak** and were re-anchored to
+where the topic is genuinely discussed:
+
+- **Agenda-mention → substance (HP55 "Spain Taxes 101"):** wealth-tax (→13:14), modelo-720
+  (→20:46), beckham-law (→27:23), register-autonomo + autonomo-social-security (→7:59) — all had
+  pointed at the webinar's opening table-of-contents.
+- **Wrong topic entirely:** empadronamiento (was a private-school aside in the Málaga video →
+  Key Steps padrón discussion), student-visa-health-insurance (was a physiotherapy anecdote →
+  Visas 101 student-documents segment), apostille-documents (was a duplicate of the criminal-check
+  anchor → the actual document-legalization discussion), citizenship-track-latam (was the
+  democratic-memory-law segment → the 2-year residency track), pet-import (was a joke about five
+  dogs in first class → "overview of bringing pets to Spain"), exit-tax-return (was the Spanish
+  filing window → the home-country/US-taxes-still-owed discussion), tax-planning-consultation
+  (→ "do this before you move to structure").
+- **Missing timestamps (t=0):** property-legal-due-diligence (→1:59), land-registry-registration
+  (→9:30), property-transfer-tax (→12:00) in "Buying a Home in Spain".
+- **Refinements:** dnv-qualification-proof (→ the degree/experience requirement), dnv-renewal
+  (→ the actual renewal terms).
+- **Kept, imperfect but honest:** `nie` (Málaga school-paperwork mention — no webinar discusses
+  the NIE substantively; noted), `dgt-*` (the only licence discussion in any webinar is the 2A19
+  Q&A), `scout-where-to-live` (regional-affordability segment).
