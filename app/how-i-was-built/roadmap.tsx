@@ -36,13 +36,12 @@ const SECTIONS: Section[] = [
   {
     h: 'In progress',
     items: [
-      { title: 'Smoothing out Sign in with Apple', note: 'It works for most people; we’re chasing down an edge case before the next iOS build ships.' },
+      { title: 'Roadmap PDF export', note: 'For the fridge door, or the gestor.' },
     ],
   },
   {
     h: 'Next',
     items: [
-      { title: 'Roadmap PDF export', note: 'For the fridge door, or the gestor.' },
       { title: 'Region-aware steps', note: 'Some bureaucracy differs by comunidad — the plan should know yours.' },
     ],
   },

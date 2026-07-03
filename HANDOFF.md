@@ -20,20 +20,21 @@ user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS bui
 2. **Step drawer unscrollable on iOS**: the sheet's ScrollView was wrapped in a Pressable, which
    claimed the drag gesture. Backdrop is now an absolute-fill Pressable BEHIND a plain-View
    sheet. (Pattern note: never wrap a native ScrollView in a touchable.)
-3. **Apple sign-in — the 2FA theory is DEAD** (user uses SIWA fine in other apps → their Apple
-   ID has 2FA). Systematically excluded: 2FA ✗, Apple system status ✗ (SIWA green), ASC
-   agreements ✗ (Free Apps Agreement active Jul 2026–Jul 2027), App ID config ✗ (SIWA checked,
-   "Enable as a primary App ID", no stray settings, team Proxim.us VB9CHJM4AN), entitlement in
-   IPA ✓ (verified earlier). Remaining suspect: **stale SIWA provisioning on Apple's side** —
-   the widely-reported remedy applied 2026-07-03 ~21:33: capability toggled OFF → saved →
-   re-enabled as primary → saved (invalidates profiles by design). **Build 20** (`4b6193bf`)
-   kicked immediately after so EAS re-mints a fresh profile against the re-provisioned
-   capability. **Test Apple sign-in on build 20.** If it STILL fails: try a second Apple ID
-   (account-state vs app), and consider filing with Apple (all config is provably correct).
+3. **Apple sign-in — SOLVED 2026-07-03 ~21:45.** Root cause: **stale SIWA provisioning on
+   Apple's servers for the App ID** (every checkable layer was verified correct: entitlement in
+   the signed IPA, App ID capability/primary, fresh profiles, Supabase provider, agreements,
+   service status; the user's 2FA was fine — SIWA worked in other apps). Remedy: capability
+   toggled OFF → saved → re-enabled as primary → saved (~21:33), forcing Apple to re-provision.
+   **Proof it was server-side: build 19 — cut BEFORE the toggle — started working minutes
+   after it.** Build 20 failed once then worked (propagation settling). Expect reliable within
+   the hour. Playbook lesson recorded in the build log: when every layer verifies correct,
+   re-provision before you rewrite.
 
-**User to test on build 20:** email one-time code, drawer scrolling (fixed in 19's code, also
-in 20), Apple sign-in after the capability re-provision. Build 19 failing on Apple was expected
-— it predates the re-toggle.
+4. **Guides alert on native** (build-19 finding): expo-router/head on iOS is the Apple Handoff
+   integration and alerts without an `origin` config. Head is now a platform-split
+   `components/SeoHead` (web re-exports it, native renders nothing). Fixed in **build 21**
+   (`0fc2f1dd` submission) — the one build that has EVERYTHING: OTP fix, drawer fix, no alert,
+   re-provisioned Apple. **Family testing should use build 21+.**
 
 **ALSO SPOTTED in ASC (App Store release prep):** the DSA **trader status** must be completed
 (ASC → Business banner) or EU distribution is blocked — Spain IS the market. Add to the

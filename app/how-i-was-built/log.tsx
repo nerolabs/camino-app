@@ -254,6 +254,15 @@ const ROWS: Row[] = [
       'The drawer bug was a wrapper stealing the scroll gesture — the tap-to-close backdrop now sits behind the sheet instead of around it.',
     ],
   },
+  {
+    feature: 'Sign in with Apple, solved',
+    work: 'A five-build mystery: Apple\'s own sign-in sheet rejected only this app, while every layer we could check was provably correct — the entitlement inside the signed binary, the App ID capability, fresh provisioning profiles, the auth provider config, active developer agreements. The failure lived in none of them: Apple\'s server-side provisioning for the App ID had gone stale. Toggling the capability off and back on forced a re-provision, and sign-in started working — even on the older builds.',
+    decisions: [
+      'Eliminate by evidence, not vibes: each layer was verified with an artifact (the IPA\'s own entitlements, the portal config, the agreement dates) before moving to the next.',
+      'The decisive clue was that an OLD build started working the moment the capability was re-provisioned — proof the broken state lived on Apple\'s servers, not in anything we shipped.',
+      'When every checkable layer is correct and the platform still fails, re-provision before you rewrite.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {
