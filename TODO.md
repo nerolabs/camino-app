@@ -426,15 +426,17 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             "nearly sixty… large majority officially cited"). Still open: a real blog surface later.
 
 ## 🔜 Next (candidates, not yet started)
-- [ ] **Sample plan — show the payoff BEFORE the interview (user feedback 2026-07-03).** The plan
-      page is the product's wow moment, but today users invest a whole interview on trust before
-      they see it. Add a **"Sample plan"** surface: either a top-level nav item or (likely better)
-      a prominent home-page section that walks into a pre-built roadmap for a fictional persona
-      (e.g. Susan, US retiree → NLV) with a persistent banner: "This is Susan's plan — take the
-      5-minute interview to get yours, super-customized." Build it deterministically from a fixed
-      persona profile via `buildPlan` (zero new content to maintain — it's the real engine on a
-      canned profile, so it stays current as the catalog evolves). Read-only: hide mark-done /
-      re-plan / coach actions (or make them demo-safe). Also a great SEO/landing artifact.
+- [x] **Sample plan — DONE 2026-07-03, live on prod (`/sample-plan`).** The payoff before the ask:
+      `core/sample-profile.ts` (Susan & Tom, US retirees → NLV + dog + undecided region + citizenship
+      hopes; arrival floats +270d so dates never go stale) rendered read-only by the REAL engine —
+      30 steps / 21 required / 4 phases, amber "SAMPLE ROADMAP" banner, interview CTAs top+bottom.
+      Cards **tap-to-expand with deterministic detail** (timing, severity+source blurbs, prerequisites,
+      official-source link, and an amber tease that in YOUR plan Lola coaches/checks-off/re-flows) —
+      the LLM coach + mark-done stay out on purpose (public page = free-LLM abuse surface; demo
+      honesty). Surfaced via signed-out NavBar link + home-hero link. Audit validates the profile
+      like a persona; Playwright smoke covers the page. Analytics: sample_plan_viewed /
+      sample_plan_cta_clicked / sample_plan_step_expanded.
+- [ ] **"Show our homework" — a second, detailed how-i-was-built page (user feedback 2026-07-02).**
       A companion to the narrative essay (`app/how-i-was-built.tsx`): a build log that walks **each
       roadmap item in the order we took the work on**, as a table with columns **Feature | Work
       completed | Key decisions made**. It's the receipts/appendix to the story — e.g. rows for the
