@@ -438,6 +438,9 @@ export const CATALOG: Obligation[] = [
       all: [
         NON_EU,
         { field: 'has_spouse_or_partner', op: 'eq', value: true },
+        // Reagrupación familiar requires marriage or a registered partnership — an unmarried
+        // partner can't be reunified this way, so don't show it to them.
+        { field: 'partner_is_married', op: 'eq', value: true },
       ],
     },
     depends_on: ['residencia'],
@@ -467,6 +470,9 @@ export const CATALOG: Obligation[] = [
     title: 'Citizenship eligibility: 2 years (ex-Spanish-colony nationals)',
     category: 'residency', severity: 'info',
     source: 'official',
+    // Intentionally no NON_EU gate: a dual EU + Latin-American national could still naturalise via
+    // the 2-year track. In practice `wants_citizenship` is only asked of non-EU movers, so this is
+    // effectively non-EU today — but if that slot ever widens, this stays correct.
     applies_if: { all: [
       WANTS_CITIZENSHIP,
       { field: 'is_ex_colony_national', op: 'eq', value: true },
@@ -845,10 +851,12 @@ export const CATALOG: Obligation[] = [
     title: 'Pass DELE A2 Spanish language exam (Instituto Cervantes) — required for naturalization',
     category: 'admin', severity: 'required',
     source: 'official',
+    // Exemption is for nationals of SPANISH-SPEAKING countries — not the ex-colony set. A Filipino
+    // applicant gets the 2-year citizenship track (ex-colony) but still must pass DELE.
     applies_if: { all: [
       NON_EU,
       WANTS_CITIZENSHIP,
-      { field: 'is_ex_colony_national', op: 'eq', value: false },
+      { field: 'is_spanish_speaking_national', op: 'eq', value: false },
     ] },
     depends_on: ['residencia'],
     timing: { kind: 'relative_to_event', anchor: 'residency_established', offset_days: 1825 },

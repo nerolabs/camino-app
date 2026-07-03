@@ -155,6 +155,12 @@ const DGT_AGREEMENT = new Set(["GB","AR","BO","BR","CH","CL","CO","CR","CU","DO"
 // Former Spanish colonies → 2-year citizenship track
 const EX_COLONY = new Set(["AR","BO","CL","CO","CR","CU","DO","EC","GT","GQ","HN","MX","NI","PA","PE","PH","PR","PY","SV","UY","VE"]);
 
+// Nationals of countries where Spanish is an official language → exempt from the DELE A2 exam
+// for naturalisation. NOT the same set as EX_COLONY: the Philippines gets the 2-year citizenship
+// track but Spanish is not official there, so Filipino applicants still need DELE (this split is
+// why the two sets exist — a single "ex-colony" flag mis-gated DELE for PH).
+const SPANISH_SPEAKING = new Set([...EX_COLONY].filter(c => c !== "PH"));
+
 const INCOME_BAND_MIDPOINT: Record<string, number> = {
   "under €20k":   10_000,
   "€20k–€28k":   24_000,
@@ -188,15 +194,25 @@ function deriveVisaType(p: Profile): string | null {
 
 type Derivation = { field: string; from: string[]; compute: (p: Profile) => unknown };
 
-const DERIVATIONS: Derivation[] = [
+// Exported so core/catalog-audit.ts can verify the catalog↔interview contract (invariant 2).
+export const DERIVATIONS: Derivation[] = [
   { field: "is_eu", from: ["nationalities"],
     compute: (p) => (p.nationalities as string[]).some(n => EU.has(n)) },
 
   { field: "nationality_has_dgt_agreement", from: ["nationalities"],
     compute: (p) => (p.nationalities as string[]).some(n => DGT_AGREEMENT.has(n)) },
 
+  // Passport-derived, with the interview's explicit yes/no as an OR-fallback — catches dual
+  // nationals who under-report their passports but confirm ex-colony nationality when asked.
   { field: "is_ex_colony_national", from: ["nationalities"],
-    compute: (p) => (p.nationalities as string[]).some(n => EX_COLONY.has(n)) },
+    compute: (p) => (p.nationalities as string[]).some(n => EX_COLONY.has(n))
+                 || p.previously_ex_spanish_colony_nationality === true },
+
+  // Gates the DELE A2 exemption (naturalisation). Deliberately passport-only: the explicit
+  // ex-colony answer can't distinguish Spanish-speaking (exempt) from PH (not exempt), so we
+  // only exempt when a passport positively shows a Spanish-speaking country.
+  { field: "is_spanish_speaking_national", from: ["nationalities"],
+    compute: (p) => (p.nationalities as string[]).some(n => SPANISH_SPEAKING.has(n)) },
 
   { field: "is_tax_resident", from: ["intends_long_stay"],
     compute: (p) => p.intends_long_stay === true },

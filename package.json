@@ -8,7 +8,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "deploy:staging": "bash scripts/deploy.sh staging",
-    "deploy:production": "bash scripts/deploy.sh production"
+    "deploy:production": "bash scripts/deploy.sh production",
+    "audit": "npx tsx scripts/audit-catalog.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.107.0",
