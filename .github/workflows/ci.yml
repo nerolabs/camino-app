@@ -1,0 +1,44 @@
+# CI: the fast deterministic gate on every push/PR — typecheck, catalog audit (invariant 2),
+# and the engine test suite. No secrets, no network beyond npm install.
+# The web smoke suite (Playwright vs the deployed staging site) runs on manual dispatch only,
+# so pushes never depend on staging being up or spend LLM/TTS quota.
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run audit
+      - run: npm test
+
+  smoke:
+    # Manual only: hits the deployed staging environment (1 live /api/lola turn per run).
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/

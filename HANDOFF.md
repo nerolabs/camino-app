@@ -53,8 +53,11 @@ to the very end (no test device). Localization is explicitly sequenced **last**.
 ## Commands
 
 - `npm run audit` — catalog↔interview contract + personas (run after ANY catalog/slot change).
+- `npm test` — deterministic engine suite (vitest, ~140ms; also a deploy gate + CI on every push).
+- `npm run test:api` — API contract tests vs staging (opt-in; network).
+- `npm run test:e2e` — Playwright web smoke vs staging (1 live Lola turn per run).
 - `npm run typecheck` — tsc, strict.
-- `npm run deploy:staging` / `deploy:production` — web deploys (audit-gated).
+- `npm run deploy:staging` / `deploy:production` — web deploys (gated on audit + tests).
 - iOS: `npx eas-cli build --platform ios --profile production --auto-submit --non-interactive`
   (needs EXPO_TOKEN + ASC key env vars from `~/.zshrc`; auto-submits to TestFlight).
 

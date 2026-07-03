@@ -38,6 +38,9 @@ echo "[deploy] Baking: EXPO_PUBLIC_ENV=${EXPO_PUBLIC_ENV:-<unset>}  SUPABASE=${E
 echo "[deploy] Catalog audit (invariant 2: interview <-> catalog contract)..."
 npm run --silent audit
 
+echo "[deploy] Engine test suite (deterministic, offline)..."
+npm run --silent test
+
 echo "[deploy] Exporting web bundle with fully cleared caches (critical -- see header)..."
 rm -rf dist node_modules/.cache
 npx expo export --platform web --clear

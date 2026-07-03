@@ -303,10 +303,21 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             in-drawer Lola coaching for region evaluation.
 
 ### Infra / ops (large — before wider launch)
-- [ ] **B5 — Automated end-to-end test suite (on-demand + on prod pushes).** We're spot-testing;
-      time for real E2E. Cover: interview → extraction → plan generation for key personas;
-      `/api/lola` contract; sign-in; living-plan re-model. Runs locally + in CI on deploy. Consider
-      Playwright (web) + Maestro (native), and an engine-level deterministic test pass.
+- [~] **B5 — Automated test suite — 3 of 4 layers DONE 2026-07-03.**
+      - [x] **Engine (deterministic, offline)** — `tests/engine.test.ts` (vitest, `npm test`,
+            15 tests, ~140ms): invariant-2 audit as a test, purity (same profile → identical plan),
+            dependency ordering across all 9 personas, every audit-fix regression (DELE/PH,
+            unmarried partner, renewal-only, EU registration, property cluster), anchor re-flow
+            (residencia done → ccse firm + exact re-date), derivations + slot sequencing.
+            **Runs in deploy.sh (gate) + GitHub Actions CI on every push** (`.github/workflows/ci.yml`).
+      - [x] **API contract** — `npm run test:api` (opt-in, hits staging): lola 400/413/role
+            validation, tts 400/413 + GET happy path (7 tests). Never runs in CI (no spend).
+      - [x] **Web smoke (Playwright)** — `npm run test:e2e` vs staging (5 tests): home, interview
+            actually starts (real /api/lola turn → Lola's first question), plan empty state,
+            blog + robots/sitemap, zero uncaught page errors. CI job on manual dispatch.
+      - [ ] **Native (Maestro)** — deferred: needs simulator/device infra; revisit pre-launch.
+            Also not yet covered: authed flows (sign-in → saved plan → re-model) — needs a test
+            auth strategy (Supabase test user or bypass); design when tackling Maestro.
 - [~] **B6 — Observability (Sentry). Web + backend DONE 2026-07-02; native + alerts next.**
       One Sentry project (**camino**, org **camino-ko**, DE region), tagged by platform
       (web/ios/android/server) + environment (production/staging). DSN in EAS preview + production.
@@ -415,7 +426,15 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
             "nearly sixty… large majority officially cited"). Still open: a real blog surface later.
 
 ## 🔜 Next (candidates, not yet started)
-- [ ] **"Show our homework" — a second, detailed how-i-was-built page (user feedback 2026-07-02).**
+- [ ] **Sample plan — show the payoff BEFORE the interview (user feedback 2026-07-03).** The plan
+      page is the product's wow moment, but today users invest a whole interview on trust before
+      they see it. Add a **"Sample plan"** surface: either a top-level nav item or (likely better)
+      a prominent home-page section that walks into a pre-built roadmap for a fictional persona
+      (e.g. Susan, US retiree → NLV) with a persistent banner: "This is Susan's plan — take the
+      5-minute interview to get yours, super-customized." Build it deterministically from a fixed
+      persona profile via `buildPlan` (zero new content to maintain — it's the real engine on a
+      canned profile, so it stays current as the catalog evolves). Read-only: hide mark-done /
+      re-plan / coach actions (or make them demo-safe). Also a great SEO/landing artifact.
       A companion to the narrative essay (`app/how-i-was-built.tsx`): a build log that walks **each
       roadmap item in the order we took the work on**, as a table with columns **Feature | Work
       completed | Key decisions made**. It's the receipts/appendix to the story — e.g. rows for the

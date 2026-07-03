@@ -44,3 +44,7 @@ yarn-error.*
 # macOS/editor accidental duplicates ("File 2.ext" — note the space before the number)
 * [0-9].ts
 * [0-9].tsx
+
+# test artifacts
+playwright-report/
+test-results/
