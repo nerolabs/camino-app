@@ -5,7 +5,7 @@
  * personas as fixtures (each persona documents which branch it exists to exercise). Runs in CI on
  * every push and inside scripts/deploy.sh, so a regression can't reach a deploy.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { buildPlan, CATALOG, isOverdue, type Objective } from '../core/engine-controller';
 import { derive, nextSlot, SLOTS, type Profile } from '../core/interview-controller';
 import { auditCatalog } from '../core/catalog-audit';
@@ -38,12 +38,21 @@ describe('catalog audit', () => {
 // ── Invariant 4: the plan is a pure function of the profile ────────────────────
 describe('determinism', () => {
   it('same profile → identical plan (ids, order, dates)', () => {
-    for (const persona of TEST_PERSONAS) {
-      const p1: Profile = { ...persona.answers }; derive(p1);
-      const p2: Profile = { ...persona.answers }; derive(p2);
-      const a = buildPlan(p1), b = buildPlan(p2);
-      expect(a.map(o => o.id)).toEqual(b.map(o => o.id));
-      expect(JSON.stringify(a)).toEqual(JSON.stringify(b));
+    // buildPlan anchors estimated dates to "now", so the invariant is: same profile AND same
+    // instant → identical plan. Freeze the clock or the two builds can straddle a millisecond
+    // tick (real CI flake: timing dates differed by 1ms, .636Z vs .637Z).
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-07-03T12:00:00Z'));
+    try {
+      for (const persona of TEST_PERSONAS) {
+        const p1: Profile = { ...persona.answers }; derive(p1);
+        const p2: Profile = { ...persona.answers }; derive(p2);
+        const a = buildPlan(p1), b = buildPlan(p2);
+        expect(a.map(o => o.id)).toEqual(b.map(o => o.id));
+        expect(JSON.stringify(a)).toEqual(JSON.stringify(b));
+      }
+    } finally {
+      vi.useRealTimers();
     }
   });
 });
