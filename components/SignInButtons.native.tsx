@@ -3,6 +3,7 @@ import { Alert, Text, TouchableOpacity, Modal, Pressable, StyleSheet } from 'rea
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
+import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
 import EmailSignIn from '@/components/EmailSignIn';
 
 // Signed-out auth control (native). The NavBar shows a single "Sign in" link — the inline Apple
@@ -14,6 +15,7 @@ export default function SignInButtons() {
   const { signInWithGoogle, signInWithApple, appleSignInAvailable } = useAuth();
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<'providers' | 'email'>('providers');
+  const kb = useKeyboardHeight(); // email mode has an input — keep the card above the keyboard
 
   const close = () => { setOpen(false); setMode('providers'); };
 
@@ -28,11 +30,11 @@ export default function SignInButtons() {
   return (
     <>
       <TouchableOpacity onPress={() => setOpen(true)} style={styles.ghost}>
-        <Text style={styles.ghostText}>Sign in</Text>
+        <Text style={styles.ghostText} numberOfLines={1} maxFontSizeMultiplier={1.2}>Sign in</Text>
       </TouchableOpacity>
 
       <Modal visible={open} transparent animationType="fade" onRequestClose={close}>
-        <Pressable style={styles.overlay} onPress={close}>
+        <Pressable style={[styles.overlay, kb > 0 && { paddingBottom: kb + 16 }]} onPress={close}>
           {/* Stop card taps from closing the dialog */}
           <Pressable style={styles.card} onPress={() => {}}>
             <Text style={styles.title}>Sign in to Camino</Text>

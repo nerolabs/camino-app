@@ -28,27 +28,33 @@ export default function NavBar() {
     // padding here too would double-pad, and only root-level clipping stops SCROLLED content
     // sliding under the island. Left/right insets still matter in landscape.
     <View style={[styles.nav, { paddingTop: 18, paddingLeft: 24 + insets.left, paddingRight: 24 + insets.right }]}>
-      <TouchableOpacity onPress={() => router.push('/')}>
-        <Text style={styles.logo}>{width < WIDE ? 'Camino' : 'Camino: Your Road to Spain'}</Text>
+      {/* Bar text caps its Dynamic Type scaling (maxFontSizeMultiplier) and never wraps:
+          at large accessibility text sizes the labels outgrew the row and the bar stacked
+          into two ugly lines (build-24 family finding — same phone, larger text setting).
+          The MENU items stay fully scalable; only the one-line bar is capped. */}
+      <TouchableOpacity onPress={() => router.push('/')} style={styles.logoWrap}>
+        <Text style={styles.logo} numberOfLines={1} maxFontSizeMultiplier={1.1}>
+          {width < WIDE ? 'Camino' : 'Camino: Your Road to Spain'}
+        </Text>
       </TouchableOpacity>
 
       <View style={styles.right}>
         {user ? (
           <TouchableOpacity onPress={() => router.push('/plan')} style={styles.cta}>
-            <Text style={styles.ctaText}>My roadmap</Text>
+            <Text style={styles.ctaText} numberOfLines={1} maxFontSizeMultiplier={1.2}>My roadmap</Text>
           </TouchableOpacity>
         ) : (
           <>
             {/* Platform-split: web = Google; iOS = dialog with Apple + Google (guideline 4.8). */}
             <SignInButtons />
             <TouchableOpacity onPress={() => router.push('/interview')} style={styles.cta}>
-              <Text style={styles.ctaText}>Get your roadmap</Text>
+              <Text style={styles.ctaText} numberOfLines={1} maxFontSizeMultiplier={1.2}>Get your roadmap</Text>
             </TouchableOpacity>
           </>
         )}
 
         <TouchableOpacity onPress={() => setMenuOpen(true)} style={styles.burger} accessibilityLabel="Menu">
-          <Text style={styles.burgerText}>☰</Text>
+          <Text style={styles.burgerText} maxFontSizeMultiplier={1.2}>☰</Text>
         </TouchableOpacity>
       </View>
 
@@ -86,9 +92,10 @@ function MenuLink({ label, onPress }: { label: string; onPress: () => void }) {
 }
 
 const styles = StyleSheet.create({
-  nav:          { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 18, backgroundColor: palette.cal, flexWrap: 'wrap', gap: 8, borderBottomWidth: 1, borderBottomColor: '#E8E4DC' },
+  nav:          { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 18, backgroundColor: palette.cal, gap: 8, borderBottomWidth: 1, borderBottomColor: '#E8E4DC' },
+  logoWrap:     { flexShrink: 1 },
   logo:         { fontFamily: 'Fraunces_600SemiBold', fontSize: 18, color: palette.indigo },
-  right:        { flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
+  right:        { flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 0 },
   cta:          { backgroundColor: palette.cobalt, borderRadius: 8, paddingVertical: 8, paddingHorizontal: 16 },
   ctaText:      { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cal },
 

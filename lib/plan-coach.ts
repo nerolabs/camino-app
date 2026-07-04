@@ -72,7 +72,10 @@ ${fieldGuide()}
 
 Respond with ONLY JSON: {"changes": { "<field>": <typed value>, ... }} containing just the
 fields that genuinely changed. If nothing maps to a field above, return {"changes": {}}.
-Never invent fields, deadlines, costs, or laws — only set the listed fields to typed values.`,
+Appointment/booking dates for an individual step (e.g. "our consulate appointment is now in
+August") are NOT profile fields — return {"changes": {}} for those; the user marks the step
+done with its real date instead. Never invent fields, deadlines, costs, or laws — only set
+the listed fields to typed values.`,
       messages: [{ role: 'user', content: freeText }],
     });
     const raw = rawText.trim();

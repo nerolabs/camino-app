@@ -18,7 +18,7 @@ export default function SignInButtons() {
   return (
     <>
       <TouchableOpacity onPress={() => setOpen(true)} style={styles.ghost}>
-        <Text style={styles.ghostText}>Sign in</Text>
+        <Text style={styles.ghostText} numberOfLines={1} maxFontSizeMultiplier={1.2}>Sign in</Text>
       </TouchableOpacity>
 
       <Modal visible={open} transparent animationType="fade" onRequestClose={close}>

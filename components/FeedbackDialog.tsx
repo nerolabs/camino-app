@@ -4,6 +4,7 @@ import Constants from 'expo-constants';
 import { usePathname } from 'expo-router';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
+import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
 import { capture } from '@/lib/analytics';
 
 // "Report a problem / send feedback" — subtle but always at hand (lives in the ☰ menu).
@@ -13,9 +14,16 @@ import { capture } from '@/lib/analytics';
 
 const API_BASE = process.env.EXPO_PUBLIC_API_URL ?? '';
 
+// The server answers in <0.5s, but on some devices/networks the native fetch stalls on the
+// RESPONSE long after the request landed (build-24 family finding: email arrived instantly,
+// spinner ran 1–2 min). After this grace period we thank the user and move on — a genuinely
+// failed send (offline) rejects fast and still shows the error.
+const SEND_GRACE_MS = 10_000;
+
 export default function FeedbackDialog({ visible, onClose }: { visible: boolean; onClose: () => void }) {
   const { user } = useAuth();
   const pathname = usePathname();
+  const kb = useKeyboardHeight(); // keep the dialog above the keyboard (it autofocuses)
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
@@ -27,7 +35,7 @@ export default function FeedbackDialog({ visible, onClose }: { visible: boolean;
     if (!text.trim() || busy) return;
     setBusy(true); setErr(null);
     try {
-      const res = await fetch(`${API_BASE}/api/feedback`, {
+      const request = fetch(`${API_BASE}/api/feedback`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
@@ -38,6 +46,16 @@ export default function FeedbackDialog({ visible, onClose }: { visible: boolean;
           route: pathname,
         }),
       });
+      const res = await Promise.race([
+        request,
+        new Promise<'slow'>(resolve => setTimeout(() => resolve('slow'), SEND_GRACE_MS)),
+      ]);
+      if (res === 'slow') {
+        request.catch(() => {}); // let it finish (or fail) quietly in the background
+        capture('feedback_send_slow', { route: pathname });
+        setSent(true);
+        return;
+      }
       if (!res.ok) throw new Error(String(res.status));
       capture('feedback_sent', { route: pathname });
       setSent(true);
@@ -50,7 +68,7 @@ export default function FeedbackDialog({ visible, onClose }: { visible: boolean;
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={close}>
-      <View style={styles.overlay}>
+      <View style={[styles.overlay, kb > 0 && { paddingBottom: kb + 16 }]}>
         <Pressable style={StyleSheet.absoluteFill} onPress={close} />
         <View style={styles.card}>
           {sent ? (

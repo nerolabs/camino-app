@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput, ActivityIndicator, Platform, useWindowDimensions } from 'react-native';
+import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
 import { palette } from '@/constants/Colors';
 import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
@@ -15,7 +16,7 @@ import { capture } from '@/lib/analytics';
 import EmailSignIn from '@/components/EmailSignIn';
 import { parseProfileChange, askLola, TASK_INTRO, changeHint } from '@/lib/plan-coach';
 import {
-  ISO_DATE, diffSummary, completionLine, formatTiming, timingDetail, openExternal,
+  ISO_DATE, diffSummary, plansDiffer, completionLine, formatTiming, timingDetail, openExternal,
   PHASE_LABELS, PHASE_ICONS, PHASE_ORDER, SEV_COLOR, SEV_LABEL, SEV_BLURB,
   SOURCE_SHORT, SOURCE_BLURB, SOURCE_COLOR,
 } from '@/lib/plan-format';
@@ -90,6 +91,10 @@ export default function PlanScreen() {
   // "This week" vs the full phased roadmap. Full is the default — the week view is the
   // attention filter you flip to, not a place to hide the plan.
   const [view, setView] = useState<'week' | 'all'>('all');
+  // Exact keyboard overlap (same hook as the interview composer — the KAV lesson): the task
+  // sheet slides above the keyboard so its inputs stay visible (build-24 family finding).
+  const kb = useKeyboardHeight();
+  const { height: winH } = useWindowDimensions();
 
   useEffect(() => { capture('roadmap_viewed'); }, []); // funnel endpoint: reached the roadmap
 
@@ -151,12 +156,21 @@ export default function PlanScreen() {
     setChangeOpen(false);
     setSelected(null);
     if (Object.keys(changes).length === 0) {
-      setChangeNote({ title: 'Thanks for the update', body: 'Nothing in your plan needed to change.' });
+      setChangeNote({ title: 'Thanks for the update', body: 'Nothing in your plan needed to change. If a step happened (or will happen) on a specific date, mark it done "on a date" and the plan re-flows from that.' });
       return;
     }
     const nextProfile: Profile = { ...profile, ...changes };
     derive(nextProfile);
     const after = buildPlan(nextProfile);
+    // Honesty check: a field can change without any plan impact — never claim a remodel
+    // over a no-op diff (build-24 family finding: "replanned!" while every date stayed put).
+    if (!plansDiffer(currentPlan, after)) {
+      capture('plan_remodel_noop', { changed_fields: Object.keys(changes) });
+      setChangeNote({ title: 'Thanks — noted.', body: 'I’ve saved that, and nothing in your plan needed to move because of it.' });
+      setProfile(nextProfile);
+      if (user) await saveProfileDb(user.id, nextProfile);
+      return;
+    }
     capture('plan_remodelled', { changed_fields: Object.keys(changes) });
     setChangeNote({ title: 'That was useful — I’ve remodelled your plan!', body: diffSummary(currentPlan, after) });
     setProfile(nextProfile);
@@ -390,7 +404,9 @@ export default function PlanScreen() {
           claimed the drag gesture; build-18 device finding). Tap-out still closes. */}
       <View style={styles.modalBackdrop}>
         <Pressable style={StyleSheet.absoluteFill} onPress={() => setSelected(null)} />
-        <View style={styles.sheet}>
+        {/* Keyboard-aware: slide the whole sheet above the keyboard by the exact overlap the
+            OS reports, and cap its height to the space that remains. */}
+        <View style={[styles.sheet, kb > 0 && { marginBottom: kb, maxHeight: winH - kb - 60 }]}>
           {selected && (() => {
             const deps = selected.depends_on
               .map(id => titleById.get(id))

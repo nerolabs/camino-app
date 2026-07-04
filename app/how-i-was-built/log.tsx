@@ -325,6 +325,16 @@ const ROWS: Row[] = [
       'The deploy script now strips iCloud conflict-copy directories from the export: one deploy silently shipped stale pages while the local build was correct.',
     ],
   },
+  {
+    feature: 'Family-testing fixes, round two',
+    date: '4 Jul 2026',
+    work: 'A second phone found four more: the feedback spinner could run minutes after the report had already arrived (the response stalls on some networks; a grace period now thanks you once the send is safely away); the step drawer\'s inputs hid under the keyboard (it now slides above it by the exact overlap the OS reports); Lola claimed to have "remodelled your plan" when nothing had moved (a no-op re-plan now says so honestly, and appointment dates are steered to "mark done on a date"); and the nav bar wrapped into two lines at larger iOS text sizes (bar labels now cap their scaling — menu items still scale fully).',
+    decisions: [
+      'Same phone model, different bug: accessibility text size is a device dimension of its own — test with it.',
+      'Never let a celebration outrun the diff: "I\'ve remodelled your plan" is only said when a date actually moved.',
+      'When the work is provably done but the network is slow to say so, thank the user and stop the spinner — and count how often it happens.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

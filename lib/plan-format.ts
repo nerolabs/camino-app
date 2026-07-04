@@ -36,6 +36,21 @@ export function diffSummary(before: Objective[], after: Objective[]): string {
   return joined.charAt(0).toUpperCase() + joined.slice(1) + '.';
 }
 
+// Did the re-plan actually change anything? Same criteria as diffSummary — used to keep the
+// celebration honest: "I've remodelled your plan!" must never appear over a no-op diff
+// (build-24 family finding: extractor set a field, nothing moved, Lola claimed a replan).
+export function plansDiffer(before: Objective[], after: Objective[]): boolean {
+  if (before.length !== after.length) return true;
+  const beforeById = new Map(before.map(o => [o.id, o]));
+  for (const o of after) {
+    const b = beforeById.get(o.id);
+    if (!b) return true;
+    if (b.timing.state === 'scheduled' && o.timing.state === 'scheduled'
+        && b.timing.due.getTime() !== o.timing.due.getTime()) return true;
+  }
+  return false;
+}
+
 function daysBetween(a: Date, b: Date): number {
   return Math.round((a.getTime() - b.getTime()) / 86_400_000);
 }
