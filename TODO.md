@@ -51,7 +51,9 @@ command** (credits).
    spend limit + ElevenLabs plan quota (no usage-based overage). Research notes: no CF
    bindings/WAF available on EAS Hosting; in-memory counters demonstrably reset (70-burst,
    zero 429s). **Turnstile stays queued for the pre-launch-moment** (web-only; native needs an
-   exemption path — see Phase 5 launch item).
+   exemption path — see Phase 5 launch item). User completed the provider caps 2026-07-04
+   (Anthropic monthly spend limit + ElevenLabs overage OFF) — all three layers live; strict
+   CORS confirmed propagated to getcamino.app.
 6. **Native E2E (Maestro) + authed-flow test strategy** (B5's deferred fourth layer —
    "revisit pre-launch" = now). Needs: simulator/cloud infra choice, a Supabase test-user or
    auth-bypass strategy, and extending Playwright to authed web flows (sign-in → saved plan →
