@@ -6,6 +6,7 @@ import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
 import SignInButtons from '@/components/SignInButtons';
 import FeedbackDialog from '@/components/FeedbackDialog';
+import DeleteAccountDialog from '@/components/DeleteAccountDialog';
 
 // One nav for every width (user decision 2026-07-03: desktop gets the burger too — parity with
 // mobile, and Sign out declutters into the menu). Actions stay on the bar (Sign in / CTA / ☰);
@@ -20,6 +21,7 @@ export default function NavBar() {
   const { width } = useWindowDimensions();
   const [menuOpen, setMenuOpen] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const go = (path: string) => { setMenuOpen(false); router.push(path as never); };
 
@@ -72,13 +74,18 @@ export default function NavBar() {
             {/* Subtle but always at hand — one tap from anywhere (user request 2026-07-03). */}
             <MenuLink label="Report a problem" onPress={() => { setMenuOpen(false); setFeedbackOpen(true); }} />
             {user && (
-              <MenuLink label="Sign out" onPress={() => { setMenuOpen(false); signOut(); }} />
+              <>
+                <MenuLink label="Sign out" onPress={() => { setMenuOpen(false); signOut(); }} />
+                {/* Apple 5.1.1(v): account deletion must be reachable in-app. Quiet, but here. */}
+                <MenuLink label="Delete my account" onPress={() => { setMenuOpen(false); setDeleteOpen(true); }} />
+              </>
             )}
           </Pressable>
         </Pressable>
       </Modal>
 
       <FeedbackDialog visible={feedbackOpen} onClose={() => setFeedbackOpen(false)} />
+      <DeleteAccountDialog visible={deleteOpen} onClose={() => setDeleteOpen(false)} />
     </View>
   );
 }

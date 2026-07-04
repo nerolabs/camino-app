@@ -23,6 +23,7 @@ const SECTIONS: Section[] = [
   {
     h: 'Just shipped',
     items: [
+      { title: 'Privacy, terms & delete-my-account', date: '4 Jul 2026', note: 'The grown-up pages: plain-language privacy policy and terms in every footer, cookieless analytics (no banner needed), and one-tap permanent account deletion in the menu.' },
       { title: 'Every guide got a written explainer', date: '4 Jul 2026', note: 'Sixty pages now tell you what each step actually is and how it feels in practice — with a build rule that the prose can never introduce a number the step itself doesn\'t carry.' },
       { title: 'Roadmap PDF export', date: '3 Jul 2026', note: 'One tap turns your roadmap into a clean printable report — estimated vs firm dates, official sources included. For the fridge door, or the gestor.' },
       { title: 'Report a problem', date: '3 Jul 2026', note: 'A quiet line in the menu, one text box, straight to us. Every report makes the roadmap better.' },

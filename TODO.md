@@ -500,7 +500,7 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
    Also shipped 2026-07-03: **Report a problem** (menu → dialog → /api/feedback → Resend to
    team inbox with platform/version/route context; verified end-to-end) and **iPad OFF** for
    the first release (supportsTablet: false — no iPad screenshots/review overhead).
-6. **Legal & compliance surfaces — DO FIRST, blocks the App Store submission (found in the
+6. **Legal & compliance surfaces — SHIPPED 2026-07-04** (in-app hard-delete account (E2E-tested live on staging), /privacy + /terms + /aviso-legal (operator Proxim.us; drafted, USER REVIEW + eventual professional pass pending), footer links, sitemap, PostHog cookieless). **USER ACTION left: paste https://getcamino.app/privacy into App Store Connect (privacy policy URL field) + review the three legal pages' wording.** (Originally: found in the
    2026-07-03 multi-stakeholder review, docs/STRATEGY.md):**
    1. **In-app account deletion** — Apple guideline 5.1.1(v) hard-rejects sign-in apps
       without it; doubles as the GDPR right-to-erasure mechanism.

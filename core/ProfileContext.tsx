@@ -3,7 +3,8 @@ import { type Profile } from './interview-controller';
 
 type ProfileContextValue = {
   profile: Profile | null;
-  setProfile: (p: Profile) => void;
+  // null clears the in-memory profile (account deletion) — matches the state's real shape.
+  setProfile: (p: Profile | null) => void;
   // Server-owned staff flag (from the profiles table). Gates non-sensitive dev/staff tooling
   // (test personas, the webinar cross-check link). Defaults false; set by an admin in the DB.
   isStaff: boolean;

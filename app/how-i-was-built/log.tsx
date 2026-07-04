@@ -355,6 +355,16 @@ const ROWS: Row[] = [
       'Print is its own medium: colors that read on a screen wash out on paper, and iOS ignores CSS page margins entirely — the report now carries both itself.',
     ],
   },
+  {
+    feature: 'The boring pages that make a real product',
+    date: '4 Jul 2026',
+    work: 'Privacy policy, terms of use, and aviso legal — plain language, linked from every footer. Delete my account, in the menu: one warning, one tap, immediate and permanent (tested live, start to finish). And web analytics went cookieless, so there\'s no consent banner because there\'s nothing to consent to.',
+    decisions: [
+      'Account deletion is both Apple\'s requirement and the GDPR\'s right to erasure — one honest implementation serves both: hard delete, no grace period, no dark patterns to keep you.',
+      'No cookie banner by design: analytics that persist nothing client-side beat a banner everyone resents.',
+      'Legal pages follow the homework-page rule: if a data flow changes, the privacy page changes in the same PR.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

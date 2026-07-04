@@ -16,6 +16,10 @@ export function initAnalytics() {
   if (ready || !KEY || typeof window === 'undefined') return;
   posthog.init(KEY, {
     api_host: HOST,
+    // Cookieless (user decision 2026-07-04, consent strategy): nothing persisted client-side →
+    // no ePrivacy consent banner needed for EU visitors. Tradeoff accepted: anonymous visitors
+    // don't stitch across sessions; signed-in analytics still stitch via identify(user id).
+    persistence: 'memory',
     person_profiles: 'always',   // include anonymous visitors so the home→roadmap funnel + retention work
     capture_pageview: true,      // SPA route views (home / interview / plan)
     capture_pageleave: true,

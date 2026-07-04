@@ -11,6 +11,7 @@ export function GET(request: Request): Response {
   const urls = [
     '/', '/how-it-works', '/sample-plan', '/guide',
     '/how-i-was-built', '/how-i-was-built/log', '/how-i-was-built/roadmap',
+    '/privacy', '/terms', '/aviso-legal',
     ...CATALOG.map(o => `/guide/${o.id}`),
   ];
   const xml =
