@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter, Link } from 'expo-router';
-import Head from '@/components/SeoHead';
+import Seo from '@/components/Seo';
 import { palette } from '@/constants/Colors';
 import { useWide } from '@/lib/useWide';
 import NavBar from '@/components/NavBar';
@@ -46,14 +46,11 @@ export default function HowItWorksPage() {
 
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
-      <Head>
-        <title>How Camino works — moving to Spain, in the right order</title>
-        <meta
-          name="description"
-          content="Tell Lola your situation, get a personal roadmap, work through it together. Every official step cites its government source; sequence and deadlines come built in."
-        />
-        <link rel="canonical" href="https://getcamino.app/how-it-works" />
-      </Head>
+      <Seo
+        title="How Camino works — moving to Spain, in the right order"
+        description="Tell Lola your situation, get a personal roadmap, work through it together. Every official step cites its government source; sequence and deadlines come built in."
+        canonical="https://getcamino.app/how-it-works"
+      />
       <NavBar />
 
       <View style={styles.header}>

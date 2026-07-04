@@ -522,8 +522,8 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
    account) so destructive actions move out of the main hamburger.
 
 7. **Polish backlog for the next push (user-approved 2026-07-03 night), in value order:**
-   1. **Social share cards** — og:/twitter: meta + one branded share image; links will live in
-      expat Facebook groups/WhatsApp and previews are currently bare. Cheap, high leverage.
+   1. **Social share cards — SHIPPED 2026-07-04.** components/Seo.tsx (full og:/twitter set on
+      every public page) + public/og-card.png from scripts/gen-share-card.mjs (brand geometry).
    2. **JSON-LD on the guide pages** — Article/FAQ structured data; the SEO follow-through on
       the 60 pages.
    3. **Curated prose per guide — SHIPPED 2026-07-04.** core/guide-prose.ts (60 explainers) + digit-lint test (prose digits ⊆ title digits, invariant 3 mechanized) + prose-first meta descriptions.

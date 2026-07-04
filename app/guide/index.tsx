@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter, Link } from 'expo-router';
-import Head from '@/components/SeoHead';
+import Seo from '@/components/Seo';
 import { palette } from '@/constants/Colors';
 import { GUIDES, CATEGORY_LABEL, CATEGORY_ORDER, shortClause } from '@/core/guide-content';
 import { SEV_COLOR, SEV_LABEL } from '@/lib/plan-format';
@@ -21,14 +21,11 @@ export default function GuideIndex() {
 
   return (
     <ScrollView style={styles.scroll}>
-      <Head>
-        <title>Moving to Spain: every step, explained | Camino guides</title>
-        <meta
-          name="description"
-          content={`All ${GUIDES.length} steps of moving to Spain — visas, residency, tax, healthcare, banking and more. What each one is, when it's due, and the official source.`}
-        />
-        <link rel="canonical" href="https://getcamino.app/guide" />
-      </Head>
+      <Seo
+        title="Moving to Spain: every step, explained | Camino guides"
+        description={`All ${GUIDES.length} steps of moving to Spain — visas, residency, tax, healthcare, banking and more. What each one is, when it's due, and the official source.`}
+        canonical="https://getcamino.app/guide"
+      />
       <NavBar />
       <View style={styles.content}>
 

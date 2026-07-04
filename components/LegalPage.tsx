@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import Head from '@/components/SeoHead';
+import Seo from '@/components/Seo';
 import { palette } from '@/constants/Colors';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
@@ -15,11 +15,7 @@ export default function LegalPage({ title, metaTitle, description, canonical, up
 }) {
   return (
     <ScrollView style={styles.scroll}>
-      <Head>
-        <title>{metaTitle}</title>
-        <meta name="description" content={description} />
-        <link rel="canonical" href={canonical} />
-      </Head>
+      <Seo title={metaTitle} description={description} canonical={canonical} />
       <NavBar />
       <View style={styles.content}>
         <Text style={styles.title}>{title}</Text>

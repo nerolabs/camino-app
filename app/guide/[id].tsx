@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, useRouter, Link } from 'expo-router';
-import Head from '@/components/SeoHead';
+import Seo from '@/components/Seo';
 import { palette } from '@/constants/Colors';
 import {
   guideById, titleById, describeTiming, metaDescription, related, shortClause, CATEGORY_LABEL,
@@ -44,11 +44,11 @@ export default function GuidePage() {
 
   return (
     <ScrollView style={styles.scroll}>
-      <Head>
-        <title>{`${shortClause(g.title)} — moving to Spain | Camino`}</title>
-        <meta name="description" content={metaDescription(g)} />
-        <link rel="canonical" href={`https://getcamino.app/guide/${g.id}`} />
-      </Head>
+      <Seo
+        title={`${shortClause(g.title)} — moving to Spain | Camino`}
+        description={metaDescription(g)}
+        canonical={`https://getcamino.app/guide/${g.id}`}
+      />
       <NavBar />
       <View style={styles.content}>
 

@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
 import { palette } from '@/constants/Colors';
-import Head from '@/components/SeoHead';
+import Seo from '@/components/Seo';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 
@@ -74,11 +74,11 @@ const SECTIONS: Section[] = [
 export default function Roadmap() {
   return (
     <ScrollView style={styles.flex} contentContainerStyle={styles.scroll}>
-      <Head>
-        <title>The Camino product roadmap — shipped, next, and honest noes</title>
-        <meta name="description" content="Camino gives you a roadmap, so it's only fair you see ours: just shipped, in progress, next — and what we've decided not to build." />
-        <link rel="canonical" href="https://getcamino.app/how-i-was-built/roadmap" />
-      </Head>
+      <Seo
+        title="The Camino product roadmap — shipped, next, and honest noes"
+        description="Camino gives you a roadmap, so it's only fair you see ours: just shipped, in progress, next — and what we've decided not to build."
+        canonical="https://getcamino.app/how-i-was-built/roadmap"
+      />
       <NavBar />
       <View style={styles.column}>
         <Text style={styles.eyebrow}>WHERE CAMINO IS GOING</Text>

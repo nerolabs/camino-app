@@ -10,7 +10,7 @@ import {
   PHASE_LABELS, PHASE_ICONS, PHASE_ORDER,
   SEV_COLOR, SEV_LABEL, SEV_BLURB, SOURCE_COLOR, SOURCE_SHORT, SOURCE_BLURB,
 } from '@/lib/plan-format';
-import Head from '@/components/SeoHead';
+import Seo from '@/components/Seo';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { capture } from '@/lib/analytics';
@@ -48,11 +48,11 @@ export default function SamplePlanScreen() {
 
   return (
     <ScrollView style={styles.scroll}>
-      <Head>
-        <title>A sample roadmap for moving to Spain | Camino</title>
-        <meta name="description" content="Susan &amp; Tom's real, engine-built relocation roadmap — every step, deadline and official source — so you can see what Camino builds before answering a single question." />
-        <link rel="canonical" href="https://getcamino.app/sample-plan" />
-      </Head>
+      <Seo
+        title="A sample roadmap for moving to Spain | Camino"
+        description="Susan &amp; Tom's real, engine-built relocation roadmap — every step, deadline and official source — so you can see what Camino builds before answering a single question."
+        canonical="https://getcamino.app/sample-plan"
+      />
       <NavBar />
       <View style={styles.content}>
 

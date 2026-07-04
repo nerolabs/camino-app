@@ -4,7 +4,7 @@ import {
   View, Text, ScrollView, TouchableOpacity, Image,
   StyleSheet, Animated,
 } from 'react-native';
-import Head from '@/components/SeoHead';
+import Seo from '@/components/Seo';
 import { palette } from '@/constants/Colors';
 import { useWide } from '@/lib/useWide';
 import NavBar from '@/components/NavBar';
@@ -70,14 +70,11 @@ export default function LandingPage() {
 
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
-      <Head>
-        <title>Camino — your personalized roadmap for moving to Spain</title>
-        <meta
-          name="description"
-          content="Camino turns moving to Spain into a step-by-step roadmap: the right visa, residency, schools, banking and bureaucracy — sequenced for your situation, every official step backed by its government source. Free, about 3 minutes."
-        />
-        <link rel="canonical" href="https://getcamino.app/" />
-      </Head>
+      <Seo
+        title="Camino — your personalized roadmap for moving to Spain"
+        description="Camino turns moving to Spain into a step-by-step roadmap: the right visa, residency, schools, banking and bureaucracy — sequenced for your situation, every official step backed by its government source. Free, about 3 minutes."
+        canonical="https://getcamino.app/"
+      />
 
       <NavBar />
 
