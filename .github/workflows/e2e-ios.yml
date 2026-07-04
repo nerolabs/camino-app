@@ -1,0 +1,83 @@
+# Native E2E: Maestro flows on an iOS simulator (B5's fourth layer).
+#
+# Runs on a standard GitHub macOS runner — free with no minute cap for public repos — and builds
+# the simulator app with `eas build --local`, so NO EAS build credits are consumed. Manual
+# dispatch only: each run costs a couple of live LLM calls (staging) and ~30–45 min of runner
+# time; it's the pre-release gate, not a per-push check.
+#
+# Required repo secrets (user-set):
+#   EXPO_TOKEN                     — EAS access (build --local still authenticates the project)
+#   E2E_SUPABASE_URL               — the STAGING Supabase project URL
+#   E2E_SUPABASE_SERVICE_ROLE_KEY  — the STAGING service-role key (seed script refuses prod)
+name: e2e-ios
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-ios
+  cancel-in-progress: false
+
+jobs:
+  maestro:
+    runs-on: macos-15
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Build simulator app (eas build --local, zero EAS credits)
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          npx eas-cli@latest build --platform ios --profile e2e-test --local \
+            --non-interactive --output ./camino-e2e.tar.gz
+          mkdir -p ./e2e-app && tar -xzf ./camino-e2e.tar.gz -C ./e2e-app
+          APP_PATH=$(find ./e2e-app -maxdepth 2 -name "*.app" | head -1)
+          echo "APP_PATH=$APP_PATH" >> "$GITHUB_ENV"
+          test -n "$APP_PATH"
+
+      - name: Boot simulator and install the app
+        run: |
+          UDID=$(xcrun simctl list devices available -j \
+            | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{const j=JSON.parse(d);const all=Object.values(j.devices).flat().filter(x=>x.isAvailable&&/^iPhone/.test(x.name));console.log(all.length?all[all.length-1].udid:"")})')
+          test -n "$UDID"
+          echo "SIM_UDID=$UDID" >> "$GITHUB_ENV"
+          xcrun simctl boot "$UDID"
+          xcrun simctl bootstatus "$UDID" -b
+          xcrun simctl install "$UDID" "$APP_PATH"
+
+      - name: Install Maestro
+        run: |
+          curl -fsSL "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+
+      - name: Seed E2E user and mint sign-in link (staging only)
+        env:
+          E2E_SUPABASE_URL: ${{ secrets.E2E_SUPABASE_URL }}
+          E2E_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.E2E_SUPABASE_SERVICE_ROLE_KEY }}
+          E2E_REDIRECT_TO: caminoapp://auth-callback
+        run: |
+          node scripts/e2e/seed.mjs > seed.json
+          node -e 'const s=require("./seed.json");if(!s.action_link)process.exit(1)'
+          echo "AUTH_LINK=$(node -e 'console.log(require("./seed.json").action_link)')" >> "$GITHUB_ENV"
+
+      - name: Run Maestro flows
+        run: |
+          maestro test .maestro \
+            -e APP_ID=com.nerolabs.camino \
+            -e AUTH_LINK="$AUTH_LINK" \
+            --format junit --output maestro-report.xml
+
+      - name: Upload failure artifacts (recordings, screenshots, report)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-artifacts
+          path: |
+            ~/.maestro/tests
+            maestro-report.xml

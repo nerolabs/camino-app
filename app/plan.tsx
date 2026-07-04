@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'expo-router';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput, ActivityIndicator, Platform, useWindowDimensions } from 'react-native';
 import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
 import { palette } from '@/constants/Colors';
@@ -77,8 +78,22 @@ function ConsulateBanner({ profile }: { profile: Record<string, unknown> }) {
 }
 
 export default function PlanScreen() {
-  const { profile, setProfile, isStaff } = useProfile();
+  const { profile, setProfile, isStaff, profileLoaded } = useProfile();
   const { user } = useAuth();
+  const router = useRouter();
+
+  // "Loading your roadmap…" must be a moment, never a destination (build-28 family finding:
+  // a cold start with a restored session but no saved answers sat here forever). Once the
+  // profile question is SETTLED and there's nothing to show, go home to start the process —
+  // and if settling itself hangs (offline fetch), stop pretending after 10s and go home too.
+  useEffect(() => {
+    if (profile || !user) return; // signed-out empty state stays a real page (guides/SEO)
+    // Settled-empty → home after a short grace (absorbs the just-signed-in tick where
+    // profileLoaded is still stale-true until SessionSync resets it). Not settled → the
+    // fetch gets 10s before we stop pretending and go home anyway.
+    const t = setTimeout(() => router.replace('/'), profileLoaded ? 1_500 : 10_000);
+    return () => clearTimeout(t);
+  }, [profile, profileLoaded, user, router]);
   const [selected, setSelected] = useState<Objective | null>(null);
   const [dateInput, setDateInput] = useState('');
   const [changeOpen, setChangeOpen] = useState(false);

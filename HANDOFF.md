@@ -145,6 +145,21 @@ user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS bui
     staging + production). User-side layer: Anthropic spend cap + ElevenLabs quota
     (directions given). Turnstile deliberately deferred to the pre-launch-moment.
 
+13. **2026-07-04 (late) — E2E SUITE LIVE + family-testing round 5 fixed.** Backlog #6 A+B
+    executed (user-approved, GitHub-runner path): authed Playwright GREEN (12/12 vs staging;
+    seed `scripts/e2e/seed.mjs` staging-guarded; sessions via generateLink→verifyOtp→
+    storageState; suite's first catch = NavBar hydration #418, fixed with useWide); Maestro
+    flows + e2e-ios.yml written — **needs 3 user-set repo secrets (EXPO_TOKEN,
+    E2E_SUPABASE_URL, E2E_SUPABASE_SERVICE_ROLE_KEY) then dispatch + CI iteration** (no local
+    simulator). Round-5 fixes (web live; native rides BUILD 29): /plan eternal
+    "Loading your roadmap…" → profileLoaded settlement + redirect home (grace 1.5s / failsafe
+    10s); interview spinner TTL (35s askAnthropic abort + own-it retry turn, static-question
+    fallbacks); mic clipping BOTH ends (listening cue on real 'start' event; stop() keeps the
+    final flush, new cancel() discards it on send); composer auto-grows again (multiline +
+    measured height, Enter still sends). A11y round 2 shipped (focus-visible ring).
+    **Build 29 retest list:** mic first/last words at normal pace, box grows while dictating,
+    cold-start lands home when no roadmap, spinner never exceeds ~35s.
+
 **ALSO SPOTTED in ASC (App Store release prep):** the DSA **trader status** must be completed
 (ASC → Business banner) or EU distribution is blocked — Spain IS the market. Add to the
 submission checklist (user action, needs their trader info).

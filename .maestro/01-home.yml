@@ -1,0 +1,10 @@
+# P0: the app launches and the home screen renders.
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "Build my free roadmap.*"
+    timeout: 20000
+- assertVisible: "Get Camino.*"
+- assertVisible: ".*sample roadmap.*"

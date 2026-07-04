@@ -54,8 +54,18 @@ command** (credits).
    exemption path — see Phase 5 launch item). User completed the provider caps 2026-07-04
    (Anthropic monthly spend limit + ElevenLabs overage OFF) — all three layers live; strict
    CORS confirmed propagated to getcamino.app.
-6. **Native E2E (Maestro) + authed-flow test strategy** — **PLAN DRAFTED 2026-07-04, awaiting
-   user go (do not execute until approved).** Research verified: Maestro CLI is free/OSS;
+6. **Native E2E (Maestro) + authed-flow test strategy** — **Phase A SHIPPED + Phase B code
+   COMPLETE 2026-07-04 (user approved A+B, GitHub-runner path).** Phase A: authed Playwright
+   suite live — 12 tests / ~12s vs staging (public smoke refreshed + setup + 5 authed:
+   saved roadmap, This-week, mark-done/undo, no-op honesty, sign-out); seed script
+   `scripts/e2e/seed.mjs` (staging-guarded, e2e@getcamino.app, fixture reset each run,
+   welcome/weekly emails pre-suppressed); session captured via admin.generateLink →
+   verifyOtp → storageState. First catch: NavBar hydration error #418 (fixed via useWide).
+   Phase B: `.maestro/` P0 flows + `.github/workflows/e2e-ios.yml` (macos-15, `eas build
+   --local` = zero credits, junit + failure recordings). **REMAINING: user adds 3 repo
+   secrets (EXPO_TOKEN, E2E_SUPABASE_URL, E2E_SUPABASE_SERVICE_ROLE_KEY) → first
+   workflow_dispatch → iterate flows on CI (no local simulator; expect 2–4 rounds).**
+   *(Original plan below for reference.)* Research verified: Maestro CLI is free/OSS;
    EAS Workflows has first-class `type: maestro` jobs BUT consumes build credits; GitHub
    Actions standard macOS runners are FREE with no minute cap for public repos (ours is) —
    `eas build --local --profile e2e-test` (ios.simulator, withoutCredentials) there = zero

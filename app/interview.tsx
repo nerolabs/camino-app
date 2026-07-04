@@ -179,6 +179,7 @@ export default function InterviewScreen() {
   const [profile, setProfile] = useState<Profile>({});
   const [currentSlot, setCurrentSlot] = useState<Slot | null>(null);
   const [input, setInput] = useState('');
+  const [inputHeight, setInputHeight] = useState(0); // measured composer content height (auto-grow)
   const [loading, setLoading] = useState(false);
   const [started, setStarted] = useState(false);
   const [done, setDone] = useState(false);
@@ -261,7 +262,8 @@ export default function InterviewScreen() {
     setLoading(true);
     const slot = nextSlot({});
     if (!slot) { setDone(true); setLoading(false); return; }
-    const lola = await phraseQuestion(slot, [], arrivedFrom ? shortClause(arrivedFrom.title) : undefined);
+    const lola = await phraseQuestion(slot, [], arrivedFrom ? shortClause(arrivedFrom.title) : undefined)
+      .catch(() => STATIC_QUESTIONS[slot.field] ?? `Could you tell me about ${slot.prompt_hint}?`);
     setCurrentSlot(slot);
     setTurns([{ role: 'lola', text: lola }]);
     setLoading(false);
@@ -269,11 +271,15 @@ export default function InterviewScreen() {
 
   async function submit(text: string) {
     if (!currentSlot || !text.trim() || loading) return;
-    if (dictation.listening) dictation.stop(); // stop dictation when the answer is sent
+    // CANCEL (not stop) dictation: the recognizer's final async flush must be discarded here,
+    // or it re-fills the input we're about to clear (build-27/28 family findings).
+    if (dictation.listening) dictation.cancel();
     setInput('');
+    setInputHeight(0); // shrink the composer back to one line
     setLoading(true);
     setTurns(prev => [...prev, { role: 'user', text }]);
 
+    try {
     const remainingSlots = SLOTS.filter(s => !(s.field in profile) && s.field !== currentSlot.field);
     const result = await extractAnswer(currentSlot, text, turns, remainingSlots);
 
@@ -288,7 +294,6 @@ export default function InterviewScreen() {
       const reply = await phraseClarify(currentSlot, text, turns, result.clarify, reask)
         .catch(() => `Sorry, I didn't quite catch that. ${reask}`);
       setTurns(prev => [...prev, { role: 'lola', text: reply || `Sorry, I didn't quite catch that. ${reask}` }]);
-      setLoading(false);
       return;
     }
 
@@ -323,15 +328,28 @@ export default function InterviewScreen() {
       }]);
       setDone(true);
       setTimeout(() => router.push('/plan'), 1800);
-      setLoading(false);
       return;
     }
 
-    const lola = await phraseQuestion(next, [...turns, { role: 'user', text }]);
+    // The next question must arrive even when the LLM doesn't — the static question is the
+    // deterministic fallback (same interview, less charm).
+    const lola = await phraseQuestion(next, [...turns, { role: 'user', text }])
+      .catch(() => STATIC_QUESTIONS[next.field] ?? `Could you tell me about ${next.prompt_hint}?`);
     setCurrentSlot(next);
     setTurns(prev => [...prev, { role: 'lola', text: lola }]);
-    setLoading(false);
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
+    } catch (e) {
+      // Extraction failed or timed out: own it, restore their answer so nothing is retyped,
+      // and let them send again. The spinner must never be a destination (build-28 finding).
+      capture('interview_turn_failed', { field: currentSlot.field });
+      setTurns(prev => [...prev, {
+        role: 'lola',
+        text: 'Sorry — that took longer than it should have. Your answer is still in the box; mind sending it again?',
+      }]);
+      setInput(text);
+    } finally {
+      setLoading(false);
+    }
   }
 
   if (!started) {
@@ -438,12 +456,25 @@ export default function InterviewScreen() {
             <View style={styles.inputRow}>
               <TextInput
                 ref={inputRef}
-                style={styles.input}
+                style={[styles.input, { height: Math.min(120, Math.max(38, inputHeight)) }]}
                 value={input}
                 onChangeText={setInput}
                 placeholder={dictation.listening ? 'Listening…' : 'Type your answer…'}
                 placeholderTextColor={palette.muted}
+                // Grows with the answer (regressed at some point — long dictated answers were
+                // stuck in a one-line box). Multiline + measured content height, capped at ~5
+                // lines; Enter still SENDS (submitBehavior on native, key handler on web).
+                multiline
+                onContentSizeChange={e => setInputHeight(e.nativeEvent.contentSize.height + 16)}
+                submitBehavior="submit"
                 onSubmitEditing={() => submit(input)}
+                onKeyPress={(e) => {
+                  const ne = e.nativeEvent as { key?: string; shiftKey?: boolean };
+                  if (Platform.OS === 'web' && ne.key === 'Enter' && !ne.shiftKey) {
+                    (e as { preventDefault?: () => void }).preventDefault?.();
+                    submit(input);
+                  }
+                }}
                 returnKeyType="send"
                 editable={!loading}
               />
@@ -459,6 +490,7 @@ export default function InterviewScreen() {
               )}
               <TouchableOpacity
                 style={[styles.sendBtn, (!input.trim() || loading) && styles.sendBtnDisabled]}
+                accessibilityLabel="Send your answer"
                 onPress={() => submit(input)}
                 disabled={!input.trim() || loading}
               >
@@ -507,7 +539,7 @@ const styles = StyleSheet.create({
   lolaText:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.indigo, lineHeight: 22 },
   userText:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.cal,   lineHeight: 22 },
   inputRow:  {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
+    flexDirection: 'row', alignItems: 'flex-end', gap: 8,
     marginTop: 12, backgroundColor: '#FFFFFF',
     borderRadius: 28, borderWidth: 1, borderColor: '#E0DCD4',
     paddingLeft: 6, paddingRight: 6, paddingVertical: 6,

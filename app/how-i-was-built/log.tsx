@@ -393,6 +393,25 @@ const ROWS: Row[] = [
     ],
   },
   {
+    feature: 'The robots test the app now',
+    date: '4 Jul 2026',
+    work: 'End-to-end tests grew up: the web suite now signs in as a seeded test user (through the real magic-link machinery, no inbox involved) and walks the journeys that matter — saved roadmap, the week view, mark-done and undo, the no-op honesty gate, sign out. Twelve tests, twelve seconds, against the live staging site. Native flows are written for the iOS simulator and run on a free CI runner with zero build credits. First catch, before it even finished: a React hydration error firing on every page load (the nav wordmark rendered differently on server and client).',
+    decisions: [
+      'Tests sign in through the same code path real magic links use — a test-only backdoor would test the backdoor.',
+      'The test user lives ONLY in staging, and the seed script hard-refuses to run against production.',
+      'Runs are manual + pre-release, not per-push: each one spends real LLM calls, and our own rate limits apply to us too.',
+    ],
+  },
+  {
+    feature: 'A spinner is a moment, not a destination',
+    date: '4 Jul 2026',
+    work: 'Family testing round five, all fixed: the app could cold-start into an eternal "Loading your roadmap…" (it now knows when there\'s nothing to load and takes you home); an interview answer could spin forever if the network hung (35-second limit, then Lola owns it and your answer is back in the box to resend); the microphone cue now appears when the mic is actually hot — so fast talkers stop losing their first words — and tapping it off keeps your last words instead of discarding them; and the answer box grows again as you dictate.',
+    decisions: [
+      'Every waiting state needs an exit: a timeout, a fallback, or a redirect — nothing may wait forever.',
+      'Two ways to end dictation, deliberately: mic-off KEEPS the recognizer\'s final flush (your last words); send DISCARDS it (it would refill the box that just cleared).',
+    ],
+  },
+  {
     feature: 'Keyboard focus you can see',
     date: '4 Jul 2026',
     work: 'Tab through any page and an amber ring — the brand\'s waypoint color — shows exactly where you are. Keyboard users get the ring; mouse and touch clicks don\'t.',

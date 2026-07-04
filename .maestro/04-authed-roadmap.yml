@@ -1,0 +1,22 @@
+# P0 authed: sign in through the REAL magic-link deep-link flow (AUTH_LINK is minted by
+# scripts/e2e/seed.mjs with redirect_to=caminoapp://auth-callback), then the seeded roadmap
+# renders and a step sheet opens. iOS may interpose an "Open in …?" dialog after the Safari
+# redirect — handled as an optional tap.
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- openLink: ${AUTH_LINK}
+- runFlow:
+    when:
+      visible: "Open"
+    commands:
+      - tapOn: "Open"
+- extendedWaitUntil:
+    visible: "Your roadmap"
+    timeout: 45000
+- assertVisible: "Obtain your NIE.*"
+- tapOn: "Obtain your NIE.*"
+- extendedWaitUntil:
+    visible: ".*Mark done"
+    timeout: 15000

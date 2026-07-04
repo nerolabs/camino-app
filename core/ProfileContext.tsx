@@ -9,6 +9,11 @@ type ProfileContextValue = {
   // (test personas, the webinar cross-check link). Defaults false; set by an admin in the DB.
   isStaff: boolean;
   setIsStaff: (v: boolean) => void;
+  // Has SessionSync SETTLED the profile question for the current auth state? "profile is null"
+  // alone can't distinguish "still fetching" from "this account has nothing saved" — which left
+  // /plan showing "Loading your roadmap…" forever (build-28 family finding).
+  profileLoaded: boolean;
+  setProfileLoaded: (v: boolean) => void;
 };
 
 const ProfileContext = createContext<ProfileContextValue>({
@@ -16,13 +21,18 @@ const ProfileContext = createContext<ProfileContextValue>({
   setProfile: () => {},
   isStaff: false,
   setIsStaff: () => {},
+  profileLoaded: false,
+  setProfileLoaded: () => {},
 });
 
 export function ProfileProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isStaff, setIsStaff] = useState(false);
+  const [profileLoaded, setProfileLoaded] = useState(false);
   return (
-    <ProfileContext.Provider value={{ profile, setProfile, isStaff, setIsStaff }}>
+    <ProfileContext.Provider
+      value={{ profile, setProfile, isStaff, setIsStaff, profileLoaded, setProfileLoaded }}
+    >
       {children}
     </ProfileContext.Provider>
   );

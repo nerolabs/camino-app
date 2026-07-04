@@ -32,9 +32,10 @@ let welcomeRequestedFor: string | null = null;
 // staff-only webinar links could vanish: the in-memory context reset and nothing reloaded it.
 function SessionSync() {
   const { user } = useAuth();
-  const { setProfile, setIsStaff } = useProfile();
+  const { setProfile, setIsStaff, setProfileLoaded } = useProfile();
   useEffect(() => {
-    if (!user) { setIsStaff(false); return; }
+    if (!user) { setIsStaff(false); setProfileLoaded(true); return; }
+    setProfileLoaded(false); // (new) signed-in user — the fetch below settles it either way
     (async () => {
       // "Email me my roadmap": a brand-new account carries the signed-out interview answers
       // in auth metadata (set at signInWithOtp time). Adopt them into the profiles table on
@@ -50,6 +51,7 @@ function SessionSync() {
       const { answers, isStaff } = await loadProfileRow(user.id);
       setIsStaff(isStaff);
       if (answers) { derive(answers); setProfile(answers); }
+      setProfileLoaded(true); // settled: either answers landed above, or there's nothing saved
 
       // Welcome email, once ever — the server re-checks welcomed_at with the service role
       // (claiming it before the send), and the module guard above stops same-page-load refires.
@@ -64,7 +66,7 @@ function SessionSync() {
           }).catch(() => {});
         }
       }
-    })();
+    })().finally(() => setProfileLoaded(true)); // throw-safe: the question is settled either way
     // Key on the id, not the object: USER_UPDATED / TOKEN_REFRESHED hand back new user objects
     // for the same account, and re-running this effect for those only invites duplicate work.
   }, [user?.id]);

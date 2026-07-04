@@ -1,0 +1,13 @@
+# P0: the sample plan renders from the real engine (no account, no LLM).
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: ".*sample roadmap.*"
+    timeout: 20000
+- tapOn: ".*sample roadmap.*"
+- extendedWaitUntil:
+    visible: "SAMPLE ROADMAP"
+    timeout: 20000
+- assertVisible: ".*Susan.*"

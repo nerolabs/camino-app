@@ -1,0 +1,107 @@
+// E2E test-identity seeder — STAGING ONLY. Creates/resets the shared test user and mints a
+// fresh magic sign-in link, printing JSON to stdout:
+//   { email, user_id, action_link, hashed_token }
+//
+// Consumers:
+//  - tests-e2e/auth.setup.ts (web): exchanges hashed_token for a session via verifyOtp, then
+//    persists it as Playwright storageState.
+//  - .github/workflows/e2e-ios.yml (native): passes action_link to Maestro, which opens it —
+//    riding the app's REAL caminoapp://auth-callback deep-link session flow.
+//
+// Env: E2E_SUPABASE_URL + E2E_SUPABASE_SERVICE_ROLE_KEY (falls back to EXPO_PUBLIC_SUPABASE_URL /
+// SUPABASE_SERVICE_ROLE_KEY so a pulled preview env works locally). Hard-refuses production.
+
+import { createClient } from '@supabase/supabase-js';
+
+const URL_ = process.env.E2E_SUPABASE_URL ?? process.env.EXPO_PUBLIC_SUPABASE_URL;
+const KEY = process.env.E2E_SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
+const EMAIL = process.env.E2E_EMAIL ?? 'e2e@getcamino.app';
+// Where the magic link lands after Supabase verifies it. Default: the staging web app (web
+// tests don't follow the link anyway); the iOS workflow overrides with caminoapp://auth-callback.
+const REDIRECT_TO = process.env.E2E_REDIRECT_TO ?? 'https://camino--staging.expo.app';
+
+if (!URL_ || !KEY) {
+  console.error('seed: missing E2E_SUPABASE_URL / E2E_SUPABASE_SERVICE_ROLE_KEY');
+  process.exit(1);
+}
+// The one rule that must never break: E2E never touches the production database.
+if (URL_.includes('oftrpaleqtmuvolwsocd')) {
+  console.error('seed: REFUSING to run against the PRODUCTION Supabase project');
+  process.exit(1);
+}
+
+// Deterministic fixture: US-only NLV couple, address + region known, citizenship track on.
+// Mirrors persona fields (all validated against SLOTS by `npm run audit` on the personas) and
+// guarantees stable assertions: NIE applies (non-EU), empadronamiento applies (address),
+// regional flags render (madrid), plan has firm-ish dates (fixed arrival).
+const FIXTURE_ANSWERS = {
+  nationalities: ['US'],
+  work_situation: 'passive_income',
+  annual_income_eur_band: '€34k–€60k',
+  has_spouse_or_partner: true,
+  partner_is_married: true,
+  has_children: false,
+  intends_long_stay: true,
+  arrival_date: '2026-10-15',
+  has_spanish_address: true,
+  owns_or_drives: true,
+  owns_property_in_spain: false,
+  knows_where_to_live: true,
+  region: 'madrid',
+  has_pets: false,
+  foreign_assets_eur_band: '€50k–€200k',
+  us_resident: true,
+  previously_ex_spanish_colony_nationality: false,
+  wants_citizenship: true,
+};
+
+const admin = createClient(URL_, KEY, { auth: { autoRefreshToken: false, persistSession: false } });
+
+async function findUser(email) {
+  // listUsers is paginated; the test project is small, one page is plenty.
+  const { data, error } = await admin.auth.admin.listUsers({ page: 1, perPage: 200 });
+  if (error) throw error;
+  return data.users.find(u => u.email?.toLowerCase() === email.toLowerCase()) ?? null;
+}
+
+const nowIso = new Date().toISOString();
+let user = await findUser(EMAIL);
+if (!user) {
+  const { data, error } = await admin.auth.admin.createUser({
+    email: EMAIL,
+    email_confirm: true,
+    // Pre-mark email bookkeeping so the E2E account never triggers welcome/weekly sends.
+    user_metadata: { welcomed_at: nowIso, weekly_optout: true },
+  });
+  if (error) throw error;
+  user = data.user;
+} else {
+  const { error } = await admin.auth.admin.updateUserById(user.id, {
+    user_metadata: { ...user.user_metadata, welcomed_at: user.user_metadata?.welcomed_at ?? nowIso, weekly_optout: true },
+  });
+  if (error) throw error;
+}
+
+// Reset to the fixture every run — this IS the determinism: progress and any prior test
+// mutations are wiped by overwriting `answers` wholesale.
+{
+  const { error } = await admin.from('profiles').upsert(
+    { user_id: user.id, answers: FIXTURE_ANSWERS, updated_at: nowIso },
+    { onConflict: 'user_id' },
+  );
+  if (error) throw error;
+}
+
+const { data: link, error: linkErr } = await admin.auth.admin.generateLink({
+  type: 'magiclink',
+  email: EMAIL,
+  options: { redirectTo: REDIRECT_TO },
+});
+if (linkErr) throw linkErr;
+
+console.log(JSON.stringify({
+  email: EMAIL,
+  user_id: user.id,
+  action_link: link.properties?.action_link ?? null,
+  hashed_token: link.properties?.hashed_token ?? null,
+}));

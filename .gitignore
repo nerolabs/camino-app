@@ -48,3 +48,6 @@ yarn-error.*
 # test artifacts
 playwright-report/
 test-results/
+
+# Playwright captured auth state (contains a live staging session)
+tests-e2e/.auth/

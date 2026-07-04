@@ -1,0 +1,24 @@
+# P0: the interview actually starts — one live LLM round-trip phrases question 1, and a typed
+# answer is extracted so question 2 appears. Anchors on the deterministic progress label
+# ("Question N of ~M"), never on Lola's LLM-phrased wording.
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "Build my free roadmap.*"
+    timeout: 20000
+- tapOn: "Build my free roadmap.*"
+- extendedWaitUntil:
+    visible: "Hola, I'm Lola.*"
+    timeout: 20000
+- tapOn: "Let's get started"
+- extendedWaitUntil:
+    visible: "Question 1 of.*"
+    timeout: 60000
+- tapOn: "Type your answer.*"
+- inputText: "I'm a US citizen"
+- tapOn: "Send your answer"
+- extendedWaitUntil:
+    visible: "Question 2 of.*"
+    timeout: 60000

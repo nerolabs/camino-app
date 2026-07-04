@@ -9,19 +9,35 @@
       "distribution": "internal",
       "channel": "development",
       "environment": "development",
-      "env": { "EXPO_PUBLIC_API_URL": "https://getcamino.app" }
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://getcamino.app"
+      }
     },
     "preview": {
       "distribution": "internal",
       "channel": "preview",
       "environment": "preview",
-      "env": { "EXPO_PUBLIC_API_URL": "https://getcamino.app" }
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://getcamino.app"
+      }
     },
     "production": {
       "autoIncrement": true,
       "channel": "production",
       "environment": "production",
-      "env": { "EXPO_PUBLIC_API_URL": "https://getcamino.app" }
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://getcamino.app"
+      }
+    },
+    "e2e-test": {
+      "withoutCredentials": true,
+      "environment": "preview",
+      "ios": {
+        "simulator": true
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://camino--staging.expo.app"
+      }
     }
   },
   "submit": {

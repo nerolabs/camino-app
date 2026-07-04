@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, Pressable, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, Pressable, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
+import { useWide } from '@/lib/useWide';
 import SignInButtons from '@/components/SignInButtons';
 import FeedbackDialog from '@/components/FeedbackDialog';
 import DeleteAccountDialog from '@/components/DeleteAccountDialog';
@@ -11,14 +12,16 @@ import DeleteAccountDialog from '@/components/DeleteAccountDialog';
 // One nav for every width (user decision 2026-07-03: desktop gets the burger too — parity with
 // mobile, and Sign out declutters into the menu). Actions stay on the bar (Sign in / CTA / ☰);
 // browsing (Home / How it works / Sample plan — and, later, the SEO content sections) plus
-// Sign out live in the burger menu. Only the logo text responds to width.
-const WIDE = 768;
+// Sign out live in the burger menu. Only the logo text responds to width — via useWide, whose
+// SSR default matches the first client render (raw useWindowDimensions here made the server
+// and client disagree on the wordmark TEXT → React hydration error #418 on every page,
+// caught by the Playwright error tracker 2026-07-04).
 
 export default function NavBar() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { user, signOut } = useAuth();
-  const { width } = useWindowDimensions();
+  const wide = useWide();
   const [menuOpen, setMenuOpen] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -36,7 +39,7 @@ export default function NavBar() {
           The MENU items stay fully scalable; only the one-line bar is capped. */}
       <TouchableOpacity onPress={() => router.push('/')} style={styles.logoWrap} accessibilityRole="link" accessibilityLabel="Get Camino home">
         <Text style={styles.logo} numberOfLines={1} maxFontSizeMultiplier={1.1}>
-          {width < WIDE ? 'Get Camino' : 'Get Camino: Your Road to Spain'}
+          {wide ? 'Get Camino: Your Road to Spain' : 'Get Camino'}
         </Text>
       </TouchableOpacity>
 

@@ -67,10 +67,15 @@ test('sample plan renders the full read-only roadmap + interview CTA', async ({ 
   expect(errors).toEqual([]);
 });
 
-test('robots.txt disallows the unlisted blog; sitemap route is gone', async ({ request }) => {
+test('robots.txt is open (blog un-gated 2026-07-03) and points at the sitemap', async ({ request }) => {
   const robots = await request.get('/robots.txt');
   expect(robots.status()).toBe(200);
-  expect(await robots.text()).toContain('Disallow: /how-i-was-built');
-  const sitemap = await request.get('/_sitemap');
-  expect(sitemap.status()).toBe(404);
+  const body = await robots.text();
+  expect(body).not.toContain('Disallow: /how-i-was-built'); // public by user decision
+  expect(body).toContain('Sitemap:');
+  const sitemap = await request.get('/sitemap.xml');
+  expect(sitemap.status()).toBe(200);
+  expect(await sitemap.text()).toContain('/guide/');
+  const autoSitemap = await request.get('/_sitemap'); // Expo's route index stays off
+  expect(autoSitemap.status()).toBe(404);
 });

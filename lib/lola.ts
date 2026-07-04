@@ -8,6 +8,10 @@
 
 const API_BASE = process.env.EXPO_PUBLIC_API_URL ?? '';
 
+// A stuck request must never become a stuck spinner (build-28 family finding: 30+s of
+// spinner mid-interview). Normal turns answer in 1–4s; anything past this is dead.
+const TIMEOUT_MS = 35_000;
+
 export type LolaMessage = { role: 'user' | 'assistant'; content: string };
 
 export async function askAnthropic(opts: {
@@ -16,12 +20,19 @@ export async function askAnthropic(opts: {
   model?: string;
   max_tokens?: number;
 }): Promise<string> {
-  const res = await fetch(`${API_BASE}/api/lola`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(opts),
-  });
-  if (!res.ok) throw new Error(`lola proxy ${res.status}`);
-  const data = (await res.json()) as { text?: string };
-  return data.text ?? '';
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
+  try {
+    const res = await fetch(`${API_BASE}/api/lola`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(opts),
+      signal: ctrl.signal,
+    });
+    if (!res.ok) throw new Error(`lola proxy ${res.status}`);
+    const data = (await res.json()) as { text?: string };
+    return data.text ?? '';
+  } finally {
+    clearTimeout(t);
+  }
 }
