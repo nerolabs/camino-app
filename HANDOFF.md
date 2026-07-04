@@ -297,16 +297,13 @@ the unified hamburger nav. Android deferred to the very end; localization sequen
 - Verify before claiming: deploys checked live (curl/browser), engine changes get a persona run,
   TestFlight builds get on-device confirmation from the user.
 
-## What's next (see TODO.md for detail)
+## What's next
 
-1. **Email loop: DONE.** **60 guide pages: DONE.** **Build 18: submitted to TestFlight.**
-2. **User device-tests build 18** — native email sign-in + the Apple retry (2FA check / second
-   Apple ID; see resume block).
-3. **The three pre-release features (user priority 2026-07-03):** ~~"This week" view~~ (SHIPPED
-   2026-07-03: `core/this-week.ts` + toggle on /plan) → **roadmap PDF export (NEXT)** →
-   region-aware steps. All land before the App Store push, which is ALSO gated on significant
-   family testing / edge-case cleanup. **Reminders/push: STRUCK** (user decision — the weekly
-   email is the retention loop).
-4. Later: guide-page polish (JSON-LD, curated prose); per-step problem-report link.
-5. App Store submission (screenshots/age-rating/copyright are user-side; see docs/APP_STORE.md).
-6. Monetization at the very end (affiliate programs first); localization last.
+**Canonical priority order = TODO.md → "🎯 THE SEQUENCED BACKLOG" (full audit 2026-07-04).**
+Six phases: (1) verify what's built — build 27 on user command, device verification, family
+testing (THE release gate), source-link QA; (2) hardening — API volume-limiting (site is now
+public+indexed; overdue), Maestro/authed E2E, a11y round 2; (3) store paperwork — legal entity
+swap (hard gate), ASC fields, screenshots, bus-factor hour; (4) submission; (5) growth —
+region specifics content pass, regulatory changelog, SEO expansion, share links, launch
+moment; (6) the tail — Android, localization, monetization. Immediate next action: **user
+kicks build 27**, then Phase 1 verification.

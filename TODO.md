@@ -3,7 +3,7 @@
 Living list of what we're tracking against. Update as work moves. Newest context at top.
 See `HANDOFF.md` for the fuller picture and `core/SOURCING.md` for obligation provenance.
 
-Last updated: 2026-07-01.
+Last updated: 2026-07-04 (full backlog audit + resequencing).
 
 ## 🔒 Security — TOP PRIORITY
 
@@ -11,12 +11,105 @@ Last updated: 2026-07-01.
       push and before sharing the repo. Standing guarantees: `.env` is gitignored; the Anthropic
       key now lives server-side only (`app/api/lola+api.ts`). Quick audit:
       `git ls-files | grep -iE '(^|/)\.env'` → empty, and `git grep -I 'sk-ant-' HEAD` → no matches.
-      **Last audited 2026-07-01: CLEAN** — `.env` never committed; no `sk-ant-` keys in any tracked
-      file or in full history; the one `eyJ…` match in `package-lock.json` is an npm integrity hash,
-      not a secret. Also confirm the Supabase URL/anon key are the only `EXPO_PUBLIC_` values (anon
-      key is public-safe under RLS).
+      **Last audited 2026-07-04: CLEAN** — no `.env` tracked; no `sk-ant-`, Resend-key (`re_…`) or
+      JWT patterns in any tracked file (TODO.md's own audit-command text self-matches, benign;
+      `SUPABASE_SERVICE_ROLE_KEY` appears only as `process.env` reads in API routes). Supabase
+      URL/anon key remain the only `EXPO_PUBLIC_` values (public-safe under RLS).
 
-## 🥇 Priority order (set by user 2026-07-02)
+## 🎯 THE SEQUENCED BACKLOG — canonical priority order (full audit 2026-07-04)
+
+Every open item from this file, HANDOFF.md, docs/STRATEGY.md, docs/APP_STORE.md,
+docs/MONITORING.md and code markers, audited and resequenced. Detail lives in the numbered
+sections below (referenced as "item N"). Supersedes all earlier ordering in this file.
+
+**Standing (every batch, never leaves):** security audit above · update both homework pages
+per release (CLAUDE.md rule) · consult/backtest docs/STRATEGY.md · **EAS builds only on user
+command** (credits).
+
+### Phase 1 — Verify what's already built (NOW; blocks everything downstream)
+1. **Build 27** *(awaits user go)* — batch riding: TTS volume root-fix v2 (session
+   mode/deactivation — UNVERIFIED), delete-my-account in the native menu, the region interview
+   question, PDF print margins, keyboard-aware sheets/dialogs.
+2. **Device-verify build 27**: volume steady across turns · region Q + "WHERE YOU LIVE MATTERS"
+   sheet · delete-account on iOS · PDF margins on paper · **universal links on a FRESH install**
+   (AASA is cached at install — never yet device-verified) · Apple sign-in still reliable.
+3. **Family testing round 3+** (user + Cristina, on 27) — THE release gate (user decision);
+   triage via Report-a-problem, fix rounds as they land.
+4. **Source-link QA click-test** — spot-check all 55 official `source_url`s render the right
+   page (launch-final QA remnant of old priority #4; Claude can browser-drive this).
+
+### Phase 2 — Harden before more public exposure (parallel with Phase 1; MUST precede any
+### launch moment and the store release)
+5. **Real volume-limiting on `/api/lola` + `/api/tts`** (item: Deployment → harden). The
+   origin allowlist is fail-open on the Workers runtime and the site is now PUBLIC and indexed
+   (robots un-gated 2026-07-03) — the old "fine for an unlisted family test" condition no
+   longer holds. Decide + ship: Turnstile on interview start, a KV-backed counter, or an edge
+   WAF rule.
+6. **Native E2E (Maestro) + authed-flow test strategy** (B5's deferred fourth layer —
+   "revisit pre-launch" = now). Needs: simulator/cloud infra choice, a Supabase test-user or
+   auth-bypass strategy, and extending Playwright to authed web flows (sign-in → saved plan →
+   re-model). Design first, then implement. Protects every release train after v1.
+7. **A11y round 2** — focus-visible styles + full audit (small; ride-along).
+8. **Monitoring tune-up** (small): per-surface Sentry alert rules; optional backend latency
+   tracing; refresh docs/MONITORING.md's stale "native (next)" section.
+
+### Phase 3 — Store paperwork (user-heavy; runs parallel to Phases 1–2; converges on submission)
+9. **[USER] Create the real legal entity** (+ @getcamino.app mailbox) → then replace the
+   TEMPORARY values (Proxim.us / Vashon PO box / nerolabs@gmail.com) in /privacy, /terms,
+   /aviso-legal, the feedback route's inbox, and the ASC legal entity (item 6b — HARD
+   pre-submission gate). Eventual professional legal-review pass stays queued (at revenue).
+10. **[USER] ASC housekeeping**: paste https://getcamino.app/privacy into the privacy-policy
+    URL field · DSA trader status (blocks EU distribution) · fix the display name — currently
+    "Camino (51e654)", target "Camino: Your Road to Spain" · age-rating questionnaire (expect
+    4+) · copyright line.
+11. **Screenshots + metadata**: user captures the 5-shot story on build 27+ (docs/APP_STORE.md
+    has the shot list), Claude frames/annotates; paste metadata + privacy-nutrition answers
+    (all drafted in docs/APP_STORE.md).
+12. **[USER] Bus-factor hour**: credentials → password manager + trusted second person; second
+    admin on Apple + Supabase. Biggest continuity risk; do it before release makes it real.
+13. **[USER] Gestor consult** (US LLC managed from Spain — PE/autónomo) + **trademark search**
+    ("Camino", software classes) — must precede brand spend / the launch moment; may trail
+    submission.
+
+### Phase 4 — 🚀 App Store submission (gate: Phases 1–3 complete)
+14. Attach the final build, submit for review (review notes drafted in docs/APP_STORE.md);
+    expect a rejection cycle or two. Google Play stays deferred (Phase 6).
+
+### Phase 5 — Post-release growth (STRATEGY.md order, re-validated 2026-07-04)
+15. **Region-by-region specifics content pass** — ITP rates / wealth-tax allowances / school
+    windows per comunidad, EACH verified against that region's own official source (17× —
+    invariant 3); renders under the shipped regional flags. Deepens the moat + SEO.
+16. **Public regulatory changelog + "last verified" stamps** — publish catalog diffs with
+    sources; feeds the weekly email; doubles as the correction process (the PR defense).
+    Most linkable asset in the space.
+17. **SEO expansion**: question-shaped pages from catalog data ("NLV income requirement 2026")
+    + 3–5 persona sample plans.
+18. **Read-only roadmap share link** (every share is a landing page).
+19. **The launch moment**: seed communities with sourced guide links (share cards ready),
+    webinar-creator partnerships (warm list; MovingToSpain.com clear-eyed), Product Hunt / HN —
+    only AFTER #5 (abuse limiting) and with the "built in 4 days" pre-emption paragraph
+    written first. `webinar_url` → user-facing rides a MovingToSpain partnership if it lands.
+20. **Uniqueness bets** (cheap on a deterministic engine): timeline simulation (arrive March
+    vs Sept) · move-budget view (official fees) · cita checklists (what to bring).
+21. **"My account" page** (item 6c) — email prefs + delete-account move out of the hamburger
+    once account options accumulate.
+22. **Small polish, parked**: context-aware "what changed" placeholder (plan.tsx changeBox) ·
+    per-step problem-report link · scout-step prominence/coaching depth · a real blog surface.
+
+### Phase 6 — The tail (explicitly sequenced last by user)
+23. **Android**: verify the existing preview APK on a real device → fresh build → Google Play
+    ($25, needs a test device).
+24. **Localization** (Spanish first, then others; engine stays deterministic — translation is
+    presentation only). User: "at the very end."
+25. **Monetization** — gestor/advisor referrals once affiliate programs are identified;
+    referral-compensation disclosure + E&O insurance land WITH it.
+26. **Scale revisits** (as usage grows): weekly-email `MAX_SENDS_PER_RUN` cap · PostHog
+    retention dashboards once there's data · `/api/lola` rate-limit posture review.
+
+**Explicitly NOT building (user decisions, unchanged):** push notifications (weekly email IS
+the retention loop) · document vault · country #2 · household sharing (wait for demand).
+
+## 🥇 Priority order (set by user 2026-07-02) — ✅ COMPLETE, superseded by the sequenced backlog above
 
 1. **Security** (above) — always first.
 2. ~~**Webinar → obligation mapping.**~~ **DONE (2026-07-02).** All 16 transcripts captured;
@@ -448,13 +541,13 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
 
 ## 🗺️ Product roadmap (user-reviewed 2026-07-03) — in priority order
 
-1. **[BUGS — in progress] Build-15 device findings:** (a) interview composer STILL clips behind the
-   keyboard (KeyboardAvoidingView + safe-area math is unreliable — replacing with a deterministic
-   keyboard-height hook); (b) the inline Apple button wrecks the NavBar layout — collapse to a
-   single "Sign in" that opens a dialog offering Apple + Google.
-2. **Overdue-state handling** (feeds the weekly email): overdue = scheduled due date in the past and
-   not done. Roadmap shows a red overdue treatment + stat chip; step sheet nudges "mark it done or
-   tell Lola what changed."
+1. ~~**[BUGS] Build-15 device findings**~~ — **DONE (verified in the 2026-07-04 audit):**
+   (a) keyboard clipping solved for good by the deterministic `hooks/useKeyboardHeight` hook
+   (build-25 batch, applied to composer + sheets + dialogs); (b) inline Apple button replaced by
+   the single "Sign in" → dialog (Apple + Google + email OTP), NavBar now hamburger-based.
+2. ~~**Overdue-state handling**~~ — **DONE (verified in the 2026-07-04 audit):** engine's single
+   `isOverdue` predicate drives the red overdue treatment + stat chip on /plan, the "This week"
+   overdue bucket, the PDF report's red "Overdue · was due …" lines, and the weekly email.
 3. **The email loop — LIVE 2026-07-03.** Code shipped (magic-link auth + email-me-my-roadmap +
    welcome + weekly-roundup engine + cron workflow), env keys landed as `sensitive`, both envs
    redeployed, and verified end-to-end: forced weekly run via workflow_dispatch → 200
