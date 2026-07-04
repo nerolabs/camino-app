@@ -1,4 +1,6 @@
-# Localization — technical design (2026-07-04, DRAFT for user review)
+# Localization — technical design (2026-07-04, **APPROVED by user** — see §10 answers)
+
+**Execution gate: E2E green first (user directive) — no localization surgery before that.**
 
 Decision context: Spanish (es-ES) ships **before launch** (a moving-to-Spain product must
 speak Spanish — authenticity); French, German, Italian fast-follow; suggested tier 3 = Dutch,
@@ -127,12 +129,16 @@ point at Spanish government pages — already the target language for es users).
   first question arrives in es) added in L2 — cheap, catches the "half-translated screen"
   class.
 
-## 10. Open questions for review
+## 10. Review answers (user, 2026-07-04) — all decided
 
-1. **URL scheme:** English unprefixed + `/es/...` prefixes for others (recommended) — OK?
-2. **Homework pages** (how-i-was-built, log, product roadmap) stay English-only for v1 — OK?
-3. **Spanish verification:** is Cristina the human verifier for the es-ES pass?
-4. **Legal depth at launch:** es-ES fully translated legal (recommended) vs English-only
-   legal with a Spanish notice?
-5. **Register:** Lola speaks **tú** (warm, personal — matches her voice) rather than
-   usted — confirm?
+1. **URL scheme:** ✅ English unprefixed + `/es/...` prefixes.
+2. **Homework pages:** ✅ English-only for now.
+3. **Spanish verification:** ✅ Cristina is the es-ES human verifier.
+4. **Legal:** ✅ fully translated es-ES legal (with "English prevails" clause).
+5. **Register:** ✅ tú — "warmer spanish is good."
+
+**Additional user requirement:** the language selector in the ☰ menu is a FEATURE, not a
+buried setting — device/browser language is the default, but the switcher must be visibly
+present so users see the app honors their native language. Design the menu item to show
+the current language by its own name (e.g. "Language · Español") and list each option in
+its own language (Español, Français, Deutsch, Italiano, English).
