@@ -214,8 +214,15 @@ export default function InterviewScreen() {
   }, [currentSlot, loading, started, done]);
 
   function toggleMic() {
-    if (dictation.listening) dictation.stop();
-    else dictation.start(input);
+    if (dictation.listening) {
+      dictation.stop();
+    } else {
+      // Lola yields the floor: opening the mic cuts her current line outright (build-27
+      // finding — the old behavior only DUCKED her via the recognizer's audio session, and
+      // the duck never released; now playback stops here and later turns play at full volume).
+      voice.stop();
+      dictation.start(input);
+    }
   }
 
   async function loadPersona(persona: Persona) {

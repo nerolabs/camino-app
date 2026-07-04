@@ -33,23 +33,29 @@ function releaseAudioSessionIOS() {
 export function useDictation(onText: (text: string) => void): Dictation {
   const [listening, setListening] = useState(false);
   const baseRef = useRef('');
+  // Gate for late results: SFSpeechRecognizer flushes a final 'result' event AFTER stop() is
+  // called — without this gate, that flush re-fills the answer box the submit just cleared
+  // (build-27 finding: the previous spoken answer reappeared in the next question's box).
+  const activeRef = useRef(false);
   // Keep the latest callback in a ref — the event subscriptions below register once, so a
   // captured `onText` could go stale between renders.
   const onTextRef = useRef(onText);
   onTextRef.current = onText;
 
   useSpeechRecognitionEvent('result', (event) => {
+    if (!activeRef.current) return; // stale flush after stop — the answer was already sent
     const transcript = event.results?.[0]?.transcript ?? '';
     const prefix = baseRef.current ? baseRef.current.trim() + ' ' : '';
     onTextRef.current(prefix + transcript);
   });
-  useSpeechRecognitionEvent('end', () => { setListening(false); releaseAudioSessionIOS(); });
-  useSpeechRecognitionEvent('error', () => { setListening(false); releaseAudioSessionIOS(); });
+  useSpeechRecognitionEvent('end', () => { activeRef.current = false; setListening(false); releaseAudioSessionIOS(); });
+  useSpeechRecognitionEvent('error', () => { activeRef.current = false; setListening(false); releaseAudioSessionIOS(); });
 
   async function start(baseText: string) {
     const perm = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
     if (!perm.granted) return;
     baseRef.current = baseText;
+    activeRef.current = true;
     ExpoSpeechRecognitionModule.start({
       lang: 'en-US',
       interimResults: true, // live partial results
@@ -60,6 +66,7 @@ export function useDictation(onText: (text: string) => void): Dictation {
   }
 
   function stop() {
+    activeRef.current = false; // BEFORE the engine stop — its final flush must not land
     ExpoSpeechRecognitionModule.stop();
     setListening(false);
     releaseAudioSessionIOS();

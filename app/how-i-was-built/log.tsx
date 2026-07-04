@@ -393,6 +393,15 @@ const ROWS: Row[] = [
     ],
   },
   {
+    feature: 'The microphone and Lola learn turn-taking',
+    date: '4 Jul 2026',
+    work: 'Family testing round four (build 27) nailed the last voice bug with a precise diagnosis: earlier builds only DUCKED Lola\'s voice while the mic was open — and never released the duck, so everything after went quiet. Build 27 fixed the volume but left her talking over you. Now it\'s explicit turn-taking: opening the mic cuts her line outright, and every later line plays at full volume. Also fixed: your spoken answer no longer reappears in the next question\'s box (the recognizer flushes one last result after it\'s told to stop — that flush was refilling the input the send had just cleared).',
+    decisions: [
+      'Replace audio-session side-effects with explicit app-level behavior: "mic opens → Lola stops" is one deterministic line, not a hardware mode.',
+      'Treat late recognizer events as stale by default — a gate flips before the engine is told to stop, on both web and iOS.',
+    ],
+  },
+  {
     feature: 'A safer name: Get Camino',
     date: '4 Jul 2026',
     work: '"Camino" is a lovely word — which is exactly the problem: plenty of businesses already want a piece of it. Until a proper trademark search happens, the app and site go by Get Camino (matching the domain we already own), extended brand "Get Camino: Your Road to Spain" — which happens to fit the App Store\'s 30-character name limit exactly. Every user-facing surface renamed: the name under the icon, the nav, the emails, the printed report, the legal pages, and how Lola introduces the product.',
