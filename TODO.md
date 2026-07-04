@@ -3,7 +3,7 @@
 Living list of what we're tracking against. Update as work moves. Newest context at top.
 See `HANDOFF.md` for the fuller picture and `core/SOURCING.md` for obligation provenance.
 
-Last updated: 2026-07-04 (full backlog audit + resequencing).
+Last updated: 2026-07-04 (backlog v2 — second full audit of the day).
 
 ## 🔒 Security — TOP PRIORITY
 
@@ -16,159 +16,98 @@ Last updated: 2026-07-04 (full backlog audit + resequencing).
       `SUPABASE_SERVICE_ROLE_KEY` appears only as `process.env` reads in API routes). Supabase
       URL/anon key remain the only `EXPO_PUBLIC_` values (public-safe under RLS).
 
-## 🎯 THE SEQUENCED BACKLOG — canonical priority order (full audit 2026-07-04)
+## 🎯 THE SEQUENCED BACKLOG v2 — canonical priority order (re-audited 2026-07-04 late)
 
-Every open item from this file, HANDOFF.md, docs/STRATEGY.md, docs/APP_STORE.md,
-docs/MONITORING.md and code markers, audited and resequenced. Detail lives in the numbered
-sections below (referenced as "item N"). Supersedes all earlier ordering in this file.
+Second full audit of the day. **Closed since v1:** source-link QA (55/55, 2 fixed) ·
+API volume-limiting (durable counters + strict CORS + provider caps) · a11y round 2 ·
+authed Playwright suite (12/12 green) · Maestro flows + free-runner workflow (iterating:
+run 2 = 3/4 passed) · rebrand Get Camino · @getcamino.app mailboxes · operator identity
+FINAL (AELaboratories, Inc, Sanford NC — entity gate LIFTED, sole prop until revenue) ·
+builds 27/28/29 · family-testing rounds 4–5 fixed (turn-taking, clipping, spinner TTL,
+plan loading, composer growth) · slow-turn Sentry alarm · localization design APPROVED.
+**Reshaped by user decisions:** launch = web + iOS + Android; Spanish pre-launch;
+FR/DE/IT fast-follow; bus factor parked; back-to-top queued.
 
-**Standing (every batch, never leaves):** security audit above · update both homework pages
-per release (CLAUDE.md rule) · consult/backtest docs/STRATEGY.md · **EAS builds only on user
-command** (credits).
+**Standing (every batch):** security audit (§ above) · homework pages per release ·
+STRATEGY.md backtest · EAS builds only on user command · (once L0 lands) translation lints.
 
-### Phase 1 — Verify what's already built (NOW; blocks everything downstream)
-1. **Build 27** *(awaits user go)* — batch riding: TTS volume root-fix v2 (session
-   mode/deactivation — UNVERIFIED), delete-my-account in the native menu, the region interview
-   question, PDF print margins, keyboard-aware sheets/dialogs.
-2. **Device-verify build 27**: volume steady across turns · region Q + "WHERE YOU LIVE MATTERS"
-   sheet · delete-account on iOS · PDF margins on paper · **universal links on a FRESH install**
-   (AASA is cached at install — never yet device-verified) · Apple sign-in still reliable.
-3. **Family testing round 3+** (user + Cristina, on 27) — THE release gate (user decision);
-   triage via Report-a-problem, fix rounds as they land.
-4. **Source-link QA click-test** — spot-check all 55 official `source_url`s render the right
-   page (launch-final QA remnant of old priority #4; Claude can browser-drive this).
+### Phase 1 — E2E gate (IN FLIGHT — blocks everything below; user directive)
+1. **Maestro green**: run #3 in flight (dialog-tap fix). Iterate to 4/4.
+2. **Pipeline wiring (Phase C)**: docs/BUILD.md release checklist — green Playwright
+   (12 tests) + green e2e-ios REQUIRED before any store submission; triggers stay manual +
+   pre-release (each run costs real LLM calls); decide whether to add a weekly scheduled run.
+3. **[USER] Build 29 verification + family testing** (parallel, ongoing): mic first/last
+   words at normal pace · composer grows while dictating · cold-start with no roadmap lands
+   home · no spinner past 35s. Fix rounds as filed.
 
-### Phase 2 — Harden before more public exposure (parallel with Phase 1; MUST precede any
-### launch moment and the store release)
-5. ~~**Real volume-limiting on `/api/lola` + `/api/tts`**~~ — **SHIPPED 2026-07-04, verified
-   live on both envs.** (a) Durable Supabase counters (`scripts/sql/api-counters.sql` on BOTH
-   DBs + `lib/apiGuard.ts`): global daily budget per route (lola 2000/day, tts 1000/day) +
-   per-IP per-minute (30 / 20), fail-open, counted only after payload validation. Burst-tested:
-   tts tripped at exactly 21; the runtime DOES forward the client IP (X-Real-IP). (b) Strict
-   CORS: own OPTIONS handlers replace EAS's default `Allow-Origin: *` — grants pin to our own
-   origins (the platform rewrites Origin to our hostname, so the echo is always ours; foreign
-   pages fail the browser match). (c) User-side blast-radius caps: Anthropic Console monthly
-   spend limit + ElevenLabs plan quota (no usage-based overage). Research notes: no CF
-   bindings/WAF available on EAS Hosting; in-memory counters demonstrably reset (70-burst,
-   zero 429s). **Turnstile stays queued for the pre-launch-moment** (web-only; native needs an
-   exemption path — see Phase 5 launch item). User completed the provider caps 2026-07-04
-   (Anthropic monthly spend limit + ElevenLabs overage OFF) — all three layers live; strict
-   CORS confirmed propagated to getcamino.app.
-6. **Native E2E (Maestro) + authed-flow test strategy** — **Phase A SHIPPED + Phase B code
-   COMPLETE 2026-07-04 (user approved A+B, GitHub-runner path).** Phase A: authed Playwright
-   suite live — 12 tests / ~12s vs staging (public smoke refreshed + setup + 5 authed:
-   saved roadmap, This-week, mark-done/undo, no-op honesty, sign-out); seed script
-   `scripts/e2e/seed.mjs` (staging-guarded, e2e@getcamino.app, fixture reset each run,
-   welcome/weekly emails pre-suppressed); session captured via admin.generateLink →
-   verifyOtp → storageState. First catch: NavBar hydration error #418 (fixed via useWide).
-   Phase B: `.maestro/` P0 flows + `.github/workflows/e2e-ios.yml` (macos-15, `eas build
-   --local` = zero credits, junit + failure recordings). **REMAINING: user adds 3 repo
-   secrets (EXPO_TOKEN, E2E_SUPABASE_URL, E2E_SUPABASE_SERVICE_ROLE_KEY) → first
-   workflow_dispatch → iterate flows on CI (no local simulator; expect 2–4 rounds).**
-   *(Original plan below for reference.)* Research verified: Maestro CLI is free/OSS;
-   EAS Workflows has first-class `type: maestro` jobs BUT consumes build credits; GitHub
-   Actions standard macOS runners are FREE with no minute cap for public repos (ours is) —
-   `eas build --local --profile e2e-test` (ios.simulator, withoutCredentials) there = zero
-   EAS credits; Supabase `admin.generateLink({type:'magiclink'})` mints sign-in links without
-   email — web tests persist the session via storageState, native tests open the link and ride
-   the EXISTING caminoapp://auth-callback deep-link flow (real code path). Plan:
-   **Phase A** (~half day): staging-only test user + fixture + reset step; authed Playwright
-   specs (saved plan, This-week, mark-done re-flow, no-op re-model, sign-out); GH secrets set
-   by user. **Phase B** (~1–1.5 days): `.maestro/` P0 flows (launch/home, sample plan,
-   interview 1 LLM turn + answer, deep-link sign-in → roadmap → step sheet → mark done) on a
-   free GH macOS runner; EAS Workflows kept as paid-plan upgrade path. **Phase C** (~half
-   day): release-train wiring in docs/BUILD.md + failure artifacts. Cadence: manual dispatch +
-   pre-release (never per-push — LLM spend + our own rate limits). Out of scope: Apple
-   sign-in (human checklist; needs live Apple ID), TTS audio assertions, Android (deferred).
-7. ~~**A11y round 2**~~ — **SHIPPED 2026-07-04:** global `:focus-visible` amber ring in
-   `app/+html.tsx` (keyboard-only, beats RNW's inline outline reset), verified live by
-   tabbing the deployed page. Remaining a11y depth (full audit vs WCAG checklist) → fold
-   into a later polish pass if user testing surfaces need.
-8. **Monitoring tune-up** (small): per-surface Sentry alert rules; optional backend latency
-   tracing; refresh docs/MONITORING.md's stale "native (next)" section.
+### Phase 2 — Localization (docs/LOCALIZATION.md, APPROVED; starts when Phase 1 closes)
+4. **L0 — plumbing (~1–1.5 days):** i18next + locale resolution/persistence + the VISIBLE
+   language switcher in ☰ ("Language · Español"; each option in its own language) + full
+   English string extraction + 4 lint gates into npm test. Product identical after = proof.
+5. **L1 — Spanish (~2 days + Cristina verification) — THE LAUNCH GATE:** chrome, catalog
+   titles, guide prose, static questions, emails, legal-ES (English prevails), Lola tú
+   directive, locale dates.
+6. **L2 — web SEO tree (~1 day):** /es routes via app/[locale], hreflang + x-default,
+   sitemap expansion, JSON-LD inLanguage. Ships right behind L1.
+7. **L3 — FR/DE/IT (~0.5–1 day each + verification):** fast-follow; may land after store
+   submission without blocking it.
 
-### Phase 3 — Store paperwork (user-heavy; runs parallel to Phases 1–2; converges on submission)
-9. ~~**[USER] Create the real legal entity**~~ — **GATE LIFTED 2026-07-04 (see 6b): sole
-   proprietor for launch; US LLC only at proven revenue.** Remaining from this item: confirm
-   the legal-pages operator wording (Proxim.us d/b/a vs personal name — 6b(d)).
-   ~~@getcamino.app mailbox~~ DONE. Professional legal-review pass stays queued (at revenue).
-10. **[USER] ASC housekeeping**: paste https://getcamino.app/privacy into the privacy-policy
-    URL field · DSA trader status (blocks EU distribution) · fix the display name — currently
-    "Camino (51e654)", target **"Get Camino: Your Road to Spain"** (exactly 30 chars — the
-    ASC limit; brand renamed 2026-07-04) · age-rating questionnaire (expect 4+) · copyright line.
-11. **Screenshots + metadata**: user captures the 5-shot story on build 27+ (docs/APP_STORE.md
-    has the shot list), Claude frames/annotates; paste metadata + privacy-nutrition answers
-    (all drafted in docs/APP_STORE.md).
-12. ~~**[USER] Bus-factor hour**~~ — **DEPRIORITIZED (user decision 2026-07-04):** "If this
-    turns into a real entity making real money that will be a step we will take." Parked to
-    the at-revenue tail alongside E&O insurance; no pre-launch action.
-13. **[USER] Gestor consult** (US LLC managed from Spain — PE/autónomo) + **trademark search**
-    (software classes) — must precede brand spend / the launch moment; may trail submission.
-    *Interim mitigation SHIPPED 2026-07-04:* public brand renamed **"Get Camino"** (extended:
-    "Get Camino: Your Road to Spain") — a distinctive compound matching the owned domain,
-    replacing the crowded bare word "Camino" everywhere user-facing. Search still due before
-    real brand spend.
+### Phase 3 — Android track (START THE 14-DAY CLOCK EARLY — parallel with Phase 2)
+8. **[USER] Buy the test device** (~$100–250: Moto G Play new / Galaxy A16 / refurb
+   Pixel 7a — Play-certified, Android 14+).
+9. **Play developer account** (personal, $25 — sole-prop decision) + first Android build
+   (verify the old preview APK on-device, then a production .aab) + store listing +
+   data-safety form (mirror the Apple nutrition answers).
+10. **Closed test: 12+ testers × 14 days** (personal-account requirement) — start the
+    moment a build installs; the calendar time burns in parallel with localization. Recruit
+    from the family-testing circle; the English build is fine for this.
+11. **Android fix round** (expect one: back gesture, keyboard behavior, dictation quirks).
 
-### Phase 4 — 🚀 App Store submission (gate: Phases 1–3 complete)
-14. Attach the final build, submit for review (review notes drafted in docs/APP_STORE.md);
-    expect a rejection cycle or two. Google Play stays deferred (Phase 6).
+### Phase 4 — Store paperwork, assets, small polish (parallel; mostly [USER])
+12. **[USER] ASC fields**: privacy URL (https://getcamino.app/privacy) · DSA trader status ·
+    display name → "Get Camino: Your Road to Spain" (exactly 30 chars) · age rating (4+) ·
+    copyright `© 2026 AELaboratories`.
+13. **Screenshots + metadata**: capture on build 29+ (docs/APP_STORE.md shot list; consider
+    waiting for L1 so an es-ES localized listing can ship alongside — optional), Claude
+    frames; paste metadata + privacy nutrition.
+14. **Supabase auth-email templates** still say "Camino" (both dashboards) — copy ready in
+    docs/design/supabase-auth-emails.md; Claude can drive with approval. + es-ES variants at L1.
+15. **Polish batch**: back-to-top floating affordance (roadmap/guides) · monitoring tune-up
+    (per-surface Sentry alert rules; refresh MONITORING.md's stale native section) ·
+    anything small from build-29 testing.
+16. **[USER] Gestor consult + trademark search** — before brand spend / launch moment; may
+    trail submission.
 
-### Phase 5 — Post-release growth (STRATEGY.md order, re-validated 2026-07-04)
-15. **Region-by-region specifics content pass** — ITP rates / wealth-tax allowances / school
-    windows per comunidad, EACH verified against that region's own official source (17× —
-    invariant 3); renders under the shipped regional flags. Deepens the moat + SEO.
-16. **Public regulatory changelog + "last verified" stamps** — publish catalog diffs with
-    sources; feeds the weekly email; doubles as the correction process (the PR defense).
-    Most linkable asset in the space.
-17. **SEO expansion**: question-shaped pages from catalog data ("NLV income requirement 2026")
-    + 3–5 persona sample plans.
-18. **Read-only roadmap share link** (every share is a landing page).
-19. **The launch moment**: seed communities with sourced guide links (share cards ready),
-    webinar-creator partnerships (warm list; MovingToSpain.com clear-eyed), Product Hunt / HN —
-    only AFTER #5 (abuse limiting) and with the "built in 4 days" pre-emption paragraph
+### Phase 5 — 🚀 Submissions (gate: Phases 1, 2(L0–L2), 3, 4 complete)
+17. **iOS**: attach final build, submit (review notes drafted); expect a rejection cycle.
+18. **Android**: promote to production once the 14-day closed test clears.
+19. Web needs no submission — its "launch" is the Phase-6 marketing moment.
+
+### Phase 6 — Post-launch growth (STRATEGY.md order)
+20. **Turnstile on interview start** (web) — land BEFORE the public launch moment.
+21. **Region-by-region specifics content pass** (17 comunidades, each against its own
+    official source — invariant 3; renders under the shipped regional flags).
+22. **Public regulatory changelog + "last verified" stamps** — trust engine, correction
+    process, most linkable asset.
+23. **SEO expansion**: question-shaped pages + 3–5 persona sample plans (× locales once L2
+    exists — compounding).
+24. **Read-only roadmap share link.**
+25. **The launch moment**: communities with sourced guide links, webinar-creator
+    partnerships, Product Hunt / HN — with the "built in N days" pre-emption paragraph
     written first. `webinar_url` → user-facing rides a MovingToSpain partnership if it lands.
-20. **Uniqueness bets** (cheap on a deterministic engine): timeline simulation (arrive March
-    vs Sept) · move-budget view (official fees) · cita checklists (what to bring).
-21. **"My account" page** (item 6c) — email prefs + delete-account move out of the hamburger
-    once account options accumulate.
-22. **Small polish, parked**: context-aware "what changed" placeholder (plan.tsx changeBox) ·
-    per-step problem-report link · scout-step prominence/coaching depth · a real blog surface.
+26. **Uniqueness bets**: timeline simulation · move-budget view · cita checklists.
+27. **"My account" page** (email prefs + language + delete move out of the hamburger).
+28. **Parked polish**: per-step problem-report link · scout-step prominence · a real blog
+    surface. (Context-aware change hints SHIPPED — verified in code 2026-07-04.)
 
-### ⚠️ RESEQUENCED 2026-07-04 (user feedback round): the launch platform set is now
-### **web + iOS + Android**, and **Spanish ships BEFORE launch** (authenticity: a
-### moving-to-Spain product must speak Spanish). Gate on E2E green first (user directive:
-### nothing new until a successful Maestro run + E2E confident enough for the pipeline).
-
-**Localization (pulled forward from the tail):**
-- **Spanish (es-ES) — PRE-LAUNCH GATE.** Then fast-follow tier: **French, German, Italian**
-  (user-picked). Suggested tier 3 by mover demographics: **Dutch** (top EU relocator cohort)
-  and **Portuguese** (pt — serves Brazil's fast-growing nomad/citizenship cohort + Portugal);
-  later, cohort-driven: Romanian + Polish (largest foreign communities in Spain), Arabic
-  (RTL cost) and Chinese when data justifies. Brand "Get Camino" NEVER localizes.
-- Architecture (unchanged from the original plan): i18n layer + string catalogs; the
-  obligation CATALOG titles/prose are user-facing content needing HUMAN-VERIFIED translation
-  (invariant 3 — machine-translating legal step titles risks changing meaning; extend the
-  digit-lint idea: translated text may not alter any number); Lola prompts take a target
-  language (Claude is natively strong in all picks; ElevenLabs voice is already multilingual);
-  locale-aware dates; SEO = localized guide routes + hreflang (a 60-page surface per language).
-
-**Android (promoted from the tail to LAUNCH platform):**
-- User buys a cheap test device (guidance given in chat: new budget Moto G / Galaxy A-series
-  ~$100–200, or refurb Pixel 7a — Play-certified, Android 14+); verify the existing preview
-  APK, then a fresh build + Google Play ($25 one-time).
-- ⚠️ **Play policy gate:** PERSONAL dev accounts (created after Nov 2023) must run a closed
-  test with 12+ testers for 14 days before production access; ORGANIZATION accounts are
-  exempt — registering the Play account under the coming LLC (needs D-U-N-S) both skips the
-  12-tester gate and matches the legal-entity step. Decide account type with the entity.
-
-**Small UX (user request):** back-to-top floating affordance on long scrolls (roadmap,
-guides index) — appears after scrolling down; established pattern. Polish batch after E2E.
-
-### Phase 6 — The tail (remaining)
-25. **Monetization** — gestor/advisor referrals once affiliate programs are identified;
-    referral-compensation disclosure + E&O insurance land WITH it.
-26. **Scale revisits** (as usage grows): weekly-email `MAX_SENDS_PER_RUN` cap · PostHog
-    retention dashboards once there's data · `/api/lola` rate-limit posture review.
+### Phase 7 — The tail (at revenue / at demand)
+29. **Tier-3+ languages**: Dutch, Portuguese; then Romanian/Polish/Arabic/Chinese by data.
+    es-419 and localized slugs likewise demand-driven.
+30. **Monetization** (gestor/advisor referrals) + referral disclosure + E&O insurance.
+31. **At-revenue ops**: US LLC migration (ASC/Play agreement transfers + legal-pages text) ·
+    professional legal review · bus-factor hour (user decision: parked until real money).
+32. **Scale revisits**: weekly-email MAX_SENDS cap · rate-limit posture · PostHog retention
+    dashboards · iPad support.
 
 **Explicitly NOT building (user decisions, unchanged):** push notifications (weekly email IS
 the retention loop) · document vault · country #2 · household sharing (wait for demand).
