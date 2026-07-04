@@ -1,67 +1,62 @@
-# BUILD.md — pipeline & resources
+# BUILD.md — release pipeline & the pre-ship gate
 
-The build process for Camino. Mostly forward-looking — the native app isn't
-scaffolded yet (see `CLAUDE.md` → Immediate next task).
+How Get Camino ships, and the checks that gate a release. (Historical scaffolding notes were
+removed 2026-07-04 — the app is long since real; see HANDOFF.md for current state.)
 
-## Pipeline (one codebase → iOS, Android, web)
+## Surfaces & how each ships
 
-1. **Local dev** — `create-expo-app` (Expo Router, TS). On macOS you get the iOS
-   Simulator + Android emulator locally.
-2. **Source** — GitHub (this repo).
-3. **Cloud builds — EAS Build** — signed iOS + Android binaries in the cloud.
-   Profiles live in `eas.json`.
-4. **Store submit — EAS Submit** — to App Store Connect + Google Play.
-5. **OTA — EAS Update** — JS-only changes over the air, no new store build. Most
-   day-to-day iteration goes here.
-6. **Web** — `expo export -p web` → any static host.
-7. **CI/CD** — EAS Workflows or GitHub Actions: on push to `main`, test + build/update.
+- **Web** — `./scripts/deploy.sh {staging|production}` (pulls that env's vars, clears the Metro
+  cache, exports, deploys to EAS Hosting). Verify a content marker ON THE UNIQUE DEPLOYMENT URL
+  (the alias/custom domain lag on CDN edges). This is the day-to-day surface; deploy freely.
+- **iOS** — `eas build --platform ios --profile production --auto-submit` → TestFlight. **Only
+  on user command** (free-tier build credits). Batch native changes between builds.
+- **Android** — same EAS build path; Google Play is a launch platform now (personal Play
+  account → 12-tester/14-day closed test applies — start it early).
 
-Backend in parallel: Supabase (Postgres for the catalog + profiles, auth, storage,
-cron), Anthropic API key (Lola's two surface calls), Google Places key.
+## The pre-ship gate (all must be green before a store submission)
 
-## `eas.json` starting point (add once the Expo app exists)
+1. **`npm run typecheck`** — tsc strict.
+2. **`npm run audit`** — catalog ↔ interview contract (invariant 2) + all personas. Runs in
+   deploy.sh and CI on every push.
+3. **`npm test`** — deterministic engine + email-digest + report + this-week + date + digit-lint
+   suites (vitest). Deploy gate + CI.
+4. **`npm run test:e2e`** — Playwright, 12 tests vs deployed staging: the public smoke suite +
+   the **authed** suite (sign in → saved roadmap → This-week → mark-done → no-op re-model →
+   sign-out). Needs `E2E_SUPABASE_SERVICE_ROLE_KEY` in env (skips cleanly without it). Manual +
+   pre-release (each run spends a few live LLM calls; our own rate limits apply to us too).
+5. **`e2e-ios` GitHub workflow** (manual dispatch) — Maestro on an iOS simulator, on a free
+   macОS runner via `eas build --local` (zero EAS credits). Gates the **3 deterministic native
+   flows**: launch/home, sample plan, interview (a real LLM turn). ~30–45 min.
 
-```json
-{
-  "cli": { "version": ">= 12.0.0" },
-  "build": {
-    "development": { "developmentClient": true, "distribution": "internal" },
-    "preview":     { "distribution": "internal" },
-    "production":  { "autoIncrement": true }
-  },
-  "submit": { "production": {} }
-}
-```
+### Why the native authed flow is NOT in the gate
 
-## Resources to acquire
+The `04-authed-roadmap` Maestro flow (deep-link sign-in) is tagged `authed` and
+**`--exclude-tags=authed`** in CI. Opening iOS deep links via Maestro on CI runners is a
+documented, unresolved flake — the "Open in app" SpringBoard alert isn't in the app's
+accessibility tree on Maestro 2.x / iOS 18.x, so it can't be tapped
+([Maestro #2610](https://github.com/mobile-dev-inc/Maestro/issues/2610); confirmed in our runs
+2–4). We don't gate on a known tool bug. That journey is fully covered by the authed **Playwright
+web** suite (identical React components) and by **manual on-device sign-in** every build. The
+flow stays in `.maestro/` — runnable locally on a Maestro version where the dialog pattern works;
+re-fold into CI when #2610 is fixed or when we pin a known-good Maestro version.
 
-| Resource | For | Cost | When |
-|---|---|---|---|
-| Apple Developer Program | iOS + TestFlight | $99/year | Before iOS distribution (enroll early — 1–2 day approval) |
-| Google Play Developer | Android store | $25 one-time | Before Android distribution |
-| Expo / EAS | Cloud builds, OTA | Free tier (15 iOS + 15 Android builds/mo, OTA to 1,000 MAU); Starter $19/mo; Production $199/mo | Free covers build + launch |
-| GitHub | Version control | Free | Now |
-| Supabase | Backend | Free tier to start; ~$25/mo Pro at scale | At first real data |
-| Anthropic API | Lola's two calls | Usage-based | At integration |
-| Google Maps/Places | "Nearest office" | Usage-based, monthly free credit | When maps are added |
-| Xcode + Android Studio | Local simulators | Free | Now |
+## Release checklist (per store submission)
 
-**To reach both stores: ~$124** ($99 Apple + $25 Google). Everything else has a free
-tier through build and launch.
+- [ ] Gate green: typecheck · audit · test · test:e2e (12) · e2e-ios (3 native).
+- [ ] Target build device-verified by the user (TestFlight / Play internal) — mic, voice,
+      dictation, deep-link sign-in, the current fix list.
+- [ ] Store metadata / screenshots / privacy answers current (docs/APP_STORE.md).
+- [ ] iOS: DSA trader status + privacy-policy URL in ASC.
+- [ ] Android: closed-test 14-day window cleared.
 
-## Push this repo to GitHub (from your Mac)
+## Resources / costs
 
-```bash
-brew install gh && gh auth login          # one-time
-cd camino
-git init && git add . && git commit -m "Camino: walking skeleton"
-gh repo create camino --private --source=. --push
-```
+| Resource | For | Cost |
+|---|---|---|
+| Apple Developer Program | iOS + TestFlight | $99/year |
+| Google Play Developer | Android store | $25 one-time (personal account → 12-tester rule) |
+| EAS | Cloud builds, hosting | Free tier + paid domain plan (in use) |
+| Supabase · Anthropic · ElevenLabs · Resend · PostHog · Sentry | Backend / AI / email / analytics / errors | Free tiers + usage; provider spend caps set |
 
-## Open in Claude Code
-
-```bash
-npm install -g @anthropic-ai/claude-code   # one-time
-cd camino
-claude                                      # reads CLAUDE.md automatically
-```
+CI-secret setup for the E2E workflows: `EXPO_TOKEN`, `E2E_SUPABASE_URL`,
+`E2E_SUPABASE_SERVICE_ROLE_KEY` (staging) as GitHub repo secrets.
