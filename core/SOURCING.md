@@ -340,3 +340,38 @@ where the topic is genuinely discussed:
 - **Kept, imperfect but honest:** `nie` (Málaga school-paperwork mention — no webinar discusses
   the NIE substantively; noted), `dgt-*` (the only licence discussion in any webinar is the 2A19
   Q&A), `scout-where-to-live` (regional-affordability segment).
+
+## Source-link QA click-test — all 55 official URLs verified (2026-07-04)
+
+Launch-final QA (sequenced-backlog Phase 1 #4): every `source_url` fetched with a browser UA
+(status + final URL + `<title>`/H1 checked against its obligation), the bot-walled ones
+re-verified individually.
+
+- **53/55 rendered the right page; 2 replaced (below).** Notes for the record: the two
+  `sanidad.gob.es` pages carry a broken site-wide `<title>` template but the correct H1s
+  ("Convenio especial de prestación de asistencia sanitaria", "Tarjeta Sanitaria Individual");
+  all `inclusion.gob.es` + `sede.maec.gob.es` links fail *programmatic* TLS verification
+  (server omits the intermediate cert — browsers repair it via AIA, users unaffected) but
+  serve exactly the right pages (Hoja 6 NLV / Hoja 7 renovación / Hoja 8 reagrupación /
+  Hoja 65 certificado UE / Teletrabajadores UGE / Autorizaciones / Cita previa MAEC);
+  `interior.gob.es` (residencia/TIE) Cloudflare-challenges non-browser clients but renders
+  the right page in a real browser (verified); the `portal.seg-social.gob.es` importass page
+  (autonomo-social-security) is a JS portal with a generic `<title>` but its body is the
+  correct "Alta en trabajo autónomo" content.
+- **Dead link fixed — `empadronamiento`:** the old
+  `administracion.gob.es/pagFront/buscadortramites/detalleTramite.htm?idT=32988` is a hard 404
+  (portal retired; its `Tu-espacio-europeo/...` candidates are soft-404s — HTTP 200 with an
+  "Error" H1, beware). Replaced with the legal basis itself:
+  **BOE-A-1985-5392 (Ley 7/1985 Reguladora de las Bases del Régimen Local)** — art. 15 states
+  the exact obligation ("Toda persona que viva en España está obligada a inscribirse en el
+  Padrón del municipio en el que resida habitualmente"). Same pattern as community-fees (LPH)
+  and ibi-property-tax (Haciendas Locales). Verified 200 + content 2026-07-04.
+- **Cookie-walled link fixed — `nie`:** `policia.es/_es/extranjeria_extranjeros.php` lands on
+  the site's cookie interstitial (`/_es/cookies.php`) even in a real browser — users clicking
+  "View the official source" never reached NIE content. Replaced with the Ministerio del
+  Interior's canonical NIE page
+  (`interior.gob.es/.../extranjeria/ciudadanos-de-la-union-europea/numero-de-Identidad-de-extranjero-nie/`
+  — general NIE assignment rules despite the EU-citizens nav placement): assignment
+  requirements, where to apply (extranjería offices / comisarías / consulates), and the
+  normalized application form, matching the step's EX-15 reference. Browser-verified
+  2026-07-04.

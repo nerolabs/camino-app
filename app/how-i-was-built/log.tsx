@@ -393,6 +393,15 @@ const ROWS: Row[] = [
     ],
   },
   {
+    feature: 'Every official source link, click-tested',
+    date: '4 Jul 2026',
+    work: 'All 55 official source links were fetched and checked against their steps — status, where they redirect, and whether the page is actually about the step. Two failed honestly: the empadronamiento link died when a government portal was retired (now points at the law itself, art. 15 of the Ley de Bases del Régimen Local), and the NIE link landed visitors on a police-site cookie wall instead of NIE content (now the Ministerio del Interior\'s canonical NIE page).',
+    decisions: [
+      'Trust content, not status codes: administracion.gob.es serves "Error" pages with HTTP 200, so every link was verified by its actual heading, not its response code.',
+      'When a government info page is unstable, cite the law itself — BOE links outlive portal redesigns.',
+    ],
+  },
+  {
     feature: 'How-it-works redesign + "the product roadmap"',
     date: '4 Jul 2026',
     work: 'The how-it-works page — untouched since the earliest days — got a layout pass: its sections ran edge-to-edge on desktop while every other page reads in a centered column, so each section\'s content now sits in the same 760px column, and the bureaucracy card says what the plan just learned (rules that differ by comunidad are flagged). This page was also renamed "the product roadmap".',
