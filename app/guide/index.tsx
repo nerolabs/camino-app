@@ -6,6 +6,7 @@ import { GUIDES, CATEGORY_LABEL, CATEGORY_ORDER, shortClause, guideIndexJsonLd }
 import { SEV_COLOR, SEV_LABEL } from '@/lib/plan-format';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
+import { BackToTop, useBackToTop } from '@/components/BackToTop';
 import { capture } from '@/lib/analytics';
 
 // The guide index: every obligation in the catalog, grouped by category — the public,
@@ -14,13 +15,15 @@ import { capture } from '@/lib/analytics';
 
 export default function GuideIndex() {
   const router = useRouter();
+  const top = useBackToTop();
 
   const groups = CATEGORY_ORDER
     .map(cat => ({ cat, items: GUIDES.filter(g => g.category === cat) }))
     .filter(g => g.items.length > 0);
 
   return (
-    <ScrollView style={styles.scroll}>
+    <View style={styles.screen}>
+    <ScrollView style={styles.scroll} ref={top.ref} onScroll={top.onScroll} scrollEventThrottle={16}>
       <Seo
         title="Moving to Spain: every step, explained | Get Camino guides"
         description={`All ${GUIDES.length} steps of moving to Spain — visas, residency, tax, healthcare, banking and more. What each one is, when it's due, and the official source.`}
@@ -66,10 +69,13 @@ export default function GuideIndex() {
       </View>
       <Footer />
     </ScrollView>
+    <BackToTop visible={top.visible} scrollToTop={top.scrollToTop} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screen:       { flex: 1 },
   scroll:       { flex: 1, backgroundColor: palette.cal },
   content:      { width: '100%', maxWidth: 720, alignSelf: 'center', paddingHorizontal: 20, paddingVertical: 28 },
 

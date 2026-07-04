@@ -13,6 +13,7 @@ import {
 import Seo from '@/components/Seo';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
+import { BackToTop, useBackToTop } from '@/components/BackToTop';
 import { capture } from '@/lib/analytics';
 
 // The payoff, before the ask: a real roadmap — the actual engine run on a canned persona — shown
@@ -21,6 +22,7 @@ import { capture } from '@/lib/analytics';
 
 export default function SamplePlanScreen() {
   const router = useRouter();
+  const top = useBackToTop();
   useEffect(() => { capture('sample_plan_viewed'); }, []);
 
   const objectives = useMemo(() => {
@@ -47,7 +49,8 @@ export default function SamplePlanScreen() {
   };
 
   return (
-    <ScrollView style={styles.scroll}>
+    <View style={styles.screen}>
+    <ScrollView style={styles.scroll} ref={top.ref} onScroll={top.onScroll} scrollEventThrottle={16}>
       <Seo
         title="A sample roadmap for moving to Spain | Get Camino"
         description="Susan &amp; Tom's real, engine-built relocation roadmap — every step, deadline and official source — so you can see what Get Camino builds before answering a single question."
@@ -175,10 +178,13 @@ export default function SamplePlanScreen() {
       </View>
       <Footer />
     </ScrollView>
+    <BackToTop visible={top.visible} scrollToTop={top.scrollToTop} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screen:        { flex: 1 },
   scroll:        { flex: 1, backgroundColor: palette.cal },
   content:       { width: '100%', maxWidth: 760, alignSelf: 'center', paddingHorizontal: 20, paddingVertical: 28 },
 

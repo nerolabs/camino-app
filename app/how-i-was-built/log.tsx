@@ -485,6 +485,15 @@ const ROWS: Row[] = [
       'Lola says tú, not usted — warmth is her voice in every language. And "Get Camino" and "Lola" never translate.',
     ],
   },
+  {
+    feature: 'Take it with you (and get back to the top)',
+    date: '4 Jul 2026',
+    work: 'The home page now says where the app is headed: a quiet band announcing the iPhone and Android apps — honestly marked "coming soon," not a fake download badge for something you can\'t download yet. And long scrolls got a back-to-top button: on the roadmap, the sample plan, and the sixty-step guide list, a floating arrow appears once you\'ve scrolled a screen down and takes you home in one tap.',
+    decisions: [
+      'Honest placeholders over impressive-looking lies: no official store badge appears until there\'s a real listing behind it — swapping in the link is a one-line change when the apps ship.',
+      'The back-to-top button respects reduced-motion: it jumps instantly instead of animating for anyone who\'s asked their device to calm down.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

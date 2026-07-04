@@ -15,6 +15,7 @@ import { normalizeDateInput } from '@/lib/dateInput';
 import { regionLabel } from '@/core/regions';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
+import { BackToTop, useBackToTop } from '@/components/BackToTop';
 import { capture } from '@/lib/analytics';
 import EmailSignIn from '@/components/EmailSignIn';
 import { parseProfileChange, askLola, TASK_INTRO, changeHint } from '@/lib/plan-coach';
@@ -81,6 +82,7 @@ export default function PlanScreen() {
   const { profile, setProfile, isStaff, profileLoaded } = useProfile();
   const { user } = useAuth();
   const router = useRouter();
+  const top = useBackToTop();
 
   // "Loading your roadmap…" must be a moment, never a destination (build-28 family finding:
   // a cold start with a restored session but no saved answers sat here forever). Once the
@@ -284,8 +286,8 @@ export default function PlanScreen() {
   };
 
   return (
-    <>
-    <ScrollView style={styles.scroll}>
+    <View style={styles.screen}>
+    <ScrollView style={styles.scroll} ref={top.ref} onScroll={top.onScroll} scrollEventThrottle={16}>
       <NavBar />
       <View style={styles.content}>
         <Text style={styles.heading} accessibilityRole="header">Your roadmap</Text>
@@ -632,11 +634,13 @@ export default function PlanScreen() {
         </Pressable>
       </Pressable>
     </Modal>
-    </>
+    <BackToTop visible={top.visible} scrollToTop={top.scrollToTop} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screen:        { flex: 1 },
   scroll:        { flex: 1, backgroundColor: palette.cal },
   content:       { width: '100%', maxWidth: 820, alignSelf: 'center', padding: 24, paddingTop: 32, paddingBottom: 48 },
 

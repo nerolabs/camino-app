@@ -11,6 +11,7 @@ import { useReducedMotion } from '@/lib/useReducedMotion';
 import { siteJsonLd } from '@/core/guide-content';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
+import StoreBadges from '@/components/StoreBadges';
 
 const PHOTOS = [
   { src: require('@/assets/images/spain-gothic-quarter-barcelona.jpg'), label: 'Gothic Quarter, Barcelona' },
@@ -119,6 +120,8 @@ export default function LandingPage() {
           <Text style={styles.stripLink}>  ·  Explore all 60 guides →</Text>
         </Text>
       </TouchableOpacity>
+
+      <StoreBadges />
 
       <Footer />
 
