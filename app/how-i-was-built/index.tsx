@@ -170,7 +170,7 @@ export default function HowIWasBuilt() {
           decisions behind each →
         </Link>
         <Link href="/how-i-was-built/roadmap" style={styles.logLink}>
-          Where it’s going next: the roadmap — updated with every release →
+          Where it’s going next: the product roadmap — updated with every release →
         </Link>
         <Text style={styles.logLink} onPress={() => openExternal('https://github.com/nerolabs/camino-app')}>
           And the code itself is public — github.com/nerolabs/camino-app ↗

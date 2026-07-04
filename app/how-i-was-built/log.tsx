@@ -392,6 +392,15 @@ const ROWS: Row[] = [
       '"Not sure yet" is a first-class answer: undecided movers get the scouting step and generic flags, not a forced guess.',
     ],
   },
+  {
+    feature: 'How-it-works redesign + "the product roadmap"',
+    date: '4 Jul 2026',
+    work: 'The how-it-works page — untouched since the earliest days — got a layout pass: its sections ran edge-to-edge on desktop while every other page reads in a centered column, so each section\'s content now sits in the same 760px column, and the bureaucracy card says what the plan just learned (rules that differ by comunidad are flagged). This page was also renamed "the product roadmap".',
+    decisions: [
+      'Full-bleed section backgrounds stay — only the content inside is constrained. The rhythm of alternating bands is the page\'s structure; the fix was readability, not a rebuild.',
+      'Renamed to differentiate: "roadmap" is what Camino builds FOR YOU in the product; "the product roadmap" is where the product itself is going.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

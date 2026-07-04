@@ -5,11 +5,11 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-Last updated: 2026-07-03.
+Last updated: 2026-07-04.
 
 ---
 
-## ⭐ RESUME HERE (2026-07-03 night — family-testing round 1 fixed, build 19 submitted)
+## ⭐ RESUME HERE (2026-07-04 — all three pre-release features SHIPPED; builds only on user command)
 
 **Latest:** the "This week" view SHIPPED (toggle on /plan, `core/this-week.ts`, 4 tests) and the
 user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS build 19**
@@ -92,6 +92,30 @@ user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS bui
    first violation pre-ship) + prose-first meta descriptions (template fallback when the first
    sentence references "the title"). Remaining from polish backlog: share cards, guide JSON-LD,
    context CTAs, a11y sweep. Legal surfaces (TODO 6) still FIRST for the store push.
+
+10. **2026-07-04 evening — pre-release feature set COMPLETE.** In ship order:
+    **Legal surfaces** (TODO 6): privacy/terms/aviso-legal pages + footer links, PostHog
+    cookieless (`persistence:'memory'` + legacy `ph_*` scrub — no cookie banner needed, by
+    design), and **delete-my-account** (menu → `/api/account/delete`, hard delete, E2E-verified
+    with a throwaway account) — Apple 5.1.1(v) unblocked. ⚠️ Operator identity (Proxim.us /
+    nerolabs@gmail.com) is **TEMPORARY**: user will create a real legal entity + @getcamino.app
+    email — replace across privacy/terms/aviso, feedback inbox, ASC **before store publish**
+    (TODO 6b, pre-submission gate). **BUILD 26** cut before that (Cristina round 3:
+    conversational clarify fallback in the interview, deterministic date normalization
+    (`lib/dateInput.ts`) with live preview, clearer "on a date" copy). Her volume bug SURVIVED
+    build 26's first fix; real cause found after: expo-speech-recognition leaves the iOS audio
+    session in "measurement" mode and never deactivates it → `hooks/useDictation.native.ts` now
+    sets a proper session category and releases the session on stop/end/error — **rides the next
+    build, UNVERIFIED on device**. **Polish batch** (TODO 7, all shipped): OG/Twitter share
+    cards, JSON-LD everywhere, context-carrying CTAs (guide → interview greeting), a11y round 1,
+    build-log newest-first, Sample plan always in the menu. **Region-aware steps v1 SHIPPED**
+    (`4add0da` — the last pre-release feature; region slot in the interview, `regional` flags
+    through plan/guides/report). Then a design pass: **how-it-works** content now sits in the
+    standard centered 760px column (was full-bleed) and the homework "roadmap" page is renamed
+    **"the product roadmap"** (vs. the roadmap the product builds for users).
+    **⚠️ EAS BUILDS NOW ONLY ON USER COMMAND** (free-tier credits low — user directive).
+    **Build 27 batch waiting:** volume fix v2 (needs device verification), delete-my-account in
+    the native menu, region slot, everything since build 26.
 
 **ALSO SPOTTED in ASC (App Store release prep):** the DSA **trader status** must be completed
 (ASC → Business banner) or EU distribution is blocked — Spain IS the market. Add to the

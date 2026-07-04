@@ -30,7 +30,7 @@ const TOPICS = [
   { icon: '🏫', title: 'Schools & education', body: 'Public bilingual, international private, home country curriculum — the options vary enormously by city. Lola maps what\'s available where you\'re looking.' },
   { icon: '💼', title: 'Work & remote income', body: 'Working remotely, starting a Spanish job search, or freelancing — each has different visa and tax implications. Lola builds the right path for your situation.' },
   { icon: '🏦', title: 'Banking & money', body: 'How to open a Spanish bank account, which services (Wise, Revolut) make sense for currency exchange, and how to transfer larger sums without losing money.' },
-  { icon: '📋', title: 'Bureaucracy, in order', body: 'NIE, empadronamiento, TIE, health card, Modelo 720, driving licence — all the paperwork, sequenced correctly, with real deadlines surfaced before they sneak up on you.' },
+  { icon: '📋', title: 'Bureaucracy, in order', body: 'NIE, empadronamiento, TIE, health card, Modelo 720, driving licence — all the paperwork, sequenced correctly, with real deadlines surfaced before they sneak up on you — and where rules differ by comunidad, your plan says so.' },
 ];
 
 const PROBLEMS = [
@@ -54,16 +54,19 @@ export default function HowItWorksPage() {
       <NavBar />
 
       <View style={styles.header}>
+        <View style={styles.inner}>
         <Text style={styles.eyebrow}>How Camino works</Text>
         <Text style={styles.headline}>From first question{'\n'}to clear next step.</Text>
         <Text style={styles.sub}>
           Moving to Spain is manageable when you know what applies to you and what comes first.
           That's all Camino does — in three steps.
         </Text>
+        </View>
       </View>
 
       {/* Steps */}
       <View style={styles.section}>
+        <View style={styles.inner}>
         {STEPS.map((step, i) => (
           <View key={i} style={styles.stepRow}>
             <Text style={styles.stepNum}>{step.num}</Text>
@@ -73,10 +76,12 @@ export default function HowItWorksPage() {
             </View>
           </View>
         ))}
+        </View>
       </View>
 
       {/* What's covered */}
       <View style={[styles.section, styles.sectionAlt]}>
+        <View style={styles.inner}>
         <Text style={styles.sectionEyebrow}>What's covered</Text>
         <Text style={styles.sectionHeadline}>The full picture, not just the paperwork.</Text>
         <Text style={styles.sectionBody}>
@@ -94,10 +99,12 @@ export default function HowItWorksPage() {
             </View>
           ))}
         </View>
+        </View>
       </View>
 
       {/* Why it matters */}
       <View style={styles.section}>
+        <View style={styles.inner}>
         <Text style={styles.sectionEyebrow}>Why sequence matters</Text>
         <Text style={styles.sectionHeadline}>Moving abroad is a maze with no map.</Text>
         <View style={[styles.problemGrid, wide && styles.problemGridWide]}>
@@ -108,10 +115,12 @@ export default function HowItWorksPage() {
             </View>
           ))}
         </View>
+        </View>
       </View>
 
       {/* Lola */}
       <View style={[styles.section, styles.sectionDark]}>
+        <View style={styles.innerCenter}>
         <View style={styles.lolaGlyph}><Text style={styles.lolaGlyphStar}>✦</Text></View>
         <Text style={styles.lolaQuote}>"I keep the map. A gestor signs the papers."</Text>
         <Text style={styles.lolaAttrib}>— Lola, your Camino guide</Text>
@@ -120,6 +129,7 @@ export default function HowItWorksPage() {
           She'll never invent a deadline or dress up something important as optional.
           Guidance, not legal advice.
         </Text>
+        </View>
       </View>
 
       {/* Closing CTA — the page used to explain everything and then ask for nothing. */}
@@ -147,6 +157,8 @@ const styles = StyleSheet.create({
   sub:      { fontFamily: 'HankenGrotesk_400Regular', fontSize: 16, color: 'rgba(251,250,247,0.75)', lineHeight: 25, maxWidth: 520 },
 
   section:         { padding: 40, paddingVertical: 48 },
+  inner:           { width: '100%', maxWidth: 760, alignSelf: 'center' },
+  innerCenter:     { width: '100%', maxWidth: 760, alignSelf: 'center', alignItems: 'center' },
   sectionAlt:      { backgroundColor: '#F0F3F8' },
   sectionEyebrow:  { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.cobalt, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 12 },
   sectionHeadline: { fontFamily: 'Fraunces_600SemiBold', fontSize: 28, color: palette.indigo, marginBottom: 12, lineHeight: 36 },

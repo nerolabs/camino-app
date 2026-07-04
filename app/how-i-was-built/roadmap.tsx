@@ -82,8 +82,8 @@ export default function Roadmap() {
       />
       <NavBar />
       <View style={styles.column}>
-        <Text style={styles.eyebrow}>WHERE CAMINO IS GOING</Text>
-        <Text style={styles.title}>The roadmap</Text>
+        <Text style={styles.eyebrow}>WHERE THE PRODUCT IS GOING</Text>
+        <Text style={styles.title}>The product roadmap</Text>
         <Text style={styles.dek}>
           Camino gives you a roadmap, so it’s only fair you get to see ours. Updated with every
           release — last: {UPDATED}.
