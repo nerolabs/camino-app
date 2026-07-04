@@ -5,6 +5,7 @@ import { palette } from '@/constants/Colors';
 import {
   guideById, titleById, describeTiming, metaDescription, related, shortClause, CATEGORY_LABEL,
 } from '@/core/guide-content';
+import { GUIDE_PROSE } from '@/core/guide-prose';
 import { SEV_LABEL, SEV_BLURB, SOURCE_BLURB, openExternal } from '@/lib/plan-format';
 import { CATEGORY_TIP } from '@/core/email-digest';
 import NavBar from '@/components/NavBar';
@@ -54,6 +55,10 @@ export default function GuidePage() {
         <Link href="/guide" style={styles.crumb}>← All guides</Link>
         <Text style={styles.eyebrow}>{CATEGORY_LABEL[g.category].toUpperCase()} · {SEV_LABEL[g.severity].toUpperCase()}</Text>
         <Text style={styles.title}>{g.title}</Text>
+
+        {/* Curated narrative — restates catalog facts + process context only; the digit-lint
+            test guarantees no number appears here that isn't in the title (invariant 3). */}
+        {GUIDE_PROSE[g.id] && <Text style={styles.prose}>{GUIDE_PROSE[g.id]}</Text>}
 
         <View style={styles.factCard}>
           <Text style={styles.factLabel}>WHEN IT'S DUE</Text>
@@ -123,7 +128,8 @@ const styles = StyleSheet.create({
 
   crumb:      { fontFamily: 'HankenGrotesk_500Medium', fontSize: 13, color: palette.muted, marginBottom: 18 },
   eyebrow:    { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, letterSpacing: 1.5, color: palette.amber, marginBottom: 10 },
-  title:      { fontFamily: 'Fraunces_600SemiBold', fontSize: 30, lineHeight: 38, color: palette.indigo, marginBottom: 20 },
+  title:      { fontFamily: 'Fraunces_600SemiBold', fontSize: 30, lineHeight: 38, color: palette.indigo, marginBottom: 14 },
+  prose:      { fontFamily: 'HankenGrotesk_400Regular', fontSize: 16, lineHeight: 25, color: palette.indigo, marginBottom: 20 },
   link:       { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, color: palette.cobalt, marginTop: 12 },
 
   factCard:   { backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 14, padding: 20, marginBottom: 14 },

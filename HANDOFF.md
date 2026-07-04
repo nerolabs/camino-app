@@ -56,7 +56,7 @@ user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS bui
    sample-plan/homework trio; only guides had it), how-it-works gained the missing CTA + weekly-
    email/guides mentions + shared Footer, home strip links to /guide, shared `lib/useWide.ts`
    breakpoint hook, deploy.sh strips iCloud conflict-copy dirs (one deploy shipped stale pages;
-   verify a content marker after deploys — getcamino.app CDN caches pages ~1h).
+   verify a content marker after deploys — ON THE UNIQUE DEPLOYMENT URL (always fresh); the staging/production alias + custom domain lag behind on CDN edges (minutes to ~1h), and query-string cache-busting is unreliable).
    **Tomorrow's push — REORDERED by the 2026-07-03 multi-stakeholder review
    (docs/STRATEGY.md, read it):**
    1. **Legal surfaces FIRST (TODO item 6)** — in-app account deletion (Apple 5.1.1(v)
@@ -81,6 +81,17 @@ user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS bui
    applinks:getcamino.app), profile minted 22:30Z; submission 6cf5ed94 uploading to
    TestFlight at last check. **Playbook: when adding ANY capability to app.config, flip it
    on the App ID first (or expect the next build to fail and re-mint).**
+
+9. **2026-07-04 daytime:** new Lola voice (ELEVENLABS_VOICE_ID in both EAS envs, server-side —
+   live everywhere, no build) + speakable passport question. **Family-testing round two fixed**
+   (feedback grace-timeout, keyboard-aware sheets/dialogs, honest no-op re-plan + extractor
+   guardrail, Dynamic-Type-proof nav — lesson: test with large accessibility text). **BUILD 25**
+   kicked with all of it (user request — Cristina blocked on the nav). **Curated guide prose
+   SHIPPED**: `core/guide-prose.ts` (60 explainers, Camino voice) + `tests/guide-prose.test.ts`
+   **digit-lint** (prose digits ⊆ title digits — invariant 3 as a build gate; it caught its
+   first violation pre-ship) + prose-first meta descriptions (template fallback when the first
+   sentence references "the title"). Remaining from polish backlog: share cards, guide JSON-LD,
+   context CTAs, a11y sweep. Legal surfaces (TODO 6) still FIRST for the store push.
 
 **ALSO SPOTTED in ASC (App Store release prep):** the DSA **trader status** must be completed
 (ASC → Business banner) or EU distribution is blocked — Spain IS the market. Add to the

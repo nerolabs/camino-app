@@ -335,6 +335,16 @@ const ROWS: Row[] = [
       'When the work is provably done but the network is slow to say so, thank the user and stop the spinner — and count how often it happens.',
     ],
   },
+  {
+    feature: 'The guides learn to talk',
+    date: '4 Jul 2026',
+    work: 'All sixty guide pages gained a written explainer — what the step actually is, how the process feels, who\'s involved — in Camino\'s voice. Each page\'s search snippet now uses its own opening sentence instead of a shared template.',
+    decisions: [
+      'The honesty rule became a build gate: a test fails if the prose contains any number that isn\'t already in that step\'s own title — new figures and deadlines can only live behind the official source link.',
+      'The lint caught its first violation before shipping (a cross-referenced form number) — the mechanism works.',
+      'Narrative explains, data asserts: prose adds context and texture, while every checkable fact stays in the catalog where the audit can see it.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

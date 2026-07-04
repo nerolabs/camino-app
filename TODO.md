@@ -515,7 +515,7 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       expat Facebook groups/WhatsApp and previews are currently bare. Cheap, high leverage.
    2. **JSON-LD on the guide pages** — Article/FAQ structured data; the SEO follow-through on
       the 60 pages.
-   3. **Curated prose per guide** — 2–3 sentences of "what this actually is" per obligation.
+   3. **Curated prose per guide — SHIPPED 2026-07-04.** core/guide-prose.ts (60 explainers) + digit-lint test (prose digits ⊆ title digits, invariant 3 mechanized) + prose-first meta descriptions.
       A real content session: every sentence verified against the official source (invariant 3).
    4. **Context-carrying CTAs** — pass the guide id into the interview so Lola can acknowledge
       where the visitor came from ("You came from the NIE guide…").

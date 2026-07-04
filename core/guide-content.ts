@@ -6,6 +6,7 @@
  * dates only exist in a real roadmap, which is exactly what the pages' CTA points at.
  */
 import { CATALOG, type Obligation } from '@/core/engine-controller';
+import { GUIDE_PROSE } from '@/core/guide-prose';
 
 export const GUIDES: Obligation[] = CATALOG;
 
@@ -76,6 +77,17 @@ export function shortClause(title: string): string {
 }
 
 export function metaDescription(o: Obligation): string {
+  // Prefer the curated prose's first sentence — unique, human copy per page beats a template.
+  // EXCEPT when that sentence leans on "the title": on the page it points at the heading
+  // right above it, but in a search snippet it reads as nonsense — fall back to the template.
+  const prose = GUIDE_PROSE[o.id];
+  if (prose) {
+    const cut = prose.indexOf('. ');
+    const first = cut > 40 ? prose.slice(0, cut + 1) : prose;
+    if (!first.toLowerCase().includes('title')) {
+      return `${first} One step in Camino's free, source-cited roadmap for moving to Spain.`;
+    }
+  }
   const what = shortClause(o.title);
   const kind = o.source === 'official' ? 'an official Spanish requirement' : 'a practical step Camino recommends';
   return `${what} — ${kind} when moving to Spain: when it's due, what comes before it, and the source. One step in Camino's personalized relocation roadmap.`;
