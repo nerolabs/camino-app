@@ -23,6 +23,10 @@ const SECTIONS: Section[] = [
   {
     h: 'Just shipped',
     items: [
+      { title: 'A safer name: Get Camino', date: '4 Jul 2026', note: 'The app and site now go by Get Camino — a distinctive compound matching the domain we already own, chosen deliberately before any brand spend on a crowded word.' },
+      { title: 'Voice that takes turns', date: '4 Jul 2026', note: 'Opening the mic stops Lola mid-sentence; closing it keeps your last words; the cue appears when the mic is actually hot; the answer box grows as you dictate; and no spinner is allowed to live past 35 seconds — Lola owns the retry.' },
+      { title: 'The app tests itself now', date: '4 Jul 2026', note: 'Twelve automated web journeys — including signing in and reworking a real roadmap — plus iOS simulator flows on every release train. The first run caught a bug on every page load that humans had scrolled straight past.' },
+      { title: 'Every official source link, click-tested', date: '4 Jul 2026', note: 'All 55 government links checked against their steps; two were quietly broken (a retired portal, a cookie wall) and now point where they should.' },
       { title: 'Region-aware steps', date: '4 Jul 2026', note: 'The interview now asks which comunidad you\'re settling in, and the steps whose rules vary by region — transfer tax, wealth tax, school admissions, property tax — say so and name yours. Region-by-region rates come next as a sourced content pass.' },
       { title: 'Privacy, terms & delete-my-account', date: '4 Jul 2026', note: 'The grown-up pages: plain-language privacy policy and terms in every footer, cookieless analytics (no banner needed), and one-tap permanent account deletion in the menu.' },
       { title: 'Every guide got a written explainer', date: '4 Jul 2026', note: 'Sixty pages now tell you what each step actually is and how it feels in practice — with a build rule that the prose can never introduce a number the step itself doesn\'t carry.' },
@@ -43,21 +47,22 @@ const SECTIONS: Section[] = [
   {
     h: 'In progress',
     items: [
+      { title: 'Hablamos español', note: 'A moving-to-Spain product should speak Spanish. The whole experience — Lola included — ships in Spanish before launch, verified by a native-speaking human, with the same rule the catalog lives by: a translation may never change a number.' },
       { title: 'Family testing & edge-case cleanup', note: 'Real relatives, real phones, real bug reports — the app earns its release the honest way.' },
     ],
   },
   {
     h: 'Next',
     items: [
-      { title: 'The public App Store release', note: 'The feature list is done. What remains is honest: more family testing, edge-case cleanup, and the grown-up paperwork.' },
+      { title: 'The public launch — web, iOS, and Android together', note: 'Android moved up from "later": launching on all three. What remains is honest: Spanish, more family testing, and the grown-up paperwork.' },
+      { title: 'French, German, Italian', note: 'Right behind Spanish — the plumbing makes each new language a translation exercise, not an engineering project.' },
       { title: 'Region-by-region specifics', note: 'The rates and windows for each comunidad, verified against each region\'s own official sources — the content pass behind the region flags.' },
     ],
   },
   {
     h: 'Later',
     items: [
-      { title: 'Android app' },
-      { title: 'Spanish first, then more languages' },
+      { title: 'More languages', note: 'Dutch and Portuguese look likeliest next, by who actually moves to Spain.' },
     ],
   },
   {

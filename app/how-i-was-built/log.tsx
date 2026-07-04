@@ -466,6 +466,25 @@ const ROWS: Row[] = [
       'Renamed to differentiate: "roadmap" is what Get Camino builds FOR YOU in the product; "the product roadmap" is where the product itself is going.',
     ],
   },
+  {
+    feature: 'A real inbox and a real operator',
+    date: '4 Jul 2026',
+    work: 'The product stopped using a personal Gmail: feedback@, privacy@ and legal@getcamino.app now route reports and rights requests (delivery tested end-to-end), and the legal pages name the actual operator — AELaboratories, Inc — with governing law updated to match its state. The path to a formal company is deliberately deferred: sole proprietorship until there\'s a proven revenue model.',
+    decisions: [
+      'Purpose-named addresses over one generic inbox: where an email lands tells you what it is before you open it — and they all route to a single mailbox anyway.',
+      'Incorporate when revenue proves the model, not before — the migration is mostly behind-the-scenes store agreements, so waiting costs little.',
+    ],
+  },
+  {
+    feature: 'The plan for Spanish',
+    date: '4 Jul 2026',
+    work: 'A moving-to-Spain product that only speaks English lacks authenticity — so localization moved from "someday" to before launch. The technical design is written and approved: Spanish first (verified by a native-speaking family member), then French, German and Italian as fill-in-the-blanks exercises on the same plumbing. The engine stays language-free; translation is purely presentation.',
+    decisions: [
+      'Invariant 3 extends to translations, mechanically: a translated step may never carry a number its English source doesn\'t — the digit-lint now guards every language.',
+      'The language switcher is a feature, not a setting: each language listed in its own name, visible in the menu, because a Spanish speaker lost in an English UI can always find "Español".',
+      'Lola says tú, not usted — warmth is her voice in every language. And "Get Camino" and "Lola" never translate.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {
