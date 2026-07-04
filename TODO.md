@@ -114,6 +114,18 @@ STRATEGY.md backtest · EAS builds only on user command · (once L0 lands) trans
 32. **Scale revisits**: weekly-email MAX_SENDS cap · rate-limit posture · PostHog retention
     dashboards · iPad support.
 
+### 🔒 Blocked on upstream (revisit when the dependency changes)
+33. **Re-fold native authed E2E into CI** (blocked on Maestro). The `04-authed-roadmap`
+    deep-link flow is written, tagged `authed`, and `--exclude-tags=authed` in CI because
+    opening iOS deep links via Maestro on CI runners is a documented, unresolved flake — the
+    "Open in app" SpringBoard alert isn't in the app's a11y tree on Maestro 2.x / iOS 18.x
+    ([mobile-dev-inc/Maestro #2610](https://github.com/mobile-dev-inc/Maestro/issues/2610);
+    confirmed in our runs 2–4). Meanwhile it's covered by the 12 authed Playwright web tests
+    + manual on-device sign-in. **Re-enable when:** #2610 is fixed, OR pin a pre-1.40 Maestro
+    and verify it drives the iOS-18.x simulator → then drop `--exclude-tags=authed`. **Do NOT
+    coordinate-tap the dialog** (brute-forcing a tool bug — explicitly rejected). Full context:
+    docs/BUILD.md + memory `maestro-ios-deeplink-flake`.
+
 **Explicitly NOT building (user decisions, unchanged):** push notifications (weekly email IS
 the retention loop) · document vault · country #2 · household sharing (wait for demand).
 
