@@ -16,6 +16,7 @@ import { askAnthropic } from '@/lib/lola';
 import { useDictation } from '@/hooks/useDictation';
 import { useLolaVoice } from '@/hooks/useLolaVoice';
 import { capture } from '@/lib/analytics';
+import { captureError } from '@/lib/monitoring';
 import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
 
 type Turn = { role: 'lola' | 'user'; text: string };
@@ -341,6 +342,11 @@ export default function InterviewScreen() {
     } catch (e) {
       // Extraction failed or timed out: own it, restore their answer so nothing is retyped,
       // and let them send again. The spinner must never be a destination (build-28 finding).
+      // Sentry too (user directive): the server times its upstream; this catches everything
+      // the server can't see — network hangs between the app and the API, and the 35s abort.
+      captureError(e instanceof Error ? e : new Error('interview turn failed'), {
+        route: '/interview', field: currentSlot.field,
+      });
       capture('interview_turn_failed', { field: currentSlot.field });
       setTurns(prev => [...prev, {
         role: 'lola',

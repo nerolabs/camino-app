@@ -151,6 +151,7 @@ export async function POST(request: Request) {
       return Response.json({ error: 'server not configured' }, { status: 500 });
     }
 
+    const upstreamStart = Date.now();
     const res = await fetch(ANTHROPIC_URL, {
       method: 'POST',
       headers: {
@@ -165,6 +166,14 @@ export async function POST(request: Request) {
         messages: body.messages,
       }),
     });
+    // A turn normally answers in 1–4s. Anything past 10s is a user staring at a spinner —
+    // page it (user directive 2026-07-04): one Sentry event per slow turn, with the timing.
+    const upstreamMs = Date.now() - upstreamStart;
+    if (upstreamMs > 10_000) {
+      await captureServerError(new Error('lola upstream slow (>10s)'), {
+        route: '/api/lola', extra: { ms: upstreamMs, model: body.model ?? DEFAULT_MODEL, status: res.status },
+      });
+    }
 
     if (!res.ok) {
       const detail = await res.text();
