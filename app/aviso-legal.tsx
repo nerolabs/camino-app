@@ -14,7 +14,7 @@ export default function AvisoLegalPage() {
       updated="4 July 2026"
       sections={[
         { h: 'Titular del sitio / Site operator', body: [
-          'getcamino.app ("Get Camino") is operated by AELabratories (a US sole proprietorship, d/b/a), PO Box 1973, Vashon, WA 98070, United States — a US-based operator (no Spanish NIF/CIF applies).',
+          'getcamino.app ("Get Camino") is operated by AELaboratories (a US sole proprietorship, d/b/a), PO Box 1973, Vashon, WA 98070, United States — a US-based operator (no Spanish NIF/CIF applies).',
           'Contact: legal@getcamino.app, or the "Report a problem" form in the app.',
         ]},
         { h: 'Purpose', body: [
