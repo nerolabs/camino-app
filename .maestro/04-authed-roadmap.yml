@@ -1,21 +1,17 @@
-# P0 authed: sign in through the REAL magic-link deep-link flow (AUTH_LINK is minted by
-# scripts/e2e/seed.mjs with redirect_to=caminoapp://auth-callback), then the seeded roadmap
-# renders and a step sheet opens.
+# P0 authed: sign in by opening the caminoapp:// deep link directly (AUTH_LINK is the
+# post-verify redirect captured server-side by scripts/e2e/seed.mjs — access+refresh tokens
+# in the fragment), then the seeded roadmap renders and a step sheet opens.
 #
-# Run-2 postmortem: iOS interposes an "Open in 'Get Camino'?" system dialog after Safari
-# follows the verify redirect — a conditional (runFlow when visible) checked BEFORE the
-# dialog appeared and skipped, leaving it unanswered. Now we WAIT for the dialog and tap it.
-# We also route to the roadmap via the signed-in "My roadmap" nav button rather than
-# assuming which screen the deep link lands on.
+# Why a deep link, not the https magic link: opening the https link routes through Safari,
+# which raises an "Open in 'Get Camino'?" SpringBoard alert. That alert is NOT in the app's
+# accessibility tree, so Maestro can neither see nor reliably tap it (runs 2 & 3 both died
+# there). Opening the custom scheme directly hands the URL straight to the app's deep-link
+# handler (completeSessionFromUrl → setSession) — the same code path, no browser, no dialog.
 appId: ${APP_ID}
 ---
 - launchApp:
     clearState: true
 - openLink: ${AUTH_LINK}
-- extendedWaitUntil:
-    visible: "Open"
-    timeout: 30000
-- tapOn: "Open"
 - extendedWaitUntil:
     visible: "My roadmap"
     timeout: 45000

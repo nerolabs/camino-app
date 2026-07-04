@@ -92,6 +92,7 @@ if (!user) {
   if (error) throw error;
 }
 
+// Link #1 → the web suite (auth.setup.ts) verifies hashed_token itself into a session.
 const { data: link, error: linkErr } = await admin.auth.admin.generateLink({
   type: 'magiclink',
   email: EMAIL,
@@ -99,9 +100,31 @@ const { data: link, error: linkErr } = await admin.auth.admin.generateLink({
 });
 if (linkErr) throw linkErr;
 
+// Link #2 → a ready-to-open DEEP LINK for native. Following the verify URL server-side
+// yields the exact caminoapp://auth-callback#access_token=… redirect Supabase would hand a
+// browser — but WITHOUT Safari, so Maestro never faces the "Open in Get Camino?" SpringBoard
+// dialog (which isn't in the app's accessibility tree — the run-2/3 failure). The app's own
+// deep-link handler (completeSessionFromUrl → setSession) does the rest. Separate token so it
+// doesn't consume link #1.
+let deep_link = null;
+{
+  const { data: l2, error: e2 } = await admin.auth.admin.generateLink({
+    type: 'magiclink', email: EMAIL, options: { redirectTo: REDIRECT_TO },
+  });
+  if (e2) throw e2;
+  const verifyUrl = l2.properties?.action_link;
+  if (verifyUrl) {
+    const res = await fetch(verifyUrl, { redirect: 'manual' });
+    const loc = res.headers.get('location');
+    if (loc && loc.startsWith('caminoapp://')) deep_link = loc;
+    else console.error(`seed: unexpected verify redirect (status ${res.status}): ${loc?.slice(0, 60)}`);
+  }
+}
+
 console.log(JSON.stringify({
   email: EMAIL,
   user_id: user.id,
   action_link: link.properties?.action_link ?? null,
   hashed_token: link.properties?.hashed_token ?? null,
+  deep_link,
 }));

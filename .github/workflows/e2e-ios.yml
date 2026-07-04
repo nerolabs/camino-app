@@ -74,8 +74,8 @@ jobs:
           E2E_REDIRECT_TO: caminoapp://auth-callback
         run: |
           node scripts/e2e/seed.mjs > seed.json
-          node -e 'const s=require("./seed.json");if(!s.action_link)process.exit(1)'
-          echo "AUTH_LINK=$(node -e 'console.log(require("./seed.json").action_link)')" >> "$GITHUB_ENV"
+          node -e 'const s=require("./seed.json");if(!s.deep_link)process.exit(1)'
+          echo "AUTH_LINK=$(node -e 'console.log(require("./seed.json").deep_link)')" >> "$GITHUB_ENV"
 
       - name: Run Maestro flows
         run: |
