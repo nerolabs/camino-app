@@ -56,6 +56,10 @@ function isAllowed(value: string): boolean {
   try {
     const url = new URL(value);
     if (ALLOWED_ORIGINS.has(url.origin)) return true;
+    // Per-deploy EAS Hosting origins (camino--<id>.expo.app) are all OUR deployments —
+    // allowing them keeps pre-production verification on unique deployment URLs working
+    // (found 2026-07-04: the interview 403'd when tested on a fresh deploy URL).
+    if (/^camino--[a-z0-9]+\.expo\.app$/.test(url.hostname) && url.protocol === 'https:') return true;
     return url.hostname === 'localhost' || url.hostname === '127.0.0.1'; // any localhost port for dev
   } catch {
     return false;

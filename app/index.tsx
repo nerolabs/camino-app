@@ -7,6 +7,8 @@ import {
 import Seo from '@/components/Seo';
 import { palette } from '@/constants/Colors';
 import { useWide } from '@/lib/useWide';
+import { useReducedMotion } from '@/lib/useReducedMotion';
+import { siteJsonLd } from '@/core/guide-content';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 
@@ -21,8 +23,10 @@ function RotatingPhoto({ wide }: { wide: boolean }) {
   const [current, setCurrent] = useState(0);
   const [next, setNext] = useState(1);
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
+    if (reducedMotion) return; // rest on the current photo — no endless cross-fade (a11y)
     const interval = setInterval(() => {
       // fade in the next photo over the current
       Animated.timing(fadeAnim, {
@@ -40,7 +44,7 @@ function RotatingPhoto({ wide }: { wide: boolean }) {
       });
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [reducedMotion]);
 
   const containerStyle = wide ? styles.photoContainerWide : styles.photoContainerMobile;
   // Explicit pixel height, not '100%': expo-image's wrapper collapses to height 0 in the
@@ -51,7 +55,7 @@ function RotatingPhoto({ wide }: { wide: boolean }) {
   return (
     <View style={containerStyle}>
       {/* Base layer — current photo */}
-      <Image source={PHOTOS[current].src} style={imgStyle} resizeMode="cover" />
+      <Image source={PHOTOS[current].src} style={imgStyle} resizeMode="cover" accessible accessibilityRole="image" accessibilityLabel={`${PHOTOS[current].label}, Spain`} />
       {/* Fade layer — next photo */}
       <Animated.View style={[StyleSheet.absoluteFill, { opacity: fadeAnim }]}>
         <Image source={PHOTOS[next].src} style={imgStyle} resizeMode="cover" />
@@ -74,6 +78,7 @@ export default function LandingPage() {
         title="Camino — your personalized roadmap for moving to Spain"
         description="Camino turns moving to Spain into a step-by-step roadmap: the right visa, residency, schools, banking and bureaucracy — sequenced for your situation, every official step backed by its government source. Free, about 3 minutes."
         canonical="https://getcamino.app/"
+        jsonLd={siteJsonLd()}
       />
 
       <NavBar />
@@ -86,7 +91,7 @@ export default function LandingPage() {
             <Text style={styles.lolaGlyphStar}>✦</Text>
           </View>
           <Text style={styles.heroEyebrow}>Moving to Spain</Text>
-          <Text style={styles.heroHeadline}>
+          <Text style={styles.heroHeadline} accessibilityRole="header">
             Your personalized roadmap for moving to Spain.
           </Text>
           <Text style={styles.heroSub}>

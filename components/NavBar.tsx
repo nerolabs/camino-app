@@ -34,7 +34,7 @@ export default function NavBar() {
           at large accessibility text sizes the labels outgrew the row and the bar stacked
           into two ugly lines (build-24 family finding — same phone, larger text setting).
           The MENU items stay fully scalable; only the one-line bar is capped. */}
-      <TouchableOpacity onPress={() => router.push('/')} style={styles.logoWrap}>
+      <TouchableOpacity onPress={() => router.push('/')} style={styles.logoWrap} accessibilityRole="link" accessibilityLabel="Camino home">
         <Text style={styles.logo} numberOfLines={1} maxFontSizeMultiplier={1.1}>
           {width < WIDE ? 'Camino' : 'Camino: Your Road to Spain'}
         </Text>
@@ -55,7 +55,7 @@ export default function NavBar() {
           </>
         )}
 
-        <TouchableOpacity onPress={() => setMenuOpen(true)} style={styles.burger} accessibilityLabel="Menu">
+        <TouchableOpacity onPress={() => setMenuOpen(true)} style={styles.burger} accessibilityLabel="Menu" accessibilityRole="button">
           <Text style={styles.burgerText} maxFontSizeMultiplier={1.2}>☰</Text>
         </TouchableOpacity>
       </View>
@@ -93,7 +93,7 @@ export default function NavBar() {
 
 function MenuLink({ label, onPress }: { label: string; onPress: () => void }) {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.menuItem}>
+    <TouchableOpacity onPress={onPress} style={styles.menuItem} accessibilityRole="button">
       <Text style={styles.menuItemText}>{label}</Text>
     </TouchableOpacity>
   );

@@ -37,4 +37,13 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
 </svg>`;
 
 await sharp(Buffer.from(svg)).flatten({ background: WHITE }).png().toFile('public/og-card.png');
-console.log('Generated public/og-card.png (1200×630)');
+
+// Square logo for schema.org Organization (512×512): the icon tile, publicly served.
+const L = 512, lc = L / 2;
+const logoSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${L}" height="${L}" viewBox="0 0 ${L} ${L}">
+  <rect width="${L}" height="${L}" rx="108" fill="${COBALT}"/>
+  <path d="${starPath(190, 79, lc, lc)}" fill="${WHITE}"/>
+  <circle cx="${lc}" cy="${lc}" r="35" fill="${AMBER}"/>
+</svg>`;
+await sharp(Buffer.from(logoSvg)).png().toFile('public/logo.png');
+console.log('Generated public/og-card.png (1200×630) + public/logo.png (512×512)');

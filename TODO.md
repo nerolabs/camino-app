@@ -524,14 +524,17 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
 7. **Polish backlog for the next push (user-approved 2026-07-03 night), in value order:**
    1. **Social share cards — SHIPPED 2026-07-04.** components/Seo.tsx (full og:/twitter set on
       every public page) + public/og-card.png from scripts/gen-share-card.mjs (brand geometry).
-   2. **JSON-LD on the guide pages** — Article/FAQ structured data; the SEO follow-through on
-      the 60 pages.
+   2. **JSON-LD — SHIPPED 2026-07-04.** Article+BreadcrumbList per guide, CollectionPage+ItemList
+      on the index, WebSite+Organization on home (core/guide-content.ts, pure), logo.png served.
    3. **Curated prose per guide — SHIPPED 2026-07-04.** core/guide-prose.ts (60 explainers) + digit-lint test (prose digits ⊆ title digits, invariant 3 mechanized) + prose-first meta descriptions.
       A real content session: every sentence verified against the official source (invariant 3).
-   4. **Context-carrying CTAs** — pass the guide id into the interview so Lola can acknowledge
-      where the visitor came from ("You came from the NIE guide…").
-   5. **Accessibility sweep** — reduced-motion for the rotating hero, focus states, labels.
-      Do before the store listing points people at the web.
+   4. **Context-carrying CTAs — SHIPPED 2026-07-04.** /interview?from=<guide-id>; Lola's greeting
+      acknowledges the referring guide (phrasing only, no facts). Verified live. Also fixed:
+      /api/lola + /api/tts origin allowlists now accept our own per-deploy camino--*.expo.app
+      origins (they 403'd pre-production verification).
+   5. **Accessibility sweep — SHIPPED 2026-07-04 (round 1).** lib/useReducedMotion (hero rests),
+      roles/labels on nav/menu/cards/dialogs/inputs, header roles on page titles,
+      accessibilityViewIsModal on dialogs. Deeper pass (focus-visible styles, full audit) later.
 8. **App Store submission — gated (user decision 2026-07-03)** on region-aware steps PLUS
    significant family testing / edge-case cleanup PLUS item 6 above (account deletion +
    privacy policy URL are hard blockers). See docs/APP_STORE.md for the pack.

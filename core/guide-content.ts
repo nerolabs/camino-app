@@ -96,3 +96,73 @@ export function metaDescription(o: Obligation): string {
 export function related(o: Obligation, n = 5): Obligation[] {
   return CATALOG.filter(g => g.category === o.category && g.id !== o.id).slice(0, n);
 }
+
+// ── schema.org structured data (pure functions of the catalog, like everything else) ──────
+
+const ORG = {
+  '@type': 'Organization',
+  name: 'Camino',
+  url: 'https://getcamino.app',
+  logo: { '@type': 'ImageObject', url: 'https://getcamino.app/logo.png' },
+};
+
+export function siteJsonLd(): object[] {
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Camino',
+      url: 'https://getcamino.app',
+      description: 'A personalized, source-cited roadmap for moving to Spain.',
+      publisher: ORG,
+    },
+  ];
+}
+
+export function guideJsonLd(o: Obligation): object[] {
+  const url = `https://getcamino.app/guide/${o.id}`;
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: `${shortClause(o.title)} — moving to Spain`,
+      description: metaDescription(o),
+      url,
+      mainEntityOfPage: url,
+      image: 'https://getcamino.app/og-card.png',
+      author: ORG,
+      publisher: ORG,
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Camino', item: 'https://getcamino.app' },
+        { '@type': 'ListItem', position: 2, name: 'Guides', item: 'https://getcamino.app/guide' },
+        { '@type': 'ListItem', position: 3, name: shortClause(o.title), item: url },
+      ],
+    },
+  ];
+}
+
+export function guideIndexJsonLd(): object[] {
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: 'Moving to Spain: every step, explained',
+      url: 'https://getcamino.app/guide',
+      publisher: ORG,
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: CATALOG.length,
+        itemListElement: CATALOG.map((o, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: shortClause(o.title),
+          url: `https://getcamino.app/guide/${o.id}`,
+        })),
+      },
+    },
+  ];
+}

@@ -7,8 +7,10 @@ import Head from '@/components/SeoHead';
 
 const DEFAULT_IMAGE = 'https://getcamino.app/og-card.png';
 
-export default function Seo({ title, description, canonical, image = DEFAULT_IMAGE }: {
+export default function Seo({ title, description, canonical, image = DEFAULT_IMAGE, jsonLd }: {
   title: string; description: string; canonical: string; image?: string;
+  // schema.org structured data (an object or several) — rendered as application/ld+json.
+  jsonLd?: object | object[];
 }) {
   return (
     <Head>
@@ -27,6 +29,11 @@ export default function Seo({ title, description, canonical, image = DEFAULT_IMA
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
+      {jsonLd && (
+        <script type="application/ld+json">
+          {JSON.stringify(Array.isArray(jsonLd) && jsonLd.length === 1 ? jsonLd[0] : jsonLd)}
+        </script>
+      )}
     </Head>
   );
 }

@@ -33,6 +33,8 @@ function isAllowed(value: string): boolean {
   try {
     const url = new URL(value);
     if (ALLOWED_ORIGINS.has(url.origin)) return true;
+    // Per-deploy EAS Hosting origins are all our own deployments (see lola+api.ts).
+    if (/^camino--[a-z0-9]+\.expo\.app$/.test(url.hostname) && url.protocol === 'https:') return true;
     return url.hostname === 'localhost' || url.hostname === '127.0.0.1';
   } catch {
     return false;

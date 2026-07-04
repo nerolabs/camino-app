@@ -2,7 +2,7 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-nati
 import { useRouter, Link } from 'expo-router';
 import Seo from '@/components/Seo';
 import { palette } from '@/constants/Colors';
-import { GUIDES, CATEGORY_LABEL, CATEGORY_ORDER, shortClause } from '@/core/guide-content';
+import { GUIDES, CATEGORY_LABEL, CATEGORY_ORDER, shortClause, guideIndexJsonLd } from '@/core/guide-content';
 import { SEV_COLOR, SEV_LABEL } from '@/lib/plan-format';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
@@ -25,12 +25,13 @@ export default function GuideIndex() {
         title="Moving to Spain: every step, explained | Camino guides"
         description={`All ${GUIDES.length} steps of moving to Spain — visas, residency, tax, healthcare, banking and more. What each one is, when it's due, and the official source.`}
         canonical="https://getcamino.app/guide"
+        jsonLd={guideIndexJsonLd()}
       />
       <NavBar />
       <View style={styles.content}>
 
         <Text style={styles.eyebrow}>THE CAMINO GUIDES</Text>
-        <Text style={styles.title}>Every step of moving to Spain, explained.</Text>
+        <Text style={styles.title} accessibilityRole="header">Every step of moving to Spain, explained.</Text>
         <Text style={styles.dek}>
           These {GUIDES.length} steps are the same catalog Camino builds roadmaps from — each with
           what it is, when it's due, and the official source. Which ones apply to <Text style={styles.dekEm}>you</Text>,

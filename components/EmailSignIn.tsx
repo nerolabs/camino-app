@@ -68,6 +68,7 @@ export default function EmailSignIn({ pendingProfile, context, sendLabel, onVeri
         </Text>
         <TextInput
           style={styles.input}
+          accessibilityLabel="One-time code from your email"
           value={code}
           onChangeText={setCode}
           placeholder="12345678"
@@ -92,6 +93,7 @@ export default function EmailSignIn({ pendingProfile, context, sendLabel, onVeri
     <View style={styles.wrap}>
       <TextInput
         style={styles.input}
+        accessibilityLabel="Email address"
         value={email}
         onChangeText={setEmail}
         placeholder="you@example.com"

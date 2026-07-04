@@ -70,7 +70,7 @@ export default function FeedbackDialog({ visible, onClose }: { visible: boolean;
     <Modal visible={visible} transparent animationType="fade" onRequestClose={close}>
       <View style={[styles.overlay, kb > 0 && { paddingBottom: kb + 16 }]}>
         <Pressable style={StyleSheet.absoluteFill} onPress={close} />
-        <View style={styles.card}>
+        <View style={styles.card} accessibilityViewIsModal>
           {sent ? (
             <>
               <Text style={styles.title}>Gracias — got it.</Text>
@@ -85,6 +85,7 @@ export default function FeedbackDialog({ visible, onClose }: { visible: boolean;
               <Text style={styles.sub}>Something broken, confusing, or missing? Tell us — a sentence is plenty.</Text>
               <TextInput
                 style={styles.input}
+                accessibilityLabel="Describe the problem"
                 value={text}
                 onChangeText={setText}
                 placeholder="What happened?"

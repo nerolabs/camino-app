@@ -374,6 +374,15 @@ const ROWS: Row[] = [
       'The share card is generated from the same brand-mark code as the app icons: one geometry, every surface.',
     ],
   },
+  {
+    feature: 'Polish: structured data, a smarter front door, and quieter motion',
+    date: '4 Jul 2026',
+    work: 'Search engines now get structured data (article + breadcrumbs on every guide, the full catalog as a list, the site itself); arriving at the interview from a guide gets acknowledged ("so glad you\'re looking into getting your NIE sorted") before the first question; and an accessibility pass landed — the rotating home photo rests when your system prefers reduced motion, controls carry proper roles and labels, and inputs are named for screen readers.',
+    decisions: [
+      'The interview greeting may acknowledge WHERE you came from, never facts about the topic — phrasing is the only surface the model owns.',
+      'Per-deploy preview URLs are now first-class origins for our own APIs: the hardening was blocking our own pre-production verification.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

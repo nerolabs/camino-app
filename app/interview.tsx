@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
   StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator,
@@ -7,6 +7,7 @@ import {
 import NavBar from '@/components/NavBar';
 import { palette } from '@/constants/Colors';
 import { nextSlot, derive, interviewProgress, SLOTS, type Slot, type Profile } from '@/core/interview-controller';
+import { guideById, shortClause } from '@/core/guide-content';
 import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
 import { saveProfile as saveProfileDb } from '@/core/profileDb';
@@ -28,7 +29,7 @@ function transcriptOf(turns: Turn[]): string {
     .join('\n');
 }
 
-async function phraseQuestion(slot: Slot, turns: Turn[]): Promise<string> {
+async function phraseQuestion(slot: Slot, turns: Turn[], arrivedFrom?: string): Promise<string> {
   const transcript = transcriptOf(turns);
   const midConversation = transcript.length > 0;
   return askAnthropic({
@@ -43,7 +44,9 @@ Ask the NEXT question as a natural follow-up. Crucial rules:
 - Do NOT greet again — no "Hey!", "Hola!", "Hi!". You've already met.
 - Briefly acknowledge what they just told you when it's natural, then move on.
 - NEVER re-ask something they've already answered or clearly implied (e.g. if they mentioned "my wife", you already know a partner is coming — don't ask whether one is). Use that context to phrase this as a confirmation instead.`
-  : 'This is your very first question, so a short, warm greeting is welcome.'}
+  : `This is your very first question, so a short, warm greeting is welcome.${arrivedFrom
+      ? ` They arrived from Camino's guide about "${arrivedFrom}" — acknowledge that interest in a brief clause (no facts about the topic), then ask the question.`
+      : ''}`}
 
 Ask ONE short question to learn: ${slot.prompt_hint}.
 ${slot.sensitive ? 'Acknowledge this is personal and they only need to pick a range.' : ''}
@@ -160,6 +163,10 @@ const STATIC_QUESTIONS: Record<string, string> = {
 
 export default function InterviewScreen() {
   const router = useRouter();
+  // Context-carrying CTA: /interview?from=<guide-id> lets Lola's greeting acknowledge which
+  // guide brought them here (phrasing only — never facts; those live in the sourced pages).
+  const { from } = useLocalSearchParams<{ from?: string }>();
+  const arrivedFrom = typeof from === 'string' ? guideById.get(from) : undefined;
   const { user } = useAuth();
   const { setProfile: saveProfile, isStaff } = useProfile();
 
@@ -240,13 +247,13 @@ export default function InterviewScreen() {
   }
 
   async function start() {
-    capture('interview_started');
+    capture('interview_started', { from: typeof from === 'string' ? from : undefined });
     voice.unlock(); // within this click gesture, so the first spoken turn can auto-play (autoplay policy)
     setStarted(true);
     setLoading(true);
     const slot = nextSlot({});
     if (!slot) { setDone(true); setLoading(false); return; }
-    const lola = await phraseQuestion(slot, []);
+    const lola = await phraseQuestion(slot, [], arrivedFrom ? shortClause(arrivedFrom.title) : undefined);
     setCurrentSlot(slot);
     setTurns([{ role: 'lola', text: lola }]);
     setLoading(false);

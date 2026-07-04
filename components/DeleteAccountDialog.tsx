@@ -48,7 +48,7 @@ export default function DeleteAccountDialog({ visible, onClose }: { visible: boo
     <Modal visible={visible} transparent animationType="fade" onRequestClose={close}>
       <View style={styles.overlay}>
         <Pressable style={StyleSheet.absoluteFill} onPress={busy ? undefined : close} />
-        <View style={styles.card}>
+        <View style={styles.card} accessibilityViewIsModal>
           {done ? (
             <>
               <Text style={styles.title}>Account deleted.</Text>

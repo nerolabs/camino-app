@@ -18,7 +18,7 @@ export default function LegalPage({ title, metaTitle, description, canonical, up
       <Seo title={metaTitle} description={description} canonical={canonical} />
       <NavBar />
       <View style={styles.content}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title} accessibilityRole="header">{title}</Text>
         <Text style={styles.updated}>Last updated: {updated}</Text>
         {intro && <Text style={styles.intro}>{intro}</Text>}
         {sections.map((s, i) => (

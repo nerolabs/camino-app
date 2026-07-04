@@ -225,6 +225,8 @@ export default function PlanScreen() {
         style={[styles.card, isPenalty && styles.cardPenalty, obj.done && styles.cardDone]}
         activeOpacity={0.7}
         onPress={() => openCard(obj)}
+        accessibilityRole="button"
+        accessibilityLabel={`${obj.title}. ${obj.done ? 'Done' : formatTiming(obj)}. Opens step details`}
       >
         <View style={[styles.severityBar, { backgroundColor: barColor }]} />
         <View style={styles.cardBody}>
@@ -270,7 +272,7 @@ export default function PlanScreen() {
     <ScrollView style={styles.scroll}>
       <NavBar />
       <View style={styles.content}>
-        <Text style={styles.heading}>Your roadmap</Text>
+        <Text style={styles.heading} accessibilityRole="header">Your roadmap</Text>
 
         <View style={styles.toolbarRow}>
           <View style={styles.viewToggle}>
@@ -454,6 +456,7 @@ export default function PlanScreen() {
                 <View style={styles.askRow}>
                   <TextInput
                     style={styles.askInput}
+                    accessibilityLabel="Ask Lola about this step"
                     value={taskInput}
                     onChangeText={setTaskInput}
                     placeholder="Ask Lola about this step…"

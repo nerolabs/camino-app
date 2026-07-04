@@ -3,7 +3,7 @@ import { useLocalSearchParams, useRouter, Link } from 'expo-router';
 import Seo from '@/components/Seo';
 import { palette } from '@/constants/Colors';
 import {
-  guideById, titleById, describeTiming, metaDescription, related, shortClause, CATEGORY_LABEL,
+  guideById, titleById, describeTiming, metaDescription, related, shortClause, CATEGORY_LABEL, guideJsonLd,
 } from '@/core/guide-content';
 import { GUIDE_PROSE } from '@/core/guide-prose';
 import { SEV_LABEL, SEV_BLURB, SOURCE_BLURB, openExternal } from '@/lib/plan-format';
@@ -48,13 +48,14 @@ export default function GuidePage() {
         title={`${shortClause(g.title)} — moving to Spain | Camino`}
         description={metaDescription(g)}
         canonical={`https://getcamino.app/guide/${g.id}`}
+        jsonLd={guideJsonLd(g)}
       />
       <NavBar />
       <View style={styles.content}>
 
         <Link href="/guide" style={styles.crumb}>← All guides</Link>
         <Text style={styles.eyebrow}>{CATEGORY_LABEL[g.category].toUpperCase()} · {SEV_LABEL[g.severity].toUpperCase()}</Text>
-        <Text style={styles.title}>{g.title}</Text>
+        <Text style={styles.title} accessibilityRole="header">{g.title}</Text>
 
         {/* Curated narrative — restates catalog facts + process context only; the digit-lint
             test guarantees no number appears here that isn't in the title (invariant 3). */}
@@ -99,7 +100,7 @@ export default function GuidePage() {
           </Text>
           <TouchableOpacity
             style={styles.ctaBtn}
-            onPress={() => { capture('guide_cta_clicked', { guide_id: g.id }); router.push('/interview'); }}
+            onPress={() => { capture('guide_cta_clicked', { guide_id: g.id }); router.push(`/interview?from=${g.id}` as never); }}
           >
             <Text style={styles.ctaBtnText}>Build my free roadmap →</Text>
           </TouchableOpacity>
