@@ -33,7 +33,9 @@ export const SLOTS: Slot[] = [
     field: "nationalities", type: "list",
     gates: ["work_situation", "has_spouse_or_partner", "has_children", "annual_income_eur_band",
             "intends_long_stay", "us_resident", "previously_ex_spanish_colony_nationality"],
-    prompt_hint: "what passport(s) everyone in the household holds",
+    // Plain plural, no "(s)": Lola echoes this hint into the spoken question and TTS
+    // reads a parenthetical "(s)" out loud (user report, 2026-07-04).
+    prompt_hint: "what passports everyone in the household holds — people sometimes hold more than one",
   },
 
   // ── Round 2: work & income ─────────────────────────────────────────────────
