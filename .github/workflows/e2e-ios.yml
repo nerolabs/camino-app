@@ -20,7 +20,10 @@ concurrency:
 
 jobs:
   maestro:
-    runs-on: macos-15
+    # macos-26: Expo SDK 56's prebuilt ExpoModulesJSI xcframework needs the Xcode 26 toolchain
+    # (run #1 failed its script phase on macos-15's default Xcode 16.4 — same toolchain EAS's
+    # own SDK-56 cloud images use).
+    runs-on: macos-26
     timeout-minutes: 75
     steps:
       - uses: actions/checkout@v4
@@ -29,6 +32,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+
+      - name: Select newest Xcode on the image
+        run: |
+          ls -d /Applications/Xcode*.app
+          LATEST=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
+          echo "Selecting $LATEST"
+          sudo xcode-select -s "$LATEST/Contents/Developer"
+          xcodebuild -version
 
       - name: Build simulator app (eas build --local, zero EAS credits)
         env:
