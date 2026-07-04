@@ -82,6 +82,12 @@ jobs:
         # Maestro on CI runners is a documented unresolved flake (issue #2610) — that journey
         # is covered by the authed Playwright web suite instead. The gate is the 3 native flows
         # that ARE reliable: launch/home, sample plan, and the interview (a real LLM turn).
+        #
+        # MAESTRO_DRIVER_STARTUP_TIMEOUT: the XCUITest driver builds+boots on a cold CI
+        # simulator; the default startup window occasionally times out (run #5). 4 min is
+        # generous headroom — only consumed when the driver is genuinely slow to come up.
+        env:
+          MAESTRO_DRIVER_STARTUP_TIMEOUT: "240000"
         run: |
           maestro test .maestro --exclude-tags=authed \
             -e APP_ID=com.nerolabs.camino \
