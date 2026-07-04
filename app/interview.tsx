@@ -45,7 +45,7 @@ Ask the NEXT question as a natural follow-up. Crucial rules:
 - Briefly acknowledge what they just told you when it's natural, then move on.
 - NEVER re-ask something they've already answered or clearly implied (e.g. if they mentioned "my wife", you already know a partner is coming — don't ask whether one is). Use that context to phrase this as a confirmation instead.`
   : `This is your very first question, so a short, warm greeting is welcome.${arrivedFrom
-      ? ` They arrived from Camino's guide about "${arrivedFrom}" — acknowledge that interest in a brief clause (no facts about the topic), then ask the question.`
+      ? ` They arrived from Get Camino's guide about "${arrivedFrom}" — acknowledge that interest in a brief clause (no facts about the topic), then ask the question.`
       : ''}`}
 
 Ask ONE short question to learn: ${slot.prompt_hint}.
@@ -128,7 +128,7 @@ async function phraseClarify(
   const rawText = await askAnthropic({
     model: 'claude-haiku-4-5-20251001',
     max_tokens: 220,
-    system: `You are Lola, Camino's warm, honest relocation guide, mid-interview. You asked about
+    system: `You are Lola, Get Camino's warm, honest relocation guide, mid-interview. You asked about
 "${slot.prompt_hint}" and the user replied with a question or confusion rather than an answer.
 ${transcriptOf(turns) ? `Conversation so far:\n${transcriptOf(turns)}\n` : ''}
 ${extractorHint ? `What seems ambiguous: ${extractorHint}\n` : ''}

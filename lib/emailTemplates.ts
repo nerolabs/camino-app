@@ -27,7 +27,7 @@ function shell(bodyHtml: string, footerHtml: string): string {
   return `<!doctype html>
 <html><body style="margin:0;padding:0;background:${C.cal};">
 <div style="max-width:560px;margin:0 auto;padding:32px 24px;font-family:Georgia,'Times New Roman',serif;color:${C.indigo};">
-  <div style="font-size:22px;font-weight:600;margin-bottom:24px;">Camino <span style="color:${C.muted};font-size:14px;font-style:italic;">— your road to Spain</span></div>
+  <div style="font-size:22px;font-weight:600;margin-bottom:24px;">Get Camino <span style="color:${C.muted};font-size:14px;font-style:italic;">— your road to Spain</span></div>
   ${bodyHtml}
   <hr style="border:none;border-top:1px solid #E8E4DC;margin:32px 0 16px;">
   <div style="font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:18px;color:${C.muted};">
@@ -47,10 +47,10 @@ const p = (html: string) =>
 // ── Welcome ────────────────────────────────────────────────────────────────────
 
 export function welcomeEmail(opts: { planUrl: string; unsubHtml: string }): RenderedEmail {
-  const subject = 'Welcome to Camino — your road to Spain starts here';
+  const subject = 'Welcome to Get Camino — your road to Spain starts here';
   const html = shell(
     p('Hola — I’m Lola.') +
-    p('Camino turns your move to Spain into a step-by-step roadmap: every visa, form and deadline that applies to <em>your</em> situation, in the right order, each one backed by an official source.') +
+    p('Get Camino turns your move to Spain into a step-by-step roadmap: every visa, form and deadline that applies to <em>your</em> situation, in the right order, each one backed by an official source.') +
     p('Your roadmap lives here — it updates as your plans change, and I’ll coach you through any step you tap:') +
     `<div style="margin:24px 0;">${button(opts.planUrl, 'Open your roadmap')}</div>` +
     p(`While your move is underway I’ll send a short weekly roundup — what’s coming up, what’s slipped, never more than a handful of tasks.`),
@@ -59,7 +59,7 @@ export function welcomeEmail(opts: { planUrl: string; unsubHtml: string }): Rend
   const text = [
     'Hola — I’m Lola.',
     '',
-    'Camino turns your move to Spain into a step-by-step roadmap: every visa, form and deadline that applies to your situation, in the right order, backed by official sources.',
+    'Get Camino turns your move to Spain into a step-by-step roadmap: every visa, form and deadline that applies to your situation, in the right order, backed by official sources.',
     '',
     `Open your roadmap: ${opts.planUrl}`,
     '',
@@ -89,8 +89,8 @@ export function roundupEmail(opts: { digest: Digest; planUrl: string; unsubHtml:
   const { digest } = opts;
   const n = digest.overdue.length + digest.upcoming.length;
   const subject = digest.overdue.length > 0
-    ? `Your Camino week: ${digest.overdue.length} overdue, ${digest.upcoming.length} coming up`
-    : `Your Camino week: ${n === 1 ? 'one thing' : `${n} things`} coming up`;
+    ? `Your Get Camino week: ${digest.overdue.length} overdue, ${digest.upcoming.length} coming up`
+    : `Your Get Camino week: ${n === 1 ? 'one thing' : `${n} things`} coming up`;
 
   const sectionH = (label: string, color: string) =>
     `<div style="font-family:Helvetica,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;color:${color};margin:24px 0 12px;">${label}</div>`;
@@ -150,6 +150,6 @@ export function nudgeEmail(opts: { interviewUrl: string; unsubHtml: string }): R
 
 export function unsubFooter(unsubUrl: string | null): string {
   return unsubUrl
-    ? `You’re getting this because you have a Camino roadmap. <a href="${unsubUrl}" style="color:${C.muted};">Unsubscribe from the weekly roundup</a>.`
-    : 'You’re getting this because you have a Camino roadmap.';
+    ? `You’re getting this because you have a Get Camino roadmap. <a href="${unsubUrl}" style="color:${C.muted};">Unsubscribe from the weekly roundup</a>.`
+    : 'You’re getting this because you have a Get Camino roadmap.';
 }

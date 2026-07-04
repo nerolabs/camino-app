@@ -76,8 +76,8 @@ export default function Roadmap() {
   return (
     <ScrollView style={styles.flex} contentContainerStyle={styles.scroll}>
       <Seo
-        title="The Camino product roadmap — shipped, next, and honest noes"
-        description="Camino gives you a roadmap, so it's only fair you see ours: just shipped, in progress, next — and what we've decided not to build."
+        title="The Get Camino product roadmap — shipped, next, and honest noes"
+        description="Get Camino gives you a roadmap, so it's only fair you see ours: just shipped, in progress, next — and what we've decided not to build."
         canonical="https://getcamino.app/how-i-was-built/roadmap"
       />
       <NavBar />
@@ -85,7 +85,7 @@ export default function Roadmap() {
         <Text style={styles.eyebrow}>WHERE THE PRODUCT IS GOING</Text>
         <Text style={styles.title}>The product roadmap</Text>
         <Text style={styles.dek}>
-          Camino gives you a roadmap, so it’s only fair you get to see ours. Updated with every
+          Get Camino gives you a roadmap, so it’s only fair you get to see ours. Updated with every
           release — last: {UPDATED}.
         </Text>
         <View style={styles.rule} />
@@ -105,7 +105,7 @@ export default function Roadmap() {
 
         <View style={styles.rule} />
         <Link href="/how-i-was-built" style={styles.link}>
-          Curious how it’s made? Read how Camino was built →
+          Curious how it’s made? Read how Get Camino was built →
         </Link>
         <Link href="/how-i-was-built/log" style={styles.link}>
           Or the full build log — every item above, with the decisions behind it →

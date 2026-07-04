@@ -75,8 +75,8 @@ export default function LandingPage() {
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
       <Seo
-        title="Camino — your personalized roadmap for moving to Spain"
-        description="Camino turns moving to Spain into a step-by-step roadmap: the right visa, residency, schools, banking and bureaucracy — sequenced for your situation, every official step backed by its government source. Free, about 3 minutes."
+        title="Get Camino — your personalized roadmap for moving to Spain"
+        description="Get Camino turns moving to Spain into a step-by-step roadmap: the right visa, residency, schools, banking and bureaucracy — sequenced for your situation, every official step backed by its government source. Free, about 3 minutes."
         canonical="https://getcamino.app/"
         jsonLd={siteJsonLd()}
       />
@@ -96,7 +96,7 @@ export default function LandingPage() {
           </Text>
           <Text style={styles.heroSub}>
             From choosing the right visa to finding the right city, enrolling your kids in school,
-            and getting your paperwork in order — Camino figures out what applies to you
+            and getting your paperwork in order — Get Camino figures out what applies to you
             and what to do first.
           </Text>
           <TouchableOpacity style={styles.heroCta} onPress={() => router.push('/interview')}>

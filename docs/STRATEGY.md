@@ -74,7 +74,11 @@ and the current Spanish political climate. The actionable queue lives in TODO.md
 6. **Entity/tax hygiene**: Camino under the LLC, not personal. If operating while
    Spain-resident, US-LLC-managed-from-Spain raises PE/autónomo questions → get a gestor
    (the product's own advice, applied; there's a good public story in doing so).
-7. **Trademark**: search "Camino" in software classes before brand spend (crowded word).
+7. **Trademark**: search in software classes before brand spend (crowded word). *Backtest
+   2026-07-04 — call held up and user acted early: public brand renamed to **"Get Camino"**
+   ("Get Camino: Your Road to Spain") without waiting for an attorney — distinctive compound,
+   matches the owned domain getcamino.app, exactly fits ASC's 30-char name limit. Identifiers
+   (bundle id, scheme) deliberately unchanged. Full search still due before brand spend.*
 
 ### PR
 1. **The wrong-date story** is the nightmare scenario. Defense = architecture + process:

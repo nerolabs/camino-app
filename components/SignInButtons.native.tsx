@@ -37,7 +37,7 @@ export default function SignInButtons() {
         <Pressable style={[styles.overlay, kb > 0 && { paddingBottom: kb + 16 }]} onPress={close}>
           {/* Stop card taps from closing the dialog */}
           <Pressable style={styles.card} onPress={() => {}}>
-            <Text style={styles.title}>Sign in to Camino</Text>
+            <Text style={styles.title}>Sign in to Get Camino</Text>
             <Text style={styles.sub}>Save your roadmap and pick it up on any device.</Text>
 
             {mode === 'providers' ? (

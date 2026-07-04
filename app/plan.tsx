@@ -343,7 +343,7 @@ export default function PlanScreen() {
           </View>
           <View style={styles.legendItem}>
             <View style={[styles.legendDot, { backgroundColor: SOURCE_COLOR.recommendation }]} />
-            <Text style={styles.legendText}>Camino recommendation</Text>
+            <Text style={styles.legendText}>Get Camino recommendation</Text>
           </View>
         </View>
 

@@ -13,7 +13,7 @@ type Urgency = 'immediate' | 'soon' | 'exploratory';
 // grounding). Two values, after the sourcing pass:
 //   'official'        — a codified government requirement, verified against an official source
 //                       (AEAT, extranjería, BOE, …) and carrying a `source_url`.
-//   'recommendation'  — Camino's own practical advice (e.g. a scouting trip, hiring a lawyer,
+//   'recommendation'  — Get Camino's own practical advice (e.g. a scouting trip, hiring a lawyer,
 //                       consulting a tax specialist). Not a legal requirement, so no official
 //                       `source_url`; `severity` still conveys how strongly we suggest it.
 // (Provenance during mining used to distinguish 'webinar' vs 'domain'; that history now lives in

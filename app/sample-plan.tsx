@@ -49,8 +49,8 @@ export default function SamplePlanScreen() {
   return (
     <ScrollView style={styles.scroll}>
       <Seo
-        title="A sample roadmap for moving to Spain | Camino"
-        description="Susan &amp; Tom's real, engine-built relocation roadmap — every step, deadline and official source — so you can see what Camino builds before answering a single question."
+        title="A sample roadmap for moving to Spain | Get Camino"
+        description="Susan &amp; Tom's real, engine-built relocation roadmap — every step, deadline and official source — so you can see what Get Camino builds before answering a single question."
         canonical="https://getcamino.app/sample-plan"
       />
       <NavBar />
@@ -61,7 +61,7 @@ export default function SamplePlanScreen() {
           <Text style={styles.sampleEyebrow}>SAMPLE ROADMAP</Text>
           <Text style={styles.sampleTitle}>This is {SAMPLE_NAME}'s plan.</Text>
           <Text style={styles.sampleBody}>
-            {SAMPLE_NAME} — {SAMPLE_BLURB}. Camino turned their situation into the {objectives.length}-step,
+            {SAMPLE_NAME} — {SAMPLE_BLURB}. Get Camino turned their situation into the {objectives.length}-step,
             deadline-aware roadmap below. Yours will look different: a few answers about your own move, and
             the same engine builds it just for you.
           </Text>
@@ -93,7 +93,7 @@ export default function SamplePlanScreen() {
           </View>
           <View style={styles.legendItem}>
             <View style={[styles.legendDot, { backgroundColor: SOURCE_COLOR.recommendation }]} />
-            <Text style={styles.legendText}>Camino recommendation</Text>
+            <Text style={styles.legendText}>Get Camino recommendation</Text>
           </View>
         </View>
 

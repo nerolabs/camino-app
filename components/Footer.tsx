@@ -10,7 +10,7 @@ export default function Footer() {
   const go = (path: string) => router.push(path as never);
   return (
     <View style={styles.footer}>
-      <Text style={styles.footerLogo}>Camino</Text>
+      <Text style={styles.footerLogo}>Get Camino</Text>
       <Text style={styles.footerNote}>Guidance only — not legal or tax advice.</Text>
       <View style={styles.links}>
         <TouchableOpacity onPress={() => go('/privacy')}><Text style={styles.link}>Privacy</Text></TouchableOpacity>

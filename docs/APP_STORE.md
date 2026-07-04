@@ -1,4 +1,4 @@
-# App Store submission prep — Camino
+# App Store submission prep — Get Camino
 
 Everything drafted for the public iOS listing (ASC App ID **6786412055**). Copy is ready for your
 review/edit; items marked **[YOU]** need your hand (assets, decisions, the submit button).
@@ -20,11 +20,11 @@ doesn't enforce it; public review usually does.
 
 ## Metadata (drafts — edit freely)
 
-- **Name (30 chars max):** `Camino: Your Road to Spain`
+- **Name (30 chars max):** `Get Camino: Your Road to Spain`
 - **Subtitle (30 chars):** `Your Spain move, in order`
 - **Category:** Travel (primary) · Lifestyle (secondary)
 - **Promotional text (170 chars, editable without review):**
-  `Moving to Spain? Camino turns your situation into a step-by-step roadmap — real requirements, real deadlines, in the right order — with Lola guiding you the whole way.`
+  `Moving to Spain? Get Camino turns your situation into a step-by-step roadmap — real requirements, real deadlines, in the right order — with Lola guiding you the whole way.`
 - **Keywords (100 chars, comma-separated, no spaces needed):**
   `spain,move abroad,relocation,visa,NIE,expat,digital nomad,retire,NLV,residency,padron,checklist`
 - **Support URL:** https://getcamino.app/how-it-works
@@ -35,7 +35,7 @@ doesn't enforce it; public review usually does.
 > Moving to Spain is a hundred small steps — visa before flight, padrón before residency,
 > residency before the health card — and they only work in the right order.
 >
-> Camino turns YOUR situation into a personal, deadline-aware roadmap. Answer a few questions in
+> Get Camino turns YOUR situation into a personal, deadline-aware roadmap. Answer a few questions in
 > a short conversation with Lola, our warm relocation guide, and get a sequenced plan built from
 > real requirements: which visa path fits, which documents to apostille, when the padrón, NIE and
 > TIE happen, what taxes actually apply to you — each step linked to its official government
@@ -52,7 +52,7 @@ doesn't enforce it; public review usually does.
 > • Try before you commit: browse a full sample roadmap first — no account needed.
 >
 > Whether you're coming on the non-lucrative visa, as a digital nomad, to study, or heading for
-> citizenship one day, Camino keeps the map. (Guidance only — not legal or tax advice. Lola keeps
+> citizenship one day, Get Camino keeps the map. (Guidance only — not legal or tax advice. Lola keeps
 > the map; a gestor signs the papers.)
 
 ## Privacy nutrition label (Apple's questionnaire → our honest answers)
@@ -71,7 +71,7 @@ doesn't enforce it; public review usually does.
 
 ## App Review notes (paste into the review box)
 
-> Camino builds a personalized relocation roadmap for moving to Spain.
+> Get Camino builds a personalized relocation roadmap for moving to Spain.
 > • No account is required to browse, view the sample plan (/sample-plan), or complete the full
 >   interview; Google sign-in is only needed to SAVE a plan across devices. [If Apple account
 >   added: Sign in with Apple is offered alongside Google.]

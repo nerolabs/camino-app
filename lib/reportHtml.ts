@@ -71,7 +71,7 @@ function itemHtml(o: Objective, today: Date): string {
     <div style="font-size:12px;line-height:16px;color:${o.done ? C.olive : C.indigo};${o.done ? 'text-decoration:line-through;text-decoration-thickness:1px;' : ''}">${o.done ? '✓ ' : ''}${esc(o.title)}</div>
     <div style="font-size:10px;line-height:15px;margin-top:2px;">
       <span style="color:${due.color};font-weight:600;">${esc(due.text)}</span>
-      <span style="color:${C.muted};"> · ${esc(SEV_LABEL[o.severity])} · ${o.source === 'official' ? 'official requirement' : 'Camino recommendation'}${o.regional ? ' · varies by comunidad' : ''}</span>
+      <span style="color:${C.muted};"> · ${esc(SEV_LABEL[o.severity])} · ${o.source === 'official' ? 'official requirement' : 'Get Camino recommendation'}${o.regional ? ' · varies by comunidad' : ''}</span>
     </div>
     ${src}
   </div>`;
@@ -97,7 +97,7 @@ export function reportHtml(objectives: Objective[], today: Date = new Date()): s
   })() : '';
 
   return `<!doctype html>
-<html><head><meta charset="utf-8"><title>Camino — your road to Spain</title>
+<html><head><meta charset="utf-8"><title>Get Camino — your road to Spain</title>
 <style>@page { margin: 18mm 15mm; } body { margin: 0; }</style></head>
 <body style="background:${C.cal};font-family:Georgia,'Times New Roman',serif;color:${C.indigo};">
 <!-- Container padding is the margin fallback: iOS's HTML→PDF renderer ignores @page
@@ -105,7 +105,7 @@ export function reportHtml(objectives: Objective[], today: Date = new Date()): s
 <div style="max-width:720px;margin:0 auto;padding:28px 24px;font-family:Helvetica,Arial,sans-serif;">
 
   <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid ${C.indigo};padding-bottom:10px;">
-    <div style="font-family:Georgia,serif;font-size:22px;font-weight:600;">Camino <span style="font-size:12px;color:${C.muted};font-style:italic;">— your road to Spain</span></div>
+    <div style="font-family:Georgia,serif;font-size:22px;font-weight:600;">Get Camino <span style="font-size:12px;color:${C.muted};font-style:italic;">— your road to Spain</span></div>
     <div style="font-size:10px;color:${C.muted};">Generated ${fmt(today)}</div>
   </div>
 
@@ -125,8 +125,8 @@ export function reportHtml(objectives: Objective[], today: Date = new Date()): s
   </div>`).join('')}
 
   <div style="margin-top:24px;padding-top:10px;border-top:1px solid ${C.line};font-size:10px;line-height:15px;color:${C.faint};">
-    Estimated dates sharpen as real dates are confirmed; steps without dates begin once their milestone happens — Camino never invents a deadline.
-    <br>Made with Camino (getcamino.app). Guidance only — not legal or tax advice; a gestor signs the papers.
+    Estimated dates sharpen as real dates are confirmed; steps without dates begin once their milestone happens — Get Camino never invents a deadline.
+    <br>Made with Get Camino (getcamino.app). Guidance only — not legal or tax advice; a gestor signs the papers.
   </div>
 </div>
 </body></html>`;

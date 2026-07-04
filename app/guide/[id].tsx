@@ -45,7 +45,7 @@ export default function GuidePage() {
   return (
     <ScrollView style={styles.scroll}>
       <Seo
-        title={`${shortClause(g.title)} — moving to Spain | Camino`}
+        title={`${shortClause(g.title)} — moving to Spain | Get Camino`}
         description={metaDescription(g)}
         canonical={`https://getcamino.app/guide/${g.id}`}
         jsonLd={guideJsonLd(g)}
@@ -71,7 +71,7 @@ export default function GuidePage() {
           {g.regional && (
             <>
               <Text style={styles.factLabel}>WHERE YOU LIVE MATTERS</Text>
-              <Text style={styles.factText}>The specifics are set by each comunidad autónoma — the official source covers the national rules; your region's own rates and windows apply. Camino's interview asks where you're settling and flags this step accordingly.</Text>
+              <Text style={styles.factText}>The specifics are set by each comunidad autónoma — the official source covers the national rules; your region's own rates and windows apply. Get Camino's interview asks where you're settling and flags this step accordingly.</Text>
             </>
           )}
 
@@ -102,7 +102,7 @@ export default function GuidePage() {
           <Text style={styles.ctaTitle}>Where does this fall in your move?</Text>
           <Text style={styles.ctaBody}>
             Whether this step even applies — and when it's due — depends on your passport, work,
-            family and plans. Answer a few questions and Camino builds your full roadmap, every
+            family and plans. Answer a few questions and Get Camino builds your full roadmap, every
             step in the right order with real deadlines.
           </Text>
           <TouchableOpacity

@@ -22,7 +22,7 @@ export default function GuideIndex() {
   return (
     <ScrollView style={styles.scroll}>
       <Seo
-        title="Moving to Spain: every step, explained | Camino guides"
+        title="Moving to Spain: every step, explained | Get Camino guides"
         description={`All ${GUIDES.length} steps of moving to Spain — visas, residency, tax, healthcare, banking and more. What each one is, when it's due, and the official source.`}
         canonical="https://getcamino.app/guide"
         jsonLd={guideIndexJsonLd()}
@@ -33,7 +33,7 @@ export default function GuideIndex() {
         <Text style={styles.eyebrow}>THE CAMINO GUIDES</Text>
         <Text style={styles.title} accessibilityRole="header">Every step of moving to Spain, explained.</Text>
         <Text style={styles.dek}>
-          These {GUIDES.length} steps are the same catalog Camino builds roadmaps from — each with
+          These {GUIDES.length} steps are the same catalog Get Camino builds roadmaps from — each with
           what it is, when it's due, and the official source. Which ones apply to <Text style={styles.dekEm}>you</Text>,
           and in what order, is what the free interview works out.
         </Text>

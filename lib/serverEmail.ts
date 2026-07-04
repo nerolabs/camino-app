@@ -4,7 +4,7 @@
  * Domain getcamino.app is verified in Resend, so lola@ passes SPF/DKIM.
  */
 
-export const EMAIL_FROM = 'Lola from Camino <lola@getcamino.app>';
+export const EMAIL_FROM = 'Lola from Get Camino <lola@getcamino.app>';
 
 /**
  * Canonical site origin for links inside emails. Behind EAS Hosting's custom domain,

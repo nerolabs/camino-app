@@ -1,5 +1,5 @@
 /**
- * Curated narrative for each guide page — "what this actually is", in Camino's voice.
+ * Curated narrative for each guide page — "what this actually is", in Get Camino's voice.
  *
  * HONESTY CONTRACT (invariant 3, enforced by tests/guide-prose.test.ts):
  *  - Prose may restate facts already present in the obligation's own title, and may add
@@ -12,7 +12,7 @@
 
 export const GUIDE_PROSE: Record<string, string> = {
   'scout-where-to-live':
-    'Most of the moving-to-Spain machinery asks "where?" before it can do anything for you — the padrón, schools, even which office handles your paperwork all hang off an address. This is Camino\'s advice rather than any legal requirement: spend real time in your candidate areas before committing, in the season you\'d actually live there. A rental contract is much easier to sign than to escape.',
+    'Most of the moving-to-Spain machinery asks "where?" before it can do anything for you — the padrón, schools, even which office handles your paperwork all hang off an address. This is Get Camino\'s advice rather than any legal requirement: spend real time in your candidate areas before committing, in the season you\'d actually live there. A rental contract is much easier to sign than to escape.',
   'choose-visa-type':
     'Everything else in your move flows from this decision: which residence route matches your work, income, family and plans. Each visa type has its own evidence list, its own timeline, and its own renewal rhythm — choosing early is what makes the rest of the roadmap sequenceable. If two routes could fit, the differences that matter are usually about work rights and taxes, and that\'s a conversation worth having with a professional.',
   'consulate-appointment':
@@ -40,11 +40,11 @@ export const GUIDE_PROSE: Record<string, string> = {
   'eu-registration-certificate':
     'EU and EEA citizens don\'t get visas — they register. Stay past the title\'s three months and you\'re expected to enter the Central Register of Foreign Nationals and collect the green certificado de registro (form EX-18), in person. It\'s the document that turns free movement into formal Spanish residence, and later steps (like permanent residence) count time from it.',
   'residencia':
-    'The TIE is the physical card that proves your residence status — the appointment takes your fingerprints (the huella), and the card follows weeks later. The title\'s clock matters: the process should start within 30 days of entry, and big-city appointment queues eat that window fast. Once your residency is established, a whole family of downstream clocks (renewals, driving licence, citizenship) starts ticking from it — which is why Camino re-anchors your plan around this date.',
+    'The TIE is the physical card that proves your residence status — the appointment takes your fingerprints (the huella), and the card follows weeks later. The title\'s clock matters: the process should start within 30 days of entry, and big-city appointment queues eat that window fast. Once your residency is established, a whole family of downstream clocks (renewals, driving licence, citizenship) starts ticking from it — which is why Get Camino re-anchors your plan around this date.',
   'tarjeta-sanitaria':
     'The tarjeta sanitaria is your public health system card, issued once you actually have access — through work contributions, or another qualifying route. It\'s applied for at your local health centre with your padrón certificate. Non-lucrative residents are the exception by design: the NLV runs on private insurance instead, which is why this step may not appear in an NLV roadmap at all.',
   'exit-tax-return':
-    'Leaving a tax system cleanly is as important as entering the new one. Telling your home tax authority you\'ve changed tax residence — whatever form that takes where you\'re from — prevents years of "you didn\'t file" letters and double-withholding headaches. This is Camino\'s recommendation rather than a Spanish requirement; your home country\'s rules are the source of truth here.',
+    'Leaving a tax system cleanly is as important as entering the new one. Telling your home tax authority you\'ve changed tax residence — whatever form that takes where you\'re from — prevents years of "you didn\'t file" letters and double-withholding headaches. This is Get Camino\'s recommendation rather than a Spanish requirement; your home country\'s rules are the source of truth here.',
   'modelo-720':
     'Spain\'s foreign-asset declaration: once you\'re tax resident, overseas holdings above the title\'s per-category threshold must be reported in the title\'s first-quarter window. It\'s informative — no tax is due on the declaration itself — but it carries penalties for not filing, and its history (the EU court ruling the title mentions) is exactly why it should be taken seriously rather than feared. A gestor files it in an afternoon.',
   'dgt-exchange':
@@ -56,11 +56,11 @@ export const GUIDE_PROSE: Record<string, string> = {
   'family-reunification':
     'Reagrupación familiar is the route for bringing family members after you\'ve settled, rather than applying together at the start. The title carries the essentials: it opens after your first renewal, and asks you to show adequate housing and means. It\'s document-heavy and regional practice varies — one of the steps where a gestor most clearly earns their fee.',
   'citizenship-track-standard':
-    'The general naturalisation clock: the title\'s ten years of continuous legal residence before you can apply. Nothing to do here but know the date — and protect the continuity, since long absences can reset more than you\'d expect. Camino tracks the milestone from your residency date so the rest of the citizenship track sequences itself.',
+    'The general naturalisation clock: the title\'s ten years of continuous legal residence before you can apply. Nothing to do here but know the date — and protect the continuity, since long absences can reset more than you\'d expect. Get Camino tracks the milestone from your residency date so the rest of the citizenship track sequences itself.',
   'citizenship-track-latam':
     'The shortened clock the title describes: nationals of ex-Spanish colonies (most of Latin America and a few others) qualify for citizenship after two years of legal residence instead of ten. If this is you, the language and civics exams arrive much sooner than you think — the roadmap pulls them forward accordingly.',
   'tax-planning-consultation':
-    'The months before you become Spanish tax resident are the cheapest tax advice you\'ll ever buy: timing a sale, a bonus, or a pension event to land on the right side of the residency line can matter enormously. This is Camino\'s strong recommendation, not a legal step — a cross-border specialist who knows both systems is the point, not just any adviser.',
+    'The months before you become Spanish tax resident are the cheapest tax advice you\'ll ever buy: timing a sale, a bonus, or a pension event to land on the right side of the residency line can matter enormously. This is Get Camino\'s strong recommendation, not a legal step — a cross-border specialist who knows both systems is the point, not just any adviser.',
   'apostille-documents':
     'An apostille is the international "this document is real" stamp under the title\'s Hague Convention — and the rule that trips people is in the title too: each document is apostilled in the country that issued it. Order certificates fresh (consulates dislike old ones), get them apostilled at home, and only then translated. Doing this from inside Spain is possible but much slower.',
   'sworn-translation':
@@ -68,7 +68,7 @@ export const GUIDE_PROSE: Record<string, string> = {
   'nlv-letter-of-intent':
     'The consulate wants your move in your own words: why Spain, where you intend to live, and how your passive income sustains it. It doesn\'t need to be literary — coherent and consistent with your evidence is the bar. Contradictions between this letter and your documents are what raise eyebrows.',
   'nlv-non-work-declaration':
-    'Working-age NLV applicants are often asked to notarise the promise the visa already implies: that you won\'t work in Spain. It\'s a short, formulaic document — the notarisation is the point. Requirements vary by consulate, which is why Camino lists it as recommended and your consulate\'s checklist has the final word.',
+    'Working-age NLV applicants are often asked to notarise the promise the visa already implies: that you won\'t work in Spain. It\'s a short, formulaic document — the notarisation is the point. Requirements vary by consulate, which is why Get Camino lists it as recommended and your consulate\'s checklist has the final word.',
   'dnv-qualification-proof':
     'The DNV asks you to prove you\'re a professional: the title\'s two routes are a university degree (apostilled) or documented years of professional experience. The degree route is usually simpler evidence-wise; the experience route leans on contracts, references and portfolios telling a verifiable story.',
   'dnv-company-activity-proof':
@@ -108,7 +108,7 @@ export const GUIDE_PROSE: Record<string, string> = {
   'permanent-residence':
     'After the title\'s five years of continuous legal residence, long-term residence removes the renewal treadmill: one status, renewed as a formality, no more proving income each cycle. The application looks backward — continuity of residence is the thing being tested — so absences and gaps in your record matter more than your current circumstances.',
   'property-legal-due-diligence':
-    'Camino\'s strongest property recommendation: an independent lawyer (yours, not the seller\'s or agent\'s) checks title, debts, planning status and the habitation licence before any money moves. Spanish property debts can follow the property rather than the person — which is exactly why the checks come before the signing, never after.',
+    'Get Camino\'s strongest property recommendation: an independent lawyer (yours, not the seller\'s or agent\'s) checks title, debts, planning status and the habitation licence before any money moves. Spanish property debts can follow the property rather than the person — which is exactly why the checks come before the signing, never after.',
   'completion-deed-notary':
     'Spanish property completes in front of a notary: the escritura de compraventa is signed, the balance paid, keys handed over in the same sitting. The notary certifies legality rather than representing you — your lawyer does that — and as the title notes, the public deed is the standard formalisation (and unavoidable with a mortgage).',
   'land-registry-registration':

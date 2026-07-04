@@ -297,7 +297,7 @@ const ROWS: Row[] = [
   {
     feature: 'The homework goes public + links that open the app',
     date: '3 Jul 2026',
-    work: 'This whole section — the essay, this log, the roadmap — left the unlisted shadows: it\'s in the nav menu and the sitemap now, and every entry carries its ship date. And the links in Camino\'s emails gained universal links, so tapping "Open your roadmap" on an iPhone opens the app (signed in) instead of a logged-out browser tab.',
+    work: 'This whole section — the essay, this log, the roadmap — left the unlisted shadows: it\'s in the nav menu and the sitemap now, and every entry carries its ship date. And the links in Get Camino\'s emails gained universal links, so tapping "Open your roadmap" on an iPhone opens the app (signed in) instead of a logged-out browser tab.',
     decisions: [
       'Building in the open was already the point — hiding the receipts behind a direct link stopped making sense once the guides made content the front door.',
       'Dates on every entry keep the log honest about pace: this product went from empty repo to sixty guides in four days, and the record should show it.',
@@ -338,7 +338,7 @@ const ROWS: Row[] = [
   {
     feature: 'The guides learn to talk',
     date: '4 Jul 2026',
-    work: 'All sixty guide pages gained a written explainer — what the step actually is, how the process feels, who\'s involved — in Camino\'s voice. Each page\'s search snippet now uses its own opening sentence instead of a shared template.',
+    work: 'All sixty guide pages gained a written explainer — what the step actually is, how the process feels, who\'s involved — in Get Camino\'s voice. Each page\'s search snippet now uses its own opening sentence instead of a shared template.',
     decisions: [
       'The honesty rule became a build gate: a test fails if the prose contains any number that isn\'t already in that step\'s own title — new figures and deadlines can only live behind the official source link.',
       'The lint caught its first violation before shipping (a cross-referenced form number) — the mechanism works.',
@@ -370,7 +370,7 @@ const ROWS: Row[] = [
     date: '4 Jul 2026',
     work: 'Every public page now unfurls properly when shared: a branded card (the compass-star tile, the promise, the domain) plus per-page social titles and descriptions. One Seo component owns the whole tag set, so no page can ship half of it.',
     decisions: [
-      'Camino\'s links will live in WhatsApp threads and expat Facebook groups — a bare gray link and a branded card are different products there.',
+      'Get Camino\'s links will live in WhatsApp threads and expat Facebook groups — a bare gray link and a branded card are different products there.',
       'The share card is generated from the same brand-mark code as the app icons: one geometry, every surface.',
     ],
   },
@@ -393,6 +393,15 @@ const ROWS: Row[] = [
     ],
   },
   {
+    feature: 'A safer name: Get Camino',
+    date: '4 Jul 2026',
+    work: '"Camino" is a lovely word — which is exactly the problem: plenty of businesses already want a piece of it. Until a proper trademark search happens, the app and site go by Get Camino (matching the domain we already own), extended brand "Get Camino: Your Road to Spain" — which happens to fit the App Store\'s 30-character name limit exactly. Every user-facing surface renamed: the name under the icon, the nav, the emails, the printed report, the legal pages, and how Lola introduces the product.',
+    decisions: [
+      'Brand defensively before brand spend: a distinctive compound beats a common word you\'d have to fight for.',
+      'Identifiers never chase brands: the bundle id, URL scheme, and internal names stay put — a rename should never break sign-in or saved links.',
+    ],
+  },
+  {
     feature: 'Every official source link, click-tested',
     date: '4 Jul 2026',
     work: 'All 55 official source links were fetched and checked against their steps — status, where they redirect, and whether the page is actually about the step. Two failed honestly: the empadronamiento link died when a government portal was retired (now points at the law itself, art. 15 of the Ley de Bases del Régimen Local), and the NIE link landed visitors on a police-site cookie wall instead of NIE content (now the Ministerio del Interior\'s canonical NIE page).',
@@ -407,7 +416,7 @@ const ROWS: Row[] = [
     work: 'The how-it-works page — untouched since the earliest days — got a layout pass: its sections ran edge-to-edge on desktop while every other page reads in a centered column, so each section\'s content now sits in the same 760px column, and the bureaucracy card says what the plan just learned (rules that differ by comunidad are flagged). This page was also renamed "the product roadmap".',
     decisions: [
       'Full-bleed section backgrounds stay — only the content inside is constrained. The rhythm of alternating bands is the page\'s structure; the fix was readability, not a rebuild.',
-      'Renamed to differentiate: "roadmap" is what Camino builds FOR YOU in the product; "the product roadmap" is where the product itself is going.',
+      'Renamed to differentiate: "roadmap" is what Get Camino builds FOR YOU in the product; "the product roadmap" is where the product itself is going.',
     ],
   },
 ];
@@ -417,8 +426,8 @@ export default function BuildLogScreen() {
   return (
     <ScrollView style={styles.scroll}>
       <Seo
-        title="The Camino build log — every feature, dated, with decisions"
-        description="Every major piece of Camino in the order the work happened: what shipped, when, and the decisions that shaped it."
+        title="The Get Camino build log — every feature, dated, with decisions"
+        description="Every major piece of Get Camino in the order the work happened: what shipped, when, and the decisions that shaped it."
         canonical="https://getcamino.app/how-i-was-built/log"
       />
       <NavBar />
@@ -426,7 +435,7 @@ export default function BuildLogScreen() {
         <Text style={styles.eyebrow}>HOW I WAS BUILT — THE RECEIPTS</Text>
         <Text style={styles.title}>The build log</Text>
         <Text style={styles.dek}>
-          The essay tells the story; this is the homework. Every major piece of Camino — newest
+          The essay tells the story; this is the homework. Every major piece of Get Camino — newest
           first — with what shipped and the decisions that shaped it.
         </Text>
         <View style={styles.linksRow}>

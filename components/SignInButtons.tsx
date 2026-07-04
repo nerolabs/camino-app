@@ -24,7 +24,7 @@ export default function SignInButtons() {
       <Modal visible={open} transparent animationType="fade" onRequestClose={close}>
         <Pressable style={styles.overlay} onPress={close}>
           <Pressable style={styles.card} onPress={() => {}}>
-            <Text style={styles.title}>Sign in to Camino</Text>
+            <Text style={styles.title}>Sign in to Get Camino</Text>
             <Text style={styles.sub}>Save your roadmap and pick it up on any device.</Text>
 
             {mode === 'providers' ? (

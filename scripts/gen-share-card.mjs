@@ -28,7 +28,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
   <rect x="${tile.x}" y="${tile.y}" width="${tile.size}" height="${tile.size}" rx="68" fill="${COBALT}"/>
   <path d="${starPath(118, 49, tc.x, tc.y)}" fill="${WHITE}"/>
   <circle cx="${tc.x}" cy="${tc.y}" r="22" fill="${AMBER}"/>
-  <text x="490" y="255" font-family="Georgia, 'Times New Roman', serif" font-weight="600" font-size="104" fill="${INDIGO}">Camino</text>
+  <text x="490" y="255" font-family="Georgia, 'Times New Roman', serif" font-weight="600" font-size="104" fill="${INDIGO}">Get Camino</text>
   <text x="494" y="330" font-family="Helvetica, Arial, sans-serif" font-size="40" fill="${INDIGO}">Your personalized roadmap</text>
   <text x="494" y="384" font-family="Helvetica, Arial, sans-serif" font-size="40" fill="${INDIGO}">for moving to Spain.</text>
   <text x="494" y="452" font-family="Helvetica, Arial, sans-serif" font-size="27" fill="${MUTED}">Every step in the right order — each one backed</text>

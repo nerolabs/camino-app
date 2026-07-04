@@ -60,16 +60,19 @@ command** (credits).
    pre-submission gate). Eventual professional legal-review pass stays queued (at revenue).
 10. **[USER] ASC housekeeping**: paste https://getcamino.app/privacy into the privacy-policy
     URL field · DSA trader status (blocks EU distribution) · fix the display name — currently
-    "Camino (51e654)", target "Camino: Your Road to Spain" · age-rating questionnaire (expect
-    4+) · copyright line.
+    "Camino (51e654)", target **"Get Camino: Your Road to Spain"** (exactly 30 chars — the
+    ASC limit; brand renamed 2026-07-04) · age-rating questionnaire (expect 4+) · copyright line.
 11. **Screenshots + metadata**: user captures the 5-shot story on build 27+ (docs/APP_STORE.md
     has the shot list), Claude frames/annotates; paste metadata + privacy-nutrition answers
     (all drafted in docs/APP_STORE.md).
 12. **[USER] Bus-factor hour**: credentials → password manager + trusted second person; second
     admin on Apple + Supabase. Biggest continuity risk; do it before release makes it real.
 13. **[USER] Gestor consult** (US LLC managed from Spain — PE/autónomo) + **trademark search**
-    ("Camino", software classes) — must precede brand spend / the launch moment; may trail
-    submission.
+    (software classes) — must precede brand spend / the launch moment; may trail submission.
+    *Interim mitigation SHIPPED 2026-07-04:* public brand renamed **"Get Camino"** (extended:
+    "Get Camino: Your Road to Spain") — a distinctive compound matching the owned domain,
+    replacing the crowded bare word "Camino" everywhere user-facing. Search still due before
+    real brand spend.
 
 ### Phase 4 — 🚀 App Store submission (gate: Phases 1–3 complete)
 14. Attach the final build, submit for review (review notes drafted in docs/APP_STORE.md);

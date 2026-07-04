@@ -85,12 +85,12 @@ export function metaDescription(o: Obligation): string {
     const cut = prose.indexOf('. ');
     const first = cut > 40 ? prose.slice(0, cut + 1) : prose;
     if (!first.toLowerCase().includes('title')) {
-      return `${first} One step in Camino's free, source-cited roadmap for moving to Spain.`;
+      return `${first} One step in Get Camino's free, source-cited roadmap for moving to Spain.`;
     }
   }
   const what = shortClause(o.title);
-  const kind = o.source === 'official' ? 'an official Spanish requirement' : 'a practical step Camino recommends';
-  return `${what} — ${kind} when moving to Spain: when it's due, what comes before it, and the source. One step in Camino's personalized relocation roadmap.`;
+  const kind = o.source === 'official' ? 'an official Spanish requirement' : 'a practical step Get Camino recommends';
+  return `${what} — ${kind} when moving to Spain: when it's due, what comes before it, and the source. One step in Get Camino's personalized relocation roadmap.`;
 }
 
 export function related(o: Obligation, n = 5): Obligation[] {
@@ -101,7 +101,7 @@ export function related(o: Obligation, n = 5): Obligation[] {
 
 const ORG = {
   '@type': 'Organization',
-  name: 'Camino',
+  name: 'Get Camino',
   url: 'https://getcamino.app',
   logo: { '@type': 'ImageObject', url: 'https://getcamino.app/logo.png' },
 };
@@ -111,7 +111,7 @@ export function siteJsonLd(): object[] {
     {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
-      name: 'Camino',
+      name: 'Get Camino',
       url: 'https://getcamino.app',
       description: 'A personalized, source-cited roadmap for moving to Spain.',
       publisher: ORG,
@@ -137,7 +137,7 @@ export function guideJsonLd(o: Obligation): object[] {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Camino', item: 'https://getcamino.app' },
+        { '@type': 'ListItem', position: 1, name: 'Get Camino', item: 'https://getcamino.app' },
         { '@type': 'ListItem', position: 2, name: 'Guides', item: 'https://getcamino.app/guide' },
         { '@type': 'ListItem', position: 3, name: shortClause(o.title), item: url },
       ],

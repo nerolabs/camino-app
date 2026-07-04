@@ -121,7 +121,7 @@ export const SOURCE_SHORT: Record<string, string> = {
 
 export const SOURCE_BLURB: Record<string, string> = {
   official:       'Verified against an official government source (AEAT, extranjería, BOE).',
-  recommendation: 'Camino’s practical recommendation — not a legal requirement. How strongly we suggest it is shown by its priority; confirm the specifics for your own case.',
+  recommendation: 'Get Camino’s practical recommendation — not a legal requirement. How strongly we suggest it is shown by its priority; confirm the specifics for your own case.',
 };
 
 export const SOURCE_COLOR: Record<string, string> = {

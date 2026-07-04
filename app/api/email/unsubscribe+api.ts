@@ -33,10 +33,10 @@ async function unsubscribe(request: Request): Promise<Response> {
   return new Response(
     `<!doctype html><html><body style="margin:0;background:#FBFAF7;font-family:Georgia,serif;color:#15243B;">
      <div style="max-width:560px;margin:80px auto;padding:0 24px;text-align:center;">
-       <div style="font-size:22px;font-weight:600;">Camino</div>
+       <div style="font-size:22px;font-weight:600;">Get Camino</div>
        <p style="font-family:Helvetica,Arial,sans-serif;font-size:16px;line-height:26px;margin-top:24px;">
          Done — no more weekly roundups.<br>Your roadmap stays right where it is,
-         and you can keep using Camino as always.
+         and you can keep using Get Camino as always.
        </p>
        <p style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#8A9BB0;">
          Changed your mind? Just ask Lola in the app.

@@ -12,7 +12,7 @@ export async function exportPdf(html: string): Promise<void> {
     margins: { left: 36, top: 36, right: 36, bottom: 36 },
   });
   if (await Sharing.isAvailableAsync()) {
-    await Sharing.shareAsync(uri, { mimeType: 'application/pdf', dialogTitle: 'Your Camino roadmap' });
+    await Sharing.shareAsync(uri, { mimeType: 'application/pdf', dialogTitle: 'Your Get Camino roadmap' });
   } else {
     // No share sheet (rare) — fall back to the print dialog, which can also save to Files.
     await Print.printAsync({ uri });

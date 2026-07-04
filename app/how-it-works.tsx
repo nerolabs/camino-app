@@ -47,7 +47,7 @@ export default function HowItWorksPage() {
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
       <Seo
-        title="How Camino works — moving to Spain, in the right order"
+        title="How Get Camino works — moving to Spain, in the right order"
         description="Tell Lola your situation, get a personal roadmap, work through it together. Every official step cites its government source; sequence and deadlines come built in."
         canonical="https://getcamino.app/how-it-works"
       />
@@ -55,11 +55,11 @@ export default function HowItWorksPage() {
 
       <View style={styles.header}>
         <View style={styles.inner}>
-        <Text style={styles.eyebrow}>How Camino works</Text>
+        <Text style={styles.eyebrow}>How Get Camino works</Text>
         <Text style={styles.headline}>From first question{'\n'}to clear next step.</Text>
         <Text style={styles.sub}>
           Moving to Spain is manageable when you know what applies to you and what comes first.
-          That's all Camino does — in three steps.
+          That's all Get Camino does — in three steps.
         </Text>
         </View>
       </View>
@@ -85,7 +85,7 @@ export default function HowItWorksPage() {
         <Text style={styles.sectionEyebrow}>What's covered</Text>
         <Text style={styles.sectionHeadline}>The full picture, not just the paperwork.</Text>
         <Text style={styles.sectionBody}>
-          Most relocation guides stop at bureaucracy. Camino starts with the bigger questions
+          Most relocation guides stop at bureaucracy. Get Camino starts with the bigger questions
           and works through the practical steps that follow — and every official step cites the
           government source it comes from, so you can check it yourself.
         </Text>
@@ -123,7 +123,7 @@ export default function HowItWorksPage() {
         <View style={styles.innerCenter}>
         <View style={styles.lolaGlyph}><Text style={styles.lolaGlyphStar}>✦</Text></View>
         <Text style={styles.lolaQuote}>"I keep the map. A gestor signs the papers."</Text>
-        <Text style={styles.lolaAttrib}>— Lola, your Camino guide</Text>
+        <Text style={styles.lolaAttrib}>— Lola, your Get Camino guide</Text>
         <Text style={styles.lolaBody}>
           Lola is your AI guide — warm, bilingual, and always honest.
           She'll never invent a deadline or dress up something important as optional.

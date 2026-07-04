@@ -39,7 +39,7 @@ export async function POST(request: Request): Promise<Response> {
   try {
     await sendEmail({
       to: TEAM_INBOX,
-      subject: `Camino feedback (${ctx.env}${ctx.platform ? ` · ${ctx.platform}` : ''})`,
+      subject: `Get Camino feedback (${ctx.env}${ctx.platform ? ` · ${ctx.platform}` : ''})`,
       html: `<div style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:21px;color:#15243B;">
         <p style="white-space:pre-wrap;">${esc(message)}</p>
         <hr style="border:none;border-top:1px solid #E8E4DC;">

@@ -6,7 +6,7 @@ import Seo from '@/components/Seo';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 
-// Unlisted route: not linked from the nav. Direct link only. A narrative of how Camino was
+// Unlisted route: not linked from the nav. Direct link only. A narrative of how Get Camino was
 // built — revised as the product matures.
 
 type Block = { h: string; p: string[] };
@@ -20,7 +20,7 @@ const SECTIONS: Block[] = [
   {
     h: 'The idea, from a suitcase',
     p: [
-      'Camino started with my own move to Spain. Not the romantic part — the other part: the ' +
+      'Get Camino started with my own move to Spain. Not the romantic part — the other part: the ' +
       'hundred small, unglamorous tasks that only work in a specific order. Visa before flight. ' +
       'Padrón before residency. Residency before the health card. Get one wrong and the next ' +
       'three stall for weeks.',
@@ -144,8 +144,8 @@ export default function HowIWasBuilt() {
   return (
     <ScrollView style={styles.flex} contentContainerStyle={styles.scroll}>
       <Seo
-        title="How Camino was built | the story behind the app"
-        description="The build story of Camino: an AI guide for moving to Spain, built in the open — the thesis, the decisions, and the receipts."
+        title="How Get Camino was built | the story behind the app"
+        description="The build story of Get Camino: an AI guide for moving to Spain, built in the open — the thesis, the decisions, and the receipts."
         canonical="https://getcamino.app/how-i-was-built"
       />
       <NavBar />
@@ -176,7 +176,7 @@ export default function HowIWasBuilt() {
           And the code itself is public — github.com/nerolabs/camino-app ↗
         </Text>
         <Text style={styles.footer}>
-          A first pass, written while the product is still young. We’ll revise it as Camino grows —
+          A first pass, written while the product is still young. We’ll revise it as Get Camino grows —
           the same way we built it.
         </Text>
       </View>

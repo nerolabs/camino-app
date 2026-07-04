@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { ExpoConfig } from 'expo/config';
 
 const config: ExpoConfig = {
-  name: 'Camino',
+  name: 'Get Camino',
   slug: 'camino',
   owner: 'nerolabs-team',
   version: '1.0.0',
@@ -25,10 +25,10 @@ const config: ExpoConfig = {
       // App uses only standard HTTPS (exempt encryption) — avoids the manual export-compliance step.
       ITSAppUsesNonExemptEncryption: false,
       // A linked system framework (expo-file-system) references the Photos API, so Apple's static
-      // check (ITMS-90683) requires this string even though Camino does not access your photos.
+      // check (ITMS-90683) requires this string even though Get Camino does not access your photos.
       // TODO(public-release): revisit — drop this if we confirm no photo API path ships.
       NSPhotoLibraryUsageDescription:
-        'Camino does not access your photo library; this entry is only required by a system framework the app links against.',
+        'Get Camino does not access your photo library; this entry is only required by a system framework the app links against.',
     },
   },
   android: {
@@ -57,8 +57,8 @@ const config: ExpoConfig = {
     }],
     'expo-font',
     ['expo-speech-recognition', {
-      microphonePermission: 'Allow Camino to use the microphone so you can dictate your answers.',
-      speechRecognitionPermission: 'Allow Camino to use speech recognition to transcribe your spoken answers.',
+      microphonePermission: 'Allow Get Camino to use the microphone so you can dictate your answers.',
+      speechRecognitionPermission: 'Allow Get Camino to use speech recognition to transcribe your spoken answers.',
     }],
     // expo-speech-recognition requires iOS 16.4+; pin the deployment target so the pod builds.
     ['expo-build-properties', { ios: { deploymentTarget: '16.4' } }],

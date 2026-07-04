@@ -9,14 +9,14 @@ export default function PrivacyPage() {
   return (
     <LegalPage
       title="Privacy"
-      metaTitle="Privacy policy | Camino"
-      description="What Camino collects, why, where it goes, and how to delete it — in plain language."
+      metaTitle="Privacy policy | Get Camino"
+      description="What Get Camino collects, why, where it goes, and how to delete it — in plain language."
       canonical="https://getcamino.app/privacy"
       updated="4 July 2026"
       intro="The short version: we collect your email and your interview answers so we can build and save your roadmap and send you the emails you asked for. We don't sell data, we don't run ads, we don't want your documents, and you can delete everything yourself, in the app, at any time."
       sections={[
         { h: 'Who we are', body: [
-          'Camino (getcamino.app) is operated by Proxim.us, PO Box 1973, Vashon, WA 98070, United States.',
+          'Get Camino (getcamino.app) is operated by Proxim.us, PO Box 1973, Vashon, WA 98070, United States.',
           'Questions or requests about your data: use "Report a problem" in the app menu, or email nerolabs@gmail.com.',
         ]},
         { h: 'What we collect', body: [
@@ -28,7 +28,7 @@ export default function PrivacyPage() {
         ]},
         { h: 'What we deliberately do not collect', body: [
           'No document uploads — we\'ve chosen not to be a store of passports and certificates.',
-          'No payment details (Camino is free), no precise location, no advertising identifiers, no data sales to anyone, ever.',
+          'No payment details (Get Camino is free), no precise location, no advertising identifiers, no data sales to anyone, ever.',
         ]},
         { h: 'How AI is involved', body: [
           'Lola\'s conversation runs on Anthropic\'s Claude: the text you type in the interview and in step conversations is processed to phrase questions and understand answers. Which steps apply to you, and every date, is computed by our own deterministic engine — not by AI.',

@@ -117,6 +117,21 @@ user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS bui
     **Build 27 batch waiting:** volume fix v2 (needs device verification), delete-my-account in
     the native menu, region slot, everything since build 26.
 
+11. **2026-07-04 (later) — BUILD 27 + source-link QA + THE REBRAND.** Build 27 FINISHED &
+    auto-submitted to TestFlight (5c4d86b6; carries volume fix v2 UNVERIFIED, native
+    delete-account, region question, PDF margins, keyboard sheets — the user's heavy-testing
+    build). Backlog fully audited → TODO.md "🎯 THE SEQUENCED BACKLOG" is now the canonical
+    order. Phase-1 #4 DONE: all 55 source links click-tested, 2 fixed (empadronamiento → BOE
+    Ley 7/1985; nie → interior.gob.es canonical page — policia.es cookie-walls real browsers;
+    notes in SOURCING.md). **BRAND RENAMED (user decision): "Get Camino"**, extended
+    **"Get Camino: Your Road to Spain"** (= exactly 30 chars, fits ASC) — trademark-risk
+    mitigation; ~100 user-facing strings + share card + ASC drafts + Supabase-template doc
+    updated; **identifiers unchanged** (slug camino, scheme caminoapp, bundle
+    com.nerolabs.camino). Native-visible bits (icon label, permission strings, in-app copy)
+    ride **build 28**. STILL SAYING "Camino": the live Supabase auth-email templates (both
+    dashboards — copy ready in docs/design/supabase-auth-emails.md) and the ASC display name
+    (user-side).
+
 **ALSO SPOTTED in ASC (App Store release prep):** the DSA **trader status** must be completed
 (ASC → Business banner) or EU distribution is blocked — Spain IS the market. Add to the
 submission checklist (user action, needs their trader info).
