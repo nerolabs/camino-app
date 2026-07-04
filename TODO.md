@@ -54,10 +54,22 @@ command** (credits).
    exemption path — see Phase 5 launch item). User completed the provider caps 2026-07-04
    (Anthropic monthly spend limit + ElevenLabs overage OFF) — all three layers live; strict
    CORS confirmed propagated to getcamino.app.
-6. **Native E2E (Maestro) + authed-flow test strategy** (B5's deferred fourth layer —
-   "revisit pre-launch" = now). Needs: simulator/cloud infra choice, a Supabase test-user or
-   auth-bypass strategy, and extending Playwright to authed web flows (sign-in → saved plan →
-   re-model). Design first, then implement. Protects every release train after v1.
+6. **Native E2E (Maestro) + authed-flow test strategy** — **PLAN DRAFTED 2026-07-04, awaiting
+   user go (do not execute until approved).** Research verified: Maestro CLI is free/OSS;
+   EAS Workflows has first-class `type: maestro` jobs BUT consumes build credits; GitHub
+   Actions standard macOS runners are FREE with no minute cap for public repos (ours is) —
+   `eas build --local --profile e2e-test` (ios.simulator, withoutCredentials) there = zero
+   EAS credits; Supabase `admin.generateLink({type:'magiclink'})` mints sign-in links without
+   email — web tests persist the session via storageState, native tests open the link and ride
+   the EXISTING caminoapp://auth-callback deep-link flow (real code path). Plan:
+   **Phase A** (~half day): staging-only test user + fixture + reset step; authed Playwright
+   specs (saved plan, This-week, mark-done re-flow, no-op re-model, sign-out); GH secrets set
+   by user. **Phase B** (~1–1.5 days): `.maestro/` P0 flows (launch/home, sample plan,
+   interview 1 LLM turn + answer, deep-link sign-in → roadmap → step sheet → mark done) on a
+   free GH macOS runner; EAS Workflows kept as paid-plan upgrade path. **Phase C** (~half
+   day): release-train wiring in docs/BUILD.md + failure artifacts. Cadence: manual dispatch +
+   pre-release (never per-push — LLM spend + our own rate limits). Out of scope: Apple
+   sign-in (human checklist; needs live Apple ID), TTS audio assertions, Android (deferred).
 7. ~~**A11y round 2**~~ — **SHIPPED 2026-07-04:** global `:focus-visible` amber ring in
    `app/+html.tsx` (keyboard-only, beats RNW's inline outline reset), verified live by
    tabbing the deployed page. Remaining a11y depth (full audit vs WCAG checklist) → fold
