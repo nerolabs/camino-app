@@ -1,13 +1,19 @@
-# P0: the interview actually starts — one live LLM round-trip phrases question 1, and a typed
+# P0: the interview actually starts — one live LLM round-trip phrases question 1 — and a typed
 # answer is extracted so question 2 appears. Anchors on the deterministic progress label
 # ("Question N of ~M"), never on Lola's LLM-phrased wording.
+#
+# Run-6 fix: the answer box was empty at failure (Send disabled, no user bubble) — inputText
+# raced the native keyboard/focus. Now: tap the field, let the keyboard animate up, type, then
+# ASSERT the text actually landed before sending (fails fast + tells us "text entry" vs "LLM"
+# if it ever flakes again). LLM waits are generous — a turn is two sequential /api/lola calls,
+# and this is a big-build gate where a few extra minutes is fine.
 appId: ${APP_ID}
 ---
 - launchApp:
     clearState: true
 - extendedWaitUntil:
     visible: "Build my free roadmap.*"
-    timeout: 20000
+    timeout: 30000
 - tapOn: "Build my free roadmap.*"
 - extendedWaitUntil:
     visible: "Hola, I'm Lola.*"
@@ -15,10 +21,13 @@ appId: ${APP_ID}
 - tapOn: "Let's get started"
 - extendedWaitUntil:
     visible: "Question 1 of.*"
-    timeout: 60000
+    timeout: 90000
 - tapOn: "Type your answer.*"
+- waitForAnimationToEnd:
+    timeout: 4000
 - inputText: "I'm a US citizen"
+- assertVisible: "I'm a US citizen"   # the text really landed — Send is enabled now
 - tapOn: "Send your answer"
 - extendedWaitUntil:
     visible: "Question 2 of.*"
-    timeout: 60000
+    timeout: 120000
