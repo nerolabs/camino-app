@@ -36,4 +36,16 @@ body {
   body {
     background-color: #000;
   }
+}
+
+/* Keyboard focus you can see (a11y round 2). Amber — the brand waypoint color — reads on
+   both the cream background and the dark indigo bands. :focus-visible means keyboard users
+   get the ring and mouse/touch clicks don't; !important beats react-native-web's inline
+   outline reset on its focusable elements. */
+:focus-visible {
+  outline: 3px solid #BD8318 !important;
+  outline-offset: 2px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
 }`;

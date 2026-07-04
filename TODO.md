@@ -58,7 +58,10 @@ command** (credits).
    "revisit pre-launch" = now). Needs: simulator/cloud infra choice, a Supabase test-user or
    auth-bypass strategy, and extending Playwright to authed web flows (sign-in → saved plan →
    re-model). Design first, then implement. Protects every release train after v1.
-7. **A11y round 2** — focus-visible styles + full audit (small; ride-along).
+7. ~~**A11y round 2**~~ — **SHIPPED 2026-07-04:** global `:focus-visible` amber ring in
+   `app/+html.tsx` (keyboard-only, beats RNW's inline outline reset), verified live by
+   tabbing the deployed page. Remaining a11y depth (full audit vs WCAG checklist) → fold
+   into a later polish pass if user testing surfaces need.
 8. **Monitoring tune-up** (small): per-surface Sentry alert rules; optional backend latency
    tracing; refresh docs/MONITORING.md's stale "native (next)" section.
 

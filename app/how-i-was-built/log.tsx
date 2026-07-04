@@ -393,6 +393,15 @@ const ROWS: Row[] = [
     ],
   },
   {
+    feature: 'Keyboard focus you can see',
+    date: '4 Jul 2026',
+    work: 'Tab through any page and an amber ring — the brand\'s waypoint color — shows exactly where you are. Keyboard users get the ring; mouse and touch clicks don\'t.',
+    decisions: [
+      'Amber over cobalt: the one brand color that reads on both the cream background and the dark indigo bands.',
+      ':focus-visible, not :focus — a11y for keyboard users shouldn\'t add visual noise for everyone else.',
+    ],
+  },
+  {
     feature: 'The paid endpoints learned to say no',
     date: '4 Jul 2026',
     work: 'The two endpoints that cost real money per call — Lola\'s brain and Lola\'s voice — now carry real volume limits: a per-visitor per-minute cap and a global daily budget each, counted durably in the database. The in-memory counters they replace reset whenever the platform recycled a worker (a 70-request burst produced zero throttles); the new ones trip at exactly their limit, verified live. Cross-site browsers are locked out too: the platform\'s default wide-open CORS answer is replaced with a strict one pinned to our own origins.',
