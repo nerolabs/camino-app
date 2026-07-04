@@ -100,8 +100,9 @@ command** (credits).
 11. **Screenshots + metadata**: user captures the 5-shot story on build 27+ (docs/APP_STORE.md
     has the shot list), Claude frames/annotates; paste metadata + privacy-nutrition answers
     (all drafted in docs/APP_STORE.md).
-12. **[USER] Bus-factor hour**: credentials → password manager + trusted second person; second
-    admin on Apple + Supabase. Biggest continuity risk; do it before release makes it real.
+12. ~~**[USER] Bus-factor hour**~~ — **DEPRIORITIZED (user decision 2026-07-04):** "If this
+    turns into a real entity making real money that will be a step we will take." Parked to
+    the at-revenue tail alongside E&O insurance; no pre-launch action.
 13. **[USER] Gestor consult** (US LLC managed from Spain — PE/autónomo) + **trademark search**
     (software classes) — must precede brand spend / the launch moment; may trail submission.
     *Interim mitigation SHIPPED 2026-07-04:* public brand renamed **"Get Camino"** (extended:
@@ -134,11 +135,37 @@ command** (credits).
 22. **Small polish, parked**: context-aware "what changed" placeholder (plan.tsx changeBox) ·
     per-step problem-report link · scout-step prominence/coaching depth · a real blog surface.
 
-### Phase 6 — The tail (explicitly sequenced last by user)
-23. **Android**: verify the existing preview APK on a real device → fresh build → Google Play
-    ($25, needs a test device).
-24. **Localization** (Spanish first, then others; engine stays deterministic — translation is
-    presentation only). User: "at the very end."
+### ⚠️ RESEQUENCED 2026-07-04 (user feedback round): the launch platform set is now
+### **web + iOS + Android**, and **Spanish ships BEFORE launch** (authenticity: a
+### moving-to-Spain product must speak Spanish). Gate on E2E green first (user directive:
+### nothing new until a successful Maestro run + E2E confident enough for the pipeline).
+
+**Localization (pulled forward from the tail):**
+- **Spanish (es-ES) — PRE-LAUNCH GATE.** Then fast-follow tier: **French, German, Italian**
+  (user-picked). Suggested tier 3 by mover demographics: **Dutch** (top EU relocator cohort)
+  and **Portuguese** (pt — serves Brazil's fast-growing nomad/citizenship cohort + Portugal);
+  later, cohort-driven: Romanian + Polish (largest foreign communities in Spain), Arabic
+  (RTL cost) and Chinese when data justifies. Brand "Get Camino" NEVER localizes.
+- Architecture (unchanged from the original plan): i18n layer + string catalogs; the
+  obligation CATALOG titles/prose are user-facing content needing HUMAN-VERIFIED translation
+  (invariant 3 — machine-translating legal step titles risks changing meaning; extend the
+  digit-lint idea: translated text may not alter any number); Lola prompts take a target
+  language (Claude is natively strong in all picks; ElevenLabs voice is already multilingual);
+  locale-aware dates; SEO = localized guide routes + hreflang (a 60-page surface per language).
+
+**Android (promoted from the tail to LAUNCH platform):**
+- User buys a cheap test device (guidance given in chat: new budget Moto G / Galaxy A-series
+  ~$100–200, or refurb Pixel 7a — Play-certified, Android 14+); verify the existing preview
+  APK, then a fresh build + Google Play ($25 one-time).
+- ⚠️ **Play policy gate:** PERSONAL dev accounts (created after Nov 2023) must run a closed
+  test with 12+ testers for 14 days before production access; ORGANIZATION accounts are
+  exempt — registering the Play account under the coming LLC (needs D-U-N-S) both skips the
+  12-tester gate and matches the legal-entity step. Decide account type with the entity.
+
+**Small UX (user request):** back-to-top floating affordance on long scrolls (roadmap,
+guides index) — appears after scrolling down; established pattern. Polish batch after E2E.
+
+### Phase 6 — The tail (remaining)
 25. **Monetization** — gestor/advisor referrals once affiliate programs are identified;
     referral-compensation disclosure + E&O insurance land WITH it.
 26. **Scale revisits** (as usage grows): weekly-email `MAX_SENDS_PER_RUN` cap · PostHog
