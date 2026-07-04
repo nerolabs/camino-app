@@ -66,8 +66,9 @@ export default function NavBar() {
             <MenuLink label="Home" onPress={() => go('/')} />
             <MenuLink label="How it works" onPress={() => go('/how-it-works')} />
             <MenuLink label="Guides" onPress={() => go('/guide')} />
-            {/* The payoff before the ask — visible to visitors who haven't committed yet. */}
-            {!user && <MenuLink label="Sample plan" onPress={() => go('/sample-plan')} />}
+            {/* The payoff before the ask — for everyone (user request 2026-07-04: it used to
+                hide when signed in, which read as it vanishing). */}
+            <MenuLink label="Sample plan" onPress={() => go('/sample-plan')} />
             {/* The build story went public 3 Jul 2026 (user decision) — essay, log, roadmap. */}
             <MenuLink label="How I was built" onPress={() => go('/how-i-was-built')} />
             <View style={styles.menuDivider} />

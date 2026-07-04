@@ -390,8 +390,8 @@ export default function BuildLogScreen() {
         <Text style={styles.eyebrow}>HOW I WAS BUILT — THE RECEIPTS</Text>
         <Text style={styles.title}>The build log</Text>
         <Text style={styles.dek}>
-          The essay tells the story; this is the homework. Every major piece of Camino in the order
-          we actually took the work on — what shipped, and the decisions that shaped it.
+          The essay tells the story; this is the homework. Every major piece of Camino — newest
+          first — with what shipped and the decisions that shaped it.
         </Text>
         <View style={styles.linksRow}>
           <TouchableOpacity onPress={() => router.push('/how-i-was-built')}>
@@ -402,10 +402,13 @@ export default function BuildLogScreen() {
           </TouchableOpacity>
         </View>
 
-        {ROWS.map((row, i) => (
-          <View key={i} style={styles.row}>
+        {/* Data stays chronological (it reads as history in code); display is newest-first
+            (user request 2026-07-04 — the log got long). Numbers stay chronological, so the
+            top entry carries the highest number of the running series. */}
+        {ROWS.map((row, i) => ({ row, n: i + 1 })).reverse().map(({ row, n }) => (
+          <View key={n} style={styles.row}>
             <View style={styles.rowHeader}>
-              <Text style={styles.rowNum}>{String(i + 1).padStart(2, '0')}</Text>
+              <Text style={styles.rowNum}>{String(n).padStart(2, '0')}</Text>
               <Text style={styles.rowFeature}>{row.feature}</Text>
               <Text style={styles.rowDate}>{row.date}</Text>
             </View>
