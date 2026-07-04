@@ -71,7 +71,7 @@ function itemHtml(o: Objective, today: Date): string {
     <div style="font-size:12px;line-height:16px;color:${o.done ? C.olive : C.indigo};${o.done ? 'text-decoration:line-through;text-decoration-thickness:1px;' : ''}">${o.done ? '✓ ' : ''}${esc(o.title)}</div>
     <div style="font-size:10px;line-height:15px;margin-top:2px;">
       <span style="color:${due.color};font-weight:600;">${esc(due.text)}</span>
-      <span style="color:${C.muted};"> · ${esc(SEV_LABEL[o.severity])} · ${o.source === 'official' ? 'official requirement' : 'Camino recommendation'}</span>
+      <span style="color:${C.muted};"> · ${esc(SEV_LABEL[o.severity])} · ${o.source === 'official' ? 'official requirement' : 'Camino recommendation'}${o.regional ? ' · varies by comunidad' : ''}</span>
     </div>
     ${src}
   </div>`;

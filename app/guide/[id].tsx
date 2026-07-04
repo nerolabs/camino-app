@@ -68,6 +68,13 @@ export default function GuidePage() {
           <Text style={styles.factLabel}>WHY IT MATTERS</Text>
           <Text style={styles.factText}>{SEV_BLURB[g.severity]} {SOURCE_BLURB[g.source]}</Text>
 
+          {g.regional && (
+            <>
+              <Text style={styles.factLabel}>WHERE YOU LIVE MATTERS</Text>
+              <Text style={styles.factText}>The specifics are set by each comunidad autónoma — the official source covers the national rules; your region's own rates and windows apply. Camino's interview asks where you're settling and flags this step accordingly.</Text>
+            </>
+          )}
+
           {deps.length > 0 && (
             <>
               <Text style={styles.factLabel}>WHAT COMES FIRST</Text>

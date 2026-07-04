@@ -155,6 +155,7 @@ const STATIC_QUESTIONS: Record<string, string> = {
   has_spanish_address:                      "Do you already have a place lined up, rented or owned?",
   owns_or_drives:                           "Will anyone be driving while you're there?",
   owns_property_in_spain:                   "Are you planning to buy property in Spain, or have you already bought?",
+  region:                                   "Which part of Spain will you be settling in? A comunidad — or just name the city and I'll place it.",
   has_pets:                                 "Any pets making this move with you?",
   foreign_assets_eur_band:                  "Slightly personal — and you only pick a range — roughly how much do you hold outside Spain?",
   us_resident:                              "Are you currently based in the US? (Consulate wait times are quite long right now.)",

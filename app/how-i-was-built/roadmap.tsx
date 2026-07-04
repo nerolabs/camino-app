@@ -23,6 +23,7 @@ const SECTIONS: Section[] = [
   {
     h: 'Just shipped',
     items: [
+      { title: 'Region-aware steps', date: '4 Jul 2026', note: 'The interview now asks which comunidad you\'re settling in, and the steps whose rules vary by region — transfer tax, wealth tax, school admissions, property tax — say so and name yours. Region-by-region rates come next as a sourced content pass.' },
       { title: 'Privacy, terms & delete-my-account', date: '4 Jul 2026', note: 'The grown-up pages: plain-language privacy policy and terms in every footer, cookieless analytics (no banner needed), and one-tap permanent account deletion in the menu.' },
       { title: 'Every guide got a written explainer', date: '4 Jul 2026', note: 'Sixty pages now tell you what each step actually is and how it feels in practice — with a build rule that the prose can never introduce a number the step itself doesn\'t carry.' },
       { title: 'Roadmap PDF export', date: '3 Jul 2026', note: 'One tap turns your roadmap into a clean printable report — estimated vs firm dates, official sources included. For the fridge door, or the gestor.' },
@@ -48,13 +49,13 @@ const SECTIONS: Section[] = [
   {
     h: 'Next',
     items: [
-      { title: 'Region-aware steps', note: 'Some bureaucracy differs by comunidad — the plan should know yours.' },
+      { title: 'The public App Store release', note: 'The feature list is done. What remains is honest: more family testing, edge-case cleanup, and the grown-up paperwork.' },
+      { title: 'Region-by-region specifics', note: 'The rates and windows for each comunidad, verified against each region\'s own official sources — the content pass behind the region flags.' },
     ],
   },
   {
     h: 'Later',
     items: [
-      { title: 'The public App Store release', note: 'The iOS app is in TestFlight now. The listing goes live after the features above land and the app has survived a lot more family testing.' },
       { title: 'Android app' },
       { title: 'Spanish first, then more languages' },
     ],

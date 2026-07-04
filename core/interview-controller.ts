@@ -1,3 +1,5 @@
+import { REGION_OPTIONS } from './regions';
+
 type Condition =
   | { all: Condition[] } | { any: Condition[] } | { not: Condition }
   | { field: string; op: "eq" | "gt" | "in" | "exists"; value?: unknown };
@@ -107,6 +109,19 @@ export const SLOTS: Slot[] = [
     field: "knows_where_to_live", type: "bool",
     required_if: { not: { field: "owns_property_in_spain", op: "eq", value: true } },
     prompt_hint: "whether they already know which city or region in Spain they'll settle in, or are still deciding where to live",
+  },
+  {
+    // Region-awareness v1 (2026-07-04): asked only of movers who know where they're going
+    // (or already own there). "not_sure" is a fine answer. No applies_if tests this field —
+    // it personalizes the regional-variation notes on plan steps and stays ready for the
+    // per-region content pass.
+    field: "region", type: "band",
+    required_if: { any: [
+      { field: "knows_where_to_live", op: "eq", value: true },
+      { field: "owns_property_in_spain", op: "eq", value: true },
+    ] },
+    options: REGION_OPTIONS,
+    prompt_hint: "which comunidad autónoma (region of Spain) they'll settle in — if they name a city or province, map it to its comunidad; 'not sure yet' is a fine answer",
   },
   {
     field: "has_pets", type: "bool",

@@ -11,6 +11,7 @@ import { thisWeek } from '@/core/this-week';
 import { reportHtml } from '@/lib/reportHtml';
 import { exportPdf } from '@/lib/exportPdf';
 import { normalizeDateInput } from '@/lib/dateInput';
+import { regionLabel } from '@/core/regions';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { capture } from '@/lib/analytics';
@@ -566,6 +567,14 @@ export default function PlanScreen() {
                       </Text>
                     )}
                     <Text style={styles.sheetBody}>{timingDetail(selected)}</Text>
+                    {selected.regional && (
+                      <>
+                        <Text style={styles.sheetSectionLabel}>WHERE YOU LIVE MATTERS</Text>
+                        <Text style={styles.sheetBody}>
+                          {`The specifics of this step are set by each comunidad autónoma${regionLabel(profile?.region) ? ` — yours: ${regionLabel(profile?.region)}` : ''}. The source link covers the national rules; your region's own rates and windows apply.`}
+                        </Text>
+                      </>
+                    )}
                     {deps.length > 0 && (
                       <>
                         <Text style={styles.sheetSectionLabel}>BEFORE THIS, YOU'LL NEED</Text>

@@ -383,6 +383,15 @@ const ROWS: Row[] = [
       'Per-deploy preview URLs are now first-class origins for our own APIs: the hardening was blocking our own pre-production verification.',
     ],
   },
+  {
+    feature: 'The plan learns geography',
+    date: '4 Jul 2026',
+    work: 'Spain isn\'t one rulebook: transfer tax, wealth tax, school admission windows and property tax all vary by comunidad autónoma. The interview now asks where you\'re settling (name a city and Lola places it in its region), and every region-varying step says so — on your roadmap, in the guides, and on the printed report — naming your region when it\'s known.',
+    decisions: [
+      'Honest v1: the plan KNOWS your region and flags what varies there. Shipping 17 regions of rates without per-region official sources would break the no-invented-facts rule — that\'s a sourced content pass, now queued.',
+      '"Not sure yet" is a first-class answer: undecided movers get the scouting step and generic flags, not a forced guess.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

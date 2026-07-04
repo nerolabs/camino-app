@@ -495,7 +495,13 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       THESIS piece 4: hero next step, estimated vs firm, dateless pending steps, official URLs
       printed; 4 tests) + platform-split `lib/exportPdf` (web → print dialog, native →
       expo-print + share sheet) + "⤓ PDF" on /plan. Native rides build 23.
-   3. **Region-aware steps** — region slot; some bureaucracy differs by comunidad. ← NEXT
+   3. **Region-aware steps — SHIPPED 2026-07-04 (v1).** `region` slot (asked when
+      knows_where_to_live/owns_property; city→comunidad mapping via extractor; not_sure is
+      first-class; core/regions.ts labels), `regional: true` on property-transfer-tax /
+      wealth-tax / escolarizacion / ibi-property-tax, surfaced on plan sheet ("WHERE YOU
+      LIVE MATTERS" + names your region), guide pages, and the PDF report. Personas updated.
+      **ALL THREE PRE-RELEASE FEATURES DONE.** Follow-up queued in item 9: per-region
+      specifics as a SOURCED content pass (17 regions × official sources — invariant 3).
 
    Also shipped 2026-07-03: **Report a problem** (menu → dialog → /api/feedback → Resend to
    team inbox with platform/version/route context; verified end-to-end) and **iPad OFF** for
@@ -540,6 +546,9 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
    privacy policy URL are hard blockers). See docs/APP_STORE.md for the pack.
    User-side items: **DSA trader status in ASC** (blocks EU distribution).
 9. **Growth & uniqueness backlog (2026-07-03 review — full reasoning in docs/STRATEGY.md):**
+   - **Region-by-region specifics content pass** (NEW 2026-07-04): ITP rates, wealth-tax
+     allowances, school windows per comunidad, each verified against that region's own
+     official source; renders under the existing regional flags.
    - **Public regulatory changelog** (top pick): publish catalog diffs with sources; feeds
      the weekly email; trust engine + most linkable asset.
    - **"Last verified" stamps** on steps/guides.

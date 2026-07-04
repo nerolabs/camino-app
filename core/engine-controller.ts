@@ -37,6 +37,9 @@ export type Obligation = {
   webinar_url?: string; // original webinar (YouTube) the content was mined from — staff-only, for
                         // cross-checking official vs. webinar; also a future partnership/upsell hook
   applies_if: Condition; depends_on: string[]; timing: Timing;
+  // The specifics (rates, allowances, windows) are set per comunidad autónoma — the plan
+  // flags these and names the user's region when known. National source stays canonical.
+  regional?: boolean;
 };
 
 export type Resolved =
@@ -56,6 +59,7 @@ export type Objective = {
   source: Source; source_url?: string; webinar_url?: string; depends_on: string[];
   timing: Resolved; phase: Phase;
   done: boolean; completedOn: Date | null;
+  regional?: boolean;
 };
 
 const SEV_RANK: Record<Severity, number> = { penalty: 4, required: 3, recommended: 2, info: 1 };
@@ -448,7 +452,7 @@ export const CATALOG: Obligation[] = [
 
   // ── Family ──────────────────────────────────────────────────────────────────
   {
-    id: 'escolarizacion',
+    regional: true, id: 'escolarizacion',
     source_url: 'https://educagob.educacionfpydeportes.gob.es/ensenanzas/primaria/informacion-general/acceso.html',
     title: 'Enroll your child in school — the ordinary admission window runs in spring (≈March–May) for the September start; arriving off-cycle uses the "fuera de plazo" process',
     category: 'family', severity: 'required',
@@ -670,7 +674,7 @@ export const CATALOG: Obligation[] = [
     timing: { kind: 'absolute_recurring', rrule: 'FREQ=YEARLY;BYMONTH=4,5,6' },
   },
   {
-    id: 'wealth-tax',
+    regional: true, id: 'wealth-tax',
     source_url: 'https://sede.agenciatributaria.gob.es/Sede/procedimientoini/G611.shtml',
     webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=794s',
     title: 'File annual wealth-tax return (Modelo 714) during the renta period — applies when net assets exceed the €700,000 state allowance (regions vary; e.g. €500k in Catalonia), with a further ~€300k exemption for your main home',
@@ -829,7 +833,7 @@ export const CATALOG: Obligation[] = [
     timing: { kind: 'relative_to_event', anchor: 'property_purchase', offset_days: 30 },
   },
   {
-    id: 'property-transfer-tax',
+    regional: true, id: 'property-transfer-tax',
     source_url: 'https://administracion.gob.es/pag_Home/Tu-espacio-europeo/derechos-obligaciones/ciudadanos/residencia/compraventa-bienes-inmuebles/impuestos.html',
     title: 'Pay property transfer tax (ITP) on a resale property — roughly 6–11% of the price, set by each autonomous community',
     category: 'tax', severity: 'penalty',
@@ -840,7 +844,7 @@ export const CATALOG: Obligation[] = [
     timing: { kind: 'relative_to_event', anchor: 'property_purchase', offset_days: 30 },
   },
   {
-    id: 'ibi-property-tax',
+    regional: true, id: 'ibi-property-tax',
     source_url: 'https://boe.es/buscar/act.php?id=BOE-A-2004-4214',
     title: 'Pay the annual municipal property tax on your home to the town hall (IBI) — billing month varies by municipality',
     category: 'tax', severity: 'penalty',
@@ -972,6 +976,7 @@ export function buildPlan(p: Record<string, unknown>): Objective[] {
     return {
       id: o.id, title: o.title, category: o.category, severity: o.severity,
       source: o.source, source_url: o.source_url, webinar_url: o.webinar_url, depends_on: o.depends_on, timing, phase: phaseOf(timing, arrival),
+      regional: o.regional,
       done: pr?.state === 'done',
       completedOn: pr?.completedOn ? new Date(pr.completedOn) : null,
     };
