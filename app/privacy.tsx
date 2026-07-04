@@ -16,7 +16,7 @@ export default function PrivacyPage() {
       intro="The short version: we collect your email and your interview answers so we can build and save your roadmap and send you the emails you asked for. We don't sell data, we don't run ads, we don't want your documents, and you can delete everything yourself, in the app, at any time."
       sections={[
         { h: 'Who we are', body: [
-          'Get Camino (getcamino.app) is operated by Proxim.us, PO Box 1973, Vashon, WA 98070, United States.',
+          'Get Camino (getcamino.app) is operated by AELabratories (a US sole proprietorship, d/b/a), PO Box 1973, Vashon, WA 98070, United States.',
           'Questions or requests about your data: use "Report a problem" in the app menu, or email privacy@getcamino.app.',
         ]},
         { h: 'What we collect', body: [

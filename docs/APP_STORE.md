@@ -106,7 +106,7 @@ drop raw PNGs into `docs/store-assets/`.
       reads well at small sizes. *(exists via `scripts/gen-icon.mjs`)*
 - [ ] Screenshots per above. **[YOU capture / I polish]**
 - [ ] Age rating questionnaire → expect **4+** (no objectionable content). **[YOU click through]**
-- [ ] Copyright line (`© 2026 Proxim.us / Nerolabs — pick one`), trade rep info if EU DSA prompts. **[YOU]**
+- [ ] Copyright line: `© 2026 AELabratories` (sole proprietorship d/b/a — user decision 2026-07-04); trade rep info if EU DSA prompts. **[YOU]**
 - [ ] Paste metadata + privacy answers into App Store Connect, attach build (12+ recommended so
       the keyboard fix + interview intelligence ride along), **Submit for review**. **[YOU]**
 
