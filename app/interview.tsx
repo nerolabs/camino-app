@@ -114,6 +114,31 @@ entirely when nothing qualifies.`,
   }
 }
 
+// When the user replies with a QUESTION instead of an answer ("what do you mean?", "why do
+// you ask?"), a canned "sorry, didn't catch that" reads as deaf (build-25 family finding).
+// This is the phrasing surface, extended: Lola may explain what the question means and why
+// it's asked, then re-ask — but she may NOT state legal facts, thresholds, deadlines, costs,
+// or eligibility rules here (invariant 3: those live in the roadmap's sourced steps).
+async function phraseClarify(
+  slot: Slot, userText: string, turns: Turn[], extractorHint: string | undefined, reask: string,
+): Promise<string> {
+  const rawText = await askAnthropic({
+    model: 'claude-haiku-4-5-20251001',
+    max_tokens: 220,
+    system: `You are Lola, Camino's warm, honest relocation guide, mid-interview. You asked about
+"${slot.prompt_hint}" and the user replied with a question or confusion rather than an answer.
+${transcriptOf(turns) ? `Conversation so far:\n${transcriptOf(turns)}\n` : ''}
+${extractorHint ? `What seems ambiguous: ${extractorHint}\n` : ''}
+Reply in 1–3 short, warm sentences: first help them — explain what the question means in plain
+words, or why you're asking it — then naturally re-ask (you can adapt: "${reask}").
+HARD RULES: never state legal facts, deadlines, income thresholds, costs, or eligibility rules —
+if they ask for those, say their personalized roadmap right after this interview covers it with
+official sources. Never invent an answer for them. Plain text only.`,
+    messages: [{ role: 'user', content: userText }],
+  });
+  return rawText.trim();
+}
+
 const STATIC_QUESTIONS: Record<string, string> = {
   nationalities:                            "Quick one — where's everyone in the household a citizen?",
   work_situation:                           "Work-wise, when you move — will you be working remotely, freelancing, studying, retired, or something else?",
@@ -241,14 +266,13 @@ export default function InterviewScreen() {
       // Monitor these: every clarify is a real user stuck on a question the extractor fumbled.
       // The PostHog trend on this event is the tuning loop for the extraction prompts.
       capture('interview_clarify_needed', { field: currentSlot.field, answer: text.slice(0, 200) });
-      // Re-ask in Lola's voice rather than surfacing the extractor's raw clarify
-      // string, which leaks internal framing (e.g. "...you'd like me to extract?").
       const reask = STATIC_QUESTIONS[currentSlot.field]
         ?? `Could you tell me a little more about ${currentSlot.prompt_hint}?`;
-      setTurns(prev => [...prev, {
-        role: 'lola',
-        text: `Sorry, I didn't quite catch that. ${reask}`,
-      }]);
+      // Conversational clarify: answer their meta-question in Lola's voice, then re-ask
+      // (no legal facts — see phraseClarify). Falls back to the static re-ask on any error.
+      const reply = await phraseClarify(currentSlot, text, turns, result.clarify, reask)
+        .catch(() => `Sorry, I didn't quite catch that. ${reask}`);
+      setTurns(prev => [...prev, { role: 'lola', text: reply || `Sorry, I didn't quite catch that. ${reask}` }]);
       setLoading(false);
       return;
     }

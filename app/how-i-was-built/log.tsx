@@ -345,6 +345,16 @@ const ROWS: Row[] = [
       'Narrative explains, data asserts: prose adds context and texture, while every checkable fact stays in the catalog where the audit can see it.',
     ],
   },
+  {
+    feature: 'Family-testing fixes, round three',
+    date: '4 Jul 2026',
+    work: 'A former QA engineer joined the testing and it shows: Lola\'s voice dropped to phone-call volume after the first line (the microphone session was rerouting audio to the earpiece — playback now reclaims the loud speaker every time); a clarifying question mid-interview got a canned "sorry, didn\'t catch that" (Lola now answers what you asked, then re-asks — still forbidden from stating legal facts there); "on a date" became "did it earlier? add the date" with a forgiving date field that reads "25 April 2026", Spanish months, and "yesterday" — and shows you what it understood before saving; and the printable report got print-safe contrast and real page margins.',
+    decisions: [
+      'Date entry is a parser, not an AI: instant, offline, and incapable of hallucinating — and when input is genuinely ambiguous (04/05/2026) it asks rather than guesses.',
+      'The conversational interview keeps the honesty wall: Lola can explain what a question means, never what the law says — that lives in the sourced roadmap.',
+      'Print is its own medium: colors that read on a screen wash out on paper, and iOS ignores CSS page margins entirely — the report now carries both itself.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

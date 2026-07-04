@@ -13,7 +13,6 @@ export function useLolaVoice(): LolaVoice {
   const [enabled, setEnabled] = useState(true);
   const playerRef = useRef<ReturnType<typeof createAudioPlayer> | null>(null);
   const lastRef = useRef<string>('');
-  const modeSetRef = useRef(false);
 
   // Release the native player when the screen unmounts.
   useEffect(() => () => { try { playerRef.current?.remove(); } catch { /* noop */ } }, []);
@@ -35,11 +34,12 @@ export function useLolaVoice(): LolaVoice {
     if (!enabled || !t || t === lastRef.current) return;
     lastRef.current = t;
     try {
-      // Play through the iOS silent switch so Lola is heard even if the ringer is off.
-      if (!modeSetRef.current) {
-        modeSetRef.current = true;
-        await setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
-      }
+      // Re-assert the playback session before EVERY play — not once. Dictation's microphone
+      // flips iOS into a record-capable session that routes output to the quiet earpiece
+      // receiver, which made the second and every later Lola line come out at phone-call
+      // volume (build-25 family finding). allowsRecording:false forces the loud speaker
+      // route back; playsInSilentMode keeps her audible past the ringer switch.
+      await setAudioModeAsync({ playsInSilentMode: true, allowsRecording: false }).catch(() => {});
       const url = `${API_BASE}/api/tts?text=${encodeURIComponent(t)}`;
       if (!playerRef.current) playerRef.current = createAudioPlayer(url);
       else playerRef.current.replace(url);

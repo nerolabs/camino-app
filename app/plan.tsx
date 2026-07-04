@@ -10,13 +10,14 @@ import { buildPlan, isOverdue, type Objective, type Progress } from '@/core/engi
 import { thisWeek } from '@/core/this-week';
 import { reportHtml } from '@/lib/reportHtml';
 import { exportPdf } from '@/lib/exportPdf';
+import { normalizeDateInput } from '@/lib/dateInput';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { capture } from '@/lib/analytics';
 import EmailSignIn from '@/components/EmailSignIn';
 import { parseProfileChange, askLola, TASK_INTRO, changeHint } from '@/lib/plan-coach';
 import {
-  ISO_DATE, diffSummary, plansDiffer, completionLine, formatTiming, timingDetail, openExternal,
+  diffSummary, plansDiffer, completionLine, formatTiming, timingDetail, openExternal,
   PHASE_LABELS, PHASE_ICONS, PHASE_ORDER, SEV_COLOR, SEV_LABEL, SEV_BLURB,
   SOURCE_SHORT, SOURCE_BLURB, SOURCE_COLOR,
 } from '@/lib/plan-format';
@@ -484,32 +485,46 @@ export default function PlanScreen() {
                       <TouchableOpacity style={styles.doneChip} onPress={() => markDone(selected.id, new Date().toISOString().slice(0, 10))}>
                         <Text style={styles.doneChipText}>✓ Mark done</Text>
                       </TouchableOpacity>
+                      {/* "on a date" read as a mystery (build-25 family finding) — say what it's for. */}
                       <TouchableOpacity onPress={() => setDateOpen(v => !v)}>
-                        <Text style={styles.linkBtn}>on a date</Text>
+                        <Text style={styles.linkBtn}>did it earlier? add the date</Text>
                       </TouchableOpacity>
                     </>
                   )}
                 </View>
 
-                {dateOpen && !selected.done && (
-                  <View style={styles.dateRow}>
-                    <TextInput
-                      style={styles.dateInput}
-                      value={dateInput}
-                      onChangeText={setDateInput}
-                      placeholder="YYYY-MM-DD — downstream dates re-flow from this"
-                      placeholderTextColor={palette.muted}
-                      autoCapitalize="none"
-                    />
-                    <TouchableOpacity
-                      style={[styles.dateSaveBtn, !ISO_DATE.test(dateInput) && styles.dateSaveBtnDisabled]}
-                      disabled={!ISO_DATE.test(dateInput)}
-                      onPress={() => markDone(selected.id, dateInput)}
-                    >
-                      <Text style={styles.dateSaveBtnText}>Save</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
+                {dateOpen && !selected.done && (() => {
+                  // Forgiving entry (build-25 family finding: "2026-April-25" was rejected):
+                  // deterministic normalizer + a live preview so the user confirms our parse.
+                  const parsed = normalizeDateInput(dateInput);
+                  return (
+                    <View>
+                      <Text style={styles.dateHint}>When did you actually do this? Downstream dates re-flow from it.</Text>
+                      <View style={styles.dateRow}>
+                        <TextInput
+                          style={styles.dateInput}
+                          value={dateInput}
+                          onChangeText={setDateInput}
+                          placeholder='e.g. 25 April 2026 or 2026-04-25'
+                          placeholderTextColor={palette.muted}
+                          autoCapitalize="none"
+                        />
+                        <TouchableOpacity
+                          style={[styles.dateSaveBtn, !parsed && styles.dateSaveBtnDisabled]}
+                          disabled={!parsed}
+                          onPress={() => parsed && markDone(selected.id, parsed.iso)}
+                        >
+                          <Text style={styles.dateSaveBtnText}>Save</Text>
+                        </TouchableOpacity>
+                      </View>
+                      {dateInput.trim().length > 0 && (
+                        <Text style={[styles.datePreview, !parsed && styles.datePreviewBad]}>
+                          {parsed ? `→ ${parsed.label}` : 'I can’t read that yet — try the month as a word, e.g. "25 April 2026".'}
+                        </Text>
+                      )}
+                    </View>
+                  );
+                })()}
 
                 {/* ── Something changed → re-plan ─────────────────────────── */}
                 {!changeOpen ? (
@@ -745,7 +760,10 @@ const styles = StyleSheet.create({
   donePillText:  { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.olive },
   linkBtn:       { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.cobalt },
 
-  dateRow:       { flexDirection: 'row', gap: 8, alignItems: 'center', marginTop: 12 },
+  dateHint:      { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: palette.muted, marginTop: 12 },
+  datePreview:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.olive, marginTop: 6 },
+  datePreviewBad:{ color: palette.muted, fontFamily: 'HankenGrotesk_400Regular' },
+  dateRow:       { flexDirection: 'row', gap: 8, alignItems: 'center', marginTop: 8 },
   dateInput:     { flex: 1, backgroundColor: '#FFFFFF', borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10,
                    fontFamily: 'HankenGrotesk_400Regular', fontSize: 14, color: palette.indigo,
                    borderWidth: 1, borderColor: '#E0DCD4' },

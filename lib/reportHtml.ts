@@ -21,9 +21,12 @@ const SEV_LABEL: Record<string, string> = {
   penalty: 'Penalty risk', required: 'Required', recommended: 'Recommended', info: 'Info',
 };
 
+// Print-safe palette: the app's muted blue-gray (#8A9BB0) reads fine on screens but washes
+// out on paper and cheap-toner printers (build-25 QA finding) — the report uses a darker
+// slate for secondary text instead. Accents (cobalt/amber/olive/red) stay brand.
 const C = {
   cobalt: '#2B5AA3', indigo: '#15243B', amber: '#BD8318', olive: '#5E7355',
-  cal: '#FBFAF7', muted: '#8A9BB0', red: '#C0392B', line: '#E8E4DC',
+  cal: '#FBFAF7', muted: '#4A5A70', faint: '#5B6B80', red: '#C0392B', line: '#D8D2C8',
 };
 
 const esc = (s: string) =>
@@ -62,7 +65,7 @@ const SEV_INK: Record<string, string> = {
 function itemHtml(o: Objective, today: Date): string {
   const due = dueLine(o, today);
   const src = o.source === 'official' && o.source_url
-    ? `<div style="font-size:9px;color:${C.muted};margin-top:2px;word-break:break-all;">Official source: ${esc(o.source_url)}</div>`
+    ? `<div style="font-size:10px;color:${C.faint};margin-top:2px;word-break:break-all;">Official source: ${esc(o.source_url)}</div>`
     : '';
   return `<div style="page-break-inside:avoid;padding:8px 0 8px 12px;border-left:3px solid ${o.done ? C.olive : SEV_INK[o.severity]};border-bottom:1px solid ${C.line};">
     <div style="font-size:12px;line-height:16px;color:${o.done ? C.olive : C.indigo};${o.done ? 'text-decoration:line-through;text-decoration-thickness:1px;' : ''}">${o.done ? '✓ ' : ''}${esc(o.title)}</div>
@@ -97,7 +100,9 @@ export function reportHtml(objectives: Objective[], today: Date = new Date()): s
 <html><head><meta charset="utf-8"><title>Camino — your road to Spain</title>
 <style>@page { margin: 18mm 15mm; } body { margin: 0; }</style></head>
 <body style="background:${C.cal};font-family:Georgia,'Times New Roman',serif;color:${C.indigo};">
-<div style="max-width:720px;margin:0 auto;padding:8px 4px;font-family:Helvetica,Arial,sans-serif;">
+<!-- Container padding is the margin fallback: iOS's HTML→PDF renderer ignores @page
+     (build-25 QA finding: zero print margins), so the page must carry its own. -->
+<div style="max-width:720px;margin:0 auto;padding:28px 24px;font-family:Helvetica,Arial,sans-serif;">
 
   <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid ${C.indigo};padding-bottom:10px;">
     <div style="font-family:Georgia,serif;font-size:22px;font-weight:600;">Camino <span style="font-size:12px;color:${C.muted};font-style:italic;">— your road to Spain</span></div>
@@ -119,7 +124,7 @@ export function reportHtml(objectives: Objective[], today: Date = new Date()): s
     ${items.map(o => itemHtml(o, today)).join('')}
   </div>`).join('')}
 
-  <div style="margin-top:24px;padding-top:10px;border-top:1px solid ${C.line};font-size:9px;line-height:14px;color:${C.muted};">
+  <div style="margin-top:24px;padding-top:10px;border-top:1px solid ${C.line};font-size:10px;line-height:15px;color:${C.faint};">
     Estimated dates sharpen as real dates are confirmed; steps without dates begin once their milestone happens — Camino never invents a deadline.
     <br>Made with Camino (getcamino.app). Guidance only — not legal or tax advice; a gestor signs the papers.
   </div>
