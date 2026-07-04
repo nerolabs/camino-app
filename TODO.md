@@ -510,6 +510,17 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       operator identity).
    4. **Analytics consent decision**: PostHog cookieless mode (preferred — no banner, fits
       brand) or a consent banner; Sentry too.
+6b. **⚠️ PRE-SUBMISSION GATE (user, 2026-07-04): a real legal entity is coming.** The current
+   legal-page values (operator Proxim.us, Vashon PO box, nerolabs@gmail.com contact) are
+   TEMPORARY. Before ANY App Store publish: new entity name + registered address + a
+   @getcamino.app contact mailbox must replace them in /privacy, /terms, /aviso-legal, the
+   feedback route's team inbox, and the ASC legal entity. Legal pages were reviewed by the
+   user 2026-07-04 (wording OK; entity values pending).
+
+6c. *(eventually, not now — user request 2026-07-04)* **"My account" page** — as account
+   options accumulate, a proper account screen (email, sign-in method, email prefs, delete
+   account) so destructive actions move out of the main hamburger.
+
 7. **Polish backlog for the next push (user-approved 2026-07-03 night), in value order:**
    1. **Social share cards** — og:/twitter: meta + one branded share image; links will live in
       expat Facebook groups/WhatsApp and previews are currently bare. Cheap, high leverage.

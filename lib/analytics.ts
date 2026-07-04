@@ -14,6 +14,14 @@ let ready = false;
 
 export function initAnalytics() {
   if (ready || !KEY || typeof window === 'undefined') return;
+  // Cookieless promise includes RETURNING visitors: scrub any ph_* localStorage left behind
+  // by the pre-cookieless bundle (verified present on prod 2026-07-04), so "nothing persisted
+  // client-side" is true for everyone, not just first-time visitors.
+  try {
+    for (const k of Object.keys(window.localStorage)) {
+      if (k.startsWith('ph_')) window.localStorage.removeItem(k);
+    }
+  } catch { /* storage may be unavailable (private mode) — fine */ }
   posthog.init(KEY, {
     api_host: HOST,
     // Cookieless (user decision 2026-07-04, consent strategy): nothing persisted client-side →
