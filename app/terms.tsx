@@ -24,13 +24,13 @@ export default function TermsPage() {
           'Keep your answers honest (the roadmap is only as good as its inputs). You can delete your account and data at any time in the app. We may suspend accounts that abuse the service (automated scraping, attempting to misuse the AI endpoints, or unlawful use).',
         ]},
         { h: 'Liability', body: [
-          'Get Camino is provided free and "as is". To the maximum extent permitted by law, AELaboratories is not liable for indirect or consequential losses (including missed deadlines, visa outcomes, or tax consequences) arising from use of the service. Nothing in these terms excludes liability that cannot lawfully be excluded.',
+          'Get Camino is provided free and "as is". To the maximum extent permitted by law, AELaboratories, Inc is not liable for indirect or consequential losses (including missed deadlines, visa outcomes, or tax consequences) arising from use of the service. Nothing in these terms excludes liability that cannot lawfully be excluded.',
         ]},
         { h: 'Intellectual property', body: [
           'The Get Camino product, brand, catalog structure and content are ours; your answers and your roadmap are yours. Official sources belong to their governments — that\'s rather the point.',
         ]},
         { h: 'Governing law', body: [
-          'These terms are governed by the laws of the State of Washington, United States, where the operator is based. If you use Get Camino as a consumer in the EU, mandatory consumer protections of your country still apply to you.',
+          'These terms are governed by the laws of the State of North Carolina, United States, where the operator is based. If you use Get Camino as a consumer in the EU, mandatory consumer protections of your country still apply to you.',
         ]},
         { h: 'Changes', body: [
           'We\'ll update these terms as the product grows, with the date above. Material changes will be noted in the app or by email.',
