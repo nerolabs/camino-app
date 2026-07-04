@@ -6,8 +6,8 @@ import Seo from '@/components/Seo';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 
-// Unlisted route: not linked from the nav. Direct link only. A narrative of how Get Camino was
-// built — revised as the product matures.
+// Public since 3 Jul 2026 (nav menu + sitemap). A narrative of how Get Camino was built —
+// revised as the product matures (major revision 4 Jul: the family-testing/E2E/localization era).
 
 type Block = { h: string; p: string[] };
 
@@ -104,8 +104,9 @@ const SECTIONS: Block[] = [
     h: 'Parity, then a cold-eyed audit',
     p: [
       'Once the web experience had earned its shape, we brought the iOS app to full parity — ' +
-      'native sign-in, dictation, Lola’s spoken voice, crash reporting, analytics — three ' +
-      'TestFlight builds, each verified on a real device before we called it done.',
+      'native sign-in, dictation, Lola’s spoken voice, crash reporting, analytics — a train of ' +
+      'TestFlight builds (twenty-nine and counting), verified on real devices before we called ' +
+      'anything done.',
       'Then we did something teams skip: we stopped building and audited everything with fresh ' +
       'eyes. The audit found real problems — a language-exam rule that mis-handled Filipino ' +
       'applicants, an interview question whose answer was collected and then silently thrown away, ' +
@@ -125,6 +126,67 @@ const SECTIONS: Block[] = [
     ],
   },
   {
+    h: 'Family testing: the bug reports were a gift',
+    p: [
+      'Then we handed the app to relatives, and the most valuable engineering of the week came ' +
+      'back as screenshots. Five rounds of it. My wife — a former QA engineer — filed the report ' +
+      'that finally cracked a voice bug that had survived three builds: she noticed the volume ' +
+      'only dropped after the microphone had been used, and that speaking slowly “fixed” the ' +
+      'clipping. That’s not a complaint; that’s a diagnosis. The fix was to stop fighting the ' +
+      'audio hardware with side-effects and make turn-taking explicit: open the mic, Lola stops ' +
+      'talking; close it, your last words are kept; send, and the buffer is deliberately thrown ' +
+      'away. One deterministic rule beats a hardware mode.',
+      'The same rounds produced a principle we now build by: every waiting state needs an exit. ' +
+      'A spinner that could sit for thirty seconds now gives up at thirty-five and hands your ' +
+      'answer back to resend. A loading screen that could trap you after an upgrade now knows ' +
+      'when there is nothing to load and takes you home. A spinner is a moment, not a ' +
+      'destination — and anything slower than it should be now pages us through monitoring.',
+    ],
+  },
+  {
+    h: 'Measure the platform; don’t believe it',
+    p: [
+      'The week’s sharpest technical lesson: documentation describes intent, not behavior. Our ' +
+      'hosting runtime rewrites a security header in a way that quietly disabled a protection we ' +
+      'thought we had; our in-memory rate limiter turned out to reset whenever the platform ' +
+      'recycled a worker — a seventy-request burst produced zero throttles. A government portal ' +
+      'served error pages with a success status code, so a “working” source link was actually ' +
+      'dead. In every case the fix started the same way: stop reading, start measuring. We ' +
+      'burst-tested our own endpoints, click-tested all fifty-five official source links against ' +
+      'their content rather than their status codes (two were quietly broken), and rebuilt rate ' +
+      'limiting on durable counters that trip at exactly their limit — verified live, on both ' +
+      'environments, before we believed ourselves.',
+    ],
+  },
+  {
+    h: 'The robots test the app now',
+    p: [
+      'Hand-testing stops scaling exactly when a product starts working. So the app tests ' +
+      'itself: twelve automated web journeys — including signing in and reworking a real ' +
+      'roadmap — and native flows that run on an iOS simulator in CI, on free public-repo ' +
+      'runners, costing nothing per run. The tests sign in through the same magic-link machinery ' +
+      'real users ride; a test-only backdoor would test the backdoor.',
+      'The suite earned its keep before it was even finished: its first run caught a rendering ' +
+      'error firing on every single page load — one that humans, including us, had scrolled ' +
+      'straight past for days. That’s the argument for automated eyes in one sentence.',
+    ],
+  },
+  {
+    h: 'Decisions are product, too',
+    p: [
+      'Some of the week’s biggest ships weren’t features. The app got a safer name — Get Camino, ' +
+      'a distinctive compound matching the domain we already own, chosen deliberately before ' +
+      'spending anything on a brand we might have had to fight for. The operating entity got ' +
+      'honest: a sole proprietorship now, incorporation when revenue proves the model, because ' +
+      'the migration is mostly behind-the-scenes paperwork and waiting costs little. And the ' +
+      'launch got bigger in the way that matters: a moving-to-Spain product that doesn’t speak ' +
+      'Spanish lacks authenticity, so Spanish ships before launch — verified by a native speaker, ' +
+      'governed by the same rule as everything else here: a translation may never change a ' +
+      'number. The invariants we wrote on day one keep absorbing surfaces that didn’t exist when ' +
+      'we wrote them. That’s how you know they were the right ones.',
+    ],
+  },
+  {
     h: 'Why this matters, if you lead engineers',
     p: [
       'I built this to prove something to myself: that an engineering leader can direct an AI ' +
@@ -136,6 +198,13 @@ const SECTIONS: Block[] = [
       'the actual work — who stay close enough to the code to have opinions worth having, and who ' +
       'treat learning this new way of building as the most important skill on their roadmap. Ours ' +
       'included.',
+      'A week in, I’d add one thing. The AI learns your project the way a sharp new hire does — ' +
+      'through the artifacts you keep. Our postmortems became playbooks it applies unprompted; ' +
+      'our invariants became gates it extends to new surfaces; our backlog, audited and ' +
+      're-sequenced in the open, is the shared memory that makes each session compound instead ' +
+      'of restart. Write things down as if your best engineer has amnesia and your standards are ' +
+      'the only thing they’ll remember. It turns out that’s just good leadership, with the ' +
+      'volume turned up.',
     ],
   },
 ];
@@ -176,8 +245,8 @@ export default function HowIWasBuilt() {
           And the code itself is public — github.com/nerolabs/camino-app ↗
         </Text>
         <Text style={styles.footer}>
-          A first pass, written while the product is still young. We’ll revise it as Get Camino grows —
-          the same way we built it.
+          Written while the product is young and revised as it grows — last revised July 2026,
+          after the family-testing week. The receipts above stay current either way.
         </Text>
       </View>
       <Footer />
