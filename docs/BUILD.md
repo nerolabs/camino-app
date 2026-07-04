@@ -13,9 +13,21 @@ removed 2026-07-04 — the app is long since real; see HANDOFF.md for current st
 - **Android** — same EAS build path; Google Play is a launch platform now (personal Play
   account → 12-tester/14-day closed test applies — start it early).
 
-## The pre-ship gate (all must be green before a store submission)
+## Two tiers of checks (small builds vs big builds — user decision 2026-07-05)
 
-1. **`npm run typecheck`** — tsc strict.
+- **Every push / small iteration** (web deploys, JS-only changes, day-to-day): the fast
+  deterministic CI only — **typecheck · audit · test**. No E2E. Runs automatically, no spend,
+  no simulator. This is the routine loop.
+- **Big builds only** (a native EAS build headed for TestFlight/Play, and any store
+  submission): ALSO run the two E2E suites below — **`test:e2e`** (Playwright web) and the
+  **`e2e-ios`** workflow (Maestro native). Both are **manual dispatch on purpose**: each spends
+  live LLM calls, e2e-ios takes ~30–45 min, and iOS-simulator-on-CI is inherently slow — so we
+  run them deliberately before a build that matters, never on every small change. Native E2E is
+  a release gate, not an iteration gate.
+
+## The pre-ship gate (all green before a big build / store submission)
+
+1. **`npm run typecheck`** — tsc strict. *(also every push)*
 2. **`npm run audit`** — catalog ↔ interview contract (invariant 2) + all personas. Runs in
    deploy.sh and CI on every push.
 3. **`npm test`** — deterministic engine + email-digest + report + this-week + date + digit-lint
@@ -24,9 +36,11 @@ removed 2026-07-04 — the app is long since real; see HANDOFF.md for current st
    the **authed** suite (sign in → saved roadmap → This-week → mark-done → no-op re-model →
    sign-out). Needs `E2E_SUPABASE_SERVICE_ROLE_KEY` in env (skips cleanly without it). Manual +
    pre-release (each run spends a few live LLM calls; our own rate limits apply to us too).
-5. **`e2e-ios` GitHub workflow** (manual dispatch) — Maestro on an iOS simulator, on a free
-   macОS runner via `eas build --local` (zero EAS credits). Gates the **3 deterministic native
-   flows**: launch/home, sample plan, interview (a real LLM turn). ~30–45 min.
+5. **`e2e-ios` GitHub workflow** (manual dispatch; **big builds only**) — Maestro on an iOS
+   simulator, on a free macОS runner via `eas build --local` (zero EAS credits). Gates the
+   **3 deterministic native flows**: launch/home, sample plan, interview (a real LLM turn).
+   ~30–45 min. Dispatch before cutting a release-candidate native build; tolerate the occasional
+   re-run for CI-simulator flakiness (that's why it's a deliberate gate, not a per-push check).
 
 ### Why the native authed flow is NOT in the gate
 

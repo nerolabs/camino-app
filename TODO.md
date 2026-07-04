@@ -37,10 +37,12 @@ STRATEGY.md backtest · EAS builds only on user command · (once L0 lands) trans
    iOS-deep-link flake (issue #2610); covered by the authed Playwright web suite + manual
    on-device sign-in instead. Rationale in docs/BUILD.md. Re-fold 04 when #2610 is fixed or a
    known-good Maestro is pinned.
-2. ~~**Pipeline wiring (Phase C)**~~ — **docs/BUILD.md rewritten** with the full pre-ship gate
-   (typecheck · audit · test · test:e2e (12) · e2e-ios (3 native)) + release checklist. Both
-   E2E workflows stay manual + pre-release (LLM spend + our own rate limits). Optional later:
-   a weekly scheduled run.
+2. ~~**Pipeline wiring (Phase C)**~~ — **docs/BUILD.md rewritten** with the two-tier gate
+   (user decision 2026-07-05): **small builds** = fast CI only (typecheck · audit · test, every
+   push); **big builds** (native RC / store submission) = ALSO test:e2e (12) + e2e-ios
+   (3 native), both manual dispatch. Native E2E is a RELEASE gate, not an iteration gate —
+   tolerate the occasional CI-simulator re-run rather than chasing per-push reliability. The
+   e2e-ios workflow is already workflow_dispatch-only (verified).
 3. **[USER] Build 29 verification + family testing** (parallel, ongoing): mic first/last
    words at normal pace · composer grows while dictating · cold-start with no roadmap lands
    home · no spinner past 35s. Fix rounds as filed.
