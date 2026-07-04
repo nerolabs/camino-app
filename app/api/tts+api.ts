@@ -9,43 +9,35 @@
  */
 
 import { captureServerError } from '@/lib/sentryServer';
+import { corsPreflight, isAllowedOrigin, volumeGuard } from '@/lib/apiGuard';
 
 const ELEVEN_BASE = 'https://api.elevenlabs.io/v1/text-to-speech';
 // Warm, natural accented English needs the multilingual model. Voice is chosen per-account.
 const MODEL = process.env.ELEVENLABS_MODEL ?? 'eleven_multilingual_v2';
 const MAX_CHARS = 1000; // an intro or a question — never a wall of text
 
+// In-memory per-IP limit (per isolate, free backstop); durable limits below.
 const RATE_LIMIT = Number(process.env.TTS_RATE_LIMIT ?? 60);
 const RATE_WINDOW_MS = 60_000;
 
-const DEFAULT_ORIGINS = [
-  'https://getcamino.app',
-  'https://www.getcamino.app',
-  'https://camino.expo.app',
-  'https://camino--staging.expo.app',
-];
-const ALLOWED_ORIGINS = new Set([
-  ...DEFAULT_ORIGINS,
-  ...(process.env.ALLOWED_ORIGINS ?? '').split(',').map(s => s.trim()).filter(Boolean),
-]);
+// Durable volume limits (Supabase-backed, cross-isolate). One TTS call per Lola turn —
+// real users make a handful per minute; note CORS can't protect this route's GET (media
+// tags skip preflight), so these counters are its primary defense.
+const IP_PER_MINUTE = Number(process.env.TTS_IP_PER_MINUTE ?? 20);
+const GLOBAL_PER_DAY = Number(process.env.TTS_GLOBAL_PER_DAY ?? 1000);
 
-function isAllowed(value: string): boolean {
-  try {
-    const url = new URL(value);
-    if (ALLOWED_ORIGINS.has(url.origin)) return true;
-    // Per-deploy EAS Hosting origins are all our own deployments (see lola+api.ts).
-    if (/^camino--[a-z0-9]+\.expo\.app$/.test(url.hostname) && url.protocol === 'https:') return true;
-    return url.hostname === 'localhost' || url.hostname === '127.0.0.1';
-  } catch {
-    return false;
-  }
-}
+// See lola+api.ts: never fires on EAS (platform rewrites Origin), real check elsewhere.
 function requestOriginRejected(request: Request): boolean {
   const origin = request.headers.get('origin');
-  if (origin) return !isAllowed(origin);
+  if (origin) return !isAllowedOrigin(origin);
   const referer = request.headers.get('referer');
-  if (referer) return !isAllowed(referer);
+  if (referer) return !isAllowedOrigin(referer);
   return false;
+}
+
+// Opts out of EAS Hosting's default permissive CORS (see lola+api.ts).
+export function OPTIONS(request: Request): Response {
+  return corsPreflight(request);
 }
 
 const hits = new Map<string, { count: number; resetAt: number }>();
@@ -80,9 +72,15 @@ function budgetExceeded(): boolean {
 
 // Synthesize `text` → audio/mpeg. Shared by POST (web sends JSON) and GET (native streams by URL,
 // since expo-audio's player fetches a URL rather than a body).
-async function ttsResponse(text: string, method: string): Promise<Response> {
+async function ttsResponse(text: string, method: string, request: Request): Promise<Response> {
   if (!text) return Response.json({ error: 'text is required' }, { status: 400 });
   if (text.length > MAX_CHARS) return Response.json({ error: 'text too long' }, { status: 413 });
+
+  // Durable volume limits — AFTER validation so malformed junk can't burn the budget.
+  const limited = await volumeGuard('tts', request, {
+    ipPerMinute: IP_PER_MINUTE, globalPerDay: GLOBAL_PER_DAY,
+  });
+  if (limited) return limited;
 
   const key = process.env.ELEVENLABS_API_KEY;
   const voiceId = process.env.ELEVENLABS_VOICE_ID;
@@ -123,7 +121,7 @@ export async function POST(request: Request) {
     if (rateLimited(clientIp(request))) return Response.json({ error: 'rate limit exceeded' }, { status: 429 });
     if (budgetExceeded()) return Response.json({ error: 'daily capacity reached' }, { status: 429 });
     const body = (await request.json()) as { text?: string };
-    return await ttsResponse((body.text ?? '').trim(), 'POST');
+    return await ttsResponse((body.text ?? '').trim(), 'POST', request);
   } catch (e) {
     console.error('tts route error', e);
     await captureServerError(e, { route: '/api/tts', method: 'POST' });
@@ -138,7 +136,7 @@ export async function GET(request: Request) {
     if (rateLimited(clientIp(request))) return Response.json({ error: 'rate limit exceeded' }, { status: 429 });
     if (budgetExceeded()) return Response.json({ error: 'daily capacity reached' }, { status: 429 });
     const text = new URL(request.url).searchParams.get('text') ?? '';
-    return await ttsResponse(text.trim(), 'GET');
+    return await ttsResponse(text.trim(), 'GET', request);
   } catch (e) {
     console.error('tts route error', e);
     await captureServerError(e, { route: '/api/tts', method: 'GET' });

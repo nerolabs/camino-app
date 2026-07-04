@@ -393,6 +393,16 @@ const ROWS: Row[] = [
     ],
   },
   {
+    feature: 'The paid endpoints learned to say no',
+    date: '4 Jul 2026',
+    work: 'The two endpoints that cost real money per call — Lola\'s brain and Lola\'s voice — now carry real volume limits: a per-visitor per-minute cap and a global daily budget each, counted durably in the database. The in-memory counters they replace reset whenever the platform recycled a worker (a 70-request burst produced zero throttles); the new ones trip at exactly their limit, verified live. Cross-site browsers are locked out too: the platform\'s default wide-open CORS answer is replaced with a strict one pinned to our own origins.',
+    decisions: [
+      'Fail open, bounded in dollars: if the counter database hiccups, users keep working — and provider spend caps bound the worst case. Availability first at this scale.',
+      'Only requests that would actually reach the paid provider consume budget — malformed junk can\'t starve the day\'s capacity.',
+      'Measured before believing: the platform rewrites the Origin header and quietly recycles in-memory state, so every layer was burst-tested against the real runtime, not the docs.',
+    ],
+  },
+  {
     feature: 'The microphone and Lola learn turn-taking',
     date: '4 Jul 2026',
     work: 'Family testing round four (build 27) nailed the last voice bug with a precise diagnosis: earlier builds only DUCKED Lola\'s voice while the mic was open — and never released the duck, so everything after went quiet. Build 27 fixed the volume but left her talking over you. Now it\'s explicit turn-taking: opening the mic cuts her line outright, and every later line plays at full volume. Also fixed: your spoken answer no longer reappears in the next question\'s box (the recognizer flushes one last result after it\'s told to stop — that flush was refilling the input the send had just cleared).',

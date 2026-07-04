@@ -40,11 +40,18 @@ command** (credits).
 
 ### Phase 2 — Harden before more public exposure (parallel with Phase 1; MUST precede any
 ### launch moment and the store release)
-5. **Real volume-limiting on `/api/lola` + `/api/tts`** (item: Deployment → harden). The
-   origin allowlist is fail-open on the Workers runtime and the site is now PUBLIC and indexed
-   (robots un-gated 2026-07-03) — the old "fine for an unlisted family test" condition no
-   longer holds. Decide + ship: Turnstile on interview start, a KV-backed counter, or an edge
-   WAF rule.
+5. ~~**Real volume-limiting on `/api/lola` + `/api/tts`**~~ — **SHIPPED 2026-07-04, verified
+   live on both envs.** (a) Durable Supabase counters (`scripts/sql/api-counters.sql` on BOTH
+   DBs + `lib/apiGuard.ts`): global daily budget per route (lola 2000/day, tts 1000/day) +
+   per-IP per-minute (30 / 20), fail-open, counted only after payload validation. Burst-tested:
+   tts tripped at exactly 21; the runtime DOES forward the client IP (X-Real-IP). (b) Strict
+   CORS: own OPTIONS handlers replace EAS's default `Allow-Origin: *` — grants pin to our own
+   origins (the platform rewrites Origin to our hostname, so the echo is always ours; foreign
+   pages fail the browser match). (c) User-side blast-radius caps: Anthropic Console monthly
+   spend limit + ElevenLabs plan quota (no usage-based overage). Research notes: no CF
+   bindings/WAF available on EAS Hosting; in-memory counters demonstrably reset (70-burst,
+   zero 429s). **Turnstile stays queued for the pre-launch-moment** (web-only; native needs an
+   exemption path — see Phase 5 launch item).
 6. **Native E2E (Maestro) + authed-flow test strategy** (B5's deferred fourth layer —
    "revisit pre-launch" = now). Needs: simulator/cloud infra choice, a Supabase test-user or
    auth-bypass strategy, and extending Playwright to authed web flows (sign-in → saved plan →

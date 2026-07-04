@@ -22,6 +22,7 @@
  */
 
 import { captureServerError } from '@/lib/sentryServer';
+import { corsPreflight, isAllowedOrigin, volumeGuard } from '@/lib/apiGuard';
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
@@ -31,52 +32,35 @@ const MAX_TOKENS_CAP = 1024;
 const MAX_MESSAGES = 40;
 const MAX_TOTAL_CHARS = 24_000; // summed length of all message contents + system
 
-// Rate limit: requests per IP per window. A full interview is ~2 calls per answer
-// spaced by typing time, so a real user stays well under this; a hammering script won't.
+// In-memory per-IP limit (per isolate, free backstop). The DURABLE limits live in
+// lib/apiGuard.ts volumeGuard — see LOLA_IP_PER_MINUTE / LOLA_GLOBAL_PER_DAY below.
 const RATE_LIMIT = Number(process.env.LOLA_RATE_LIMIT ?? 60);
 const RATE_WINDOW_MS = 60_000;
 
-// Origins allowed to call this route. Extra origins can be added via ALLOWED_ORIGINS
-// (comma-separated). Requests with NO Origin header (native apps, some same-origin
-// cases) are allowed through and rely on the rate limit + payload caps.
-const DEFAULT_ORIGINS = [
-  'https://getcamino.app',
-  'https://www.getcamino.app',
-  'https://camino.expo.app',
-  'https://camino--staging.expo.app',
-];
-const ALLOWED_ORIGINS = new Set([
-  ...DEFAULT_ORIGINS,
-  ...(process.env.ALLOWED_ORIGINS ?? '').split(',').map(s => s.trim()).filter(Boolean),
-]);
-
-// Accepts either an Origin (https://host) or a Referer (https://host/path) and checks
-// the normalized origin, so both header shapes work.
-function isAllowed(value: string): boolean {
-  try {
-    const url = new URL(value);
-    if (ALLOWED_ORIGINS.has(url.origin)) return true;
-    // Per-deploy EAS Hosting origins (camino--<id>.expo.app) are all OUR deployments —
-    // allowing them keeps pre-production verification on unique deployment URLs working
-    // (found 2026-07-04: the interview 403'd when tested on a fresh deploy URL).
-    if (/^camino--[a-z0-9]+\.expo\.app$/.test(url.hostname) && url.protocol === 'https:') return true;
-    return url.hostname === 'localhost' || url.hostname === '127.0.0.1'; // any localhost port for dev
-  } catch {
-    return false;
-  }
-}
+// Durable volume limits (Supabase-backed, cross-isolate). A full interview is ~2 calls
+// per answer spaced by typing time — a real user stays far under 30/min; 2000/day is
+// ~60 complete interviews of headroom.
+const IP_PER_MINUTE = Number(process.env.LOLA_IP_PER_MINUTE ?? 30);
+const GLOBAL_PER_DAY = Number(process.env.LOLA_GLOBAL_PER_DAY ?? 2000);
 
 // Reject only when we have a positive signal (Origin or Referer) that the request came
-// from a DIFFERENT site. When neither header is present — which is the case on the EAS
-// Hosting / Cloudflare Workers runtime, and for native apps — we allow and rely on the
-// payload caps + rate limit. (So this blocks casual cross-origin browser abuse where the
-// runtime forwards the header, and is a harmless no-op where it doesn't.)
+// from a DIFFERENT site. NOTE: on EAS Hosting the platform rewrites Origin to our own
+// hostname, so this never fires there (verified live 2026-07-04) — it's a real check on
+// other runtimes and harmless where it isn't. The strict OPTIONS handler below is what
+// actually shuts foreign browsers out on EAS.
 function requestOriginRejected(request: Request): boolean {
   const origin = request.headers.get('origin');
-  if (origin) return !isAllowed(origin);
+  if (origin) return !isAllowedOrigin(origin);
   const referer = request.headers.get('referer');
-  if (referer) return !isAllowed(referer);
+  if (referer) return !isAllowedOrigin(referer);
   return false;
+}
+
+// Handling OPTIONS ourselves opts out of EAS Hosting's default permissive CORS
+// (Allow-Origin: * + credentials), which would otherwise let any website use this
+// endpoint from its visitors' browsers.
+export function OPTIONS(request: Request): Response {
+  return corsPreflight(request);
 }
 
 // Best-effort per-IP fixed-window limiter. NOTE: on Cloudflare Workers each isolate has
@@ -153,6 +137,12 @@ export async function POST(request: Request) {
     if (totalChars > MAX_TOTAL_CHARS) {
       return Response.json({ error: 'payload too large' }, { status: 413 });
     }
+
+    // Durable volume limits — AFTER validation so malformed junk can't burn the budget.
+    const limited = await volumeGuard('lola', request, {
+      ipPerMinute: IP_PER_MINUTE, globalPerDay: GLOBAL_PER_DAY,
+    });
+    if (limited) return limited;
 
     const key = process.env.ANTHROPIC_API_KEY;
     if (!key) {

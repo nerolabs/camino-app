@@ -132,6 +132,19 @@ user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS bui
     dashboards — copy ready in docs/design/supabase-auth-emails.md) and the ASC display name
     (user-side).
 
+12. **2026-07-04 (night) — BUILD 28 + @getcamino.app mailboxes + API volume-limiting SHIPPED.**
+    Build 28 FINISHED → TestFlight (rebrand strings + voice turn-taking + answer-box clearing;
+    user confirmed TTS/mic "finally working correctly"). Product emails moved off the personal
+    inbox (Workspace + alias routing): feedback@ / privacy@ / legal@getcamino.app — delivery
+    E2E-confirmed. **Sequenced-backlog #5 DONE:** durable Supabase rate limiting
+    (`scripts/sql/api-counters.sql` on BOTH DBs, `lib/apiGuard.ts`, wired into lola/tts after
+    validation; fail-open) + strict CORS OPTIONS handlers. Empirics that matter: EAS rewrites
+    `Origin` to our own hostname (allowlist can never see foreign origins); in-memory counters
+    don't survive isolate churn (70-burst → zero 429s); the runtime DOES forward the client IP;
+    the durable per-IP limit trips at exactly limit+1 (tts: 20×200 then 5×429, verified
+    staging + production). User-side layer: Anthropic spend cap + ElevenLabs quota
+    (directions given). Turnstile deliberately deferred to the pre-launch-moment.
+
 **ALSO SPOTTED in ASC (App Store release prep):** the DSA **trader status** must be completed
 (ASC → Business banner) or EU distribution is blocked — Spain IS the market. Add to the
 submission checklist (user action, needs their trader info).
