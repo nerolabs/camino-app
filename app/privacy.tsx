@@ -17,7 +17,7 @@ export default function PrivacyPage() {
       sections={[
         { h: 'Who we are', body: [
           'Get Camino (getcamino.app) is operated by Proxim.us, PO Box 1973, Vashon, WA 98070, United States.',
-          'Questions or requests about your data: use "Report a problem" in the app menu, or email nerolabs@gmail.com.',
+          'Questions or requests about your data: use "Report a problem" in the app menu, or email privacy@getcamino.app.',
         ]},
         { h: 'What we collect', body: [
           'Account: your email address and a sign-in identifier (from Apple, Google, or the email code you use to sign in).',

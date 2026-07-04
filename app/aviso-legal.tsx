@@ -15,7 +15,7 @@ export default function AvisoLegalPage() {
       sections={[
         { h: 'Titular del sitio / Site operator', body: [
           'getcamino.app ("Get Camino") is operated by Proxim.us, PO Box 1973, Vashon, WA 98070, United States — a US-based operator (no Spanish NIF/CIF applies).',
-          'Contact: nerolabs@gmail.com, or the "Report a problem" form in the app.',
+          'Contact: legal@getcamino.app, or the "Report a problem" form in the app.',
         ]},
         { h: 'Purpose', body: [
           'Get Camino provides general informational guidance for people planning a move to Spain: a personalized sequence of steps with links to official government sources. It is not legal, tax, or immigration advice, and it is not a gestoría or law firm.',

@@ -8,7 +8,7 @@
 import { sendEmail } from '@/lib/serverEmail';
 import { captureServerError } from '@/lib/sentryServer';
 
-const TEAM_INBOX = 'nerolabs@gmail.com';
+const TEAM_INBOX = 'feedback@getcamino.app';
 const MAX_MESSAGE = 2000;
 const MAX_FIELD = 200;
 

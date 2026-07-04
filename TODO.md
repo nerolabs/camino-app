@@ -54,10 +54,11 @@ command** (credits).
    tracing; refresh docs/MONITORING.md's stale "native (next)" section.
 
 ### Phase 3 — Store paperwork (user-heavy; runs parallel to Phases 1–2; converges on submission)
-9. **[USER] Create the real legal entity** (+ @getcamino.app mailbox) → then replace the
-   TEMPORARY values (Proxim.us / Vashon PO box / nerolabs@gmail.com) in /privacy, /terms,
-   /aviso-legal, the feedback route's inbox, and the ASC legal entity (item 6b — HARD
-   pre-submission gate). Eventual professional legal-review pass stays queued (at revenue).
+9. **[USER] Create the real legal entity** → then replace the TEMPORARY operator values
+   (Proxim.us / Vashon PO box) in /privacy, /terms, /aviso-legal and the ASC legal entity
+   (item 6b — HARD pre-submission gate). ~~@getcamino.app mailbox~~ DONE 2026-07-04
+   (Workspace + alias routing; privacy@/legal@/feedback@ live in the product). Eventual
+   professional legal-review pass stays queued (at revenue).
 10. **[USER] ASC housekeeping**: paste https://getcamino.app/privacy into the privacy-policy
     URL field · DSA trader status (blocks EU distribution) · fix the display name — currently
     "Camino (51e654)", target **"Get Camino: Your Road to Spain"** (exactly 30 chars — the
@@ -613,11 +614,13 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
    4. **Analytics consent decision**: PostHog cookieless mode (preferred — no banner, fits
       brand) or a consent banner; Sentry too.
 6b. **⚠️ PRE-SUBMISSION GATE (user, 2026-07-04): a real legal entity is coming.** The current
-   legal-page values (operator Proxim.us, Vashon PO box, nerolabs@gmail.com contact) are
-   TEMPORARY. Before ANY App Store publish: new entity name + registered address + a
-   @getcamino.app contact mailbox must replace them in /privacy, /terms, /aviso-legal, the
-   feedback route's team inbox, and the ASC legal entity. Legal pages were reviewed by the
-   user 2026-07-04 (wording OK; entity values pending).
+   operator identity (Proxim.us, Vashon PO box) is TEMPORARY. Before ANY App Store publish:
+   new entity name + registered address must replace them in /privacy, /terms, /aviso-legal
+   and the ASC legal entity. Legal pages were reviewed by the user 2026-07-04 (wording OK;
+   entity values pending). **Mailbox part RESOLVED 2026-07-04:** Google Workspace on
+   getcamino.app (single user andrew@getcamino.app + routing rule for any alias) — the site
+   now uses privacy@getcamino.app (privacy page), legal@getcamino.app (aviso legal), and
+   feedback@getcamino.app (Report-a-problem inbox); nerolabs@gmail.com is out of the product.
 
 6c. *(eventually, not now — user request 2026-07-04)* **"My account" page** — as account
    options accumulate, a proper account screen (email, sign-in method, email prefs, delete
