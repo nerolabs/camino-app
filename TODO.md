@@ -88,11 +88,10 @@ command** (credits).
    tracing; refresh docs/MONITORING.md's stale "native (next)" section.
 
 ### Phase 3 — Store paperwork (user-heavy; runs parallel to Phases 1–2; converges on submission)
-9. **[USER] Create the real legal entity** → then replace the TEMPORARY operator values
-   (Proxim.us / Vashon PO box) in /privacy, /terms, /aviso-legal and the ASC legal entity
-   (item 6b — HARD pre-submission gate). ~~@getcamino.app mailbox~~ DONE 2026-07-04
-   (Workspace + alias routing; privacy@/legal@/feedback@ live in the product). Eventual
-   professional legal-review pass stays queued (at revenue).
+9. ~~**[USER] Create the real legal entity**~~ — **GATE LIFTED 2026-07-04 (see 6b): sole
+   proprietor for launch; US LLC only at proven revenue.** Remaining from this item: confirm
+   the legal-pages operator wording (Proxim.us d/b/a vs personal name — 6b(d)).
+   ~~@getcamino.app mailbox~~ DONE. Professional legal-review pass stays queued (at revenue).
 10. **[USER] ASC housekeeping**: paste https://getcamino.app/privacy into the privacy-policy
     URL field · DSA trader status (blocks EU distribution) · fix the display name — currently
     "Camino (51e654)", target **"Get Camino: Your Road to Spain"** (exactly 30 chars — the
@@ -674,14 +673,19 @@ observability → B8 blog stub → B2 app icon (needs an asset decision).**
       operator identity).
    4. **Analytics consent decision**: PostHog cookieless mode (preferred — no banner, fits
       brand) or a consent banner; Sentry too.
-6b. **⚠️ PRE-SUBMISSION GATE (user, 2026-07-04): a real legal entity is coming.** The current
-   operator identity (Proxim.us, Vashon PO box) is TEMPORARY. Before ANY App Store publish:
-   new entity name + registered address must replace them in /privacy, /terms, /aviso-legal
-   and the ASC legal entity. Legal pages were reviewed by the user 2026-07-04 (wording OK;
-   entity values pending). **Mailbox part RESOLVED 2026-07-04:** Google Workspace on
-   getcamino.app (single user andrew@getcamino.app + routing rule for any alias) — the site
-   now uses privacy@getcamino.app (privacy page), legal@getcamino.app (aviso legal), and
-   feedback@getcamino.app (Report-a-problem inbox); nerolabs@gmail.com is out of the product.
+6b. **ENTITY DECISION REVISED (user, 2026-07-04 late): SOLE PROPRIETOR for launch — the
+   pre-submission entity gate is LIFTED.** No new legal entity until a proven revenue model;
+   user operates as sole proprietor (own SSN as Tax ID) for Apple/Google/taxes. When
+   formalization happens it will be the **US LLC** (no Spanish entity — user's immigration
+   still processing); the migration is mostly behind-the-scenes (ASC / Play agreement
+   transfers) plus the legal-pages text. CONSEQUENCES: (a) Google Play = PERSONAL account →
+   the 12-testers × 14-days closed-test rule APPLIES before production (plan it into Android
+   launch; fits the family-testing culture); (b) Apple individual account stays as-is;
+   (c) ASC copyright line = the sole proprietor; (d) one open wording choice: legal pages
+   currently name "Proxim.us, Vashon PO box" — confirm that's the right sole-prop/d.b.a.
+   identity to keep, or swap to the personal name. **Mailbox RESOLVED 2026-07-04:** Google
+   Workspace on getcamino.app (single user andrew@getcamino.app + alias routing) — the site
+   uses privacy@/legal@/feedback@getcamino.app; nerolabs@gmail.com is out of the product.
 
 6c. *(eventually, not now — user request 2026-07-04)* **"My account" page** — as account
    options accumulate, a proper account screen (email, sign-in method, email prefs, delete
