@@ -12,7 +12,7 @@
  */
 import { isOverdue, type Objective, type Phase } from '../core/engine-controller';
 import { emailStrings, interp, emailDateLocale, type EmailLang } from './serverLocale';
-import { ES_CATALOG_TITLES } from '../core/i18n/es/catalog';
+import { titleFor } from '../core/i18n/registry';
 
 const PHASE_ORDER: Phase[] = ['before_you_go', 'first_weeks', 'ongoing', 'when_settled'];
 
@@ -69,7 +69,7 @@ function itemHtml(o: Objective, today: Date, R: R, fmt: (d: Date) => string, tit
 export function reportHtml(objectives: Objective[], today: Date = new Date(), lang: EmailLang = 'en'): string {
   const R = emailStrings(lang).report;
   const fmt = (d: Date) => d.toLocaleDateString(emailDateLocale(lang), { day: 'numeric', month: 'short', year: 'numeric' });
-  const titleOf = (o: Objective) => (lang === 'es' ? ES_CATALOG_TITLES[o.id] ?? o.title : o.title);
+  const titleOf = (o: Objective) => titleFor(lang, o.id, o.title);
 
   const hero = objectives.find(o => !o.done) ?? null;
   const done = objectives.filter(o => o.done).length;

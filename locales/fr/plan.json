@@ -1,0 +1,184 @@
+{
+  "heading": "Ta feuille de route",
+  "empty": {
+    "loadingTitle": "Chargement de ta feuille de route…",
+    "loadingBody": "Un instant, nous récupérons ton plan.",
+    "noneTitle": "Pas encore de feuille de route",
+    "noneBody": "Termine l’entretien et ta feuille de route apparaîtra ici."
+  },
+  "emailCard": {
+    "title": "Ne perds pas cette feuille de route",
+    "body": "Nous te l’envoyons par e-mail — le lien te connecte sur n’importe quel appareil, sans mot de passe à inventer. Tu recevras aussi un bref récap hebdomadaire des échéances pendant que ton installation avance.",
+    "button": "M’envoyer ma feuille de route"
+  },
+  "banners": {
+    "penaltyOne": "1 étape entraîne une sanction financière si elle est manquée.",
+    "penaltyMany": "{{count}} étapes entraînent des sanctions financières si elles sont manquées.",
+    "consulate": "Les délais du consulat aux États-Unis sont actuellement de 8–16 semaines. Réserve ton rendez-vous au plus tôt."
+  },
+  "toolbar": {
+    "thisWeek": "Cette semaine",
+    "thisWeekOverdue": "Cette semaine · {{count}} en retard",
+    "fullRoadmap": "Feuille de route complète",
+    "exportPdf": "⤓ PDF",
+    "exportA11y": "Exporter ta feuille de route en PDF"
+  },
+  "stats": {
+    "totalSteps": "étapes au total",
+    "required": "obligatoires",
+    "overdue": "en retard",
+    "penaltyRisk": "risque de sanction",
+    "done": "faites"
+  },
+  "legend": {
+    "official": "Exigence officielle",
+    "recommendation": "Recommandation Get Camino"
+  },
+  "week": {
+    "slippedPast": "PASSÉ À CÔTÉ",
+    "dueThisWeek": "À FAIRE CETTE SEMAINE",
+    "clearTitle": "Rien ne t’attend cette semaine.",
+    "clearNext": "Ensuite : {{title}} — {{timing}}.",
+    "clearWaiting": "Tes étapes restantes attendent des jalons antérieurs — la feuille de route complète donne la vue d’ensemble."
+  },
+  "card": {
+    "doneBadge": "✓ Fait",
+    "a11y": "{{title}}. {{status}}. Ouvre les détails de l’étape",
+    "a11yDone": "Fait"
+  },
+  "overdue": {
+    "wasDue": "En retard · échéance le {{date}}",
+    "plain": "En retard"
+  },
+  "sheet": {
+    "askPlaceholder": "Demande à Lola pour cette étape…",
+    "askA11y": "Demande à Lola pour cette étape",
+    "markDone": "✓ Marquer fait",
+    "doneBadge": "✓ Fait",
+    "undo": "Annuler",
+    "addDate": "déjà fait ? ajoute la date",
+    "dateHint": "Quand l’as-tu réellement fait ? Les dates suivantes se recalculent à partir de là.",
+    "datePlaceholder": "p. ex. 25 avril 2026 ou 2026-04-25",
+    "save": "Enregistrer",
+    "datePreview": "→ {{label}}",
+    "dateUnreadable": "Je n’arrive pas encore à lire ça — essaie avec le mois en toutes lettres, p. ex. « 25 avril 2026 ».",
+    "changeLink": "Quelque chose a changé ? Dis-le à Lola pour mettre à jour ton plan →",
+    "tellLola": "Le dire à Lola",
+    "whenLabel": "QUAND",
+    "overdueNudge": "Cette étape est en retard. Déjà réglée ? Marque-la faite — même avec la vraie date — et le plan se recalcule autour de ce qui s’est réellement passé. Les plans ont changé ? Dis-le à Lola ci-dessous.",
+    "regionalLabel": "TON LIEU DE VIE COMPTE",
+    "regionalBody": "Les détails de cette étape sont fixés par chaque communauté autonome. Le lien officiel couvre les règles nationales ; les taux et délais de ta région s’appliquent.",
+    "regionalBodyWithRegion": "Les détails de cette étape sont fixés par chaque communauté autonome — la tienne : {{region}}. Le lien officiel couvre les règles nationales ; les taux et délais de ta région s’appliquent.",
+    "depsLabel": "AVANT CELA, IL TE FAUDRA",
+    "close": "Fermer"
+  },
+  "format": {
+    "phase": {
+      "before_you_go": "Avant de partir",
+      "first_weeks": "Premières semaines",
+      "ongoing": "En continu",
+      "when_settled": "Une fois installé"
+    },
+    "severity": {
+      "penalty": "Risque de sanction",
+      "required": "Obligatoire",
+      "recommended": "Recommandé",
+      "info": "Info"
+    },
+    "severityBlurb": {
+      "penalty": "Manquer cette étape peut entraîner une sanction financière.",
+      "required": "Une exigence légale pour ta situation.",
+      "recommended": "Fortement conseillé, sans être strictement obligatoire.",
+      "info": "Informatif — un jalon à garder en tête."
+    },
+    "source": {
+      "official": "officiel",
+      "recommendation": "recommandé"
+    },
+    "sourceBlurb": {
+      "official": "Vérifié contre une source gouvernementale officielle (AEAT, extranjería, BOE).",
+      "recommendation": "Recommandation pratique de Get Camino — pas une exigence légale. La priorité indique à quel point nous la conseillons ; confirme les détails pour ton propre cas."
+    },
+    "timing": {
+      "due": "Échéance le {{date}}",
+      "dueEst": "Échéance le {{date}} (est.)",
+      "nextDue": "Prochaine : {{date}} · annuel",
+      "startsOnce": "Commence quand {{event}}",
+      "anchor": {
+        "arrival": "tu arrives en Espagne",
+        "residency_established": "ta résidence est établie",
+        "property_purchase": "l’achat est conclu"
+      },
+      "recurringDetail": "Cela se répète chaque année tant que ça s’applique à toi.",
+      "pendingDetail": "Impossible de dater tant que {{event}}.",
+      "pendingEvent": {
+        "arrival": "tu n’es pas arrivé en Espagne",
+        "residency_established": "ta résidence n’est pas établie",
+        "property_purchase": "l’achat n’est pas conclu",
+        "other": "une étape antérieure n’est pas terminée"
+      },
+      "estimatedDetail": "Cette date est une estimation fondée sur des délais typiques — donne à Lola des dates fermes pour l’affiner.",
+      "firmDetail": "Une date ferme fondée sur ce que tu as dit à Lola."
+    },
+    "completion": {
+      "bare": "Terminé le {{date}}",
+      "line": "Terminé le {{date}} · {{rel}}",
+      "onTime": "à temps",
+      "late_one": "{{count}} jour de retard",
+      "late_other": "{{count}} jours de retard",
+      "early_one": "{{count}} jour d’avance",
+      "early_other": "{{count}} jours d’avance"
+    },
+    "diff": {
+      "added_one": "ajouté {{count}} étape (p. ex. {{example}})",
+      "added_other": "ajouté {{count}} étapes (p. ex. {{example}})",
+      "removed_one": "retiré {{count}} étape",
+      "removed_other": "retiré {{count}} étapes",
+      "shifted_one": "{{count}} date déplacée",
+      "shifted_other": "{{count}} dates déplacées",
+      "none": "Rien dans ton plan n’avait besoin de changer."
+    }
+  },
+  "coach": {
+    "error": "Désolée — impossible de charger ça pour l’instant. Redemande dans un instant.",
+    "hints": {
+      "visa": "p. ex. J’ai trouvé un travail à distance, on passe au visa nomade numérique.",
+      "residency": "p. ex. Ma carte de résidence (TIE) a été émise le 2027-02-01.",
+      "tax": "p. ex. Je vais finalement travailler en indépendant en Espagne, pas seulement vivre de mon épargne.",
+      "health": "p. ex. On ne reste que six mois, ce n’est pas un déménagement définitif.",
+      "mobility": "p. ex. On a décidé que personne ne conduira en Espagne.",
+      "banking": "p. ex. Notre arrivée est repoussée de deux mois.",
+      "family": "p. ex. On s’est mariés le mois dernier.",
+      "property": "p. ex. On a décidé de louer plutôt que d’acheter.",
+      "admin": "p. ex. On arrive en novembre au lieu de septembre.",
+      "generic": "p. ex. Notre date d’arrivée est repoussée au printemps prochain."
+    }
+  },
+  "sample": {
+    "name": "Suzanne et Thomas",
+    "blurb": "couple de retraités d’Austin, qui s’installe avec son chien grâce au visa non lucratif, hésite encore entre Valence et Malaga — et espère un jour la nationalité",
+    "eyebrow": "FEUILLE DE ROUTE D’EXEMPLE",
+    "title": "Voici le plan de {{name}}.",
+    "body": "{{name}} — {{blurb}}. Get Camino a transformé leur situation en la feuille de route de {{count}} étapes, avec échéances, que tu vois ci-dessous. La tienne sera différente : quelques réponses sur ta propre installation, et le même moteur la construit rien que pour toi.",
+    "cta": "Créer ma propre feuille de route →",
+    "ctaNote": "Gratuit · environ 3 minutes · aucun compte requis pour commencer",
+    "lifePhases": "phases de vie",
+    "whyLabel": "POURQUOI C’EST LÀ",
+    "depsLabel": "AVANT CELA, {{name}} DOIVENT",
+    "sourceLink": "Voir la source officielle ↗",
+    "tease": "Dans ton propre plan, Lola t’accompagne sur cette étape, tu la coches, et les dates se recalculent selon ce qui se passe vraiment.",
+    "closingTitle": "Ton installation ne ressemblera pas à celle de {{name}}.",
+    "closingBody": "Autre passeport, autre travail, autre famille ou autres projets — autre feuille de route. Raconte ton installation à Lola et obtiens la version qui est vraiment la tienne, avec de vraies échéances dans le bon ordre.",
+    "closingCta": "Commencer mon entretien de 3 minutes →"
+  },
+  "changeNote": {
+    "errTitle": "Hmm, ça n’est pas passé",
+    "errBody": "Je n’ai pas pu traiter ça tout de suite — réessaie.",
+    "noChangeTitle": "Merci pour l’info",
+    "noChangeBody": "Rien dans ton plan n’avait besoin de changer. Si une étape a eu lieu (ou aura lieu) à une date précise, marque-la faite « avec date » et le plan se recalcule à partir de là.",
+    "noopTitle": "Merci — c’est noté.",
+    "noopBody": "J’ai enregistré ça, et rien dans ton plan n’avait besoin de bouger pour autant.",
+    "remodelTitle": "Très utile — j’ai refait ton plan !",
+    "seePlan": "Voir mon plan à jour"
+  }
+}

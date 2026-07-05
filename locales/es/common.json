@@ -24,7 +24,8 @@
   },
   "backToTop": "Volver arriba",
   "legal": {
-    "lastUpdated": "Última actualización: {{date}}"
+    "lastUpdated": "Última actualización: {{date}}",
+    "englishNotice": "Las páginas legales se muestran en inglés; prevalece la versión en inglés."
   },
   "home": {
     "eyebrow": "Mudarse a España",

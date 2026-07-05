@@ -27,6 +27,10 @@ import esCommon from '@/locales/es/common.json';
 import esPlan from '@/locales/es/plan.json';
 import esInterview from '@/locales/es/interview.json';
 import esGuides from '@/locales/es/guides.json';
+import frCommon from '@/locales/fr/common.json';
+import frPlan from '@/locales/fr/plan.json';
+import frInterview from '@/locales/fr/interview.json';
+import frGuides from '@/locales/fr/guides.json';
 
 // Each locale is listed by its OWN name (user requirement: the switcher is a feature —
 // "Español", never "Spanish"). FR/DE/IT join at L3.
@@ -34,6 +38,7 @@ import esGuides from '@/locales/es/guides.json';
 export const SUPPORTED_LOCALES = [
   { code: 'en', name: 'English', llmName: 'English' },
   { code: 'es', name: 'Español', llmName: 'Spanish (es-ES — address the user with tú, never usted)' },
+  { code: 'fr', name: 'Français', llmName: 'French (fr-FR — tutoie the user, warm and informal, never vous)' },
 ] as const;
 export type LocaleCode = (typeof SUPPORTED_LOCALES)[number]['code'];
 
@@ -50,6 +55,7 @@ i18n.use(initReactI18next).init({
   resources: {
     en: { common: enCommon, plan: enPlan, interview: enInterview, guides: enGuides },
     es: { common: esCommon, plan: esPlan, interview: esInterview, guides: esGuides },
+    fr: { common: frCommon, plan: frPlan, interview: frInterview, guides: frGuides },
   },
   lng: 'en',
   fallbackLng: 'en',
@@ -60,8 +66,9 @@ i18n.use(initReactI18next).init({
 });
 
 /** BCP 47 tag for date formatting in the current language ("18 abr 2026" in es). */
+const DATE_LOCALES: Record<string, string> = { en: 'en-GB', es: 'es-ES', fr: 'fr-FR', de: 'de-DE', it: 'it-IT' };
 export function dateLocale(): string {
-  return i18n.language === 'es' ? 'es-ES' : 'en-GB';
+  return DATE_LOCALES[i18n.language] ?? 'en-GB';
 }
 
 /** The current language as a supported code (for APIs that take an explicit lang param —

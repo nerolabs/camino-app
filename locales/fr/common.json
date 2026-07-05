@@ -1,0 +1,112 @@
+{
+  "nav": {
+    "wordmark": "Get Camino",
+    "wordmarkWide": "Get Camino : ta route vers l’Espagne",
+    "homeA11y": "Accueil Get Camino",
+    "myRoadmap": "Ma feuille de route",
+    "getYourRoadmap": "Obtenir ta feuille de route",
+    "menuA11y": "Menu",
+    "menu": {
+      "home": "Accueil",
+      "howItWorks": "Comment ça marche",
+      "guides": "Guides",
+      "samplePlan": "Plan d’exemple",
+      "howIWasBuilt": "How I was built",
+      "reportProblem": "Signaler un problème",
+      "language": "Langue",
+      "signOut": "Se déconnecter",
+      "deleteAccount": "Supprimer mon compte"
+    }
+  },
+  "language": {
+    "title": "Langue",
+    "current": "Langue · {{name}}"
+  },
+  "backToTop": "Revenir en haut",
+  "legal": {
+    "lastUpdated": "Dernière mise à jour : {{date}}",
+    "englishNotice": "Les pages légales sont fournies en anglais ; la version anglaise fait foi."
+  },
+  "home": {
+    "eyebrow": "S’installer en Espagne",
+    "headline": "Ta feuille de route personnalisée pour t’installer en Espagne.",
+    "sub": "Du bon visa au bon quartier, de l’école des enfants aux papiers en règle — Get Camino détermine ce qui s’applique à toi et par quoi commencer.",
+    "cta": "Créer ma feuille de route gratuite →",
+    "disclaimer": "Gratuit · Environ 3 minutes · Aucun compte requis pour commencer",
+    "sampleLink": "Pas encore sûr ? Jette d’abord un œil à une feuille de route d’exemple →",
+    "strip": "Visas · Où vivre · Écoles · Banque · NIE · TIE · Empadronamiento · Modelo 720 · Conduire · Télétravail",
+    "stripLink": "  ·  Explore les 60 guides →",
+    "browseGuidesA11y": "Voir tous les guides",
+    "photoA11y": "{{label}}, Espagne",
+    "photos": {
+      "gothicQuarter": "Quartier gothique, Barcelone",
+      "madrid": "Madrid",
+      "plazaEspana": "Plaza de España, Séville",
+      "sevillaSunset": "Séville au coucher du soleil"
+    }
+  },
+  "footer": {
+    "note": "Simple orientation — ni conseil juridique ni conseil fiscal.",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "avisoLegal": "Aviso legal"
+  },
+  "storeBadges": {
+    "eyebrow": "EMPORTE-LE AVEC TOI",
+    "titleLive": "Emporte Get Camino sur ton téléphone.",
+    "titleSoon": "L’app web fonctionne déjà. Les apps mobiles arrivent.",
+    "subLive": "Ta feuille de route, voix comprise, sur iPhone et Android.",
+    "subSoon": "Tout fonctionne ici, dans ton navigateur — rien à installer. Les apps natives iPhone et Android sont en préparation.",
+    "downloadOn": "Télécharger sur",
+    "comingSoonTo": "Bientôt sur",
+    "badgeLinkA11y": "Obtenir Get Camino sur {{store}}",
+    "badgeSoonA11y": "{{store}} — bientôt disponible"
+  },
+  "signIn": {
+    "button": "Se connecter",
+    "title": "Connecte-toi à Get Camino",
+    "sub": "Sauvegarde ta feuille de route et retrouve-la sur n’importe quel appareil.",
+    "google": "Continuer avec Google",
+    "apple": "Continuer avec Apple",
+    "email": "Continuer par e-mail",
+    "allOptions": "← Toutes les options",
+    "cancel": "Annuler",
+    "failedTitle": "Échec de la connexion avec {{provider}}"
+  },
+  "deleteAccount": {
+    "title": "Supprimer ton compte ?",
+    "warning": "Cela supprime définitivement ton compte, tes réponses et ta feuille de route — immédiatement, sans annulation possible ni délai de récupération. Les 60 guides gratuits restent ouverts à tous.",
+    "confirm": "Supprimer mon compte définitivement",
+    "keep": "Conserver mon compte",
+    "doneTitle": "Compte supprimé.",
+    "doneSub": "Ton compte, tes réponses et ta feuille de route ont disparu. Si l’Espagne t’appelle à nouveau, nous serons là — buen camino.",
+    "close": "Fermer",
+    "err": "Ça n’a pas fonctionné — rien n’a été supprimé. Réessaie, ou écris-nous via « Signaler un problème »."
+  },
+  "emailSignIn": {
+    "sentTitle": "Regarde ta boîte mail 📬",
+    "sentSub": "Nous avons envoyé un lien de connexion à {{email}}. Ouvre-le sur cet appareil — ou saisis le code à usage unique du même e-mail :",
+    "codeA11y": "Code à usage unique de ton e-mail",
+    "verify": "Vérifier le code",
+    "checking": "Vérification…",
+    "tryAgain": "Autre adresse / renvoyer",
+    "emailA11y": "Adresse e-mail",
+    "send": "M’envoyer un lien de connexion",
+    "sending": "Envoi…",
+    "hint": "Pas de mot de passe — le lien (ou le code) te connecte.",
+    "errSend": "L’e-mail n’a pas pu partir — réessaie.",
+    "errCode": "Ce code ne correspond pas — vérifie l’e-mail ou renvoies-en un."
+  },
+  "feedback": {
+    "title": "Signaler un problème",
+    "sub": "Quelque chose de cassé, de confus ou de manquant ? Dis-le-nous — une phrase suffit.",
+    "inputA11y": "Décris le problème",
+    "placeholder": "Que s’est-il passé ?",
+    "send": "Envoyer",
+    "cancel": "Annuler",
+    "thanksTitle": "Gracias — bien reçu.",
+    "thanksSub": "Chaque signalement améliore la feuille de route. Nous les lisons tous.",
+    "done": "Terminé",
+    "errSend": "L’envoi a échoué — réessaie."
+  }
+}

@@ -42,7 +42,8 @@
   },
   "backToTop": "Back to top",
   "legal": {
-    "lastUpdated": "Last updated: {{date}}"
+    "lastUpdated": "Last updated: {{date}}",
+    "englishNotice": "Legal pages are provided in English; the English version prevails."
   },
   "footer": {
     "note": "Guidance only — not legal or tax advice.",

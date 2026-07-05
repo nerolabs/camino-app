@@ -1,0 +1,128 @@
+/**
+ * fr-FR narrative for each guide page (L3) — the French twin of core/guide-prose.ts.
+ * Same honesty contract (digit-lint against the fr titles, brand parity, no invented facts);
+ * same plain, warm Camino voice, in tu.
+ */
+
+export const FR_GUIDE_PROSE: Record<string, string> = {
+  'scout-where-to-live':
+    'Presque toute la machinerie d’une installation en Espagne demande « où ? » avant de pouvoir faire quoi que ce soit pour toi — le padrón, les écoles, même le guichet qui traite tes dossiers dépendent d’une adresse. C’est un conseil de Get Camino, pas une exigence légale : passe du vrai temps dans tes zones candidates avant de t’engager, et à la saison où tu y vivrais vraiment. Un bail est bien plus facile à signer qu’à défaire.',
+  'choose-visa-type':
+    'Tout le reste de ton installation découle de cette décision : quelle voie de résidence correspond à ton travail, tes revenus, ta famille et tes projets. Chaque type de visa a sa liste de preuves, son calendrier et son rythme de renouvellement — choisir tôt est ce qui rend le reste de la feuille de route ordonnançable. Si deux voies peuvent convenir, les différences qui comptent touchent en général au droit de travailler et aux impôts, et cette conversation mérite un professionnel.',
+  'consulate-appointment':
+    'Les visas longue durée se déposent depuis ton pays, au consulat espagnol dont dépend ton domicile — via son système de cita previa. Le goulot d’étranglement est en général le créneau, pas le dossier : décroche la date d’abord et assemble les documents en la visant. La fourchette de délai du titre reflète ce que voient couramment les demandeurs aux États-Unis ; la page de ton consulat fait foi.',
+  'criminal-background-check':
+    'L’Espagne demande aux candidats au long séjour un casier judiciaire vierge du ou des pays où tu as vécu récemment — apostillé, et traduit en espagnol par un traducteur assermenté. Les fenêtres de validité sont courtes et l’administration émettrice est lente : c’est un puzzle de timing — commande-le assez tard pour qu’il reste valide, assez tôt pour qu’il arrive. Les 90 jours de validité du titre et le raccourci du channeler américain viennent de la pratique consulaire — vérifie la formulation exacte de ton consulat.',
+  'medical-certificate':
+    'Une lettre de médecin, sur papier officiel, attestant que tu ne portes pas les maladies visées par le Règlement sanitaire international — les consulats sont stricts sur la formulation, alors apporte leur modèle en consultation plutôt que d’improviser. Comme le casier judiciaire, il a une fenêtre de validité courte (les 90 jours du titre), donc il se place vers la fin de ta collecte de documents.',
+  'nlv-income-proof':
+    'Le visa non lucratif est la voie espagnole du « vivre ici sans travailler » : les preuves portent donc sur des moyens passifs. Les montants du titre — €28,800 par an pour le demandeur principal plus €7,200 par personne à charge — sont l’expression actuelle de la règle des 400% de l’IPREM, et bougent avec lui. Les consulats veulent voir un argent réellement passif et récurrent : pensions, dividendes, loyers — pas un salaire déguisé.',
+  'nlv-health-insurance':
+    'Les demandeurs NLV doivent arriver pleinement assurés par un assureur privé agréé en Espagne, avec une couverture comparable au système public : sans franchise, sans délai de carence. Une assurance voyage ne convient pas. Les assureurs connaissent bien ce marché — demande expressément une police conforme au visa et obtiens la confirmation par écrit pour ton dossier.',
+  'convenio-especial':
+    'Le Convenio Especial est l’accès payant de l’Espagne à la santé publique pour les résidents qui ne cotisent pas encore : une cotisation mensuelle fixe (les montants du titre, par tranche d’âge) contre la couverture du système public. Il s’ouvre après l’année de résidence continue et empadronada que fixe le titre — une évolution courante pour les résidents non lucratifs quand les primes privées commencent à piquer.',
+  'dnv-remote-work-proof':
+    'La revendication centrale du visa nomade numérique est que ton travail se fait à distance pour des employeurs ou clients hors d’Espagne — et la preuve est contractuelle. Rassemble les accords qui montrent que la relation existe et que le télétravail depuis l’Espagne est réellement autorisé ; la lettre de l’employeur et le certificat d’activité de l’entreprise, aussi dans ta feuille de route, complètent la même histoire.',
+  'dnv-income-proof':
+    'Le test de ressources du DNV suit le salaire minimum espagnol plutôt que l’IPREM : les montants du titre — environ €34,000 par an, plus à peu près €13,000 pour un conjoint et €4,000 par enfant — sont l’expression actuelle de cette formule, et montent avec le salaire minimum. Des relevés, contrats et fiches de paie qui racontent une seule histoire cohérente valent mieux que n’importe quel document isolé.',
+  'dnv-coverage-certificate':
+    'La sécurité sociale est le coin le plus délicat du DNV : l’Espagne veut savoir que tes cotisations sont réglées quelque part. Un certificat de couverture au titre d’un accord de totalisation (celui des États-Unis, ou l’A1 britannique) te maintient dans ton système d’origine ; sans cela, l’alternative est l’affiliation à la sécurité sociale espagnole. La voie applicable dépend de ta structure d’emploi — une question à trancher avant la demande, pas après.',
+  'empadronamiento':
+    'Le padrón est ton inscription au registre de la mairie disant « cette personne vit à cette adresse » — et il déverrouille sans bruit la moitié de la vie administrative espagnole : la carte de santé, la place à l’école, les démarches de résidence. C’est un rendez-vous court avec ton bail ou une preuve de domicile, et c’est gratuit. Si tu ne fais qu’une démarche ta première semaine, que ce soit celle-là.',
+  'nie':
+    'Le NIE est ton numéro d’identification d’étranger — pas un permis de résidence, juste le numéro avec lequel l’Espagne sait que tu es toi. Presque tout ce qui est financier ou officiel (comptes bancaires, contrats, impôts, immobilier) le réclame, d’où sa place si tôt dans ta feuille de route. Le formulaire EX-15 est la demande ; les rendez-vous sont le goulot habituel.',
+  'eu-registration-certificate':
+    'Les citoyens de l’UE et de l’EEE n’ont pas de visa — ils s’enregistrent. Reste au-delà des trois mois du titre et tu es censé entrer au Registre central des étrangers et retirer le certificado de registro vert (formulaire EX-18), en personne. C’est le document qui transforme la libre circulation en résidence espagnole formelle, et des étapes ultérieures (comme la résidence de longue durée) comptent le temps à partir de lui.',
+  'residencia':
+    'La TIE est la carte physique qui prouve ton statut de résident — le rendez-vous prend tes empreintes (la huella), et la carte suit quelques semaines plus tard. L’horloge du titre compte : la démarche doit démarrer dans les 30 jours suivant l’entrée, et les files d’attente des grandes villes dévorent cette fenêtre. Une fois ta résidence établie, toute une famille d’horloges en aval (renouvellements, permis de conduire, nationalité) se met à compter depuis cette date — c’est pourquoi Get Camino ré-ancre ton plan autour d’elle.',
+  'tarjeta-sanitaria':
+    'La tarjeta sanitaria est ta carte du système public de santé, émise quand tu y as réellement accès — par les cotisations, ou une autre voie ouvrant des droits. Elle se demande à ton centre de santé avec le certificat d’empadronamiento. Les résidents non lucratifs sont l’exception voulue : la NLV fonctionne à l’assurance privée, raison pour laquelle cette étape peut ne pas figurer dans une feuille de route NLV.',
+  'exit-tax-return':
+    'Sortir proprement d’un système fiscal compte autant qu’entrer dans le nouveau. Prévenir ton administration fiscale d’origine que ta résidence fiscale a changé — sous la forme en vigueur chez toi — évite des années de lettres « vous n’avez pas déclaré » et des maux de double retenue. C’est une recommandation de Get Camino, pas une exigence espagnole ; les règles de ton pays d’origine font foi ici.',
+  'modelo-720':
+    'La déclaration espagnole des biens à l’étranger : une fois résident fiscal, les avoirs hors d’Espagne dépassant le seuil par catégorie du titre se déclarent dans la fenêtre du premier trimestre que le titre indique. Elle est informative — la déclaration elle-même ne coûte aucun impôt — mais son absence est sanctionnée, et son histoire (l’arrêt européen que mentionne le titre) est exactement la raison de la prendre au sérieux sans la craindre. Un gestor la dépose en un après-midi.',
+  'dgt-exchange':
+    'Si ton pays a un accord bilatéral avec l’Espagne, ton permis de conduire se convertit par échange : une visite médico-psychotechnique et un dossier à la DGT, pas d’examen. La logique de délai du titre est le piège — un permis étranger ne reste valable qu’un temps limité après l’obtention de la résidence, alors mets-le dans ton agenda, pas dans ta liste « un jour ».',
+  'dgt-exam':
+    'Sans accord bilatéral, il faut décrocher le permis espagnol à la manière locale : examen théorique (disponible en anglais dans la plupart des provinces) et épreuve pratique réservée via une auto-école. C’est un vrai investissement en temps, et la fenêtre de validité de ton permis étranger après la résidence (voir le guide de l’échange) est la même horloge — commence avant qu’elle ne s’épuise.',
+  'escolarizacion':
+    'Les places scolaires s’attribuent lors d’un tour annuel d’admission — la fenêtre de printemps du titre pour la rentrée de septembre — géré par ta région avec des points de proximité et de fratrie. Arriver hors cycle n’est pas une impasse : la procédure fuera de plazo attribue des places parmi ce qui reste, ce qui rend ton choix de quartier et ta date de padrón encore plus importants.',
+  'family-reunification':
+    'La reagrupación familiar est la voie pour faire venir la famille après ton installation, plutôt que de déposer ensemble dès le départ. Le titre porte l’essentiel : elle s’ouvre après ton premier renouvellement et te demande de justifier d’un logement adéquat et de ressources. C’est un dossier lourd et la pratique varie selon la région — l’une des étapes où un gestor gagne le plus clairement ses honoraires.',
+  'citizenship-track-standard':
+    'L’horloge générale de la naturalisation : les dix ans de résidence légale continue du titre avant de pouvoir déposer. Rien à faire ici sinon connaître la date — et protéger la continuité, car de longues absences peuvent remettre à zéro plus que tu ne crois. Get Camino suit le jalon depuis ta date de résidence pour que le reste du parcours nationalité s’ordonne tout seul.',
+  'citizenship-track-latam':
+    'L’horloge raccourcie que décrit le titre : les ressortissants d’ex-colonies espagnoles (la majorité de l’Amérique latine et quelques autres) accèdent à la nationalité après deux ans de résidence légale au lieu de dix. Si c’est ton cas, les examens de langue et de culture arrivent bien plus vite que tu ne le penses — la feuille de route les avance en conséquence.',
+  'tax-planning-consultation':
+    'Les mois précédant ta résidence fiscale espagnole sont le conseil fiscal le moins cher que tu achèteras jamais : programmer une cession, une prime ou un événement de retraite du bon côté de la ligne de résidence peut compter énormément. C’est une recommandation appuyée de Get Camino, pas une étape légale — l’important est un spécialiste transfrontalier qui connaît les deux systèmes, pas n’importe quel conseiller.',
+  'apostille-documents':
+    'L’apostille est le tampon international « ce document est authentique » au titre de la Convention de La Haye citée par le titre — et la règle qui fait trébucher est aussi dans le titre : chaque document s’apostille dans le pays qui l’a émis. Commande des actes récents (les consulats n’aiment pas les vieux), fais-les apostiller chez toi, et traduis seulement ensuite. Le faire depuis l’Espagne est possible, mais bien plus lent.',
+  'sworn-translation':
+    'L’Espagne n’accepte pas n’importe quelle traduction de documents officiels : seul un traductor jurado — assermenté par le ministère des Affaires étrangères (MAEC) — produit des traductions à validité légale. Ils travaillent sur tes documents déjà apostillés, donc l’ordre compte : apostille d’abord, traduction ensuite. Les annuaires de traducteurs assermentés sont publics ; le délai se compte en jours, pas en semaines.',
+  'nlv-letter-of-intent':
+    'Le consulat veut ton installation racontée avec tes mots : pourquoi l’Espagne, où tu comptes vivre, et comment tes revenus passifs la soutiennent. Pas besoin de littérature — la barre est la cohérence avec tes preuves. Ce qui fait tiquer, ce sont les contradictions entre cette lettre et tes documents.',
+  'nlv-non-work-declaration':
+    'Aux demandeurs NLV en âge de travailler, on demande souvent de notarier la promesse que le visa implique déjà : ne pas travailler en Espagne. C’est un document court et convenu — la notarisation est le point. Les exigences varient selon le consulat, raison pour laquelle Get Camino le liste en recommandé et la checklist de ton consulat a le dernier mot.',
+  'dnv-qualification-proof':
+    'Le DNV te demande de prouver que tu es un professionnel : les deux voies du titre sont un diplôme universitaire (apostillé) ou des années documentées d’expérience professionnelle. La voie du diplôme est en général plus simple côté preuves ; celle de l’expérience s’appuie sur des contrats, références et portfolios racontant une histoire vérifiable.',
+  'dnv-company-activity-proof':
+    'L’Espagne veut voir que l’entreprise pour laquelle tu travailles est réelle et établie — le certificat d’immatriculation du titre attestant que l’activité dure depuis au moins la période indiquée. C’est un document que produit ton employeur ou ton client, alors demande-le tôt ; la paperasse d’entreprise avance à la vitesse de l’entreprise.',
+  'dnv-employer-permission-letter':
+    'Pour les demandeurs DNV salariés (et non freelances) : une lettre de ton employeur autorisant le télétravail depuis l’Espagne et décrivant ton poste. Les RH ont désormais des modèles ; la lettre doit coller à ton contrat et à ton histoire de couverture — la cohérence entre documents est ce que vérifie l’examinateur.',
+  'spanish-bank-account':
+    'Pas obligatoire en droit, mais la vie sans IBAN espagnol, c’est du frottement partout : services, loyer, impôts et taxes le préfèrent, et certains prélèvements l’exigent. L’astuce utile est dans le titre : beaucoup de banques ouvrent des comptes de non-résident à distance avant l’arrivée, à convertir en compte de résident quand ton NIE et ta TIE existent.',
+  'digital-certificate':
+    'Le certificat numérique FNMT est ton identité en ligne auprès des administrations espagnoles : avec lui, déclarations, certificats de padrón et notifications officielles se font depuis ton canapé plutôt qu’une salle d’attente. L’Espagne notifie de plus en plus par voie électronique, que tu regardes ou non — c’est pourquoi cette étape « facultative » est l’une des heures les plus rentables de toute la feuille de route.',
+  'modelo-030':
+    'Le Modelo 030 est ta présentation à Hacienda : il t’inscrit au registre fiscal comme nouveau résident et fixe ton adresse fiscale. Un formulaire simple à l’effet démesuré — le courrier fiscal arrive à la bonne adresse — et chaque dépôt ultérieur en devient plus propre.',
+  'beckham-law':
+    'Le régime spécial des impatriés que décrit le titre : les nouveaux arrivants éligibles peuvent opter pour un taux fixe sur les revenus de source espagnole pendant une période limitée, au lieu des taux progressifs standard. Le titre porte son propre avertissement — la fenêtre d’option est stricte et l’éligibilité a des angles vifs (les autónomos classiques ne se qualifient en général pas) — traite donc cela comme une décision à prendre avec un conseiller fiscal dès le début de ton activité, pas à ta première renta.',
+  'modelo-100':
+    'La déclaration annuelle de revenus — la renta — déposée dans la fenêtre de printemps du titre pour l’année civile écoulée. La plupart des résidents passent par un gestor ou par le brouillon de Hacienda ; le travail est de rassembler les attestations de l’année, pas le formulaire. Elle est assortie de pénalités de retard — d’où son marquage dans ta feuille de route.',
+  'wealth-tax':
+    'L’Espagne taxe chaque année les gros patrimoines, avec l’abattement national du titre plus une exonération pour la résidence principale — et une variation régionale qui change réellement les résultats (l’exemple catalan du titre). Elle se dépose avec la renta. Si tes actifs frôlent les seuils, cela va naturellement de pair avec la déclaration des biens à l’étranger de ta feuille de route, et avec la même aide professionnelle.',
+  'register-autonomo':
+    'Devenir indépendant en Espagne est une double inscription la même semaine, exactement comme l’ordonne le titre : le dépôt au registre fiscal de Hacienda (Modelo 036), puis le régime des indépendants de la sécurité sociale (RETA) dans la fenêtre du titre. L’ordre compte, et les règles de délai ont changé récemment (le titre note la suppression de l’ancien formulaire) — un gestor en fait une seule course.',
+  'autonomo-social-security':
+    'La cotisation mensuelle RETA est le prix du système des indépendants : le tarif réduit du titre pour la première période, puis des tranches selon les revenus. Elle est prélevée chaque mois — compte-la comme un coût fixe dans tes prix, et garde le compte approvisionné, car les prélèvements rejetés produisent exactement le genre de lettres de rappel dont personne ne veut.',
+  'modelo-130':
+    'Les acomptes trimestriels d’impôt sur le revenu des indépendants, déposés aux mois du titre : chaque trimestre, tu calcules le bénéfice cumulé et tu paies une tranche d’impôt à valoir, que ta renta annuelle réconcilie ensuite. Manquer un trimestre fait courir des majorations — c’est du travail de calendrier, exactement ce pour quoi existent les forfaits trimestriels des gestors.',
+  'modelo-303':
+    'La déclaration trimestrielle de TVA, déposée aux mois du titre — et la parenthèse du titre est le piège que ratent les nouveaux venus : elle est exigée même quand la TVA due est nulle, car l’obligation est le dépôt lui-même. Un logiciel de facturation ou un gestor en fait un non-événement ; ignorer un trimestre « rien à déclarer » en fait une sanction.',
+  'modelo-390':
+    'Le récapitulatif de TVA de fin d’année que décrit le titre : une synthèse informative des dépôts trimestriels de l’année, soumise en ligne dans la fenêtre de janvier du titre. Aucun impôt nouveau n’est dû — elle doit se réconcilier avec tes trimestriels, raison exacte pour laquelle une comptabilité trimestrielle propre la rend triviale.',
+  'modelo-200':
+    'L’impôt sur les sociétés d’une entreprise espagnole, dû à la date de juillet du titre pour l’exercice précédent. Si tu as monté une SL plutôt que d’exercer en autónomo, c’est franchement le territoire de l’expert-comptable — la déclaration repose sur des comptes annuels bien arrêtés, pas sur un formulaire rempli la veille.',
+  'student-visa-health-insurance':
+    'Le visa étudiant a sa propre barre d’assurance, et le titre l’énonce précisément : assureur agréé en Espagne, couverture équivalente au système public, sans franchise, sans carence, rapatriement inclus. Les polices de voyage génériques échouent constamment à ce test — demande à l’assureur de confirmer par écrit la conformité au visa étudiant et joins cette confirmation au dossier.',
+  'nlv-renewal':
+    'La NLV se renouvelle au rythme du titre : dépose dans la fenêtre précédant l’expiration (le titre note aussi la tolérance de dépôt tardif et son amende), en montrant ce qui t’a valu le visa — revenus passifs et assurance continus. Les renouvellements regardent aussi quelque chose de nouveau : la présence réelle en Espagne, puisque la NLV suppose que tu y vives vraiment. Note la fenêtre au calendrier le jour où ta carte arrive.',
+  'dnv-renewal':
+    'Le permis nomade numérique se renouvelle par les périodes pluriannuelles du titre tant que les conditions tiennent — même logique de revenus, même histoire de télétravail, géré par l’UGE-CE au titre de la loi Startups. Tiens la piste de preuves (contrats, factures, relevés) propre au fil de l’eau et le renouvellement devient un travail d’assemblage, pas une enquête.',
+  'permanent-residence':
+    'Après les cinq ans de résidence légale continue du titre, la résidence de longue durée t’enlève le manège des renouvellements : un seul statut, renouvelé comme une formalité, sans plus prouver de revenus à chaque cycle. La demande regarde en arrière — c’est la continuité de résidence qui est testée — donc absences et trous dans ton dossier pèsent plus que ta situation actuelle.',
+  'property-legal-due-diligence':
+    'La recommandation immobilière la plus ferme de Get Camino : un avocat indépendant (le tien, pas celui du vendeur ni de l’agence) vérifie titre, dettes, urbanisme et cédula de habitabilidad avant que l’argent bouge. En Espagne, les dettes d’un bien peuvent suivre le bien plutôt que la personne — exactement pourquoi les vérifications précèdent la signature, jamais l’inverse.',
+  'completion-deed-notary':
+    'Une vente espagnole se conclut devant notaire : l’escritura de compraventa est signée, le solde payé, les clés remises dans la même séance. Le notaire certifie la légalité, il ne te représente pas — c’est le rôle de ton avocat — et, comme le note le titre, l’acte authentique est la formalisation standard (et incontournable avec un crédit).',
+  'land-registry-registration':
+    'Le titre dit tout haut la partie discrète : l’inscription au Registro de la Propiedad est techniquement facultative — et tu devrais absolument la faire quand même. C’est l’inscription qui rend ta propriété visible et opposable aux tiers. En général, ton notaire ou ta gestoría la dépose avec la clôture ; confirme au lieu de supposer.',
+  'property-transfer-tax':
+    'Acheter un bien ancien déclenche l’ITP au taux de ta région — la fourchette du titre montre combien la géographie compte. Il s’auto-liquide et se paie peu après la clôture, et l’acte ne peut en général pas s’inscrire tant qu’il n’est pas réglé — d’où sa place juste derrière le rendez-vous notarial dans ta feuille de route.',
+  'ibi-property-tax':
+    'L’IBI est la taxe municipale annuelle de ton logement, facturée par la mairie au mois qu’utilise ta commune. Le geste fiable est le prélèvement automatique — certaines mairies font même une remise — car la facture ne s’annonce pas toujours avant d’être en retard.',
+  'community-fees':
+    'Possède un appartement dans un immeuble partagé et tu es membre de la comunidad de propietarios de par la loi (le titre cite le texte) : les charges paient l’ascenseur, le toit, tout le commun. Les charges impayées s’attachent au bien lui-même — vérifie les arriérés avant d’acheter et budgète-les en coût fixe après.',
+  'nonresident-property-tax':
+    'Le titre décrit l’impôt immobilier le plus curieux d’Espagne : possède un logement espagnol sans être (encore) résident fiscal et Hacienda lui impute un revenu théorique — même vide — déclaré via le Modelo 210 avant l’échéance du titre. Il cesse de s’appliquer une fois résident fiscal ; d’ici là, c’est un rituel annuel dont beaucoup de propriétaires n’entendent parler qu’à l’arrivée de la lettre.',
+  'pet-import':
+    'Le titre est la checklist : puce d’abord, vaccin antirabique fait au moins le nombre de jours indiqué avant le voyage, et — depuis un pays hors UE — le certificat zoosanitaire UE émis par un vétérinaire agréé dans la fenêtre serrée du titre avant l’entrée. Cette dernière fenêtre organise l’agenda toute seule : la visite vétérinaire tombe dans tes derniers jours avant le vol, réserve-la en réservant les billets.',
+  'dele-a2-exam':
+    'La naturalisation exige de prouver un espagnol de base, et le DELE A2 (Instituto Cervantes) est la voie standard — proposé en sessions dans l’année dans des centres accrédités, la place est donc une affaire d’agenda. Il évalue la communication quotidienne, pas la littérature. Les hispanophones natifs de pays exemptés le sautent, d’où son absence de certaines feuilles de route.',
+  'ccse-exam':
+    'Le CCSE est la moitié civique de la naturalisation : un court QCM sur la Constitution et la société espagnole, administré par l’Instituto Cervantes à partir d’une banque de questions publiée. Toutes les questions étant publiques d’avance, la préparation est réellement mécanique — réserve la session, bachote la banque, terminé.',
+  'citizenship-application':
+    'La demande elle-même : la nationalité par résidence, déposée au ministère de la Justice une fois ton horloge d’éligibilité écoulée et les examens réussis. Elle se dépose en ligne désormais, et ensuite — honnêtement — le plus dur est la patience, la décision prenant couramment des années. Tout ton dossier doit être à jour au dépôt ; les certificats périmés sont le refus évitable classique.',
+  'citizenship-jura':
+    'Le dernier acte formel pour devenir espagnol, exactement comme le décrit le titre : le serment de fidélité au Roi et d’obéissance à la Constitution, prêté au Registro Civil. Le délai du titre est la seule chose à respecter — l’octroi caduque si la jura n’est pas accomplie dans sa fenêtre après notification. Après des années de procédure, c’est un rendez-vous et une phrase — savoure-le.',
+};

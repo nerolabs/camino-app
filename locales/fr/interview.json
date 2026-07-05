@@ -1,0 +1,54 @@
+{
+  "landing": {
+    "eyebrow": "TA ROUTE VERS L’ESPAGNE",
+    "headline": "Hola, je suis Lola.",
+    "sub": "S’installer en Espagne, ce sont cent petites étapes — visas, padrón, impôts, santé — qui ne fonctionnent que dans le bon ordre. J’ai aidé d’autres personnes à franchir le pas, et je ferai la route avec toi du début à la fin.",
+    "subQuiet": "Réponds à quelques questions et je construis ta feuille de route personnelle : de vraies étapes, de vraies échéances, rien d’inutile.",
+    "start": "C’est parti"
+  },
+  "progress": {
+    "question": "Question {{n}} sur ~{{total}}",
+    "almostThere": "Presque fini",
+    "underAMinute": "Moins d’une minute",
+    "minutesLeft": "Encore ~{{m}} min"
+  },
+  "voice": {
+    "on": "Voix activée",
+    "off": "Voix coupée",
+    "turnOffA11y": "Couper la voix de Lola",
+    "turnOnA11y": "Activer la voix de Lola"
+  },
+  "composer": {
+    "placeholder": "Écris ta réponse…",
+    "placeholderListening": "J’écoute…",
+    "micStartA11y": "Dicte ta réponse",
+    "micStopA11y": "Arrêter la dictée",
+    "sendA11y": "Envoyer ta réponse"
+  },
+  "done": "C’est tout ce qu’il me faut — ta feuille de route est prête.",
+  "fallback": {
+    "question": "Tu peux me parler de {{hint}} ?",
+    "clarifyReask": "Tu peux m’en dire un peu plus sur {{hint}} ?",
+    "clarifyPrefix": "Pardon, je n’ai pas tout saisi. {{reask}}",
+    "turnFailed": "Pardon — ça a pris plus de temps que prévu. Ta réponse est toujours dans le champ ; tu peux me la renvoyer ?"
+  },
+  "static": {
+    "nationalities": "Une rapide — de quel(s) pays chacun à la maison est-il citoyen ?",
+    "work_situation": "Côté travail, une fois installé — télétravail, freelance, études, retraite, ou autre chose ?",
+    "employer_country_is_foreign": "Ton employeur est-il basé hors d’Espagne ?",
+    "annual_income_eur_band": "Pour trouver le bon visa, il me faut un ordre de grandeur des revenus annuels du foyer. Quelle tranche correspond ?",
+    "has_spouse_or_partner": "Un conjoint ou partenaire fait-il le déménagement avec toi ?",
+    "partner_is_married": "Êtes-vous mariés ou en partenariat civil enregistré ?",
+    "has_children": "Des enfants viennent avec toi ?",
+    "intends_long_stay": "Est-ce une vraie installation longue durée — plus de six mois par an — ou plutôt un long séjour ?",
+    "arrival_date": "Tu comptes arriver quand, à peu près ? Le mois suffit.",
+    "has_spanish_address": "As-tu déjà un logement prévu, loué ou acheté ?",
+    "owns_or_drives": "Quelqu’un conduira-t-il là-bas ?",
+    "owns_property_in_spain": "Comptes-tu acheter un logement en Espagne, ou l’as-tu déjà fait ?",
+    "region": "Dans quelle partie de l’Espagne vas-tu t’installer ? Une communauté — ou donne-moi la ville et je la situe.",
+    "has_pets": "Un animal fait le voyage avec toi ?",
+    "foreign_assets_eur_band": "Un peu personnel — et tu ne choisis qu’une tranche — combien détiens-tu, environ, hors d’Espagne ?",
+    "us_resident": "Es-tu actuellement basé aux États-Unis ? (Les délais des consulats y sont assez longs en ce moment.)",
+    "previously_ex_spanish_colony_nationality": "Es-tu ressortissant d’une ancienne colonie espagnole — la plupart de l’Amérique latine, ou les Philippines ?"
+  }
+}

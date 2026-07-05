@@ -1,9 +1,11 @@
 import { buildPlan, isOverdue, type Objective } from './engine-controller';
 import { derive, nextSlot, type Profile } from './interview-controller';
-import { ES_CATALOG_TITLES } from './i18n/es/catalog';
+import { titleFor } from './i18n/registry';
 import enEmails from '@/locales/en/emails.json';
 import esEmails from '@/locales/es/emails.json';
+import frEmails from '@/locales/fr/emails.json';
 import esGuides from '@/locales/es/guides.json';
+import frGuides from '@/locales/fr/guides.json';
 
 /**
  * Weekly-roundup digest: a pure function of the profile (invariant 4 applies to email too).
@@ -57,14 +59,16 @@ export const CATEGORY_TIP: Record<Objective['category'], string> = {
 // switcher). Pure JSON tables, no i18next: this runs in the Workers runtime. Spanish tips are
 // the SAME nine strings the guide pages use (locales/es/guides.json), so there is exactly one
 // translation of each tip per locale.
-export type DigestLang = 'en' | 'es';
+export type DigestLang = 'en' | 'es' | 'fr';
 const TIPS: Record<DigestLang, Record<Objective['category'], string>> = {
   en: CATEGORY_TIP,
   es: esGuides.tip as Record<Objective['category'], string>,
+  fr: frGuides.tip as Record<Objective['category'], string>,
 };
 const DIGEST_STRINGS: Record<DigestLang, typeof enEmails.digest> = {
   en: enEmails.digest,
   es: esEmails.digest,
+  fr: frEmails.digest,
 };
 
 function tipFor(o: Objective, lang: DigestLang): string {
@@ -74,8 +78,9 @@ function tipFor(o: Objective, lang: DigestLang): string {
     : base;
 }
 
+const SHORT_DATE_LOCALES: Record<DigestLang, string> = { en: 'en-GB', es: 'es-ES', fr: 'fr-FR' };
 const shortDate = (d: Date, lang: DigestLang) =>
-  d.toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-GB', { day: 'numeric', month: 'short' });
+  d.toLocaleDateString(SHORT_DATE_LOCALES[lang] ?? 'en-GB', { day: 'numeric', month: 'short' });
 
 export function interviewComplete(raw: Profile): boolean {
   const p: Profile = { ...raw };
@@ -110,7 +115,7 @@ export function buildDigest(raw: Profile, today: Date = new Date(), lang: Digest
   const S = DIGEST_STRINGS[lang];
   const toItem = (o: Objective, over: boolean): DigestItem => ({
     id: o.id,
-    title: lang === 'es' ? ES_CATALOG_TITLES[o.id] ?? o.title : o.title,
+    title: titleFor(lang, o.id, o.title),
     overdue: over,
     whenLabel: o.timing.state === 'scheduled'
       ? (over ? S.wasDue : S.due).replace('{{date}}', shortDate(o.timing.due, lang))

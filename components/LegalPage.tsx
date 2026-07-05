@@ -18,7 +18,10 @@ export default function LegalPage({ metaTitle, description, canonical, en, es }:
   en: LegalContent; es: LegalContent;
 }) {
   const { t, i18n } = useTranslation();
+  // es has a full courtesy translation; other locales show ENGLISH legal + a one-line native
+  // notice (design §7 — industry-normal until each language earns its reviewed translation).
   const { title, updated, intro, sections } = i18n.language === 'es' ? es : en;
+  const englishNotice = i18n.language !== 'en' && i18n.language !== 'es';
   return (
     <ScrollView style={styles.scroll}>
       <Seo localized title={metaTitle} description={description} canonical={canonical} />
@@ -26,6 +29,7 @@ export default function LegalPage({ metaTitle, description, canonical, en, es }:
       <View style={styles.content}>
         <Text style={styles.title} accessibilityRole="header">{title}</Text>
         <Text style={styles.updated}>{t('legal.lastUpdated', { date: updated })}</Text>
+        {englishNotice && <Text style={styles.intro}>{t('legal.englishNotice')}</Text>}
         {intro && <Text style={styles.intro}>{intro}</Text>}
         {sections.map((s, i) => (
           <View key={i} style={styles.section}>

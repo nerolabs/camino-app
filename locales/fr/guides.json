@@ -1,0 +1,66 @@
+{
+  "category": {
+    "visa": "Visas",
+    "residency": "Résidence",
+    "tax": "Impôts",
+    "health": "Santé",
+    "mobility": "Conduite et mobilité",
+    "banking": "Banque et argent",
+    "family": "Famille",
+    "property": "Immobilier",
+    "admin": "Démarches et registres"
+  },
+  "timing": {
+    "asap": "Dès que ça s’applique — cette étape arrive tout en haut d’une feuille de route, dans les premières semaines.",
+    "yearlyWindow": "Une obligation annuelle — la fenêtre de chaque année se ferme fin {{month}}.",
+    "recurring": "Une obligation récurrente qui revient selon un calendrier fixe.",
+    "dueWhen": "À faire quand {{event}}.",
+    "dueBefore": "À faire {{days}} jours avant que {{event}}.",
+    "dueAfter": "À faire dans les {{days}} jours après que {{event}}.",
+    "follows": "Suit « {{step}} » — à faire dans les {{days}} jours une fois cette étape terminée.",
+    "anchor": {
+      "arrival": "tu arrives en Espagne",
+      "residency_established": "ta résidence est établie",
+      "padron_done": "ton empadronamiento est fait",
+      "property_purchase": "tu conclus l’achat du logement",
+      "other": "un jalon antérieur est atteint"
+    },
+    "fallbackStep": "une étape antérieure"
+  },
+  "tip": {
+    "visa": "Les rendez-vous des consulats partent des semaines à l’avance — décroche le créneau d’abord, prépare le dossier ensuite.",
+    "residency": "Prends la cita previa dès maintenant — le vrai goulot, ce sont les créneaux, pas la paperasse.",
+    "tax": "Dans le doute, un gestor prépare ça en une journée — une assurance bon marché contre une erreur de déclaration.",
+    "health": "Règle ça avant d’en avoir besoin — les trous de couverture sont le genre de surprise qui coûte cher.",
+    "mobility": "Commence tôt : examens, rendez-vous et guichets fonctionnent ici sur liste d’attente.",
+    "banking": "Apporte chaque document de la liste — les dossiers incomplets sont refusés sur place.",
+    "family": "Les papiers de famille exigent souvent une traduction assermentée — vérifie avant le rendez-vous.",
+    "property": "Ne signe et ne vire rien avant la fin des vérifications — cette étape protège l’achat.",
+    "admin": "Une course rapide une fois tes documents prêts — prends la cita previa et coche-la."
+  },
+  "index": {
+    "eyebrow": "LES GUIDES CAMINO",
+    "title": "Chaque étape d’une installation en Espagne, expliquée.",
+    "dek1": "Ces {{count}} étapes sont le catalogue même dont Get Camino tire ses feuilles de route — chacune avec ce qu’elle est, quand elle est due, et la source officielle. Lesquelles s’appliquent à ",
+    "dekYou": "toi",
+    "dek2": ", et dans quel ordre, c’est ce que l’entretien gratuit détermine.",
+    "cta": "Créer ma feuille de route gratuite →"
+  },
+  "detail": {
+    "notFound": "Guide introuvable",
+    "browseAll": "Voir tous les guides →",
+    "crumb": "← Tous les guides",
+    "whenDue": "QUAND C’EST DÛ",
+    "whyMatters": "POURQUOI ÇA COMPTE",
+    "regionalLabel": "TON LIEU DE VIE COMPTE",
+    "regionalBody": "Les détails sont fixés par chaque communauté autonome — la source officielle couvre les règles nationales ; les taux et délais de ta région s’appliquent. L’entretien de Get Camino demande où tu t’installes et signale cette étape en conséquence.",
+    "whatFirst": "CE QUI VIENT AVANT",
+    "sourceLink": "Voir la source officielle ↗",
+    "tipLabel": "LE CONSEIL DE LOLA",
+    "ctaTitle": "Où cette étape tombe-t-elle dans ton installation ?",
+    "ctaBody": "Que cette étape s’applique même à toi — et quand elle est due — dépend de ton passeport, de ton travail, de ta famille et de tes projets. Réponds à quelques questions et Get Camino construit ta feuille de route complète, chaque étape dans le bon ordre avec de vraies échéances.",
+    "ctaButton": "Créer ma feuille de route gratuite →",
+    "ctaNote": "Gratuit · environ 3 minutes · aucun compte requis pour commencer",
+    "moreIn": "PLUS DANS {{category}}"
+  }
+}

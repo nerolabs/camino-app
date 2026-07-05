@@ -14,14 +14,12 @@ import i18n, { dateLocale } from '@/lib/i18n';
 import { titleById, shortClause } from '@/core/guide-content';
 import { type Obligation } from '@/core/engine-controller';
 import { GUIDE_PROSE } from '@/core/guide-prose';
-import { ES_GUIDE_PROSE } from '@/core/i18n/es/guide-prose';
-import { ES_CATALOG_TITLES } from '@/core/i18n/es/catalog';
+import { GUIDE_PROSE_BY_LOCALE, titleFor } from '@/core/i18n/registry';
 
 const tg = (key: string, options?: Record<string, unknown>) => i18n.t(`guides:${key}`, options) as string;
 
 export function displayProse(id: string): string | undefined {
-  if (i18n.language === 'es') return ES_GUIDE_PROSE[id] ?? GUIDE_PROSE[id];
-  return GUIDE_PROSE[id];
+  return GUIDE_PROSE_BY_LOCALE[i18n.language]?.[id] ?? GUIDE_PROSE[id];
 }
 
 export const categoryLabel = (cat: Obligation['category']): string => tg(`category.${cat}`);
@@ -50,9 +48,8 @@ export function describeTimingLocalized(o: Obligation): string {
       return tg('timing.dueAfter', { days: t.offset_days, event });
     }
     case 'relative_to_obligation': {
-      const after = i18n.language === 'es'
-        ? ES_CATALOG_TITLES[t.after] ?? titleById.get(t.after)
-        : titleById.get(t.after);
+      const en = titleById.get(t.after);
+      const after = en ? titleFor(i18n.language, t.after, en) : undefined;
       const step = after ? shortClause(after) : tg('timing.fallbackStep');
       return tg('timing.follows', { step, days: t.offset_days });
     }
