@@ -19,7 +19,7 @@ Layers, and when they run:
 
 ---
 
-## 1. Unit / integration (vitest) — 87 passing (+10 opt-in network)
+## 1. Unit / integration (vitest) — 97 passing (+10 opt-in network)
 
 Concentrated on the deterministic core (that's the product's real risk surface):
 
@@ -41,7 +41,9 @@ Concentrated on the deterministic core (that's the product's real risk surface):
 | **Display formatters** (via RN stub) | `plan-format.test.ts` (8) | `plansDiffer` honesty gate (no-op false; add/remove/date-shift true); `diffSummary` narration; `completionLine` on-time/late/early; phase & severity label completeness |
 | **Change hints** | `plan-coach.test.ts` (2) | `changeHint` per category + generic fallback |
 | **Render snapshots (localization guard)** | `render-snapshot.test.ts` (4) | full-HTML snapshots of all 3 emails (`welcomeEmail`/`roundupEmail`/`nudgeEmail`, fixed digest + URLs) and the printable report (`reportHtml`, one of every timing state, frozen clock) — a translation can't break markup or drop a section unseen; extend per-locale at L1 |
-| **The 4 i18n lint gates (L0)** | `i18n-lint.test.ts` (1 + 4×per-locale) | scans `locales/<lang>/*.json` from disk — adding a locale directory enrolls it automatically. en self-check (no empty strings, well-formed `{{placeholders}}`); per non-English locale: *completeness* (exact en key set), *digit-lint* (translation never changes a number — invariant 3), *placeholder-lint* (`{{var}}` parity), *brand-lint* ("Get Camino"/"Lola" verbatim) |
+| **The 4 i18n lint gates (L0)** | `i18n-lint.test.ts` (1 + 4×per-locale) | scans `locales/<lang>/*.json` from disk — adding a locale directory enrolls it automatically (es enrolled at L1). en self-check (no empty strings, well-formed `{{placeholders}}`); per non-English locale: *completeness* (exact en key set), *digit-lint* (translation never changes a number — invariant 3), *placeholder-lint* (`{{var}}` parity), *brand-lint* ("Get Camino"/"Lola" verbatim) |
+| **es catalog titles (L1)** | `catalog-titles.test.ts` (4) | the 60 obligation titles in Spanish (`core/i18n/es/catalog.ts`): completeness over the full CATALOG (obligation #61 fails until every locale follows), digit-lint on the legal content, substantive-length check, `displayTitle` resolution + English fallback |
+| **es display formatters (L1)** | in `plan-format.test.ts` (2 of 10) | `changeLanguage('es')` → phase labels, completion narration ("3 días tarde"), and dates ("Vence el …") render in Spanish; en unchanged after a language round-trip |
 
 **Infra:** `tests/stubs/react-native.ts` + `@`/`react-native` aliases in `vitest.config.ts` let
 the display layer (formatters, hints — the surfaces localization touches most) be unit-tested.

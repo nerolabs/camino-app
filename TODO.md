@@ -86,9 +86,20 @@ the regression harness in place. Strategy + rationale: docs/TEST-COVERAGE.md §4
    riding L1/L2 with their own per-locale mechanisms (design §2):** guide/content-page prose
    (how-it-works, guide pages, legal, homework), `plan-format`/`plan-coach`/`date-input`
    generated strings, email templates, SEO meta.
-5. **L1 — Spanish (~2 days + Cristina verification) — THE LAUNCH GATE:** chrome, catalog
-   titles, guide prose, static questions, emails, legal-ES (English prevails), Lola tú
-   directive, locale dates.
+5. **L1 — Spanish (~2 days + Cristina verification) — THE LAUNCH GATE.** Progress 2026-07-05:
+   - ✅ **L1a chrome** (`a94c613`): locales/es/{common,plan,interview}.json (tú, brand verbatim,
+     17 static questions); switcher offers Español; Lola language directive (phrase/clarify/
+     coach); extraction + re-plan any-language lines; vitest stubs unlock display-layer i18n.
+   - ✅ **L1b display layer** (`7194787`): plan-format labels/formatters from plan.json
+     "format.*" with locale dates; es assertions in tests.
+   - ✅ **L1c catalog titles** (`b5b0075`): all 60 in core/i18n/es/catalog.ts, digit-verbatim;
+     displayTitle() at render points; catalog-titles.test.ts gates (completeness/digit/length).
+   - [ ] **Guide prose es** (60 explainers, core/i18n/es/guide-prose.ts + digit-lint) + guide
+     page template strings — biggest remaining content batch; guides render English until then.
+   - [ ] **Emails es** (templates per locale keyed on user_metadata.lang) + reportHtml(locale)
+     + per-locale render snapshots. SAMPLE_BLURB (sample-plan persona blurb) also still English.
+   - [ ] **Legal-ES** drafts (privacy/terms/aviso with "English prevails" clause).
+   - [ ] **[USER] Cristina verification pass** over everything above — the human gate.
 6. **L2 — web SEO tree (~1 day):** /es routes via app/[locale], hreflang + x-default,
    sitemap expansion, JSON-LD inLanguage. Ships right behind L1.
 7. **L3 — FR/DE/IT (~0.5–1 day each + verification):** fast-follow; may land after store
