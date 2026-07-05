@@ -109,6 +109,14 @@ the regression harness in place. Strategy + rationale: docs/TEST-COVERAGE.md §4
    - [ ] **[USER] Cristina verification pass** over the LIVE production es surface — the
      human gate (user decision 2026-07-05: shipped at ~95% to production pre-release;
      corrections iterate against the frozen snapshots + lint gates).
+   - [ ] **[USER] ⚠️ Supabase auth email templates** (user-found bug: Italian UI, English
+     sign-in code email — the ONE email GoTrue sends, outside our Resend pipeline): paste
+     the five-language Magic-link + Confirm-signup templates from
+     docs/design/supabase-auth-emails.md into BOTH dashboards — STAGING first, request a
+     code in it/es from staging to verify, then PRODUCTION. Nil-safe branching included
+     (`printf "%v" .Data.lang` — a bare eq would kill sends for legacy users). Code side
+     deployed: signInWithOtp always sends data.lang. Claude can drive the dashboards via
+     the browser with approval.
 6. ✅ **L2 — web SEO tree — DONE 2026-07-05** (live in production): static per-locale trees
    (app/{es,fr,de,it} — NOT a dynamic [locale] segment: the routes manifest is first-match
    ordered and a root dynamic segment swallowed /plan//interview//sitemap.xml; the post-deploy
