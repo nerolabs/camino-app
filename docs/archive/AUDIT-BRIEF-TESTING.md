@@ -1,3 +1,6 @@
+> ARCHIVED 2026-07-05: this brief was EXECUTED the same day (all 5 deliverables — see
+> docs/TEST-COVERAGE.md §5 and HANDOFF.md). Kept for the record of mandate + method.
+
 # AUDIT BRIEF — fresh-eyes testing audit (prepared 2026-07-05 for a new session)
 
 **Mandate (user):** with fresh eyes, audit ALL testing — end-to-end, unit, integration, the build

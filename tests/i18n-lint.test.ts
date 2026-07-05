@@ -65,6 +65,19 @@ describe('locale wiring stays in sync', () => {
   it('every non-English locale directory is a shipped locale (no orphan translations)', () => {
     expect(otherLocales.sort()).toEqual([...APP_WEB_LOCALES].sort());
   });
+
+  it('every web locale has its complete app/<locale> route tree (the SEO pages)', () => {
+    // The trees are hand-copied re-exports (deliberately STATIC dirs — see app/es/_layout.tsx);
+    // this is the guard that a new language can't ship with its web pages silently missing.
+    const expected = ['_layout.tsx', 'index.tsx', 'sample-plan.tsx', 'privacy.tsx', 'terms.tsx',
+                      'aviso-legal.tsx', 'guide/index.tsx', 'guide/[id].tsx'];
+    for (const locale of APP_WEB_LOCALES) {
+      for (const file of expected) {
+        expect(existsSync(path.resolve(__dirname, `../app/${locale}/${file}`)),
+          `app/${locale}/${file} missing — the ${locale} web tree is incomplete`).toBe(true);
+      }
+    }
+  });
 });
 
 describe('en catalogs (source of truth) are well-formed', () => {
