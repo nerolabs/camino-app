@@ -1,10 +1,15 @@
 /**
  * Pure formatting helpers + display maps for the roadmap, extracted from app/plan.tsx.
- * No state, no LLM — everything here is a deterministic function of plan data.
+ * No state, no LLM — everything here is a deterministic function of plan data (and, since L1,
+ * of the app language: human-readable strings come from locales/<lang>/plan.json "format.*",
+ * dates from dateLocale()). Colors, icons, and ordering stay code — they don't localize.
  */
 import { Platform, Linking } from 'react-native';
+import i18n, { dateLocale } from '@/lib/i18n';
 import { palette } from '@/constants/Colors';
 import { type Objective, type Phase } from '@/core/engine-controller';
+
+const tf = (key: string, options?: Record<string, unknown>) => i18n.t(`plan:format.${key}`, options) as string;
 
 export const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -28,10 +33,10 @@ export function diffSummary(before: Objective[], after: Objective[]): string {
         && b.timing.due.getTime() !== o.timing.due.getTime()) shifted++;
   }
   const parts: string[] = [];
-  if (added.length)   parts.push(`added ${added.length} step${added.length === 1 ? '' : 's'} (e.g. ${shortTitle(added[0].title)})`);
-  if (removed.length) parts.push(`removed ${removed.length} step${removed.length === 1 ? '' : 's'}`);
-  if (shifted)        parts.push(`${shifted} date${shifted === 1 ? '' : 's'} shifted`);
-  if (!parts.length)  return 'Nothing in your plan needed to change.';
+  if (added.length)   parts.push(tf('diff.added', { count: added.length, example: shortTitle(added[0].title) }));
+  if (removed.length) parts.push(tf('diff.removed', { count: removed.length }));
+  if (shifted)        parts.push(tf('diff.shifted', { count: shifted }));
+  if (!parts.length)  return tf('diff.none');
   const joined = parts.join(', ');
   return joined.charAt(0).toUpperCase() + joined.slice(1) + '.';
 }
@@ -59,20 +64,17 @@ function daysBetween(a: Date, b: Date): number {
 // the step's own scheduled due date when there is one.
 export function completionLine(obj: Objective): string {
   const on = obj.completedOn!;
-  const dateStr = on.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-  if (obj.timing.state !== 'scheduled') return `Completed ${dateStr}`;
+  const dateStr = on.toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short', year: 'numeric' });
+  if (obj.timing.state !== 'scheduled') return tf('completion.bare', { date: dateStr });
   const delta = daysBetween(on, obj.timing.due);
   const mag = Math.abs(delta);
-  const rel = delta === 0 ? 'on time' : `${mag} day${mag === 1 ? '' : 's'} ${delta > 0 ? 'late' : 'early'}`;
-  return `Completed ${dateStr} · ${rel}`;
+  const rel = delta === 0 ? tf('completion.onTime')
+            : delta > 0   ? tf('completion.late', { count: mag })
+            :               tf('completion.early', { count: mag });
+  return tf('completion.line', { date: dateStr, rel });
 }
 
-export const PHASE_LABELS: Record<Phase, string> = {
-  before_you_go: 'Before you go',
-  first_weeks:   'First weeks',
-  ongoing:       'Ongoing',
-  when_settled:  'When settled',
-};
+export const phaseLabel = (phase: Phase): string => tf(`phase.${phase}`);
 
 export const PHASE_ICONS: Record<Phase, string> = {
   before_you_go: '✈️',
@@ -90,19 +92,9 @@ export const SEV_COLOR: Record<string, string> = {
   info:        palette.muted,
 };
 
-export const SEV_LABEL: Record<string, string> = {
-  penalty:     'Penalty risk',
-  required:    'Required',
-  recommended: 'Recommended',
-  info:        'Info',
-};
+export const sevLabel = (sev: string): string => tf(`severity.${sev}`);
 
-export const SEV_BLURB: Record<string, string> = {
-  penalty:     'Missing this can trigger a financial penalty.',
-  required:    'A legal requirement for your situation.',
-  recommended: 'Strongly advised, though not strictly mandatory.',
-  info:        'Informational — a milestone to be aware of.',
-};
+export const sevBlurb = (sev: string): string => tf(`severityBlurb.${sev}`);
 
 // Open an external URL. On web, a new tab (so the user keeps their roadmap open); Linking.openURL
 // would navigate the current tab away. On native, hand off to the OS browser.
@@ -114,15 +106,9 @@ export function openExternal(url: string) {
   }
 }
 
-export const SOURCE_SHORT: Record<string, string> = {
-  official:       'official',
-  recommendation: 'recommended',
-};
+export const sourceShort = (src: string): string => tf(`source.${src}`);
 
-export const SOURCE_BLURB: Record<string, string> = {
-  official:       'Verified against an official government source (AEAT, extranjería, BOE).',
-  recommendation: 'Get Camino’s practical recommendation — not a legal requirement. How strongly we suggest it is shown by its priority; confirm the specifics for your own case.',
-};
+export const sourceBlurb = (src: string): string => tf(`sourceBlurb.${src}`);
 
 export const SOURCE_COLOR: Record<string, string> = {
   official:       palette.cobalt,
@@ -131,27 +117,22 @@ export const SOURCE_COLOR: Record<string, string> = {
 
 export function timingDetail(obj: Objective): string {
   const t = obj.timing;
-  if (t.state === 'recurring') return 'This repeats every year for as long as it applies to you.';
+  if (t.state === 'recurring') return tf('timing.recurringDetail');
   if (t.state === 'pending_anchor') {
-    const evt = t.anchor === 'arrival'              ? 'you arrive in Spain'
-              : t.anchor === 'residency_established' ? 'your residency is established'
-              : t.anchor === 'property_purchase'     ? 'you complete your property purchase'
-              :                                        'an earlier step is done';
-    return `This can't be given a date until ${evt}.`;
+    const key = `timing.pendingEvent.${t.anchor}`;
+    const evt = i18n.exists(`plan:format.${key}`) ? tf(key) : tf('timing.pendingEvent.other');
+    return tf('timing.pendingDetail', { event: evt });
   }
-  if (t.estimated) return 'This date is an estimate based on typical timelines — give Lola firm dates to sharpen it.';
-  return 'A firm date based on what you told Lola.';
+  if (t.estimated) return tf('timing.estimatedDetail');
+  return tf('timing.firmDetail');
 }
 
 export function formatTiming(obj: Objective): string {
   const t = obj.timing;
-  if (t.state === 'scheduled') {
-    const due = t.due.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-    return `Due ${due}${t.estimated ? ' (est.)' : ''}`;
-  }
-  if (t.state === 'recurring') {
-    const next = t.nextDue.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-    return `Next due ${next} · yearly`;
-  }
-  return `Starts once ${t.anchor.replace(/_/g, ' ')}`;
+  const fmt = (d: Date) => d.toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short', year: 'numeric' });
+  if (t.state === 'scheduled') return tf(t.estimated ? 'timing.dueEst' : 'timing.due', { date: fmt(t.due) });
+  if (t.state === 'recurring') return tf('timing.nextDue', { date: fmt(t.nextDue) });
+  const anchorKey = `timing.anchor.${t.anchor}`;
+  const event = i18n.exists(`plan:format.${anchorKey}`) ? tf(anchorKey) : t.anchor.replace(/_/g, ' ');
+  return tf('timing.startsOnce', { event });
 }

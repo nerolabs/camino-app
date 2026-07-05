@@ -8,8 +8,8 @@ import { buildPlan, type Objective } from '@/core/engine-controller';
 import { sampleProfile, SAMPLE_NAME, SAMPLE_BLURB } from '@/core/sample-profile';
 import {
   formatTiming, timingDetail, openExternal,
-  PHASE_LABELS, PHASE_ICONS, PHASE_ORDER,
-  SEV_COLOR, SEV_LABEL, SEV_BLURB, SOURCE_COLOR, SOURCE_SHORT, SOURCE_BLURB,
+  phaseLabel, PHASE_ICONS, PHASE_ORDER,
+  SEV_COLOR, sevLabel, sevBlurb, SOURCE_COLOR, sourceShort, sourceBlurb,
 } from '@/lib/plan-format';
 import Seo from '@/components/Seo';
 import NavBar from '@/components/NavBar';
@@ -104,7 +104,7 @@ export default function SamplePlanScreen() {
           <View key={phase} style={styles.section}>
             <View style={styles.phaseHeader}>
               <Text style={styles.phaseIcon}>{PHASE_ICONS[phase]}</Text>
-              <Text style={styles.phaseLabel}>{PHASE_LABELS[phase]}</Text>
+              <Text style={styles.phaseLabel}>{phaseLabel(phase)}</Text>
               <Text style={styles.phaseCount}>{items.length}</Text>
             </View>
             {items.map((obj: Objective) => {
@@ -127,11 +127,11 @@ export default function SamplePlanScreen() {
                   <View style={styles.cardBody}>
                     <Text style={styles.cardTitle}>{obj.title}</Text>
                     <View style={styles.cardMeta}>
-                      <Text style={[styles.sevText, { color: SEV_COLOR[obj.severity] }]}>{SEV_LABEL[obj.severity]}</Text>
+                      <Text style={[styles.sevText, { color: SEV_COLOR[obj.severity] }]}>{sevLabel(obj.severity)}</Text>
                       <Text style={styles.metaDivider}>·</Text>
                       <Text style={styles.timingText}>{formatTiming(obj)}</Text>
                       <View style={[styles.srcDot, { backgroundColor: SOURCE_COLOR[obj.source] }]} />
-                      <Text style={styles.srcText}>{SOURCE_SHORT[obj.source]}</Text>
+                      <Text style={styles.srcText}>{sourceShort(obj.source)}</Text>
                       <Text style={styles.expandHint}>{expanded ? '▴' : '▾'}</Text>
                     </View>
                     {expanded && (
@@ -139,7 +139,7 @@ export default function SamplePlanScreen() {
                         <Text style={styles.detailLabel}>{t('sheet.whenLabel')}</Text>
                         <Text style={styles.detailText}>{timingDetail(obj)}</Text>
                         <Text style={styles.detailLabel}>{t('sample.whyLabel')}</Text>
-                        <Text style={styles.detailText}>{SEV_BLURB[obj.severity]} {SOURCE_BLURB[obj.source]}</Text>
+                        <Text style={styles.detailText}>{sevBlurb(obj.severity)} {sourceBlurb(obj.source)}</Text>
                         {deps.length > 0 && (
                           <>
                             <Text style={styles.detailLabel}>{t('sample.depsLabel')}</Text>

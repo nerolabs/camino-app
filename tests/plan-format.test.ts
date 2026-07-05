@@ -2,9 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { buildPlan, type Objective } from '../core/engine-controller';
 import { derive, type Profile } from '../core/interview-controller';
 import { TEST_PERSONAS } from '../core/test-personas';
+import { afterEach } from 'vitest';
+import i18n from '../lib/i18n';
 import {
-  plansDiffer, diffSummary, completionLine,
-  PHASE_ORDER, PHASE_LABELS, SEV_LABEL,
+  plansDiffer, diffSummary, completionLine, formatTiming,
+  PHASE_ORDER, phaseLabel, sevLabel,
 } from '../lib/plan-format';
 
 // Display-layer formatters — now unit-testable via the react-native stub. These strings
@@ -74,12 +76,36 @@ describe('completionLine', () => {
 describe('label maps stay complete (localization completeness)', () => {
   it('every phase has an order slot and a label', () => {
     expect(PHASE_ORDER.length).toBe(4);
-    for (const phase of PHASE_ORDER) expect(PHASE_LABELS[phase]).toBeTruthy();
+    for (const phase of PHASE_ORDER) expect(phaseLabel(phase)).toBeTruthy();
   });
 
   it('every severity has a label', () => {
     for (const sev of ['penalty', 'required', 'recommended', 'info']) {
-      expect(SEV_LABEL[sev]).toBeTruthy();
+      expect(sevLabel(sev)).toBeTruthy();
     }
+  });
+});
+
+describe('formatters follow the app language (L1)', () => {
+  afterEach(async () => { await i18n.changeLanguage('en'); });
+
+  it('es: phase labels, completion narration, and dates render in Spanish', async () => {
+    await i18n.changeLanguage('es');
+    expect(phaseLabel('before_you_go')).toBe('Antes de irte');
+    expect(sevLabel('required')).toBe('Obligatorio');
+
+    const plan = planFor('Susan');
+    const scheduled = plan.find(o => o.timing.state === 'scheduled')!;
+    const due = (scheduled.timing as { due: Date }).due;
+    const late = { ...scheduled, completedOn: new Date(due.getTime() + 3 * 86_400_000) };
+    expect(completionLine(late)).toContain('3 días tarde');
+    expect(completionLine(late)).toMatch(/^Completado el /);
+    expect(formatTiming(scheduled)).toMatch(/^Vence el /);
+  });
+
+  it('en is unchanged after a language round-trip (no leakage between tests)', async () => {
+    await i18n.changeLanguage('es');
+    await i18n.changeLanguage('en');
+    expect(phaseLabel('before_you_go')).toBe('Before you go');
   });
 });

@@ -6,7 +6,7 @@ import {
   guideById, titleById, describeTiming, metaDescription, related, shortClause, CATEGORY_LABEL, guideJsonLd,
 } from '@/core/guide-content';
 import { GUIDE_PROSE } from '@/core/guide-prose';
-import { SEV_LABEL, SEV_BLURB, SOURCE_BLURB, openExternal } from '@/lib/plan-format';
+import { sevLabel, sevBlurb, sourceBlurb, openExternal } from '@/lib/plan-format';
 import { CATEGORY_TIP } from '@/core/email-digest';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
@@ -54,7 +54,7 @@ export default function GuidePage() {
       <View style={styles.content}>
 
         <Link href="/guide" style={styles.crumb}>← All guides</Link>
-        <Text style={styles.eyebrow}>{CATEGORY_LABEL[g.category].toUpperCase()} · {SEV_LABEL[g.severity].toUpperCase()}</Text>
+        <Text style={styles.eyebrow}>{CATEGORY_LABEL[g.category].toUpperCase()} · {sevLabel(g.severity).toUpperCase()}</Text>
         <Text style={styles.title} accessibilityRole="header">{g.title}</Text>
 
         {/* Curated narrative — restates catalog facts + process context only; the digit-lint
@@ -66,7 +66,7 @@ export default function GuidePage() {
           <Text style={styles.factText}>{describeTiming(g)}</Text>
 
           <Text style={styles.factLabel}>WHY IT MATTERS</Text>
-          <Text style={styles.factText}>{SEV_BLURB[g.severity]} {SOURCE_BLURB[g.source]}</Text>
+          <Text style={styles.factText}>{sevBlurb(g.severity)} {sourceBlurb(g.source)}</Text>
 
           {g.regional && (
             <>

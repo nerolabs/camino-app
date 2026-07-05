@@ -3,7 +3,7 @@ import { useRouter, Link } from 'expo-router';
 import Seo from '@/components/Seo';
 import { palette } from '@/constants/Colors';
 import { GUIDES, CATEGORY_LABEL, CATEGORY_ORDER, shortClause, guideIndexJsonLd } from '@/core/guide-content';
-import { SEV_COLOR, SEV_LABEL } from '@/lib/plan-format';
+import { SEV_COLOR, sevLabel } from '@/lib/plan-format';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { BackToTop, useBackToTop } from '@/components/BackToTop';
@@ -57,7 +57,7 @@ export default function GuideIndex() {
                   <View style={[styles.sevDot, { backgroundColor: SEV_COLOR[g.severity] }]} />
                   <View style={styles.rowBody}>
                     <Text style={styles.rowTitle}>{shortClause(g.title)}</Text>
-                    <Text style={styles.rowMeta}>{SEV_LABEL[g.severity]}</Text>
+                    <Text style={styles.rowMeta}>{sevLabel(g.severity)}</Text>
                   </View>
                   <Text style={styles.rowArrow}>→</Text>
                 </TouchableOpacity>

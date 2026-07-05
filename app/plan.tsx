@@ -23,8 +23,8 @@ import EmailSignIn from '@/components/EmailSignIn';
 import { parseProfileChange, askLola, TASK_INTRO, changeHint } from '@/lib/plan-coach';
 import {
   diffSummary, plansDiffer, completionLine, formatTiming, timingDetail, openExternal,
-  PHASE_LABELS, PHASE_ICONS, PHASE_ORDER, SEV_COLOR, SEV_LABEL, SEV_BLURB,
-  SOURCE_SHORT, SOURCE_BLURB, SOURCE_COLOR,
+  phaseLabel, PHASE_ICONS, PHASE_ORDER, SEV_COLOR, sevLabel, sevBlurb,
+  sourceShort, sourceBlurb, SOURCE_COLOR,
 } from '@/lib/plan-format';
 
 // Signed-out users just watched their roadmap appear — the capture moment. One email field:
@@ -262,7 +262,7 @@ export default function PlanScreen() {
             ) : (
               <View style={[styles.sevBadge, { backgroundColor: SEV_COLOR[obj.severity] + '18' }]}>
                 <Text style={[styles.sevBadgeText, { color: SEV_COLOR[obj.severity] }]}>
-                  {SEV_LABEL[obj.severity]}
+                  {sevLabel(obj.severity)}
                 </Text>
               </View>
             )}
@@ -277,7 +277,7 @@ export default function PlanScreen() {
                 </Text>
                 <View style={styles.sourceDot}>
                   <View style={[styles.sourceDotMark, { backgroundColor: SOURCE_COLOR[obj.source] }]} />
-                  <Text style={styles.sourceDotText}>{SOURCE_SHORT[obj.source]}</Text>
+                  <Text style={styles.sourceDotText}>{sourceShort(obj.source)}</Text>
                 </View>
                 <Text style={styles.cardCategory}>{obj.category}</Text>
               </>
@@ -406,7 +406,7 @@ export default function PlanScreen() {
             <View key={phase} style={styles.section}>
               <View style={styles.phaseHeader}>
                 <Text style={styles.phaseIcon}>{PHASE_ICONS[phase]}</Text>
-                <Text style={styles.phaseLabel}>{PHASE_LABELS[phase]}</Text>
+                <Text style={styles.phaseLabel}>{phaseLabel(phase)}</Text>
                 <Text style={styles.phaseCount}>{items.length}</Text>
               </View>
               {items.map(renderCard)}
@@ -446,12 +446,12 @@ export default function PlanScreen() {
                   {selected.source_url ? (
                     <TouchableOpacity style={styles.pillLink} onPress={() => openExternal(selected.source_url!)}>
                       <View style={[styles.pillDot, { backgroundColor: SOURCE_COLOR[selected.source] }]} />
-                      <Text style={styles.pillLinkText}>{SOURCE_SHORT[selected.source]} ↗</Text>
+                      <Text style={styles.pillLinkText}>{sourceShort(selected.source)} ↗</Text>
                     </TouchableOpacity>
                   ) : (
                     <View style={styles.pill}>
                       <View style={[styles.pillDot, { backgroundColor: SOURCE_COLOR[selected.source] }]} />
-                      <Text style={styles.pillText}>{SOURCE_SHORT[selected.source]}</Text>
+                      <Text style={styles.pillText}>{sourceShort(selected.source)}</Text>
                     </View>
                   )}
                   {/* Staff-only: corresponding webinar button — opens the YouTube source at its timestamp. */}
@@ -605,7 +605,7 @@ export default function PlanScreen() {
                     {/* Explanation of the source tag. The actionable links live in the header pills
                         (official / webinar), so they're visible without opening details. */}
                     <View style={[styles.sourceNote, { borderLeftColor: SOURCE_COLOR[selected.source] }]}>
-                      <Text style={styles.sourceNoteText}>{SOURCE_BLURB[selected.source]}</Text>
+                      <Text style={styles.sourceNoteText}>{sourceBlurb(selected.source)}</Text>
                     </View>
                 </View>
 

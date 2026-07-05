@@ -87,6 +87,73 @@
     "closingBody": "Different passport, work, family, or plans — different roadmap. Tell Lola about your move and get the version that's actually yours, with real deadlines in the right order.",
     "closingCta": "Start my 3-minute interview →"
   },
+  "format": {
+    "phase": {
+      "before_you_go": "Before you go",
+      "first_weeks": "First weeks",
+      "ongoing": "Ongoing",
+      "when_settled": "When settled"
+    },
+    "severity": {
+      "penalty": "Penalty risk",
+      "required": "Required",
+      "recommended": "Recommended",
+      "info": "Info"
+    },
+    "severityBlurb": {
+      "penalty": "Missing this can trigger a financial penalty.",
+      "required": "A legal requirement for your situation.",
+      "recommended": "Strongly advised, though not strictly mandatory.",
+      "info": "Informational — a milestone to be aware of."
+    },
+    "source": {
+      "official": "official",
+      "recommendation": "recommended"
+    },
+    "sourceBlurb": {
+      "official": "Verified against an official government source (AEAT, extranjería, BOE).",
+      "recommendation": "Get Camino’s practical recommendation — not a legal requirement. How strongly we suggest it is shown by its priority; confirm the specifics for your own case."
+    },
+    "timing": {
+      "due": "Due {{date}}",
+      "dueEst": "Due {{date}} (est.)",
+      "nextDue": "Next due {{date}} · yearly",
+      "startsOnce": "Starts once {{event}}",
+      "anchor": {
+        "arrival": "arrival",
+        "residency_established": "residency established",
+        "property_purchase": "property purchase"
+      },
+      "recurringDetail": "This repeats every year for as long as it applies to you.",
+      "pendingDetail": "This can't be given a date until {{event}}.",
+      "pendingEvent": {
+        "arrival": "you arrive in Spain",
+        "residency_established": "your residency is established",
+        "property_purchase": "you complete your property purchase",
+        "other": "an earlier step is done"
+      },
+      "estimatedDetail": "This date is an estimate based on typical timelines — give Lola firm dates to sharpen it.",
+      "firmDetail": "A firm date based on what you told Lola."
+    },
+    "completion": {
+      "bare": "Completed {{date}}",
+      "line": "Completed {{date}} · {{rel}}",
+      "onTime": "on time",
+      "late_one": "{{count}} day late",
+      "late_other": "{{count}} days late",
+      "early_one": "{{count}} day early",
+      "early_other": "{{count}} days early"
+    },
+    "diff": {
+      "added_one": "added {{count}} step (e.g. {{example}})",
+      "added_other": "added {{count}} steps (e.g. {{example}})",
+      "removed_one": "removed {{count}} step",
+      "removed_other": "removed {{count}} steps",
+      "shifted_one": "{{count}} date shifted",
+      "shifted_other": "{{count}} dates shifted",
+      "none": "Nothing in your plan needed to change."
+    }
+  },
   "coach": {
     "error": "Sorry — I couldn't load that just now. Try asking again in a moment.",
     "hints": {

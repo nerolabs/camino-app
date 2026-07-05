@@ -87,6 +87,73 @@
     "closingBody": "Otro pasaporte, otro trabajo, otra familia u otros planes — otra hoja de ruta. Cuéntale a Lola tu mudanza y consigue la versión que de verdad es tuya, con plazos reales en el orden correcto.",
     "closingCta": "Empezar mi entrevista de 3 minutos →"
   },
+  "format": {
+    "phase": {
+      "before_you_go": "Antes de irte",
+      "first_weeks": "Primeras semanas",
+      "ongoing": "Continuo",
+      "when_settled": "Ya instalado"
+    },
+    "severity": {
+      "penalty": "Riesgo de sanción",
+      "required": "Obligatorio",
+      "recommended": "Recomendado",
+      "info": "Información"
+    },
+    "severityBlurb": {
+      "penalty": "Saltarse esto puede acarrear una sanción económica.",
+      "required": "Un requisito legal para tu situación.",
+      "recommended": "Muy aconsejable, aunque no estrictamente obligatorio.",
+      "info": "Informativo — un hito que conviene tener presente."
+    },
+    "source": {
+      "official": "oficial",
+      "recommendation": "recomendado"
+    },
+    "sourceBlurb": {
+      "official": "Verificado contra una fuente oficial del gobierno (AEAT, extranjería, BOE).",
+      "recommendation": "Recomendación práctica de Get Camino — no es un requisito legal. La prioridad indica cuánto lo aconsejamos; confirma los detalles para tu propio caso."
+    },
+    "timing": {
+      "due": "Vence el {{date}}",
+      "dueEst": "Vence el {{date}} (est.)",
+      "nextDue": "Próximo: {{date}} · anual",
+      "startsOnce": "Empieza cuando {{event}}",
+      "anchor": {
+        "arrival": "llegues a España",
+        "residency_established": "la residencia esté establecida",
+        "property_purchase": "la compra esté cerrada"
+      },
+      "recurringDetail": "Esto se repite cada año mientras te aplique.",
+      "pendingDetail": "No se le puede poner fecha hasta que {{event}}.",
+      "pendingEvent": {
+        "arrival": "llegues a España",
+        "residency_established": "tu residencia esté establecida",
+        "property_purchase": "cierres la compra de la vivienda",
+        "other": "se complete un paso anterior"
+      },
+      "estimatedDetail": "Esta fecha es una estimación basada en plazos típicos — dale a Lola fechas firmes para afinarla.",
+      "firmDetail": "Una fecha firme basada en lo que le contaste a Lola."
+    },
+    "completion": {
+      "bare": "Completado el {{date}}",
+      "line": "Completado el {{date}} · {{rel}}",
+      "onTime": "a tiempo",
+      "late_one": "{{count}} día tarde",
+      "late_other": "{{count}} días tarde",
+      "early_one": "{{count}} día antes",
+      "early_other": "{{count}} días antes"
+    },
+    "diff": {
+      "added_one": "añadí {{count}} paso (p. ej. {{example}})",
+      "added_other": "añadí {{count}} pasos (p. ej. {{example}})",
+      "removed_one": "quité {{count}} paso",
+      "removed_other": "quité {{count}} pasos",
+      "shifted_one": "{{count}} fecha se movió",
+      "shifted_other": "{{count}} fechas se movieron",
+      "none": "Nada en tu plan necesitaba cambiar."
+    }
+  },
   "coach": {
     "error": "Perdona — no he podido cargar eso ahora mismo. Pregúntame otra vez en un momento.",
     "hints": {
