@@ -1,0 +1,66 @@
+{
+  "category": {
+    "visa": "Visa",
+    "residency": "Aufenthalt",
+    "tax": "Steuern",
+    "health": "Gesundheit",
+    "mobility": "Fahren & Mobilität",
+    "banking": "Banking & Geld",
+    "family": "Familie",
+    "property": "Immobilien",
+    "admin": "Behörden & Register"
+  },
+  "timing": {
+    "asap": "Sobald es gilt — dieser Schritt steht ganz oben in einer Roadmap, in den ersten Wochen.",
+    "yearlyWindow": "Eine jährliche Pflicht — das Zeitfenster schließt jedes Jahr Ende {{month}}.",
+    "recurring": "Eine wiederkehrende Pflicht mit festem Kalenderrhythmus.",
+    "dueWhen": "Fällig, sobald {{event}}.",
+    "dueBefore": "Fällig {{days}} Tage bevor {{event}}.",
+    "dueAfter": "Fällig innerhalb von {{days}} Tagen, nachdem {{event}}.",
+    "follows": "Folgt auf „{{step}}“ — fällig innerhalb von {{days}} Tagen, sobald dieser Schritt erledigt ist.",
+    "anchor": {
+      "arrival": "du in Spanien ankommst",
+      "residency_established": "dein Aufenthaltsstatus steht",
+      "padron_done": "dein Empadronamiento erledigt ist",
+      "property_purchase": "du den Immobilienkauf abschließt",
+      "other": "ein früherer Meilenstein erreicht ist"
+    },
+    "fallbackStep": "ein früherer Schritt"
+  },
+  "tip": {
+    "visa": "Konsulatstermine sind Wochen im Voraus ausgebucht — sichere dir zuerst den Termin, dann die Unterlagen.",
+    "residency": "Buche die Cita previa jetzt — der echte Engpass sind die Termine, nicht der Papierkram.",
+    "tax": "Im Zweifel erledigt ein Gestor das an einem Tag — eine günstige Versicherung gegen Fehler in der Erklärung.",
+    "health": "Regle das, bevor du es brauchst — Versorgungslücken sind die teure Art von Überraschung.",
+    "mobility": "Fang früh an: Prüfungen, Termine und Ämter laufen hier über Wartelisten.",
+    "banking": "Bring jedes Dokument der Liste mit — unvollständige Anträge werden vor Ort abgelehnt.",
+    "family": "Familienunterlagen brauchen oft beglaubigte (vereidigte) Übersetzungen — prüfe das vor dem Termin.",
+    "property": "Unterschreibe und überweise nichts, bevor die Prüfungen sauber sind — dieser Schritt schützt den Kauf.",
+    "admin": "Ein kurzer Gang, sobald deine Unterlagen bereit sind — Cita previa buchen und abhaken."
+  },
+  "index": {
+    "eyebrow": "DIE CAMINO-GUIDES",
+    "title": "Jeder Schritt eines Umzugs nach Spanien, erklärt.",
+    "dek1": "Diese {{count}} Schritte sind derselbe Katalog, aus dem Get Camino Roadmaps baut — jeder mit dem, was er ist, wann er fällig ist, und der offiziellen Quelle. Welche für ",
+    "dekYou": "dich",
+    "dek2": " gelten, und in welcher Reihenfolge, findet das kostenlose Interview heraus.",
+    "cta": "Meine kostenlose Roadmap erstellen →"
+  },
+  "detail": {
+    "notFound": "Guide nicht gefunden",
+    "browseAll": "Alle Guides ansehen →",
+    "crumb": "← Alle Guides",
+    "whenDue": "WANN ES FÄLLIG IST",
+    "whyMatters": "WARUM ES ZÄHLT",
+    "regionalLabel": "DEIN WOHNORT ZÄHLT",
+    "regionalBody": "Die Details legt jede Autonome Gemeinschaft selbst fest — die offizielle Quelle deckt die landesweiten Regeln ab; es gelten die Sätze und Fristen deiner Region. Das Interview von Get Camino fragt, wo du dich niederlässt, und markiert diesen Schritt entsprechend.",
+    "whatFirst": "WAS VORHER KOMMT",
+    "sourceLink": "Offizielle Quelle ansehen ↗",
+    "tipLabel": "LOLAS TIPP",
+    "ctaTitle": "Wo fällt das in deinen Umzug?",
+    "ctaBody": "Ob dieser Schritt für dich überhaupt gilt — und wann er fällig ist — hängt von Pass, Arbeit, Familie und Plänen ab. Beantworte ein paar Fragen und Get Camino baut deine komplette Roadmap, jeder Schritt in der richtigen Reihenfolge mit echten Fristen.",
+    "ctaButton": "Meine kostenlose Roadmap erstellen →",
+    "ctaNote": "Kostenlos · etwa 3 Minuten · kein Konto nötig, um anzufangen",
+    "moreIn": "MEHR IN {{category}}"
+  }
+}

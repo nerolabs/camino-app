@@ -31,6 +31,14 @@ import frCommon from '@/locales/fr/common.json';
 import frPlan from '@/locales/fr/plan.json';
 import frInterview from '@/locales/fr/interview.json';
 import frGuides from '@/locales/fr/guides.json';
+import deCommon from '@/locales/de/common.json';
+import dePlan from '@/locales/de/plan.json';
+import deInterview from '@/locales/de/interview.json';
+import deGuides from '@/locales/de/guides.json';
+import itCommon from '@/locales/it/common.json';
+import itPlan from '@/locales/it/plan.json';
+import itInterview from '@/locales/it/interview.json';
+import itGuides from '@/locales/it/guides.json';
 
 // Each locale is listed by its OWN name (user requirement: the switcher is a feature —
 // "Español", never "Spanish"). FR/DE/IT join at L3.
@@ -39,6 +47,8 @@ export const SUPPORTED_LOCALES = [
   { code: 'en', name: 'English', llmName: 'English' },
   { code: 'es', name: 'Español', llmName: 'Spanish (es-ES — address the user with tú, never usted)' },
   { code: 'fr', name: 'Français', llmName: 'French (fr-FR — tutoie the user, warm and informal, never vous)' },
+  { code: 'de', name: 'Deutsch', llmName: 'German (de-DE — duze the user, warm and informal, never Sie)' },
+  { code: 'it', name: 'Italiano', llmName: 'Italian (it-IT — address the user with tu, warm and informal, never Lei)' },
 ] as const;
 export type LocaleCode = (typeof SUPPORTED_LOCALES)[number]['code'];
 
@@ -56,6 +66,8 @@ i18n.use(initReactI18next).init({
     en: { common: enCommon, plan: enPlan, interview: enInterview, guides: enGuides },
     es: { common: esCommon, plan: esPlan, interview: esInterview, guides: esGuides },
     fr: { common: frCommon, plan: frPlan, interview: frInterview, guides: frGuides },
+    de: { common: deCommon, plan: dePlan, interview: deInterview, guides: deGuides },
+    it: { common: itCommon, plan: itPlan, interview: itInterview, guides: itGuides },
   },
   lng: 'en',
   fallbackLng: 'en',

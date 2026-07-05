@@ -8,15 +8,23 @@ import { ES_CATALOG_TITLES } from './es/catalog';
 import { ES_GUIDE_PROSE } from './es/guide-prose';
 import { FR_CATALOG_TITLES } from './fr/catalog';
 import { FR_GUIDE_PROSE } from './fr/guide-prose';
+import { DE_CATALOG_TITLES } from './de/catalog';
+import { DE_GUIDE_PROSE } from './de/guide-prose';
+import { IT_CATALOG_TITLES } from './it/catalog';
+import { IT_GUIDE_PROSE } from './it/guide-prose';
 
 export const CATALOG_TITLES: Record<string, Record<string, string>> = {
   es: ES_CATALOG_TITLES,
   fr: FR_CATALOG_TITLES,
+  de: DE_CATALOG_TITLES,
+  it: IT_CATALOG_TITLES,
 };
 
 export const GUIDE_PROSE_BY_LOCALE: Record<string, Record<string, string>> = {
   es: ES_GUIDE_PROSE,
   fr: FR_GUIDE_PROSE,
+  de: DE_GUIDE_PROSE,
+  it: IT_GUIDE_PROSE,
 };
 
 export function titleFor(lang: string, id: string, fallback: string): string {

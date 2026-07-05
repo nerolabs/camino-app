@@ -9,20 +9,24 @@
 import enEmails from '@/locales/en/emails.json';
 import esEmails from '@/locales/es/emails.json';
 import frEmails from '@/locales/fr/emails.json';
+import deEmails from '@/locales/de/emails.json';
+import itEmails from '@/locales/it/emails.json';
 
-export type EmailLang = 'en' | 'es' | 'fr';
+export type EmailLang = 'en' | 'es' | 'fr' | 'de' | 'it';
 
 export type EmailStrings = typeof enEmails;
 
 // The locales with a prefixed web route tree — the SERVER-SAFE twin of lib/i18n's WEB_LOCALES
 // (the sitemap route imports this; it can't touch lib/i18n's native storage imports).
 // tests/i18n-lint.test.ts pins the two lists identical, so L3 languages can't ship half-wired.
-export const WEB_LOCALES: EmailLang[] = ['es', 'fr'];
+export const WEB_LOCALES: EmailLang[] = ['es', 'fr', 'de', 'it'];
 
 const EMAIL_TABLES: Record<EmailLang, EmailStrings> = {
   en: enEmails,
   es: esEmails as EmailStrings,
   fr: frEmails as EmailStrings,
+  de: deEmails as EmailStrings,
+  it: itEmails as EmailStrings,
 };
 
 export function resolveEmailLang(md: Record<string, unknown> | null | undefined): EmailLang {
@@ -40,5 +44,5 @@ export function interp(tpl: string, vars: Record<string, string | number>): stri
   return tpl.replace(/\{\{(\w+)\}\}/g, (_, k: string) => String(vars[k] ?? ''));
 }
 
-const DATE_LOCALES: Record<EmailLang, string> = { en: 'en-GB', es: 'es-ES', fr: 'fr-FR' };
+const DATE_LOCALES: Record<EmailLang, string> = { en: 'en-GB', es: 'es-ES', fr: 'fr-FR', de: 'de-DE', it: 'it-IT' };
 export const emailDateLocale = (lang: EmailLang): string => DATE_LOCALES[lang] ?? 'en-GB';

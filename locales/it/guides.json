@@ -1,0 +1,66 @@
+{
+  "category": {
+    "visa": "Visti",
+    "residency": "Residenza",
+    "tax": "Tasse",
+    "health": "Sanità",
+    "mobility": "Guida e mobilità",
+    "banking": "Banca e denaro",
+    "family": "Famiglia",
+    "property": "Immobili",
+    "admin": "Pratiche e registri"
+  },
+  "timing": {
+    "asap": "Appena vale per te — questo passo sta in cima a una roadmap, nelle prime settimane.",
+    "yearlyWindow": "Un obbligo annuale — la finestra di ogni anno si chiude a fine {{month}}.",
+    "recurring": "Un obbligo ricorrente che torna con un calendario fisso.",
+    "dueWhen": "Da fare quando {{event}}.",
+    "dueBefore": "Da fare {{days}} giorni prima che {{event}}.",
+    "dueAfter": "Da fare entro {{days}} giorni dopo che {{event}}.",
+    "follows": "Segue «{{step}}» — da fare entro {{days}} giorni una volta completato quel passo.",
+    "anchor": {
+      "arrival": "arrivi in Spagna",
+      "residency_established": "la tua residenza è stabilita",
+      "padron_done": "il tuo empadronamiento è fatto",
+      "property_purchase": "concludi l’acquisto della casa",
+      "other": "un traguardo precedente è raggiunto"
+    },
+    "fallbackStep": "un passo precedente"
+  },
+  "tip": {
+    "visa": "Gli appuntamenti dei consolati si esauriscono con settimane di anticipo — assicurati prima il posto, poi prepara le carte.",
+    "residency": "Prenota subito la cita previa — il vero collo di bottiglia sono gli appuntamenti, non le carte.",
+    "tax": "Nel dubbio, un gestor la prepara in un giorno — un’assicurazione economica contro gli errori di dichiarazione.",
+    "health": "Sistemalo prima di averne bisogno — i buchi di copertura sono il tipo di sorpresa che costa cara.",
+    "mobility": "Comincia presto: esami, appuntamenti e uffici qui funzionano con liste d’attesa.",
+    "banking": "Porta ogni documento della lista — le pratiche incomplete vengono respinte sul posto.",
+    "family": "Le carte di famiglia spesso richiedono traduzioni giurate — verifica prima dell’appuntamento.",
+    "property": "Non firmare né trasferire nulla prima che i controlli siano puliti — questo passo protegge l’acquisto.",
+    "admin": "Una commissione veloce quando i documenti sono pronti — prenota la cita previa e spuntala."
+  },
+  "index": {
+    "eyebrow": "LE GUIDE CAMINO",
+    "title": "Ogni passo per trasferirsi in Spagna, spiegato.",
+    "dek1": "Questi {{count}} passi sono lo stesso catalogo da cui Get Camino costruisce le roadmap — ognuno con cos’è, quando scade e la fonte ufficiale. Quali valgono per ",
+    "dekYou": "te",
+    "dek2": ", e in che ordine, lo scopre l’intervista gratuita.",
+    "cta": "Crea la mia roadmap gratuita →"
+  },
+  "detail": {
+    "notFound": "Guida non trovata",
+    "browseAll": "Vedi tutte le guide →",
+    "crumb": "← Tutte le guide",
+    "whenDue": "QUANDO SCADE",
+    "whyMatters": "PERCHÉ CONTA",
+    "regionalLabel": "DOVE VIVI CONTA",
+    "regionalBody": "I dettagli li fissa ogni comunità autonoma — la fonte ufficiale copre le regole nazionali; valgono le tariffe e le finestre della tua regione. L’intervista di Get Camino chiede dove ti sistemi e segnala questo passo di conseguenza.",
+    "whatFirst": "COSA VIENE PRIMA",
+    "sourceLink": "Vedi la fonte ufficiale ↗",
+    "tipLabel": "IL CONSIGLIO DI LOLA",
+    "ctaTitle": "Dove cade questo nel tuo trasferimento?",
+    "ctaBody": "Se questo passo vale per te — e quando scade — dipende da passaporto, lavoro, famiglia e piani. Rispondi a qualche domanda e Get Camino costruisce la tua roadmap completa, ogni passo nell’ordine giusto con scadenze vere.",
+    "ctaButton": "Crea la mia roadmap gratuita →",
+    "ctaNote": "Gratis · circa 3 minuti · nessun account per iniziare",
+    "moreIn": "ALTRO IN {{category}}"
+  }
+}

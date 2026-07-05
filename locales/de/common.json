@@ -1,0 +1,112 @@
+{
+  "nav": {
+    "wordmark": "Get Camino",
+    "wordmarkWide": "Get Camino: dein Weg nach Spanien",
+    "homeA11y": "Get Camino Startseite",
+    "myRoadmap": "Meine Roadmap",
+    "getYourRoadmap": "Hol dir deine Roadmap",
+    "menuA11y": "Menü",
+    "menu": {
+      "home": "Start",
+      "howItWorks": "So funktioniert’s",
+      "guides": "Guides",
+      "samplePlan": "Beispielplan",
+      "howIWasBuilt": "How I was built",
+      "reportProblem": "Problem melden",
+      "language": "Sprache",
+      "signOut": "Abmelden",
+      "deleteAccount": "Konto löschen"
+    }
+  },
+  "language": {
+    "title": "Sprache",
+    "current": "Sprache · {{name}}"
+  },
+  "backToTop": "Nach oben",
+  "legal": {
+    "lastUpdated": "Zuletzt aktualisiert: {{date}}",
+    "englishNotice": "Die Rechtsseiten werden auf Englisch bereitgestellt; die englische Fassung ist maßgeblich."
+  },
+  "home": {
+    "eyebrow": "Auswandern nach Spanien",
+    "headline": "Deine persönliche Roadmap für den Umzug nach Spanien.",
+    "sub": "Vom richtigen Visum über die richtige Stadt bis zu Schule und Papierkram — Get Camino findet heraus, was für dich gilt und was zuerst dran ist.",
+    "cta": "Meine kostenlose Roadmap erstellen →",
+    "disclaimer": "Kostenlos · Dauert etwa 3 Minuten · Kein Konto nötig, um anzufangen",
+    "sampleLink": "Noch unsicher? Wirf zuerst einen Blick auf eine Beispiel-Roadmap →",
+    "strip": "Visa · Wo wohnen · Schulen · Banking · NIE · TIE · Empadronamiento · Modelo 720 · Autofahren · Remote-Arbeit",
+    "stripLink": "  ·  Alle 60 Guides entdecken →",
+    "browseGuidesA11y": "Alle Guides ansehen",
+    "photoA11y": "{{label}}, Spanien",
+    "photos": {
+      "gothicQuarter": "Gotisches Viertel, Barcelona",
+      "madrid": "Madrid",
+      "plazaEspana": "Plaza de España, Sevilla",
+      "sevillaSunset": "Sevilla bei Sonnenuntergang"
+    }
+  },
+  "footer": {
+    "note": "Nur Orientierung — keine Rechts- oder Steuerberatung.",
+    "privacy": "Datenschutz",
+    "terms": "Nutzungsbedingungen",
+    "avisoLegal": "Aviso legal"
+  },
+  "storeBadges": {
+    "eyebrow": "NIMM ES MIT",
+    "titleLive": "Hol dir Get Camino aufs Handy.",
+    "titleSoon": "Die Web-App funktioniert schon heute. Die Handy-Apps kommen.",
+    "subLive": "Deine Roadmap, Stimme inklusive, auf iPhone und Android.",
+    "subSoon": "Alles läuft direkt hier im Browser — nichts zu installieren. Native Apps für iPhone und Android sind in Arbeit.",
+    "downloadOn": "Laden im",
+    "comingSoonTo": "Bald im",
+    "badgeLinkA11y": "Get Camino im {{store}} holen",
+    "badgeSoonA11y": "{{store}} — bald verfügbar"
+  },
+  "signIn": {
+    "button": "Anmelden",
+    "title": "Bei Get Camino anmelden",
+    "sub": "Speichere deine Roadmap und mach auf jedem Gerät weiter.",
+    "google": "Weiter mit Google",
+    "apple": "Weiter mit Apple",
+    "email": "Weiter mit E-Mail",
+    "allOptions": "← Alle Anmeldeoptionen",
+    "cancel": "Abbrechen",
+    "failedTitle": "Anmeldung mit {{provider}} fehlgeschlagen"
+  },
+  "deleteAccount": {
+    "title": "Konto löschen?",
+    "warning": "Das löscht dein Konto, deine Antworten und deine Roadmap endgültig — sofort, ohne Rückgängig und ohne Wiederherstellungsfrist. Die 60 kostenlosen Guides bleiben für alle offen.",
+    "confirm": "Mein Konto endgültig löschen",
+    "keep": "Konto behalten",
+    "doneTitle": "Konto gelöscht.",
+    "doneSub": "Dein Konto, deine Antworten und deine Roadmap sind weg. Wenn Spanien wieder ruft, sind wir da — buen camino.",
+    "close": "Schließen",
+    "err": "Das hat nicht geklappt — nichts wurde gelöscht. Versuch es noch einmal oder schreib uns über „Problem melden“."
+  },
+  "emailSignIn": {
+    "sentTitle": "Schau in dein Postfach 📬",
+    "sentSub": "Wir haben einen Anmeldelink an {{email}} geschickt. Öffne ihn auf diesem Gerät — oder gib den Einmalcode aus derselben E-Mail ein:",
+    "codeA11y": "Einmalcode aus deiner E-Mail",
+    "verify": "Code prüfen",
+    "checking": "Wird geprüft…",
+    "tryAgain": "Andere Adresse / erneut senden",
+    "emailA11y": "E-Mail-Adresse",
+    "send": "Anmeldelink schicken",
+    "sending": "Wird gesendet…",
+    "hint": "Kein Passwort — der Link (oder der Code) meldet dich an.",
+    "errSend": "Die E-Mail konnte nicht gesendet werden — versuch es noch einmal.",
+    "errCode": "Der Code passt nicht — prüfe die E-Mail oder fordere einen neuen an."
+  },
+  "feedback": {
+    "title": "Problem melden",
+    "sub": "Etwas kaputt, verwirrend oder fehlt? Sag es uns — ein Satz reicht.",
+    "inputA11y": "Beschreibe das Problem",
+    "placeholder": "Was ist passiert?",
+    "send": "Senden",
+    "cancel": "Abbrechen",
+    "thanksTitle": "Gracias — angekommen.",
+    "thanksSub": "Jede Meldung macht die Roadmap besser. Wir lesen sie alle.",
+    "done": "Fertig",
+    "errSend": "Das Senden ist fehlgeschlagen — versuch es noch einmal."
+  }
+}

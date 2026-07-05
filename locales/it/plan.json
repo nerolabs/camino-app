@@ -1,0 +1,184 @@
+{
+  "heading": "La tua roadmap",
+  "empty": {
+    "loadingTitle": "Carico la tua roadmap…",
+    "loadingBody": "Un attimo, stiamo recuperando il tuo piano.",
+    "noneTitle": "Ancora nessuna roadmap",
+    "noneBody": "Completa l’intervista e la tua roadmap apparirà qui."
+  },
+  "emailCard": {
+    "title": "Non perdere questa roadmap",
+    "body": "Te la inviamo per e-mail — il link ti fa accedere da qualsiasi dispositivo, senza inventare password. Riceverai anche un breve riepilogo settimanale delle scadenze mentre il tuo trasferimento avanza.",
+    "button": "Inviami la mia roadmap"
+  },
+  "banners": {
+    "penaltyOne": "1 passo comporta una sanzione economica se saltato.",
+    "penaltyMany": "{{count}} passi comportano sanzioni economiche se saltati.",
+    "consulate": "I tempi d’attesa dei consolati negli USA sono attualmente di 8–16 settimane. Prenota il tuo appuntamento il prima possibile."
+  },
+  "toolbar": {
+    "thisWeek": "Questa settimana",
+    "thisWeekOverdue": "Questa settimana · {{count}} in ritardo",
+    "fullRoadmap": "Roadmap completa",
+    "exportPdf": "⤓ PDF",
+    "exportA11y": "Esporta la tua roadmap in PDF"
+  },
+  "stats": {
+    "totalSteps": "passi in totale",
+    "required": "obbligatori",
+    "overdue": "in ritardo",
+    "penaltyRisk": "rischio sanzione",
+    "done": "fatti"
+  },
+  "legend": {
+    "official": "Requisito ufficiale",
+    "recommendation": "Raccomandazione Get Camino"
+  },
+  "week": {
+    "slippedPast": "SFUGGITO",
+    "dueThisWeek": "SCADE QUESTA SETTIMANA",
+    "clearTitle": "Niente ha bisogno di te questa settimana.",
+    "clearNext": "Prossimo: {{title}} — {{timing}}.",
+    "clearWaiting": "I passi rimanenti aspettano traguardi precedenti — la roadmap completa mostra il quadro intero."
+  },
+  "card": {
+    "doneBadge": "✓ Fatto",
+    "a11y": "{{title}}. {{status}}. Apre i dettagli del passo",
+    "a11yDone": "Fatto"
+  },
+  "overdue": {
+    "wasDue": "In ritardo · scadeva il {{date}}",
+    "plain": "In ritardo"
+  },
+  "sheet": {
+    "askPlaceholder": "Chiedi a Lola di questo passo…",
+    "askA11y": "Chiedi a Lola di questo passo",
+    "markDone": "✓ Segna fatto",
+    "doneBadge": "✓ Fatto",
+    "undo": "Annulla",
+    "addDate": "fatto prima? aggiungi la data",
+    "dateHint": "Quando l’hai fatto davvero? Le date successive si ricalcolano da lì.",
+    "datePlaceholder": "es. 25 aprile 2026 o 2026-04-25",
+    "save": "Salva",
+    "datePreview": "→ {{label}}",
+    "dateUnreadable": "Non riesco ancora a leggerlo — prova con il mese in lettere, es. «25 aprile 2026».",
+    "changeLink": "È cambiato qualcosa? Dillo a Lola e aggiorna il tuo piano →",
+    "tellLola": "Dillo a Lola",
+    "whenLabel": "QUANDO",
+    "overdueNudge": "Questo passo è scaduto. Già sistemato? Segnalo fatto — anche con la data vera — e il piano si ricalcola attorno a ciò che è successo davvero. Piani cambiati? Dillo a Lola qui sotto.",
+    "regionalLabel": "DOVE VIVI CONTA",
+    "regionalBody": "I dettagli di questo passo li fissa ogni comunità autonoma. Il link ufficiale copre le regole nazionali; valgono le tariffe e le finestre della tua regione.",
+    "regionalBodyWithRegion": "I dettagli di questo passo li fissa ogni comunità autonoma — la tua: {{region}}. Il link ufficiale copre le regole nazionali; valgono le tariffe e le finestre della tua regione.",
+    "depsLabel": "PRIMA DI QUESTO TI SERVIRÀ",
+    "close": "Chiudi"
+  },
+  "format": {
+    "phase": {
+      "before_you_go": "Prima di partire",
+      "first_weeks": "Prime settimane",
+      "ongoing": "Continuativo",
+      "when_settled": "Una volta sistemato"
+    },
+    "severity": {
+      "penalty": "Rischio sanzione",
+      "required": "Obbligatorio",
+      "recommended": "Consigliato",
+      "info": "Info"
+    },
+    "severityBlurb": {
+      "penalty": "Saltarlo può comportare una sanzione economica.",
+      "required": "Un requisito di legge per la tua situazione.",
+      "recommended": "Fortemente consigliato, anche se non strettamente obbligatorio.",
+      "info": "Informativo — un traguardo da tenere presente."
+    },
+    "source": {
+      "official": "ufficiale",
+      "recommendation": "consigliato"
+    },
+    "sourceBlurb": {
+      "official": "Verificato su una fonte governativa ufficiale (AEAT, extranjería, BOE).",
+      "recommendation": "Raccomandazione pratica di Get Camino — non un requisito di legge. La priorità indica quanto la consigliamo; conferma i dettagli per il tuo caso."
+    },
+    "timing": {
+      "due": "Scade il {{date}}",
+      "dueEst": "Scade il {{date}} (stim.)",
+      "nextDue": "Prossima: {{date}} · annuale",
+      "startsOnce": "Inizia quando {{event}}",
+      "anchor": {
+        "arrival": "arrivi in Spagna",
+        "residency_established": "la tua residenza è stabilita",
+        "property_purchase": "l’acquisto è concluso"
+      },
+      "recurringDetail": "Si ripete ogni anno finché vale per te.",
+      "pendingDetail": "Non si può datare finché {{event}}.",
+      "pendingEvent": {
+        "arrival": "non arrivi in Spagna",
+        "residency_established": "la tua residenza non è stabilita",
+        "property_purchase": "l’acquisto non è concluso",
+        "other": "un passo precedente non è completato"
+      },
+      "estimatedDetail": "Questa data è una stima basata su tempi tipici — dai a Lola date certe per affinarla.",
+      "firmDetail": "Una data certa basata su ciò che hai raccontato a Lola."
+    },
+    "completion": {
+      "bare": "Completato il {{date}}",
+      "line": "Completato il {{date}} · {{rel}}",
+      "onTime": "puntuale",
+      "late_one": "{{count}} giorno di ritardo",
+      "late_other": "{{count}} giorni di ritardo",
+      "early_one": "{{count}} giorno d’anticipo",
+      "early_other": "{{count}} giorni d’anticipo"
+    },
+    "diff": {
+      "added_one": "aggiunto {{count}} passo (es. {{example}})",
+      "added_other": "aggiunti {{count}} passi (es. {{example}})",
+      "removed_one": "rimosso {{count}} passo",
+      "removed_other": "rimossi {{count}} passi",
+      "shifted_one": "{{count}} data spostata",
+      "shifted_other": "{{count}} date spostate",
+      "none": "Nel tuo piano non serviva cambiare nulla."
+    }
+  },
+  "coach": {
+    "error": "Scusa — non riesco a caricarlo adesso. Riprova tra un attimo.",
+    "hints": {
+      "visa": "es. Ho trovato un lavoro da remoto, passiamo al visto per nomadi digitali.",
+      "residency": "es. La mia carta di residenza (TIE) è stata emessa il 2027-02-01.",
+      "tax": "es. Alla fine lavorerò da autonomo in Spagna, non vivrò solo di risparmi.",
+      "health": "es. Restiamo solo sei mesi, non è un trasferimento definitivo.",
+      "mobility": "es. Abbiamo deciso che nessuno guiderà in Spagna.",
+      "banking": "es. Il nostro arrivo slitta di due mesi.",
+      "family": "es. Ci siamo sposati il mese scorso.",
+      "property": "es. Abbiamo deciso di affittare invece di comprare.",
+      "admin": "es. Arriviamo a novembre invece che a settembre.",
+      "generic": "es. La nostra data di arrivo è slittata alla prossima primavera."
+    }
+  },
+  "sample": {
+    "name": "Susanna e Tommaso",
+    "blurb": "coppia di pensionati di Austin, che si trasferisce col cane con il visto non lucrativo, ancora indecisa tra Valencia e Malaga — e che un giorno spera nella cittadinanza",
+    "eyebrow": "ROADMAP DI ESEMPIO",
+    "title": "Questo è il piano di {{name}}.",
+    "body": "{{name}} — {{blurb}}. Get Camino ha trasformato la loro situazione nella roadmap di {{count}} passi, con scadenze, che vedi qui sotto. La tua sarà diversa: poche risposte sul tuo trasferimento, e lo stesso motore la costruisce solo per te.",
+    "cta": "Crea la mia roadmap →",
+    "ctaNote": "Gratis · circa 3 minuti · nessun account per iniziare",
+    "lifePhases": "fasi di vita",
+    "whyLabel": "PERCHÉ È QUI",
+    "depsLabel": "PRIMA DI QUESTO, A {{name}} SERVE",
+    "sourceLink": "Vedi la fonte ufficiale ↗",
+    "tease": "Nel tuo piano, Lola ti accompagna in questo passo, tu lo spunti, e le date si ricalcolano secondo ciò che succede davvero.",
+    "closingTitle": "Il tuo trasferimento non sarà come quello di {{name}}.",
+    "closingBody": "Altro passaporto, altro lavoro, altra famiglia o altri piani — altra roadmap. Racconta a Lola il tuo trasferimento e ottieni la versione che è davvero tua, con scadenze vere nell’ordine giusto.",
+    "closingCta": "Inizia la mia intervista di 3 minuti →"
+  },
+  "changeNote": {
+    "errTitle": "Hmm, non è passato",
+    "errBody": "Non sono riuscita a elaborarlo adesso — riprova.",
+    "noChangeTitle": "Grazie per l’aggiornamento",
+    "noChangeBody": "Nel tuo piano non serviva cambiare nulla. Se un passo è avvenuto (o avverrà) in una data precisa, segnalo fatto «con data» e il piano si ricalcola da lì.",
+    "noopTitle": "Grazie — annotato.",
+    "noopBody": "L’ho salvato, e nulla nel tuo piano doveva spostarsi per questo.",
+    "remodelTitle": "Utilissimo — ho rifatto il tuo piano!",
+    "seePlan": "Vedi il mio piano aggiornato"
+  }
+}

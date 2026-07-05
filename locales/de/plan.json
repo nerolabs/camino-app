@@ -1,0 +1,184 @@
+{
+  "heading": "Deine Roadmap",
+  "empty": {
+    "loadingTitle": "Deine Roadmap wird geladen…",
+    "loadingBody": "Einen Moment, wir holen deinen Plan.",
+    "noneTitle": "Noch keine Roadmap",
+    "noneBody": "Schließe das Interview ab und deine Roadmap erscheint hier."
+  },
+  "emailCard": {
+    "title": "Verlier diese Roadmap nicht",
+    "body": "Wir schicken sie dir per E-Mail — der Link meldet dich auf jedem Gerät an, ohne Passwort. Außerdem bekommst du eine kurze wöchentliche Zusammenfassung der anstehenden Fristen, solange dein Umzug läuft.",
+    "button": "Roadmap per E-Mail schicken"
+  },
+  "banners": {
+    "penaltyOne": "1 Schritt zieht bei Versäumnis eine Geldstrafe nach sich.",
+    "penaltyMany": "{{count}} Schritte ziehen bei Versäumnis Geldstrafen nach sich.",
+    "consulate": "Die Wartezeiten der US-Konsulate liegen derzeit bei 8–16 Wochen. Buche deinen Termin so früh wie möglich."
+  },
+  "toolbar": {
+    "thisWeek": "Diese Woche",
+    "thisWeekOverdue": "Diese Woche · {{count}} überfällig",
+    "fullRoadmap": "Ganze Roadmap",
+    "exportPdf": "⤓ PDF",
+    "exportA11y": "Roadmap als PDF exportieren"
+  },
+  "stats": {
+    "totalSteps": "Schritte gesamt",
+    "required": "verpflichtend",
+    "overdue": "überfällig",
+    "penaltyRisk": "Strafrisiko",
+    "done": "erledigt"
+  },
+  "legend": {
+    "official": "Offizielle Anforderung",
+    "recommendation": "Empfehlung von Get Camino"
+  },
+  "week": {
+    "slippedPast": "DURCHGERUTSCHT",
+    "dueThisWeek": "DIESE WOCHE FÄLLIG",
+    "clearTitle": "Diese Woche braucht dich nichts.",
+    "clearNext": "Als Nächstes: {{title}} — {{timing}}.",
+    "clearWaiting": "Deine übrigen Schritte warten auf frühere Meilensteine — die ganze Roadmap zeigt das volle Bild."
+  },
+  "card": {
+    "doneBadge": "✓ Erledigt",
+    "a11y": "{{title}}. {{status}}. Öffnet die Schrittdetails",
+    "a11yDone": "Erledigt"
+  },
+  "overdue": {
+    "wasDue": "Überfällig · fällig am {{date}}",
+    "plain": "Überfällig"
+  },
+  "sheet": {
+    "askPlaceholder": "Frag Lola zu diesem Schritt…",
+    "askA11y": "Frag Lola zu diesem Schritt",
+    "markDone": "✓ Erledigt markieren",
+    "doneBadge": "✓ Erledigt",
+    "undo": "Rückgängig",
+    "addDate": "schon früher erledigt? Datum eintragen",
+    "dateHint": "Wann hast du das wirklich erledigt? Spätere Termine berechnen sich davon neu.",
+    "datePlaceholder": "z. B. 25 April 2026 oder 2026-04-25",
+    "save": "Speichern",
+    "datePreview": "→ {{label}}",
+    "dateUnreadable": "Das kann ich noch nicht lesen — probiere den Monat ausgeschrieben, z. B. „25 April 2026“.",
+    "changeLink": "Etwas hat sich geändert? Sag es Lola und aktualisiere deinen Plan →",
+    "tellLola": "Lola erzählen",
+    "whenLabel": "WANN",
+    "overdueNudge": "Dieser Schritt ist überfällig. Schon erledigt? Markiere ihn als erledigt — gern mit dem echten Datum — und der Plan ordnet sich um das, was wirklich passiert ist. Pläne geändert? Sag es Lola unten.",
+    "regionalLabel": "DEIN WOHNORT ZÄHLT",
+    "regionalBody": "Die Details dieses Schritts legt jede Autonome Gemeinschaft selbst fest. Der offizielle Link deckt die landesweiten Regeln ab; es gelten die Sätze und Fristen deiner Region.",
+    "regionalBodyWithRegion": "Die Details dieses Schritts legt jede Autonome Gemeinschaft selbst fest — deine: {{region}}. Der offizielle Link deckt die landesweiten Regeln ab; es gelten die Sätze und Fristen deiner Region.",
+    "depsLabel": "VORHER BRAUCHST DU",
+    "close": "Schließen"
+  },
+  "format": {
+    "phase": {
+      "before_you_go": "Vor der Abreise",
+      "first_weeks": "Erste Wochen",
+      "ongoing": "Laufend",
+      "when_settled": "Angekommen"
+    },
+    "severity": {
+      "penalty": "Strafrisiko",
+      "required": "Verpflichtend",
+      "recommended": "Empfohlen",
+      "info": "Info"
+    },
+    "severityBlurb": {
+      "penalty": "Wer das versäumt, riskiert eine Geldstrafe.",
+      "required": "Eine gesetzliche Anforderung für deine Situation.",
+      "recommended": "Dringend geraten, aber nicht strikt verpflichtend.",
+      "info": "Informativ — ein Meilenstein, den du kennen solltest."
+    },
+    "source": {
+      "official": "offiziell",
+      "recommendation": "empfohlen"
+    },
+    "sourceBlurb": {
+      "official": "Geprüft gegen eine offizielle Regierungsquelle (AEAT, Extranjería, BOE).",
+      "recommendation": "Praktische Empfehlung von Get Camino — keine gesetzliche Pflicht. Die Priorität zeigt, wie sehr wir dazu raten; prüfe die Details für deinen eigenen Fall."
+    },
+    "timing": {
+      "due": "Fällig am {{date}}",
+      "dueEst": "Fällig am {{date}} (gesch.)",
+      "nextDue": "Nächster Termin: {{date}} · jährlich",
+      "startsOnce": "Beginnt, sobald {{event}}",
+      "anchor": {
+        "arrival": "du in Spanien ankommst",
+        "residency_established": "dein Aufenthaltsstatus steht",
+        "property_purchase": "der Kauf abgeschlossen ist"
+      },
+      "recurringDetail": "Das wiederholt sich jedes Jahr, solange es für dich gilt.",
+      "pendingDetail": "Ein Datum gibt es erst, wenn {{event}}.",
+      "pendingEvent": {
+        "arrival": "du in Spanien angekommen bist",
+        "residency_established": "dein Aufenthaltsstatus steht",
+        "property_purchase": "der Kauf abgeschlossen ist",
+        "other": "ein früherer Schritt erledigt ist"
+      },
+      "estimatedDetail": "Dieses Datum ist eine Schätzung nach typischen Abläufen — gib Lola feste Termine, um es zu schärfen.",
+      "firmDetail": "Ein festes Datum auf Basis dessen, was du Lola erzählt hast."
+    },
+    "completion": {
+      "bare": "Erledigt am {{date}}",
+      "line": "Erledigt am {{date}} · {{rel}}",
+      "onTime": "pünktlich",
+      "late_one": "{{count}} Tag zu spät",
+      "late_other": "{{count}} Tage zu spät",
+      "early_one": "{{count}} Tag zu früh",
+      "early_other": "{{count}} Tage zu früh"
+    },
+    "diff": {
+      "added_one": "{{count}} Schritt ergänzt (z. B. {{example}})",
+      "added_other": "{{count}} Schritte ergänzt (z. B. {{example}})",
+      "removed_one": "{{count}} Schritt entfernt",
+      "removed_other": "{{count}} Schritte entfernt",
+      "shifted_one": "{{count}} Termin verschoben",
+      "shifted_other": "{{count}} Termine verschoben",
+      "none": "In deinem Plan musste sich nichts ändern."
+    }
+  },
+  "coach": {
+    "error": "Entschuldige — das konnte ich gerade nicht laden. Frag gleich noch einmal.",
+    "hints": {
+      "visa": "z. B. Ich habe einen Remote-Job bekommen, wir wechseln aufs Digital-Nomad-Visum.",
+      "residency": "z. B. Meine Aufenthaltskarte (TIE) wurde am 2027-02-01 ausgestellt.",
+      "tax": "z. B. Ich werde in Spanien doch selbstständig arbeiten, nicht nur von Erspartem leben.",
+      "health": "z. B. Wir bleiben nur sechs Monate, kein endgültiger Umzug.",
+      "mobility": "z. B. Wir haben entschieden, dass niemand in Spanien fahren wird.",
+      "banking": "z. B. Unsere Ankunft verschiebt sich um zwei Monate.",
+      "family": "z. B. Wir haben letzten Monat geheiratet.",
+      "property": "z. B. Wir mieten jetzt doch, statt zu kaufen.",
+      "admin": "z. B. Wir kommen im November statt im September.",
+      "generic": "z. B. Unsere Ankunft verschiebt sich auf nächstes Frühjahr."
+    }
+  },
+  "sample": {
+    "name": "Susanne & Thomas",
+    "blurb": "Rentnerpaar aus Austin, das mit Hund und Non-Lucrative-Visum umzieht, noch zwischen Valencia und Málaga schwankt — und eines Tages auf die Staatsbürgerschaft hofft",
+    "eyebrow": "BEISPIEL-ROADMAP",
+    "title": "Das ist der Plan von {{name}}.",
+    "body": "{{name}} — {{blurb}}. Get Camino hat ihre Situation in die Roadmap mit {{count}} Schritten und Fristen verwandelt, die du unten siehst. Deine wird anders aussehen: ein paar Antworten zu deinem eigenen Umzug, und derselbe Motor baut sie nur für dich.",
+    "cta": "Meine eigene Roadmap erstellen →",
+    "ctaNote": "Kostenlos · etwa 3 Minuten · kein Konto nötig, um anzufangen",
+    "lifePhases": "Lebensphasen",
+    "whyLabel": "WARUM ES HIER STEHT",
+    "depsLabel": "VORHER BRAUCHEN {{name}}",
+    "sourceLink": "Offizielle Quelle ansehen ↗",
+    "tease": "In deinem eigenen Plan begleitet dich Lola durch diesen Schritt, du hakst ihn ab, und die Termine ordnen sich nach dem, was wirklich passiert.",
+    "closingTitle": "Dein Umzug wird nicht wie der von {{name}} aussehen.",
+    "closingBody": "Anderer Pass, andere Arbeit, andere Familie oder andere Pläne — andere Roadmap. Erzähl Lola von deinem Umzug und bekomme die Version, die wirklich deine ist, mit echten Fristen in der richtigen Reihenfolge.",
+    "closingCta": "Mein 3-Minuten-Interview starten →"
+  },
+  "changeNote": {
+    "errTitle": "Hmm, das ist nicht durchgegangen",
+    "errBody": "Ich konnte das gerade nicht verarbeiten — versuch es noch einmal.",
+    "noChangeTitle": "Danke für die Info",
+    "noChangeBody": "In deinem Plan musste sich nichts ändern. Wenn ein Schritt an einem konkreten Datum passiert ist (oder passieren wird), markiere ihn „mit Datum“ als erledigt und der Plan berechnet sich davon neu.",
+    "noopTitle": "Danke — notiert.",
+    "noopBody": "Ich habe das gespeichert, und nichts in deinem Plan musste sich deshalb bewegen.",
+    "remodelTitle": "Sehr nützlich — ich habe deinen Plan neu gebaut!",
+    "seePlan": "Meinen aktuellen Plan ansehen"
+  }
+}

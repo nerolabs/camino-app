@@ -1,0 +1,96 @@
+{
+  "shell": {
+    "tagline": "— la tua strada per la Spagna",
+    "disclaimer": "Solo orientamento — non è consulenza legale né fiscale."
+  },
+  "footer": {
+    "because": "Ricevi questa e-mail perché hai una roadmap Get Camino.",
+    "unsubscribe": "Disiscriviti dal riepilogo settimanale"
+  },
+  "welcome": {
+    "subject": "Benvenuto su Get Camino — la tua strada per la Spagna inizia qui",
+    "hola": "Hola — sono Lola.",
+    "what": "Get Camino trasforma il tuo trasferimento in Spagna in una roadmap passo per passo: ogni visto, modulo e scadenza che vale per la <em>tua</em> situazione, nell’ordine giusto, ciascuno con la sua fonte ufficiale.",
+    "whatText": "Get Camino trasforma il tuo trasferimento in Spagna in una roadmap passo per passo: ogni visto, modulo e scadenza che vale per la tua situazione, nell’ordine giusto, con fonti ufficiali.",
+    "lives": "La tua roadmap vive qui — si aggiorna quando i tuoi piani cambiano, e io ti accompagno in ogni passo che apri:",
+    "button": "Apri la tua roadmap",
+    "weekly": "Mentre il tuo trasferimento avanza ti manderò un breve riepilogo settimanale — cosa arriva, cosa è slittato, mai più di una manciata di cose.",
+    "weeklyText": "Mentre il tuo trasferimento avanza ti manderò un breve riepilogo settimanale — mai più di una manciata di cose.",
+    "textOpen": "Apri la tua roadmap: {{url}}"
+  },
+  "roundup": {
+    "subjectOverdue": "La tua settimana con Get Camino: {{overdue}} in ritardo, {{upcoming}} in arrivo",
+    "subjectOne": "La tua settimana con Get Camino: una cosa in arrivo",
+    "subjectMany": "La tua settimana con Get Camino: {{count}} cose in arrivo",
+    "intro": "Hola — ecco a che punto è la tua strada per la Spagna questa settimana.",
+    "overdueBadge": "IN RITARDO",
+    "slippedPast": "SFUGGITO",
+    "comingUp": "IN ARRIVO",
+    "reflow": "Ne hai già sistemata una? Segnala fatta con la data vera e il piano si ricalcola. Piani cambiati? Raccontami cos’è successo e rifaccio la roadmap.",
+    "more": "…e altre {{count}} dopo queste — un passo alla volta.",
+    "moreText": "…e altre {{count}} dopo queste.",
+    "button": "Apri la roadmap completa",
+    "textOpen": "Apri la roadmap completa: {{url}}",
+    "officialSource": "fonte ufficiale ↗",
+    "textOfficialSource": "fonte ufficiale: {{url}}",
+    "textTip": "consiglio: {{tip}}"
+  },
+  "nudge": {
+    "subject": "La tua roadmap per la Spagna ti aspetta — mancano poche domande",
+    "hola": "Hola — sono Lola.",
+    "body": "Avevi iniziato a raccontarmi il tuo trasferimento in Spagna, e mi dispiacerebbe sprecare quel vantaggio. Ancora qualche risposta e ti stendo la roadmap completa — ogni passo che vale per te, nell’ordine giusto, con scadenze vere.",
+    "button": "Riprendi da dove eri",
+    "note": "Di solito ci vogliono due o tre minuti. Le tue risposte precedenti sono salvate.",
+    "bodyText": "Avevi iniziato a raccontarmi il tuo trasferimento in Spagna. Ancora qualche risposta e ti stendo la roadmap completa.",
+    "textOpen": "Riprendi da dove eri: {{url}}"
+  },
+  "digest": {
+    "wasDue": "scadeva il {{date}}",
+    "due": "scade il {{date}}",
+    "overdueWord": "in ritardo",
+    "comingUpWord": "in arrivo",
+    "penaltySuffix": "Saltarlo può comportare una sanzione economica."
+  },
+  "report": {
+    "title": "Get Camino — la tua strada per la Spagna",
+    "tagline": "— la tua strada per la Spagna",
+    "generated": "Generato il {{date}}",
+    "steps": "passi",
+    "required": "obbligatori",
+    "done": "fatti",
+    "overdue": "in ritardo",
+    "nextStep": "IL TUO PROSSIMO PASSO",
+    "phase": {
+      "before_you_go": "Prima di partire",
+      "first_weeks": "Prime settimane",
+      "ongoing": "Continuativo",
+      "when_settled": "Una volta sistemato"
+    },
+    "severity": {
+      "penalty": "Rischio sanzione",
+      "required": "Obbligatorio",
+      "recommended": "Consigliato",
+      "info": "Info"
+    },
+    "anchor": {
+      "arrival": "arrivi in Spagna",
+      "residency_established": "la tua residenza è stabilita",
+      "padron_done": "il tuo empadronamiento è fatto",
+      "property_purchase": "concludi l’acquisto della casa",
+      "other": "un passo precedente è completato"
+    },
+    "doneBare": "Fatto",
+    "doneOn": "Fatto · {{date}}",
+    "startsOnce": "Inizia quando {{event}}",
+    "everyYear": "Ogni anno · prossima il {{date}}",
+    "overdueLine": "In ritardo · scadeva il {{date}}",
+    "dueLine": "Scade il {{date}}",
+    "estimatedSuffix": " (stimato)",
+    "official": "requisito ufficiale",
+    "recommendation": "raccomandazione Get Camino",
+    "regional": "varia per comunità",
+    "sourcePrefix": "Fonte ufficiale: ",
+    "footerHonesty": "Le date stimate si affinano quando si confermano date vere; i passi senza data iniziano quando avviene il loro traguardo — Get Camino non inventa mai una scadenza.",
+    "footerMade": "Creato con Get Camino (getcamino.app). Solo orientamento — non è consulenza legale né fiscale; le carte le firma un gestor."
+  }
+}

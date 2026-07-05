@@ -1,0 +1,96 @@
+{
+  "shell": {
+    "tagline": "— dein Weg nach Spanien",
+    "disclaimer": "Nur Orientierung — keine Rechts- oder Steuerberatung."
+  },
+  "footer": {
+    "because": "Du bekommst das, weil du eine Roadmap von Get Camino hast.",
+    "unsubscribe": "Wöchentliche Zusammenfassung abbestellen"
+  },
+  "welcome": {
+    "subject": "Willkommen bei Get Camino — dein Weg nach Spanien beginnt hier",
+    "hola": "Hola — ich bin Lola.",
+    "what": "Get Camino verwandelt deinen Umzug nach Spanien in eine Schritt-für-Schritt-Roadmap: jedes Visum, jedes Formular und jede Frist, die für <em>deine</em> Situation gilt, in der richtigen Reihenfolge, jede mit offizieller Quelle.",
+    "whatText": "Get Camino verwandelt deinen Umzug nach Spanien in eine Schritt-für-Schritt-Roadmap: jedes Visum, jedes Formular und jede Frist, die für deine Situation gilt, in der richtigen Reihenfolge, mit offiziellen Quellen.",
+    "lives": "Deine Roadmap lebt hier — sie aktualisiert sich, wenn sich deine Pläne ändern, und ich begleite dich durch jeden Schritt, den du antippst:",
+    "button": "Roadmap öffnen",
+    "weekly": "Solange dein Umzug läuft, schicke ich dir eine kurze wöchentliche Zusammenfassung — was ansteht, was gerutscht ist, nie mehr als eine Handvoll Aufgaben.",
+    "weeklyText": "Solange dein Umzug läuft, schicke ich dir eine kurze wöchentliche Zusammenfassung — nie mehr als eine Handvoll Aufgaben.",
+    "textOpen": "Roadmap öffnen: {{url}}"
+  },
+  "roundup": {
+    "subjectOverdue": "Deine Woche mit Get Camino: {{overdue}} überfällig, {{upcoming}} stehen an",
+    "subjectOne": "Deine Woche mit Get Camino: eine Sache steht an",
+    "subjectMany": "Deine Woche mit Get Camino: {{count}} Dinge stehen an",
+    "intro": "Hola — so steht dein Weg nach Spanien diese Woche.",
+    "overdueBadge": "ÜBERFÄLLIG",
+    "slippedPast": "DURCHGERUTSCHT",
+    "comingUp": "STEHT AN",
+    "reflow": "Eine davon schon erledigt? Markiere sie mit dem echten Datum als erledigt und dein Plan ordnet sich neu. Pläne geändert? Erzähl mir, was passiert ist, und ich baue die Roadmap um.",
+    "more": "…und {{count}} weitere danach — ein Schritt nach dem anderen.",
+    "moreText": "…und {{count}} weitere danach.",
+    "button": "Ganze Roadmap öffnen",
+    "textOpen": "Ganze Roadmap öffnen: {{url}}",
+    "officialSource": "offizielle Quelle ↗",
+    "textOfficialSource": "offizielle Quelle: {{url}}",
+    "textTip": "Tipp: {{tip}}"
+  },
+  "nudge": {
+    "subject": "Deine Spanien-Roadmap wartet — nur noch ein paar Fragen",
+    "hola": "Hola — hier ist Lola.",
+    "body": "Du hast angefangen, mir von deinem Umzug nach Spanien zu erzählen, und es wäre schade um diesen Vorsprung. Ein paar Antworten noch und ich lege dir deine komplette Roadmap hin — jeder Schritt, der für dich gilt, in der richtigen Reihenfolge, mit echten Fristen.",
+    "button": "Dort weitermachen, wo du warst",
+    "note": "Dauert meist zwei bis drei Minuten. Deine bisherigen Antworten sind gespeichert.",
+    "bodyText": "Du hast angefangen, mir von deinem Umzug nach Spanien zu erzählen. Ein paar Antworten noch und ich lege dir deine komplette Roadmap hin.",
+    "textOpen": "Dort weitermachen, wo du warst: {{url}}"
+  },
+  "digest": {
+    "wasDue": "war fällig am {{date}}",
+    "due": "fällig am {{date}}",
+    "overdueWord": "überfällig",
+    "comingUpWord": "steht an",
+    "penaltySuffix": "Ein Versäumnis kann eine Geldstrafe nach sich ziehen."
+  },
+  "report": {
+    "title": "Get Camino — dein Weg nach Spanien",
+    "tagline": "— dein Weg nach Spanien",
+    "generated": "Erstellt am {{date}}",
+    "steps": "Schritte",
+    "required": "verpflichtend",
+    "done": "erledigt",
+    "overdue": "überfällig",
+    "nextStep": "DEIN NÄCHSTER SCHRITT",
+    "phase": {
+      "before_you_go": "Vor der Abreise",
+      "first_weeks": "Erste Wochen",
+      "ongoing": "Laufend",
+      "when_settled": "Angekommen"
+    },
+    "severity": {
+      "penalty": "Strafrisiko",
+      "required": "Verpflichtend",
+      "recommended": "Empfohlen",
+      "info": "Info"
+    },
+    "anchor": {
+      "arrival": "du in Spanien ankommst",
+      "residency_established": "dein Aufenthaltsstatus steht",
+      "padron_done": "dein Empadronamiento erledigt ist",
+      "property_purchase": "du den Immobilienkauf abschließt",
+      "other": "ein früherer Schritt erledigt ist"
+    },
+    "doneBare": "Erledigt",
+    "doneOn": "Erledigt · {{date}}",
+    "startsOnce": "Beginnt, sobald {{event}}",
+    "everyYear": "Jedes Jahr · nächster Termin {{date}}",
+    "overdueLine": "Überfällig · war fällig am {{date}}",
+    "dueLine": "Fällig am {{date}}",
+    "estimatedSuffix": " (geschätzt)",
+    "official": "offizielle Anforderung",
+    "recommendation": "Empfehlung von Get Camino",
+    "regional": "variiert je nach Region",
+    "sourcePrefix": "Offizielle Quelle: ",
+    "footerHonesty": "Geschätzte Termine werden schärfer, sobald echte Daten bestätigt sind; Schritte ohne Datum beginnen, wenn ihr Meilenstein eintritt — Get Camino erfindet nie eine Frist.",
+    "footerMade": "Erstellt mit Get Camino (getcamino.app). Nur Orientierung — keine Rechts- oder Steuerberatung; die Papiere unterschreibt ein Gestor."
+  }
+}

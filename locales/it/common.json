@@ -1,0 +1,112 @@
+{
+  "nav": {
+    "wordmark": "Get Camino",
+    "wordmarkWide": "Get Camino: la tua strada per la Spagna",
+    "homeA11y": "Home di Get Camino",
+    "myRoadmap": "La mia roadmap",
+    "getYourRoadmap": "Ottieni la tua roadmap",
+    "menuA11y": "Menu",
+    "menu": {
+      "home": "Home",
+      "howItWorks": "Come funziona",
+      "guides": "Guide",
+      "samplePlan": "Piano di esempio",
+      "howIWasBuilt": "How I was built",
+      "reportProblem": "Segnala un problema",
+      "language": "Lingua",
+      "signOut": "Esci",
+      "deleteAccount": "Elimina il mio account"
+    }
+  },
+  "language": {
+    "title": "Lingua",
+    "current": "Lingua · {{name}}"
+  },
+  "backToTop": "Torna su",
+  "legal": {
+    "lastUpdated": "Ultimo aggiornamento: {{date}}",
+    "englishNotice": "Le pagine legali sono fornite in inglese; in caso di discrepanza prevale la versione inglese."
+  },
+  "home": {
+    "eyebrow": "Trasferirsi in Spagna",
+    "headline": "La tua roadmap personalizzata per trasferirti in Spagna.",
+    "sub": "Dal visto giusto alla città giusta, dalla scuola dei figli alle carte in regola — Get Camino capisce cosa vale per te e da dove cominciare.",
+    "cta": "Crea la mia roadmap gratuita →",
+    "disclaimer": "Gratis · Circa 3 minuti · Nessun account per iniziare",
+    "sampleLink": "Non sei ancora sicuro? Dai prima un’occhiata a una roadmap di esempio →",
+    "strip": "Visti · Dove vivere · Scuole · Banca · NIE · TIE · Empadronamiento · Modelo 720 · Guidare · Lavoro da remoto",
+    "stripLink": "  ·  Esplora tutte le 60 guide →",
+    "browseGuidesA11y": "Vedi tutte le guide",
+    "photoA11y": "{{label}}, Spagna",
+    "photos": {
+      "gothicQuarter": "Quartiere Gotico, Barcellona",
+      "madrid": "Madrid",
+      "plazaEspana": "Plaza de España, Siviglia",
+      "sevillaSunset": "Siviglia al tramonto"
+    }
+  },
+  "footer": {
+    "note": "Solo orientamento — non è consulenza legale né fiscale.",
+    "privacy": "Privacy",
+    "terms": "Termini",
+    "avisoLegal": "Aviso legal"
+  },
+  "storeBadges": {
+    "eyebrow": "PORTALO CON TE",
+    "titleLive": "Porta Get Camino sul tuo telefono.",
+    "titleSoon": "La web app funziona già oggi. Le app per il telefono stanno arrivando.",
+    "subLive": "La tua roadmap, voce compresa, su iPhone e Android.",
+    "subSoon": "Funziona tutto qui, nel tuo browser — niente da installare. Le app native per iPhone e Android sono in lavorazione.",
+    "downloadOn": "Scarica su",
+    "comingSoonTo": "Presto su",
+    "badgeLinkA11y": "Ottieni Get Camino su {{store}}",
+    "badgeSoonA11y": "{{store}} — in arrivo"
+  },
+  "signIn": {
+    "button": "Accedi",
+    "title": "Accedi a Get Camino",
+    "sub": "Salva la tua roadmap e riprendila su qualsiasi dispositivo.",
+    "google": "Continua con Google",
+    "apple": "Continua con Apple",
+    "email": "Continua con l’e-mail",
+    "allOptions": "← Tutte le opzioni",
+    "cancel": "Annulla",
+    "failedTitle": "Accesso con {{provider}} non riuscito"
+  },
+  "deleteAccount": {
+    "title": "Eliminare il tuo account?",
+    "warning": "Questo elimina definitivamente il tuo account, le tue risposte e la tua roadmap — subito, senza annullamento né finestra di recupero. Le 60 guide gratuite restano aperte a tutti.",
+    "confirm": "Elimina il mio account definitivamente",
+    "keep": "Conserva il mio account",
+    "doneTitle": "Account eliminato.",
+    "doneSub": "Il tuo account, le tue risposte e la tua roadmap non ci sono più. Se la Spagna chiamerà di nuovo, noi saremo qui — buen camino.",
+    "close": "Chiudi",
+    "err": "Non ha funzionato — non è stato eliminato nulla. Riprova, o scrivici da «Segnala un problema»."
+  },
+  "emailSignIn": {
+    "sentTitle": "Controlla la tua casella 📬",
+    "sentSub": "Ti abbiamo inviato un link di accesso a {{email}}. Aprilo su questo dispositivo — oppure inserisci il codice monouso della stessa e-mail:",
+    "codeA11y": "Codice monouso dalla tua e-mail",
+    "verify": "Verifica codice",
+    "checking": "Verifica in corso…",
+    "tryAgain": "Altro indirizzo / invia di nuovo",
+    "emailA11y": "Indirizzo e-mail",
+    "send": "Inviami un link di accesso",
+    "sending": "Invio…",
+    "hint": "Niente password — il link (o il codice) ti fa entrare.",
+    "errSend": "Non è stato possibile inviare l’e-mail — riprova.",
+    "errCode": "Quel codice non corrisponde — controlla l’e-mail o richiedine uno nuovo."
+  },
+  "feedback": {
+    "title": "Segnala un problema",
+    "sub": "Qualcosa di rotto, confuso o mancante? Diccelo — basta una frase.",
+    "inputA11y": "Descrivi il problema",
+    "placeholder": "Cos’è successo?",
+    "send": "Invia",
+    "cancel": "Annulla",
+    "thanksTitle": "Gracias — ricevuto.",
+    "thanksSub": "Ogni segnalazione migliora la roadmap. Le leggiamo tutte.",
+    "done": "Fatto",
+    "errSend": "L’invio non è andato a buon fine — riprova."
+  }
+}

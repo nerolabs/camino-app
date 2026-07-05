@@ -1,0 +1,54 @@
+{
+  "landing": {
+    "eyebrow": "DEIN WEG NACH SPANIEN",
+    "headline": "Hola, ich bin Lola.",
+    "sub": "Ein Umzug nach Spanien sind hundert kleine Schritte — Visa, Padrón, Steuern, Gesundheit — und sie funktionieren nur in der richtigen Reihenfolge. Ich habe schon anderen bei diesem Schritt geholfen und gehe den Weg mit dir, von Anfang bis Ende.",
+    "subQuiet": "Beantworte ein paar Fragen und ich baue deine persönliche Roadmap: echte Schritte, echte Fristen, nichts, was du nicht brauchst.",
+    "start": "Los geht’s"
+  },
+  "progress": {
+    "question": "Frage {{n}} von ~{{total}}",
+    "almostThere": "Fast geschafft",
+    "underAMinute": "Weniger als eine Minute",
+    "minutesLeft": "Noch ca. {{m}} Min."
+  },
+  "voice": {
+    "on": "Stimme an",
+    "off": "Stimme aus",
+    "turnOffA11y": "Lolas Stimme ausschalten",
+    "turnOnA11y": "Lolas Stimme einschalten"
+  },
+  "composer": {
+    "placeholder": "Schreib deine Antwort…",
+    "placeholderListening": "Ich höre zu…",
+    "micStartA11y": "Antwort diktieren",
+    "micStopA11y": "Diktat beenden",
+    "sendA11y": "Antwort senden"
+  },
+  "done": "Das ist alles, was ich brauche — deine Roadmap ist fertig.",
+  "fallback": {
+    "question": "Erzählst du mir etwas über {{hint}}?",
+    "clarifyReask": "Erzählst du mir etwas mehr über {{hint}}?",
+    "clarifyPrefix": "Entschuldige, das habe ich nicht ganz verstanden. {{reask}}",
+    "turnFailed": "Entschuldige — das hat länger gedauert als es sollte. Deine Antwort steht noch im Feld; schickst du sie mir noch einmal?"
+  },
+  "static": {
+    "nationalities": "Kurze Frage — welche Staatsbürgerschaft hat jede Person in deinem Haushalt?",
+    "work_situation": "Und beruflich, nach dem Umzug — Remote-Arbeit, Freelance, Studium, Ruhestand oder etwas anderes?",
+    "employer_country_is_foreign": "Sitzt dein Arbeitgeber außerhalb Spaniens?",
+    "annual_income_eur_band": "Für das richtige Visum brauche ich eine grobe Vorstellung vom Jahreseinkommen des Haushalts. Welche Spanne passt?",
+    "has_spouse_or_partner": "Zieht ein Ehe- oder Lebenspartner mit dir um?",
+    "partner_is_married": "Seid ihr verheiratet oder in eingetragener Partnerschaft?",
+    "has_children": "Kommen Kinder mit?",
+    "intends_long_stay": "Ist das ein richtiger Langzeit-Umzug — mehr als sechs Monate im Jahr — oder eher ein längerer Aufenthalt?",
+    "arrival_date": "Wann willst du ungefähr ankommen? Der Monat reicht schon.",
+    "has_spanish_address": "Hast du schon eine Bleibe in Aussicht, gemietet oder gekauft?",
+    "owns_or_drives": "Wird dort jemand Auto fahren?",
+    "owns_property_in_spain": "Planst du, in Spanien eine Immobilie zu kaufen, oder hast du schon gekauft?",
+    "region": "In welchem Teil Spaniens wirst du dich niederlassen? Eine Autonome Gemeinschaft — oder nenn mir die Stadt und ich ordne sie zu.",
+    "has_pets": "Zieht ein Haustier mit um?",
+    "foreign_assets_eur_band": "Etwas persönlich — und du wählst nur eine Spanne — wie viel hältst du ungefähr außerhalb Spaniens?",
+    "us_resident": "Lebst du derzeit in den USA? (Die Wartezeiten der Konsulate sind dort gerade ziemlich lang.)",
+    "previously_ex_spanish_colony_nationality": "Bist du Staatsangehöriger einer ehemaligen spanischen Kolonie — der Großteil Lateinamerikas, oder die Philippinen?"
+  }
+}
