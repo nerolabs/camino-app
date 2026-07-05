@@ -18,10 +18,14 @@ removed 2026-07-04 — the app is long since real; see HANDOFF.md for current st
 - **Every web deploy** (the routine iteration loop): `scripts/deploy.sh` runs, in order, the
   fast deterministic checks (**typecheck via tsc is separate; audit · test** inline) → export →
   deploy → **the Playwright web E2E suite against the unique deployment URL**. Staging runs all
-  12 (public smoke + authed); production runs the 6 public smoke (the authed suite seeds a test
-  user that must never touch the prod DB). A failure exits non-zero — on staging, that's the
-  "don't promote to prod" signal. `DEPLOY_SKIP_E2E=1` to skip. **Web regressions are caught at
-  the deploy, automatically, on exactly the bundle that shipped.**
+  12 (public smoke + authed) **plus the API contract tests** (validation paths + the Spanish
+  extraction gate — promoted from opt-in by the 2026-07-05 testing audit); production runs the
+  6 public smoke (the authed suite seeds a test user that must never touch the prod DB — and
+  seed.mjs now ALLOWLISTS the staging project rather than denylisting prod). A failure exits
+  non-zero — on staging, that's the "don't promote to prod" signal; a deploy whose unique URL
+  can't be captured now FAILS instead of silently skipping the gate. `DEPLOY_SKIP_E2E=1` to
+  skip deliberately. **Web regressions are caught at the deploy, automatically, on exactly the
+  bundle that shipped.**
 - **Big builds only** (a native EAS build for TestFlight/Play, i.e. an App Store candidate):
   ALSO run the **`e2e-ios`** Maestro workflow (manual dispatch). It's ~30–45 min and iOS-sim-on-CI
   is inherently slow, so it's a deliberate **release gate, not an iteration gate** — dispatch it
@@ -55,6 +59,11 @@ accessibility tree on Maestro 2.x / iOS 18.x, so it can't be tapped
 web** suite (identical React components) and by **manual on-device sign-in** every build. The
 flow stays in `.maestro/` — runnable locally on a Maestro version where the dialog pattern works;
 re-fold into CI when #2610 is fixed or when we pin a known-good Maestro version.
+
+Re-checked 2026-07-05 (testing audit): #2610 is closed as "waiting for customer response" — NOT
+fixed. Deep links reportedly work on ≤1.39.13, but pinning that old a CLI would risk the three
+green flows on the Xcode 26 image. Instead the workflow now pins **Maestro 2.6.1** (the version
+green run #7 used) so runs are reproducible; the exclusion stands.
 
 ## Release checklist (per store submission)
 

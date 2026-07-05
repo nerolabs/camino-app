@@ -4,7 +4,9 @@
 added or removed. Forward-looking ideas (tests we *want*) live in `docs/BUILD.md` → "Growing E2E
 coverage"; this file is the honest picture of **current** coverage.
 
-Last updated: 2026-07-05 (deepened for the localization push — 44 → 82 passing vitest tests).
+Last updated: 2026-07-05 (fresh-eyes testing audit: map verified against reality, per-file
+counts corrected, localization-gate tests landed — 86 passing vitest tests + 10 opt-in network;
+critical-path verdicts in §5).
 
 Layers, and when they run:
 - **Unit / integration** (vitest, `tests/`) — deterministic, offline. Runs in `deploy.sh` and CI
@@ -17,7 +19,7 @@ Layers, and when they run:
 
 ---
 
-## 1. Unit / integration (vitest) — 82 passing (+7 opt-in network)
+## 1. Unit / integration (vitest) — 86 passing (+10 opt-in network)
 
 Concentrated on the deterministic core (that's the product's real risk surface):
 
@@ -30,23 +32,25 @@ Concentrated on the deterministic core (that's the product's real risk surface):
 | **Weekly email digest** | `email-digest.test.ts` (6) | incomplete interview → null (no spam); pressing items → capped, overdue-first; nothing-in-window → null; deterministic; done items never appear; unsubscribe token sign/verify + tamper-fail |
 | **Guide prose** | `guide-prose.test.ts` (3) | covers every obligation & nothing else; substantive (no stubs); **digit-lint** (never introduces a number the title lacks — invariant 3) |
 | **Date normalization** | `date-input.test.ts` (7) | strict ISO; "2026-April-25"; Spanish months; unambiguous numerics only; today/hoy; rejects junk; preview label |
-| **API contract** (opt-in, hits staging) | `api.contract.test.ts` (7) | /api/lola 400/413/role validation; /api/tts 400/413 + GET audio happy path |
+| **API contract** (opt-in + per-staging-deploy) | `api.contract.test.ts` (10) | /api/lola 400/413/role validation; /api/tts 400/413 + GET audio happy path; **Spanish-extraction gate** (3): real extraction prompt (`lib/extractionPrompt.ts`) via the deployed /api/lola — "Somos estadounidenses"→`["US"]`, "trabajo en remoto…"→`employed_remote`, "estamos casados"→`true`. Runs in `deploy.sh` on every STAGING deploy (against the unique URL) and via `npm run test:api` |
 | **Plan structure = frozen (localization guard)** | `plan-snapshot.test.ts` (10) | every persona's plan snapshotted as `id\|phase\|severity\|timing-state` (clock frozen) — the engine takes NO locale, so this proves localization surgery never changes WHICH steps / order / timing; + no-dupes/non-empty |
-| **Abuse guards** | `api-guard.test.ts` (7) | `isAllowedOrigin` (own origins, per-deploy `camino--*`, localhost, foreign & look-alike rejects, referer); `corsPreflight` grants allowed / denies foreign / no-origin |
+| **Abuse guards** | `api-guard.test.ts` (8) | `isAllowedOrigin` (own origins, per-deploy `camino--*`, localhost, foreign & look-alike rejects, referer); `corsPreflight` grants allowed / denies foreign / no-origin |
 | **Email origin** | `server-email.test.ts` (3) | `siteOrigin` is the canonical host per env, never derived from request.url (the leak it exists to prevent) |
-| **Region layer** | `regions.test.ts` (5) | `regionLabel` known/`not_sure`/unknown/non-string; slugs are stable kebab; 17+2 comunidades |
+| **Region layer** | `regions.test.ts` (4) | `regionLabel` known/`not_sure`/unknown/non-string; slugs are stable kebab; 17+2 comunidades |
 | **Sample plan validity** | `sample-profile.test.ts` (3) | only sets real slot fields; arrival floats to the future; rich plan with the right signature steps (nie/scout/720/citizenship) and the right absences (no empadronamiento without an address) |
 | **Display formatters** (via RN stub) | `plan-format.test.ts` (8) | `plansDiffer` honesty gate (no-op false; add/remove/date-shift true); `diffSummary` narration; `completionLine` on-time/late/early; phase & severity label completeness |
 | **Change hints** | `plan-coach.test.ts` (2) | `changeHint` per category + generic fallback |
+| **Render snapshots (localization guard)** | `render-snapshot.test.ts` (4) | full-HTML snapshots of all 3 emails (`welcomeEmail`/`roundupEmail`/`nudgeEmail`, fixed digest + URLs) and the printable report (`reportHtml`, one of every timing state, frozen clock) — a translation can't break markup or drop a section unseen; extend per-locale at L1 |
 
 **Infra:** `tests/stubs/react-native.ts` + `@`/`react-native` aliases in `vitest.config.ts` let
 the display layer (formatters, hints — the surfaces localization touches most) be unit-tested.
 
 **Still not unit-tested (known gaps, ranked):** the **API route handlers** beyond lola/tts
 (`feedback`, `account/delete`, `email/welcome`, `email/weekly`, `email/unsubscribe`) — these do
-real auth + DB work, best covered by focused integration tests or extending the opt-in contract
-suite; `lib/emailTemplates.ts` HTML rendering (localization target — worth a render-snapshot);
-`lib/analytics.ts` / `lib/monitoring.ts` (thin wrappers, low risk). See the strategy below.
+real auth + DB work, best covered by focused integration tests with a mocked Supabase admin
+client. Notably the **welcome-once dedupe** (the 3×-send bug that reached a real inbox) still
+has no regression test — the claim/rollback logic lives in the handler. `lib/analytics.ts` /
+`lib/monitoring.ts` (thin wrappers, low risk). See the strategy below.
 
 ---
 
@@ -115,10 +119,10 @@ can refactor against fearlessly**. Sequenced:
 ### A. Localization-hardening (the priority — land BEFORE L0)
 1. ✅ **Engine structural snapshot** (`plan-snapshot.test.ts`) — done. The engine is locale-free;
    this proves it stays that way.
-2. **Interview extraction is language-agnostic** (opt-in network test): Spanish input →
-   correct English slug (`"Somos estadounidenses"` → `nationalities: ["US"]`;
-   `"trabajo en remoto para una empresa de EE. UU."` → `employed_remote`). Proves the interview
-   already works in Spanish *before* we localize, and can't regress. Add to `api.contract.test.ts`.
+2. ✅ **Interview extraction is language-agnostic** — done 2026-07-05 (3 cases in
+   `api.contract.test.ts`, verified live against staging). The extraction prompt was moved to
+   the pure `lib/extractionPrompt.ts` so the test exercises the EXACT prompt the app sends —
+   no test-only copy to drift. Runs on every staging deploy via `deploy.sh`.
 3. **Catalog/guide title completeness per locale** — once catalogs exist: a runtime test that
    every obligation id has a title (and prose) in every shipped locale (belt-and-suspenders to the
    tsc `Record<ObligationId,…>` type). 
@@ -126,8 +130,11 @@ can refactor against fearlessly**. Sequenced:
    *completeness* (no missing keys), *digit-lint per locale* (a translation never changes a
    number — invariant 3), *placeholder-lint* (`{{var}}` parity), *brand-lint* ("Get Camino"/"Lola"
    verbatim). These are the mechanical guardrails that make L1/L3 fill-in-the-blanks.
-5. **Email/report render snapshots** — `emailTemplates` + `reportHtml` → HTML snapshot per locale,
-   so a translation can't break the markup or drop a section.
+5. ✅ **Email/report render snapshots** — done 2026-07-05 (`render-snapshot.test.ts`, 4
+   snapshots: 3 emails + the report). Extend per-locale at L1.
+
+**→ With 1, 2 and 5 green, the localization HARD GATE is CLEAR: L0 may start.** (3 and 4 are
+built INTO L0 by design — they need the string catalogs to exist.)
 
 ### B. Web (Playwright) — grow the deployed-env flows (each costs a few live LLM calls)
 6. **Full interview → roadmap** (currently only "interview starts"): drive typed answers through
@@ -153,7 +160,35 @@ render snapshots (doubles as A5). Do these opportunistically — they're not loc
 **Operating rule:** every bug that reaches a person earns a regression test in the owning layer,
 added in the same fix. The suites are meant to grow.
 
-## 5. How to keep this honest
+## 5. Critical-path coverage verdicts (fresh-eyes audit, 2026-07-05)
+
+The ten critical paths from `docs/AUDIT-BRIEF-TESTING.md`, walked against the suites as they
+actually are. "Covered" means automated; honest exceptions are named, not hidden.
+
+| # | Path | Covered by | Verdict | Gap / action |
+|---|---|---|---|---|
+| 1 | Visitor → interview → completed roadmap | Web E2E #2 (interview starts, 1 live turn) + Maestro 03 (native shell to answer-posted) + extraction contract tests | **PARTIAL** | The full multi-turn journey is the biggest uncovered flow. Build as an opt-in Playwright project (pre-release, not per-deploy — ~17 live LLM turns/run), §4B6 |
+| 2 | Email-me-my-roadmap → magic link → signed-in roadmap | `auth.setup.ts` proves token→session→roadmap per deploy | **PARTIAL** | Real email delivery + `pending_profile` adoption are manual-only; adoption belongs in a handler integration test |
+| 3 | Living-plan ops (done/undo, re-flow, re-model honesty) | Authed E2E #9–10 + engine anchor-re-flow unit + `plansDiffer` units | **GOOD** | Real re-model E2E ("we had a baby" → school step) still planned, §4B7 |
+| 4 | This-week · PDF · region rendering | This-week: unit + authed E2E #8 ✓. PDF: `reportHtml` units + render snapshot. Region: units + seeded `madrid` fixture | **PARTIAL** | No E2E asserts the PDF export button or the regional note on the page (§4B8–9, cheap) |
+| 5 | Guides/SEO (60 pages, sitemap, robots, JSON-LD) | Prose units + digit-lint; smoke #4/#6 (robots, sitemap, content pages) | **GOOD** | A single guide-page E2E (source link + CTA) is a cheap add, §4B10 |
+| 6 | Email loop (welcome-once, digest, unsubscribe, nudge) | Digest logic units (6) + unsubscribe-token unit + render snapshots | **PARTIAL** | The welcome-once dedupe (a real 3×-send bug) and the route handlers have NO regression test — top of gap list §4D |
+| 7 | Account deletion · feedback route | Nothing automated (each manually E2E-verified once) | **GAP** | Honest exception for now; right layer = handler integration tests with mocked Supabase/Resend, §4D |
+| 8 | API abuse guards (caps, rate limits, CORS) | `api-guard` units (8) + contract tests now on every staging deploy | **GOOD** | Durable 429 burst verified manually once; deliberately not per-deploy (bursting our own API each deploy is self-harm) — documented exception |
+| 9 | Native shell (launch, render, navigate, keyboard, 1 LLM turn) | Maestro 01/02/03, retry-once, big-builds-only, Maestro now pinned 2.6.1 | **COVERED, unverified** | Flow-03 trim must be confirmed on the next deliberate `e2e-ios` run (don't burn runs for it) |
+| 10 | Localization invariants | `plan-snapshot` (10) + Spanish extraction (3, live-verified) + render snapshots (4) | **GATE CLEAR** | The 4 i18n lint gates land inside L0 with the string catalogs |
+
+**Native-testing verdict (deliverable 4): keep the current scope.** Evidence: 9 `e2e-ios`
+dispatches → 1 green; the failures were environment (cold boot, LLM latency), not product; runs
+cost 30–75 min each. The trim of flow 03 is correct (both #9 retries died on the second
+sequential LLM round-trip; the "thinking" spinner is a disappearing element and would flake in
+the opposite direction). Flow 04 stays excluded: Maestro #2610 is closed-stale ("waiting for
+customer response"), regression window 1.40+; re-pinning to 1.39.13 would risk the three green
+flows on the Xcode 26 image for the sake of one excluded flow. Improvements applied instead:
+Maestro pinned to 2.6.1 (the green run's version — reproducibility), and the two-tier policy is
+confirmed empirically right.
+
+## 6. How to keep this honest
 
 - **Add a row here in the same PR** that adds/removes a test — this file should never lag the suite.
 - When a bug reaches a person, add its regression test to the owning layer and note it here.

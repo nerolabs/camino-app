@@ -3,7 +3,8 @@
 Living list of what we're tracking against. Update as work moves. Newest context at top.
 See `HANDOFF.md` for the fuller picture and `core/SOURCING.md` for obligation provenance.
 
-Last updated: 2026-07-04 (backlog v2 — second full audit of the day).
+Last updated: 2026-07-05 (fresh-eyes testing audit DONE — verdicts in docs/TEST-COVERAGE.md §5;
+localization hard gate CLEAR).
 
 ## 🔒 Security — TOP PRIORITY
 
@@ -33,14 +34,17 @@ STRATEGY.md backtest · EAS builds only on user command · (once L0 lands) trans
 **web E2E auto-runs on every deploy** (deploy.sh gate) · **grow the test suites** as concern
 areas surface — every bug that reaches a person earns a regression test · **keep
 docs/TEST-COVERAGE.md current** (what's tested today + the deepening strategy; CLAUDE.md rule).
-Current: 82 vitest tests (+7 opt-in) · 11 web E2E flows · 3 native flows (retry-tolerant gate).
+Current: 86 vitest tests (+10 opt-in) · 11 web E2E flows · 3 native flows (retry-tolerant gate,
+Maestro pinned 2.6.1) · API contract tests run on every staging deploy.
 
 ### Phase 1 — E2E gate (IN FLIGHT — blocks everything below; user directive)
 1. **Maestro green**: 3 native flows (01-home, 02-sample-plan, 03-interview) are the gate;
-   run #5 verifying. The authed deep-link flow (04) is EXCLUDED from CI — documented Maestro
-   iOS-deep-link flake (issue #2610); covered by the authed Playwright web suite + manual
-   on-device sign-in instead. Rationale in docs/BUILD.md. Re-fold 04 when #2610 is fixed or a
-   known-good Maestro is pinned.
+   run #7 green; flow-03 trim (stops before the 2nd LLM round-trip) still UNVERIFIED in CI —
+   confirm on the next deliberate big-build run. **2026-07-05 audit:** Maestro pinned to 2.6.1
+   (the green run's version; installs were unpinned-latest before). The authed deep-link flow
+   (04) stays EXCLUDED — #2610 re-checked: closed-stale ("waiting for customer response"), NOT
+   fixed; re-pinning to pre-1.40 would risk the 3 green flows on the Xcode 26 image. Verdicts:
+   docs/TEST-COVERAGE.md §5.
 2. ~~**Pipeline wiring (Phase C)**~~ — **docs/BUILD.md rewritten** with the two-tier gate
    (user decision 2026-07-05): **small builds** = fast CI only (typecheck · audit · test, every
    push); **big builds** (native RC / store submission) = ALSO test:e2e (12) + e2e-ios
@@ -58,12 +62,13 @@ directive 2026-07-05). Localization is broad, mechanical surgery; we do not touc
 the regression harness in place. Strategy + rationale: docs/TEST-COVERAGE.md §4A.**
 - ✅ **Engine structural snapshot** (`tests/plan-snapshot.test.ts`) — DONE. Engine is
   locale-free; proves localization never changes which steps / order / timing.
-- [ ] **Interview extraction is language-agnostic** — opt-in network test: Spanish input →
-  correct English slug (`"Somos estadounidenses"` → `nationalities:["US"]`;
-  `"trabajo en remoto para una empresa de EE.UU."` → `employed_remote`). Proves the interview
-  already works in Spanish BEFORE we localize. Add to `tests/api.contract.test.ts`.
-- [ ] **Email/report render snapshots** (`emailTemplates`, `reportHtml`) — HTML snapshot so a
-  translation can't break markup or drop a section (extend per-locale at L1).
+- ✅ **Interview extraction is language-agnostic** — DONE 2026-07-05, verified LIVE against
+  staging (3 Spanish cases in `tests/api.contract.test.ts`, using the app's real extraction
+  prompt via the new pure `lib/extractionPrompt.ts`; runs on every staging deploy).
+- ✅ **Email/report render snapshots** — DONE 2026-07-05 (`tests/render-snapshot.test.ts`,
+  4 full-HTML snapshots: 3 emails + the printable report; extend per-locale at L1).
+- **→ GATE CLEAR (2026-07-05 audit): L0 may start.** The remaining two items below are BUILT
+  INTO L0 by design (they need the string catalogs to exist).
 - [ ] **The 4 i18n lint gates BUILT AS PART OF L0** and wired into `npm test` in the SAME change
   that adds the string catalogs: *completeness* (no missing keys), *per-locale digit-lint*
   (a translation never changes a number — invariant 3), *placeholder-lint* (`{{var}}` parity),

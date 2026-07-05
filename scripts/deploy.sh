@@ -63,19 +63,28 @@ rm -f "$DEPLOY_LOG"
 
 # Web E2E as a post-deploy regression gate (set DEPLOY_SKIP_E2E=1 to skip). Runs against the
 # unique URL. Staging: the full suite (public smoke + authed — SUPABASE_SERVICE_ROLE_KEY is in
-# the sourced env, and seed.mjs targets the staging DB / refuses prod). Production: PUBLIC smoke
-# ONLY — the authed suite seeds a test user, which must never touch the prod DB. `set -e` makes
-# a failure exit non-zero (loud): on staging that's your "don't promote to prod" signal.
-if [ -z "${DEPLOY_SKIP_E2E:-}" ] && [ -n "$DEPLOY_URL" ] && npx playwright --version >/dev/null 2>&1; then
+# the sourced env, and seed.mjs targets the staging DB / refuses prod) + the API contract tests
+# (validation paths only; one CDN-cacheable TTS GET). Production: PUBLIC smoke ONLY — the authed
+# suite seeds a test user, which must never touch the prod DB. `set -e` makes a failure exit
+# non-zero (loud): on staging that's your "don't promote to prod" signal.
+if [ -n "${DEPLOY_SKIP_E2E:-}" ]; then
+  echo "[deploy] ⚠️  Web E2E SKIPPED by DEPLOY_SKIP_E2E=1."
+elif [ -z "$DEPLOY_URL" ]; then
+  # A gate that silently doesn't run isn't a gate (2026-07-05 testing audit).
+  echo "[deploy] ❌ No unique deploy URL captured from eas-cli output — the E2E gate cannot run."
+  echo "[deploy]    The deploy itself may have succeeded; verify, fix the URL capture, or rerun"
+  echo "[deploy]    with DEPLOY_SKIP_E2E=1 to accept an ungated deploy deliberately."
+  exit 1
+else
   echo "[deploy] Web E2E against ${DEPLOY_URL} ..."
   if [ "$TARGET" = "production" ]; then
     E2E_BASE_URL="$DEPLOY_URL" npx playwright test --project=public
   else
     E2E_BASE_URL="$DEPLOY_URL" npx playwright test
+    echo "[deploy] API contract tests against ${DEPLOY_URL} ..."
+    API_BASE="$DEPLOY_URL" npm run --silent test:api
   fi
   echo "[deploy] Web E2E passed."
-elif [ -z "${DEPLOY_SKIP_E2E:-}" ]; then
-  echo "[deploy] ⚠️  Skipped web E2E (no deploy URL captured, or Playwright not installed)."
 fi
 
 echo "[deploy] Cleaning up .env.local (leaves your local dev .env untouched)..."

@@ -9,13 +9,23 @@ Last updated: 2026-07-05.
 
 ---
 
-## ⭐ RESUME HERE (2026-07-05 — FIRST TASK: fresh-eyes testing audit, then localization)
+## ⭐ RESUME HERE (2026-07-05 — testing audit DONE, localization gate CLEAR → next: L0)
 
-**⚠️ The user's explicit first task for this session: a FRESH-EYES AUDIT of all testing (E2E,
-unit, integration, build-pipeline critical-path coverage, and native) — mandate, method,
-critical paths, decisions-to-challenge, and deliverables are in `docs/AUDIT-BRIEF-TESTING.md`.
-Read that brief FIRST. Its output feeds the localization hard gate below; localization (Phase 2)
-starts only after.**
+**The fresh-eyes testing audit ran 2026-07-05 morning and is COMPLETE** (mandate was
+`docs/AUDIT-BRIEF-TESTING.md`; all 5 deliverables in `docs/TEST-COVERAGE.md` — critical-path
+verdicts in its §5). Outcomes: map verified against reality (2 per-file counts corrected);
+**localization HARD GATE CLEAR** — Spanish extraction proven LIVE (3 cases, real prompt via new
+pure `lib/extractionPrompt.ts`) + email/report render snapshots (`tests/render-snapshot.test.ts`);
+suite now 86 (+10 opt-in). Gates hardened: deploy.sh fails loudly when the E2E gate can't run,
+API contract tests run on every STAGING deploy, seed.mjs allowlists staging (was a prod
+denylist), Maestro pinned 2.6.1. Decisions re-verified, all upheld: flow-03 trim (still confirm
+on next deliberate big-build run), flow-04 exclusion (#2610 closed-stale, NOT fixed), two-tier
+policy (9 runs → 1 green says native CI can't be an iteration gate). Biggest named gaps: full
+interview→roadmap web journey (build as opt-in pre-release Playwright project, not per-deploy);
+welcome-once dedupe + route handlers have no regression test (the 3×-send bug reached a person).
+**NEXT: Phase 2 L0** — i18next plumbing + full string extraction + the 4 i18n lint gates built
+in, re-run plan-snapshot + full suite after (still green = behavior untouched). See TODO.md
+Phase 2.
 
 **Session digest (2026-07-04→05, the marathon):** backlog audited twice (TODO "SEQUENCED BACKLOG
 v2" is canonical) · source-link QA 55/55 (2 fixed) · rebrand **Get Camino** (~100 strings, ASC

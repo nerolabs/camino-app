@@ -494,6 +494,17 @@ const ROWS: Row[] = [
       'The back-to-top button respects reduced-motion: it jumps instantly instead of animating for anyone who\'s asked their device to calm down.',
     ],
   },
+  {
+    feature: 'The fresh-eyes testing audit',
+    date: '5 Jul 2026',
+    work: 'Before translating the app into Spanish, every layer of testing was audited with fresh eyes: the coverage map verified against what actually runs, ten critical user paths given honest verdicts, and last week\'s under-pressure scoping decisions re-examined. Three new safety nets landed: live tests proving the interview already understands Spanish answers, pixel-exact snapshots of every email and the printable report, and API checks that now run on every staging deploy.',
+    decisions: [
+      'A gate that silently doesn\'t run isn\'t a gate: a deploy that can\'t run its test suite now fails loudly instead of shipping unchecked.',
+      'The test-database guard became an allowlist — only the staging database may ever be seeded, rather than merely refusing the one known production one.',
+      'Prove the hard part before the mechanical part: the interview demonstrably speaks Spanish before a single UI string is translated.',
+      'Prior decisions were re-verified, not inherited — the trimmed native test flow and the excluded deep-link flow both survived scrutiny, with the tool version now pinned for reproducible runs.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

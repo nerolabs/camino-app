@@ -25,8 +25,13 @@ if (!URL_ || !KEY) {
   process.exit(1);
 }
 // The one rule that must never break: E2E never touches the production database.
-if (URL_.includes('oftrpaleqtmuvolwsocd')) {
-  console.error('seed: REFUSING to run against the PRODUCTION Supabase project');
+// ALLOWLIST, not denylist (2026-07-05 testing audit): only the known staging project may be
+// seeded. A denylist of the prod ref would silently pass any OTHER non-staging database
+// (a future second prod project, a typo'd URL). E2E_SEED_ALLOW_HOST extends it deliberately.
+const STAGING_REF = 'gsnsgfobfswazqhfcstx';
+if (!URL_.includes(STAGING_REF) && !(process.env.E2E_SEED_ALLOW_HOST && URL_.includes(process.env.E2E_SEED_ALLOW_HOST))) {
+  console.error(`seed: REFUSING to seed a non-staging Supabase project (${URL_}).`);
+  console.error(`seed: only the staging project (${STAGING_REF}) is allowed; set E2E_SEED_ALLOW_HOST to extend.`);
   process.exit(1);
 }
 

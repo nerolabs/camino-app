@@ -63,6 +63,11 @@ jobs:
           xcrun simctl install "$UDID" "$APP_PATH"
 
       - name: Install Maestro
+        # Pinned (2026-07-05 testing audit): unpinned "latest" made runs non-reproducible run
+        # to run. 2.6.1 is the version the green run #7 used. The deep-link flow stays excluded
+        # regardless — Maestro #2610 (openLink flake on CI since 1.40) is closed-stale, not fixed.
+        env:
+          MAESTRO_VERSION: 2.6.1
         run: |
           curl -fsSL "https://get.maestro.mobile.dev" | bash
           echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"

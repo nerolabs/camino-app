@@ -23,6 +23,7 @@ const SECTIONS: Section[] = [
   {
     h: 'Just shipped',
     items: [
+      { title: 'The tests got a fresh-eyes audit', date: '5 Jul 2026', note: 'Before translating anything, every safety net was re-checked against reality: ten critical user journeys got honest coverage verdicts, the interview proved it already understands Spanish answers, and every email and the printable report are now snapshot-frozen so a translation can\'t quietly break them.' },
       { title: 'A safer name: Get Camino', date: '4 Jul 2026', note: 'The app and site now go by Get Camino — a distinctive compound matching the domain we already own, chosen deliberately before any brand spend on a crowded word.' },
       { title: 'Voice that takes turns', date: '4 Jul 2026', note: 'Opening the mic stops Lola mid-sentence; closing it keeps your last words; the cue appears when the mic is actually hot; the answer box grows as you dictate; and no spinner is allowed to live past 35 seconds — Lola owns the retry.' },
       { title: 'The app tests itself now', date: '4 Jul 2026', note: 'Twelve automated web journeys — including signing in and reworking a real roadmap — plus iOS simulator flows on every release train. The first run caught a bug on every page load that humans had scrolled straight past.' },
