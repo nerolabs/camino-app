@@ -505,6 +505,18 @@ const ROWS: Row[] = [
     ],
   },
   {
+    feature: 'Hablamos español',
+    date: '5 Jul 2026',
+    work: 'In one day, the whole product learned Spanish: Lola interviews in warm, informal Spanish; all sixty roadmap steps and their sixty written guides read natively; dates, emails, and the printable roadmap follow your language; the legal pages carry a faithful courtesy translation; and the sample roadmap belongs to Susana y Tomás. English users see a byte-identical product — proven by frozen snapshots that didn\'t change.',
+    decisions: [
+      'Tú, not usted — the user chose warmth, and Lola\'s Spanish is instructed to match, never formal.',
+      'The engine never learned what a language is: which steps you get, their order, and every date are identical in every language — frozen plan snapshots prove it.',
+      'Every legal number survives translation mechanically: the €28,800 threshold, form EX-15, the 90-day validity window — a lint fails the build if any translation changes a digit.',
+      'Names belong to languages: each locale meets a sample couple with names native to it, and the brand "Get Camino" and "Lola" stay exactly themselves everywhere.',
+      'Ship at 95% and verify in production: the Spanish is machine-drafted and mechanically linted, with a native-speaker pass running against the live site — corrections land as reviewable diffs.',
+    ],
+  },
+  {
     feature: 'The fresh-eyes testing audit',
     date: '5 Jul 2026',
     work: 'Before translating the app into Spanish, every layer of testing was audited with fresh eyes: the coverage map verified against what actually runs, ten critical user paths given honest verdicts, and last week\'s under-pressure scoping decisions re-examined. Three new safety nets landed: live tests proving the interview already understands Spanish answers, pixel-exact snapshots of every email and the printable report, and API checks that now run on every staging deploy.',

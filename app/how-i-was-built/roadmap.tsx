@@ -23,6 +23,7 @@ const SECTIONS: Section[] = [
   {
     h: 'Just shipped',
     items: [
+      { title: 'Hablamos español', date: '5 Jul 2026', note: 'The whole experience now ships in Spanish — Lola interviews in Spanish, all sixty steps and their guides read natively, emails and the printable roadmap follow your language, and the sample plan belongs to Susana y Tomás. A native-speaker verification pass is underway; four automatic checks already guarantee no translation can change a number or the names "Get Camino" and "Lola".' },
       { title: 'The tests got a fresh-eyes audit', date: '5 Jul 2026', note: 'Before translating anything, every safety net was re-checked against reality: ten critical user journeys got honest coverage verdicts, the interview proved it already understands Spanish answers, and every email and the printable report are now snapshot-frozen so a translation can\'t quietly break them.' },
       { title: 'A safer name: Get Camino', date: '4 Jul 2026', note: 'The app and site now go by Get Camino — a distinctive compound matching the domain we already own, chosen deliberately before any brand spend on a crowded word.' },
       { title: 'Voice that takes turns', date: '4 Jul 2026', note: 'Opening the mic stops Lola mid-sentence; closing it keeps your last words; the cue appears when the mic is actually hot; the answer box grows as you dictate; and no spinner is allowed to live past 35 seconds — Lola owns the retry.' },
@@ -48,7 +49,7 @@ const SECTIONS: Section[] = [
   {
     h: 'In progress',
     items: [
-      { title: 'Hablamos español', note: 'A moving-to-Spain product should speak Spanish. The whole experience — Lola included — ships in Spanish before launch, verified by a native-speaking human, with the same rule the catalog lives by: a translation may never change a number.' },
+      { title: 'The Spanish gets its human pass', note: 'Machine-drafted, mechanically linted — and now verified by a native speaker, sentence by sentence, before launch. Corrections land as reviewable diffs against frozen snapshots.' },
       { title: 'Family testing & edge-case cleanup', note: 'Real relatives, real phones, real bug reports — the app earns its release the honest way.' },
     ],
   },

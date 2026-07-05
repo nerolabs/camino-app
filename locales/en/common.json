@@ -41,6 +41,9 @@
     }
   },
   "backToTop": "Back to top",
+  "legal": {
+    "lastUpdated": "Last updated: {{date}}"
+  },
   "footer": {
     "note": "Guidance only — not legal or tax advice.",
     "privacy": "Privacy",

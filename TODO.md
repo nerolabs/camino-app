@@ -104,8 +104,13 @@ the regression harness in place. Strategy + rationale: docs/TEST-COVERAGE.md §4
      words; welcome/weekly routes resolve user_metadata.lang; PDF export follows the app
      language. Pure JSON tables (no i18next server-side); en output snapshot-pinned
      byte-identical; 4 new es snapshots. 108 tests.
-   - [ ] **Legal-ES** drafts (privacy/terms/aviso with "English prevails" clause).
-   - [ ] **[USER] Cristina verification pass** over everything above — the human gate.
+   - ✅ **L1f legal-ES** (2026-07-05): per-page EN/ES content in privacy/terms/aviso-legal,
+     selected by app language; every es version carries the "Idioma" section (English
+     prevails). Address/entity figures verbatim. Professional legal review stays on the
+     pre-launch list (TODO 16).
+   - [ ] **[USER] Cristina verification pass** over the LIVE production es surface — the
+     human gate (user decision 2026-07-05: shipped at ~95% to production pre-release;
+     corrections iterate against the frozen snapshots + lint gates).
 6. **L2 — web SEO tree (~1 day):** /es routes via app/[locale], hreflang + x-default,
    sitemap expansion, JSON-LD inLanguage. Ships right behind L1.
 7. **L3 — FR/DE/IT (~0.5–1 day each + verification):** fast-follow; may land after store

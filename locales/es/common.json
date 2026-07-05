@@ -23,6 +23,9 @@
     "current": "Idioma · {{name}}"
   },
   "backToTop": "Volver arriba",
+  "legal": {
+    "lastUpdated": "Última actualización: {{date}}"
+  },
   "home": {
     "eyebrow": "Mudarse a España",
     "headline": "Tu hoja de ruta personalizada para mudarte a España.",

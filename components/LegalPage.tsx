@@ -1,25 +1,31 @@
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Seo from '@/components/Seo';
 import { palette } from '@/constants/Colors';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 
 // Shared frame for the legal pages (privacy / terms / aviso legal): same brand, plain
-// language, one obvious "last updated" date. Content is data so the pages stay skimmable.
+// language, one obvious "last updated" date. Content is data so the pages stay skimmable —
+// each page holds an EN and an ES version and selects by the app language (L1); the es
+// versions carry an explicit "English prevails" clause (user decision, LOCALIZATION.md §10).
 
 export type LegalSection = { h?: string; body: string[] };
+export type LegalContent = { title: string; updated: string; intro?: string; sections: LegalSection[] };
 
-export default function LegalPage({ title, metaTitle, description, canonical, updated, intro, sections }: {
-  title: string; metaTitle: string; description: string; canonical: string;
-  updated: string; intro?: string; sections: LegalSection[];
+export default function LegalPage({ metaTitle, description, canonical, en, es }: {
+  metaTitle: string; description: string; canonical: string;
+  en: LegalContent; es: LegalContent;
 }) {
+  const { t, i18n } = useTranslation();
+  const { title, updated, intro, sections } = i18n.language === 'es' ? es : en;
   return (
     <ScrollView style={styles.scroll}>
       <Seo title={metaTitle} description={description} canonical={canonical} />
       <NavBar />
       <View style={styles.content}>
         <Text style={styles.title} accessibilityRole="header">{title}</Text>
-        <Text style={styles.updated}>Last updated: {updated}</Text>
+        <Text style={styles.updated}>{t('legal.lastUpdated', { date: updated })}</Text>
         {intro && <Text style={styles.intro}>{intro}</Text>}
         {sections.map((s, i) => (
           <View key={i} style={styles.section}>
