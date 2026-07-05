@@ -9,7 +9,30 @@ Last updated: 2026-07-05.
 
 ---
 
-## ⭐ RESUME HERE (2026-07-05 — E2E gate essentially done; NEXT = localization, gated on tests)
+## ⭐ RESUME HERE (2026-07-05 — FIRST TASK: fresh-eyes testing audit, then localization)
+
+**⚠️ The user's explicit first task for this session: a FRESH-EYES AUDIT of all testing (E2E,
+unit, integration, build-pipeline critical-path coverage, and native) — mandate, method,
+critical paths, decisions-to-challenge, and deliverables are in `docs/AUDIT-BRIEF-TESTING.md`.
+Read that brief FIRST. Its output feeds the localization hard gate below; localization (Phase 2)
+starts only after.**
+
+**Session digest (2026-07-04→05, the marathon):** backlog audited twice (TODO "SEQUENCED BACKLOG
+v2" is canonical) · source-link QA 55/55 (2 fixed) · rebrand **Get Camino** (~100 strings, ASC
+name fits 30 chars) · @getcamino.app mailboxes (feedback@/privacy@/legal@) · operator finalized
+**AELaboratories, Inc, Sanford NC** (entity gate LIFTED — sole prop until revenue; NC governing
+law) · API volume-limiting shipped+verified (durable Supabase counters, strict CORS, provider
+caps) · a11y focus ring · family-testing rounds 4–5 fixed (voice turn-taking, clipping both ends,
+composer growth, eternal-loading redirect, 35s spinner TTL + Sentry slow-turn alarm) · builds
+27–29 (29 on device: TTS/mic "finally working correctly") · E2E built: 12-test authed Playwright
+suite (per-deploy gate in deploy.sh — caught a real seed-ordering bug on first run) + Maestro
+native (9 CI runs → lessons: Xcode 26 needed, driver timeout, text-entry race, deep-link #2610
+excluded, Q2-LLM-wait trimmed) · two-tier policy (web per-deploy / native big-builds-only) ·
+44→82 vitest tests incl. the plan-structure snapshot (localization guard) · localization design
+APPROVED (docs/LOCALIZATION.md; es pre-launch, tú, Cristina verifies, visible switcher) · Android
+promoted to launch platform (personal Play acct → 12-tester×14d closed test) · store-badge stub +
+back-to-top shipped · homework pages + essay revised · docs: BUILD.md (pipeline+gate),
+TEST-COVERAGE.md (living map), AUDIT-BRIEF-TESTING.md (next session's mandate).
 
 **Where we are:** the E2E gate (Phase 1) is basically closed and the deep testing investment for
 localization is in place. **The morning's job is Phase 2 — Localization — but it has a HARD
