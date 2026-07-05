@@ -18,5 +18,8 @@ This is the Expo app. Two files give you the full picture — read both before w
   stay honest — `app/how-i-was-built/log.tsx` (add a row for what shipped and the key
   decisions) and `app/how-i-was-built/roadmap.tsx` (move items between Just shipped /
   In progress / Next; bump the `UPDATED` date). Source of truth: TODO.md's roadmap.
+- **When you add or remove a test:** update `docs/TEST-COVERAGE.md` in the same change —
+  it's the living map of what's covered (unit/integration + web & mobile E2E user flows).
+  Every bug that reaches a person earns a regression test in the layer that owns it.
 
 @AGENTS.md
