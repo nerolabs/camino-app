@@ -4,9 +4,7 @@
 added or removed. Forward-looking ideas (tests we *want*) live in `docs/BUILD.md` → "Growing E2E
 coverage"; this file is the honest picture of **current** coverage.
 
-Last updated: 2026-07-05 (fresh-eyes testing audit: map verified against reality, per-file
-counts corrected, localization-gate tests landed — 86 passing vitest tests + 10 opt-in network;
-critical-path verdicts in §5).
+Last updated: 2026-07-05 evening (L0–L3 localization day: five languages shipped — en/es/fr/de/it — 146 passing vitest tests + 10 opt-in network; per-locale gates iterate core/i18n/registry.ts; critical-path verdicts in §5).
 
 Layers, and when they run:
 - **Unit / integration** (vitest, `tests/`) — deterministic, offline. Runs in `deploy.sh` and CI
@@ -19,7 +17,7 @@ Layers, and when they run:
 
 ---
 
-## 1. Unit / integration (vitest) — 108 passing (+10 opt-in network)
+## 1. Unit / integration (vitest) — 146 passing (+10 opt-in network)
 
 Concentrated on the deterministic core (that's the product's real risk surface):
 
@@ -43,9 +41,9 @@ Concentrated on the deterministic core (that's the product's real risk surface):
 | **Render snapshots (localization guard)** | `render-snapshot.test.ts` (8) | full-HTML snapshots of all 3 emails (`welcomeEmail`/`roundupEmail`/`nudgeEmail`, fixed digest + URLs) and the printable report (`reportHtml`, one of every timing state, frozen clock) — in BOTH languages since L1. The en snapshots passed unchanged through the lang-param refactor = byte-identical output for existing users |
 | **es digest (L1)** | in `email-digest.test.ts` (1 of 7) | `buildDigest(…, 'es')` selects the SAME items (selection is locale-free) with Spanish titles, when-labels ("vencía el …"), and tips |
 | **The 4 i18n lint gates (L0)** | `i18n-lint.test.ts` (1 + 4×per-locale) | scans `locales/<lang>/*.json` from disk — adding a locale directory enrolls it automatically (es enrolled at L1). en self-check (no empty strings, well-formed `{{placeholders}}`); per non-English locale: *completeness* (exact en key set), *digit-lint* (translation never changes a number — invariant 3), *placeholder-lint* (`{{var}}` parity), *brand-lint* ("Get Camino"/"Lola" verbatim) |
-| **es catalog titles (L1)** | `catalog-titles.test.ts` (4) | the 60 obligation titles in Spanish (`core/i18n/es/catalog.ts`): completeness over the full CATALOG (obligation #61 fails until every locale follows), digit-lint on the legal content, substantive-length check, `displayTitle` resolution + English fallback |
+| **Per-locale catalog titles (L1/L3)** | `catalog-titles.test.ts` (4×locale) | the 60 obligation titles in Spanish (`core/i18n/es/catalog.ts`): completeness over the full CATALOG (obligation #61 fails until every locale follows), digit-lint on the legal content, substantive-length check, `displayTitle` resolution + English fallback |
 | **es display formatters (L1)** | in `plan-format.test.ts` (2 of 10) | `changeLanguage('es')` → phase labels, completion narration ("3 días tarde"), and dates ("Vence el …") render in Spanish; en unchanged after a language round-trip |
-| **es guide prose + guide helpers (L1)** | `guide-prose-es.test.ts` (6) | the 60 es explainers: completeness / digit-lint (⊆ es title digits — invariant 3 per locale) / substantive + brand parity with the English twin; `describeTimingLocalized(en)` pinned byte-identical to core `describeTiming` for all 60 (core stays i18n-free — server code imports it); category labels/tips en-parity; es timing sentences render Spanish |
+| **Per-locale guide prose + helpers (L1/L3)** | `guide-prose-locales.test.ts` (3×locale + 4) | the 60 es explainers: completeness / digit-lint (⊆ es title digits — invariant 3 per locale) / substantive + brand parity with the English twin; `describeTimingLocalized(en)` pinned byte-identical to core `describeTiming` for all 60 (core stays i18n-free — server code imports it); category labels/tips en-parity; es timing sentences render Spanish |
 
 **Infra:** `tests/stubs/react-native.ts` + `@`/`react-native` aliases in `vitest.config.ts` let
 the display layer (formatters, hints — the surfaces localization touches most) be unit-tested.

@@ -505,6 +505,17 @@ const ROWS: Row[] = [
     ],
   },
   {
+    feature: 'Y luego, cuatro idiomas más: the web speaks five languages',
+    date: '5 Jul 2026',
+    work: 'The same afternoon Spanish shipped, the plumbing proved itself: French, German, and Italian followed — each with the full interview, all sixty step titles and sixty guide explainers, emails, and the printable roadmap. The web grew real per-language pages that search engines can find, every page telling crawlers about its four siblings. And a user question exposed a real gap, fixed the same hour: your language now follows you from the browser into your inbox, so the weekly email never speaks the wrong language.',
+    decisions: [
+      'One registry, every guardrail: a new language enrolls in all the automatic checks at once — number-preservation, completeness, brand names — or it can\'t ship at all.',
+      'The deploy gate earned its keep: a routing change quietly broke every single-segment page on staging, the automated post-deploy tests caught it, and production was never exposed.',
+      'German taught the brand rule a lesson: compound words like "Get-Camino-Roadmap" are natural German and still not allowed — the brand check caught them, and the sentences were rewritten around the name.',
+      'Legal stays honest per language: Spanish has a reviewed courtesy translation; the newer languages say plainly, in their own words, that the legal pages are in English.',
+    ],
+  },
+  {
     feature: 'Hablamos español',
     date: '5 Jul 2026',
     work: 'In one day, the whole product learned Spanish: Lola interviews in warm, informal Spanish; all sixty roadmap steps and their sixty written guides read natively; dates, emails, and the printable roadmap follow your language; the legal pages carry a faithful courtesy translation; and the sample roadmap belongs to Susana y Tomás. English users see a byte-identical product — proven by frozen snapshots that didn\'t change.',

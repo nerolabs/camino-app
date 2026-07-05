@@ -23,7 +23,7 @@ const SECTIONS: Section[] = [
   {
     h: 'Just shipped',
     items: [
-      { title: 'Hablamos español', date: '5 Jul 2026', note: 'The whole experience now ships in Spanish — Lola interviews in Spanish, all sixty steps and their guides read natively, emails and the printable roadmap follow your language, and the sample plan belongs to Susana y Tomás. A native-speaker verification pass is underway; four automatic checks already guarantee no translation can change a number or the names "Get Camino" and "Lola".' },
+      { title: 'Cinco idiomas en un día', date: '5 Jul 2026', note: 'The whole experience now ships in five languages — English, Español, Français, Deutsch, Italiano. Lola interviews in yours, all sixty steps and guides read natively, emails and the printable roadmap follow your language, and each language meets its own sample couple. The web has real per-language pages for search engines, and your language choice follows you from browser to inbox.' },
       { title: 'The tests got a fresh-eyes audit', date: '5 Jul 2026', note: 'Before translating anything, every safety net was re-checked against reality: ten critical user journeys got honest coverage verdicts, the interview proved it already understands Spanish answers, and every email and the printable report are now snapshot-frozen so a translation can\'t quietly break them.' },
       { title: 'A safer name: Get Camino', date: '4 Jul 2026', note: 'The app and site now go by Get Camino — a distinctive compound matching the domain we already own, chosen deliberately before any brand spend on a crowded word.' },
       { title: 'Voice that takes turns', date: '4 Jul 2026', note: 'Opening the mic stops Lola mid-sentence; closing it keeps your last words; the cue appears when the mic is actually hot; the answer box grows as you dictate; and no spinner is allowed to live past 35 seconds — Lola owns the retry.' },
@@ -49,15 +49,14 @@ const SECTIONS: Section[] = [
   {
     h: 'In progress',
     items: [
-      { title: 'The Spanish gets its human pass', note: 'Machine-drafted, mechanically linted — and now verified by a native speaker, sentence by sentence, before launch. Corrections land as reviewable diffs against frozen snapshots.' },
+      { title: 'The languages get their human pass', note: 'Machine-drafted, mechanically linted — and now verified by native speakers, sentence by sentence, before launch. Corrections land as reviewable diffs against frozen snapshots.' },
       { title: 'Family testing & edge-case cleanup', note: 'Real relatives, real phones, real bug reports — the app earns its release the honest way.' },
     ],
   },
   {
     h: 'Next',
     items: [
-      { title: 'The public launch — web, iOS, and Android together', note: 'Android moved up from "later": launching on all three. What remains is honest: Spanish, more family testing, and the grown-up paperwork.' },
-      { title: 'French, German, Italian', note: 'Right behind Spanish — the plumbing makes each new language a translation exercise, not an engineering project.' },
+      { title: 'The public launch — web, iOS, and Android together', note: 'Android moved up from "later": launching on all three. What remains is honest: native-speaker verification of the new languages, more family testing, and the grown-up paperwork.' },
       { title: 'Region-by-region specifics', note: 'The rates and windows for each comunidad, verified against each region\'s own official sources — the content pass behind the region flags.' },
     ],
   },

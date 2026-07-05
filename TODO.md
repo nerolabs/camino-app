@@ -111,8 +111,22 @@ the regression harness in place. Strategy + rationale: docs/TEST-COVERAGE.md §4
    - [ ] **[USER] Cristina verification pass** over the LIVE production es surface — the
      human gate (user decision 2026-07-05: shipped at ~95% to production pre-release;
      corrections iterate against the frozen snapshots + lint gates).
-6. **L2 — web SEO tree (~1 day):** /es routes via app/[locale], hreflang + x-default,
-   sitemap expansion, JSON-LD inLanguage. Ships right behind L1.
+6. ✅ **L2 — web SEO tree — DONE 2026-07-05** (live in production): static per-locale trees
+   (app/{es,fr,de,it} — NOT a dynamic [locale] segment: the routes manifest is first-match
+   ordered and a root dynamic segment swallowed /plan//interview//sitemap.xml; the post-deploy
+   E2E gate caught it on staging, production never exposed); hreflang en/es/fr/de/it +
+   x-default; per-variant canonicals; JSON-LD inLanguage; sitemap 334 URLs; route-locale
+   forcing in the root layout (SSG-verified by grep on the export).
+7. ✅ **L3 — FR/DE/IT — DONE 2026-07-05** (live in production): full content per language
+   (5 JSONs + 60 titles + 60 explainers each, tu/du registers; German brand compounds caught
+   by brand-lint and de-compounded); per-locale sample couples (Suzanne et Thomas, Susanne &
+   Thomas, Susanna e Tommaso); emails/report/digest in all five; switcher lists each language
+   in its own name. All gates iterate core/i18n/registry.ts — 146 tests.
+   **Language persistence** (user-spotted gap): SessionSync mirrors the app language into
+   auth user_metadata.lang on sign-in (and adopts the account language on fresh devices), so
+   the weekly cron + welcome email match a browser-detected language without touching the
+   switcher. **[USER/Cristina] verification passes over the live es/fr/de/it surfaces over
+   the coming days; corrections iterate against the lint gates + snapshots.**
 7. **L3 — FR/DE/IT (~0.5–1 day each + verification):** fast-follow; may land after store
    submission without blocking it.
 

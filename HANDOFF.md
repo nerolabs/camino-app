@@ -9,7 +9,23 @@ Last updated: 2026-07-05.
 
 ---
 
-## ⭐ RESUME HERE (2026-07-05 — testing audit DONE, localization gate CLEAR → next: L0)
+## ⭐ RESUME HERE (2026-07-05 EVENING — L0–L3 ALL SHIPPED: five languages LIVE in production)
+
+**The entire localization arc (L0→L3) shipped in one day and is LIVE at getcamino.app:**
+en/es/fr/de/it — chrome, interview (+static questions), 60 catalog titles ×4, 60 guide
+explainers ×4, emails/report/digest per language (user_metadata.lang; SessionSync mirrors
+browser-detected language into metadata — user-spotted gap, fixed), legal (es full courtesy
+translation, fr/de/it English + native notice), per-locale sample couples, per-locale web
+trees app/{es,fr,de,it} (STATIC dirs — a dynamic [locale] segment shadowed every
+single-segment route incl. /sitemap.xml; the post-deploy gate caught it, production never
+exposed), hreflang ×5 + x-default, sitemap 334 URLs. 146 vitest tests (+10 opt-in); all
+per-locale gates iterate core/i18n/registry.ts (add a language there or it can't ship).
+**NEXT:** (a) Cristina/native passes over live es/fr/de/it (days, user-side; corrections =
+data edits, gates re-verify); (b) iOS build 30 on user command — carries ALL languages;
+dispatch the e2e-ios workflow first (also confirms the flow-03 trim); (c) route-handler
+integration tests (welcome-once dedupe) from the audit's gap list.
+
+## Earlier that morning (2026-07-05 — testing audit DONE, localization gate CLEAR → then: L0)
 
 **The fresh-eyes testing audit ran 2026-07-05 morning and is COMPLETE** (mandate was
 `docs/AUDIT-BRIEF-TESTING.md`; all 5 deliverables in `docs/TEST-COVERAGE.md` — critical-path
