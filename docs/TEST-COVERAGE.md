@@ -4,7 +4,7 @@
 added or removed. Forward-looking ideas (tests we *want*) live in `docs/BUILD.md` → "Growing E2E
 coverage"; this file is the honest picture of **current** coverage.
 
-Last updated: 2026-07-05.
+Last updated: 2026-07-05 (deepened for the localization push — 44 → 82 passing vitest tests).
 
 Layers, and when they run:
 - **Unit / integration** (vitest, `tests/`) — deterministic, offline. Runs in `deploy.sh` and CI
@@ -17,7 +17,7 @@ Layers, and when they run:
 
 ---
 
-## 1. Unit / integration (vitest) — 51 tests
+## 1. Unit / integration (vitest) — 82 passing (+7 opt-in network)
 
 Concentrated on the deterministic core (that's the product's real risk surface):
 
@@ -31,12 +31,22 @@ Concentrated on the deterministic core (that's the product's real risk surface):
 | **Guide prose** | `guide-prose.test.ts` (3) | covers every obligation & nothing else; substantive (no stubs); **digit-lint** (never introduces a number the title lacks — invariant 3) |
 | **Date normalization** | `date-input.test.ts` (7) | strict ISO; "2026-April-25"; Spanish months; unambiguous numerics only; today/hoy; rejects junk; preview label |
 | **API contract** (opt-in, hits staging) | `api.contract.test.ts` (7) | /api/lola 400/413/role validation; /api/tts 400/413 + GET audio happy path |
+| **Plan structure = frozen (localization guard)** | `plan-snapshot.test.ts` (10) | every persona's plan snapshotted as `id\|phase\|severity\|timing-state` (clock frozen) — the engine takes NO locale, so this proves localization surgery never changes WHICH steps / order / timing; + no-dupes/non-empty |
+| **Abuse guards** | `api-guard.test.ts` (7) | `isAllowedOrigin` (own origins, per-deploy `camino--*`, localhost, foreign & look-alike rejects, referer); `corsPreflight` grants allowed / denies foreign / no-origin |
+| **Email origin** | `server-email.test.ts` (3) | `siteOrigin` is the canonical host per env, never derived from request.url (the leak it exists to prevent) |
+| **Region layer** | `regions.test.ts` (5) | `regionLabel` known/`not_sure`/unknown/non-string; slugs are stable kebab; 17+2 comunidades |
+| **Sample plan validity** | `sample-profile.test.ts` (3) | only sets real slot fields; arrival floats to the future; rich plan with the right signature steps (nie/scout/720/citizenship) and the right absences (no empadronamiento without an address) |
+| **Display formatters** (via RN stub) | `plan-format.test.ts` (8) | `plansDiffer` honesty gate (no-op false; add/remove/date-shift true); `diffSummary` narration; `completionLine` on-time/late/early; phase & severity label completeness |
+| **Change hints** | `plan-coach.test.ts` (2) | `changeHint` per category + generic fallback |
 
-**Not yet unit-tested (known gaps):** `lib/apiGuard.ts` (rate-limit counters, `isAllowedOrigin`,
-`corsPreflight` — only live-burst-verified); `lib/plan-format.ts` (`formatTiming` etc.);
-`lib/serverEmail.ts` (`siteOrigin` per-env); `lib/plan-coach.ts` (`changeHint`); `core/regions.ts`
-(`regionLabel`); the API route *handlers* beyond lola/tts (feedback, account-delete, welcome,
-weekly, unsubscribe). Most are pure functions that would be cheap to cover — good next targets.
+**Infra:** `tests/stubs/react-native.ts` + `@`/`react-native` aliases in `vitest.config.ts` let
+the display layer (formatters, hints — the surfaces localization touches most) be unit-tested.
+
+**Still not unit-tested (known gaps, ranked):** the **API route handlers** beyond lola/tts
+(`feedback`, `account/delete`, `email/welcome`, `email/weekly`, `email/unsubscribe`) — these do
+real auth + DB work, best covered by focused integration tests or extending the opt-in contract
+suite; `lib/emailTemplates.ts` HTML rendering (localization target — worth a render-snapshot);
+`lib/analytics.ts` / `lib/monitoring.ts` (thin wrappers, low risk). See the strategy below.
 
 ---
 
@@ -91,7 +101,55 @@ navigates, and drives the interview with a real LLM turn (the web suite covers t
 
 ---
 
-## 4. How to keep this honest
+## 4. Strategy — deepening coverage before localization
+
+The core product is ~95% done; the next big surgery is **localization** (extract every UI string
+into per-locale catalogs, wrap components, add `/es` routing). That's exactly the kind of broad,
+mechanical change that silently breaks things — so the investment now is a **regression harness we
+can refactor against fearlessly**. Sequenced:
+
+### A. Localization-hardening (the priority — land BEFORE L0)
+1. ✅ **Engine structural snapshot** (`plan-snapshot.test.ts`) — done. The engine is locale-free;
+   this proves it stays that way.
+2. **Interview extraction is language-agnostic** (opt-in network test): Spanish input →
+   correct English slug (`"Somos estadounidenses"` → `nationalities: ["US"]`;
+   `"trabajo en remoto para una empresa de EE. UU."` → `employed_remote`). Proves the interview
+   already works in Spanish *before* we localize, and can't regress. Add to `api.contract.test.ts`.
+3. **Catalog/guide title completeness per locale** — once catalogs exist: a runtime test that
+   every obligation id has a title (and prose) in every shipped locale (belt-and-suspenders to the
+   tsc `Record<ObligationId,…>` type). 
+4. **The four i18n lint gates** (design in `docs/LOCALIZATION.md`) as vitest, wired at L0:
+   *completeness* (no missing keys), *digit-lint per locale* (a translation never changes a
+   number — invariant 3), *placeholder-lint* (`{{var}}` parity), *brand-lint* ("Get Camino"/"Lola"
+   verbatim). These are the mechanical guardrails that make L1/L3 fill-in-the-blanks.
+5. **Email/report render snapshots** — `emailTemplates` + `reportHtml` → HTML snapshot per locale,
+   so a translation can't break the markup or drop a section.
+
+### B. Web (Playwright) — grow the deployed-env flows (each costs a few live LLM calls)
+6. **Full interview → roadmap** (currently only "interview starts"): drive typed answers through
+   to a generated roadmap with expected signature steps. The highest-value uncovered journey.
+7. **Real re-model** (we have the no-op): open a step → "we had a baby" → a school step appears +
+   "remodelled" is honestly shown.
+8. **Region-aware**: choose a comunidad → the regional note names it on the roadmap.
+9. **PDF export** doesn't error; the report opens.
+10. **A guide page** renders its official-source link + interview CTA; **per-locale smoke** (home +
+    interview in `es`) once L2 ships.
+
+### C. Mobile (Maestro) — incremental, respecting the flakiness
+Mobile CI is irreducibly flaky (cold-boot, LLM latency) — so **keep flows short and deterministic,
+add one at a time, and prove each is reliable (2 green) before adding the next.** Candidates, in
+order of signal-per-flakiness: **PDF export** (native share sheet), **voice toggle**, **This-week
+toggle** on a seeded plan. Authed-dependent native flows wait for Maestro #2610. The gate stays
+retry-tolerant and big-builds-only.
+
+### D. Fill the remaining unit gaps (cheap, deterministic, every-push)
+The API route handlers (feedback/account/email) via focused integration tests; `emailTemplates`
+render snapshots (doubles as A5). Do these opportunistically — they're not localization-blocking.
+
+**Operating rule:** every bug that reaches a person earns a regression test in the owning layer,
+added in the same fix. The suites are meant to grow.
+
+## 5. How to keep this honest
 
 - **Add a row here in the same PR** that adds/removes a test — this file should never lag the suite.
 - When a bug reaches a person, add its regression test to the owning layer and note it here.

@@ -1,0 +1,235 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`plan structure is frozen (localization must not change engine behavior) > Andrew — US family, dual-ES household — structural fingerprint 1`] = `
+[
+  "modelo-100 | ongoing | penalty | recurring",
+  "modelo-720 | ongoing | penalty | recurring",
+  "wealth-tax | ongoing | penalty | recurring",
+  "dgt-exam | when_settled | required | scheduled",
+  "empadronamiento | first_weeks | required | scheduled",
+  "escolarizacion | first_weeks | required | scheduled",
+  "eu-registration-certificate | first_weeks | required | scheduled",
+  "tarjeta-sanitaria | first_weeks | required | scheduled",
+  "digital-certificate | when_settled | recommended | pending_anchor",
+  "exit-tax-return | before_you_go | recommended | scheduled",
+  "modelo-030 | first_weeks | recommended | scheduled",
+  "tax-planning-consultation | before_you_go | recommended | scheduled",
+]
+`;
+
+exports[`plan structure is frozen (localization must not change engine behavior) > Elena — Canadian with unmarried partner — structural fingerprint 1`] = `
+[
+  "modelo-720 | ongoing | penalty | recurring",
+  "choose-visa-type | before_you_go | required | scheduled",
+  "apostille-documents | before_you_go | required | scheduled",
+  "consulate-appointment | before_you_go | required | scheduled",
+  "criminal-background-check | before_you_go | required | scheduled",
+  "empadronamiento | first_weeks | required | scheduled",
+  "medical-certificate | before_you_go | required | scheduled",
+  "nie | first_weeks | required | scheduled",
+  "nlv-health-insurance | before_you_go | required | scheduled",
+  "nlv-income-proof | before_you_go | required | scheduled",
+  "nlv-letter-of-intent | before_you_go | required | scheduled",
+  "residencia | first_weeks | required | scheduled",
+  "modelo-100 | ongoing | penalty | recurring",
+  "ccse-exam | when_settled | required | scheduled",
+  "dele-a2-exam | when_settled | required | scheduled",
+  "nlv-renewal | when_settled | required | scheduled",
+  "sworn-translation | before_you_go | required | scheduled",
+  "convenio-especial | when_settled | recommended | scheduled",
+  "digital-certificate | first_weeks | recommended | scheduled",
+  "exit-tax-return | before_you_go | recommended | scheduled",
+  "modelo-030 | first_weeks | recommended | scheduled",
+  "permanent-residence | when_settled | recommended | scheduled",
+  "spanish-bank-account | first_weeks | recommended | scheduled",
+  "tax-planning-consultation | before_you_go | recommended | scheduled",
+  "citizenship-track-standard | when_settled | info | scheduled",
+  "citizenship-application | when_settled | required | scheduled",
+  "citizenship-jura | when_settled | required | scheduled",
+]
+`;
+
+exports[`plan structure is frozen (localization must not change engine behavior) > James — UK retiree, renewal-only — structural fingerprint 1`] = `
+[
+  "modelo-720 | ongoing | penalty | recurring",
+  "choose-visa-type | before_you_go | required | scheduled",
+  "apostille-documents | before_you_go | required | scheduled",
+  "consulate-appointment | before_you_go | required | scheduled",
+  "criminal-background-check | before_you_go | required | scheduled",
+  "medical-certificate | before_you_go | required | scheduled",
+  "nie | first_weeks | required | scheduled",
+  "nlv-health-insurance | before_you_go | required | scheduled",
+  "nlv-income-proof | before_you_go | required | scheduled",
+  "nlv-letter-of-intent | before_you_go | required | scheduled",
+  "residencia | first_weeks | required | scheduled",
+  "modelo-100 | ongoing | penalty | recurring",
+  "dgt-exchange | when_settled | required | scheduled",
+  "family-reunification | when_settled | required | scheduled",
+  "nlv-renewal | when_settled | required | scheduled",
+  "sworn-translation | before_you_go | required | scheduled",
+  "convenio-especial | when_settled | recommended | scheduled",
+  "digital-certificate | first_weeks | recommended | scheduled",
+  "exit-tax-return | before_you_go | recommended | scheduled",
+  "modelo-030 | when_settled | recommended | pending_anchor",
+  "permanent-residence | when_settled | recommended | scheduled",
+  "spanish-bank-account | first_weeks | recommended | scheduled",
+  "tax-planning-consultation | before_you_go | recommended | scheduled",
+]
+`;
+
+exports[`plan structure is frozen (localization must not change engine behavior) > Kenji — Japanese freelancer, property buyer — structural fingerprint 1`] = `
+[
+  "modelo-720 | ongoing | penalty | recurring",
+  "choose-visa-type | before_you_go | required | scheduled",
+  "apostille-documents | before_you_go | required | scheduled",
+  "consulate-appointment | before_you_go | required | scheduled",
+  "criminal-background-check | before_you_go | required | scheduled",
+  "dnv-company-activity-proof | before_you_go | required | scheduled",
+  "dnv-income-proof | before_you_go | required | scheduled",
+  "dnv-qualification-proof | before_you_go | required | scheduled",
+  "dnv-remote-work-proof | before_you_go | required | scheduled",
+  "empadronamiento | first_weeks | required | scheduled",
+  "medical-certificate | before_you_go | required | scheduled",
+  "nie | first_weeks | required | scheduled",
+  "pet-import | before_you_go | required | scheduled",
+  "residencia | first_weeks | required | scheduled",
+  "modelo-100 | ongoing | penalty | recurring",
+  "dgt-exchange | when_settled | required | scheduled",
+  "dnv-renewal | when_settled | required | scheduled",
+  "register-autonomo | when_settled | required | scheduled",
+  "autonomo-social-security | ongoing | penalty | recurring",
+  "modelo-130 | ongoing | penalty | recurring",
+  "modelo-303 | ongoing | penalty | recurring",
+  "modelo-390 | ongoing | penalty | recurring",
+  "sworn-translation | before_you_go | required | scheduled",
+  "tarjeta-sanitaria | first_weeks | required | scheduled",
+  "digital-certificate | first_weeks | recommended | scheduled",
+  "exit-tax-return | before_you_go | recommended | scheduled",
+  "modelo-030 | first_weeks | recommended | scheduled",
+  "permanent-residence | when_settled | recommended | scheduled",
+  "property-legal-due-diligence | first_weeks | recommended | scheduled",
+  "completion-deed-notary | first_weeks | required | scheduled",
+  "ibi-property-tax | ongoing | penalty | recurring",
+  "property-transfer-tax | first_weeks | penalty | scheduled",
+  "community-fees | ongoing | required | recurring",
+  "land-registry-registration | first_weeks | recommended | scheduled",
+  "spanish-bank-account | first_weeks | recommended | scheduled",
+  "tax-planning-consultation | before_you_go | recommended | scheduled",
+]
+`;
+
+exports[`plan structure is frozen (localization must not change engine behavior) > Mara — German remote worker, short stay — structural fingerprint 1`] = `
+[
+  "empadronamiento | first_weeks | required | scheduled",
+  "tarjeta-sanitaria | first_weeks | required | scheduled",
+]
+`;
+
+exports[`plan structure is frozen (localization must not change engine behavior) > Minimal — EU, fewest obligations — structural fingerprint 1`] = `
+[
+  "empadronamiento | first_weeks | required | scheduled",
+  "tarjeta-sanitaria | first_weeks | required | scheduled",
+]
+`;
+
+exports[`plan structure is frozen (localization must not change engine behavior) > Paolo — Filipino remote worker, DNV — structural fingerprint 1`] = `
+[
+  "choose-visa-type | before_you_go | required | scheduled",
+  "apostille-documents | before_you_go | required | scheduled",
+  "consulate-appointment | before_you_go | required | scheduled",
+  "criminal-background-check | before_you_go | required | scheduled",
+  "dnv-company-activity-proof | before_you_go | required | scheduled",
+  "dnv-coverage-certificate | before_you_go | required | scheduled",
+  "dnv-employer-permission-letter | before_you_go | required | scheduled",
+  "dnv-income-proof | before_you_go | required | scheduled",
+  "dnv-qualification-proof | before_you_go | required | scheduled",
+  "dnv-remote-work-proof | before_you_go | required | scheduled",
+  "empadronamiento | first_weeks | required | scheduled",
+  "medical-certificate | before_you_go | required | scheduled",
+  "nie | first_weeks | required | scheduled",
+  "residencia | first_weeks | required | scheduled",
+  "modelo-100 | ongoing | penalty | recurring",
+  "ccse-exam | when_settled | required | scheduled",
+  "dele-a2-exam | when_settled | required | scheduled",
+  "dnv-renewal | when_settled | required | scheduled",
+  "sworn-translation | before_you_go | required | scheduled",
+  "tarjeta-sanitaria | first_weeks | required | scheduled",
+  "beckham-law | when_settled | recommended | scheduled",
+  "digital-certificate | first_weeks | recommended | scheduled",
+  "exit-tax-return | before_you_go | recommended | scheduled",
+  "modelo-030 | first_weeks | recommended | scheduled",
+  "permanent-residence | when_settled | recommended | scheduled",
+  "spanish-bank-account | first_weeks | recommended | scheduled",
+  "tax-planning-consultation | before_you_go | recommended | scheduled",
+  "citizenship-track-latam | when_settled | info | scheduled",
+  "citizenship-application | when_settled | required | scheduled",
+  "citizenship-jura | when_settled | required | scheduled",
+]
+`;
+
+exports[`plan structure is frozen (localization must not change engine behavior) > Sofia — Colombian family, 2-year track, DELE-exempt — structural fingerprint 1`] = `
+[
+  "choose-visa-type | before_you_go | required | scheduled",
+  "apostille-documents | before_you_go | required | scheduled",
+  "consulate-appointment | before_you_go | required | scheduled",
+  "criminal-background-check | before_you_go | required | scheduled",
+  "empadronamiento | first_weeks | required | scheduled",
+  "escolarizacion | first_weeks | required | scheduled",
+  "medical-certificate | before_you_go | required | scheduled",
+  "nie | first_weeks | required | scheduled",
+  "nlv-health-insurance | before_you_go | required | scheduled",
+  "nlv-income-proof | before_you_go | required | scheduled",
+  "nlv-letter-of-intent | before_you_go | required | scheduled",
+  "residencia | first_weeks | required | scheduled",
+  "modelo-100 | ongoing | penalty | recurring",
+  "ccse-exam | when_settled | required | scheduled",
+  "dgt-exchange | when_settled | required | scheduled",
+  "family-reunification | when_settled | required | scheduled",
+  "nlv-renewal | when_settled | required | scheduled",
+  "sworn-translation | before_you_go | required | scheduled",
+  "convenio-especial | when_settled | recommended | scheduled",
+  "digital-certificate | first_weeks | recommended | scheduled",
+  "exit-tax-return | before_you_go | recommended | scheduled",
+  "modelo-030 | first_weeks | recommended | scheduled",
+  "permanent-residence | when_settled | recommended | scheduled",
+  "spanish-bank-account | first_weeks | recommended | scheduled",
+  "tax-planning-consultation | before_you_go | recommended | scheduled",
+  "citizenship-track-latam | when_settled | info | scheduled",
+  "citizenship-application | when_settled | required | scheduled",
+  "citizenship-jura | when_settled | required | scheduled",
+]
+`;
+
+exports[`plan structure is frozen (localization must not change engine behavior) > Susan — US retiree, NLV, aiming for citizenship — structural fingerprint 1`] = `
+[
+  "modelo-720 | ongoing | penalty | recurring",
+  "choose-visa-type | before_you_go | required | scheduled",
+  "apostille-documents | before_you_go | required | scheduled",
+  "consulate-appointment | before_you_go | required | scheduled",
+  "criminal-background-check | before_you_go | required | scheduled",
+  "medical-certificate | before_you_go | required | scheduled",
+  "nie | first_weeks | required | scheduled",
+  "nlv-health-insurance | before_you_go | required | scheduled",
+  "nlv-income-proof | before_you_go | required | scheduled",
+  "nlv-letter-of-intent | before_you_go | required | scheduled",
+  "residencia | first_weeks | required | scheduled",
+  "modelo-100 | ongoing | penalty | recurring",
+  "ccse-exam | when_settled | required | scheduled",
+  "dele-a2-exam | when_settled | required | scheduled",
+  "dgt-exam | when_settled | required | scheduled",
+  "family-reunification | when_settled | required | scheduled",
+  "nlv-renewal | when_settled | required | scheduled",
+  "sworn-translation | before_you_go | required | scheduled",
+  "convenio-especial | when_settled | recommended | scheduled",
+  "digital-certificate | first_weeks | recommended | scheduled",
+  "exit-tax-return | before_you_go | recommended | scheduled",
+  "modelo-030 | when_settled | recommended | pending_anchor",
+  "permanent-residence | when_settled | recommended | scheduled",
+  "scout-where-to-live | before_you_go | recommended | scheduled",
+  "spanish-bank-account | first_weeks | recommended | scheduled",
+  "tax-planning-consultation | before_you_go | recommended | scheduled",
+  "citizenship-track-standard | when_settled | info | scheduled",
+  "citizenship-application | when_settled | required | scheduled",
+  "citizenship-jura | when_settled | required | scheduled",
+]
+`;
