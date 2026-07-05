@@ -94,8 +94,12 @@ export default function NavBar() {
             {/* The payoff before the ask — for everyone (user request 2026-07-04: it used to
                 hide when signed in, which read as it vanishing). */}
             <MenuLink label={t('nav.menu.samplePlan')} onPress={() => go('/sample-plan')} />
-            {/* The build story went public 3 Jul 2026 (user decision) — essay, log, roadmap. */}
-            <MenuLink label={t('nav.menu.howIWasBuilt')} onPress={() => go('/how-i-was-built')} />
+            {/* The build story (essay/log/roadmap) is English-ONLY by decision — its audience is
+                the builder's English-speaking professional network. So the menu item is hidden in
+                the other languages rather than linking their readers to an English page. */}
+            {i18n.language === 'en' && (
+              <MenuLink label={t('nav.menu.howIWasBuilt')} onPress={() => go('/how-i-was-built')} />
+            )}
             <View style={styles.menuDivider} />
             {/* The switcher is a FEATURE, not a buried setting (user requirement, LOCALIZATION.md
                 §10): always visible, current language shown by its own name. */}

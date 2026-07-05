@@ -157,6 +157,27 @@ export default function InterviewScreen() {
     }
   }, [currentSlot, loading, started, done]);
 
+  // Switching language mid-interview (user finding 2026-07-05): the chrome re-renders via
+  // useTranslation, but the CURRENT question is a stored string, generated in the old language —
+  // so it looked stranded and users reloaded (losing progress). Re-issue just the active prompt
+  // in the new language, instantly and deterministically, via the translated static question.
+  // Past turns stay as-generated (you can't retranslate an LLM conversation; they scroll away).
+  // Guarded to fire ONLY on a real language change — never clobbers a freshly generated question.
+  const langRef = useRef(i18n.language);
+  useEffect(() => {
+    if (langRef.current === i18n.language) return;
+    langRef.current = i18n.language;
+    if (!started || done || loading || !currentSlot) return;
+    const q = staticQuestion(currentSlot.field);
+    if (!q) return;
+    setTurns(prev => {
+      if (!prev.length || prev[prev.length - 1].role !== 'lola') return prev; // not awaiting an answer
+      const copy = [...prev];
+      copy[copy.length - 1] = { role: 'lola', text: q };
+      return copy;
+    });
+  }, [i18n.language, started, done, loading, currentSlot]);
+
   function toggleMic() {
     if (dictation.listening) {
       dictation.stop();
