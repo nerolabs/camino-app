@@ -140,11 +140,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         shouldCreateUser: true, // "email me my roadmap" silently creates the account
         emailRedirectTo,
         // data is only applied to NEW users by Supabase, so an existing account's saved
-        // roadmap can never be clobbered from a signed-out screen. `lang` rides along so a
-        // capture-flow user who NEVER signs in still gets weekly emails in their app
-        // language (the weekly cron reads user_metadata.lang; without this, a Spanish
-        // visitor's roundups would arrive in English until their first sign-in).
-        ...(pendingProfile ? { data: { pending_profile: pendingProfile, lang: currentLang() } } : {}),
+        // roadmap can never be clobbered from a signed-out screen. `lang` ALWAYS rides along:
+        // the Supabase auth email templates read {{ .Data.lang }} to localize the sign-in
+        // code email (user-found bug 2026-07-05: Italian UI, English code email), and the
+        // weekly cron reads the same key. Existing users keep their stored lang (SessionSync
+        // mirrors it); new users get it from this request.
+        data: { lang: currentLang(), ...(pendingProfile ? { pending_profile: pendingProfile } : {}) },
       },
     });
     if (error) throw error;
