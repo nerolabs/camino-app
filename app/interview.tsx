@@ -14,6 +14,8 @@ import { saveProfile as saveProfileDb } from '@/core/profileDb';
 import { TEST_PERSONAS, type Persona } from '@/core/test-personas';
 import { askAnthropic } from '@/lib/lola';
 import { buildExtractionSystem, parseExtraction, type Extraction } from '@/lib/extractionPrompt';
+import { useTranslation } from 'react-i18next';
+import i18n from '@/lib/i18n';
 import { useDictation } from '@/hooks/useDictation';
 import { useLolaVoice } from '@/hooks/useLolaVoice';
 import { capture } from '@/lib/analytics';
@@ -95,27 +97,15 @@ official sources. Never invent an answer for them. Plain text only.`,
   return rawText.trim();
 }
 
-const STATIC_QUESTIONS: Record<string, string> = {
-  nationalities:                            "Quick one — where's everyone in the household a citizen?",
-  work_situation:                           "Work-wise, when you move — will you be working remotely, freelancing, studying, retired, or something else?",
-  employer_country_is_foreign:              "Is your employer based outside Spain?",
-  annual_income_eur_band:                   "To find the right visa, I need a rough sense of your annual household income. Which band fits?",
-  has_spouse_or_partner:                    "Will a spouse or partner be making this move with you?",
-  partner_is_married:                       "Are you two legally married or in a registered civil partnership?",
-  has_children:                             "Any kids coming with you?",
-  intends_long_stay:                        "Is this a proper long-term move — more than six months a year — or more of an extended stay?",
-  arrival_date:                             "Roughly when are you hoping to arrive? Even just a month is fine.",
-  has_spanish_address:                      "Do you already have a place lined up, rented or owned?",
-  owns_or_drives:                           "Will anyone be driving while you're there?",
-  owns_property_in_spain:                   "Are you planning to buy property in Spain, or have you already bought?",
-  region:                                   "Which part of Spain will you be settling in? A comunidad — or just name the city and I'll place it.",
-  has_pets:                                 "Any pets making this move with you?",
-  foreign_assets_eur_band:                  "Slightly personal — and you only pick a range — roughly how much do you hold outside Spain?",
-  us_resident:                              "Are you currently based in the US? (Consulate wait times are quite long right now.)",
-  previously_ex_spanish_colony_nationality: "Are you a national of a former Spanish colony — most of Latin America, or the Philippines?",
-};
+// The deterministic question fallbacks now live in locales/<lang>/interview.json ("static.*") —
+// same interview, less charm, any language. Reads via the i18n singleton (these are used in
+// async flows, not render). Fields without a static entry fall through to the callers' generic
+// prompt_hint fallback, exactly as the old Record<string,string> lookup did.
+const staticQuestion = (field: string): string | undefined =>
+  i18n.exists(`interview:static.${field}`) ? i18n.t(`interview:static.${field}`) : undefined;
 
 export default function InterviewScreen() {
+  const { t } = useTranslation('interview');
   const router = useRouter();
   // Context-carrying CTA: /interview?from=<guide-id> lets Lola's greeting acknowledge which
   // guide brought them here (phrasing only — never facts; those live in the sourced pages).
@@ -188,7 +178,7 @@ export default function InterviewScreen() {
     // replay the interview in slot order, building the transcript
     let slot = nextSlot(p);
     while (slot) {
-      const question = STATIC_QUESTIONS[slot.field] ?? slot.prompt_hint;
+      const question = staticQuestion(slot.field) ?? slot.prompt_hint;
       const raw = persona.answers[slot.field];
       const answer = Array.isArray(raw) ? (raw as string[]).join(', ') : String(raw ?? '—');
       replayTurns.push({ role: 'lola', text: question });
@@ -198,7 +188,7 @@ export default function InterviewScreen() {
       slot = nextSlot(p);
     }
 
-    replayTurns.push({ role: 'lola', text: "That's everything I need — your roadmap is ready." });
+    replayTurns.push({ role: 'lola', text: t('done') });
 
     await persist(p);
     setProfile(p);
@@ -216,7 +206,7 @@ export default function InterviewScreen() {
     const slot = nextSlot({});
     if (!slot) { setDone(true); setLoading(false); return; }
     const lola = await phraseQuestion(slot, [], arrivedFrom ? shortClause(arrivedFrom.title) : undefined)
-      .catch(() => STATIC_QUESTIONS[slot.field] ?? `Could you tell me about ${slot.prompt_hint}?`);
+      .catch(() => staticQuestion(slot.field) ?? t('fallback.question', { hint: slot.prompt_hint }));
     setCurrentSlot(slot);
     setTurns([{ role: 'lola', text: lola }]);
     setLoading(false);
@@ -240,13 +230,13 @@ export default function InterviewScreen() {
       // Monitor these: every clarify is a real user stuck on a question the extractor fumbled.
       // The PostHog trend on this event is the tuning loop for the extraction prompts.
       capture('interview_clarify_needed', { field: currentSlot.field, answer: text.slice(0, 200) });
-      const reask = STATIC_QUESTIONS[currentSlot.field]
-        ?? `Could you tell me a little more about ${currentSlot.prompt_hint}?`;
+      const reask = staticQuestion(currentSlot.field)
+        ?? t('fallback.clarifyReask', { hint: currentSlot.prompt_hint });
       // Conversational clarify: answer their meta-question in Lola's voice, then re-ask
       // (no legal facts — see phraseClarify). Falls back to the static re-ask on any error.
       const reply = await phraseClarify(currentSlot, text, turns, result.clarify, reask)
-        .catch(() => `Sorry, I didn't quite catch that. ${reask}`);
-      setTurns(prev => [...prev, { role: 'lola', text: reply || `Sorry, I didn't quite catch that. ${reask}` }]);
+        .catch(() => t('fallback.clarifyPrefix', { reask }));
+      setTurns(prev => [...prev, { role: 'lola', text: reply || t('fallback.clarifyPrefix', { reask }) }]);
       return;
     }
 
@@ -275,10 +265,7 @@ export default function InterviewScreen() {
     if (!next) {
       await persist(next_profile);
       capture('interview_completed', { answered: interviewProgress(next_profile).answered });
-      setTurns(prev => [...prev, {
-        role: 'lola',
-        text: "That's everything I need — your roadmap is ready.",
-      }]);
+      setTurns(prev => [...prev, { role: 'lola', text: t('done') }]);
       setDone(true);
       setTimeout(() => router.push('/plan'), 1800);
       return;
@@ -287,7 +274,7 @@ export default function InterviewScreen() {
     // The next question must arrive even when the LLM doesn't — the static question is the
     // deterministic fallback (same interview, less charm).
     const lola = await phraseQuestion(next, [...turns, { role: 'user', text }])
-      .catch(() => STATIC_QUESTIONS[next.field] ?? `Could you tell me about ${next.prompt_hint}?`);
+      .catch(() => staticQuestion(next.field) ?? t('fallback.question', { hint: next.prompt_hint }));
     setCurrentSlot(next);
     setTurns(prev => [...prev, { role: 'lola', text: lola }]);
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
@@ -300,10 +287,7 @@ export default function InterviewScreen() {
         route: '/interview', field: currentSlot.field,
       });
       capture('interview_turn_failed', { field: currentSlot.field });
-      setTurns(prev => [...prev, {
-        role: 'lola',
-        text: 'Sorry — that took longer than it should have. Your answer is still in the box; mind sending it again?',
-      }]);
+      setTurns(prev => [...prev, { role: 'lola', text: t('fallback.turnFailed') }]);
       setInput(text);
     } finally {
       setLoading(false);
@@ -315,19 +299,16 @@ export default function InterviewScreen() {
       <ScrollView style={styles.flex}>
         <NavBar />
         <View style={styles.center}>
-          <Text style={styles.eyebrow}>YOUR ROAD TO SPAIN</Text>
-          <Text style={styles.headline}>Hola, I'm Lola.</Text>
+          <Text style={styles.eyebrow}>{t('landing.eyebrow')}</Text>
+          <Text style={styles.headline}>{t('landing.headline')}</Text>
           <Text style={styles.sub}>
-            Moving to Spain is a hundred small steps — visas, padrón, taxes, healthcare —
-            and they only work in the right order. I've helped others make this move, and
-            I'll walk it with you the whole way.
+            {t('landing.sub')}
           </Text>
           <Text style={styles.subQuiet}>
-            Answer a few questions and I'll build your personal roadmap: real steps, real
-            deadlines, nothing you don't need.
+            {t('landing.subQuiet')}
           </Text>
           <TouchableOpacity style={styles.startBtn} onPress={start}>
-            <Text style={styles.startBtnText}>Let's get started</Text>
+            <Text style={styles.startBtnText}>{t('landing.start')}</Text>
           </TouchableOpacity>
 
           {isStaff && (
@@ -358,9 +339,9 @@ export default function InterviewScreen() {
   const progress = done ? 1 : Math.max(progressRef.current, rawProgress);
   progressRef.current = progress;
   const remainingQ = Math.max(total - answered, 0);
-  const timeLeft = remainingQ === 0 ? 'Almost there'
-                 : remainingQ * 15 < 60 ? 'Under a minute left'
-                 : `About ${Math.round((remainingQ * 15) / 60)} min left`;
+  const timeLeft = remainingQ === 0 ? t('progress.almostThere')
+                 : remainingQ * 15 < 60 ? t('progress.underAMinute')
+                 : t('progress.minutesLeft', { m: Math.round((remainingQ * 15) / 60) });
 
   return (
     // Exact keyboard avoidance: pad by the OS-reported overlap (hooks/useKeyboardHeight).
@@ -373,17 +354,17 @@ export default function InterviewScreen() {
           <TouchableOpacity
             style={styles.voiceToggle}
             onPress={voice.toggle}
-            accessibilityLabel={voice.enabled ? 'Turn Lola’s voice off' : 'Turn Lola’s voice on'}
+            accessibilityLabel={voice.enabled ? t('voice.turnOffA11y') : t('voice.turnOnA11y')}
           >
             <Text style={styles.voiceToggleIcon}>{voice.enabled ? '🔊' : '🔇'}</Text>
-            <Text style={styles.voiceToggleText}>{voice.enabled ? 'Voice on' : 'Voice off'}</Text>
+            <Text style={styles.voiceToggleText}>{voice.enabled ? t('voice.on') : t('voice.off')}</Text>
           </TouchableOpacity>
         </View>
       )}
       {!done && (
         <View style={styles.progressWrap}>
           <View style={styles.progressRow}>
-            <Text style={styles.progressLabel}>Question {Math.min(answered + 1, total)} of ~{total}</Text>
+            <Text style={styles.progressLabel}>{t('progress.question', { n: Math.min(answered + 1, total), total })}</Text>
             <Text style={styles.progressLabel}>{timeLeft}</Text>
           </View>
           <View style={styles.progressTrack}>
@@ -417,7 +398,7 @@ export default function InterviewScreen() {
                 style={[styles.input, { height: Math.min(120, Math.max(38, inputHeight)) }]}
                 value={input}
                 onChangeText={setInput}
-                placeholder={dictation.listening ? 'Listening…' : 'Type your answer…'}
+                placeholder={dictation.listening ? t('composer.placeholderListening') : t('composer.placeholder')}
                 placeholderTextColor={palette.muted}
                 // Grows with the answer (regressed at some point — long dictated answers were
                 // stuck in a one-line box). Multiline + measured content height, capped at ~5
@@ -441,14 +422,14 @@ export default function InterviewScreen() {
                   style={[styles.micBtn, dictation.listening && styles.micBtnActive]}
                   onPress={toggleMic}
                   disabled={loading}
-                  accessibilityLabel={dictation.listening ? 'Stop dictation' : 'Speak your answer'}
+                  accessibilityLabel={dictation.listening ? t('composer.micStopA11y') : t('composer.micStartA11y')}
                 >
                   <Text style={[styles.micIcon, dictation.listening && styles.micIconActive]}>{dictation.listening ? '■' : '🎙'}</Text>
                 </TouchableOpacity>
               )}
               <TouchableOpacity
                 style={[styles.sendBtn, (!input.trim() || loading) && styles.sendBtnDisabled]}
-                accessibilityLabel="Send your answer"
+                accessibilityLabel={t('composer.sendA11y')}
                 onPress={() => submit(input)}
                 disabled={!input.trim() || loading}
               >

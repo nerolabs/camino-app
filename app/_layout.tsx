@@ -14,6 +14,7 @@ import { supabase } from '@/core/supabase';
 import { derive, type Profile } from '@/core/interview-controller';
 import { initAnalytics } from '@/lib/analytics';
 import { initMonitoring } from '@/lib/monitoring';
+import { applyStoredLocale } from '@/lib/i18n'; // side-effect import: i18next inits synchronously in English
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -83,6 +84,9 @@ export default function RootLayout() {
   useEffect(() => { if (loaded) SplashScreen.hideAsync(); }, [loaded]);
   useEffect(() => { initAnalytics(); }, []); // web: PostHog; native: no-op for now
   useEffect(() => { initMonitoring(); }, []); // web: Sentry (errors + Web Vitals); native: no-op for now
+  // After mount only (hydration-safe — the static export and first client render are English):
+  // saved choice → device/browser language → en. See lib/i18n.ts.
+  useEffect(() => { applyStoredLocale(); }, []);
 
   if (!loaded) return null;
 

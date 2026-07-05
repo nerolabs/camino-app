@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
 import { capture } from '@/lib/analytics';
@@ -21,6 +22,7 @@ type Props = {
 };
 
 export default function EmailSignIn({ pendingProfile, context, sendLabel, onVerified }: Props) {
+  const { t } = useTranslation();
   const { signInWithEmail, verifyEmailCode } = useAuth();
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
@@ -38,7 +40,7 @@ export default function EmailSignIn({ pendingProfile, context, sendLabel, onVeri
       capture('email_signin_requested', { context, creates_account: !!pendingProfile });
       setPhase('sent');
     } catch (e) {
-      setErr(e instanceof Error ? e.message : 'Could not send the email — try again.');
+      setErr(e instanceof Error ? e.message : t('emailSignIn.errSend'));
     } finally {
       setBusy(false);
     }
@@ -52,7 +54,7 @@ export default function EmailSignIn({ pendingProfile, context, sendLabel, onVeri
       capture('email_signin_verified', { context });
       onVerified?.(); // session lands via onAuthStateChange
     } catch {
-      setErr('That code didn’t match — check the email or send a fresh one.');
+      setErr(t('emailSignIn.errCode'));
     } finally {
       setBusy(false);
     }
@@ -61,14 +63,13 @@ export default function EmailSignIn({ pendingProfile, context, sendLabel, onVeri
   if (phase === 'sent') {
     return (
       <View style={styles.wrap}>
-        <Text style={styles.sentTitle}>Check your inbox 📬</Text>
+        <Text style={styles.sentTitle}>{t('emailSignIn.sentTitle')}</Text>
         <Text style={styles.sub}>
-          We sent a sign-in link to {email.trim()}. Tap it on this device — or enter the one-time
-          code from the same email:
+          {t('emailSignIn.sentSub', { email: email.trim() })}
         </Text>
         <TextInput
           style={styles.input}
-          accessibilityLabel="One-time code from your email"
+          accessibilityLabel={t('emailSignIn.codeA11y')}
           value={code}
           onChangeText={setCode}
           placeholder="12345678"
@@ -80,10 +81,10 @@ export default function EmailSignIn({ pendingProfile, context, sendLabel, onVeri
         />
         {err && <Text style={styles.err}>{err}</Text>}
         <TouchableOpacity style={[styles.btn, (code.trim().length < 6 || busy) && styles.btnDim]} onPress={verify} disabled={busy}>
-          <Text style={styles.btnText}>{busy ? 'Checking…' : 'Verify code'}</Text>
+          <Text style={styles.btnText}>{busy ? t('emailSignIn.checking') : t('emailSignIn.verify')}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => { setPhase('input'); setCode(''); setErr(null); }}>
-          <Text style={styles.ghost}>Different address / send it again</Text>
+          <Text style={styles.ghost}>{t('emailSignIn.tryAgain')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -93,7 +94,7 @@ export default function EmailSignIn({ pendingProfile, context, sendLabel, onVeri
     <View style={styles.wrap}>
       <TextInput
         style={styles.input}
-        accessibilityLabel="Email address"
+        accessibilityLabel={t('emailSignIn.emailA11y')}
         value={email}
         onChangeText={setEmail}
         placeholder="you@example.com"
@@ -107,9 +108,9 @@ export default function EmailSignIn({ pendingProfile, context, sendLabel, onVeri
       />
       {err && <Text style={styles.err}>{err}</Text>}
       <TouchableOpacity style={[styles.btn, (!valid || busy) && styles.btnDim]} onPress={send} disabled={busy}>
-        <Text style={styles.btnText}>{busy ? 'Sending…' : (sendLabel ?? 'Email me a sign-in link')}</Text>
+        <Text style={styles.btnText}>{busy ? t('emailSignIn.sending') : (sendLabel ?? t('emailSignIn.send'))}</Text>
       </TouchableOpacity>
-      <Text style={styles.hint}>No password — the link (or code) signs you in.</Text>
+      <Text style={styles.hint}>{t('emailSignIn.hint')}</Text>
     </View>
   );
 }

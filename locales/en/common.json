@@ -1,0 +1,108 @@
+{
+  "nav": {
+    "wordmark": "Get Camino",
+    "wordmarkWide": "Get Camino: Your Road to Spain",
+    "homeA11y": "Get Camino home",
+    "myRoadmap": "My roadmap",
+    "getYourRoadmap": "Get your roadmap",
+    "menuA11y": "Menu",
+    "menu": {
+      "home": "Home",
+      "howItWorks": "How it works",
+      "guides": "Guides",
+      "samplePlan": "Sample plan",
+      "howIWasBuilt": "How I was built",
+      "reportProblem": "Report a problem",
+      "language": "Language",
+      "signOut": "Sign out",
+      "deleteAccount": "Delete my account"
+    }
+  },
+  "language": {
+    "title": "Language",
+    "current": "Language · {{name}}"
+  },
+  "home": {
+    "eyebrow": "Moving to Spain",
+    "headline": "Your personalized roadmap for moving to Spain.",
+    "sub": "From choosing the right visa to finding the right city, enrolling your kids in school, and getting your paperwork in order — Get Camino figures out what applies to you and what to do first.",
+    "cta": "Build my free roadmap →",
+    "disclaimer": "Free · Takes about 3 minutes · No account needed to start",
+    "sampleLink": "Not sure yet? Peek at a sample roadmap first →",
+    "strip": "Visas · Where to live · Schools · Banking · NIE · TIE · Empadronamiento · Modelo 720 · Driving · Remote work",
+    "stripLink": "  ·  Explore all 60 guides →",
+    "browseGuidesA11y": "Browse all guides",
+    "photoA11y": "{{label}}, Spain",
+    "photos": {
+      "gothicQuarter": "Gothic Quarter, Barcelona",
+      "madrid": "Madrid",
+      "plazaEspana": "Plaza de España, Sevilla",
+      "sevillaSunset": "Sevilla at sunset"
+    }
+  },
+  "backToTop": "Back to top",
+  "footer": {
+    "note": "Guidance only — not legal or tax advice.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "avisoLegal": "Aviso legal"
+  },
+  "storeBadges": {
+    "eyebrow": "TAKE IT WITH YOU",
+    "titleLive": "Get Get Camino on your phone.",
+    "titleSoon": "The web app works today. The phone apps are coming.",
+    "subLive": "Your roadmap, voice and all, on iPhone and Android.",
+    "subSoon": "Everything runs right here in your browser — no install needed. Native iPhone and Android apps are in the works.",
+    "downloadOn": "Download on the",
+    "comingSoonTo": "Coming soon to",
+    "badgeLinkA11y": "Get Get Camino on the {{store}}",
+    "badgeSoonA11y": "{{store}} — coming soon"
+  },
+  "emailSignIn": {
+    "sentTitle": "Check your inbox 📬",
+    "sentSub": "We sent a sign-in link to {{email}}. Tap it on this device — or enter the one-time code from the same email:",
+    "codeA11y": "One-time code from your email",
+    "verify": "Verify code",
+    "checking": "Checking…",
+    "tryAgain": "Different address / send it again",
+    "emailA11y": "Email address",
+    "send": "Email me a sign-in link",
+    "sending": "Sending…",
+    "hint": "No password — the link (or code) signs you in.",
+    "errSend": "Could not send the email — try again.",
+    "errCode": "That code didn’t match — check the email or send a fresh one."
+  },
+  "signIn": {
+    "button": "Sign in",
+    "title": "Sign in to Get Camino",
+    "sub": "Save your roadmap and pick it up on any device.",
+    "google": "Continue with Google",
+    "apple": "Continue with Apple",
+    "email": "Continue with email",
+    "allOptions": "← All sign-in options",
+    "cancel": "Cancel",
+    "failedTitle": "{{provider}} sign-in failed"
+  },
+  "deleteAccount": {
+    "title": "Delete your account?",
+    "warning": "This permanently deletes your account, your answers, and your roadmap — immediately, with no undo and no recovery window. The 60 free guides stay open to everyone.",
+    "confirm": "Delete my account permanently",
+    "keep": "Keep my account",
+    "doneTitle": "Account deleted.",
+    "doneSub": "Your account, answers, and roadmap are gone. If Spain calls again, we’ll be here — buen camino.",
+    "close": "Close",
+    "err": "That didn’t work — nothing was deleted. Try again, or reach us via Report a problem."
+  },
+  "feedback": {
+    "title": "Report a problem",
+    "sub": "Something broken, confusing, or missing? Tell us — a sentence is plenty.",
+    "inputA11y": "Describe the problem",
+    "placeholder": "What happened?",
+    "send": "Send",
+    "cancel": "Cancel",
+    "thanksTitle": "Gracias — got it.",
+    "thanksSub": "Every report makes the roadmap better. We read them all.",
+    "done": "Done",
+    "errSend": "That didn’t go through — please try again."
+  }
+}

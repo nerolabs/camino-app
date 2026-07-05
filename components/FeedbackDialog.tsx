@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, Pressable, StyleSheet, Platform, ActivityIndicator } from 'react-native';
 import Constants from 'expo-constants';
 import { usePathname } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
 import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
@@ -21,6 +22,7 @@ const API_BASE = process.env.EXPO_PUBLIC_API_URL ?? '';
 const SEND_GRACE_MS = 10_000;
 
 export default function FeedbackDialog({ visible, onClose }: { visible: boolean; onClose: () => void }) {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const pathname = usePathname();
   const kb = useKeyboardHeight(); // keep the dialog above the keyboard (it autofocuses)
@@ -60,7 +62,7 @@ export default function FeedbackDialog({ visible, onClose }: { visible: boolean;
       capture('feedback_sent', { route: pathname });
       setSent(true);
     } catch {
-      setErr('That didn’t go through — please try again.');
+      setErr(t('feedback.errSend'));
     } finally {
       setBusy(false);
     }
@@ -73,22 +75,22 @@ export default function FeedbackDialog({ visible, onClose }: { visible: boolean;
         <View style={styles.card} accessibilityViewIsModal>
           {sent ? (
             <>
-              <Text style={styles.title}>Gracias — got it.</Text>
-              <Text style={styles.sub}>Every report makes the roadmap better. We read them all.</Text>
+              <Text style={styles.title}>{t('feedback.thanksTitle')}</Text>
+              <Text style={styles.sub}>{t('feedback.thanksSub')}</Text>
               <TouchableOpacity style={styles.btn} onPress={close}>
-                <Text style={styles.btnText}>Done</Text>
+                <Text style={styles.btnText}>{t('feedback.done')}</Text>
               </TouchableOpacity>
             </>
           ) : (
             <>
-              <Text style={styles.title}>Report a problem</Text>
-              <Text style={styles.sub}>Something broken, confusing, or missing? Tell us — a sentence is plenty.</Text>
+              <Text style={styles.title}>{t('feedback.title')}</Text>
+              <Text style={styles.sub}>{t('feedback.sub')}</Text>
               <TextInput
                 style={styles.input}
-                accessibilityLabel="Describe the problem"
+                accessibilityLabel={t('feedback.inputA11y')}
                 value={text}
                 onChangeText={setText}
-                placeholder="What happened?"
+                placeholder={t('feedback.placeholder')}
                 placeholderTextColor={palette.muted}
                 multiline
                 editable={!busy}
@@ -100,10 +102,10 @@ export default function FeedbackDialog({ visible, onClose }: { visible: boolean;
                 onPress={send}
                 disabled={!text.trim() || busy}
               >
-                {busy ? <ActivityIndicator color={palette.cal} /> : <Text style={styles.btnText}>Send</Text>}
+                {busy ? <ActivityIndicator color={palette.cal} /> : <Text style={styles.btnText}>{t('feedback.send')}</Text>}
               </TouchableOpacity>
               <TouchableOpacity onPress={close}>
-                <Text style={styles.cancel}>Cancel</Text>
+                <Text style={styles.cancel}>{t('feedback.cancel')}</Text>
               </TouchableOpacity>
             </>
           )}

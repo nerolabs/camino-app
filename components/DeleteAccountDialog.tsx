@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
 import { useProfile } from '@/core/ProfileContext';
@@ -13,6 +14,7 @@ import { capture, resetAnalytics } from '@/lib/analytics';
 const API_BASE = process.env.EXPO_PUBLIC_API_URL ?? '';
 
 export default function DeleteAccountDialog({ visible, onClose }: { visible: boolean; onClose: () => void }) {
+  const { t } = useTranslation();
   const { signOut } = useAuth();
   const { setProfile } = useProfile();
   const [busy, setBusy] = useState(false);
@@ -38,7 +40,7 @@ export default function DeleteAccountDialog({ visible, onClose }: { visible: boo
       await signOut().catch(() => {}); // server user is already gone; this clears local state
       setDone(true);
     } catch {
-      setErr('That didn’t work — nothing was deleted. Try again, or reach us via Report a problem.');
+      setErr(t('deleteAccount.err'));
     } finally {
       setBusy(false);
     }
@@ -51,25 +53,24 @@ export default function DeleteAccountDialog({ visible, onClose }: { visible: boo
         <View style={styles.card} accessibilityViewIsModal>
           {done ? (
             <>
-              <Text style={styles.title}>Account deleted.</Text>
-              <Text style={styles.sub}>Your account, answers, and roadmap are gone. If Spain calls again, we’ll be here — buen camino.</Text>
+              <Text style={styles.title}>{t('deleteAccount.doneTitle')}</Text>
+              <Text style={styles.sub}>{t('deleteAccount.doneSub')}</Text>
               <TouchableOpacity style={styles.btnNeutral} onPress={close}>
-                <Text style={styles.btnNeutralText}>Close</Text>
+                <Text style={styles.btnNeutralText}>{t('deleteAccount.close')}</Text>
               </TouchableOpacity>
             </>
           ) : (
             <>
-              <Text style={styles.title}>Delete your account?</Text>
+              <Text style={styles.title}>{t('deleteAccount.title')}</Text>
               <Text style={styles.sub}>
-                This permanently deletes your account, your answers, and your roadmap — immediately,
-                with no undo and no recovery window. The 60 free guides stay open to everyone.
+                {t('deleteAccount.warning')}
               </Text>
               {err && <Text style={styles.err}>{err}</Text>}
               <TouchableOpacity style={[styles.btnDanger, busy && styles.btnDim]} onPress={deleteAccount} disabled={busy}>
-                {busy ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.btnDangerText}>Delete my account permanently</Text>}
+                {busy ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.btnDangerText}>{t('deleteAccount.confirm')}</Text>}
               </TouchableOpacity>
               <TouchableOpacity onPress={close} disabled={busy}>
-                <Text style={styles.cancel}>Keep my account</Text>
+                <Text style={styles.cancel}>{t('deleteAccount.keep')}</Text>
               </TouchableOpacity>
             </>
           )}

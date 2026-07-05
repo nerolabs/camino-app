@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput, ActivityIndicator, Platform, useWindowDimensions } from 'react-native';
 import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
 import { palette } from '@/constants/Colors';
@@ -29,22 +30,22 @@ import {
 // it saves the roadmap, creates the account (silently — the profile rides in auth metadata
 // until the first sign-in adopts it), and the emailed link signs them in from any device.
 function EmailCaptureCard({ profile }: { profile: Profile }) {
+  const { t } = useTranslation('plan');
   const [open, setOpen] = useState(false);
   return (
     <View style={styles.emailCard}>
-      <Text style={styles.emailCardTitle}>Don’t lose this roadmap</Text>
+      <Text style={styles.emailCardTitle}>{t('emailCard.title')}</Text>
       <Text style={styles.emailCardBody}>
-        We’ll email it to you — the link signs you in on any device, no password to invent. You’ll
-        also get a short weekly roundup of what’s due while your move is underway.
+        {t('emailCard.body')}
       </Text>
       {open ? (
-        <EmailSignIn context="plan_page" pendingProfile={profile} sendLabel="Email me my roadmap" />
+        <EmailSignIn context="plan_page" pendingProfile={profile} sendLabel={t('emailCard.button')} />
       ) : (
         <TouchableOpacity
           style={styles.emailCardBtn}
           onPress={() => { setOpen(true); capture('email_me_roadmap_opened'); }}
         >
-          <Text style={styles.emailCardBtnText}>Email me my roadmap</Text>
+          <Text style={styles.emailCardBtnText}>{t('emailCard.button')}</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -52,6 +53,7 @@ function EmailCaptureCard({ profile }: { profile: Profile }) {
 }
 
 function PenaltyBanner({ objectives }: { objectives: Objective[] }) {
+  const { t } = useTranslation('plan');
   const penalties = objectives.filter(o => o.severity === 'penalty');
   if (penalties.length === 0) return null;
   return (
@@ -59,26 +61,28 @@ function PenaltyBanner({ objectives }: { objectives: Objective[] }) {
       <Text style={styles.penaltyBannerIcon}>⚠️</Text>
       <Text style={styles.penaltyBannerText}>
         {penalties.length === 1
-          ? `1 item carries a financial penalty if missed.`
-          : `${penalties.length} items carry financial penalties if missed.`}
+          ? t('banners.penaltyOne')
+          : t('banners.penaltyMany', { count: penalties.length })}
       </Text>
     </View>
   );
 }
 
 function ConsulateBanner({ profile }: { profile: Record<string, unknown> }) {
+  const { t } = useTranslation('plan');
   if (!profile.us_resident || profile.is_eu) return null;
   return (
     <View style={styles.alertBanner}>
       <Text style={styles.alertBannerIcon}>🕐</Text>
       <Text style={styles.alertBannerText}>
-        US consulate wait times are currently 8–16 weeks. Book your appointment as early as possible.
+        {t('banners.consulate')}
       </Text>
     </View>
   );
 }
 
 export default function PlanScreen() {
+  const { t } = useTranslation('plan');
   const { profile, setProfile, isStaff, profileLoaded } = useProfile();
   const { user } = useAuth();
   const router = useRouter();
@@ -167,7 +171,7 @@ export default function PlanScreen() {
     const result = await parseProfileChange(changeText, obj.title);
     setThinking(false);
     if ('error' in result) {
-      setChangeNote({ title: 'Hmm, that didn’t go through', body: 'I couldn’t process that just now — please try again.' });
+      setChangeNote({ title: t('changeNote.errTitle'), body: t('changeNote.errBody') });
       return;
     }
     const changes = result.changes;
@@ -175,7 +179,7 @@ export default function PlanScreen() {
     setChangeOpen(false);
     setSelected(null);
     if (Object.keys(changes).length === 0) {
-      setChangeNote({ title: 'Thanks for the update', body: 'Nothing in your plan needed to change. If a step happened (or will happen) on a specific date, mark it done "on a date" and the plan re-flows from that.' });
+      setChangeNote({ title: t('changeNote.noChangeTitle'), body: t('changeNote.noChangeBody') });
       return;
     }
     const nextProfile: Profile = { ...profile, ...changes };
@@ -185,13 +189,13 @@ export default function PlanScreen() {
     // over a no-op diff (build-24 family finding: "replanned!" while every date stayed put).
     if (!plansDiffer(currentPlan, after)) {
       capture('plan_remodel_noop', { changed_fields: Object.keys(changes) });
-      setChangeNote({ title: 'Thanks — noted.', body: 'I’ve saved that, and nothing in your plan needed to move because of it.' });
+      setChangeNote({ title: t('changeNote.noopTitle'), body: t('changeNote.noopBody') });
       setProfile(nextProfile);
       if (user) await saveProfileDb(user.id, nextProfile);
       return;
     }
     capture('plan_remodelled', { changed_fields: Object.keys(changes) });
-    setChangeNote({ title: 'That was useful — I’ve remodelled your plan!', body: diffSummary(currentPlan, after) });
+    setChangeNote({ title: t('changeNote.remodelTitle'), body: diffSummary(currentPlan, after) });
     setProfile(nextProfile);
     if (user) await saveProfileDb(user.id, nextProfile);
   }
@@ -203,11 +207,9 @@ export default function PlanScreen() {
       <ScrollView style={styles.scroll} contentContainerStyle={{ flexGrow: 1 }}>
         <NavBar />
         <View style={styles.emptyWrap}>
-          <Text style={styles.emptyHeading}>{user ? 'Loading your roadmap…' : 'No roadmap yet'}</Text>
+          <Text style={styles.emptyHeading}>{user ? t('empty.loadingTitle') : t('empty.noneTitle')}</Text>
           <Text style={styles.emptyBody}>
-            {user
-              ? 'One moment while we fetch your plan.'
-              : 'Complete the interview and your roadmap will appear here.'}
+            {user ? t('empty.loadingBody') : t('empty.noneBody')}
           </Text>
         </View>
         <Footer />
@@ -229,8 +231,8 @@ export default function PlanScreen() {
   // weekly email, all keyed off the engine's single isOverdue predicate.
   const overdueLine = (o: Objective) =>
     o.timing.state === 'scheduled'
-      ? `Overdue · was due ${o.timing.due.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`
-      : 'Overdue';
+      ? t('overdue.wasDue', { date: o.timing.due.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) })
+      : t('overdue.plain');
   const titleById = new Map(objectives.map(o => [o.id, o.title]));
   const week = thisWeek(objectives);
 
@@ -244,7 +246,7 @@ export default function PlanScreen() {
         activeOpacity={0.7}
         onPress={() => openCard(obj)}
         accessibilityRole="button"
-        accessibilityLabel={`${obj.title}. ${obj.done ? 'Done' : formatTiming(obj)}. Opens step details`}
+        accessibilityLabel={t('card.a11y', { title: obj.title, status: obj.done ? t('card.a11yDone') : formatTiming(obj) })}
       >
         <View style={[styles.severityBar, { backgroundColor: barColor }]} />
         <View style={styles.cardBody}>
@@ -254,7 +256,7 @@ export default function PlanScreen() {
             </Text>
             {obj.done ? (
               <View style={[styles.sevBadge, { backgroundColor: palette.olive + '18' }]}>
-                <Text style={[styles.sevBadgeText, { color: palette.olive }]}>✓ Done</Text>
+                <Text style={[styles.sevBadgeText, { color: palette.olive }]}>{t('card.doneBadge')}</Text>
               </View>
             ) : (
               <View style={[styles.sevBadge, { backgroundColor: SEV_COLOR[obj.severity] + '18' }]}>
@@ -290,7 +292,7 @@ export default function PlanScreen() {
     <ScrollView style={styles.scroll} ref={top.ref} onScroll={top.onScroll} scrollEventThrottle={16}>
       <NavBar />
       <View style={styles.content}>
-        <Text style={styles.heading} accessibilityRole="header">Your roadmap</Text>
+        <Text style={styles.heading} accessibilityRole="header">{t('heading')}</Text>
 
         <View style={styles.toolbarRow}>
           <View style={styles.viewToggle}>
@@ -299,14 +301,14 @@ export default function PlanScreen() {
               onPress={() => { setView('week'); capture('plan_view_toggled', { view: 'week' }); }}
             >
               <Text style={[styles.viewToggleText, view === 'week' && styles.viewToggleTextActive]}>
-                This week{week.overdue.length > 0 ? ` · ${week.overdue.length} overdue` : ''}
+                {week.overdue.length > 0 ? t('toolbar.thisWeekOverdue', { count: week.overdue.length }) : t('toolbar.thisWeek')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.viewToggleBtn, view === 'all' && styles.viewToggleBtnActive]}
               onPress={() => { setView('all'); capture('plan_view_toggled', { view: 'all' }); }}
             >
-              <Text style={[styles.viewToggleText, view === 'all' && styles.viewToggleTextActive]}>Full roadmap</Text>
+              <Text style={[styles.viewToggleText, view === 'all' && styles.viewToggleTextActive]}>{t('toolbar.fullRoadmap')}</Text>
             </TouchableOpacity>
           </View>
           {/* The report: a pure function of the plan (THESIS piece 4). Web → print dialog
@@ -316,37 +318,37 @@ export default function PlanScreen() {
               capture('plan_pdf_exported');
               exportPdf(reportHtml(objectives)).catch(() => {});
             }}
-            accessibilityLabel="Export your roadmap as a PDF"
+            accessibilityLabel={t('toolbar.exportA11y')}
           >
-            <Text style={styles.exportLink}>⤓ PDF</Text>
+            <Text style={styles.exportLink}>{t('toolbar.exportPdf')}</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.statsRow}>
           <View style={styles.statChip}>
             <Text style={styles.statNum}>{objectives.length}</Text>
-            <Text style={styles.statLabel}>total steps</Text>
+            <Text style={styles.statLabel}>{t('stats.totalSteps')}</Text>
           </View>
           <View style={styles.statChip}>
             <Text style={[styles.statNum, { color: palette.cobalt }]}>{requiredCount}</Text>
-            <Text style={styles.statLabel}>required</Text>
+            <Text style={styles.statLabel}>{t('stats.required')}</Text>
           </View>
           {overdueCount > 0 && (
             <View style={[styles.statChip, styles.statChipOverdue]}>
               <Text style={[styles.statNum, { color: '#C0392B' }]}>{overdueCount}</Text>
-              <Text style={styles.statLabel}>overdue</Text>
+              <Text style={styles.statLabel}>{t('stats.overdue')}</Text>
             </View>
           )}
           {penaltyCount > 0 && (
             <View style={styles.statChip}>
               <Text style={[styles.statNum, { color: '#C0392B' }]}>{penaltyCount}</Text>
-              <Text style={styles.statLabel}>penalty risk</Text>
+              <Text style={styles.statLabel}>{t('stats.penaltyRisk')}</Text>
             </View>
           )}
           {doneCount > 0 && (
             <View style={styles.statChip}>
               <Text style={[styles.statNum, { color: palette.olive }]}>{doneCount}</Text>
-              <Text style={styles.statLabel}>done</Text>
+              <Text style={styles.statLabel}>{t('stats.done')}</Text>
             </View>
           )}
         </View>
@@ -356,11 +358,11 @@ export default function PlanScreen() {
         <View style={styles.legend}>
           <View style={styles.legendItem}>
             <View style={[styles.legendDot, { backgroundColor: SOURCE_COLOR.official }]} />
-            <Text style={styles.legendText}>Official requirement</Text>
+            <Text style={styles.legendText}>{t('legend.official')}</Text>
           </View>
           <View style={styles.legendItem}>
             <View style={[styles.legendDot, { backgroundColor: SOURCE_COLOR.recommendation }]} />
-            <Text style={styles.legendText}>Get Camino recommendation</Text>
+            <Text style={styles.legendText}>{t('legend.recommendation')}</Text>
           </View>
         </View>
 
@@ -372,7 +374,7 @@ export default function PlanScreen() {
             {week.overdue.length > 0 && (
               <View style={styles.section}>
                 <View style={styles.phaseHeader}>
-                  <Text style={[styles.phaseLabel, { color: '#C0392B' }]}>SLIPPED PAST</Text>
+                  <Text style={[styles.phaseLabel, { color: '#C0392B' }]}>{t('week.slippedPast')}</Text>
                   <Text style={styles.phaseCount}>{week.overdue.length}</Text>
                 </View>
                 {week.overdue.map(renderCard)}
@@ -381,7 +383,7 @@ export default function PlanScreen() {
             {week.dueSoon.length > 0 && (
               <View style={styles.section}>
                 <View style={styles.phaseHeader}>
-                  <Text style={styles.phaseLabel}>DUE THIS WEEK</Text>
+                  <Text style={styles.phaseLabel}>{t('week.dueThisWeek')}</Text>
                   <Text style={styles.phaseCount}>{week.dueSoon.length}</Text>
                 </View>
                 {week.dueSoon.map(renderCard)}
@@ -389,11 +391,11 @@ export default function PlanScreen() {
             )}
             {week.overdue.length === 0 && week.dueSoon.length === 0 && (
               <View style={styles.weekClear}>
-                <Text style={styles.weekClearTitle}>Nothing needs you this week.</Text>
+                <Text style={styles.weekClearTitle}>{t('week.clearTitle')}</Text>
                 <Text style={styles.weekClearBody}>
                   {week.nextUp && week.nextUp.timing.state !== 'pending_anchor'
-                    ? `Next up: ${week.nextUp.title} — ${formatTiming(week.nextUp).toLowerCase()}.`
-                    : 'Your remaining steps are waiting on earlier milestones — the full roadmap has the whole picture.'}
+                    ? t('week.clearNext', { title: week.nextUp.title, timing: formatTiming(week.nextUp).toLowerCase() })
+                    : t('week.clearWaiting')}
                 </Text>
               </View>
             )}
@@ -474,10 +476,10 @@ export default function PlanScreen() {
                 <View style={styles.askRow}>
                   <TextInput
                     style={styles.askInput}
-                    accessibilityLabel="Ask Lola about this step"
+                    accessibilityLabel={t('sheet.askA11y')}
                     value={taskInput}
                     onChangeText={setTaskInput}
-                    placeholder="Ask Lola about this step…"
+                    placeholder={t('sheet.askPlaceholder')}
                     placeholderTextColor={palette.muted}
                     onSubmitEditing={() => submitTaskQuestion(selected)}
                     returnKeyType="send"
@@ -496,19 +498,19 @@ export default function PlanScreen() {
                 <View style={styles.actionsRow}>
                   {selected.done ? (
                     <>
-                      <View style={styles.donePill}><Text style={styles.donePillText}>✓ Done</Text></View>
+                      <View style={styles.donePill}><Text style={styles.donePillText}>{t('sheet.doneBadge')}</Text></View>
                       <TouchableOpacity onPress={() => { setProgress(selected.id, null); setSelected(null); }}>
-                        <Text style={styles.linkBtn}>Undo</Text>
+                        <Text style={styles.linkBtn}>{t('sheet.undo')}</Text>
                       </TouchableOpacity>
                     </>
                   ) : (
                     <>
                       <TouchableOpacity style={styles.doneChip} onPress={() => markDone(selected.id, new Date().toISOString().slice(0, 10))}>
-                        <Text style={styles.doneChipText}>✓ Mark done</Text>
+                        <Text style={styles.doneChipText}>{t('sheet.markDone')}</Text>
                       </TouchableOpacity>
                       {/* "on a date" read as a mystery (build-25 family finding) — say what it's for. */}
                       <TouchableOpacity onPress={() => setDateOpen(v => !v)}>
-                        <Text style={styles.linkBtn}>did it earlier? add the date</Text>
+                        <Text style={styles.linkBtn}>{t('sheet.addDate')}</Text>
                       </TouchableOpacity>
                     </>
                   )}
@@ -520,13 +522,13 @@ export default function PlanScreen() {
                   const parsed = normalizeDateInput(dateInput);
                   return (
                     <View>
-                      <Text style={styles.dateHint}>When did you actually do this? Downstream dates re-flow from it.</Text>
+                      <Text style={styles.dateHint}>{t('sheet.dateHint')}</Text>
                       <View style={styles.dateRow}>
                         <TextInput
                           style={styles.dateInput}
                           value={dateInput}
                           onChangeText={setDateInput}
-                          placeholder='e.g. 25 April 2026 or 2026-04-25'
+                          placeholder={t('sheet.datePlaceholder')}
                           placeholderTextColor={palette.muted}
                           autoCapitalize="none"
                         />
@@ -535,12 +537,12 @@ export default function PlanScreen() {
                           disabled={!parsed}
                           onPress={() => parsed && markDone(selected.id, parsed.iso)}
                         >
-                          <Text style={styles.dateSaveBtnText}>Save</Text>
+                          <Text style={styles.dateSaveBtnText}>{t('sheet.save')}</Text>
                         </TouchableOpacity>
                       </View>
                       {dateInput.trim().length > 0 && (
                         <Text style={[styles.datePreview, !parsed && styles.datePreviewBad]}>
-                          {parsed ? `→ ${parsed.label}` : 'I can’t read that yet — try the month as a word, e.g. "25 April 2026".'}
+                          {parsed ? t('sheet.datePreview', { label: parsed.label }) : t('sheet.dateUnreadable')}
                         </Text>
                       )}
                     </View>
@@ -550,7 +552,7 @@ export default function PlanScreen() {
                 {/* ── Something changed → re-plan ─────────────────────────── */}
                 {!changeOpen ? (
                   <TouchableOpacity onPress={() => setChangeOpen(true)}>
-                    <Text style={styles.changeLink}>Something changed? Tell Lola to update your plan →</Text>
+                    <Text style={styles.changeLink}>{t('sheet.changeLink')}</Text>
                   </TouchableOpacity>
                 ) : (
                   <View style={styles.changeBox}>
@@ -568,33 +570,34 @@ export default function PlanScreen() {
                       disabled={thinking || !changeText.trim()}
                       onPress={() => submitChange(selected, objectives)}
                     >
-                      {thinking ? <ActivityIndicator color={palette.cal} /> : <Text style={styles.changeSubmitText}>Tell Lola</Text>}
+                      {thinking ? <ActivityIndicator color={palette.cal} /> : <Text style={styles.changeSubmitText}>{t('sheet.tellLola')}</Text>}
                     </TouchableOpacity>
                   </View>
                 )}
 
                 {/* ── Step details (timing, prerequisites, source) — always shown ── */}
                 <View style={styles.detailsBox}>
-                    <Text style={styles.sheetSectionLabel}>WHEN</Text>
+                    <Text style={styles.sheetSectionLabel}>{t('sheet.whenLabel')}</Text>
                     <Text style={styles.sheetTiming}>{isOverdue(selected) ? overdueLine(selected) : formatTiming(selected)}</Text>
                     {isOverdue(selected) && (
                       <Text style={styles.overdueNudge}>
-                        This one's past due. Already handled it? Mark it done — even with the real date —
-                        and the plan re-flows around what actually happened. Plans changed? Tell Lola below.
+                        {t('sheet.overdueNudge')}
                       </Text>
                     )}
                     <Text style={styles.sheetBody}>{timingDetail(selected)}</Text>
                     {selected.regional && (
                       <>
-                        <Text style={styles.sheetSectionLabel}>WHERE YOU LIVE MATTERS</Text>
+                        <Text style={styles.sheetSectionLabel}>{t('sheet.regionalLabel')}</Text>
                         <Text style={styles.sheetBody}>
-                          {`The specifics of this step are set by each comunidad autónoma${regionLabel(profile?.region) ? ` — yours: ${regionLabel(profile?.region)}` : ''}. The source link covers the national rules; your region's own rates and windows apply.`}
+                          {regionLabel(profile?.region)
+                            ? t('sheet.regionalBodyWithRegion', { region: regionLabel(profile?.region) })
+                            : t('sheet.regionalBody')}
                         </Text>
                       </>
                     )}
                     {deps.length > 0 && (
                       <>
-                        <Text style={styles.sheetSectionLabel}>BEFORE THIS, YOU'LL NEED</Text>
+                        <Text style={styles.sheetSectionLabel}>{t('sheet.depsLabel')}</Text>
                         {deps.map((d, i) => (<Text key={i} style={styles.sheetDep}>• {d}</Text>))}
                       </>
                     )}
@@ -606,7 +609,7 @@ export default function PlanScreen() {
                 </View>
 
                 <TouchableOpacity style={styles.sheetCloseLink} onPress={() => setSelected(null)}>
-                  <Text style={styles.sheetCloseLinkText}>Close</Text>
+                  <Text style={styles.sheetCloseLinkText}>{t('sheet.close')}</Text>
                 </TouchableOpacity>
               </ScrollView>
             );
@@ -629,7 +632,7 @@ export default function PlanScreen() {
           <Text style={styles.celebrateTitle}>{changeNote?.title}</Text>
           <Text style={styles.celebrateBody}>{changeNote?.body}</Text>
           <TouchableOpacity style={styles.celebrateBtn} onPress={() => setChangeNote(null)}>
-            <Text style={styles.celebrateBtnText}>See my updated plan</Text>
+            <Text style={styles.celebrateBtnText}>{t('changeNote.seePlan')}</Text>
           </TouchableOpacity>
         </Pressable>
       </Pressable>

@@ -3,6 +3,7 @@ import {
   TouchableOpacity, Text, StyleSheet, Platform, ScrollView,
   type NativeSyntheticEvent, type NativeScrollEvent,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 import { useReducedMotion } from '@/lib/useReducedMotion';
 
@@ -34,13 +35,14 @@ export function useBackToTop() {
 }
 
 export function BackToTop({ visible, scrollToTop }: { visible: boolean; scrollToTop: () => void }) {
+  const { t } = useTranslation();
   if (!visible) return null;
   return (
     <TouchableOpacity
       style={styles.fab}
       onPress={scrollToTop}
       accessibilityRole="button"
-      accessibilityLabel="Back to top"
+      accessibilityLabel={t('backToTop')}
     >
       <Text style={styles.icon}>↑</Text>
     </TouchableOpacity>

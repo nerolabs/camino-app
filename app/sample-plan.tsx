@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 import { derive } from '@/core/interview-controller';
 import { buildPlan, type Objective } from '@/core/engine-controller';
@@ -21,6 +22,7 @@ import { capture } from '@/lib/analytics';
 // No mark-done / re-plan / coach here; the interview is the only path to a personalized plan.
 
 export default function SamplePlanScreen() {
+  const { t } = useTranslation('plan');
   const router = useRouter();
   const top = useBackToTop();
   useEffect(() => { capture('sample_plan_viewed'); }, []);
@@ -61,42 +63,40 @@ export default function SamplePlanScreen() {
 
         {/* ── Sample framing: whose plan this is + how to get yours ── */}
         <View style={styles.sampleBanner}>
-          <Text style={styles.sampleEyebrow}>SAMPLE ROADMAP</Text>
-          <Text style={styles.sampleTitle}>This is {SAMPLE_NAME}'s plan.</Text>
+          <Text style={styles.sampleEyebrow}>{t('sample.eyebrow')}</Text>
+          <Text style={styles.sampleTitle}>{t('sample.title', { name: SAMPLE_NAME })}</Text>
           <Text style={styles.sampleBody}>
-            {SAMPLE_NAME} — {SAMPLE_BLURB}. Get Camino turned their situation into the {objectives.length}-step,
-            deadline-aware roadmap below. Yours will look different: a few answers about your own move, and
-            the same engine builds it just for you.
+            {t('sample.body', { name: SAMPLE_NAME, blurb: SAMPLE_BLURB, count: objectives.length })}
           </Text>
           <TouchableOpacity style={styles.ctaBtn} onPress={() => startInterview('banner')}>
-            <Text style={styles.ctaBtnText}>Build my own roadmap →</Text>
+            <Text style={styles.ctaBtnText}>{t('sample.cta')}</Text>
           </TouchableOpacity>
-          <Text style={styles.ctaNote}>Free · about 3 minutes · no account needed to start</Text>
+          <Text style={styles.ctaNote}>{t('sample.ctaNote')}</Text>
         </View>
 
         <View style={styles.statsRow}>
           <View style={styles.statChip}>
             <Text style={styles.statNum}>{objectives.length}</Text>
-            <Text style={styles.statLabel}>total steps</Text>
+            <Text style={styles.statLabel}>{t('stats.totalSteps')}</Text>
           </View>
           <View style={styles.statChip}>
             <Text style={[styles.statNum, { color: palette.cobalt }]}>{requiredCount}</Text>
-            <Text style={styles.statLabel}>required</Text>
+            <Text style={styles.statLabel}>{t('stats.required')}</Text>
           </View>
           <View style={styles.statChip}>
             <Text style={[styles.statNum, { color: palette.olive }]}>{byPhase.length}</Text>
-            <Text style={styles.statLabel}>life phases</Text>
+            <Text style={styles.statLabel}>{t('sample.lifePhases')}</Text>
           </View>
         </View>
 
         <View style={styles.legend}>
           <View style={styles.legendItem}>
             <View style={[styles.legendDot, { backgroundColor: SOURCE_COLOR.official }]} />
-            <Text style={styles.legendText}>Official requirement</Text>
+            <Text style={styles.legendText}>{t('legend.official')}</Text>
           </View>
           <View style={styles.legendItem}>
             <View style={[styles.legendDot, { backgroundColor: SOURCE_COLOR.recommendation }]} />
-            <Text style={styles.legendText}>Get Camino recommendation</Text>
+            <Text style={styles.legendText}>{t('legend.recommendation')}</Text>
           </View>
         </View>
 
@@ -136,24 +136,23 @@ export default function SamplePlanScreen() {
                     </View>
                     {expanded && (
                       <View style={styles.detail}>
-                        <Text style={styles.detailLabel}>WHEN</Text>
+                        <Text style={styles.detailLabel}>{t('sheet.whenLabel')}</Text>
                         <Text style={styles.detailText}>{timingDetail(obj)}</Text>
-                        <Text style={styles.detailLabel}>WHY IT'S HERE</Text>
+                        <Text style={styles.detailLabel}>{t('sample.whyLabel')}</Text>
                         <Text style={styles.detailText}>{SEV_BLURB[obj.severity]} {SOURCE_BLURB[obj.source]}</Text>
                         {deps.length > 0 && (
                           <>
-                            <Text style={styles.detailLabel}>BEFORE THIS, SUSAN & TOM NEED</Text>
+                            <Text style={styles.detailLabel}>{t('sample.depsLabel')}</Text>
                             {deps.map((d, i) => <Text key={i} style={styles.detailDep}>• {d}</Text>)}
                           </>
                         )}
                         {obj.source_url && (
                           <TouchableOpacity onPress={() => openExternal(obj.source_url!)}>
-                            <Text style={styles.detailLink}>View the official source ↗</Text>
+                            <Text style={styles.detailLink}>{t('sample.sourceLink')}</Text>
                           </TouchableOpacity>
                         )}
                         <Text style={styles.detailTease}>
-                          In your own plan, Lola coaches you through this step, you check it off, and the
-                          dates re-flow around what actually happens.
+                          {t('sample.tease')}
                         </Text>
                       </View>
                     )}
@@ -166,13 +165,12 @@ export default function SamplePlanScreen() {
 
         {/* ── Closing CTA ── */}
         <View style={styles.closingCta}>
-          <Text style={styles.closingTitle}>Your move won't look like {SAMPLE_NAME}'s.</Text>
+          <Text style={styles.closingTitle}>{t('sample.closingTitle', { name: SAMPLE_NAME })}</Text>
           <Text style={styles.closingBody}>
-            Different passport, work, family, or plans — different roadmap. Tell Lola about your move and
-            get the version that's actually yours, with real deadlines in the right order.
+            {t('sample.closingBody')}
           </Text>
           <TouchableOpacity style={styles.ctaBtn} onPress={() => startInterview('footer')}>
-            <Text style={styles.ctaBtnText}>Start my 3-minute interview →</Text>
+            <Text style={styles.ctaBtnText}>{t('sample.closingCta')}</Text>
           </TouchableOpacity>
         </View>
       </View>

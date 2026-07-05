@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet, Linking } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 
 // Store-availability band. Until the apps are actually published we render an HONEST
@@ -10,33 +11,33 @@ import { palette } from '@/constants/Colors';
 type Props = { iosUrl?: string; androidUrl?: string };
 
 function Badge({ store, url }: { store: string; url?: string }) {
+  const { t } = useTranslation();
   const body = (
     <View style={[styles.badge, !url && styles.badgeSoon]}>
-      <Text style={styles.badgeSmall}>{url ? 'Download on the' : 'Coming soon to'}</Text>
+      <Text style={styles.badgeSmall}>{url ? t('storeBadges.downloadOn') : t('storeBadges.comingSoonTo')}</Text>
       <Text style={styles.badgeBig}>{store}</Text>
     </View>
   );
   return url ? (
-    <TouchableOpacity onPress={() => Linking.openURL(url)} accessibilityRole="link" accessibilityLabel={`Get Get Camino on the ${store}`}>
+    <TouchableOpacity onPress={() => Linking.openURL(url)} accessibilityRole="link" accessibilityLabel={t('storeBadges.badgeLinkA11y', { store })}>
       {body}
     </TouchableOpacity>
   ) : (
-    <View accessible accessibilityLabel={`${store} — coming soon`}>{body}</View>
+    <View accessible accessibilityLabel={t('storeBadges.badgeSoonA11y', { store })}>{body}</View>
   );
 }
 
 export default function StoreBadges({ iosUrl, androidUrl }: Props) {
+  const { t } = useTranslation();
   const live = !!(iosUrl || androidUrl);
   return (
     <View style={styles.wrap}>
-      <Text style={styles.eyebrow}>TAKE IT WITH YOU</Text>
+      <Text style={styles.eyebrow}>{t('storeBadges.eyebrow')}</Text>
       <Text style={styles.title} accessibilityRole="header">
-        {live ? 'Get Get Camino on your phone.' : 'The web app works today. The phone apps are coming.'}
+        {live ? t('storeBadges.titleLive') : t('storeBadges.titleSoon')}
       </Text>
       <Text style={styles.sub}>
-        {live
-          ? 'Your roadmap, voice and all, on iPhone and Android.'
-          : 'Everything runs right here in your browser — no install needed. Native iPhone and Android apps are in the works.'}
+        {live ? t('storeBadges.subLive') : t('storeBadges.subSoon')}
       </Text>
       <View style={styles.row}>
         <Badge store="App Store" url={iosUrl} />

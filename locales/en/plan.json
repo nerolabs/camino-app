@@ -1,0 +1,100 @@
+{
+  "heading": "Your roadmap",
+  "empty": {
+    "loadingTitle": "Loading your roadmap…",
+    "loadingBody": "One moment while we fetch your plan.",
+    "noneTitle": "No roadmap yet",
+    "noneBody": "Complete the interview and your roadmap will appear here."
+  },
+  "emailCard": {
+    "title": "Don’t lose this roadmap",
+    "body": "We’ll email it to you — the link signs you in on any device, no password to invent. You’ll also get a short weekly roundup of what’s due while your move is underway.",
+    "button": "Email me my roadmap"
+  },
+  "banners": {
+    "penaltyOne": "1 item carries a financial penalty if missed.",
+    "penaltyMany": "{{count}} items carry financial penalties if missed.",
+    "consulate": "US consulate wait times are currently 8–16 weeks. Book your appointment as early as possible."
+  },
+  "toolbar": {
+    "thisWeek": "This week",
+    "thisWeekOverdue": "This week · {{count}} overdue",
+    "fullRoadmap": "Full roadmap",
+    "exportPdf": "⤓ PDF",
+    "exportA11y": "Export your roadmap as a PDF"
+  },
+  "stats": {
+    "totalSteps": "total steps",
+    "required": "required",
+    "overdue": "overdue",
+    "penaltyRisk": "penalty risk",
+    "done": "done"
+  },
+  "legend": {
+    "official": "Official requirement",
+    "recommendation": "Get Camino recommendation"
+  },
+  "week": {
+    "slippedPast": "SLIPPED PAST",
+    "dueThisWeek": "DUE THIS WEEK",
+    "clearTitle": "Nothing needs you this week.",
+    "clearNext": "Next up: {{title}} — {{timing}}.",
+    "clearWaiting": "Your remaining steps are waiting on earlier milestones — the full roadmap has the whole picture."
+  },
+  "card": {
+    "doneBadge": "✓ Done",
+    "a11y": "{{title}}. {{status}}. Opens step details",
+    "a11yDone": "Done"
+  },
+  "overdue": {
+    "wasDue": "Overdue · was due {{date}}",
+    "plain": "Overdue"
+  },
+  "sheet": {
+    "askPlaceholder": "Ask Lola about this step…",
+    "askA11y": "Ask Lola about this step",
+    "markDone": "✓ Mark done",
+    "doneBadge": "✓ Done",
+    "undo": "Undo",
+    "addDate": "did it earlier? add the date",
+    "dateHint": "When did you actually do this? Downstream dates re-flow from it.",
+    "datePlaceholder": "e.g. 25 April 2026 or 2026-04-25",
+    "save": "Save",
+    "datePreview": "→ {{label}}",
+    "dateUnreadable": "I can’t read that yet — try the month as a word, e.g. \"25 April 2026\".",
+    "changeLink": "Something changed? Tell Lola to update your plan →",
+    "tellLola": "Tell Lola",
+    "whenLabel": "WHEN",
+    "overdueNudge": "This one's past due. Already handled it? Mark it done — even with the real date — and the plan re-flows around what actually happened. Plans changed? Tell Lola below.",
+    "regionalLabel": "WHERE YOU LIVE MATTERS",
+    "regionalBody": "The specifics of this step are set by each comunidad autónoma. The source link covers the national rules; your region's own rates and windows apply.",
+    "regionalBodyWithRegion": "The specifics of this step are set by each comunidad autónoma — yours: {{region}}. The source link covers the national rules; your region's own rates and windows apply.",
+    "depsLabel": "BEFORE THIS, YOU'LL NEED",
+    "close": "Close"
+  },
+  "sample": {
+    "eyebrow": "SAMPLE ROADMAP",
+    "title": "This is {{name}}'s plan.",
+    "body": "{{name}} — {{blurb}}. Get Camino turned their situation into the {{count}}-step, deadline-aware roadmap below. Yours will look different: a few answers about your own move, and the same engine builds it just for you.",
+    "cta": "Build my own roadmap →",
+    "ctaNote": "Free · about 3 minutes · no account needed to start",
+    "lifePhases": "life phases",
+    "whyLabel": "WHY IT'S HERE",
+    "depsLabel": "BEFORE THIS, SUSAN & TOM NEED",
+    "sourceLink": "View the official source ↗",
+    "tease": "In your own plan, Lola coaches you through this step, you check it off, and the dates re-flow around what actually happens.",
+    "closingTitle": "Your move won't look like {{name}}'s.",
+    "closingBody": "Different passport, work, family, or plans — different roadmap. Tell Lola about your move and get the version that's actually yours, with real deadlines in the right order.",
+    "closingCta": "Start my 3-minute interview →"
+  },
+  "changeNote": {
+    "errTitle": "Hmm, that didn’t go through",
+    "errBody": "I couldn’t process that just now — please try again.",
+    "noChangeTitle": "Thanks for the update",
+    "noChangeBody": "Nothing in your plan needed to change. If a step happened (or will happen) on a specific date, mark it done \"on a date\" and the plan re-flows from that.",
+    "noopTitle": "Thanks — noted.",
+    "noopBody": "I’ve saved that, and nothing in your plan needed to move because of it.",
+    "remodelTitle": "That was useful — I’ve remodelled your plan!",
+    "seePlan": "See my updated plan"
+  }
+}

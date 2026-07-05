@@ -495,6 +495,16 @@ const ROWS: Row[] = [
     ],
   },
   {
+    feature: 'The language plumbing (Spanish is coming)',
+    date: '5 Jul 2026',
+    work: 'Every button, question, and label in the app\'s core screens moved out of the code and into English string catalogs — the plumbing that lets the whole experience ship in Spanish next. A visible language choice now lives in the menu, and four automatic checks guard every future translation: no missing strings, no translation may ever change a number, placeholders must survive, and the names "Get Camino" and "Lola" stay exactly themselves in every language.',
+    decisions: [
+      'Prove the plumbing changed nothing: after the extraction, the app renders character-for-character identical — the whole test suite, the frozen plan snapshots, and the prerendered pages all agree.',
+      'A translation may never change a number — the catalog\'s oldest rule now applies mechanically to every language file before it can ship.',
+      'The language switcher is a feature, not a buried setting: it sits in the menu on every screen, and each language will be listed in its own tongue.',
+    ],
+  },
+  {
     feature: 'The fresh-eyes testing audit',
     date: '5 Jul 2026',
     work: 'Before translating the app into Spanish, every layer of testing was audited with fresh eyes: the coverage map verified against what actually runs, ten critical user paths given honest verdicts, and last week\'s under-pressure scoping decisions re-examined. Three new safety nets landed: live tests proving the interview already understands Spanish answers, pixel-exact snapshots of every email and the printable report, and API checks that now run on every staging deploy.',

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Alert, Text, TouchableOpacity, Modal, Pressable, StyleSheet } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
+import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
 import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
@@ -12,6 +13,7 @@ import EmailSignIn from '@/components/EmailSignIn';
 // passwordless email. Android gets the same dialog minus Apple (4.8 doesn't apply there).
 
 export default function SignInButtons() {
+  const { t } = useTranslation();
   const { signInWithGoogle, signInWithApple, appleSignInAvailable } = useAuth();
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<'providers' | 'email'>('providers');
@@ -24,21 +26,21 @@ export default function SignInButtons() {
   const failed = (provider: string) => (e: unknown) => {
     const code = (e as { code?: string })?.code;
     const detail = e instanceof Error ? e.message : String(e);
-    Alert.alert(`${provider} sign-in failed`, code ? `${detail} (${code})` : detail);
+    Alert.alert(t('signIn.failedTitle', { provider }), code ? `${detail} (${code})` : detail);
   };
 
   return (
     <>
       <TouchableOpacity onPress={() => setOpen(true)} style={styles.ghost}>
-        <Text style={styles.ghostText} numberOfLines={1} maxFontSizeMultiplier={1.2}>Sign in</Text>
+        <Text style={styles.ghostText} numberOfLines={1} maxFontSizeMultiplier={1.2}>{t('signIn.button')}</Text>
       </TouchableOpacity>
 
       <Modal visible={open} transparent animationType="fade" onRequestClose={close}>
         <Pressable style={[styles.overlay, kb > 0 && { paddingBottom: kb + 16 }]} onPress={close}>
           {/* Stop card taps from closing the dialog */}
           <Pressable style={styles.card} onPress={() => {}}>
-            <Text style={styles.title}>Sign in to Get Camino</Text>
-            <Text style={styles.sub}>Save your roadmap and pick it up on any device.</Text>
+            <Text style={styles.title}>{t('signIn.title')}</Text>
+            <Text style={styles.sub}>{t('signIn.sub')}</Text>
 
             {mode === 'providers' ? (
               <>
@@ -55,10 +57,10 @@ export default function SignInButtons() {
                   style={styles.googleBtn}
                   onPress={() => { close(); signInWithGoogle().catch(failed('Google')); }}
                 >
-                  <Text style={styles.googleBtnText}>Continue with Google</Text>
+                  <Text style={styles.googleBtnText}>{t('signIn.google')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.emailBtn} onPress={() => setMode('email')}>
-                  <Text style={styles.emailBtnText}>Continue with email</Text>
+                  <Text style={styles.emailBtnText}>{t('signIn.email')}</Text>
                 </TouchableOpacity>
               </>
             ) : (
@@ -66,7 +68,7 @@ export default function SignInButtons() {
             )}
 
             <TouchableOpacity onPress={mode === 'email' ? () => setMode('providers') : close}>
-              <Text style={styles.cancel}>{mode === 'email' ? '← All sign-in options' : 'Cancel'}</Text>
+              <Text style={styles.cancel}>{mode === 'email' ? t('signIn.allOptions') : t('signIn.cancel')}</Text>
             </TouchableOpacity>
           </Pressable>
         </Pressable>

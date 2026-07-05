@@ -69,19 +69,23 @@ the regression harness in place. Strategy + rationale: docs/TEST-COVERAGE.md §4
   4 full-HTML snapshots: 3 emails + the printable report; extend per-locale at L1).
 - **→ GATE CLEAR (2026-07-05 audit): L0 may start.** The remaining two items below are BUILT
   INTO L0 by design (they need the string catalogs to exist).
-- [ ] **The 4 i18n lint gates BUILT AS PART OF L0** and wired into `npm test` in the SAME change
-  that adds the string catalogs: *completeness* (no missing keys), *per-locale digit-lint*
-  (a translation never changes a number — invariant 3), *placeholder-lint* (`{{var}}` parity),
-  *brand-lint* ("Get Camino"/"Lola" verbatim). Catalog/guide title completeness per locale
-  (runtime, backing the tsc `Record<ObligationId,…>` type).
-  → These four are the mechanical guardrails that make L1/L3 fill-in-the-blanks; treat them as
-  part of L0's definition of done, not an afterthought.
+- ✅ **The 4 i18n lint gates** — DONE 2026-07-05 with L0 (`tests/i18n-lint.test.ts`, in
+  `npm test`): completeness / per-locale digit-lint / placeholder-lint / brand-lint, scanning
+  `locales/` from disk so the es directory enrolls automatically at L1. Catalog/guide title
+  completeness per locale still rides L1 (needs the per-locale TS modules to exist).
 
-4. **L0 — plumbing (~1–1.5 days):** i18next + locale resolution/persistence + the VISIBLE
-   language switcher in ☰ ("Language · Español"; each option in its own language) + full
-   English string extraction + **the 4 lint gates above** into npm test. Product identical
-   after = proof. Re-run `plan-snapshot` + full suite after extraction: still green = behavior
-   untouched.
+4. ✅ **L0 — plumbing — DONE 2026-07-05.** i18next + react-i18next (sync English init —
+   hydration-safe; static export verified: prerendered HTML identical) · locale resolution
+   saved → device → en (`lib/i18n.ts`; persisted in AsyncStorage + `user_metadata.lang` for
+   signed-in) · the VISIBLE switcher in ☰ ("Language · English"; options each in their own
+   language; en-only until L1 ships es) · chrome extraction to `locales/en/{common,plan,
+   interview}.json`: NavBar, home, interview (incl. the 17 static questions), plan (sheet,
+   banners, stats, change-notes), sample-plan, footer, store badges, all dialogs (sign-in,
+   email, feedback, delete-account), BackToTop. E2E-anchored strings moved character-for-
+   character. Full suite + plan-snapshot green after = behavior untouched. **Deliberately
+   riding L1/L2 with their own per-locale mechanisms (design §2):** guide/content-page prose
+   (how-it-works, guide pages, legal, homework), `plan-format`/`plan-coach`/`date-input`
+   generated strings, email templates, SEO meta.
 5. **L1 — Spanish (~2 days + Cristina verification) — THE LAUNCH GATE:** chrome, catalog
    titles, guide prose, static questions, emails, legal-ES (English prevails), Lola tú
    directive, locale dates.

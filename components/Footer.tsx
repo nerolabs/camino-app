@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 
 // Shared site footer. Kept in one place so every page (home, plan, empty states) matches.
@@ -7,17 +8,18 @@ import { palette } from '@/constants/Colors';
 // exactly where reviewers and regulators expect them.
 export default function Footer() {
   const router = useRouter();
+  const { t } = useTranslation();
   const go = (path: string) => router.push(path as never);
   return (
     <View style={styles.footer}>
-      <Text style={styles.footerLogo}>Get Camino</Text>
-      <Text style={styles.footerNote}>Guidance only — not legal or tax advice.</Text>
+      <Text style={styles.footerLogo}>{t('nav.wordmark')}</Text>
+      <Text style={styles.footerNote}>{t('footer.note')}</Text>
       <View style={styles.links}>
-        <TouchableOpacity onPress={() => go('/privacy')}><Text style={styles.link}>Privacy</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => go('/privacy')}><Text style={styles.link}>{t('footer.privacy')}</Text></TouchableOpacity>
         <Text style={styles.dot}>·</Text>
-        <TouchableOpacity onPress={() => go('/terms')}><Text style={styles.link}>Terms</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => go('/terms')}><Text style={styles.link}>{t('footer.terms')}</Text></TouchableOpacity>
         <Text style={styles.dot}>·</Text>
-        <TouchableOpacity onPress={() => go('/aviso-legal')}><Text style={styles.link}>Aviso legal</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => go('/aviso-legal')}><Text style={styles.link}>{t('footer.avisoLegal')}</Text></TouchableOpacity>
       </View>
     </View>
   );

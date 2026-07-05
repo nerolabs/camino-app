@@ -2,9 +2,12 @@ import { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, Pressable, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
+import { supabase } from '@/core/supabase';
 import { useWide } from '@/lib/useWide';
+import { SUPPORTED_LOCALES, setAppLocale, type LocaleCode } from '@/lib/i18n';
 import SignInButtons from '@/components/SignInButtons';
 import FeedbackDialog from '@/components/FeedbackDialog';
 import DeleteAccountDialog from '@/components/DeleteAccountDialog';
@@ -22,11 +25,22 @@ export default function NavBar() {
   const insets = useSafeAreaInsets();
   const { user, signOut } = useAuth();
   const wide = useWide();
+  const { t, i18n } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
 
   const go = (path: string) => { setMenuOpen(false); router.push(path as never); };
+
+  const currentLocale = SUPPORTED_LOCALES.find(l => l.code === i18n.language) ?? SUPPORTED_LOCALES[0];
+  const chooseLocale = (code: LocaleCode) => {
+    setLangOpen(false);
+    setAppLocale(code);
+    // Signed-in users carry the choice in auth metadata so emails can match the app language
+    // (design §3; the weekly engine already reads user_metadata for its bookkeeping).
+    if (user) supabase.auth.updateUser({ data: { lang: code } }).catch(() => {});
+  };
 
   return (
     // Top safe-area (Dynamic Island / notch) is handled by the ROOT layout's SafeAreaView —
@@ -37,28 +51,28 @@ export default function NavBar() {
           at large accessibility text sizes the labels outgrew the row and the bar stacked
           into two ugly lines (build-24 family finding — same phone, larger text setting).
           The MENU items stay fully scalable; only the one-line bar is capped. */}
-      <TouchableOpacity onPress={() => router.push('/')} style={styles.logoWrap} accessibilityRole="link" accessibilityLabel="Get Camino home">
+      <TouchableOpacity onPress={() => router.push('/')} style={styles.logoWrap} accessibilityRole="link" accessibilityLabel={t('nav.homeA11y')}>
         <Text style={styles.logo} numberOfLines={1} maxFontSizeMultiplier={1.1}>
-          {wide ? 'Get Camino: Your Road to Spain' : 'Get Camino'}
+          {wide ? t('nav.wordmarkWide') : t('nav.wordmark')}
         </Text>
       </TouchableOpacity>
 
       <View style={styles.right}>
         {user ? (
           <TouchableOpacity onPress={() => router.push('/plan')} style={styles.cta}>
-            <Text style={styles.ctaText} numberOfLines={1} maxFontSizeMultiplier={1.2}>My roadmap</Text>
+            <Text style={styles.ctaText} numberOfLines={1} maxFontSizeMultiplier={1.2}>{t('nav.myRoadmap')}</Text>
           </TouchableOpacity>
         ) : (
           <>
             {/* Platform-split: web = Google; iOS = dialog with Apple + Google (guideline 4.8). */}
             <SignInButtons />
             <TouchableOpacity onPress={() => router.push('/interview')} style={styles.cta}>
-              <Text style={styles.ctaText} numberOfLines={1} maxFontSizeMultiplier={1.2}>Get your roadmap</Text>
+              <Text style={styles.ctaText} numberOfLines={1} maxFontSizeMultiplier={1.2}>{t('nav.getYourRoadmap')}</Text>
             </TouchableOpacity>
           </>
         )}
 
-        <TouchableOpacity onPress={() => setMenuOpen(true)} style={styles.burger} accessibilityLabel="Menu" accessibilityRole="button">
+        <TouchableOpacity onPress={() => setMenuOpen(true)} style={styles.burger} accessibilityLabel={t('nav.menuA11y')} accessibilityRole="button">
           <Text style={styles.burgerText} maxFontSizeMultiplier={1.2}>☰</Text>
         </TouchableOpacity>
       </View>
@@ -66,24 +80,49 @@ export default function NavBar() {
       <Modal visible={menuOpen} transparent animationType="fade" onRequestClose={() => setMenuOpen(false)}>
         <Pressable style={styles.overlay} onPress={() => setMenuOpen(false)}>
           <Pressable style={[styles.menu, { marginTop: 12 + insets.top, marginRight: 16 + insets.right }]} onPress={() => {}}>
-            <MenuLink label="Home" onPress={() => go('/')} />
-            <MenuLink label="How it works" onPress={() => go('/how-it-works')} />
-            <MenuLink label="Guides" onPress={() => go('/guide')} />
+            <MenuLink label={t('nav.menu.home')} onPress={() => go('/')} />
+            <MenuLink label={t('nav.menu.howItWorks')} onPress={() => go('/how-it-works')} />
+            <MenuLink label={t('nav.menu.guides')} onPress={() => go('/guide')} />
             {/* The payoff before the ask — for everyone (user request 2026-07-04: it used to
                 hide when signed in, which read as it vanishing). */}
-            <MenuLink label="Sample plan" onPress={() => go('/sample-plan')} />
+            <MenuLink label={t('nav.menu.samplePlan')} onPress={() => go('/sample-plan')} />
             {/* The build story went public 3 Jul 2026 (user decision) — essay, log, roadmap. */}
-            <MenuLink label="How I was built" onPress={() => go('/how-i-was-built')} />
+            <MenuLink label={t('nav.menu.howIWasBuilt')} onPress={() => go('/how-i-was-built')} />
             <View style={styles.menuDivider} />
+            {/* The switcher is a FEATURE, not a buried setting (user requirement, LOCALIZATION.md
+                §10): always visible, current language shown by its own name. */}
+            <MenuLink label={t('language.current', { name: currentLocale.name })} onPress={() => { setMenuOpen(false); setLangOpen(true); }} />
             {/* Subtle but always at hand — one tap from anywhere (user request 2026-07-03). */}
-            <MenuLink label="Report a problem" onPress={() => { setMenuOpen(false); setFeedbackOpen(true); }} />
+            <MenuLink label={t('nav.menu.reportProblem')} onPress={() => { setMenuOpen(false); setFeedbackOpen(true); }} />
             {user && (
               <>
-                <MenuLink label="Sign out" onPress={() => { setMenuOpen(false); signOut(); }} />
+                <MenuLink label={t('nav.menu.signOut')} onPress={() => { setMenuOpen(false); signOut(); }} />
                 {/* Apple 5.1.1(v): account deletion must be reachable in-app. Quiet, but here. */}
-                <MenuLink label="Delete my account" onPress={() => { setMenuOpen(false); setDeleteOpen(true); }} />
+                <MenuLink label={t('nav.menu.deleteAccount')} onPress={() => { setMenuOpen(false); setDeleteOpen(true); }} />
               </>
             )}
+          </Pressable>
+        </Pressable>
+      </Modal>
+
+      {/* Each option in its OWN language (Español, not Spanish) — more join at L1/L3. */}
+      <Modal visible={langOpen} transparent animationType="fade" onRequestClose={() => setLangOpen(false)}>
+        <Pressable style={styles.overlay} onPress={() => setLangOpen(false)}>
+          <Pressable style={[styles.menu, { marginTop: 12 + insets.top, marginRight: 16 + insets.right }]} onPress={() => {}}>
+            <Text style={styles.menuHeading} accessibilityRole="header">{t('language.title')}</Text>
+            {SUPPORTED_LOCALES.map(l => (
+              <TouchableOpacity
+                key={l.code}
+                onPress={() => chooseLocale(l.code)}
+                style={styles.menuItem}
+                accessibilityRole="button"
+                accessibilityState={{ selected: l.code === currentLocale.code }}
+              >
+                <Text style={styles.menuItemText}>
+                  {l.code === currentLocale.code ? `✓ ${l.name}` : l.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </Pressable>
         </Pressable>
       </Modal>
@@ -116,5 +155,6 @@ const styles = StyleSheet.create({
   menu:         { backgroundColor: palette.cal, borderRadius: 14, paddingVertical: 8, minWidth: 220, shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 24, shadowOffset: { width: 0, height: 8 }, elevation: 8 },
   menuItem:     { paddingVertical: 13, paddingHorizontal: 20 },
   menuItemText: { fontFamily: 'HankenGrotesk_500Medium', fontSize: 16, color: palette.indigo },
+  menuHeading:  { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.muted, paddingVertical: 10, paddingHorizontal: 20, textTransform: 'uppercase', letterSpacing: 0.6 },
   menuDivider:  { height: 1, backgroundColor: '#E8E4DC', marginVertical: 4 },
 });

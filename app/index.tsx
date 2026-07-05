@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import {
   View, Text, ScrollView, TouchableOpacity, Image,
   StyleSheet, Animated,
@@ -13,14 +14,16 @@ import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import StoreBadges from '@/components/StoreBadges';
 
+// Labels are i18n keys (common:home.photos.*) so captions localize with the rest of the chrome.
 const PHOTOS = [
-  { src: require('@/assets/images/spain-gothic-quarter-barcelona.jpg'), label: 'Gothic Quarter, Barcelona' },
-  { src: require('@/assets/images/spain-madrid.jpg'),                   label: 'Madrid' },
-  { src: require('@/assets/images/spain-plaza-de-espana-in-sevilla.jpg'), label: 'Plaza de España, Sevilla' },
-  { src: require('@/assets/images/spain-sevilla-sunset.jpg'),           label: 'Sevilla at sunset' },
+  { src: require('@/assets/images/spain-gothic-quarter-barcelona.jpg'), labelKey: 'home.photos.gothicQuarter' },
+  { src: require('@/assets/images/spain-madrid.jpg'),                   labelKey: 'home.photos.madrid' },
+  { src: require('@/assets/images/spain-plaza-de-espana-in-sevilla.jpg'), labelKey: 'home.photos.plazaEspana' },
+  { src: require('@/assets/images/spain-sevilla-sunset.jpg'),           labelKey: 'home.photos.sevillaSunset' },
 ];
 
 function RotatingPhoto({ wide }: { wide: boolean }) {
+  const { t } = useTranslation();
   const [current, setCurrent] = useState(0);
   const [next, setNext] = useState(1);
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -56,14 +59,14 @@ function RotatingPhoto({ wide }: { wide: boolean }) {
   return (
     <View style={containerStyle}>
       {/* Base layer — current photo */}
-      <Image source={PHOTOS[current].src} style={imgStyle} resizeMode="cover" accessible accessibilityRole="image" accessibilityLabel={`${PHOTOS[current].label}, Spain`} />
+      <Image source={PHOTOS[current].src} style={imgStyle} resizeMode="cover" accessible accessibilityRole="image" accessibilityLabel={t('home.photoA11y', { label: t(PHOTOS[current].labelKey) })} />
       {/* Fade layer — next photo */}
       <Animated.View style={[StyleSheet.absoluteFill, { opacity: fadeAnim }]}>
         <Image source={PHOTOS[next].src} style={imgStyle} resizeMode="cover" />
       </Animated.View>
       {/* Label */}
       <View style={styles.photoLabel}>
-        <Text style={styles.photoLabelText}>{PHOTOS[current].label}</Text>
+        <Text style={styles.photoLabelText}>{t(PHOTOS[current].labelKey)}</Text>
       </View>
     </View>
   );
@@ -72,6 +75,7 @@ function RotatingPhoto({ wide }: { wide: boolean }) {
 export default function LandingPage() {
   const router = useRouter();
   const wide = useWide(); // shared hydration-safe breakpoint (see lib/useWide.ts)
+  const { t } = useTranslation();
 
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
@@ -91,22 +95,20 @@ export default function LandingPage() {
           <View style={styles.lolaGlyph}>
             <Text style={styles.lolaGlyphStar}>✦</Text>
           </View>
-          <Text style={styles.heroEyebrow}>Moving to Spain</Text>
+          <Text style={styles.heroEyebrow}>{t('home.eyebrow')}</Text>
           <Text style={styles.heroHeadline} accessibilityRole="header">
-            Your personalized roadmap for moving to Spain.
+            {t('home.headline')}
           </Text>
           <Text style={styles.heroSub}>
-            From choosing the right visa to finding the right city, enrolling your kids in school,
-            and getting your paperwork in order — Get Camino figures out what applies to you
-            and what to do first.
+            {t('home.sub')}
           </Text>
           <TouchableOpacity style={styles.heroCta} onPress={() => router.push('/interview')}>
-            <Text style={styles.heroCtaText}>Build my free roadmap →</Text>
+            <Text style={styles.heroCtaText}>{t('home.cta')}</Text>
           </TouchableOpacity>
-          <Text style={styles.heroDisclaimer}>Free · Takes about 3 minutes · No account needed to start</Text>
+          <Text style={styles.heroDisclaimer}>{t('home.disclaimer')}</Text>
           {/* Show the payoff before the ask: a real engine-built roadmap for a sample persona. */}
           <TouchableOpacity onPress={() => router.push('/sample-plan')}>
-            <Text style={styles.heroSampleLink}>Not sure yet? Peek at a sample roadmap first →</Text>
+            <Text style={styles.heroSampleLink}>{t('home.sampleLink')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -114,10 +116,10 @@ export default function LandingPage() {
       </View>
 
       {/* ── Topic strip → the guides (these topics are real pages now) ── */}
-      <TouchableOpacity style={styles.strip} onPress={() => router.push('/guide')} accessibilityLabel="Browse all guides">
+      <TouchableOpacity style={styles.strip} onPress={() => router.push('/guide')} accessibilityLabel={t('home.browseGuidesA11y')}>
         <Text style={styles.stripText}>
-          Visas · Where to live · Schools · Banking · NIE · TIE · Empadronamiento · Modelo 720 · Driving · Remote work
-          <Text style={styles.stripLink}>  ·  Explore all 60 guides →</Text>
+          {t('home.strip')}
+          <Text style={styles.stripLink}>{t('home.stripLink')}</Text>
         </Text>
       </TouchableOpacity>
 

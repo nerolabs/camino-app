@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Text, TouchableOpacity, Modal, Pressable, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
 import EmailSignIn from '@/components/EmailSignIn';
@@ -9,6 +10,7 @@ import EmailSignIn from '@/components/EmailSignIn';
 // rule, and web Apple OAuth needs extra Supabase config we haven't earned a need for.)
 
 export default function SignInButtons() {
+  const { t } = useTranslation();
   const { signInWithGoogle } = useAuth();
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<'providers' | 'email'>('providers');
@@ -18,22 +20,22 @@ export default function SignInButtons() {
   return (
     <>
       <TouchableOpacity onPress={() => setOpen(true)} style={styles.ghost}>
-        <Text style={styles.ghostText} numberOfLines={1} maxFontSizeMultiplier={1.2}>Sign in</Text>
+        <Text style={styles.ghostText} numberOfLines={1} maxFontSizeMultiplier={1.2}>{t('signIn.button')}</Text>
       </TouchableOpacity>
 
       <Modal visible={open} transparent animationType="fade" onRequestClose={close}>
         <Pressable style={styles.overlay} onPress={close}>
           <Pressable style={styles.card} onPress={() => {}}>
-            <Text style={styles.title}>Sign in to Get Camino</Text>
-            <Text style={styles.sub}>Save your roadmap and pick it up on any device.</Text>
+            <Text style={styles.title}>{t('signIn.title')}</Text>
+            <Text style={styles.sub}>{t('signIn.sub')}</Text>
 
             {mode === 'providers' ? (
               <>
                 <TouchableOpacity style={styles.googleBtn} onPress={() => { close(); signInWithGoogle().catch(() => {}); }}>
-                  <Text style={styles.googleBtnText}>Continue with Google</Text>
+                  <Text style={styles.googleBtnText}>{t('signIn.google')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.emailBtn} onPress={() => setMode('email')}>
-                  <Text style={styles.emailBtnText}>Continue with email</Text>
+                  <Text style={styles.emailBtnText}>{t('signIn.email')}</Text>
                 </TouchableOpacity>
               </>
             ) : (
@@ -41,7 +43,7 @@ export default function SignInButtons() {
             )}
 
             <TouchableOpacity onPress={mode === 'email' ? () => setMode('providers') : close}>
-              <Text style={styles.cancel}>{mode === 'email' ? '← All sign-in options' : 'Cancel'}</Text>
+              <Text style={styles.cancel}>{mode === 'email' ? t('signIn.allOptions') : t('signIn.cancel')}</Text>
             </TouchableOpacity>
           </Pressable>
         </Pressable>
