@@ -167,7 +167,16 @@ the regression harness in place. Strategy + rationale: docs/TEST-COVERAGE.md §4
 19. Web needs no submission — its "launch" is the Phase-6 marketing moment.
 
 ### Phase 6 — Post-launch growth (STRATEGY.md order)
-20. **Turnstile on interview start** (web) — land BEFORE the public launch moment.
+20. **Turnstile on interview start** (web) — land BEFORE the public launch moment. **Status
+    (2026-07-05): now hardening, not a gap.** The `/api/lola` abuse posture is verified sound —
+    payload caps + strict CORS + **durable Supabase counters (per-IP 30/min + global 2000/day)**,
+    and per-IP limiting is **confirmed live** (real client IPs land in the counter table, so the
+    Workers runtime does forward them) + provider spend caps set in the Anthropic/ElevenLabs
+    consoles. Remaining Turnstile value: convert IP-based → **per-token** limiting (mint a
+    short-lived HMAC session token on a Turnstile solve, reuse `lib/emailTokens.ts`), so a
+    rotating-IP abuser can't drain the global daily budget and 429 real users, and we don't
+    depend on IP-forwarding never changing. Native rides the counters. Full analysis: the
+    hardening-strategy section in this session's notes.
 21. **Region-by-region specifics content pass** (17 comunidades, each against its own
     official source — invariant 3; renders under the shipped regional flags).
 22. **Public regulatory changelog + "last verified" stamps** — trust engine, correction
