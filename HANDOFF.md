@@ -5,114 +5,73 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-Last updated: 2026-07-05.
+Last updated: 2026-07-05 (late — post-localization bug-fix pass; session closed out).
 
 ---
 
-## ⭐ RESUME HERE (2026-07-05 EVENING — L0–L3 ALL SHIPPED: five languages LIVE in production)
+## ⭐ RESUME HERE (2026-07-05 — five languages LIVE + build 30 in TestFlight; bug-fix pass done)
 
-**The entire localization arc (L0→L3) shipped in one day and is LIVE at getcamino.app:**
-en/es/fr/de/it — chrome, interview (+static questions), 60 catalog titles ×4, 60 guide
-explainers ×4, emails/report/digest per language (user_metadata.lang; SessionSync mirrors
-browser-detected language into metadata — user-spotted gap, fixed), legal (es full courtesy
-translation, fr/de/it English + native notice), per-locale sample couples, per-locale web
-trees app/{es,fr,de,it} (STATIC dirs — a dynamic [locale] segment shadowed every
-single-segment route incl. /sitemap.xml; the post-deploy gate caught it, production never
-exposed), hreflang ×5 + x-default, sitemap 334 URLs. 146 vitest tests (+10 opt-in); all
-per-locale gates iterate core/i18n/registry.ts (add a language there or it can't ship).
-**Since then (same evening):** e2e-ios run #10 GREEN first-attempt (flow-03 trim now
-CI-verified) → **iOS build 30 kicked** (f262aae3, auto-submit to TestFlight, all languages) ·
-welcome-once dedupe regression test landed (151 tests) · weekly-cron inspection: admin
-metadata updates MERGE (verified empirically on staging — no wipe risk), capture-flow users
-now get `lang` seeded with `pending_profile` · HANDOFF history archived to docs/archive/.
-**NEXT:** (a) Cristina/native passes over live es/fr/de/it (user-side; corrections = data
-edits, gates re-verify); (b) build-30 device test (languages incl. es TTS voice, PDF in es);
-(c) remaining route-handler tests (weekly/feedback/delete/unsubscribe — welcome pattern
-established); (d) first natural cron fire Monday 2026-07-07 06:00 UTC — check the run output.
+**getcamino.app is LIVE in five languages (en/es/fr/de/it)** and **iOS build 30** (all
+languages) is on TestFlight, device-tested by the user + wife with **everything working** —
+full Spanish interview, PDF, multi-language roadmap tasks on web and native. 157 vitest tests
+(+10 opt-in). The localization arc (L0–L3) and a full bug-fix pass are complete; the codebase
+is in a clean, well-tested state. **THIS SESSION'S FIXES (all live in production):**
 
-## Earlier that morning (2026-07-05 — testing audit DONE, localization gate CLEAR → then: L0)
+1. **🔴 SILENT PRODUCTION DATA LOSS — profiles never saved for signed-in users (fixed).** The
+   biggest find: the STAFF.md is_staff hardening left `authenticated` without `UPDATE(user_id)`,
+   and PostgREST's upsert puts the conflict key in `ON CONFLICT DO UPDATE SET` → every signed-in
+   save failed 42501, and `core/profileDb.ts` SWALLOWED the error → unnoticed for days. Only
+   pre-hardening Google profiles survived (timing, not provider). Fix: `grant update (user_id)`
+   on BOTH DBs (verified by throwaway-user probe: insert+update persist, is_staff still blocked);
+   profileDb now `captureError`s on failure (5-test regression); `scripts/sql/profiles-grants.sql`
+   + STAFF.md warning + memory [[profiles-upsert-grant-gotcha]]. **E2E was structurally blind —
+   it asserts in-memory UI, not DB persistence.**
+2. **Auth code email localized** (user-found: Italian UI → English code email). That email is
+   sent by Supabase Auth, not our Resend pipeline. Fix: signInWithOtp always sends `data.lang`;
+   both dashboard templates (magic-link + confirm-signup) rewritten with 5-language nil-safe
+   branching (`printf "%v" .Data.lang`), pasted+verified on both projects (Claude drove Chrome).
+   Subjects compacted to Supabase's 255-char cap. Source of truth: docs/design/supabase-auth-emails.md.
+3. **Interview responds to mid-interview language switch** (was: required reload → lost progress).
+   Chrome re-renders via useTranslation; now the CURRENT question also re-issues in the new
+   language (translated static question, instant). Verified in-browser.
+4. **"How I was built" hidden in non-English menus** (English-only page by decision). Web live;
+   **native shows it until the next build** (build 30 predates this).
+5. **German "Guides" anglicism → "Ratgeber"** across all de catalogs (fr "Guides" is correct
+   French, kept; es/it already localized).
+6. Earlier same session: welcome-once dedupe regression test; capture-flow users seed `lang`;
+   e2e-ios run #10 green (flow-03 trim CI-verified); weekly-cron inspected (admin metadata
+   MERGES — verified); HANDOFF history archived to docs/archive/.
 
-**The fresh-eyes testing audit ran 2026-07-05 morning and is COMPLETE** (mandate was
-`docs/archive/AUDIT-BRIEF-TESTING.md` (archived — executed); all 5 deliverables in `docs/TEST-COVERAGE.md` — critical-path
-verdicts in its §5). Outcomes: map verified against reality (2 per-file counts corrected);
-**localization HARD GATE CLEAR** — Spanish extraction proven LIVE (3 cases, real prompt via new
-pure `lib/extractionPrompt.ts`) + email/report render snapshots (`tests/render-snapshot.test.ts`);
-suite now 86 (+10 opt-in). Gates hardened: deploy.sh fails loudly when the E2E gate can't run,
-API contract tests run on every STAGING deploy, seed.mjs allowlists staging (was a prod
-denylist), Maestro pinned 2.6.1. Decisions re-verified, all upheld: flow-03 trim (still confirm
-on next deliberate big-build run), flow-04 exclusion (#2610 closed-stale, NOT fixed), two-tier
-policy (9 runs → 1 green says native CI can't be an iteration gate). Biggest named gaps: full
-interview→roadmap web journey (build as opt-in pre-release Playwright project, not per-deploy);
-welcome-once dedupe + route handlers have no regression test (the 3×-send bug reached a person).
-**NEXT: Phase 2 L0** — i18next plumbing + full string extraction + the 4 i18n lint gates built
-in, re-run plan-snapshot + full suite after (still green = behavior untouched). See TODO.md
-Phase 2.
-
-**Session digest (2026-07-04→05, the marathon):** backlog audited twice (TODO "SEQUENCED BACKLOG
-v2" is canonical) · source-link QA 55/55 (2 fixed) · rebrand **Get Camino** (~100 strings, ASC
-name fits 30 chars) · @getcamino.app mailboxes (feedback@/privacy@/legal@) · operator finalized
-**AELaboratories, Inc, Sanford NC** (entity gate LIFTED — sole prop until revenue; NC governing
-law) · API volume-limiting shipped+verified (durable Supabase counters, strict CORS, provider
-caps) · a11y focus ring · family-testing rounds 4–5 fixed (voice turn-taking, clipping both ends,
-composer growth, eternal-loading redirect, 35s spinner TTL + Sentry slow-turn alarm) · builds
-27–29 (29 on device: TTS/mic "finally working correctly") · E2E built: 12-test authed Playwright
-suite (per-deploy gate in deploy.sh — caught a real seed-ordering bug on first run) + Maestro
-native (9 CI runs → lessons: Xcode 26 needed, driver timeout, text-entry race, deep-link #2610
-excluded, Q2-LLM-wait trimmed) · two-tier policy (web per-deploy / native big-builds-only) ·
-44→82 vitest tests incl. the plan-structure snapshot (localization guard) · localization design
-APPROVED (docs/LOCALIZATION.md; es pre-launch, tú, Cristina verifies, visible switcher) · Android
-promoted to launch platform (personal Play acct → 12-tester×14d closed test) · store-badge stub +
-back-to-top shipped · homework pages + essay revised · docs: BUILD.md (pipeline+gate),
-TEST-COVERAGE.md (living map), AUDIT-BRIEF-TESTING.md (next session's mandate).
-
-**Where we are:** the E2E gate (Phase 1) is basically closed and the deep testing investment for
-localization is in place. **The morning's job is Phase 2 — Localization — but it has a HARD
-TESTING GATE in front of it (user directive): the localization-testing prerequisites in TODO.md
-Phase 2 must be green before ANY L0 code.** Design is approved in docs/LOCALIZATION.md; testing
-strategy in docs/TEST-COVERAGE.md §4A.
-
-1. **Web E2E is now a per-deploy regression gate** — `scripts/deploy.sh` runs the Playwright
-   suite against the unique deployment URL after every deploy (staging = all 12; production = 6
-   public; `DEPLOY_SKIP_E2E=1` to skip). It already caught a real seed-ordering bug on its first
-   run. Small builds = fast CI (typecheck/audit/test); big builds add the two E2E suites.
-2. **Native E2E (Maestro) — 3 flows, retry-tolerant, BIG BUILDS ONLY** (manual `e2e-ios`
-   workflow). Run #7 all-green; since then, environment flakiness (cold-boot splash, LLM latency)
-   → fixes: retry-once + generous boot waits. **Run #9 finding: flow 03 failed BOTH retries on the
-   "Question 2 appears" wait (needs a 2nd sequential LLM call — CI-latency-nondeterministic), while
-   01/02 and everything up to answer-sent were solid. So 03 was TRIMMED** to prove the
-   native-critical path (launch → interview starts via a real LLM turn → native keyboard answer
-   lands → send posts it) and NOT the flaky second LLM round-trip. **UNVERIFIED in CI — confirm on
-   the next deliberate big-build e2e-ios run (do NOT burn runs chasing it; it's big-builds-only).**
-   The authed deep-link flow (04) stays excluded — Maestro #2610. Rationale: docs/BUILD.md +
-   docs/TEST-COVERAGE.md §3.
-3. **Testing deepened for localization (44 → 82 vitest tests):** the crown jewel is
-   `tests/plan-snapshot.test.ts` — every persona's plan frozen as `id|phase|severity|timing-state`,
-   so localization surgery that changes engine behavior fails loudly. Plus a vitest RN-stub +
-   `@/` alias unlocking the display layer, and units for api-guard/server-email/regions/
-   sample-profile/plan-format/plan-coach. docs/TEST-COVERAGE.md is the living map (CLAUDE.md rule
-   to keep it current).
-4. **Immediate next actions (morning):** (a) do the localization-testing prerequisites
-   (TODO Phase 2 gate) — the highest-value one is the Spanish-input extraction test (proves the
-   interview already understands Spanish); (b) then L0 plumbing, building the 4 i18n lint gates
-   AS PART of L0; (c) re-run the full suite + plan-snapshot after string extraction (still green =
-   behavior untouched). Parallel, user-side: Android device + Play closed-test clock (Phase 3).
-
----
+**NEXT SESSION — suggested priorities (nothing is blocking; the product is release-quality):**
+- **(a) Native build 31** on user command — carries the menu-hide fix + interview switch +
+  Ratgeber + all web fixes since build 30. Dispatch `e2e-ios` first (big-builds-only rule).
+- **(b) Route-handler integration tests** — weekly / feedback / account-delete / unsubscribe,
+  using the mocked-Supabase pattern from `tests/welcome-route.test.ts` (the audit's last gap).
+- **(c) Store paperwork (TODO Phase 4)** — ASC fields, DSA trader status, screenshots (consider
+  an es-ES localized listing now that L1 shipped), Supabase auth-template parity note in TODO.
+- **(d) Android track (TODO Phase 3)** — user buys the test device + Play account → start the
+  14-day closed-test clock (burns calendar time in parallel; English build is fine to start).
+- **(e) Watch the first natural weekly cron** — Monday 2026-07-07 06:00 UTC; check the run's
+  JSON output (roundups/nudges/skipped/errors). Localized emails ride it now.
+- **(f) [USER] native-speaker passes** over live es/fr/de/it — corrections are pure data edits;
+  the lint gates + snapshots re-verify each change.
 
 ## Current state (one paragraph — rewritten 2026-07-05 evening; history: docs/archive/)
 
 Web is live at **getcamino.app** in **five languages** (en/es/fr/de/it — L0–L3 shipped
 2026-07-05; native-speaker verification passes pending, user-side). iOS is at **TestFlight
-build 30** (in flight; carries all languages) — Apple + Google + email sign-in all WORKING,
-dictation, Lola voice, universal links, PDF export, delete-account. The catalog holds **60
-obligations** (55 `official` with `source_url` / 5 `recommendation`), invariant-2-audited
-(`npm run audit`, a deploy gate). The email loop is live (welcome + weekly cron Mondays
-06:00 UTC + one-click unsubscribe), localized per `user_metadata.lang` (admin metadata
-updates MERGE — verified empirically on staging 2026-07-05). Quality gates: **151 vitest
-tests + 10 opt-in** on every push; Playwright (12) + API contract (10) on every staging
-deploy, 6 public on production deploys; 3 Maestro flows on big builds (run #10 green,
-pinned Maestro 2.6.1). Android is a launch platform (Play closed-test clock not yet
-started — user-side). Next phases: TODO.md → store paperwork (4), submissions (5).
+build 30** (device-tested working by user + wife; carries all languages) — Apple + Google +
+email sign-in all WORKING, dictation, Lola voice, universal links, PDF export, delete-account.
+Signed-in **profiles now persist** (a grant bug silently blocked all saves until 2026-07-05 —
+fixed on both DBs; see resume block). The catalog holds **60 obligations** (55 `official` with
+`source_url` / 5 `recommendation`), invariant-2-audited (`npm run audit`, a deploy gate). The
+email loop is live (welcome + weekly cron Mondays 06:00 UTC + one-click unsubscribe), localized
+per `user_metadata.lang` (admin metadata updates MERGE — verified empirically); the Supabase
+auth code emails are also localized (dashboard templates, 5-language). Quality gates: **157
+vitest tests + 10 opt-in** on every push; Playwright (12) + API contract (10) on every staging
+deploy, 6 public on production deploys; 3 Maestro flows on big builds (run #10 green, pinned
+Maestro 2.6.1). Android is a launch platform (Play closed-test clock not yet started —
+user-side). Next phases: TODO.md → store paperwork (4), submissions (5).
 
 ## Where things live
 

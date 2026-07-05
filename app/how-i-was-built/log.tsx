@@ -538,6 +538,16 @@ const ROWS: Row[] = [
       'Prior decisions were re-verified, not inherited — the trimmed native test flow and the excluded deep-link flow both survived scrutiny, with the tool version now pinned for reproducible runs.',
     ],
   },
+  {
+    feature: 'The bug-fix pass — and one that mattered',
+    date: '5 Jul 2026',
+    work: 'With five languages live and real family testing underway, a round of fixes: the sign-in code email now arrives in your language (it comes from a different system than the other emails and had been missed), the interview responds instantly when you switch languages mid-conversation instead of forcing a reload, and small wording polish across languages. The headline, though, was a silent one caught by an eagle-eyed look at the database: signed-in users\' saved roadmaps had quietly stopped persisting.',
+    decisions: [
+      'A well-meant security change caused it: locking down which columns a signed-in user may write accidentally blocked the exact save the app performs — and the failure had been swallowed in code, so it hid for days. The fix restored saving on the live databases, and now any save failure raises an alarm instead of vanishing.',
+      'Tests can be blind in a specific way: the automated tests checked that the screen looked right, not that the database actually kept the data — so a save that silently failed still passed. The lesson is written down where the next person will see it.',
+      'The clue was in the pattern: only older accounts had saved data, and they happened to be a single sign-in method. It looked like a sign-in bug; it was a timing coincidence around when the security change landed. Chasing the real cause beat trusting the obvious story.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

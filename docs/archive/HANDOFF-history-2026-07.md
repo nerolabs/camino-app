@@ -250,3 +250,74 @@ correctly, in a real Gmail inbox. Welcome fired on a real Google sign-in at getc
   POST `/api/email/weekly` without bearer → 401. CI (GitHub Actions) green on the last push.
 
 ---
+
+---
+
+## Earlier that morning (2026-07-05 — testing audit DONE, localization gate CLEAR → then: L0)
+
+**The fresh-eyes testing audit ran 2026-07-05 morning and is COMPLETE** (mandate was
+`docs/archive/AUDIT-BRIEF-TESTING.md` (archived — executed); all 5 deliverables in `docs/TEST-COVERAGE.md` — critical-path
+verdicts in its §5). Outcomes: map verified against reality (2 per-file counts corrected);
+**localization HARD GATE CLEAR** — Spanish extraction proven LIVE (3 cases, real prompt via new
+pure `lib/extractionPrompt.ts`) + email/report render snapshots (`tests/render-snapshot.test.ts`);
+suite now 86 (+10 opt-in). Gates hardened: deploy.sh fails loudly when the E2E gate can't run,
+API contract tests run on every STAGING deploy, seed.mjs allowlists staging (was a prod
+denylist), Maestro pinned 2.6.1. Decisions re-verified, all upheld: flow-03 trim (still confirm
+on next deliberate big-build run), flow-04 exclusion (#2610 closed-stale, NOT fixed), two-tier
+policy (9 runs → 1 green says native CI can't be an iteration gate). Biggest named gaps: full
+interview→roadmap web journey (build as opt-in pre-release Playwright project, not per-deploy);
+welcome-once dedupe + route handlers have no regression test (the 3×-send bug reached a person).
+**NEXT: Phase 2 L0** — i18next plumbing + full string extraction + the 4 i18n lint gates built
+in, re-run plan-snapshot + full suite after (still green = behavior untouched). See TODO.md
+Phase 2.
+
+**Session digest (2026-07-04→05, the marathon):** backlog audited twice (TODO "SEQUENCED BACKLOG
+v2" is canonical) · source-link QA 55/55 (2 fixed) · rebrand **Get Camino** (~100 strings, ASC
+name fits 30 chars) · @getcamino.app mailboxes (feedback@/privacy@/legal@) · operator finalized
+**AELaboratories, Inc, Sanford NC** (entity gate LIFTED — sole prop until revenue; NC governing
+law) · API volume-limiting shipped+verified (durable Supabase counters, strict CORS, provider
+caps) · a11y focus ring · family-testing rounds 4–5 fixed (voice turn-taking, clipping both ends,
+composer growth, eternal-loading redirect, 35s spinner TTL + Sentry slow-turn alarm) · builds
+27–29 (29 on device: TTS/mic "finally working correctly") · E2E built: 12-test authed Playwright
+suite (per-deploy gate in deploy.sh — caught a real seed-ordering bug on first run) + Maestro
+native (9 CI runs → lessons: Xcode 26 needed, driver timeout, text-entry race, deep-link #2610
+excluded, Q2-LLM-wait trimmed) · two-tier policy (web per-deploy / native big-builds-only) ·
+44→82 vitest tests incl. the plan-structure snapshot (localization guard) · localization design
+APPROVED (docs/LOCALIZATION.md; es pre-launch, tú, Cristina verifies, visible switcher) · Android
+promoted to launch platform (personal Play acct → 12-tester×14d closed test) · store-badge stub +
+back-to-top shipped · homework pages + essay revised · docs: BUILD.md (pipeline+gate),
+TEST-COVERAGE.md (living map), AUDIT-BRIEF-TESTING.md (next session's mandate).
+
+**Where we are:** the E2E gate (Phase 1) is basically closed and the deep testing investment for
+localization is in place. **The morning's job is Phase 2 — Localization — but it has a HARD
+TESTING GATE in front of it (user directive): the localization-testing prerequisites in TODO.md
+Phase 2 must be green before ANY L0 code.** Design is approved in docs/LOCALIZATION.md; testing
+strategy in docs/TEST-COVERAGE.md §4A.
+
+1. **Web E2E is now a per-deploy regression gate** — `scripts/deploy.sh` runs the Playwright
+   suite against the unique deployment URL after every deploy (staging = all 12; production = 6
+   public; `DEPLOY_SKIP_E2E=1` to skip). It already caught a real seed-ordering bug on its first
+   run. Small builds = fast CI (typecheck/audit/test); big builds add the two E2E suites.
+2. **Native E2E (Maestro) — 3 flows, retry-tolerant, BIG BUILDS ONLY** (manual `e2e-ios`
+   workflow). Run #7 all-green; since then, environment flakiness (cold-boot splash, LLM latency)
+   → fixes: retry-once + generous boot waits. **Run #9 finding: flow 03 failed BOTH retries on the
+   "Question 2 appears" wait (needs a 2nd sequential LLM call — CI-latency-nondeterministic), while
+   01/02 and everything up to answer-sent were solid. So 03 was TRIMMED** to prove the
+   native-critical path (launch → interview starts via a real LLM turn → native keyboard answer
+   lands → send posts it) and NOT the flaky second LLM round-trip. **UNVERIFIED in CI — confirm on
+   the next deliberate big-build e2e-ios run (do NOT burn runs chasing it; it's big-builds-only).**
+   The authed deep-link flow (04) stays excluded — Maestro #2610. Rationale: docs/BUILD.md +
+   docs/TEST-COVERAGE.md §3.
+3. **Testing deepened for localization (44 → 82 vitest tests):** the crown jewel is
+   `tests/plan-snapshot.test.ts` — every persona's plan frozen as `id|phase|severity|timing-state`,
+   so localization surgery that changes engine behavior fails loudly. Plus a vitest RN-stub +
+   `@/` alias unlocking the display layer, and units for api-guard/server-email/regions/
+   sample-profile/plan-format/plan-coach. docs/TEST-COVERAGE.md is the living map (CLAUDE.md rule
+   to keep it current).
+4. **Immediate next actions (morning):** (a) do the localization-testing prerequisites
+   (TODO Phase 2 gate) — the highest-value one is the Spanish-input extraction test (proves the
+   interview already understands Spanish); (b) then L0 plumbing, building the 4 i18n lint gates
+   AS PART of L0; (c) re-run the full suite + plan-snapshot after string extraction (still green =
+   behavior untouched). Parallel, user-side: Android device + Play closed-test clock (Phase 3).
+
+---
