@@ -38,13 +38,11 @@ Current: 86 vitest tests (+10 opt-in) · 11 web E2E flows · 3 native flows (ret
 Maestro pinned 2.6.1) · API contract tests run on every staging deploy.
 
 ### Phase 1 — E2E gate (IN FLIGHT — blocks everything below; user directive)
-1. **Maestro green**: 3 native flows (01-home, 02-sample-plan, 03-interview) are the gate;
-   run #7 green; flow-03 trim (stops before the 2nd LLM round-trip) still UNVERIFIED in CI —
-   confirm on the next deliberate big-build run. **2026-07-05 audit:** Maestro pinned to 2.6.1
-   (the green run's version; installs were unpinned-latest before). The authed deep-link flow
-   (04) stays EXCLUDED — #2610 re-checked: closed-stale ("waiting for customer response"), NOT
-   fixed; re-pinning to pre-1.40 would risk the 3 green flows on the Xcode 26 image. Verdicts:
-   docs/TEST-COVERAGE.md §5.
+1. ✅ **Maestro green — flow-03 trim VERIFIED IN CI** (run #10, 2026-07-05, green on the
+   first attempt, pinned Maestro 2.6.1 — the pre-build-30 gate). The authed deep-link flow
+   (04) stays EXCLUDED — #2610 re-checked: closed-stale ("waiting for customer response"),
+   NOT fixed; re-pinning to pre-1.40 would risk the 3 green flows on the Xcode 26 image.
+   Verdicts: docs/TEST-COVERAGE.md §5.
 2. ~~**Pipeline wiring (Phase C)**~~ — **docs/BUILD.md rewritten** with the two-tier gate
    (user decision 2026-07-05): **small builds** = fast CI only (typecheck · audit · test, every
    push); **big builds** (native RC / store submission) = ALSO test:e2e (12) + e2e-ios
