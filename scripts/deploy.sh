@@ -54,7 +54,29 @@ if find dist -maxdepth 1 -name "* [0-9]" | grep -q .; then
 fi
 
 echo "[deploy] Deploying to ${TARGET} ..."
-npx eas-cli deploy "${DEPLOY_FLAGS[@]}"
+DEPLOY_LOG="$(mktemp)"
+npx eas-cli deploy "${DEPLOY_FLAGS[@]}" 2>&1 | tee "$DEPLOY_LOG"
+# The UNIQUE per-deploy URL (camino--<id>.expo.app) is always fresh — testing it avoids the
+# alias/custom-domain CDN lag, so E2E checks exactly the bundle we just shipped.
+DEPLOY_URL="$(grep -oE 'https://camino--[a-z0-9]+\.expo\.app' "$DEPLOY_LOG" | head -1)"
+rm -f "$DEPLOY_LOG"
+
+# Web E2E as a post-deploy regression gate (set DEPLOY_SKIP_E2E=1 to skip). Runs against the
+# unique URL. Staging: the full suite (public smoke + authed — SUPABASE_SERVICE_ROLE_KEY is in
+# the sourced env, and seed.mjs targets the staging DB / refuses prod). Production: PUBLIC smoke
+# ONLY — the authed suite seeds a test user, which must never touch the prod DB. `set -e` makes
+# a failure exit non-zero (loud): on staging that's your "don't promote to prod" signal.
+if [ -z "${DEPLOY_SKIP_E2E:-}" ] && [ -n "$DEPLOY_URL" ] && npx playwright --version >/dev/null 2>&1; then
+  echo "[deploy] Web E2E against ${DEPLOY_URL} ..."
+  if [ "$TARGET" = "production" ]; then
+    E2E_BASE_URL="$DEPLOY_URL" npx playwright test --project=public
+  else
+    E2E_BASE_URL="$DEPLOY_URL" npx playwright test
+  fi
+  echo "[deploy] Web E2E passed."
+elif [ -z "${DEPLOY_SKIP_E2E:-}" ]; then
+  echo "[deploy] ⚠️  Skipped web E2E (no deploy URL captured, or Playwright not installed)."
+fi
 
 echo "[deploy] Cleaning up .env.local (leaves your local dev .env untouched)..."
 rm -f .env.local

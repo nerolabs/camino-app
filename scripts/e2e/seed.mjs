@@ -93,19 +93,16 @@ if (!user) {
 }
 
 // Link #1 → the web suite (auth.setup.ts) verifies hashed_token itself into a session.
-const { data: link, error: linkErr } = await admin.auth.admin.generateLink({
-  type: 'magiclink',
-  email: EMAIL,
-  options: { redirectTo: REDIRECT_TO },
-});
-if (linkErr) throw linkErr;
+// ORDER MATTERS: generating a magic link INVALIDATES any previous one for the same user
+// (Supabase). So mint the NATIVE deep link FIRST and resolve it to real session tokens
+// immediately (below); then mint the WEB link LAST so its hashed_token is the one still valid
+// when auth.setup.ts verifies it. Getting this backwards fails the web suite with
+// "Email link is invalid or has expired" (caught by the post-deploy E2E gate, 2026-07-05).
 
-// Link #2 → a ready-to-open DEEP LINK for native. Following the verify URL server-side
-// yields the exact caminoapp://auth-callback#access_token=… redirect Supabase would hand a
-// browser — but WITHOUT Safari, so Maestro never faces the "Open in Get Camino?" SpringBoard
-// dialog (which isn't in the app's accessibility tree — the run-2/3 failure). The app's own
-// deep-link handler (completeSessionFromUrl → setSession) does the rest. Separate token so it
-// doesn't consume link #1.
+// Native deep link → follow the verify URL server-side (redirect:manual) to get the exact
+// caminoapp://auth-callback#access_token=… redirect Supabase would hand a browser, but WITHOUT
+// Safari — so Maestro never faces the "Open in Get Camino?" SpringBoard dialog. Its tokens are
+// a real, already-exchanged session, independent of any later magic-link token.
 let deep_link = null;
 {
   const { data: l2, error: e2 } = await admin.auth.admin.generateLink({
@@ -120,6 +117,14 @@ let deep_link = null;
     else console.error(`seed: unexpected verify redirect (status ${res.status}): ${loc?.slice(0, 60)}`);
   }
 }
+
+// Web link LAST → its hashed_token is the currently-valid one for auth.setup.ts's verifyOtp.
+const { data: link, error: linkErr } = await admin.auth.admin.generateLink({
+  type: 'magiclink',
+  email: EMAIL,
+  options: { redirectTo: REDIRECT_TO },
+});
+if (linkErr) throw linkErr;
 
 console.log(JSON.stringify({
   email: EMAIL,
