@@ -17,7 +17,7 @@ Layers, and when they run:
 
 ---
 
-## 1. Unit / integration (vitest) — 151 passing (+10 opt-in network)
+## 1. Unit / integration (vitest) — 157 passing (+10 opt-in network)
 
 Concentrated on the deterministic core (that's the product's real risk surface):
 
@@ -39,6 +39,7 @@ Concentrated on the deterministic core (that's the product's real risk surface):
 | **Display formatters** (via RN stub) | `plan-format.test.ts` (8) | `plansDiffer` honesty gate (no-op false; add/remove/date-shift true); `diffSummary` narration; `completionLine` on-time/late/early; phase & severity label completeness |
 | **Change hints** | `plan-coach.test.ts` (2) | `changeHint` per category + generic fallback |
 | **Welcome route (dedupe)** | `welcome-route.test.ts` (5) | the welcome-once handler with mocked Supabase/Resend: 401 unauth; already-welcomed → no send, no write; **claim-before-send ordering** (the anti-3×-send property); send failure rolls the claim back; `user_metadata.lang` → localized welcome |
+| **Profile persistence (dedupe of silent data loss)** | `profile-db.test.ts` (5) | saveProfile upsert error → captureError with code+op (the anti-silent-data-loss guard after the 2026-07-05 grant incident); success → no alert; loadProfileRow is_staff-migration fallback stays quiet; both-reads-fail → alert |
 | **Render snapshots (localization guard)** | `render-snapshot.test.ts` (8) | full-HTML snapshots of all 3 emails (`welcomeEmail`/`roundupEmail`/`nudgeEmail`, fixed digest + URLs) and the printable report (`reportHtml`, one of every timing state, frozen clock) — in BOTH languages since L1. The en snapshots passed unchanged through the lang-param refactor = byte-identical output for existing users |
 | **es digest (L1)** | in `email-digest.test.ts` (1 of 7) | `buildDigest(…, 'es')` selects the SAME items (selection is locale-free) with Spanish titles, when-labels ("vencía el …"), and tips |
 | **The 4 i18n lint gates (L0)** | `i18n-lint.test.ts` (1 + 4×per-locale) | scans `locales/<lang>/*.json` from disk — adding a locale directory enrolls it automatically (es enrolled at L1). en self-check (no empty strings, well-formed `{{placeholders}}`); per non-English locale: *completeness* (exact en key set), *digit-lint* (translation never changes a number — invariant 3), *placeholder-lint* (`{{var}}` parity), *brand-lint* ("Get Camino"/"Lola" verbatim) |

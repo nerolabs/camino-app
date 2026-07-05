@@ -29,9 +29,18 @@ Verify these are the only columns your `profiles` table needs on insert/update b
 ```sql
 revoke insert, update on public.profiles from authenticated;
 grant  insert (user_id, answers, updated_at) on public.profiles to authenticated;
-grant  update (answers, updated_at)          on public.profiles to authenticated;
+grant  update (user_id, answers, updated_at) on public.profiles to authenticated;
 -- SELECT is left intact so the client can still read is_staff for its own row (under RLS).
 ```
+
+> ⚠️ **`user_id` MUST be in the UPDATE grant** (learned the hard way 2026-07-05 — it caused days
+> of silent data loss; see `scripts/sql/profiles-grants.sql`). The app saves via PostgREST
+> **upsert**, and PostgREST puts EVERY payload column — including the conflict key `user_id` — in
+> the `ON CONFLICT DO UPDATE SET`. Omit `user_id` from the UPDATE grant and every save fails with
+> `42501 permission denied`. `user_id` stays safe: the RLS UPDATE policy (`auth.uid() = user_id`)
+> forbids changing it to another user, and `is_staff` is still absent from the grant, so clients
+> still can't elevate themselves. Verify after any grant change with the probe in
+> `scripts/sql/profiles-grants.sql`.
 
 ## 3. Grant a tester staff access
 
