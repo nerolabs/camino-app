@@ -5,6 +5,6 @@ appId: ${APP_ID}
     clearState: true
 - extendedWaitUntil:
     visible: "Build my free roadmap.*"
-    timeout: 20000
+    timeout: 45000
 - assertVisible: "Get Camino.*"
 - assertVisible: ".*sample roadmap.*"

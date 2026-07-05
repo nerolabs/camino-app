@@ -5,9 +5,9 @@ appId: ${APP_ID}
     clearState: true
 - extendedWaitUntil:
     visible: ".*sample roadmap.*"
-    timeout: 20000
+    timeout: 45000
 - tapOn: ".*sample roadmap.*"
 - extendedWaitUntil:
     visible: "SAMPLE ROADMAP"
-    timeout: 20000
+    timeout: 45000
 - assertVisible: ".*Susan.*"

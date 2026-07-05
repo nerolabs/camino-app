@@ -89,10 +89,26 @@ jobs:
         env:
           MAESTRO_DRIVER_STARTUP_TIMEOUT: "240000"
         run: |
-          maestro test .maestro --exclude-tags=authed \
-            -e APP_ID=com.nerolabs.camino \
-            -e AUTH_LINK="$AUTH_LINK" \
-            --format junit --output maestro-report.xml
+          # Retry the suite once on failure. Mobile E2E on a cold CI simulator has irreducible
+          # environmental flakiness — slow boot past the splash screen, LLM latency spikes
+          # (run #8: 02 timed out on the splash, 03's turn ran 3 min). This is a big-build gate,
+          # so a retry on transient failure is the honest way to run it (like Playwright's
+          # built-in retries: 1). A real regression fails both attempts.
+          for attempt in 1 2; do
+            echo "::group::Maestro attempt $attempt"
+            if maestro test .maestro --exclude-tags=authed \
+                 -e APP_ID=com.nerolabs.camino \
+                 -e AUTH_LINK="$AUTH_LINK" \
+                 --format junit --output maestro-report.xml; then
+              echo "::endgroup::"
+              echo "Maestro passed on attempt $attempt."
+              exit 0
+            fi
+            echo "::endgroup::"
+            echo "Maestro attempt $attempt failed."
+          done
+          echo "Maestro failed after 2 attempts (likely a real regression, not flakiness)."
+          exit 1
 
       - name: Upload failure artifacts (recordings, screenshots, report)
         if: failure()

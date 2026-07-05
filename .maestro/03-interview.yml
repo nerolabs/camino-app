@@ -13,7 +13,7 @@ appId: ${APP_ID}
     clearState: true
 - extendedWaitUntil:
     visible: "Build my free roadmap.*"
-    timeout: 30000
+    timeout: 45000
 - tapOn: "Build my free roadmap.*"
 - extendedWaitUntil:
     visible: "Hola, I'm Lola.*"
