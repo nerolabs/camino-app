@@ -57,6 +57,31 @@ describe('email templates render exactly (localization guard)', () => {
   });
 });
 
+// es twins (L1): same fixtures, lang 'es' — the digest fixture carries es labels the way
+// buildDigest(…, 'es') produces them. A translation edit shows up as a reviewable diff here.
+const DIGEST_ES: Digest = {
+  ...DIGEST,
+  overdue: [{ ...DIGEST.overdue[0], title: 'Empadronamiento (padrón municipal — inscríbete en el censo de tu municipio)', whenLabel: 'vencía el 12 jun', tip: 'Pide la cita previa ya — el cuello de botella real son las citas, no el papeleo.' }],
+  upcoming: [
+    { ...DIGEST.upcoming[0], title: 'Consigue tu NIE', whenLabel: 'vence el 28 jul', tip: 'Pide la cita previa ya — el cuello de botella real son las citas, no el papeleo.' },
+    { ...DIGEST.upcoming[1], title: 'Presenta el Modelo 720', whenLabel: 'vence el 30 jul', tip: 'Ante la duda, un gestor lo prepara en un día — un seguro barato contra errores de presentación.' },
+  ],
+};
+
+describe('email templates render exactly — es (L1)', () => {
+  it('welcome (es)', () => {
+    expect(welcomeEmail({ planUrl: PLAN_URL, unsubHtml: UNSUB, lang: 'es' })).toMatchSnapshot();
+  });
+
+  it('weekly roundup (es)', () => {
+    expect(roundupEmail({ digest: DIGEST_ES, planUrl: PLAN_URL, unsubHtml: UNSUB, lang: 'es' })).toMatchSnapshot();
+  });
+
+  it('interview nudge (es)', () => {
+    expect(nudgeEmail({ interviewUrl: INTERVIEW_URL, unsubHtml: UNSUB, lang: 'es' })).toMatchSnapshot();
+  });
+});
+
 describe('printable report renders exactly (localization guard)', () => {
   const TODAY = new Date('2026-07-03T12:00:00Z');
   const day = (offset: number) => new Date(2026, 6, 3 + offset);
@@ -80,5 +105,9 @@ describe('printable report renders exactly (localization guard)', () => {
 
   it('full report HTML', () => {
     expect(reportHtml(plan, TODAY)).toMatchSnapshot();
+  });
+
+  it('full report HTML (es)', () => {
+    expect(reportHtml(plan, TODAY, 'es')).toMatchSnapshot();
   });
 });

@@ -13,6 +13,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { sendEmail, siteOrigin } from '@/lib/serverEmail';
 import { welcomeEmail, unsubFooter } from '@/lib/emailTemplates';
+import { resolveEmailLang } from '@/lib/serverLocale';
 import { signUnsubToken } from '@/lib/emailTokens';
 import { captureServerError } from '@/lib/sentryServer';
 
@@ -50,7 +51,10 @@ export async function POST(request: Request): Promise<Response> {
     });
 
     try {
-      await sendEmail({ to: user.email, ...welcomeEmail({ planUrl: `${origin}/plan`, unsubHtml: unsubFooter(unsubUrl) }) });
+      // The welcome speaks the user's language (set by the app's switcher before sign-in
+      // completes, or defaulting to English).
+      const lang = resolveEmailLang(user.user_metadata as Record<string, unknown> | null);
+      await sendEmail({ to: user.email, ...welcomeEmail({ planUrl: `${origin}/plan`, unsubHtml: unsubFooter(unsubUrl, lang), lang }) });
     } catch (e) {
       // Roll the claim back so a later sign-in can retry — otherwise a transient Resend
       // failure would silently cost the user their welcome email forever.

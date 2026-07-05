@@ -1,5 +1,9 @@
 import { buildPlan, isOverdue, type Objective } from './engine-controller';
 import { derive, nextSlot, type Profile } from './interview-controller';
+import { ES_CATALOG_TITLES } from './i18n/es/catalog';
+import enEmails from '@/locales/en/emails.json';
+import esEmails from '@/locales/es/emails.json';
+import esGuides from '@/locales/es/guides.json';
 
 /**
  * Weekly-roundup digest: a pure function of the profile (invariant 4 applies to email too).
@@ -49,15 +53,29 @@ export const CATEGORY_TIP: Record<Objective['category'], string> = {
   admin:     'A short errand once your documents are ready — book the cita previa and tick it off.',
 };
 
-function tipFor(o: Objective): string {
-  const base = CATEGORY_TIP[o.category];
+// The digest follows the user's saved language (auth user_metadata.lang — set by the app's
+// switcher). Pure JSON tables, no i18next: this runs in the Workers runtime. Spanish tips are
+// the SAME nine strings the guide pages use (locales/es/guides.json), so there is exactly one
+// translation of each tip per locale.
+export type DigestLang = 'en' | 'es';
+const TIPS: Record<DigestLang, Record<Objective['category'], string>> = {
+  en: CATEGORY_TIP,
+  es: esGuides.tip as Record<Objective['category'], string>,
+};
+const DIGEST_STRINGS: Record<DigestLang, typeof enEmails.digest> = {
+  en: enEmails.digest,
+  es: esEmails.digest,
+};
+
+function tipFor(o: Objective, lang: DigestLang): string {
+  const base = TIPS[lang][o.category];
   return o.severity === 'penalty'
-    ? `${base} Missing it can trigger a financial penalty.`
+    ? `${base} ${DIGEST_STRINGS[lang].penaltySuffix}`
     : base;
 }
 
-const shortDate = (d: Date) =>
-  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+const shortDate = (d: Date, lang: DigestLang) =>
+  d.toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-GB', { day: 'numeric', month: 'short' });
 
 export function interviewComplete(raw: Profile): boolean {
   const p: Profile = { ...raw };
@@ -65,7 +83,7 @@ export function interviewComplete(raw: Profile): boolean {
   return nextSlot(p) === null;
 }
 
-export function buildDigest(raw: Profile, today: Date = new Date()): Digest | null {
+export function buildDigest(raw: Profile, today: Date = new Date(), lang: DigestLang = 'en'): Digest | null {
   const p: Profile = { ...raw };
   derive(p);
   if (nextSlot(p) !== null) return null; // interview incomplete — nudge territory, not roundup
@@ -89,14 +107,15 @@ export function buildDigest(raw: Profile, today: Date = new Date()): Digest | nu
 
   if (overdueAll.length === 0 && upcomingAll.length === 0) return null;
 
+  const S = DIGEST_STRINGS[lang];
   const toItem = (o: Objective, over: boolean): DigestItem => ({
     id: o.id,
-    title: o.title,
+    title: lang === 'es' ? ES_CATALOG_TITLES[o.id] ?? o.title : o.title,
     overdue: over,
     whenLabel: o.timing.state === 'scheduled'
-      ? `${over ? 'was due' : 'due'} ${shortDate(o.timing.due)}`
-      : over ? 'overdue' : 'coming up',
-    tip: tipFor(o),
+      ? (over ? S.wasDue : S.due).replace('{{date}}', shortDate(o.timing.due, lang))
+      : over ? S.overdueWord : S.comingUpWord,
+    tip: tipFor(o, lang),
     ...(o.source_url ? { source_url: o.source_url } : {}),
   });
 

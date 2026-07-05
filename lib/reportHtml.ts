@@ -4,22 +4,17 @@
  * ("starts once X happens"), overdue in red, done in olive. Inline styles only,
  * A4-friendly, page-break aware — built for the fridge door and the gestor.
  *
- * No LLM, no network: (objectives, today) → HTML string. Shared by web
+ * No LLM, no network: (objectives, today, lang) → HTML string. Shared by web
  * (print dialog → save as PDF) and native (expo-print → share sheet).
+ * L1: strings come from locales/<lang>/emails.json "report" (pure JSON — this module
+ * must stay importable server-side, so no lib/i18n here); step titles resolve through
+ * the same per-locale catalog as the app. English output is snapshot-pinned.
  */
 import { isOverdue, type Objective, type Phase } from '../core/engine-controller';
+import { emailStrings, interp, emailDateLocale, type EmailLang } from './serverLocale';
+import { ES_CATALOG_TITLES } from '../core/i18n/es/catalog';
 
-// Local copies of the display maps (keep in sync with lib/plan-format.ts): importing
-// plan-format would drag react-native into this module, and the report must stay pure —
-// it runs in vitest and could one day run server-side.
 const PHASE_ORDER: Phase[] = ['before_you_go', 'first_weeks', 'ongoing', 'when_settled'];
-const PHASE_LABELS: Record<Phase, string> = {
-  before_you_go: 'Before you go', first_weeks: 'First weeks',
-  ongoing: 'Ongoing', when_settled: 'When settled',
-};
-const SEV_LABEL: Record<string, string> = {
-  penalty: 'Penalty risk', required: 'Required', recommended: 'Recommended', info: 'Info',
-};
 
 // Print-safe palette: the app's muted blue-gray (#8A9BB0) reads fine on screens but washes
 // out on paper and cheap-toner printers (build-25 QA finding) — the report uses a darker
@@ -32,52 +27,50 @@ const C = {
 const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-const fmt = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+type R = ReturnType<typeof emailStrings>['report'];
 
-const ANCHOR_PROSE: Record<string, string> = {
-  arrival: 'you arrive in Spain',
-  residency_established: 'your residency is established',
-  padron_done: 'your padrón registration is done',
-  property_purchase: 'you complete your property purchase',
-};
-
-function dueLine(o: Objective, today: Date): { text: string; color: string } {
+function dueLine(o: Objective, today: Date, R: R, fmt: (d: Date) => string): { text: string; color: string } {
   if (o.done) {
-    return { text: o.completedOn ? `Done · ${fmt(o.completedOn)}` : 'Done', color: C.olive };
+    return { text: o.completedOn ? interp(R.doneOn, { date: fmt(o.completedOn) }) : R.doneBare, color: C.olive };
   }
   const t = o.timing;
   if (t.state === 'pending_anchor') {
-    return { text: `Starts once ${ANCHOR_PROSE[t.anchor] ?? 'an earlier step is done'}`, color: C.muted };
+    const event = (R.anchor as Record<string, string>)[t.anchor] ?? R.anchor.other;
+    return { text: interp(R.startsOnce, { event }), color: C.muted };
   }
   if (t.state === 'recurring') {
-    return { text: `Every year · next due ${fmt(t.nextDue)}`, color: C.indigo };
+    return { text: interp(R.everyYear, { date: fmt(t.nextDue) }), color: C.indigo };
   }
   if (isOverdue(o, today)) {
-    return { text: `Overdue · was due ${fmt(t.due)}`, color: C.red };
+    return { text: interp(R.overdueLine, { date: fmt(t.due) }), color: C.red };
   }
-  return { text: `Due ${fmt(t.due)}${t.estimated ? ' (estimated)' : ''}`, color: C.indigo };
+  return { text: interp(R.dueLine, { date: fmt(t.due) }) + (t.estimated ? R.estimatedSuffix : ''), color: C.indigo };
 }
 
 const SEV_INK: Record<string, string> = {
   penalty: C.red, required: C.cobalt, recommended: C.olive, info: C.muted,
 };
 
-function itemHtml(o: Objective, today: Date): string {
-  const due = dueLine(o, today);
+function itemHtml(o: Objective, today: Date, R: R, fmt: (d: Date) => string, title: string): string {
+  const due = dueLine(o, today, R, fmt);
   const src = o.source === 'official' && o.source_url
-    ? `<div style="font-size:10px;color:${C.faint};margin-top:2px;word-break:break-all;">Official source: ${esc(o.source_url)}</div>`
+    ? `<div style="font-size:10px;color:${C.faint};margin-top:2px;word-break:break-all;">${R.sourcePrefix}${esc(o.source_url)}</div>`
     : '';
   return `<div style="page-break-inside:avoid;padding:8px 0 8px 12px;border-left:3px solid ${o.done ? C.olive : SEV_INK[o.severity]};border-bottom:1px solid ${C.line};">
-    <div style="font-size:12px;line-height:16px;color:${o.done ? C.olive : C.indigo};${o.done ? 'text-decoration:line-through;text-decoration-thickness:1px;' : ''}">${o.done ? '✓ ' : ''}${esc(o.title)}</div>
+    <div style="font-size:12px;line-height:16px;color:${o.done ? C.olive : C.indigo};${o.done ? 'text-decoration:line-through;text-decoration-thickness:1px;' : ''}">${o.done ? '✓ ' : ''}${esc(title)}</div>
     <div style="font-size:10px;line-height:15px;margin-top:2px;">
       <span style="color:${due.color};font-weight:600;">${esc(due.text)}</span>
-      <span style="color:${C.muted};"> · ${esc(SEV_LABEL[o.severity])} · ${o.source === 'official' ? 'official requirement' : 'Get Camino recommendation'}${o.regional ? ' · varies by comunidad' : ''}</span>
+      <span style="color:${C.muted};"> · ${esc((R.severity as Record<string, string>)[o.severity])} · ${o.source === 'official' ? R.official : R.recommendation}${o.regional ? ` · ${R.regional}` : ''}</span>
     </div>
     ${src}
   </div>`;
 }
 
-export function reportHtml(objectives: Objective[], today: Date = new Date()): string {
+export function reportHtml(objectives: Objective[], today: Date = new Date(), lang: EmailLang = 'en'): string {
+  const R = emailStrings(lang).report;
+  const fmt = (d: Date) => d.toLocaleDateString(emailDateLocale(lang), { day: 'numeric', month: 'short', year: 'numeric' });
+  const titleOf = (o: Objective) => (lang === 'es' ? ES_CATALOG_TITLES[o.id] ?? o.title : o.title);
+
   const hero = objectives.find(o => !o.done) ?? null;
   const done = objectives.filter(o => o.done).length;
   const required = objectives.filter(o => o.severity === 'required' || o.severity === 'penalty').length;
@@ -88,16 +81,16 @@ export function reportHtml(objectives: Objective[], today: Date = new Date()): s
     .filter(g => g.items.length > 0);
 
   const heroBlock = hero ? (() => {
-    const due = dueLine(hero, today);
+    const due = dueLine(hero, today, R, fmt);
     return `<div style="page-break-inside:avoid;background:#FFFFFF;border:2px solid ${C.amber};border-radius:10px;padding:14px 16px;margin:18px 0 6px;">
-      <div style="font-size:9px;letter-spacing:2px;color:${C.amber};font-weight:700;margin-bottom:6px;">YOUR NEXT STEP</div>
-      <div style="font-size:15px;line-height:20px;color:${C.indigo};font-weight:600;">${esc(hero.title)}</div>
+      <div style="font-size:9px;letter-spacing:2px;color:${C.amber};font-weight:700;margin-bottom:6px;">${R.nextStep}</div>
+      <div style="font-size:15px;line-height:20px;color:${C.indigo};font-weight:600;">${esc(titleOf(hero))}</div>
       <div style="font-size:11px;margin-top:4px;color:${due.color};font-weight:600;">${esc(due.text)}</div>
     </div>`;
   })() : '';
 
   return `<!doctype html>
-<html><head><meta charset="utf-8"><title>Get Camino — your road to Spain</title>
+<html><head><meta charset="utf-8"><title>${R.title}</title>
 <style>@page { margin: 18mm 15mm; } body { margin: 0; }</style></head>
 <body style="background:${C.cal};font-family:Georgia,'Times New Roman',serif;color:${C.indigo};">
 <!-- Container padding is the margin fallback: iOS's HTML→PDF renderer ignores @page
@@ -105,28 +98,28 @@ export function reportHtml(objectives: Objective[], today: Date = new Date()): s
 <div style="max-width:720px;margin:0 auto;padding:28px 24px;font-family:Helvetica,Arial,sans-serif;">
 
   <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid ${C.indigo};padding-bottom:10px;">
-    <div style="font-family:Georgia,serif;font-size:22px;font-weight:600;">Get Camino <span style="font-size:12px;color:${C.muted};font-style:italic;">— your road to Spain</span></div>
-    <div style="font-size:10px;color:${C.muted};">Generated ${fmt(today)}</div>
+    <div style="font-family:Georgia,serif;font-size:22px;font-weight:600;">Get Camino <span style="font-size:12px;color:${C.muted};font-style:italic;">${R.tagline}</span></div>
+    <div style="font-size:10px;color:${C.muted};">${interp(R.generated, { date: fmt(today) })}</div>
   </div>
 
   <div style="display:flex;gap:18px;margin-top:12px;font-size:11px;color:${C.muted};">
-    <span><b style="color:${C.indigo};font-size:14px;">${objectives.length}</b> steps</span>
-    <span><b style="color:${C.cobalt};font-size:14px;">${required}</b> required</span>
-    <span><b style="color:${C.olive};font-size:14px;">${done}</b> done</span>
-    ${overdue > 0 ? `<span><b style="color:${C.red};font-size:14px;">${overdue}</b> overdue</span>` : ''}
+    <span><b style="color:${C.indigo};font-size:14px;">${objectives.length}</b> ${R.steps}</span>
+    <span><b style="color:${C.cobalt};font-size:14px;">${required}</b> ${R.required}</span>
+    <span><b style="color:${C.olive};font-size:14px;">${done}</b> ${R.done}</span>
+    ${overdue > 0 ? `<span><b style="color:${C.red};font-size:14px;">${overdue}</b> ${R.overdue}</span>` : ''}
   </div>
 
   ${heroBlock}
 
   ${phases.map(({ phase, items }) => `
   <div style="margin-top:20px;">
-    <div style="font-size:10px;letter-spacing:2px;color:${C.muted};font-weight:700;border-bottom:1px solid ${C.indigo};padding-bottom:4px;">${esc(PHASE_LABELS[phase]).toUpperCase()} · ${items.length}</div>
-    ${items.map(o => itemHtml(o, today)).join('')}
+    <div style="font-size:10px;letter-spacing:2px;color:${C.muted};font-weight:700;border-bottom:1px solid ${C.indigo};padding-bottom:4px;">${esc((R.phase as Record<string, string>)[phase]).toUpperCase()} · ${items.length}</div>
+    ${items.map(o => itemHtml(o, today, R, fmt, titleOf(o))).join('')}
   </div>`).join('')}
 
   <div style="margin-top:24px;padding-top:10px;border-top:1px solid ${C.line};font-size:10px;line-height:15px;color:${C.faint};">
-    Estimated dates sharpen as real dates are confirmed; steps without dates begin once their milestone happens — Get Camino never invents a deadline.
-    <br>Made with Get Camino (getcamino.app). Guidance only — not legal or tax advice; a gestor signs the papers.
+    ${R.footerHonesty}
+    <br>${R.footerMade}
   </div>
 </div>
 </body></html>`;

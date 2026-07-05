@@ -1,0 +1,96 @@
+{
+  "shell": {
+    "tagline": "— your road to Spain",
+    "disclaimer": "Guidance only — not legal or tax advice."
+  },
+  "footer": {
+    "because": "You’re getting this because you have a Get Camino roadmap.",
+    "unsubscribe": "Unsubscribe from the weekly roundup"
+  },
+  "welcome": {
+    "subject": "Welcome to Get Camino — your road to Spain starts here",
+    "hola": "Hola — I’m Lola.",
+    "what": "Get Camino turns your move to Spain into a step-by-step roadmap: every visa, form and deadline that applies to <em>your</em> situation, in the right order, each one backed by an official source.",
+    "whatText": "Get Camino turns your move to Spain into a step-by-step roadmap: every visa, form and deadline that applies to your situation, in the right order, backed by official sources.",
+    "lives": "Your roadmap lives here — it updates as your plans change, and I’ll coach you through any step you tap:",
+    "button": "Open your roadmap",
+    "weekly": "While your move is underway I’ll send a short weekly roundup — what’s coming up, what’s slipped, never more than a handful of tasks.",
+    "weeklyText": "While your move is underway I’ll send a short weekly roundup — never more than a handful of tasks.",
+    "textOpen": "Open your roadmap: {{url}}"
+  },
+  "roundup": {
+    "subjectOverdue": "Your Get Camino week: {{overdue}} overdue, {{upcoming}} coming up",
+    "subjectOne": "Your Get Camino week: one thing coming up",
+    "subjectMany": "Your Get Camino week: {{count}} things coming up",
+    "intro": "Hola — here’s where your road to Spain stands this week.",
+    "overdueBadge": "OVERDUE",
+    "slippedPast": "SLIPPED PAST",
+    "comingUp": "COMING UP",
+    "reflow": "Already done one of these? Mark it done with the real date and your plan re-flows. Plans changed? Tell me what happened and I’ll remodel the roadmap.",
+    "more": "…and {{count}} more after these — one step at a time.",
+    "moreText": "…and {{count}} more after these.",
+    "button": "Open your full roadmap",
+    "textOpen": "Open your full roadmap: {{url}}",
+    "officialSource": "official source ↗",
+    "textOfficialSource": "official source: {{url}}",
+    "textTip": "tip: {{tip}}"
+  },
+  "nudge": {
+    "subject": "Your Spain roadmap is waiting — a few questions to go",
+    "hola": "Hola — Lola here.",
+    "body": "You started telling me about your move to Spain, and I’d hate for that head start to go to waste. A few more answers and I can lay out your full roadmap — every step that applies to you, in the right order, with real deadlines.",
+    "button": "Pick up where you left off",
+    "note": "It usually takes two or three minutes. Your earlier answers are saved.",
+    "bodyText": "You started telling me about your move to Spain. A few more answers and I can lay out your full roadmap.",
+    "textOpen": "Pick up where you left off: {{url}}"
+  },
+  "digest": {
+    "wasDue": "was due {{date}}",
+    "due": "due {{date}}",
+    "overdueWord": "overdue",
+    "comingUpWord": "coming up",
+    "penaltySuffix": "Missing it can trigger a financial penalty."
+  },
+  "report": {
+    "title": "Get Camino — your road to Spain",
+    "tagline": "— your road to Spain",
+    "generated": "Generated {{date}}",
+    "steps": "steps",
+    "required": "required",
+    "done": "done",
+    "overdue": "overdue",
+    "nextStep": "YOUR NEXT STEP",
+    "phase": {
+      "before_you_go": "Before you go",
+      "first_weeks": "First weeks",
+      "ongoing": "Ongoing",
+      "when_settled": "When settled"
+    },
+    "severity": {
+      "penalty": "Penalty risk",
+      "required": "Required",
+      "recommended": "Recommended",
+      "info": "Info"
+    },
+    "anchor": {
+      "arrival": "you arrive in Spain",
+      "residency_established": "your residency is established",
+      "padron_done": "your padrón registration is done",
+      "property_purchase": "you complete your property purchase",
+      "other": "an earlier step is done"
+    },
+    "doneBare": "Done",
+    "doneOn": "Done · {{date}}",
+    "startsOnce": "Starts once {{event}}",
+    "everyYear": "Every year · next due {{date}}",
+    "overdueLine": "Overdue · was due {{date}}",
+    "dueLine": "Due {{date}}",
+    "estimatedSuffix": " (estimated)",
+    "official": "official requirement",
+    "recommendation": "Get Camino recommendation",
+    "regional": "varies by comunidad",
+    "sourcePrefix": "Official source: ",
+    "footerHonesty": "Estimated dates sharpen as real dates are confirmed; steps without dates begin once their milestone happens — Get Camino never invents a deadline.",
+    "footerMade": "Made with Get Camino (getcamino.app). Guidance only — not legal or tax advice; a gestor signs the papers."
+  }
+}

@@ -34,6 +34,18 @@ describe('email digest', () => {
     }
   });
 
+  it('es: same selection, Spanish titles / labels / tips (L1)', () => {
+    const en = buildDigest(susan(), at('2028-10-15'))!;
+    const es = buildDigest(susan(), at('2028-10-15'), 'es')!;
+    // The language changes WORDS, never WHICH items (invariant: selection is locale-free).
+    expect(es.overdue.map(i => i.id)).toEqual(en.overdue.map(i => i.id));
+    expect(es.upcoming.map(i => i.id)).toEqual(en.upcoming.map(i => i.id));
+    for (const it_ of [...es.overdue, ...es.upcoming]) {
+      expect(it_.whenLabel).toMatch(/venc|atrasado|en camino/);
+      expect(it_.title).not.toBe(en.overdue.concat(en.upcoming).find(e => e.id === it_.id)!.title);
+    }
+  });
+
   it('well before arrival with nothing in the 45-day window → null (no spam)', () => {
     // A year before arrival, nothing is due within 45 days for Susan's NLV plan.
     expect(buildDigest(susan(), at('2025-10-15'))).toBeNull();

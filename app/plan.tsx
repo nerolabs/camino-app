@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput, ActivityIndicator, Platform, useWindowDimensions } from 'react-native';
 import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
-import { dateLocale } from '@/lib/i18n';
+import { dateLocale, currentLang } from '@/lib/i18n';
 import { palette } from '@/constants/Colors';
 import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
@@ -318,7 +318,7 @@ export default function PlanScreen() {
           <TouchableOpacity
             onPress={() => {
               capture('plan_pdf_exported');
-              exportPdf(reportHtml(objectives)).catch(() => {});
+              exportPdf(reportHtml(objectives, new Date(), currentLang())).catch(() => {});
             }}
             accessibilityLabel={t('toolbar.exportA11y')}
           >

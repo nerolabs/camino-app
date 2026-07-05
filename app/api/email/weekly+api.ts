@@ -20,6 +20,7 @@ import { buildDigest, interviewComplete } from '@/core/email-digest';
 import type { Profile } from '@/core/interview-controller';
 import { sendEmail, siteOrigin } from '@/lib/serverEmail';
 import { roundupEmail, nudgeEmail, unsubFooter } from '@/lib/emailTemplates';
+import { resolveEmailLang } from '@/lib/serverLocale';
 import { signUnsubToken } from '@/lib/emailTokens';
 import { captureServerError } from '@/lib/sentryServer';
 
@@ -73,8 +74,9 @@ export async function POST(request: Request): Promise<Response> {
       if (!user.email || md.weekly_optout === true) { counts.skipped++; continue; }
 
       const answers = answersByUser.get(user.id) ?? (md.pending_profile as Profile | undefined) ?? null;
+      const lang = resolveEmailLang(md); // the user's app language (switcher writes user_metadata.lang)
       const unsubUrl = `${origin}/api/email/unsubscribe?uid=${user.id}&sig=${await signUnsubToken(cronSecret, user.id)}`;
-      const unsubHtml = unsubFooter(unsubUrl);
+      const unsubHtml = unsubFooter(unsubUrl, lang);
       // RFC 8058 one-click unsubscribe — keeps Gmail/Apple Mail spam scoring happy.
       const headers = {
         'List-Unsubscribe': `<${unsubUrl}>`,
@@ -82,11 +84,11 @@ export async function POST(request: Request): Promise<Response> {
       };
 
       try {
-        const digest = answers ? buildDigest(answers) : null;
+        const digest = answers ? buildDigest(answers, new Date(), lang) : null;
         if (digest) {
           const last = typeof md.last_roundup_at === 'string' ? Date.parse(md.last_roundup_at) : 0;
           if (Date.now() - last < ROUNDUP_MIN_GAP_MS) { counts.skipped++; continue; }
-          await sendEmail({ to: user.email, headers, ...roundupEmail({ digest, planUrl: `${origin}/plan`, unsubHtml }) });
+          await sendEmail({ to: user.email, headers, ...roundupEmail({ digest, planUrl: `${origin}/plan`, unsubHtml, lang }) });
           await admin.auth.admin.updateUserById(user.id, { user_metadata: { last_roundup_at: new Date().toISOString() } });
           counts.roundups++; sends++;
           await sleep(SEND_SPACING_MS);
@@ -96,7 +98,7 @@ export async function POST(request: Request): Promise<Response> {
           const needsInterview = !answers || !interviewComplete(answers);
           const oldEnough = Date.now() - Date.parse(user.created_at) > NUDGE_MIN_AGE_MS;
           if (needsInterview && !md.nudged_at && oldEnough) {
-            await sendEmail({ to: user.email, headers, ...nudgeEmail({ interviewUrl: `${origin}/interview`, unsubHtml }) });
+            await sendEmail({ to: user.email, headers, ...nudgeEmail({ interviewUrl: `${origin}/interview`, unsubHtml, lang }) });
             await admin.auth.admin.updateUserById(user.id, { user_metadata: { nudged_at: new Date().toISOString() } });
             counts.nudges++; sends++;
             await sleep(SEND_SPACING_MS);

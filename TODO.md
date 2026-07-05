@@ -99,8 +99,11 @@ the regression harness in place. Strategy + rationale: docs/TEST-COVERAGE.md §4
      describeTimingLocalized (en-parity pinned; core stays i18n-free for the server bundle);
      sample persona now per-locale — es meets "Susana y Tomás" with a Spanish blurb (user
      spot-check finding: English blurb leaked + English names).
-   - [ ] **Emails es** (templates per locale keyed on user_metadata.lang) + reportHtml(locale)
-     + per-locale render snapshots.
+   - ✅ **L1e emails + report** (2026-07-05): locales/{en,es}/emails.json; welcome/roundup/
+     nudge + unsubFooter + reportHtml take `lang`; buildDigest(lang) — same items, Spanish
+     words; welcome/weekly routes resolve user_metadata.lang; PDF export follows the app
+     language. Pure JSON tables (no i18next server-side); en output snapshot-pinned
+     byte-identical; 4 new es snapshots. 108 tests.
    - [ ] **Legal-ES** drafts (privacy/terms/aviso with "English prevails" clause).
    - [ ] **[USER] Cristina verification pass** over everything above — the human gate.
 6. **L2 — web SEO tree (~1 day):** /es routes via app/[locale], hreflang + x-default,

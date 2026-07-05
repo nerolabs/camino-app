@@ -89,6 +89,164 @@ While your move is underway I’ll send a short weekly roundup — never more th
 }
 `;
 
+exports[`email templates render exactly — es (L1) > interview nudge (es) 1`] = `
+{
+  "html": "<!doctype html>
+<html><body style="margin:0;padding:0;background:#FBFAF7;">
+<div style="max-width:560px;margin:0 auto;padding:32px 24px;font-family:Georgia,'Times New Roman',serif;color:#15243B;">
+  <div style="font-size:22px;font-weight:600;margin-bottom:24px;">Get Camino <span style="color:#8A9BB0;font-size:14px;font-style:italic;">— tu camino a España</span></div>
+  <p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:24px;margin:0 0 16px;">Hola — soy Lola.</p><p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:24px;margin:0 0 16px;">Empezaste a contarme tu mudanza a España, y me daría pena que ese arranque se perdiera. Unas respuestas más y te dejo lista tu hoja de ruta completa — cada paso que te aplica, en el orden correcto, con plazos reales.</p><div style="margin:24px 0;"><a href="https://getcamino.app/interview" style="display:inline-block;background:#2B5AA3;color:#FFFFFF;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:600;padding:12px 22px;border-radius:8px;">Retomar donde lo dejaste</a></div><p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:24px;margin:0 0 16px;"><span style="font-size:13px;color:#4A5A70;">Suele llevar dos o tres minutos. Tus respuestas anteriores están guardadas.</span></p>
+  <hr style="border:none;border-top:1px solid #E8E4DC;margin:32px 0 16px;">
+  <div style="font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:18px;color:#8A9BB0;">
+    You’re getting this because you have a Get Camino roadmap. <a href="https://getcamino.app/api/email/unsubscribe?uid=fixed&sig=fixed" style="color:#8A9BB0;">Unsubscribe from the weekly roundup</a>.
+    <br>Solo orientación — no es asesoramiento legal ni fiscal.
+  </div>
+</div>
+</body></html>",
+  "subject": "Tu hoja de ruta a España te espera — quedan unas preguntas",
+  "text": "Hola — soy Lola.
+
+Empezaste a contarme tu mudanza a España. Unas respuestas más y te dejo lista tu hoja de ruta completa.
+
+Retomar donde lo dejaste: https://getcamino.app/interview",
+}
+`;
+
+exports[`email templates render exactly — es (L1) > weekly roundup (es) 1`] = `
+{
+  "html": "<!doctype html>
+<html><body style="margin:0;padding:0;background:#FBFAF7;">
+<div style="max-width:560px;margin:0 auto;padding:32px 24px;font-family:Georgia,'Times New Roman',serif;color:#15243B;">
+  <div style="font-size:22px;font-weight:600;margin-bottom:24px;">Get Camino <span style="color:#8A9BB0;font-size:14px;font-style:italic;">— tu camino a España</span></div>
+  <p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:24px;margin:0 0 16px;">Hola — así está tu camino a España esta semana.</p><div style="font-family:Helvetica,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;color:#C0392B;margin:24px 0 12px;">SE TE HA PASADO</div><div style="margin:0 0 18px;padding:14px 16px;background:#FFFFFF;border:1px solid #E8E4DC;border-radius:10px;">
+    <div style="font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:600;line-height:22px;"><span style="font-family:Helvetica,Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;color:#C0392B;background:#FBEFED;border:1px solid #C0392B;border-radius:4px;padding:2px 6px;">ATRASADO</span> Empadronamiento (padrón municipal — inscríbete en el censo de tu municipio)</div>
+    <div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:20px;margin-top:4px;"><span style="color:#C0392B;">vencía el 12 jun</span> &nbsp;·&nbsp; <a href="https://example.gob.es/empadronamiento" style="color:#2B5AA3;">fuente oficial ↗</a></div>
+    <div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:20px;color:#4A5A70;margin-top:6px;">Pide la cita previa ya — el cuello de botella real son las citas, no el papeleo.</div>
+  </div><p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:24px;margin:0 0 16px;"><span style="font-size:13px;color:#4A5A70;">¿Ya hiciste alguno? Márcalo hecho con la fecha real y tu plan se recalcula. ¿Cambiaron los planes? Cuéntame qué pasó y rehago la hoja de ruta.</span></p><div style="font-family:Helvetica,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;color:#BD8318;margin:24px 0 12px;">EN CAMINO</div><div style="margin:0 0 18px;padding:14px 16px;background:#FFFFFF;border:1px solid #E8E4DC;border-radius:10px;">
+    <div style="font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:600;line-height:22px;">Consigue tu NIE</div>
+    <div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:20px;margin-top:4px;"><span style="color:#8A9BB0;">vence el 28 jul</span> &nbsp;·&nbsp; <a href="https://example.gob.es/nie" style="color:#2B5AA3;">fuente oficial ↗</a></div>
+    <div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:20px;color:#4A5A70;margin-top:6px;">Pide la cita previa ya — el cuello de botella real son las citas, no el papeleo.</div>
+  </div><div style="margin:0 0 18px;padding:14px 16px;background:#FFFFFF;border:1px solid #E8E4DC;border-radius:10px;">
+    <div style="font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:600;line-height:22px;">Presenta el Modelo 720</div>
+    <div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:20px;margin-top:4px;"><span style="color:#8A9BB0;">vence el 30 jul</span></div>
+    <div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:20px;color:#4A5A70;margin-top:6px;">Ante la duda, un gestor lo prepara en un día — un seguro barato contra errores de presentación.</div>
+  </div><p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:24px;margin:0 0 16px;"><span style="color:#8A9BB0;">…y 2 más después de estos — paso a paso.</span></p><div style="margin:24px 0;"><a href="https://getcamino.app/plan" style="display:inline-block;background:#2B5AA3;color:#FFFFFF;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:600;padding:12px 22px;border-radius:8px;">Abrir tu hoja de ruta completa</a></div>
+  <hr style="border:none;border-top:1px solid #E8E4DC;margin:32px 0 16px;">
+  <div style="font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:18px;color:#8A9BB0;">
+    You’re getting this because you have a Get Camino roadmap. <a href="https://getcamino.app/api/email/unsubscribe?uid=fixed&sig=fixed" style="color:#8A9BB0;">Unsubscribe from the weekly roundup</a>.
+    <br>Solo orientación — no es asesoramiento legal ni fiscal.
+  </div>
+</div>
+</body></html>",
+  "subject": "Tu semana con Get Camino: 1 atrasados, 2 en camino",
+  "text": "Hola — así está tu camino a España esta semana.
+[ATRASADO] Empadronamiento (padrón municipal — inscríbete en el censo de tu municipio) — vencía el 12 jun
+  fuente oficial: https://example.gob.es/empadronamiento
+  consejo: Pide la cita previa ya — el cuello de botella real son las citas, no el papeleo.
+Consigue tu NIE — vence el 28 jul
+  fuente oficial: https://example.gob.es/nie
+  consejo: Pide la cita previa ya — el cuello de botella real son las citas, no el papeleo.
+Presenta el Modelo 720 — vence el 30 jul
+  consejo: Ante la duda, un gestor lo prepara en un día — un seguro barato contra errores de presentación.
+…y 2 más después de estos.
+Abrir tu hoja de ruta completa: https://getcamino.app/plan",
+}
+`;
+
+exports[`email templates render exactly — es (L1) > welcome (es) 1`] = `
+{
+  "html": "<!doctype html>
+<html><body style="margin:0;padding:0;background:#FBFAF7;">
+<div style="max-width:560px;margin:0 auto;padding:32px 24px;font-family:Georgia,'Times New Roman',serif;color:#15243B;">
+  <div style="font-size:22px;font-weight:600;margin-bottom:24px;">Get Camino <span style="color:#8A9BB0;font-size:14px;font-style:italic;">— tu camino a España</span></div>
+  <p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:24px;margin:0 0 16px;">Hola — soy Lola.</p><p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:24px;margin:0 0 16px;">Get Camino convierte tu mudanza a España en una hoja de ruta paso a paso: cada visado, formulario y plazo que aplica a <em>tu</em> situación, en el orden correcto, cada uno respaldado por una fuente oficial.</p><p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:24px;margin:0 0 16px;">Tu hoja de ruta vive aquí — se actualiza cuando cambian tus planes, y te acompaño en cualquier paso que toques:</p><div style="margin:24px 0;"><a href="https://getcamino.app/plan" style="display:inline-block;background:#2B5AA3;color:#FFFFFF;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:600;padding:12px 22px;border-radius:8px;">Abrir tu hoja de ruta</a></div><p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:24px;margin:0 0 16px;">Mientras tu mudanza avanza te enviaré un breve resumen semanal — lo que viene, lo que se ha pasado, nunca más de un puñado de tareas.</p>
+  <hr style="border:none;border-top:1px solid #E8E4DC;margin:32px 0 16px;">
+  <div style="font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:18px;color:#8A9BB0;">
+    You’re getting this because you have a Get Camino roadmap. <a href="https://getcamino.app/api/email/unsubscribe?uid=fixed&sig=fixed" style="color:#8A9BB0;">Unsubscribe from the weekly roundup</a>.
+    <br>Solo orientación — no es asesoramiento legal ni fiscal.
+  </div>
+</div>
+</body></html>",
+  "subject": "Te damos la bienvenida a Get Camino — tu camino a España empieza aquí",
+  "text": "Hola — soy Lola.
+
+Get Camino convierte tu mudanza a España en una hoja de ruta paso a paso: cada visado, formulario y plazo que aplica a tu situación, en el orden correcto, con fuentes oficiales.
+
+Abrir tu hoja de ruta: https://getcamino.app/plan
+
+Mientras tu mudanza avanza te enviaré un breve resumen semanal — nunca más de un puñado de tareas.",
+}
+`;
+
+exports[`printable report renders exactly (localization guard) > full report HTML (es) 1`] = `
+"<!doctype html>
+<html><head><meta charset="utf-8"><title>Get Camino — tu camino a España</title>
+<style>@page { margin: 18mm 15mm; } body { margin: 0; }</style></head>
+<body style="background:#FBFAF7;font-family:Georgia,'Times New Roman',serif;color:#15243B;">
+<!-- Container padding is the margin fallback: iOS's HTML→PDF renderer ignores @page
+     (build-25 QA finding: zero print margins), so the page must carry its own. -->
+<div style="max-width:720px;margin:0 auto;padding:28px 24px;font-family:Helvetica,Arial,sans-serif;">
+
+  <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #15243B;padding-bottom:10px;">
+    <div style="font-family:Georgia,serif;font-size:22px;font-weight:600;">Get Camino <span style="font-size:12px;color:#4A5A70;font-style:italic;">— tu camino a España</span></div>
+    <div style="font-size:10px;color:#4A5A70;">Generado el 3 jul 2026</div>
+  </div>
+
+  <div style="display:flex;gap:18px;margin-top:12px;font-size:11px;color:#4A5A70;">
+    <span><b style="color:#15243B;font-size:14px;">4</b> pasos</span>
+    <span><b style="color:#2B5AA3;font-size:14px;">4</b> obligatorios</span>
+    <span><b style="color:#5E7355;font-size:14px;">1</b> hechos</span>
+    <span><b style="color:#C0392B;font-size:14px;">1</b> atrasados</span>
+  </div>
+
+  <div style="page-break-inside:avoid;background:#FFFFFF;border:2px solid #BD8318;border-radius:10px;padding:14px 16px;margin:18px 0 6px;">
+      <div style="font-size:9px;letter-spacing:2px;color:#BD8318;font-weight:700;margin-bottom:6px;">TU PRÓXIMO PASO</div>
+      <div style="font-size:15px;line-height:20px;color:#15243B;font-weight:600;">Title of hero-step</div>
+      <div style="font-size:11px;margin-top:4px;color:#15243B;font-weight:600;">Vence el 13 jul 2026 (estimado)</div>
+    </div>
+
+  
+  <div style="margin-top:20px;">
+    <div style="font-size:10px;letter-spacing:2px;color:#4A5A70;font-weight:700;border-bottom:1px solid #15243B;padding-bottom:4px;">PRIMERAS SEMANAS · 4</div>
+    <div style="page-break-inside:avoid;padding:8px 0 8px 12px;border-left:3px solid #2B5AA3;border-bottom:1px solid #D8D2C8;">
+    <div style="font-size:12px;line-height:16px;color:#15243B;">Title of hero-step</div>
+    <div style="font-size:10px;line-height:15px;margin-top:2px;">
+      <span style="color:#15243B;font-weight:600;">Vence el 13 jul 2026 (estimado)</span>
+      <span style="color:#4A5A70;"> · Obligatorio · requisito oficial</span>
+    </div>
+    <div style="font-size:10px;color:#5B6B80;margin-top:2px;word-break:break-all;">Fuente oficial: https://example.gob.es/tramite</div>
+  </div><div style="page-break-inside:avoid;padding:8px 0 8px 12px;border-left:3px solid #2B5AA3;border-bottom:1px solid #D8D2C8;">
+    <div style="font-size:12px;line-height:16px;color:#15243B;">Title of overdue-step</div>
+    <div style="font-size:10px;line-height:15px;margin-top:2px;">
+      <span style="color:#C0392B;font-weight:600;">Atrasado · vencía el 1 jul 2026</span>
+      <span style="color:#4A5A70;"> · Obligatorio · requisito oficial</span>
+    </div>
+    <div style="font-size:10px;color:#5B6B80;margin-top:2px;word-break:break-all;">Fuente oficial: https://example.gob.es/tramite</div>
+  </div><div style="page-break-inside:avoid;padding:8px 0 8px 12px;border-left:3px solid #2B5AA3;border-bottom:1px solid #D8D2C8;">
+    <div style="font-size:12px;line-height:16px;color:#15243B;">Title of anchored-step</div>
+    <div style="font-size:10px;line-height:15px;margin-top:2px;">
+      <span style="color:#4A5A70;font-weight:600;">Empieza cuando tu residencia esté establecida</span>
+      <span style="color:#4A5A70;"> · Obligatorio · requisito oficial</span>
+    </div>
+    <div style="font-size:10px;color:#5B6B80;margin-top:2px;word-break:break-all;">Fuente oficial: https://example.gob.es/tramite</div>
+  </div><div style="page-break-inside:avoid;padding:8px 0 8px 12px;border-left:3px solid #5E7355;border-bottom:1px solid #D8D2C8;">
+    <div style="font-size:12px;line-height:16px;color:#5E7355;text-decoration:line-through;text-decoration-thickness:1px;">✓ Title of done-step</div>
+    <div style="font-size:10px;line-height:15px;margin-top:2px;">
+      <span style="color:#5E7355;font-weight:600;">Hecho · 2 jul 2026</span>
+      <span style="color:#4A5A70;"> · Obligatorio · requisito oficial</span>
+    </div>
+    <div style="font-size:10px;color:#5B6B80;margin-top:2px;word-break:break-all;">Fuente oficial: https://example.gob.es/tramite</div>
+  </div>
+  </div>
+
+  <div style="margin-top:24px;padding-top:10px;border-top:1px solid #D8D2C8;font-size:10px;line-height:15px;color:#5B6B80;">
+    Las fechas estimadas se afinan cuando se confirman fechas reales; los pasos sin fecha empiezan cuando ocurre su hito — Get Camino nunca inventa un plazo.
+    <br>Hecho con Get Camino (getcamino.app). Solo orientación — no es asesoramiento legal ni fiscal; un gestor firma los papeles.
+  </div>
+</div>
+</body></html>"
+`;
+
 exports[`printable report renders exactly (localization guard) > full report HTML 1`] = `
 "<!doctype html>
 <html><head><meta charset="utf-8"><title>Get Camino — your road to Spain</title>

@@ -61,6 +61,12 @@ export function dateLocale(): string {
   return i18n.language === 'es' ? 'es-ES' : 'en-GB';
 }
 
+/** The current language as a supported code (for APIs that take an explicit lang param —
+ *  reportHtml, email previews — rather than reading the singleton). */
+export function currentLang(): LocaleCode {
+  return isSupportedLocale(i18n.language) ? i18n.language : 'en';
+}
+
 /** The language-directive line for LLM prompts (phrase/clarify/coach). Empty for English so
  *  the English prompts stay byte-identical to pre-localization behavior. */
 export function languageDirective(): string {

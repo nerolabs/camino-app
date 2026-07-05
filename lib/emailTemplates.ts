@@ -1,10 +1,15 @@
 import type { Digest, DigestItem } from '@/core/email-digest';
+import { emailStrings, interp, type EmailLang } from '@/lib/serverLocale';
 
 /**
  * The three transactional emails, hand-rolled HTML + plain-text twins.
  * Inline styles only (email clients strip <style>), single column, max 560px —
  * the boring, deliverable kind of email. Palette mirrors constants/Colors.ts.
  * No react-email dependency: three templates don't earn a framework.
+ *
+ * L1: every template takes `lang` and reads its copy from locales/<lang>/emails.json —
+ * the caller resolves the user's language (auth user_metadata.lang; see serverLocale.ts).
+ * English output is pinned byte-identical to the pre-L1 templates by the render snapshots.
  */
 
 // Keep in sync with constants/Colors.ts (can't import it here: it sits next to RN code).
@@ -23,16 +28,17 @@ export type RenderedEmail = { subject: string; html: string; text: string };
 const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-function shell(bodyHtml: string, footerHtml: string): string {
+function shell(bodyHtml: string, footerHtml: string, lang: EmailLang): string {
+  const S = emailStrings(lang);
   return `<!doctype html>
 <html><body style="margin:0;padding:0;background:${C.cal};">
 <div style="max-width:560px;margin:0 auto;padding:32px 24px;font-family:Georgia,'Times New Roman',serif;color:${C.indigo};">
-  <div style="font-size:22px;font-weight:600;margin-bottom:24px;">Get Camino <span style="color:${C.muted};font-size:14px;font-style:italic;">— your road to Spain</span></div>
+  <div style="font-size:22px;font-weight:600;margin-bottom:24px;">Get Camino <span style="color:${C.muted};font-size:14px;font-style:italic;">${S.shell.tagline}</span></div>
   ${bodyHtml}
   <hr style="border:none;border-top:1px solid #E8E4DC;margin:32px 0 16px;">
   <div style="font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:18px;color:${C.muted};">
     ${footerHtml}
-    <br>Guidance only — not legal or tax advice.
+    <br>${S.shell.disclaimer}
   </div>
 </div>
 </body></html>`;
@@ -46,37 +52,38 @@ const p = (html: string) =>
 
 // ── Welcome ────────────────────────────────────────────────────────────────────
 
-export function welcomeEmail(opts: { planUrl: string; unsubHtml: string }): RenderedEmail {
-  const subject = 'Welcome to Get Camino — your road to Spain starts here';
+export function welcomeEmail(opts: { planUrl: string; unsubHtml: string; lang?: EmailLang }): RenderedEmail {
+  const S = emailStrings(opts.lang ?? 'en').welcome;
   const html = shell(
-    p('Hola — I’m Lola.') +
-    p('Get Camino turns your move to Spain into a step-by-step roadmap: every visa, form and deadline that applies to <em>your</em> situation, in the right order, each one backed by an official source.') +
-    p('Your roadmap lives here — it updates as your plans change, and I’ll coach you through any step you tap:') +
-    `<div style="margin:24px 0;">${button(opts.planUrl, 'Open your roadmap')}</div>` +
-    p(`While your move is underway I’ll send a short weekly roundup — what’s coming up, what’s slipped, never more than a handful of tasks.`),
-    opts.unsubHtml
+    p(S.hola) +
+    p(S.what) +
+    p(S.lives) +
+    `<div style="margin:24px 0;">${button(opts.planUrl, S.button)}</div>` +
+    p(S.weekly),
+    opts.unsubHtml,
+    opts.lang ?? 'en'
   );
   const text = [
-    'Hola — I’m Lola.',
+    S.hola,
     '',
-    'Get Camino turns your move to Spain into a step-by-step roadmap: every visa, form and deadline that applies to your situation, in the right order, backed by official sources.',
+    S.whatText,
     '',
-    `Open your roadmap: ${opts.planUrl}`,
+    interp(S.textOpen, { url: opts.planUrl }),
     '',
-    'While your move is underway I’ll send a short weekly roundup — never more than a handful of tasks.',
+    S.weeklyText,
   ].join('\n');
-  return { subject, html, text };
+  return { subject: S.subject, html, text };
 }
 
 // ── Weekly roundup ─────────────────────────────────────────────────────────────
 
-function itemHtml(it: DigestItem): string {
+function itemHtml(it: DigestItem, R: ReturnType<typeof emailStrings>['roundup']): string {
   const badge = it.overdue
-    ? `<span style="font-family:Helvetica,Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;color:${C.red};background:${C.redBg};border:1px solid ${C.red};border-radius:4px;padding:2px 6px;">OVERDUE</span> `
+    ? `<span style="font-family:Helvetica,Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;color:${C.red};background:${C.redBg};border:1px solid ${C.red};border-radius:4px;padding:2px 6px;">${R.overdueBadge}</span> `
     : '';
   const when = `<span style="color:${it.overdue ? C.red : C.muted};">${esc(it.whenLabel)}</span>`;
   const src = it.source_url
-    ? ` &nbsp;·&nbsp; <a href="${it.source_url}" style="color:${C.cobalt};">official source ↗</a>`
+    ? ` &nbsp;·&nbsp; <a href="${it.source_url}" style="color:${C.cobalt};">${R.officialSource}</a>`
     : '';
   return `<div style="margin:0 0 18px;padding:14px 16px;background:#FFFFFF;border:1px solid #E8E4DC;border-radius:10px;">
     <div style="font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:600;line-height:22px;">${badge}${esc(it.title)}</div>
@@ -85,41 +92,43 @@ function itemHtml(it: DigestItem): string {
   </div>`;
 }
 
-export function roundupEmail(opts: { digest: Digest; planUrl: string; unsubHtml: string }): RenderedEmail {
+export function roundupEmail(opts: { digest: Digest; planUrl: string; unsubHtml: string; lang?: EmailLang }): RenderedEmail {
+  const lang = opts.lang ?? 'en';
+  const R = emailStrings(lang).roundup;
   const { digest } = opts;
   const n = digest.overdue.length + digest.upcoming.length;
   const subject = digest.overdue.length > 0
-    ? `Your Get Camino week: ${digest.overdue.length} overdue, ${digest.upcoming.length} coming up`
-    : `Your Get Camino week: ${n === 1 ? 'one thing' : `${n} things`} coming up`;
+    ? interp(R.subjectOverdue, { overdue: digest.overdue.length, upcoming: digest.upcoming.length })
+    : n === 1 ? R.subjectOne : interp(R.subjectMany, { count: n });
 
   const sectionH = (label: string, color: string) =>
     `<div style="font-family:Helvetica,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;color:${color};margin:24px 0 12px;">${label}</div>`;
 
-  let body = p('Hola — here’s where your road to Spain stands this week.');
+  let body = p(R.intro);
   if (digest.overdue.length > 0) {
-    body += sectionH('SLIPPED PAST', C.red) + digest.overdue.map(itemHtml).join('');
-    body += p(`<span style="font-size:13px;color:#4A5A70;">Already done one of these? Mark it done with the real date and your plan re-flows. Plans changed? Tell me what happened and I’ll remodel the roadmap.</span>`);
+    body += sectionH(R.slippedPast, C.red) + digest.overdue.map(it => itemHtml(it, R)).join('');
+    body += p(`<span style="font-size:13px;color:#4A5A70;">${R.reflow}</span>`);
   }
   if (digest.upcoming.length > 0) {
-    body += sectionH('COMING UP', C.amber) + digest.upcoming.map(itemHtml).join('');
+    body += sectionH(R.comingUp, C.amber) + digest.upcoming.map(it => itemHtml(it, R)).join('');
   }
   if (digest.moreCount > 0) {
-    body += p(`<span style="color:${C.muted};">…and ${digest.moreCount} more after these — one step at a time.</span>`);
+    body += p(`<span style="color:${C.muted};">${interp(R.more, { count: digest.moreCount })}</span>`);
   }
-  body += `<div style="margin:24px 0;">${button(opts.planUrl, 'Open your full roadmap')}</div>`;
+  body += `<div style="margin:24px 0;">${button(opts.planUrl, R.button)}</div>`;
 
-  const html = shell(body, opts.unsubHtml);
+  const html = shell(body, opts.unsubHtml, lang);
 
   const line = (it: DigestItem) =>
-    `${it.overdue ? '[OVERDUE] ' : ''}${it.title} — ${it.whenLabel}${it.source_url ? `\n  official source: ${it.source_url}` : ''}\n  tip: ${it.tip}`;
+    `${it.overdue ? `[${R.overdueBadge}] ` : ''}${it.title} — ${it.whenLabel}${it.source_url ? `\n  ${interp(R.textOfficialSource, { url: it.source_url })}` : ''}\n  ${interp(R.textTip, { tip: it.tip })}`;
   const text = [
-    'Hola — here’s where your road to Spain stands this week.',
+    R.intro,
     '',
     ...digest.overdue.map(line),
     ...digest.upcoming.map(line),
-    digest.moreCount > 0 ? `…and ${digest.moreCount} more after these.` : '',
+    digest.moreCount > 0 ? interp(R.moreText, { count: digest.moreCount }) : '',
     '',
-    `Open your full roadmap: ${opts.planUrl}`,
+    interp(R.textOpen, { url: opts.planUrl }),
   ].filter(Boolean).join('\n');
 
   return { subject, html, text };
@@ -127,29 +136,32 @@ export function roundupEmail(opts: { digest: Digest; planUrl: string; unsubHtml:
 
 // ── Unfinished-interview nudge ─────────────────────────────────────────────────
 
-export function nudgeEmail(opts: { interviewUrl: string; unsubHtml: string }): RenderedEmail {
-  const subject = 'Your Spain roadmap is waiting — a few questions to go';
+export function nudgeEmail(opts: { interviewUrl: string; unsubHtml: string; lang?: EmailLang }): RenderedEmail {
+  const lang = opts.lang ?? 'en';
+  const S = emailStrings(lang).nudge;
   const html = shell(
-    p('Hola — Lola here.') +
-    p('You started telling me about your move to Spain, and I’d hate for that head start to go to waste. A few more answers and I can lay out your full roadmap — every step that applies to you, in the right order, with real deadlines.') +
-    `<div style="margin:24px 0;">${button(opts.interviewUrl, 'Pick up where you left off')}</div>` +
-    p(`<span style="font-size:13px;color:#4A5A70;">It usually takes two or three minutes. Your earlier answers are saved.</span>`),
-    opts.unsubHtml
+    p(S.hola) +
+    p(S.body) +
+    `<div style="margin:24px 0;">${button(opts.interviewUrl, S.button)}</div>` +
+    p(`<span style="font-size:13px;color:#4A5A70;">${S.note}</span>`),
+    opts.unsubHtml,
+    lang
   );
   const text = [
-    'Hola — Lola here.',
+    S.hola,
     '',
-    'You started telling me about your move to Spain. A few more answers and I can lay out your full roadmap.',
+    S.bodyText,
     '',
-    `Pick up where you left off: ${opts.interviewUrl}`,
+    interp(S.textOpen, { url: opts.interviewUrl }),
   ].join('\n');
-  return { subject, html, text };
+  return { subject: S.subject, html, text };
 }
 
 // ── Shared footer link ─────────────────────────────────────────────────────────
 
-export function unsubFooter(unsubUrl: string | null): string {
+export function unsubFooter(unsubUrl: string | null, lang: EmailLang = 'en'): string {
+  const F = emailStrings(lang).footer;
   return unsubUrl
-    ? `You’re getting this because you have a Get Camino roadmap. <a href="${unsubUrl}" style="color:${C.muted};">Unsubscribe from the weekly roundup</a>.`
-    : 'You’re getting this because you have a Get Camino roadmap.';
+    ? `${F.because} <a href="${unsubUrl}" style="color:${C.muted};">${F.unsubscribe}</a>.`
+    : F.because;
 }
