@@ -21,6 +21,7 @@ import { BackToTop, useBackToTop } from '@/components/BackToTop';
 import { capture } from '@/lib/analytics';
 import EmailSignIn from '@/components/EmailSignIn';
 import { parseProfileChange, askLola, TASK_INTRO, changeHint } from '@/lib/plan-coach';
+import { displayTitle } from '@/lib/catalogTitles';
 import {
   diffSummary, plansDiffer, completionLine, formatTiming, timingDetail, openExternal,
   phaseLabel, PHASE_ICONS, PHASE_ORDER, SEV_COLOR, sevLabel, sevBlurb,
@@ -234,7 +235,7 @@ export default function PlanScreen() {
     o.timing.state === 'scheduled'
       ? t('overdue.wasDue', { date: o.timing.due.toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short' }) })
       : t('overdue.plain');
-  const titleById = new Map(objectives.map(o => [o.id, o.title]));
+  const titleById = new Map(objectives.map(o => [o.id, displayTitle(o)]));
   const week = thisWeek(objectives);
 
   const renderCard = (obj: Objective) => {
@@ -247,13 +248,13 @@ export default function PlanScreen() {
         activeOpacity={0.7}
         onPress={() => openCard(obj)}
         accessibilityRole="button"
-        accessibilityLabel={t('card.a11y', { title: obj.title, status: obj.done ? t('card.a11yDone') : formatTiming(obj) })}
+        accessibilityLabel={t('card.a11y', { title: displayTitle(obj), status: obj.done ? t('card.a11yDone') : formatTiming(obj) })}
       >
         <View style={[styles.severityBar, { backgroundColor: barColor }]} />
         <View style={styles.cardBody}>
           <View style={styles.cardTop}>
             <Text style={[styles.cardTitle, isPenalty && styles.cardTitlePenalty, obj.done && styles.cardTitleDone]} numberOfLines={3}>
-              {obj.title}
+              {displayTitle(obj)}
             </Text>
             {obj.done ? (
               <View style={[styles.sevBadge, { backgroundColor: palette.olive + '18' }]}>
@@ -395,7 +396,7 @@ export default function PlanScreen() {
                 <Text style={styles.weekClearTitle}>{t('week.clearTitle')}</Text>
                 <Text style={styles.weekClearBody}>
                   {week.nextUp && week.nextUp.timing.state !== 'pending_anchor'
-                    ? t('week.clearNext', { title: week.nextUp.title, timing: formatTiming(week.nextUp).toLowerCase() })
+                    ? t('week.clearNext', { title: displayTitle(week.nextUp), timing: formatTiming(week.nextUp).toLowerCase() })
                     : t('week.clearWaiting')}
                 </Text>
               </View>
@@ -439,7 +440,7 @@ export default function PlanScreen() {
               <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.sheetHandle} />
 
-                <Text style={styles.sheetTitle}>{selected.title}</Text>
+                <Text style={styles.sheetTitle}>{displayTitle(selected)}</Text>
                 <View style={styles.sheetPills}>
                   <View style={styles.pill}><Text style={[styles.pillText, { color: selected.done ? palette.olive : isOverdue(selected) ? '#C0392B' : palette.cobalt }]}>{selected.done ? completionLine(selected) : isOverdue(selected) ? overdueLine(selected) : formatTiming(selected)}</Text></View>
                   {/* Source pill — tappable when there's a canonical source to open (new tab on web). */}

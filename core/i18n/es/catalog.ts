@@ -1,0 +1,74 @@
+/**
+ * es-ES titles for every catalog obligation (L1 — docs/LOCALIZATION.md §4).
+ *
+ * The ENGINE stays language-free: CATALOG keeps only English titles and plans are built from
+ * them; display resolves through lib/catalogTitles.ts. Rules for this file:
+ *  - Every number, form code, and € figure is VERBATIM from the English title (invariant 3 —
+ *    enforced by tests/catalog-titles.test.ts digit-lint; even thousand separators stay as-is).
+ *  - Spanish institutional terms (empadronamiento, cita previa, escritura…) stay in Spanish —
+ *    they already were.
+ *  - tú register, same warm-precise voice as the chrome.
+ * Completeness is enforced at runtime (same test): every CATALOG id must appear here, no orphans.
+ */
+export const ES_CATALOG_TITLES: Record<string, string> = {
+  'scout-where-to-live': 'Decide en qué parte de España vivir antes de comprometerte — si no lo tienes claro, planifica un viaje de exploración y pasa tiempo real en 2–3 zonas candidatas, sopesando coste de vida, acceso sanitario, clima, transporte, comunidad expat/angloparlante y (si aplica) colegios, antes de firmar un alquiler o comprar',
+  'choose-visa-type': 'Identifica tu categoría de visado — encaja tu situación con un tipo de residencia/visado español (no lucrativa, nómada digital, trabajo, estudios, familiar)',
+  'consulate-appointment': 'Reserva cita en el consulado para presentar tu solicitud de visado (calcula 8–16 semanas de antelación en EE. UU.) — las citas se reservan por el sistema de cita previa del consulado',
+  'criminal-background-check': 'Consigue un certificado nacional de antecedentes penales, apostillado y traducido al español — debe emitirse dentro de los 90 días previos a la solicitud, así que calcula varias semanas (EE. UU.: un channeler aprobado por el FBI lo acelera)',
+  'medical-certificate': 'Consigue un certificado médico (emitido dentro de 90 días, en papel oficial, traducido al español) que confirme que no padeces enfermedades según el Reglamento Sanitario Internacional',
+  'nlv-income-proof': 'Reúne pruebas de ingresos pasivos — €28,800/año para el solicitante principal más €7,200/año por dependiente (400% del IPREM; las cifras siguen al IPREM cada año)',
+  'nlv-health-insurance': 'Contrata un seguro médico privado con una aseguradora autorizada en España — cobertura completa sin copagos ni carencias (requisito de la NLV)',
+  'convenio-especial': 'Date de alta en el Convenio Especial para acceder a la sanidad pública — disponible tras 1 año de residencia continuada + empadronamiento; cuota mensual de €60 (menores de 65) o €157 (65+)',
+  'dnv-remote-work-proof': 'Reúne el contrato de trabajo / acuerdos con clientes que acrediten tu permiso para trabajar en remoto',
+  'dnv-income-proof': 'Reúne pruebas de ingresos remotos — unos €34,000/año (200% del salario mínimo español) más ~€13,000 por cónyuge y ~€4,000 por hijo; los umbrales suben cuando sube el salario mínimo',
+  'dnv-coverage-certificate': 'Consigue un certificado de cobertura de seguridad social (p. ej. totalización EE. UU./España, A1 del Reino Unido) de tu país de origen — o, en su defecto, date de alta en la Seguridad Social española',
+  'empadronamiento': 'Empadronamiento (padrón municipal — inscríbete en el censo de tu municipio)',
+  'nie': 'Consigue tu NIE (Número de Identidad de Extranjero, formulario EX-15) — necesario para casi cualquier trámite oficial o financiero',
+  'eu-registration-certificate': 'Inscríbete en el Registro Central de Extranjeros y consigue tu certificado de registro de ciudadano de la UE (certificado de registro, formulario EX-18) — obligatorio para nacionales UE/EEE que se quedan más de 3 meses; se solicita en persona dentro de los 3 meses tras la entrada (no aplica a nacionales españoles)',
+  'residencia': 'Solicita tu tarjeta de residencia (TIE) — inicia el trámite (toma de huella) dentro de los 30 días tras la entrada; la espera de cita puede ser de varias semanas en ciudades grandes',
+  'tarjeta-sanitaria': 'Solicita la tarjeta sanitaria pública cuando cotices a la Seguridad Social o tengas derecho a cobertura pública — con la NLV mantienes el seguro privado',
+  'exit-tax-return': 'Notifica a la agencia tributaria de tu país de origen el cambio de residencia fiscal',
+  'modelo-720': 'Presenta el Modelo 720 (declaración de bienes en el extranjero) si alguna categoría de activos fuera supera los €50,000 — se presenta del 1 ene al 31 mar; desde la sentencia europea de 2022 rigen las sanciones reformadas de tipo fijo',
+  'dgt-exchange': 'Canjea tu permiso de conducir por el convenio bilateral de tu país — un reconocimiento médico, sin examen de conducir; tu permiso extranjero solo vale ~6 meses una vez obtenida la residencia',
+  'dgt-exam': 'Aprueba el examen de conducir español (teórico + práctico)',
+  'escolarizacion': 'Matricula a tu hijo en el colegio — el plazo ordinario de admisión cae en primavera (≈marzo–mayo) para empezar en septiembre; llegar fuera de ciclo usa el proceso «fuera de plazo»',
+  'family-reunification': 'Solicita la reagrupación familiar — disponible tras ~1 año de residencia legal con permiso renovado; requiere informe de vivienda adecuada y medios (≈150% del IPREM + 50% por miembro adicional). No hace falta si la familia solicitó junta desde el inicio.',
+  'citizenship-track-standard': 'Requisito de nacionalidad: 10 años de residencia legal',
+  'citizenship-track-latam': 'Requisito de nacionalidad: 2 años (nacionales de antiguas colonias españolas)',
+  'tax-planning-consultation': 'Consulta a un especialista fiscal transfronterizo antes de mudarte — programa la venta de activos para minimizar tu exposición fiscal española',
+  'apostille-documents': 'Apostilla los documentos civiles para el consulado (certificados de nacimiento/matrimonio y otros documentos públicos extranjeros) — bajo el Convenio de La Haya de 1961; cada documento se apostilla en el país que lo emitió',
+  'sworn-translation': 'Consigue traducciones juradas al español (traductor jurado) de todos los documentos extranjeros apostillados — solo un traductor jurado nombrado por el MAEC les da validez oficial',
+  'nlv-letter-of-intent': 'Prepara la carta de intenciones para la solicitud NLV en el consulado (motivos de la mudanza, región prevista, origen de los ingresos)',
+  'nlv-non-work-declaration': 'Aporta una declaración notarial de intención de no trabajar en España (solicitantes NLV en edad laboral)',
+  'dnv-qualification-proof': 'Consigue el título universitario apostillado o acreditación oficial de 3+ años de experiencia profesional (requisito DNV)',
+  'dnv-company-activity-proof': 'Consigue el certificado de constitución del empleador/cliente que acredite 1+ años de actividad (DNV)',
+  'dnv-employer-permission-letter': 'Consigue la carta del empleador que te autoriza a trabajar en remoto desde España, describiendo tu puesto (DNV por cuenta ajena)',
+  'spanish-bank-account': 'Abre una cuenta bancaria española (puede hacerse en remoto como no residente, antes de llegar)',
+  'digital-certificate': 'Consigue el certificado digital (FNMT) para presentar impuestos online y recibir notificaciones oficiales',
+  'modelo-030': 'Presenta el Modelo 030 para registrarte en Hacienda como nuevo residente fiscal (censo de obligados tributarios)',
+  'beckham-law': 'Solicita el régimen especial de la Ley Beckham (Modelo 149) — un tipo fijo del 24% sobre rentas de fuente española hasta €600,000, durante hasta seis años, para trabajadores desplazados que cualifican (empleados y, desde 2023, muchos trabajadores remotos y emprendedores; normalmente no autónomos estándar). La elección tiene una ventana estricta (~6 meses desde el inicio de la actividad) — confirma elegibilidad y plazos con un asesor fiscal',
+  'modelo-100': 'Presenta la declaración anual del IRPF (Modelo 100) — plazo del 2 de abril al 30 de junio, con sanción por presentar tarde',
+  'wealth-tax': 'Presenta la declaración anual del impuesto de patrimonio (Modelo 714) durante la campaña de la renta — aplica cuando el patrimonio neto supera el mínimo estatal de €700,000 (varía por región; p. ej. €500k en Cataluña), con una exención adicional de ~€300k por la vivienda habitual',
+  'register-autonomo': 'Date de alta como autónomo: presenta el Modelo 036 en Hacienda y date de alta en la Seguridad Social (RETA) el mismo día o dentro de 60 días (el Modelo 037 se suprimió en 2025)',
+  'autonomo-social-security': 'Paga la cuota mensual de autónomo a la Seguridad Social (RETA) — tarifa reducida de €87/mes el primer año, después según ingresos',
+  'modelo-130': 'Presenta los pagos fraccionados trimestrales del IRPF (Modelo 130) — vencen en ene/abr/jul/oct',
+  'modelo-303': 'Presenta las declaraciones trimestrales de IVA (Modelo 303) — vencen en ene/abr/jul/oct (obligatorio aunque no repercutas IVA)',
+  'modelo-390': 'Presenta el resumen anual de IVA (Modelo 390) — recapitulación informativa de los Modelo 303 del año, dentro de los primeros 30 días de enero, solo electrónico',
+  'modelo-200': 'Presenta el impuesto de sociedades anual (Modelo 200) de una sociedad registrada en España — vence el 25 de julio',
+  'student-visa-health-insurance': 'Contrata un seguro médico privado apto para el visado (aseguradora autorizada en España, cobertura equivalente al SNS, sin copagos, sin carencias, con repatriación) — requisito nacional del visado de estudios',
+  'nlv-renewal': 'Renueva el permiso de residencia no lucrativa — preséntalo en los 60 días previos al vencimiento (también puedes hasta 90 días después, pero tarde es infracción leve, con multa de hasta €500); acredita ingresos pasivos continuados y seguro médico',
+  'dnv-renewal': 'Renueva tu permiso de residencia de nómada digital antes de que venza — renovable por periodos de 2 años mientras se mantengan las condiciones (ingresos remotos y medios continuados); lo gestiona la UGE-CE bajo la Ley de Startups (Ley 28/2022)',
+  'permanent-residence': 'Solicita la residencia de larga duración tras 5 años de residencia legal continuada',
+  'property-legal-due-diligence': 'Contrata a un abogado inmobiliario español para la due diligence (título, cargas, urbanismo, cédula de habitabilidad)',
+  'completion-deed-notary': 'Firma la escritura de compraventa ante notario y paga el resto del precio — la escritura pública notarial es la formalización legal estándar de la venta (y obligatoria si hay hipoteca)',
+  'land-registry-registration': 'Inscribe la escritura en el Registro de la Propiedad — técnicamente voluntario en España (obligatorio solo con hipoteca), pero muy recomendable: pone tu título bajo protección judicial',
+  'property-transfer-tax': 'Paga el impuesto de transmisiones patrimoniales (ITP) en una vivienda de segunda mano — aproximadamente el 6–11% del precio, fijado por cada comunidad autónoma',
+  'ibi-property-tax': 'Paga al ayuntamiento el impuesto municipal anual de tu vivienda (IBI) — el mes de cobro varía según el municipio',
+  'community-fees': 'Paga las cuotas de la comunidad de propietarios para el mantenimiento de las zonas comunes — obligación legal bajo la Ley de Propiedad Horizontal (Ley 49/1960, art. 9)',
+  'nonresident-property-tax': 'Presenta el impuesto de renta imputada de no residentes (Modelo 210) por una vivienda en España que no alquilas — según el valor catastral, vence el 31 dic del año siguiente, mientras aún no seas residente fiscal',
+  'pet-import': 'Importa tu mascota: microchip, vacuna antirrábica vigente (puesta al menos 21 días antes del viaje) y — llegando de un país no UE como EE. UU. — certificado zoosanitario UE emitido por un veterinario autorizado dentro de los 10 días previos a la entrada',
+  'dele-a2-exam': 'Aprueba el examen DELE A2 de español (Instituto Cervantes) — requisito para la nacionalización',
+  'ccse-exam': 'Aprueba el examen CCSE de conocimientos constitucionales y socioculturales (Instituto Cervantes) — requisito para la nacionalización',
+  'citizenship-application': 'Presenta tu solicitud de nacionalidad por residencia ante el Ministerio de Justicia',
+  'citizenship-jura': 'Completa la jura/promesa (juramento de fidelidad al Rey y obediencia a la Constitución, art. 23 del Código Civil) en el Registro Civil — debe hacerse dentro de los 180 días tras la notificación de la concesión o esta caduca',
+};

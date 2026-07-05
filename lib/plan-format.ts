@@ -6,6 +6,7 @@
  */
 import { Platform, Linking } from 'react-native';
 import i18n, { dateLocale } from '@/lib/i18n';
+import { displayTitle } from '@/lib/catalogTitles';
 import { palette } from '@/constants/Colors';
 import { type Objective, type Phase } from '@/core/engine-controller';
 
@@ -33,7 +34,7 @@ export function diffSummary(before: Objective[], after: Objective[]): string {
         && b.timing.due.getTime() !== o.timing.due.getTime()) shifted++;
   }
   const parts: string[] = [];
-  if (added.length)   parts.push(tf('diff.added', { count: added.length, example: shortTitle(added[0].title) }));
+  if (added.length)   parts.push(tf('diff.added', { count: added.length, example: shortTitle(displayTitle(added[0])) }));
   if (removed.length) parts.push(tf('diff.removed', { count: removed.length }));
   if (shifted)        parts.push(tf('diff.shifted', { count: shifted }));
   if (!parts.length)  return tf('diff.none');

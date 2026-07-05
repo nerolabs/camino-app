@@ -11,6 +11,7 @@ import {
   phaseLabel, PHASE_ICONS, PHASE_ORDER,
   SEV_COLOR, sevLabel, sevBlurb, SOURCE_COLOR, sourceShort, sourceBlurb,
 } from '@/lib/plan-format';
+import { displayTitle } from '@/lib/catalogTitles';
 import Seo from '@/components/Seo';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
@@ -32,7 +33,7 @@ export default function SamplePlanScreen() {
     derive(p);
     return buildPlan(p);
   }, []);
-  const titleById = useMemo(() => new Map(objectives.map(o => [o.id, o.title])), [objectives]);
+  const titleById = useMemo(() => new Map(objectives.map(o => [o.id, displayTitle(o)])), [objectives]);
 
   // Tap-to-expand: deterministic detail only (timing, severity, prerequisites, official source).
   // The stateful/LLM features (mark done, re-plan, Lola's coach) are deliberately absent — they're
@@ -125,7 +126,7 @@ export default function SamplePlanScreen() {
                 >
                   <View style={[styles.sevBar, { backgroundColor: SEV_COLOR[obj.severity] }]} />
                   <View style={styles.cardBody}>
-                    <Text style={styles.cardTitle}>{obj.title}</Text>
+                    <Text style={styles.cardTitle}>{displayTitle(obj)}</Text>
                     <View style={styles.cardMeta}>
                       <Text style={[styles.sevText, { color: SEV_COLOR[obj.severity] }]}>{sevLabel(obj.severity)}</Text>
                       <Text style={styles.metaDivider}>·</Text>
