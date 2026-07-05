@@ -29,6 +29,7 @@ export default function GuideIndex() {
     <View style={styles.screen}>
     <ScrollView style={styles.scroll} ref={top.ref} onScroll={top.onScroll} scrollEventThrottle={16}>
       <Seo
+        localized
         title="Moving to Spain: every step, explained | Get Camino guides"
         description={`All ${GUIDES.length} steps of moving to Spain — visas, residency, tax, healthcare, banking and more. What each one is, when it's due, and the official source.`}
         canonical="https://getcamino.app/guide"

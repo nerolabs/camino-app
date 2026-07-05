@@ -15,6 +15,8 @@
 import { describe, it, expect } from 'vitest';
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
+import { WEB_LOCALES as APP_WEB_LOCALES } from '../lib/i18n';
+import { WEB_LOCALES as SERVER_WEB_LOCALES } from '../lib/serverLocale';
 
 const LOCALES_DIR = path.resolve(__dirname, '../locales');
 const SOURCE = 'en';
@@ -54,6 +56,16 @@ const otherLocales = existsSync(LOCALES_DIR)
       .filter(d => d.isDirectory() && d.name !== SOURCE)
       .map(d => d.name)
   : [];
+
+describe('locale wiring stays in sync', () => {
+  it('app and server WEB_LOCALES lists are identical (sitemap/routes vs switcher)', () => {
+    expect([...SERVER_WEB_LOCALES].sort()).toEqual([...APP_WEB_LOCALES].sort());
+  });
+
+  it('every non-English locale directory is a shipped locale (no orphan translations)', () => {
+    expect(otherLocales.sort()).toEqual([...APP_WEB_LOCALES].sort());
+  });
+});
 
 describe('en catalogs (source of truth) are well-formed', () => {
   it('has no empty strings and no malformed placeholders', () => {

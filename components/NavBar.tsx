@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, Pressable, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useRouter, usePathname } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
@@ -33,6 +33,7 @@ export default function NavBar() {
 
   const go = (path: string) => { setMenuOpen(false); router.push(path as never); };
 
+  const pathname = usePathname();
   const currentLocale = SUPPORTED_LOCALES.find(l => l.code === i18n.language) ?? SUPPORTED_LOCALES[0];
   const chooseLocale = (code: LocaleCode) => {
     setLangOpen(false);
@@ -40,6 +41,13 @@ export default function NavBar() {
     // Signed-in users carry the choice in auth metadata so emails can match the app language
     // (design §3; the weekly engine already reads user_metadata for its bookkeeping).
     if (user) supabase.auth.updateUser({ data: { lang: code } }).catch(() => {});
+    // On a locale-prefixed web route (/es/…, L2 tree) the URL owns the language, so switching
+    // NAVIGATES to the chosen variant — otherwise the root layout would snap right back.
+    const prefixed = SUPPORTED_LOCALES.find(l => l.code !== 'en' && (pathname === `/${l.code}` || pathname?.startsWith(`/${l.code}/`)));
+    if (prefixed && code !== prefixed.code) {
+      const rest = pathname === `/${prefixed.code}` ? '/' : pathname!.slice(prefixed.code.length + 1);
+      router.replace((code === 'en' ? rest : `/${code}${rest === '/' ? '' : rest}`) as never);
+    }
   };
 
   return (

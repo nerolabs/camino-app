@@ -43,6 +43,9 @@ export function isSupportedLocale(code: unknown): code is LocaleCode {
   return typeof code === 'string' && SUPPORTED_LOCALES.some(l => l.code === code);
 }
 
+/** The locales that get a prefixed web route tree (everything but unprefixed English). */
+export const WEB_LOCALES = SUPPORTED_LOCALES.filter(l => l.code !== 'en').map(l => l.code);
+
 i18n.use(initReactI18next).init({
   resources: {
     en: { common: enCommon, plan: enPlan, interview: enInterview, guides: enGuides },

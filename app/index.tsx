@@ -80,6 +80,7 @@ export default function LandingPage() {
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
       <Seo
+        localized
         title="Get Camino — your personalized roadmap for moving to Spain"
         description="Get Camino turns moving to Spain into a step-by-step roadmap: the right visa, residency, schools, banking and bureaucracy — sequenced for your situation, every official step backed by its government source. Free, about 3 minutes."
         canonical="https://getcamino.app/"

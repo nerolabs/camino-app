@@ -1,4 +1,4 @@
-import { Stack } from 'expo-router';
+import { Stack, usePathname } from 'expo-router';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { palette } from '@/constants/Colors';
@@ -14,7 +14,7 @@ import { supabase } from '@/core/supabase';
 import { derive, type Profile } from '@/core/interview-controller';
 import { initAnalytics } from '@/lib/analytics';
 import { initMonitoring } from '@/lib/monitoring';
-import { applyStoredLocale } from '@/lib/i18n'; // side-effect import: i18next inits synchronously in English
+import i18n, { applyStoredLocale, isSupportedLocale } from '@/lib/i18n'; // side-effect import: i18next inits synchronously in English
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -80,13 +80,30 @@ export default function RootLayout() {
     HankenGrotesk_400Regular, HankenGrotesk_500Medium, HankenGrotesk_600SemiBold,
   });
 
+  // L2 route-locale forcing: pages under a locale prefix (/es/…) always render in that
+  // language — this is what makes the static export produce genuinely Spanish HTML for
+  // crawlers. Unprefixed routes follow the user's choice on the client; during STATIC
+  // rendering they pin back to English so an /es page rendered earlier in the same export
+  // process can't leak its language into the English pages (the singleton is shared).
+  // Idempotent render-time set — resources are bundled, so the switch is synchronous.
+  const pathname = usePathname();
+  const seg = pathname?.split('/')[1];
+  const routeLocale = seg && seg !== 'en' && isSupportedLocale(seg) ? seg : null;
+  if (routeLocale && i18n.language !== routeLocale) {
+    i18n.changeLanguage(routeLocale);
+  } else if (!routeLocale && typeof window === 'undefined' && i18n.language !== 'en') {
+    i18n.changeLanguage('en');
+  }
+
   useEffect(() => { if (error) throw error; }, [error]);
   useEffect(() => { if (loaded) SplashScreen.hideAsync(); }, [loaded]);
   useEffect(() => { initAnalytics(); }, []); // web: PostHog; native: no-op for now
   useEffect(() => { initMonitoring(); }, []); // web: Sentry (errors + Web Vitals); native: no-op for now
-  // After mount only (hydration-safe — the static export and first client render are English):
-  // saved choice → device/browser language → en. See lib/i18n.ts.
-  useEffect(() => { applyStoredLocale(); }, []);
+  // After mount only (hydration-safe — the static export and first client render match the
+  // route): saved choice → device/browser language → en. Skipped on locale-prefixed routes,
+  // where the URL owns the language (visiting /es/guide/nie must stay Spanish even if the
+  // visitor's saved choice is English). See lib/i18n.ts.
+  useEffect(() => { if (!routeLocale) applyStoredLocale(); }, [routeLocale]);
 
   if (!loaded) return null;
 

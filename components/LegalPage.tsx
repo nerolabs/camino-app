@@ -21,7 +21,7 @@ export default function LegalPage({ metaTitle, description, canonical, en, es }:
   const { title, updated, intro, sections } = i18n.language === 'es' ? es : en;
   return (
     <ScrollView style={styles.scroll}>
-      <Seo title={metaTitle} description={description} canonical={canonical} />
+      <Seo localized title={metaTitle} description={description} canonical={canonical} />
       <NavBar />
       <View style={styles.content}>
         <Text style={styles.title} accessibilityRole="header">{title}</Text>

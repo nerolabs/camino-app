@@ -11,6 +11,11 @@ import esEmails from '@/locales/es/emails.json';
 
 export type EmailLang = 'en' | 'es';
 
+// The locales with a prefixed web route tree — the SERVER-SAFE twin of lib/i18n's WEB_LOCALES
+// (the sitemap route imports this; it can't touch lib/i18n's native storage imports).
+// tests/i18n-lint.test.ts pins the two lists identical, so L3 languages can't ship half-wired.
+export const WEB_LOCALES: EmailLang[] = ['es'];
+
 export type EmailStrings = typeof enEmails;
 
 export function resolveEmailLang(md: Record<string, unknown> | null | undefined): EmailLang {

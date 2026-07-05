@@ -2,17 +2,25 @@
  * GET /sitemap.xml — generated from the catalog so it can never drift from the real
  * guide pages. Only public, indexable routes belong here (/plan and /interview are app
  * surfaces, not content). /how-i-was-built went public 3 Jul 2026 (user decision).
+ * L2: every fully-localized public page also lists its /<locale>/ variant (how-it-works
+ * and the homework pages stay English-only, so no variants for them).
  */
 import { CATALOG } from '@/core/engine-controller';
 import { siteOrigin } from '@/lib/serverEmail';
+import { WEB_LOCALES } from '@/lib/serverLocale';
 
 export function GET(request: Request): Response {
   const base = siteOrigin(request);
-  const urls = [
-    '/', '/how-it-works', '/sample-plan', '/guide',
-    '/how-i-was-built', '/how-i-was-built/log', '/how-i-was-built/roadmap',
+  const localized = [
+    '/', '/sample-plan', '/guide',
     '/privacy', '/terms', '/aviso-legal',
     ...CATALOG.map(o => `/guide/${o.id}`),
+  ];
+  const englishOnly = ['/how-it-works', '/how-i-was-built', '/how-i-was-built/log', '/how-i-was-built/roadmap'];
+  const urls = [
+    ...localized,
+    ...englishOnly,
+    ...WEB_LOCALES.flatMap(l => localized.map(u => `/${l}${u === '/' ? '' : u}`)),
   ];
   const xml =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +

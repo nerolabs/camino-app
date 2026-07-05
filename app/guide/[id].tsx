@@ -49,6 +49,7 @@ export default function GuidePage() {
   return (
     <ScrollView style={styles.scroll}>
       <Seo
+        localized
         title={`${shortClause(g.title)} — moving to Spain | Get Camino`}
         description={metaDescription(g)}
         canonical={`https://getcamino.app/guide/${g.id}`}

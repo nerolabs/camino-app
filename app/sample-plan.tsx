@@ -55,6 +55,7 @@ export default function SamplePlanScreen() {
     <View style={styles.screen}>
     <ScrollView style={styles.scroll} ref={top.ref} onScroll={top.onScroll} scrollEventThrottle={16}>
       <Seo
+        localized
         title="A sample roadmap for moving to Spain | Get Camino"
         description="Susan &amp; Tom's real, engine-built relocation roadmap — every step, deadline and official source — so you can see what Get Camino builds before answering a single question."
         canonical="https://getcamino.app/sample-plan"
