@@ -12,10 +12,11 @@ import { type Profile } from './interview-controller';
 //
 // scripts/audit-catalog.ts validates these fields against SLOTS exactly like the test personas.
 
+// DISPLAY name + blurb live in locales/<lang>/plan.json ("sample.name"/"sample.blurb") so each
+// language meets a couple with names native to it (es: "Susana y Tomás" — user decision
+// 2026-07-05; the PROFILE stays a US couple, which is what drives the NLV plan). This constant
+// is the internal/English reference (audit script, comments).
 export const SAMPLE_NAME = 'Susan & Tom';
-export const SAMPLE_BLURB =
-  'retired couple from Austin, moving on the non-lucrative visa with their dog, still choosing ' +
-  'between Valencia and Málaga — and hoping to become citizens one day';
 
 export function sampleProfile(): Profile {
   // ~9 months out: the earliest pre-arrival offsets are −180 days (visa choice, tax planning),

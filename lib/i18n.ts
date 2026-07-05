@@ -22,9 +22,11 @@ import { getLocales } from 'expo-localization';
 import enCommon from '@/locales/en/common.json';
 import enPlan from '@/locales/en/plan.json';
 import enInterview from '@/locales/en/interview.json';
+import enGuides from '@/locales/en/guides.json';
 import esCommon from '@/locales/es/common.json';
 import esPlan from '@/locales/es/plan.json';
 import esInterview from '@/locales/es/interview.json';
+import esGuides from '@/locales/es/guides.json';
 
 // Each locale is listed by its OWN name (user requirement: the switcher is a feature —
 // "Español", never "Spanish"). FR/DE/IT join at L3.
@@ -43,12 +45,12 @@ export function isSupportedLocale(code: unknown): code is LocaleCode {
 
 i18n.use(initReactI18next).init({
   resources: {
-    en: { common: enCommon, plan: enPlan, interview: enInterview },
-    es: { common: esCommon, plan: esPlan, interview: esInterview },
+    en: { common: enCommon, plan: enPlan, interview: enInterview, guides: enGuides },
+    es: { common: esCommon, plan: esPlan, interview: esInterview, guides: esGuides },
   },
   lng: 'en',
   fallbackLng: 'en',
-  ns: ['common', 'plan', 'interview'],
+  ns: ['common', 'plan', 'interview', 'guides'],
   defaultNS: 'common',
   interpolation: { escapeValue: false }, // values render into RN <Text>, not HTML
   react: { useSuspense: false },         // resources are bundled — nothing to suspend on

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 import { derive } from '@/core/interview-controller';
 import { buildPlan, type Objective } from '@/core/engine-controller';
-import { sampleProfile, SAMPLE_NAME, SAMPLE_BLURB } from '@/core/sample-profile';
+import { sampleProfile } from '@/core/sample-profile';
 import {
   formatTiming, timingDetail, openExternal,
   phaseLabel, PHASE_ICONS, PHASE_ORDER,
@@ -65,9 +65,9 @@ export default function SamplePlanScreen() {
         {/* ── Sample framing: whose plan this is + how to get yours ── */}
         <View style={styles.sampleBanner}>
           <Text style={styles.sampleEyebrow}>{t('sample.eyebrow')}</Text>
-          <Text style={styles.sampleTitle}>{t('sample.title', { name: SAMPLE_NAME })}</Text>
+          <Text style={styles.sampleTitle}>{t('sample.title', { name: t('sample.name') })}</Text>
           <Text style={styles.sampleBody}>
-            {t('sample.body', { name: SAMPLE_NAME, blurb: SAMPLE_BLURB, count: objectives.length })}
+            {t('sample.body', { name: t('sample.name'), blurb: t('sample.blurb'), count: objectives.length })}
           </Text>
           <TouchableOpacity style={styles.ctaBtn} onPress={() => startInterview('banner')}>
             <Text style={styles.ctaBtnText}>{t('sample.cta')}</Text>
@@ -143,7 +143,7 @@ export default function SamplePlanScreen() {
                         <Text style={styles.detailText}>{sevBlurb(obj.severity)} {sourceBlurb(obj.source)}</Text>
                         {deps.length > 0 && (
                           <>
-                            <Text style={styles.detailLabel}>{t('sample.depsLabel')}</Text>
+                            <Text style={styles.detailLabel}>{t('sample.depsLabel', { name: t('sample.name').toUpperCase() })}</Text>
                             {deps.map((d, i) => <Text key={i} style={styles.detailDep}>• {d}</Text>)}
                           </>
                         )}
@@ -166,7 +166,7 @@ export default function SamplePlanScreen() {
 
         {/* ── Closing CTA ── */}
         <View style={styles.closingCta}>
-          <Text style={styles.closingTitle}>{t('sample.closingTitle', { name: SAMPLE_NAME })}</Text>
+          <Text style={styles.closingTitle}>{t('sample.closingTitle', { name: t('sample.name') })}</Text>
           <Text style={styles.closingBody}>
             {t('sample.closingBody')}
           </Text>

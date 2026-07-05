@@ -1,0 +1,66 @@
+{
+  "category": {
+    "visa": "Visados",
+    "residency": "Residencia",
+    "tax": "Impuestos",
+    "health": "Sanidad",
+    "mobility": "Conducir y movilidad",
+    "banking": "Banca y dinero",
+    "family": "Familia",
+    "property": "Vivienda",
+    "admin": "Trámites y registros"
+  },
+  "timing": {
+    "asap": "En cuanto te aplique — esto cae cerca del principio de la hoja de ruta, en las primeras semanas.",
+    "yearlyWindow": "Una obligación anual — la ventana de cada año se cierra a final de {{month}}.",
+    "recurring": "Una obligación recurrente que vuelve con un calendario fijo.",
+    "dueWhen": "Vence cuando {{event}}.",
+    "dueBefore": "Vence {{days}} días antes de que {{event}}.",
+    "dueAfter": "Vence dentro de los {{days}} días después de que {{event}}.",
+    "follows": "Sigue a «{{step}}» — vence dentro de los {{days}} días una vez hecho ese paso.",
+    "anchor": {
+      "arrival": "llegues a España",
+      "residency_established": "tu residencia esté establecida",
+      "padron_done": "tu empadronamiento esté hecho",
+      "property_purchase": "cierres la compra de la vivienda",
+      "other": "se cumpla un hito anterior"
+    },
+    "fallbackStep": "un paso anterior"
+  },
+  "tip": {
+    "visa": "Las citas del consulado se agotan con semanas de antelación — asegura la cita primero y reúne el papeleo después.",
+    "residency": "Pide la cita previa ya — el cuello de botella real son las citas, no el papeleo.",
+    "tax": "Ante la duda, un gestor lo prepara en un día — un seguro barato contra errores de presentación.",
+    "health": "Resuélvelo antes de necesitarlo — los huecos de cobertura son la clase cara de sorpresa.",
+    "mobility": "Empieza pronto: exámenes, citas y oficinas funcionan aquí con lista de espera.",
+    "banking": "Lleva todos los documentos de la lista — las solicitudes incompletas se rechazan en el acto.",
+    "family": "El papeleo de familia suele necesitar traducción jurada — compruébalo antes de la cita.",
+    "property": "No firmes ni transfieras nada antes de que las comprobaciones estén limpias — este paso protege la compra.",
+    "admin": "Un recado corto cuando tus documentos estén listos — pide la cita previa y táchalo."
+  },
+  "index": {
+    "eyebrow": "LAS GUÍAS CAMINO",
+    "title": "Cada paso de mudarse a España, explicado.",
+    "dek1": "Estos {{count}} pasos son el mismo catálogo con el que Get Camino construye hojas de ruta — cada uno con qué es, cuándo vence y la fuente oficial. Cuáles te aplican a ",
+    "dekYou": "ti",
+    "dek2": ", y en qué orden, es lo que resuelve la entrevista gratuita.",
+    "cta": "Crea mi hoja de ruta gratis →"
+  },
+  "detail": {
+    "notFound": "Guía no encontrada",
+    "browseAll": "Ver todas las guías →",
+    "crumb": "← Todas las guías",
+    "whenDue": "CUÁNDO VENCE",
+    "whyMatters": "POR QUÉ IMPORTA",
+    "regionalLabel": "DÓNDE VIVES IMPORTA",
+    "regionalBody": "Los detalles los fija cada comunidad autónoma — la fuente oficial cubre las reglas estatales; aplican las tarifas y plazos de tu región. La entrevista de Get Camino pregunta dónde te instalas y marca este paso en consecuencia.",
+    "whatFirst": "QUÉ VA ANTES",
+    "sourceLink": "Ver la fuente oficial ↗",
+    "tipLabel": "EL CONSEJO DE LOLA",
+    "ctaTitle": "¿Dónde cae esto en tu mudanza?",
+    "ctaBody": "Que este paso te aplique siquiera — y cuándo vence — depende de tu pasaporte, tu trabajo, tu familia y tus planes. Responde unas preguntas y Get Camino construye tu hoja de ruta completa, cada paso en el orden correcto y con plazos reales.",
+    "ctaButton": "Crea mi hoja de ruta gratis →",
+    "ctaNote": "Gratis · unos 3 minutos · sin cuenta para empezar",
+    "moreIn": "MÁS EN {{category}}"
+  }
+}

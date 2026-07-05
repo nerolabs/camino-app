@@ -73,6 +73,8 @@
     "close": "Close"
   },
   "sample": {
+    "name": "Susan & Tom",
+    "blurb": "retired couple from Austin, moving on the non-lucrative visa with their dog, still choosing between Valencia and Málaga — and hoping to become citizens one day",
     "eyebrow": "SAMPLE ROADMAP",
     "title": "This is {{name}}'s plan.",
     "body": "{{name}} — {{blurb}}. Get Camino turned their situation into the {{count}}-step, deadline-aware roadmap below. Yours will look different: a few answers about your own move, and the same engine builds it just for you.",
@@ -80,7 +82,7 @@
     "ctaNote": "Free · about 3 minutes · no account needed to start",
     "lifePhases": "life phases",
     "whyLabel": "WHY IT'S HERE",
-    "depsLabel": "BEFORE THIS, SUSAN & TOM NEED",
+    "depsLabel": "BEFORE THIS, {{name}} NEED",
     "sourceLink": "View the official source ↗",
     "tease": "In your own plan, Lola coaches you through this step, you check it off, and the dates re-flow around what actually happens.",
     "closingTitle": "Your move won't look like {{name}}'s.",

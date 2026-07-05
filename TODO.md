@@ -94,10 +94,13 @@ the regression harness in place. Strategy + rationale: docs/TEST-COVERAGE.md §4
      "format.*" with locale dates; es assertions in tests.
    - ✅ **L1c catalog titles** (`b5b0075`): all 60 in core/i18n/es/catalog.ts, digit-verbatim;
      displayTitle() at render points; catalog-titles.test.ts gates (completeness/digit/length).
-   - [ ] **Guide prose es** (60 explainers, core/i18n/es/guide-prose.ts + digit-lint) + guide
-     page template strings — biggest remaining content batch; guides render English until then.
+   - ✅ **L1d guide surface + sample persona** (2026-07-05 afternoon): all 60 es explainers
+     (core/i18n/es/guide-prose.ts) + guides.json chrome/categories/tips/timing sentences +
+     describeTimingLocalized (en-parity pinned; core stays i18n-free for the server bundle);
+     sample persona now per-locale — es meets "Susana y Tomás" with a Spanish blurb (user
+     spot-check finding: English blurb leaked + English names).
    - [ ] **Emails es** (templates per locale keyed on user_metadata.lang) + reportHtml(locale)
-     + per-locale render snapshots. SAMPLE_BLURB (sample-plan persona blurb) also still English.
+     + per-locale render snapshots.
    - [ ] **Legal-ES** drafts (privacy/terms/aviso with "English prevails" clause).
    - [ ] **[USER] Cristina verification pass** over everything above — the human gate.
 6. **L2 — web SEO tree (~1 day):** /es routes via app/[locale], hreflang + x-default,

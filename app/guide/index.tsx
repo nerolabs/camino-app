@@ -1,8 +1,11 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter, Link } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import Seo from '@/components/Seo';
 import { palette } from '@/constants/Colors';
-import { GUIDES, CATEGORY_LABEL, CATEGORY_ORDER, shortClause, guideIndexJsonLd } from '@/core/guide-content';
+import { GUIDES, CATEGORY_ORDER, shortClause, guideIndexJsonLd } from '@/core/guide-content';
+import { categoryLabel } from '@/lib/guideLocale';
+import { displayTitle } from '@/lib/catalogTitles';
 import { SEV_COLOR, sevLabel } from '@/lib/plan-format';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
@@ -14,6 +17,7 @@ import { capture } from '@/lib/analytics';
 // /guide/<id> page; the personalized order + dates live behind the interview CTA.
 
 export default function GuideIndex() {
+  const { t } = useTranslation('guides');
   const router = useRouter();
   const top = useBackToTop();
 
@@ -33,30 +37,28 @@ export default function GuideIndex() {
       <NavBar />
       <View style={styles.content}>
 
-        <Text style={styles.eyebrow}>THE CAMINO GUIDES</Text>
-        <Text style={styles.title} accessibilityRole="header">Every step of moving to Spain, explained.</Text>
+        <Text style={styles.eyebrow}>{t('index.eyebrow')}</Text>
+        <Text style={styles.title} accessibilityRole="header">{t('index.title')}</Text>
         <Text style={styles.dek}>
-          These {GUIDES.length} steps are the same catalog Get Camino builds roadmaps from — each with
-          what it is, when it's due, and the official source. Which ones apply to <Text style={styles.dekEm}>you</Text>,
-          and in what order, is what the free interview works out.
+          {t('index.dek1', { count: GUIDES.length })}<Text style={styles.dekEm}>{t('index.dekYou')}</Text>{t('index.dek2')}
         </Text>
 
         <TouchableOpacity
           style={styles.ctaBtn}
           onPress={() => { capture('guide_index_cta_clicked'); router.push('/interview'); }}
         >
-          <Text style={styles.ctaBtnText}>Build my free roadmap →</Text>
+          <Text style={styles.ctaBtnText}>{t('index.cta')}</Text>
         </TouchableOpacity>
 
         {groups.map(({ cat, items }) => (
           <View key={cat} style={styles.section}>
-            <Text style={styles.sectionLabel}>{CATEGORY_LABEL[cat].toUpperCase()}</Text>
+            <Text style={styles.sectionLabel}>{categoryLabel(cat).toUpperCase()}</Text>
             {items.map(g => (
               <Link key={g.id} href={`/guide/${g.id}` as never} asChild>
                 <TouchableOpacity style={styles.row}>
                   <View style={[styles.sevDot, { backgroundColor: SEV_COLOR[g.severity] }]} />
                   <View style={styles.rowBody}>
-                    <Text style={styles.rowTitle}>{shortClause(g.title)}</Text>
+                    <Text style={styles.rowTitle}>{shortClause(displayTitle(g))}</Text>
                     <Text style={styles.rowMeta}>{sevLabel(g.severity)}</Text>
                   </View>
                   <Text style={styles.rowArrow}>→</Text>

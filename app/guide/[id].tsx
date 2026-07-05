@@ -1,13 +1,14 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, useRouter, Link } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import Seo from '@/components/Seo';
 import { palette } from '@/constants/Colors';
 import {
-  guideById, titleById, describeTiming, metaDescription, related, shortClause, CATEGORY_LABEL, guideJsonLd,
+  guideById, metaDescription, related, shortClause, guideJsonLd,
 } from '@/core/guide-content';
-import { GUIDE_PROSE } from '@/core/guide-prose';
+import { displayProse, categoryLabel, categoryTip, describeTimingLocalized } from '@/lib/guideLocale';
+import { displayTitle } from '@/lib/catalogTitles';
 import { sevLabel, sevBlurb, sourceBlurb, openExternal } from '@/lib/plan-format';
-import { CATEGORY_TIP } from '@/core/email-digest';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { capture } from '@/lib/analytics';
@@ -22,6 +23,7 @@ export function generateStaticParams(): Record<string, string>[] {
 }
 
 export default function GuidePage() {
+  const { t } = useTranslation('guides');
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const g = guideById.get(id ?? '');
@@ -31,15 +33,17 @@ export default function GuidePage() {
       <ScrollView style={styles.scroll}>
         <NavBar />
         <View style={styles.content}>
-          <Text style={styles.title}>Guide not found</Text>
-          <Link href="/guide" style={styles.link}>Browse all guides →</Link>
+          <Text style={styles.title}>{t('detail.notFound')}</Text>
+          <Link href="/guide" style={styles.link}>{t('detail.browseAll')}</Link>
         </View>
         <Footer />
       </ScrollView>
     );
   }
 
-  const deps = g.depends_on.map(d => ({ id: d, title: titleById.get(d) })).filter(d => d.title);
+  const deps = g.depends_on
+    .map(d => { const dep = guideById.get(d); return dep ? { id: d, title: displayTitle(dep) } : null; })
+    .filter((d): d is { id: string; title: string } => !!d);
   const more = related(g);
 
   return (
@@ -53,34 +57,35 @@ export default function GuidePage() {
       <NavBar />
       <View style={styles.content}>
 
-        <Link href="/guide" style={styles.crumb}>← All guides</Link>
-        <Text style={styles.eyebrow}>{CATEGORY_LABEL[g.category].toUpperCase()} · {sevLabel(g.severity).toUpperCase()}</Text>
-        <Text style={styles.title} accessibilityRole="header">{g.title}</Text>
+        <Link href="/guide" style={styles.crumb}>{t('detail.crumb')}</Link>
+        <Text style={styles.eyebrow}>{categoryLabel(g.category).toUpperCase()} · {sevLabel(g.severity).toUpperCase()}</Text>
+        <Text style={styles.title} accessibilityRole="header">{displayTitle(g)}</Text>
 
         {/* Curated narrative — restates catalog facts + process context only; the digit-lint
-            test guarantees no number appears here that isn't in the title (invariant 3). */}
-        {GUIDE_PROSE[g.id] && <Text style={styles.prose}>{GUIDE_PROSE[g.id]}</Text>}
+            tests guarantee no number appears here that isn't in the title (invariant 3),
+            in every language. */}
+        {displayProse(g.id) && <Text style={styles.prose}>{displayProse(g.id)}</Text>}
 
         <View style={styles.factCard}>
-          <Text style={styles.factLabel}>WHEN IT'S DUE</Text>
-          <Text style={styles.factText}>{describeTiming(g)}</Text>
+          <Text style={styles.factLabel}>{t('detail.whenDue')}</Text>
+          <Text style={styles.factText}>{describeTimingLocalized(g)}</Text>
 
-          <Text style={styles.factLabel}>WHY IT MATTERS</Text>
+          <Text style={styles.factLabel}>{t('detail.whyMatters')}</Text>
           <Text style={styles.factText}>{sevBlurb(g.severity)} {sourceBlurb(g.source)}</Text>
 
           {g.regional && (
             <>
-              <Text style={styles.factLabel}>WHERE YOU LIVE MATTERS</Text>
-              <Text style={styles.factText}>The specifics are set by each comunidad autónoma — the official source covers the national rules; your region's own rates and windows apply. Get Camino's interview asks where you're settling and flags this step accordingly.</Text>
+              <Text style={styles.factLabel}>{t('detail.regionalLabel')}</Text>
+              <Text style={styles.factText}>{t('detail.regionalBody')}</Text>
             </>
           )}
 
           {deps.length > 0 && (
             <>
-              <Text style={styles.factLabel}>WHAT COMES FIRST</Text>
+              <Text style={styles.factLabel}>{t('detail.whatFirst')}</Text>
               {deps.map(d => (
                 <Link key={d.id} href={`/guide/${d.id}` as never} style={styles.depLink}>
-                  • {shortClause(d.title!)}
+                  • {shortClause(d.title)}
                 </Link>
               ))}
             </>
@@ -88,38 +93,36 @@ export default function GuidePage() {
 
           {g.source_url && (
             <TouchableOpacity onPress={() => openExternal(g.source_url!)}>
-              <Text style={styles.sourceLink}>View the official source ↗</Text>
+              <Text style={styles.sourceLink}>{t('detail.sourceLink')}</Text>
             </TouchableOpacity>
           )}
         </View>
 
         <View style={styles.tipCard}>
-          <Text style={styles.tipLabel}>LOLA'S TIP</Text>
-          <Text style={styles.tipText}>{CATEGORY_TIP[g.category]}</Text>
+          <Text style={styles.tipLabel}>{t('detail.tipLabel')}</Text>
+          <Text style={styles.tipText}>{categoryTip(g.category)}</Text>
         </View>
 
         <View style={styles.ctaCard}>
-          <Text style={styles.ctaTitle}>Where does this fall in your move?</Text>
+          <Text style={styles.ctaTitle}>{t('detail.ctaTitle')}</Text>
           <Text style={styles.ctaBody}>
-            Whether this step even applies — and when it's due — depends on your passport, work,
-            family and plans. Answer a few questions and Get Camino builds your full roadmap, every
-            step in the right order with real deadlines.
+            {t('detail.ctaBody')}
           </Text>
           <TouchableOpacity
             style={styles.ctaBtn}
             onPress={() => { capture('guide_cta_clicked', { guide_id: g.id }); router.push(`/interview?from=${g.id}` as never); }}
           >
-            <Text style={styles.ctaBtnText}>Build my free roadmap →</Text>
+            <Text style={styles.ctaBtnText}>{t('detail.ctaButton')}</Text>
           </TouchableOpacity>
-          <Text style={styles.ctaNote}>Free · about 3 minutes · no account needed to start</Text>
+          <Text style={styles.ctaNote}>{t('detail.ctaNote')}</Text>
         </View>
 
         {more.length > 0 && (
           <View style={styles.moreBlock}>
-            <Text style={styles.moreLabel}>MORE IN {CATEGORY_LABEL[g.category].toUpperCase()}</Text>
+            <Text style={styles.moreLabel}>{t('detail.moreIn', { category: categoryLabel(g.category).toUpperCase() })}</Text>
             {more.map(m => (
               <Link key={m.id} href={`/guide/${m.id}` as never} style={styles.moreLink}>
-                {shortClause(m.title)} →
+                {shortClause(displayTitle(m))} →
               </Link>
             ))}
           </View>

@@ -1,0 +1,66 @@
+{
+  "category": {
+    "visa": "Visas",
+    "residency": "Residency",
+    "tax": "Tax",
+    "health": "Healthcare",
+    "mobility": "Driving & mobility",
+    "banking": "Banking & money",
+    "family": "Family",
+    "property": "Property",
+    "admin": "Admin & registrations"
+  },
+  "timing": {
+    "asap": "As soon as it applies — this lands near the top of a roadmap, in the first weeks.",
+    "yearlyWindow": "A yearly obligation — each year's window closes at the end of {{month}}.",
+    "recurring": "A recurring obligation that comes back on a fixed calendar schedule.",
+    "dueWhen": "Due when {{event}}.",
+    "dueBefore": "Due {{days}} days before {{event}}.",
+    "dueAfter": "Due within {{days}} days after {{event}}.",
+    "follows": "Follows “{{step}}” — due within {{days}} days once that step is done.",
+    "anchor": {
+      "arrival": "you arrive in Spain",
+      "residency_established": "your residency is established",
+      "padron_done": "your padrón registration is done",
+      "property_purchase": "you complete your property purchase",
+      "other": "an earlier milestone"
+    },
+    "fallbackStep": "an earlier step"
+  },
+  "tip": {
+    "visa": "Consulate appointments book out weeks ahead — secure the slot first, then assemble the paperwork.",
+    "residency": "Book the cita previa now — appointment slots are the real bottleneck, not the paperwork.",
+    "tax": "If in doubt, a gestor can prepare this in a day — cheap insurance against a mis-filing.",
+    "health": "Sort this before you need it — coverage gaps are the expensive kind of surprise.",
+    "mobility": "Start early: exams, appointments and offices here all run on waiting lists.",
+    "banking": "Bring every document on the list — incomplete applications get rejected on the spot.",
+    "family": "Family paperwork often needs certified (sworn) translations — check before the appointment.",
+    "property": "Don’t sign or transfer anything before the checks clear — this step protects the purchase.",
+    "admin": "A short errand once your documents are ready — book the cita previa and tick it off."
+  },
+  "index": {
+    "eyebrow": "THE CAMINO GUIDES",
+    "title": "Every step of moving to Spain, explained.",
+    "dek1": "These {{count}} steps are the same catalog Get Camino builds roadmaps from — each with what it is, when it's due, and the official source. Which ones apply to ",
+    "dekYou": "you",
+    "dek2": ", and in what order, is what the free interview works out.",
+    "cta": "Build my free roadmap →"
+  },
+  "detail": {
+    "notFound": "Guide not found",
+    "browseAll": "Browse all guides →",
+    "crumb": "← All guides",
+    "whenDue": "WHEN IT'S DUE",
+    "whyMatters": "WHY IT MATTERS",
+    "regionalLabel": "WHERE YOU LIVE MATTERS",
+    "regionalBody": "The specifics are set by each comunidad autónoma — the official source covers the national rules; your region's own rates and windows apply. Get Camino's interview asks where you're settling and flags this step accordingly.",
+    "whatFirst": "WHAT COMES FIRST",
+    "sourceLink": "View the official source ↗",
+    "tipLabel": "LOLA'S TIP",
+    "ctaTitle": "Where does this fall in your move?",
+    "ctaBody": "Whether this step even applies — and when it's due — depends on your passport, work, family and plans. Answer a few questions and Get Camino builds your full roadmap, every step in the right order with real deadlines.",
+    "ctaButton": "Build my free roadmap →",
+    "ctaNote": "Free · about 3 minutes · no account needed to start",
+    "moreIn": "MORE IN {{category}}"
+  }
+}

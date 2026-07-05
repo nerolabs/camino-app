@@ -73,6 +73,8 @@
     "close": "Cerrar"
   },
   "sample": {
+    "name": "Susana y Tomás",
+    "blurb": "pareja jubilada de Austin, que se muda con su perro con el visado no lucrativo, aún decidiendo entre Valencia y Málaga — y con la esperanza de nacionalizarse algún día",
     "eyebrow": "HOJA DE RUTA DE EJEMPLO",
     "title": "Este es el plan de {{name}}.",
     "body": "{{name}} — {{blurb}}. Get Camino convirtió su situación en la hoja de ruta de {{count}} pasos, con plazos, que ves abajo. La tuya será distinta: unas pocas respuestas sobre tu propia mudanza y el mismo motor la construye solo para ti.",
@@ -80,7 +82,7 @@
     "ctaNote": "Gratis · unos 3 minutos · sin cuenta para empezar",
     "lifePhases": "etapas vitales",
     "whyLabel": "POR QUÉ ESTÁ AQUÍ",
-    "depsLabel": "ANTES DE ESTO, SUSAN Y TOM NECESITAN",
+    "depsLabel": "ANTES DE ESTO, {{name}} NECESITAN",
     "sourceLink": "Ver la fuente oficial ↗",
     "tease": "En tu propio plan, Lola te acompaña en este paso, lo marcas hecho y las fechas se recalculan según lo que pase de verdad.",
     "closingTitle": "Tu mudanza no será como la de {{name}}.",
