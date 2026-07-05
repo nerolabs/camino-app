@@ -548,6 +548,15 @@ const ROWS: Row[] = [
       'The clue was in the pattern: only older accounts had saved data, and they happened to be a single sign-in method. It looked like a sign-in bug; it was a timing coincidence around when the security change landed. Chasing the real cause beat trusting the obvious story.',
     ],
   },
+  {
+    feature: 'Five languages reach the iPhone',
+    date: '5 Jul 2026',
+    work: 'The web had spoken five languages for a day; now the iOS app does too. A new TestFlight build carried the localization work and the mid-interview language fix onto the phone, gated behind the full native release checks first — the simulator user-flows had to pass before a single build credit was spent. Verified on a real device: the interview switches languages mid-conversation, every menu item reads right in all five, and the English-only build story hides itself outside English.',
+    decisions: [
+      'The native end-to-end tests are a release gate, not a per-change checkpoint — they run before the build that ships, so the phone is never the place a regression is first seen.',
+      'Build credits are spent deliberately: the gate goes green first, then one build, verified on device before it counts as done.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

@@ -9,7 +9,24 @@ Last updated: 2026-07-05 (late — post-localization bug-fix pass; session close
 
 ---
 
-## ⭐ RESUME HERE (2026-07-05 — five languages LIVE + build 30 in TestFlight; bug-fix pass done)
+## ⭐ RESUME HERE (2026-07-05 — five languages LIVE + build 31 in TestFlight, DEVICE-VERIFIED)
+
+**BUILD 31 SHIPPED + VERIFIED (2026-07-05):** e2e-ios gate green against pushed main (run
+28747895451) → `production --auto-submit` → TestFlight (build number 31, App Version 1.0.0,
+Build ID eb61c50e). **Device-verified by the user:** mid-interview language switch works
+perfectly, all hamburger items work across all five languages, the English-only "How I was
+built" page hides itself outside English. Build 31 is now the **public-submission candidate** —
+the native release gate is fully closed. **API-hardening thread closed:** per-IP limiting confirmed
+LIVE (real IPs land in the Supabase counter table), provider spend caps already set; Turnstile
+stays a pre-public-launch task (TODO #20, now hardening-not-gap). **Two operator playbooks written
+this session:** `docs/ANDROID_LAUNCH.md` (Play account + Redmi 13 + the 12-testers-×-14-days clock)
+and `docs/STORE_PAPERWORK.md` (click-by-click App Store Connect submission). **Remaining
+critical-path work is mostly USER-side now: store paperwork + screenshots + the two account/tester
+tracks.**
+
+---
+
+## Prior resume note (2026-07-05 — five languages LIVE + build 30 in TestFlight; bug-fix pass done)
 
 **getcamino.app is LIVE in five languages (en/es/fr/de/it)** and **iOS build 30** (all
 languages) is on TestFlight, device-tested by the user + wife with **everything working** —
@@ -44,11 +61,9 @@ is in a clean, well-tested state. **THIS SESSION'S FIXES (all live in production
 
 **NEXT SESSION = THE APP-RELEASE PUSH** (nothing is blocking; the product is release-quality;
 179 vitest tests + 10 opt-in; all work through dae56d4 pushed to origin/main).
-- **(a) FIRST: Native build 31** — carries the menu-hide fix + mid-interview language switch +
-  "Ratgeber" + route-handler tests + all web fixes since build 30. **Dispatch `e2e-ios` FIRST**
-  (big-builds-only rule) — note: run #11 was CANCELLED at session close because it was testing
-  pre-push (stale) code; re-dispatch against the now-pushed main, wait for green, then
-  `npx eas-cli build --platform ios --profile production --auto-submit`.
+- **(a) ✅ DONE 2026-07-05: Native build 31 shipped + device-verified** (see the RESUME block at
+  top). e2e-ios green against pushed main → auto-submit → TestFlight → verified on device. It's
+  the public-submission candidate. Next iOS step is the store paperwork (b), NOT another build.
 - **(b) Store paperwork (TODO Phase 4)** — ASC fields, DSA trader status, screenshots (consider
   an es-ES localized listing now that L1 shipped).
 - **(c) Android track (TODO Phase 3)** — user buys the test device + Play account → start the
