@@ -29,7 +29,10 @@ plan loading, composer growth) · slow-turn Sentry alarm · localization design 
 FR/DE/IT fast-follow; bus factor parked; back-to-top queued.
 
 **Standing (every batch):** security audit (§ above) · homework pages per release ·
-STRATEGY.md backtest · EAS builds only on user command · (once L0 lands) translation lints.
+STRATEGY.md backtest · EAS builds only on user command · (once L0 lands) translation lints ·
+**web E2E auto-runs on every deploy** (deploy.sh gate) · **grow the E2E suites** as areas of
+concern surface — every bug that reaches a person earns a regression test (candidate list in
+docs/BUILD.md → "Growing E2E coverage").
 
 ### Phase 1 — E2E gate (IN FLIGHT — blocks everything below; user directive)
 1. **Maestro green**: 3 native flows (01-home, 02-sample-plan, 03-interview) are the gate;

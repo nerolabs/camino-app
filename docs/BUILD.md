@@ -13,17 +13,19 @@ removed 2026-07-04 — the app is long since real; see HANDOFF.md for current st
 - **Android** — same EAS build path; Google Play is a launch platform now (personal Play
   account → 12-tester/14-day closed test applies — start it early).
 
-## Two tiers of checks (small builds vs big builds — user decision 2026-07-05)
+## Two tiers of checks (user decisions 2026-07-05)
 
-- **Every push / small iteration** (web deploys, JS-only changes, day-to-day): the fast
-  deterministic CI only — **typecheck · audit · test**. No E2E. Runs automatically, no spend,
-  no simulator. This is the routine loop.
-- **Big builds only** (a native EAS build headed for TestFlight/Play, and any store
-  submission): ALSO run the two E2E suites below — **`test:e2e`** (Playwright web) and the
-  **`e2e-ios`** workflow (Maestro native). Both are **manual dispatch on purpose**: each spends
-  live LLM calls, e2e-ios takes ~30–45 min, and iOS-simulator-on-CI is inherently slow — so we
-  run them deliberately before a build that matters, never on every small change. Native E2E is
-  a release gate, not an iteration gate.
+- **Every web deploy** (the routine iteration loop): `scripts/deploy.sh` runs, in order, the
+  fast deterministic checks (**typecheck via tsc is separate; audit · test** inline) → export →
+  deploy → **the Playwright web E2E suite against the unique deployment URL**. Staging runs all
+  12 (public smoke + authed); production runs the 6 public smoke (the authed suite seeds a test
+  user that must never touch the prod DB). A failure exits non-zero — on staging, that's the
+  "don't promote to prod" signal. `DEPLOY_SKIP_E2E=1` to skip. **Web regressions are caught at
+  the deploy, automatically, on exactly the bundle that shipped.**
+- **Big builds only** (a native EAS build for TestFlight/Play, i.e. an App Store candidate):
+  ALSO run the **`e2e-ios`** Maestro workflow (manual dispatch). It's ~30–45 min and iOS-sim-on-CI
+  is inherently slow, so it's a deliberate **release gate, not an iteration gate** — dispatch it
+  before cutting a store-candidate build; tolerate the occasional re-run.
 
 ## The pre-ship gate (all green before a big build / store submission)
 
@@ -56,12 +58,32 @@ re-fold into CI when #2610 is fixed or when we pin a known-good Maestro version.
 
 ## Release checklist (per store submission)
 
-- [ ] Gate green: typecheck · audit · test · test:e2e (12) · e2e-ios (3 native).
+- [ ] Gate green: typecheck · audit · test · test:e2e (12, auto on deploy) · e2e-ios (3 native).
 - [ ] Target build device-verified by the user (TestFlight / Play internal) — mic, voice,
       dictation, deep-link sign-in, the current fix list.
 - [ ] Store metadata / screenshots / privacy answers current (docs/APP_STORE.md).
 - [ ] iOS: DSA trader status + privacy-policy URL in ASC.
 - [ ] Android: closed-test 14-day window cleared.
+
+## Growing E2E coverage (standing practice — user directive 2026-07-05)
+
+Every time a bug reaches a person, ask: "what test would have caught this, and where?" Add it
+to the suite that owns that surface (Playwright `tests-e2e/` for web logic; `.maestro/` for
+native shell/rendering), so the same regression can't recur as we iterate. The suites are meant
+to GROW. Candidate tests to add as areas of concern surface (living list):
+
+- **Interview extraction** — a few high-value answers → expected slot values end-to-end
+  ("we're a married couple, no kids" → spouse+married+no-children autofill); multi-answer skip;
+  the conversational clarify path.
+- **Living plan** — mark-done re-flow re-dates a downstream step (not just toggles); a REAL
+  re-model that changes the plan (add "we had a baby" → school step appears) vs the no-op gate.
+- **Region-aware** — pick a comunidad → the regional note names it on the roadmap + guide + PDF.
+- **This-week honesty** — overdue vs due-soon vs clear-week states render correctly for a fixture.
+- **Email loop** — welcome fires once (not 3×); weekly digest caps at a handful; unsubscribe.
+- **Guardrails** — /api/lola & /api/tts payload caps (413), strict CORS preflight, rate-limit 429.
+- **A11y** — focus ring visible on tab; every interactive control has an accessible name.
+- **Localization (once L1 ships)** — home + interview render in `es`; the digit/brand lints.
+- **Native (Maestro, big builds)** — deep-link sign-in once #2610 is unblocked; PDF export; TTS.
 
 ## Resources / costs
 
