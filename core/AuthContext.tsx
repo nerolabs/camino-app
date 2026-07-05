@@ -5,6 +5,7 @@ import * as Linking from 'expo-linking';
 import * as QueryParams from 'expo-auth-session/build/QueryParams';
 import { type Session, type User } from '@supabase/supabase-js';
 import { supabase } from './supabase';
+import { currentLang } from '@/lib/i18n';
 import { capture, identify, resetAnalytics } from '@/lib/analytics';
 import { captureError } from '@/lib/monitoring';
 import { signInWithApple as appleFlow, appleSignInAvailable } from '@/lib/appleSignIn';
@@ -139,8 +140,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         shouldCreateUser: true, // "email me my roadmap" silently creates the account
         emailRedirectTo,
         // data is only applied to NEW users by Supabase, so an existing account's saved
-        // roadmap can never be clobbered from a signed-out screen.
-        ...(pendingProfile ? { data: { pending_profile: pendingProfile } } : {}),
+        // roadmap can never be clobbered from a signed-out screen. `lang` rides along so a
+        // capture-flow user who NEVER signs in still gets weekly emails in their app
+        // language (the weekly cron reads user_metadata.lang; without this, a Spanish
+        // visitor's roundups would arrive in English until their first sign-in).
+        ...(pendingProfile ? { data: { pending_profile: pendingProfile, lang: currentLang() } } : {}),
       },
     });
     if (error) throw error;
