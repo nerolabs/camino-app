@@ -14,7 +14,7 @@ import { supabase } from '@/core/supabase';
 import { derive, type Profile } from '@/core/interview-controller';
 import { initAnalytics } from '@/lib/analytics';
 import { initMonitoring } from '@/lib/monitoring';
-import i18n, { applyStoredLocale, isSupportedLocale } from '@/lib/i18n'; // side-effect import: i18next inits synchronously in English
+import i18n, { applyStoredLocale, isSupportedLocale, getStoredLocale, setAppLocale } from '@/lib/i18n'; // side-effect import: i18next inits synchronously in English
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -53,6 +53,21 @@ function SessionSync() {
       setIsStaff(isStaff);
       if (answers) { derive(answers); setProfile(answers); }
       setProfileLoaded(true); // settled: either answers landed above, or there's nothing saved
+
+      // Language sync: the emails (welcome below, weekly cron) read user_metadata.lang, but a
+      // browser-DETECTED language never touches the switcher — so a French visitor got French UI
+      // and ENGLISH email (gap spotted by the user, 2026-07-05). Placed after the profile fetch
+      // so the mount-time locale resolution has long since settled. Two directions:
+      //  - no explicit local choice but the account has one (chosen on another device) → ADOPT;
+      //  - otherwise, account metadata differs from the actual app language → MIRROR it (awaited:
+      //    the welcome email just below must already see it).
+      const storedChoice = await getStoredLocale();
+      const accountLang = typeof md.lang === 'string' && isSupportedLocale(md.lang) ? md.lang : null;
+      if (!storedChoice && accountLang && accountLang !== i18n.language) {
+        await setAppLocale(accountLang).catch(() => {});
+      } else if (i18n.language !== (accountLang ?? 'en')) {
+        await supabase.auth.updateUser({ data: { lang: i18n.language } }).catch(() => {});
+      }
 
       // Welcome email, once ever — the server re-checks welcomed_at with the service role
       // (claiming it before the send), and the module guard above stops same-page-load refires.

@@ -101,6 +101,17 @@ export async function applyStoredLocale(): Promise<void> {
   }
 }
 
+/** The user's EXPLICIT saved choice (null when they've only ever ridden the device default).
+ *  Lets SessionSync decide between adopting the account language and mirroring the local one. */
+export async function getStoredLocale(): Promise<LocaleCode | null> {
+  try {
+    const saved = await AsyncStorage.getItem(STORAGE_KEY);
+    return isSupportedLocale(saved) ? saved : null;
+  } catch {
+    return null;
+  }
+}
+
 /** The user's explicit choice: switch now, persist locally. Supabase metadata sync is the
  *  caller's job (the switcher has the session; this module stays auth-free). */
 export async function setAppLocale(code: LocaleCode): Promise<void> {
