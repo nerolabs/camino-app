@@ -33,10 +33,11 @@ PRODUCTION. Both templates below are complete paste-ready sources.
 
 ## Magic link or OTP
 
-**Subject:**
+**Subject** (Supabase caps subjects at 255 chars, so the brand sits OUTSIDE the branch and
+`$l` keeps the guard short):
 
 ```
-{{ if eq (printf "%v" .Data.lang) "es" }}Tu enlace de acceso a Get Camino{{ else if eq (printf "%v" .Data.lang) "fr" }}Ton lien de connexion Get Camino{{ else if eq (printf "%v" .Data.lang) "de" }}Dein Anmeldelink für Get Camino{{ else if eq (printf "%v" .Data.lang) "it" }}Il tuo link di accesso a Get Camino{{ else }}Your Get Camino sign-in link{{ end }}
+{{ $l := printf "%v" .Data.lang }}Get Camino: {{ if eq $l "es" }}tu enlace de acceso{{ else if eq $l "fr" }}ton lien de connexion{{ else if eq $l "de" }}dein Anmeldelink{{ else if eq $l "it" }}il tuo link di accesso{{ else }}your sign-in link{{ end }}
 ```
 
 **Body (Source):**
@@ -63,10 +64,10 @@ PRODUCTION. Both templates below are complete paste-ready sources.
 
 ## Confirm sign up
 
-**Subject:**
+**Subject** (compact — 255-char cap; brand outside the branch):
 
 ```
-{{ if eq (printf "%v" .Data.lang) "es" }}Confirma tu correo — tu cuenta de Get Camino está casi lista{{ else if eq (printf "%v" .Data.lang) "fr" }}Confirme ton e-mail — ton compte Get Camino est presque prêt{{ else if eq (printf "%v" .Data.lang) "de" }}Bestätige deine E-Mail — dein Konto bei Get Camino ist fast fertig{{ else if eq (printf "%v" .Data.lang) "it" }}Conferma la tua e-mail — il tuo account Get Camino è quasi pronto{{ else }}Confirm your email — your Get Camino account is almost ready{{ end }}
+{{ $l := printf "%v" .Data.lang }}Get Camino: {{ if eq $l "es" }}confirma tu correo{{ else if eq $l "fr" }}confirme ton e-mail{{ else if eq $l "de" }}bestätige deine E-Mail{{ else if eq $l "it" }}conferma la tua e-mail{{ else }}confirm your email{{ end }}
 ```
 
 **Body (Source):**
