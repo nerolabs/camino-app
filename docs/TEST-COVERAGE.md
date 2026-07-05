@@ -90,7 +90,11 @@ navigates, and drives the interview with a real LLM turn (the web suite covers t
 2. **02-sample-plan** — launch → tap the sample-roadmap link → "SAMPLE ROADMAP" + Susan's plan.
 3. **03-interview** — launch → "Build my free roadmap" → Lola's landing → "Let's get started" →
    Question 1 (a real `/api/lola` turn) → type an answer, **verified it landed** → send →
-   Question 2 (a second real turn). Exercises native keyboard input + the LLM path.
+   **the answer posts to the conversation**. Exercises native keyboard input + one live LLM turn.
+   *Deliberately stops before "Question 2" — that needs a SECOND sequential LLM call and is
+   CI-latency-nondeterministic (failed both retries in run #9). "Answering advances the interview"
+   is identical logic to web (covered manually every build + the planned full-interview web flow,
+   §4B). A gate must not hinge on two back-to-back LLM round-trips.*
 
 ### Written but EXCLUDED from CI (local-only)
 4. **04-authed-roadmap** — deep-link sign-in → seeded roadmap → open a step → mark done.

@@ -5,11 +5,47 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-Last updated: 2026-07-04.
+Last updated: 2026-07-05.
 
 ---
 
-## ⭐ RESUME HERE (2026-07-04 — all three pre-release features SHIPPED; builds only on user command)
+## ⭐ RESUME HERE (2026-07-05 — E2E gate essentially done; NEXT = localization, gated on tests)
+
+**Where we are:** the E2E gate (Phase 1) is basically closed and the deep testing investment for
+localization is in place. **The morning's job is Phase 2 — Localization — but it has a HARD
+TESTING GATE in front of it (user directive): the localization-testing prerequisites in TODO.md
+Phase 2 must be green before ANY L0 code.** Design is approved in docs/LOCALIZATION.md; testing
+strategy in docs/TEST-COVERAGE.md §4A.
+
+1. **Web E2E is now a per-deploy regression gate** — `scripts/deploy.sh` runs the Playwright
+   suite against the unique deployment URL after every deploy (staging = all 12; production = 6
+   public; `DEPLOY_SKIP_E2E=1` to skip). It already caught a real seed-ordering bug on its first
+   run. Small builds = fast CI (typecheck/audit/test); big builds add the two E2E suites.
+2. **Native E2E (Maestro) — 3 flows, retry-tolerant, BIG BUILDS ONLY** (manual `e2e-ios`
+   workflow). Run #7 all-green; since then, environment flakiness (cold-boot splash, LLM latency)
+   → fixes: retry-once + generous boot waits. **Run #9 finding: flow 03 failed BOTH retries on the
+   "Question 2 appears" wait (needs a 2nd sequential LLM call — CI-latency-nondeterministic), while
+   01/02 and everything up to answer-sent were solid. So 03 was TRIMMED** to prove the
+   native-critical path (launch → interview starts via a real LLM turn → native keyboard answer
+   lands → send posts it) and NOT the flaky second LLM round-trip. **UNVERIFIED in CI — confirm on
+   the next deliberate big-build e2e-ios run (do NOT burn runs chasing it; it's big-builds-only).**
+   The authed deep-link flow (04) stays excluded — Maestro #2610. Rationale: docs/BUILD.md +
+   docs/TEST-COVERAGE.md §3.
+3. **Testing deepened for localization (44 → 82 vitest tests):** the crown jewel is
+   `tests/plan-snapshot.test.ts` — every persona's plan frozen as `id|phase|severity|timing-state`,
+   so localization surgery that changes engine behavior fails loudly. Plus a vitest RN-stub +
+   `@/` alias unlocking the display layer, and units for api-guard/server-email/regions/
+   sample-profile/plan-format/plan-coach. docs/TEST-COVERAGE.md is the living map (CLAUDE.md rule
+   to keep it current).
+4. **Immediate next actions (morning):** (a) do the localization-testing prerequisites
+   (TODO Phase 2 gate) — the highest-value one is the Spanish-input extraction test (proves the
+   interview already understands Spanish); (b) then L0 plumbing, building the 4 i18n lint gates
+   AS PART of L0; (c) re-run the full suite + plan-snapshot after string extraction (still green =
+   behavior untouched). Parallel, user-side: Android device + Play closed-test clock (Phase 3).
+
+---
+
+## Earlier resume (2026-07-04 — all three pre-release features SHIPPED; builds only on user command)
 
 **Latest:** the "This week" view SHIPPED (toggle on /plan, `core/this-week.ts`, 4 tests) and the
 user's first family-testing round found 3 bugs. Two fixed + shipped in **iOS build 19**

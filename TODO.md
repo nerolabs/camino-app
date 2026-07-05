@@ -30,9 +30,10 @@ FR/DE/IT fast-follow; bus factor parked; back-to-top queued.
 
 **Standing (every batch):** security audit (§ above) · homework pages per release ·
 STRATEGY.md backtest · EAS builds only on user command · (once L0 lands) translation lints ·
-**web E2E auto-runs on every deploy** (deploy.sh gate) · **grow the E2E suites** as areas of
-concern surface — every bug that reaches a person earns a regression test (candidate list in
-docs/BUILD.md → "Growing E2E coverage").
+**web E2E auto-runs on every deploy** (deploy.sh gate) · **grow the test suites** as concern
+areas surface — every bug that reaches a person earns a regression test · **keep
+docs/TEST-COVERAGE.md current** (what's tested today + the deepening strategy; CLAUDE.md rule).
+Current: 82 vitest tests (+7 opt-in) · 11 web E2E flows · 3 native flows (retry-tolerant gate).
 
 ### Phase 1 — E2E gate (IN FLIGHT — blocks everything below; user directive)
 1. **Maestro green**: 3 native flows (01-home, 02-sample-plan, 03-interview) are the gate;
@@ -50,10 +51,32 @@ docs/BUILD.md → "Growing E2E coverage").
    words at normal pace · composer grows while dictating · cold-start with no roadmap lands
    home · no spinner past 35s. Fix rounds as filed.
 
-### Phase 2 — Localization (docs/LOCALIZATION.md, APPROVED; starts when Phase 1 closes)
+### Phase 2 — Localization (docs/LOCALIZATION.md APPROVED; starts when Phase 1 closes)
+
+**⚠️ HARD GATE — localization-testing prerequisites MUST be green before ANY L0 code (user
+directive 2026-07-05). Localization is broad, mechanical surgery; we do not touch it without
+the regression harness in place. Strategy + rationale: docs/TEST-COVERAGE.md §4A.**
+- ✅ **Engine structural snapshot** (`tests/plan-snapshot.test.ts`) — DONE. Engine is
+  locale-free; proves localization never changes which steps / order / timing.
+- [ ] **Interview extraction is language-agnostic** — opt-in network test: Spanish input →
+  correct English slug (`"Somos estadounidenses"` → `nationalities:["US"]`;
+  `"trabajo en remoto para una empresa de EE.UU."` → `employed_remote`). Proves the interview
+  already works in Spanish BEFORE we localize. Add to `tests/api.contract.test.ts`.
+- [ ] **Email/report render snapshots** (`emailTemplates`, `reportHtml`) — HTML snapshot so a
+  translation can't break markup or drop a section (extend per-locale at L1).
+- [ ] **The 4 i18n lint gates BUILT AS PART OF L0** and wired into `npm test` in the SAME change
+  that adds the string catalogs: *completeness* (no missing keys), *per-locale digit-lint*
+  (a translation never changes a number — invariant 3), *placeholder-lint* (`{{var}}` parity),
+  *brand-lint* ("Get Camino"/"Lola" verbatim). Catalog/guide title completeness per locale
+  (runtime, backing the tsc `Record<ObligationId,…>` type).
+  → These four are the mechanical guardrails that make L1/L3 fill-in-the-blanks; treat them as
+  part of L0's definition of done, not an afterthought.
+
 4. **L0 — plumbing (~1–1.5 days):** i18next + locale resolution/persistence + the VISIBLE
    language switcher in ☰ ("Language · Español"; each option in its own language) + full
-   English string extraction + 4 lint gates into npm test. Product identical after = proof.
+   English string extraction + **the 4 lint gates above** into npm test. Product identical
+   after = proof. Re-run `plan-snapshot` + full suite after extraction: still green = behavior
+   untouched.
 5. **L1 — Spanish (~2 days + Cristina verification) — THE LAUNCH GATE:** chrome, catalog
    titles, guide prose, static questions, emails, legal-ES (English prevails), Lola tú
    directive, locale dates.
