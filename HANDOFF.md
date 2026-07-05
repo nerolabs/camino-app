@@ -42,19 +42,25 @@ is in a clean, well-tested state. **THIS SESSION'S FIXES (all live in production
    e2e-ios run #10 green (flow-03 trim CI-verified); weekly-cron inspected (admin metadata
    MERGES — verified); HANDOFF history archived to docs/archive/.
 
-**NEXT SESSION — suggested priorities (nothing is blocking; the product is release-quality):**
-- **(a) Native build 31** on user command — carries the menu-hide fix + interview switch +
-  Ratgeber + all web fixes since build 30. Dispatch `e2e-ios` first (big-builds-only rule).
-- **(b) Route-handler integration tests** — weekly / feedback / account-delete / unsubscribe,
-  using the mocked-Supabase pattern from `tests/welcome-route.test.ts` (the audit's last gap).
-- **(c) Store paperwork (TODO Phase 4)** — ASC fields, DSA trader status, screenshots (consider
-  an es-ES localized listing now that L1 shipped), Supabase auth-template parity note in TODO.
-- **(d) Android track (TODO Phase 3)** — user buys the test device + Play account → start the
+**NEXT SESSION = THE APP-RELEASE PUSH** (nothing is blocking; the product is release-quality;
+179 vitest tests + 10 opt-in; all work through dae56d4 pushed to origin/main).
+- **(a) FIRST: Native build 31** — carries the menu-hide fix + mid-interview language switch +
+  "Ratgeber" + route-handler tests + all web fixes since build 30. **Dispatch `e2e-ios` FIRST**
+  (big-builds-only rule) — note: run #11 was CANCELLED at session close because it was testing
+  pre-push (stale) code; re-dispatch against the now-pushed main, wait for green, then
+  `npx eas-cli build --platform ios --profile production --auto-submit`.
+- **(b) Store paperwork (TODO Phase 4)** — ASC fields, DSA trader status, screenshots (consider
+  an es-ES localized listing now that L1 shipped).
+- **(c) Android track (TODO Phase 3)** — user buys the test device + Play account → start the
   14-day closed-test clock (burns calendar time in parallel; English build is fine to start).
-- **(e) Watch the first natural weekly cron** — Monday 2026-07-07 06:00 UTC; check the run's
+- **(d) Watch the first natural weekly cron** — Monday 2026-07-07 06:00 UTC; check the run's
   JSON output (roundups/nudges/skipped/errors). Localized emails ride it now.
-- **(f) [USER] native-speaker passes** over live es/fr/de/it — corrections are pure data edits;
+- **(e) [USER] native-speaker passes** over live es/fr/de/it — corrections are pure data edits;
   the lint gates + snapshots re-verify each change.
+
+**DONE this session (was next-session item (b)):** ✅ route-handler integration tests — every
+API route (welcome/feedback/account-delete/unsubscribe/weekly) now covered; the audit's last
+unit gap is closed. TEST-COVERAGE.md §1 updated.
 
 ## Current state (one paragraph — rewritten 2026-07-05 evening; history: docs/archive/)
 
