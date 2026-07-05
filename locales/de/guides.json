@@ -39,7 +39,7 @@
     "admin": "Ein kurzer Gang, sobald deine Unterlagen bereit sind — Cita previa buchen und abhaken."
   },
   "index": {
-    "eyebrow": "DIE CAMINO-GUIDES",
+    "eyebrow": "DIE CAMINO-RATGEBER",
     "title": "Jeder Schritt eines Umzugs nach Spanien, erklärt.",
     "dek1": "Diese {{count}} Schritte sind derselbe Katalog, aus dem Get Camino Roadmaps baut — jeder mit dem, was er ist, wann er fällig ist, und der offiziellen Quelle. Welche für ",
     "dekYou": "dich",
@@ -47,9 +47,9 @@
     "cta": "Meine kostenlose Roadmap erstellen →"
   },
   "detail": {
-    "notFound": "Guide nicht gefunden",
-    "browseAll": "Alle Guides ansehen →",
-    "crumb": "← Alle Guides",
+    "notFound": "Ratgeber nicht gefunden",
+    "browseAll": "Alle Ratgeber ansehen →",
+    "crumb": "← Alle Ratgeber",
     "whenDue": "WANN ES FÄLLIG IST",
     "whyMatters": "WARUM ES ZÄHLT",
     "regionalLabel": "DEIN WOHNORT ZÄHLT",
