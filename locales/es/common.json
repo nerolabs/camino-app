@@ -1,0 +1,108 @@
+{
+  "nav": {
+    "wordmark": "Get Camino",
+    "wordmarkWide": "Get Camino: tu camino a España",
+    "homeA11y": "Inicio de Get Camino",
+    "myRoadmap": "Mi hoja de ruta",
+    "getYourRoadmap": "Consigue tu hoja de ruta",
+    "menuA11y": "Menú",
+    "menu": {
+      "home": "Inicio",
+      "howItWorks": "Cómo funciona",
+      "guides": "Guías",
+      "samplePlan": "Plan de ejemplo",
+      "howIWasBuilt": "How I was built",
+      "reportProblem": "Informar de un problema",
+      "language": "Idioma",
+      "signOut": "Cerrar sesión",
+      "deleteAccount": "Eliminar mi cuenta"
+    }
+  },
+  "language": {
+    "title": "Idioma",
+    "current": "Idioma · {{name}}"
+  },
+  "backToTop": "Volver arriba",
+  "home": {
+    "eyebrow": "Mudarse a España",
+    "headline": "Tu hoja de ruta personalizada para mudarte a España.",
+    "sub": "De elegir el visado adecuado a encontrar tu ciudad, matricular a tus hijos en el colegio y poner los papeles en orden — Get Camino averigua qué te aplica a ti y qué hacer primero.",
+    "cta": "Crea mi hoja de ruta gratis →",
+    "disclaimer": "Gratis · Unos 3 minutos · Sin cuenta para empezar",
+    "sampleLink": "¿Aún no lo ves claro? Echa antes un vistazo a una hoja de ruta de ejemplo →",
+    "strip": "Visados · Dónde vivir · Colegios · Banca · NIE · TIE · Empadronamiento · Modelo 720 · Conducir · Trabajo remoto",
+    "stripLink": "  ·  Explora las 60 guías →",
+    "browseGuidesA11y": "Ver todas las guías",
+    "photoA11y": "{{label}}, España",
+    "photos": {
+      "gothicQuarter": "Barrio Gótico, Barcelona",
+      "madrid": "Madrid",
+      "plazaEspana": "Plaza de España, Sevilla",
+      "sevillaSunset": "Sevilla al atardecer"
+    }
+  },
+  "footer": {
+    "note": "Solo orientación — no es asesoramiento legal ni fiscal.",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "avisoLegal": "Aviso legal"
+  },
+  "storeBadges": {
+    "eyebrow": "LLÉVALO CONTIGO",
+    "titleLive": "Lleva Get Camino en tu móvil.",
+    "titleSoon": "La app web ya funciona. Las apps para el móvil están en camino.",
+    "subLive": "Tu hoja de ruta, con voz incluida, en iPhone y Android.",
+    "subSoon": "Todo funciona aquí mismo, en tu navegador — sin instalar nada. Las apps nativas para iPhone y Android están en desarrollo.",
+    "downloadOn": "Descárgala en",
+    "comingSoonTo": "Muy pronto en",
+    "badgeLinkA11y": "Consigue Get Camino en {{store}}",
+    "badgeSoonA11y": "{{store}} — muy pronto"
+  },
+  "signIn": {
+    "button": "Iniciar sesión",
+    "title": "Inicia sesión en Get Camino",
+    "sub": "Guarda tu hoja de ruta y retómala en cualquier dispositivo.",
+    "google": "Continuar con Google",
+    "apple": "Continuar con Apple",
+    "email": "Continuar con correo",
+    "allOptions": "← Todas las opciones",
+    "cancel": "Cancelar",
+    "failedTitle": "No se pudo iniciar sesión con {{provider}}"
+  },
+  "deleteAccount": {
+    "title": "¿Eliminar tu cuenta?",
+    "warning": "Esto elimina permanentemente tu cuenta, tus respuestas y tu hoja de ruta — de inmediato, sin deshacer y sin periodo de recuperación. Las 60 guías gratuitas siguen abiertas para todo el mundo.",
+    "confirm": "Eliminar mi cuenta permanentemente",
+    "keep": "Conservar mi cuenta",
+    "doneTitle": "Cuenta eliminada.",
+    "doneSub": "Tu cuenta, tus respuestas y tu hoja de ruta han desaparecido. Si España vuelve a llamar, aquí estaremos — buen camino.",
+    "close": "Cerrar",
+    "err": "No ha funcionado — no se eliminó nada. Inténtalo de nuevo o escríbenos desde «Informar de un problema»."
+  },
+  "emailSignIn": {
+    "sentTitle": "Revisa tu bandeja de entrada 📬",
+    "sentSub": "Te hemos enviado un enlace de acceso a {{email}}. Ábrelo en este dispositivo — o introduce el código de un solo uso que va en el mismo correo:",
+    "codeA11y": "Código de un solo uso de tu correo",
+    "verify": "Verificar código",
+    "checking": "Comprobando…",
+    "tryAgain": "Otra dirección / enviarlo de nuevo",
+    "emailA11y": "Dirección de correo",
+    "send": "Envíame un enlace de acceso",
+    "sending": "Enviando…",
+    "hint": "Sin contraseña — el enlace (o el código) te da acceso.",
+    "errSend": "No se pudo enviar el correo — inténtalo de nuevo.",
+    "errCode": "Ese código no coincide — revisa el correo o envía uno nuevo."
+  },
+  "feedback": {
+    "title": "Informar de un problema",
+    "sub": "¿Algo roto, confuso o que falta? Cuéntanoslo — con una frase basta.",
+    "inputA11y": "Describe el problema",
+    "placeholder": "¿Qué ha pasado?",
+    "send": "Enviar",
+    "cancel": "Cancelar",
+    "thanksTitle": "Gracias — recibido.",
+    "thanksSub": "Cada aviso mejora la hoja de ruta. Los leemos todos.",
+    "done": "Listo",
+    "errSend": "No se ha enviado — inténtalo otra vez."
+  }
+}

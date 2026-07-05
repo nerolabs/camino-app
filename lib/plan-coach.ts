@@ -6,6 +6,7 @@
  * re-derives everything from the profile (invariant 3).
  */
 import { askAnthropic } from '@/lib/lola';
+import i18n, { languageDirective } from '@/lib/i18n';
 import { SLOTS } from '@/core/interview-controller';
 import { type Objective } from '@/core/engine-controller';
 
@@ -39,21 +40,11 @@ function fieldGuide(): string {
 // Sample text for the "Something changed?" box, keyed by the OPEN STEP's category so the example
 // is relevant to what the user is looking at (a rent-vs-buy example on a visa step was jarring).
 // Every sample is phrased to map cleanly onto a real profile field the extractor knows — these
-// aren't just flavor, they teach the kind of sentence that actually re-plans.
-const CHANGE_HINTS: Record<string, string> = {
-  visa:      'e.g. I got a remote job, so we’re switching to the digital-nomad visa.',
-  residency: 'e.g. My residence card (TIE) was issued on 2027-02-01.',
-  tax:       'e.g. I’ll be freelancing in Spain after all, not just living off savings.',
-  health:    'e.g. We’re only staying six months, not moving permanently.',
-  mobility:  'e.g. We decided no one will drive in Spain.',
-  banking:   'e.g. Our arrival moved two months later.',
-  family:    'e.g. We got married last month.',
-  property:  'e.g. We decided to rent instead of buy.',
-  admin:     'e.g. We’re arriving in November instead of September.',
-};
-
+// aren't just flavor, they teach the kind of sentence that actually re-plans. The strings live
+// in locales/<lang>/plan.json ("coach.hints.*") so they follow the app language.
 export function changeHint(obj: Objective): string {
-  return CHANGE_HINTS[obj.category] ?? 'e.g. Our arrival date moved to next spring.';
+  const key = `plan:coach.hints.${obj.category}`;
+  return i18n.exists(key) ? i18n.t(key) : i18n.t('plan:coach.hints.generic');
 }
 
 // Layer 2 of the living plan: translate a free-text "here's what changed" into a
@@ -75,7 +66,8 @@ fields that genuinely changed. If nothing maps to a field above, return {"change
 Appointment/booking dates for an individual step (e.g. "our consulate appointment is now in
 August") are NOT profile fields — return {"changes": {}} for those; the user marks the step
 done with its real date instead. Never invent fields, deadlines, costs, or laws — only set
-the listed fields to typed values.`,
+the listed fields to typed values. The user may describe the change in ANY language (Spanish,
+English, …) — the fields and typed values above are always returned exactly as specified.`,
       messages: [{ role: 'user', content: freeText }],
     });
     const raw = rawText.trim();
@@ -102,13 +94,13 @@ export async function askLola(
 "${obj.title}" (category: ${obj.category}).${visa}
 Explain HOW to get it done in practice — the concrete steps, who usually handles it (often a gestor or lawyer), and what to prepare. Warm, plain, concise: 2–4 short sentences, and a short list only if it genuinely helps.
 Write in plain text only — no markdown, asterisks, bold, or headers; if you list steps, use short "– " dashes.
-Rules: do NOT invent specific deadlines, costs, form numbers, or legal thresholds beyond what's already stated in the step above — for exact figures or dates, tell them to confirm with a gestor or the official source. Never make a required or penalty step sound optional. You keep the map; a gestor signs the papers.`;
+Rules: do NOT invent specific deadlines, costs, form numbers, or legal thresholds beyond what's already stated in the step above — for exact figures or dates, tell them to confirm with a gestor or the official source. Never make a required or penalty step sound optional. You keep the map; a gestor signs the papers.${languageDirective()}`;
     const messages = [
       ...history.map(t => ({ role: (t.role === 'lola' ? 'assistant' : 'user') as 'assistant' | 'user', content: t.text })),
       { role: 'user' as const, content: question },
     ];
     return await askAnthropic({ model: 'claude-haiku-4-5-20251001', max_tokens: 280, system, messages });
   } catch {
-    return "Sorry — I couldn't load that just now. Try asking again in a moment.";
+    return i18n.t('plan:coach.error');
   }
 }

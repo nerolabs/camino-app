@@ -1,0 +1,54 @@
+{
+  "landing": {
+    "eyebrow": "TU CAMINO A ESPAÑA",
+    "headline": "Hola, soy Lola.",
+    "sub": "Mudarse a España son cien pequeños pasos — visados, padrón, impuestos, sanidad — y solo funcionan en el orden correcto. He ayudado a otras personas a dar este salto y lo recorreré contigo de principio a fin.",
+    "subQuiet": "Responde unas preguntas y construyo tu hoja de ruta personal: pasos reales, plazos reales, nada que no necesites.",
+    "start": "Empecemos"
+  },
+  "progress": {
+    "question": "Pregunta {{n}} de ~{{total}}",
+    "almostThere": "Ya casi está",
+    "underAMinute": "Menos de un minuto",
+    "minutesLeft": "Quedan unos {{m}} min"
+  },
+  "voice": {
+    "on": "Voz activada",
+    "off": "Voz apagada",
+    "turnOffA11y": "Apagar la voz de Lola",
+    "turnOnA11y": "Activar la voz de Lola"
+  },
+  "composer": {
+    "placeholder": "Escribe tu respuesta…",
+    "placeholderListening": "Escuchando…",
+    "micStartA11y": "Dicta tu respuesta",
+    "micStopA11y": "Detener el dictado",
+    "sendA11y": "Enviar tu respuesta"
+  },
+  "done": "Eso es todo lo que necesito — tu hoja de ruta está lista.",
+  "fallback": {
+    "question": "¿Me cuentas sobre {{hint}}?",
+    "clarifyReask": "¿Me cuentas un poco más sobre {{hint}}?",
+    "clarifyPrefix": "Perdona, no lo he pillado del todo. {{reask}}",
+    "turnFailed": "Perdona — eso ha tardado más de la cuenta. Tu respuesta sigue en el cuadro; ¿me la envías otra vez?"
+  },
+  "static": {
+    "nationalities": "Una rápida — ¿de dónde es ciudadano cada uno en casa?",
+    "work_situation": "En lo laboral, cuando te mudes — ¿trabajarás en remoto, como autónomo, estudiando, jubilado o algo distinto?",
+    "employer_country_is_foreign": "¿Tu empleador tiene su sede fuera de España?",
+    "annual_income_eur_band": "Para dar con el visado adecuado necesito una idea aproximada de los ingresos anuales del hogar. ¿Qué franja encaja?",
+    "has_spouse_or_partner": "¿Se muda contigo tu pareja o cónyuge?",
+    "partner_is_married": "¿Estáis legalmente casados o sois pareja de hecho registrada?",
+    "has_children": "¿Vienen niños contigo?",
+    "intends_long_stay": "¿Es una mudanza de verdad a largo plazo — más de seis meses al año — o más bien una estancia larga?",
+    "arrival_date": "¿Cuándo esperas llegar, más o menos? Con el mes me basta.",
+    "has_spanish_address": "¿Ya tienes vivienda apalabrada, alquilada o en propiedad?",
+    "owns_or_drives": "¿Alguien va a conducir mientras estéis allí?",
+    "owns_property_in_spain": "¿Piensas comprar vivienda en España, o ya la has comprado?",
+    "region": "¿En qué parte de España te vas a instalar? Una comunidad — o dime la ciudad y la ubico yo.",
+    "has_pets": "¿Alguna mascota se muda contigo?",
+    "foreign_assets_eur_band": "Algo personal — y solo eliges una franja — ¿cuánto tienes, aproximadamente, fuera de España?",
+    "us_resident": "¿Resides ahora en EE. UU.? (Las esperas de los consulados andan largas últimamente.)",
+    "previously_ex_spanish_colony_nationality": "¿Eres nacional de una antigua colonia española — la mayor parte de Latinoamérica, o Filipinas?"
+  }
+}

@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput, ActivityIndicator, Platform, useWindowDimensions } from 'react-native';
 import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
+import { dateLocale } from '@/lib/i18n';
 import { palette } from '@/constants/Colors';
 import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
@@ -231,7 +232,7 @@ export default function PlanScreen() {
   // weekly email, all keyed off the engine's single isOverdue predicate.
   const overdueLine = (o: Objective) =>
     o.timing.state === 'scheduled'
-      ? t('overdue.wasDue', { date: o.timing.due.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) })
+      ? t('overdue.wasDue', { date: o.timing.due.toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short' }) })
       : t('overdue.plain');
   const titleById = new Map(objectives.map(o => [o.id, o.title]));
   const week = thisWeek(objectives);

@@ -15,7 +15,7 @@ import { TEST_PERSONAS, type Persona } from '@/core/test-personas';
 import { askAnthropic } from '@/lib/lola';
 import { buildExtractionSystem, parseExtraction, type Extraction } from '@/lib/extractionPrompt';
 import { useTranslation } from 'react-i18next';
-import i18n from '@/lib/i18n';
+import i18n, { languageDirective } from '@/lib/i18n';
 import { useDictation } from '@/hooks/useDictation';
 import { useLolaVoice } from '@/hooks/useLolaVoice';
 import { capture } from '@/lib/analytics';
@@ -55,7 +55,7 @@ Ask the NEXT question as a natural follow-up. Crucial rules:
 Ask ONE short question to learn: ${slot.prompt_hint}.
 ${slot.sensitive ? 'Acknowledge this is personal and they only need to pick a range.' : ''}
 ${slot.options ? `Their options will be shown as buttons: ${slot.options.join(', ')}. Don't list them in your question.` : ''}
-Speak directly. One or two sentences max. No bullet points.`,
+Speak directly. One or two sentences max. No bullet points.${languageDirective()}`,
     messages: [{ role: 'user', content: 'Ask me the next question.' }],
   });
 }
@@ -91,7 +91,7 @@ Reply in 1–3 short, warm sentences: first help them — explain what the quest
 words, or why you're asking it — then naturally re-ask (you can adapt: "${reask}").
 HARD RULES: never state legal facts, deadlines, income thresholds, costs, or eligibility rules —
 if they ask for those, say their personalized roadmap right after this interview covers it with
-official sources. Never invent an answer for them. Plain text only.`,
+official sources. Never invent an answer for them. Plain text only.${languageDirective()}`,
     messages: [{ role: 'user', content: userText }],
   });
   return rawText.trim();

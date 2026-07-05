@@ -87,6 +87,21 @@
     "closingBody": "Different passport, work, family, or plans — different roadmap. Tell Lola about your move and get the version that's actually yours, with real deadlines in the right order.",
     "closingCta": "Start my 3-minute interview →"
   },
+  "coach": {
+    "error": "Sorry — I couldn't load that just now. Try asking again in a moment.",
+    "hints": {
+      "visa": "e.g. I got a remote job, so we’re switching to the digital-nomad visa.",
+      "residency": "e.g. My residence card (TIE) was issued on 2027-02-01.",
+      "tax": "e.g. I’ll be freelancing in Spain after all, not just living off savings.",
+      "health": "e.g. We’re only staying six months, not moving permanently.",
+      "mobility": "e.g. We decided no one will drive in Spain.",
+      "banking": "e.g. Our arrival moved two months later.",
+      "family": "e.g. We got married last month.",
+      "property": "e.g. We decided to rent instead of buy.",
+      "admin": "e.g. We’re arriving in November instead of September.",
+      "generic": "e.g. Our arrival date moved to next spring."
+    }
+  },
   "changeNote": {
     "errTitle": "Hmm, that didn’t go through",
     "errBody": "I couldn’t process that just now — please try again.",

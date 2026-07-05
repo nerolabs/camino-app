@@ -1,0 +1,115 @@
+{
+  "heading": "Tu hoja de ruta",
+  "empty": {
+    "loadingTitle": "Cargando tu hoja de ruta…",
+    "loadingBody": "Un momento mientras recuperamos tu plan.",
+    "noneTitle": "Aún no hay hoja de ruta",
+    "noneBody": "Completa la entrevista y tu hoja de ruta aparecerá aquí."
+  },
+  "emailCard": {
+    "title": "No pierdas esta hoja de ruta",
+    "body": "Te la enviamos por correo — el enlace te da acceso en cualquier dispositivo, sin inventar contraseñas. También recibirás un breve resumen semanal de lo que vence mientras tu mudanza avanza.",
+    "button": "Envíame mi hoja de ruta"
+  },
+  "banners": {
+    "penaltyOne": "1 paso conlleva sanción económica si se te pasa.",
+    "penaltyMany": "{{count}} pasos conllevan sanción económica si se te pasan.",
+    "consulate": "Las esperas del consulado en EE. UU. rondan ahora las 8–16 semanas. Reserva tu cita lo antes posible."
+  },
+  "toolbar": {
+    "thisWeek": "Esta semana",
+    "thisWeekOverdue": "Esta semana · {{count}} atrasados",
+    "fullRoadmap": "Hoja de ruta completa",
+    "exportPdf": "⤓ PDF",
+    "exportA11y": "Exporta tu hoja de ruta en PDF"
+  },
+  "stats": {
+    "totalSteps": "pasos en total",
+    "required": "obligatorios",
+    "overdue": "atrasados",
+    "penaltyRisk": "riesgo de sanción",
+    "done": "hechos"
+  },
+  "legend": {
+    "official": "Requisito oficial",
+    "recommendation": "Recomendación de Get Camino"
+  },
+  "week": {
+    "slippedPast": "SE TE HA PASADO",
+    "dueThisWeek": "VENCE ESTA SEMANA",
+    "clearTitle": "Nada te necesita esta semana.",
+    "clearNext": "Lo siguiente: {{title}} — {{timing}}.",
+    "clearWaiting": "Tus pasos restantes esperan hitos anteriores — la hoja de ruta completa tiene el panorama entero."
+  },
+  "card": {
+    "doneBadge": "✓ Hecho",
+    "a11y": "{{title}}. {{status}}. Abre los detalles del paso",
+    "a11yDone": "Hecho"
+  },
+  "overdue": {
+    "wasDue": "Atrasado · vencía el {{date}}",
+    "plain": "Atrasado"
+  },
+  "sheet": {
+    "askPlaceholder": "Pregúntale a Lola sobre este paso…",
+    "askA11y": "Pregúntale a Lola sobre este paso",
+    "markDone": "✓ Marcar hecho",
+    "doneBadge": "✓ Hecho",
+    "undo": "Deshacer",
+    "addDate": "¿lo hiciste antes? añade la fecha",
+    "dateHint": "¿Cuándo lo hiciste realmente? Las fechas posteriores se recalculan a partir de ahí.",
+    "datePlaceholder": "p. ej. 25 abril 2026 o 2026-04-25",
+    "save": "Guardar",
+    "datePreview": "→ {{label}}",
+    "dateUnreadable": "Aún no puedo leer eso — prueba con el mes en palabra, p. ej. «25 abril 2026».",
+    "changeLink": "¿Algo ha cambiado? Cuéntaselo a Lola y actualiza tu plan →",
+    "tellLola": "Contárselo a Lola",
+    "whenLabel": "CUÁNDO",
+    "overdueNudge": "Este paso está vencido. ¿Ya lo resolviste? Márcalo hecho — incluso con la fecha real — y el plan se recalcula alrededor de lo que pasó de verdad. ¿Cambiaron los planes? Cuéntaselo a Lola abajo.",
+    "regionalLabel": "DÓNDE VIVES IMPORTA",
+    "regionalBody": "Los detalles de este paso los fija cada comunidad autónoma. El enlace oficial cubre las reglas estatales; aplican las tarifas y plazos de tu región.",
+    "regionalBodyWithRegion": "Los detalles de este paso los fija cada comunidad autónoma — la tuya: {{region}}. El enlace oficial cubre las reglas estatales; aplican las tarifas y plazos de tu región.",
+    "depsLabel": "ANTES DE ESTO NECESITARÁS",
+    "close": "Cerrar"
+  },
+  "sample": {
+    "eyebrow": "HOJA DE RUTA DE EJEMPLO",
+    "title": "Este es el plan de {{name}}.",
+    "body": "{{name}} — {{blurb}}. Get Camino convirtió su situación en la hoja de ruta de {{count}} pasos, con plazos, que ves abajo. La tuya será distinta: unas pocas respuestas sobre tu propia mudanza y el mismo motor la construye solo para ti.",
+    "cta": "Crea mi propia hoja de ruta →",
+    "ctaNote": "Gratis · unos 3 minutos · sin cuenta para empezar",
+    "lifePhases": "etapas vitales",
+    "whyLabel": "POR QUÉ ESTÁ AQUÍ",
+    "depsLabel": "ANTES DE ESTO, SUSAN Y TOM NECESITAN",
+    "sourceLink": "Ver la fuente oficial ↗",
+    "tease": "En tu propio plan, Lola te acompaña en este paso, lo marcas hecho y las fechas se recalculan según lo que pase de verdad.",
+    "closingTitle": "Tu mudanza no será como la de {{name}}.",
+    "closingBody": "Otro pasaporte, otro trabajo, otra familia u otros planes — otra hoja de ruta. Cuéntale a Lola tu mudanza y consigue la versión que de verdad es tuya, con plazos reales en el orden correcto.",
+    "closingCta": "Empezar mi entrevista de 3 minutos →"
+  },
+  "coach": {
+    "error": "Perdona — no he podido cargar eso ahora mismo. Pregúntame otra vez en un momento.",
+    "hints": {
+      "visa": "p. ej. Conseguí trabajo remoto, así que pasamos al visado de nómada digital.",
+      "residency": "p. ej. Mi tarjeta de residencia (TIE) se emitió el 2027-02-01.",
+      "tax": "p. ej. Al final trabajaré como autónomo en España, no solo viviré de ahorros.",
+      "health": "p. ej. Solo nos quedamos seis meses, no es una mudanza permanente.",
+      "mobility": "p. ej. Decidimos que nadie conducirá en España.",
+      "banking": "p. ej. Nuestra llegada se retrasó dos meses.",
+      "family": "p. ej. Nos casamos el mes pasado.",
+      "property": "p. ej. Decidimos alquilar en vez de comprar.",
+      "admin": "p. ej. Llegamos en noviembre en vez de septiembre.",
+      "generic": "p. ej. Nuestra fecha de llegada se movió a la primavera que viene."
+    }
+  },
+  "changeNote": {
+    "errTitle": "Vaya, eso no ha funcionado",
+    "errBody": "No pude procesarlo ahora mismo — inténtalo de nuevo.",
+    "noChangeTitle": "Gracias por contármelo",
+    "noChangeBody": "Nada en tu plan necesitaba cambiar. Si un paso ocurrió (u ocurrirá) en una fecha concreta, márcalo hecho «con fecha» y el plan se recalcula desde ahí.",
+    "noopTitle": "Gracias — anotado.",
+    "noopBody": "Lo he guardado, y nada en tu plan necesitaba moverse por ello.",
+    "remodelTitle": "Qué útil — ¡he rehecho tu plan!",
+    "seePlan": "Ver mi plan actualizado"
+  }
+}

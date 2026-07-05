@@ -42,6 +42,8 @@ export function buildExtractionSystem(opts: {
   }).join('\n');
 
   return `You are extracting a structured value from a user's natural-language answer.
+The user may answer in ANY language (Spanish, English, …) — extract the same typed value
+regardless; option strings and country codes are always returned exactly as specified below.
 ${transcript ? `Conversation so far — use it to resolve references and avoid clarifying things already established:
 ${transcript}
 

@@ -22,11 +22,16 @@ import { getLocales } from 'expo-localization';
 import enCommon from '@/locales/en/common.json';
 import enPlan from '@/locales/en/plan.json';
 import enInterview from '@/locales/en/interview.json';
+import esCommon from '@/locales/es/common.json';
+import esPlan from '@/locales/es/plan.json';
+import esInterview from '@/locales/es/interview.json';
 
 // Each locale is listed by its OWN name (user requirement: the switcher is a feature —
-// "Español", never "Spanish"). Spanish joins at L1; FR/DE/IT at L3.
+// "Español", never "Spanish"). FR/DE/IT join at L3.
+// `llmName`: how the language directive names it to the LLM (phrase/clarify/coach prompts).
 export const SUPPORTED_LOCALES = [
-  { code: 'en', name: 'English' },
+  { code: 'en', name: 'English', llmName: 'English' },
+  { code: 'es', name: 'Español', llmName: 'Spanish (es-ES — address the user with tú, never usted)' },
 ] as const;
 export type LocaleCode = (typeof SUPPORTED_LOCALES)[number]['code'];
 
@@ -39,6 +44,7 @@ export function isSupportedLocale(code: unknown): code is LocaleCode {
 i18n.use(initReactI18next).init({
   resources: {
     en: { common: enCommon, plan: enPlan, interview: enInterview },
+    es: { common: esCommon, plan: esPlan, interview: esInterview },
   },
   lng: 'en',
   fallbackLng: 'en',
@@ -47,6 +53,18 @@ i18n.use(initReactI18next).init({
   interpolation: { escapeValue: false }, // values render into RN <Text>, not HTML
   react: { useSuspense: false },         // resources are bundled — nothing to suspend on
 });
+
+/** BCP 47 tag for date formatting in the current language ("18 abr 2026" in es). */
+export function dateLocale(): string {
+  return i18n.language === 'es' ? 'es-ES' : 'en-GB';
+}
+
+/** The language-directive line for LLM prompts (phrase/clarify/coach). Empty for English so
+ *  the English prompts stay byte-identical to pre-localization behavior. */
+export function languageDirective(): string {
+  const cur = SUPPORTED_LOCALES.find(l => l.code === i18n.language);
+  return cur && cur.code !== 'en' ? `\nRespond in ${cur.llmName}.` : '';
+}
 
 /** The device/browser language, if we ship it; otherwise null. */
 export function deviceLocale(): LocaleCode | null {
