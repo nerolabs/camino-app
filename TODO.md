@@ -3,8 +3,16 @@
 Living list of what we're tracking against. Update as work moves. Newest context at top.
 See `HANDOFF.md` for the fuller picture and `core/SOURCING.md` for obligation provenance.
 
-Last updated: 2026-07-05 (fresh-eyes testing audit DONE — verdicts in docs/TEST-COVERAGE.md §5;
-localization hard gate CLEAR).
+Last updated: 2026-07-06 (FIRST SOFT LAUNCH to r/GoingToSpain — web-only call-for-testers; ~1.2K
+views + 2 full conversions EN+ES + 0 errors before AutoMod removed it for "too many reports";
+LOLA_GLOBAL_PER_DAY bumped 2000→25000; ElevenLabs plan upgraded → CAMINO-7 401 resolved).
+
+**SOFT LAUNCH #1 (2026-07-06) — the growth learning:** DM mods/admins for permission BEFORE
+posting; Reddit's report-to-remove machinery pulled a humble, disclosed, free-tool post despite
+1.2K views and real conversions. Next channels (mod-permission-first, friendlier-first): city/local
+FB groups (user lives in JEREZ — best angle), visa-specific FB groups, then r/SpainPersonalFinance,
+r/expats, expat forums, and the webinar-creator warm list (partnership). This is a pre-launch test
+of item 25; the moat (sourced steps, deterministic, EN+ES) demonstrably works for strangers.
 
 ## 🔒 Security — TOP PRIORITY
 

@@ -5,11 +5,49 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-Last updated: 2026-07-05 (late — post-localization bug-fix pass; session closed out).
+Last updated: 2026-07-06 (first soft launch to r/GoingToSpain — clean night, post later auto-removed;
+session closed for user travel day).
 
 ---
 
-## ⭐ RESUME HERE (2026-07-05 — five languages LIVE + build 31 in TestFlight, DEVICE-VERIFIED)
+## ⭐ RESUME HERE (2026-07-06 — FIRST SOFT LAUNCH done; web-only; clean, encouraging night)
+
+**We did the first public exposure: a soft launch (call-for-testers) to r/GoingToSpain**, web-only,
+framed as a free non-commercial tool. Results before it came down: **~1.2K views, 1 positive
+comment, TWO full funnel conversions (one English, one Spanish — `interview_started → completed →
+roadmap_viewed`), zero user-facing errors.** The whole thesis worked end-to-end for real strangers,
+in two languages. **The post was then AUTO-REMOVED by AutoModerator (~5h in) for "too many
+reports"** — Reddit's self-promo/report-to-remove dynamic, NOT a content problem. **User has
+messaged the mods for re-approval.**
+
+**LESSON (now standing): DM the mods/admins for permission BEFORE posting** — mod pre-approval is
+the only reliable immunity to report-removal. Next channels to try (all mod-permission-first),
+leaning to friendlier/local given the removal: **city/local FB groups (user lives in JEREZ — the
+local angle is the strongest, most authentic play)**, visa-specific FB groups (NLV/DNV/Beckham),
+then r/SpainPersonalFinance, r/expats, expat forums, and the STRATEGY.md webinar-creator warm list
+(partnership, not cold post). **A drafted local/Jerez post + a reusable mod-DM were offered, not yet
+written** — pick up here if the user wants them.
+
+**INFRA CHANGES THIS SESSION (live in prod):**
+- **`LOLA_GLOBAL_PER_DAY` bumped 2000 → 25000** (EAS production env var, plaintext; was unset =
+  code default 2000). Covers ~500 interviews/day of headroom; **provider spend caps remain the hard
+  dollar backstop**. Deployed via `npm run deploy:production` (green post-deploy E2E). See
+  [[lola-global-budget-25000]].
+- **ElevenLabs 401 fixed:** `/api/tts` threw `ElevenLabs upstream 401` (CAMINO-7) — the free-tier
+  gate on the Kate 2 **library voice**. User **upgraded the ElevenLabs plan**; Claude verified
+  `/api/tts` now returns 200 audio and **resolved CAMINO-7** in Sentry. See [[elevenlabs-library-voice-401]].
+
+**MONITORING:** an overnight Chrome-driven watch loop ran (Reddit + Sentry + PostHog) with headless
+`curl` uptime fallback when the laptop closed. **Now stood down** (post removed = no traffic). The
+standing safety net is Sentry's own cloud alerts (error email + 1-min uptime monitor → email) —
+laptop-independent. Resume the loop only if a new post drives traffic.
+
+**Otherwise unchanged from below:** build 31 is still the iOS public-submission candidate; the two
+playbooks (`docs/ANDROID_LAUNCH.md`, `docs/STORE_PAPERWORK.md`) are the user-side critical path.
+
+---
+
+## Prior resume note (2026-07-05 — five languages LIVE + build 31 in TestFlight, DEVICE-VERIFIED)
 
 **BUILD 31 SHIPPED + VERIFIED (2026-07-05):** e2e-ios gate green against pushed main (run
 28747895451) → `production --auto-submit` → TestFlight (build number 31, App Version 1.0.0,
