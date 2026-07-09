@@ -10,7 +10,8 @@
     "question": "Question {{n}} of ~{{total}}",
     "almostThere": "Almost there",
     "underAMinute": "Under a minute left",
-    "minutesLeft": "About {{m}} min left"
+    "minutesLeft": "About {{m}} min left",
+    "complete": "{{pct}}% complete"
   },
   "voice": {
     "on": "Voice on",
@@ -23,7 +24,9 @@
     "placeholderListening": "Listening…",
     "micStartA11y": "Speak your answer",
     "micStopA11y": "Stop dictation",
-    "sendA11y": "Send your answer"
+    "sendA11y": "Send your answer",
+    "backToChoices": "Back to choices",
+    "typeRegion": "Type a region or city…"
   },
   "done": "That's everything I need — your roadmap is ready.",
   "fallback": {
@@ -33,22 +36,71 @@
     "turnFailed": "Sorry — that took longer than it should have. Your answer is still in the box; mind sending it again?"
   },
   "static": {
+    "speaks_spanish": "Before we dive in — how's your Spanish so far?",
     "nationalities": "Quick one — where's everyone in the household a citizen?",
-    "work_situation": "Work-wise, when you move — will you be working remotely, freelancing, studying, retired, or something else?",
+    "work_situation": "What'll your work situation be when you move?",
     "employer_country_is_foreign": "Is your employer based outside Spain?",
     "annual_income_eur_band": "To find the right visa, I need a rough sense of your annual household income. Which band fits?",
     "has_spouse_or_partner": "Will a spouse or partner be making this move with you?",
-    "partner_is_married": "Are you two legally married or in a registered civil partnership?",
+    "partner_is_married": "Is your relationship legally registered? A marriage or civil partnership both count.",
     "has_children": "Any kids coming with you?",
-    "intends_long_stay": "Is this a proper long-term move — more than six months a year — or more of an extended stay?",
+    "intends_long_stay": "Will you be in Spain more than six months a year?",
     "arrival_date": "Roughly when are you hoping to arrive? Even just a month is fine.",
-    "has_spanish_address": "Do you already have a place lined up, rented or owned?",
+    "has_spanish_address": "Do you already have a place lined up in Spain?",
     "owns_or_drives": "Will anyone be driving while you're there?",
-    "owns_property_in_spain": "Are you planning to buy property in Spain, or have you already bought?",
-    "region": "Which part of Spain will you be settling in? A comunidad — or just name the city and I'll place it.",
+    "owns_property_in_spain": "Do you own — or plan to buy — property in Spain?",
+    "region": "Which part of Spain will you settle in?",
     "has_pets": "Any pets making this move with you?",
     "foreign_assets_eur_band": "Slightly personal — and you only pick a range — roughly how much do you hold outside Spain?",
     "us_resident": "Are you currently based in the US? (Consulate wait times are quite long right now.)",
-    "previously_ex_spanish_colony_nationality": "Are you a national of a former Spanish colony — most of Latin America, or the Philippines?"
+    "previously_ex_spanish_colony_nationality": "Do you hold nationality from a former Spanish colony? (Most of Latin America, plus the Philippines.)",
+    "property_purchase": "Roughly when did (or will) the purchase complete? A month is enough.",
+    "knows_where_to_live": "Do you already know which part of Spain you'll settle in?",
+    "wants_citizenship": "Longer term, are you hoping to become a Spanish citizen?"
+  },
+  "chips": {
+    "yes": "Yes",
+    "no": "No",
+    "other": "Something else…",
+    "notSure": "Not sure yet"
+  },
+  "options": {
+    "speaks_spanish": {
+      "None yet": "None yet",
+      "A little": "A little",
+      "Conversational": "Conversational",
+      "Fluent or native": "Fluent or native"
+    },
+    "work_situation": {
+      "employed_remote": "Remote employee",
+      "contractor_freelance": "Freelancer / contractor",
+      "self_employed": "Self-employed",
+      "business_owner": "Business owner",
+      "student": "Student",
+      "retired": "Retired",
+      "passive_income": "Living on savings / passive income",
+      "job_seeker": "Looking for work"
+    },
+    "annual_income_eur_band": {
+      "under €20k": "Under €20k",
+      "€20k–€28k": "€20k–€28k",
+      "€28k–€34k": "€28k–€34k",
+      "€34k–€60k": "€34k–€60k",
+      "€60k+": "€60k+"
+    },
+    "foreign_assets_eur_band": {
+      "under €50k": "Under €50k",
+      "€50k–€200k": "€50k–€200k",
+      "€200k–€700k": "€200k–€700k",
+      "over €700k": "Over €700k",
+      "prefer not to say": "Prefer not to say"
+    }
+  },
+  "roadmap": {
+    "title": "Your roadmap",
+    "complete": "{{pct}}% complete",
+    "empty": "Your steps will appear here as you answer.",
+    "steps_one": "{{count}} step",
+    "steps_other": "{{count}} steps"
   }
 }

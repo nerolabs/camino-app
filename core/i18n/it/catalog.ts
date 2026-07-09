@@ -4,6 +4,7 @@
  * stay Spanish; tu register, warm-precise voice.
  */
 export const IT_CATALOG_TITLES: Record<string, string> = {
+  'language-classes': 'Inizia a imparare lo spagnolo — iscriviti a lezioni regolari o a un corso strutturato (un\'accademia locale, un tutor online o un intensivo all\'arrivo). Rende molto più facile la vita quotidiana e getta le basi se un giorno punti alla cittadinanza.',
   'scout-where-to-live': 'Decidi dove vivere in Spagna prima di impegnarti — se sei indeciso, pianifica un viaggio esplorativo e passa tempo vero in 2–3 zone candidate, pesando costo della vita, accesso alla sanità, clima, trasporti, comunità expat/anglofona e (se rilevante) scuole, prima di firmare un affitto o comprare',
   'choose-visa-type': 'Individua la tua categoria di visto — abbina la tua situazione a un tipo di residenza/visto spagnolo (non lucrativo, nomade digitale, lavoro, studio, famiglia)',
   'consulate-appointment': 'Prenota l’appuntamento in consolato per presentare la domanda di visto (calcola 8–16 settimane di anticipo negli USA) — gli appuntamenti passano dal sistema di cita previa del consolato',

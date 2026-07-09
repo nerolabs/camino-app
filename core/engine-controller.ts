@@ -191,6 +191,15 @@ const WANTS_CITIZENSHIP: Condition = { field: 'wants_citizenship', op: 'eq', val
 
 // ── Catalog ────────────────────────────────────────────────────────────────────
 export const CATALOG: Obligation[] = [
+  {
+    id: 'language-classes',
+    title: 'Start learning Spanish — book regular classes or a structured course (a local academy, an online tutor, or an intensive once you arrive). It makes daily life far easier, and builds the foundation if you later pursue citizenship.',
+    category: 'admin', severity: 'recommended',
+    source: 'recommendation',
+    applies_if: { field: 'speaks_spanish', op: 'in', value: ['None yet', 'A little'] },
+    depends_on: [],
+    timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -180 },
+  },
 
   // ── Deciding where to live ───────────────────────────────────────────────────
   // Advisory: many movers haven't chosen a region yet. Shown to anyone who doesn't already

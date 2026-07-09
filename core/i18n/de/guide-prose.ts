@@ -5,6 +5,8 @@
  */
 
 export const DE_GUIDE_PROSE: Record<string, string> = {
+  'language-classes':
+    'Das ist der Rat von Get Camino, keine gesetzliche Pflicht: Je früher Sie echtes Spanisch aufbauen, desto reibungsloser läuft alles andere — die Sachbearbeiterin beim padrón, die Ärztin, Ihre Nachbarn, der Mietvertrag, den Sie unterschreiben. Formeller Unterricht, ein Privatlehrer oder ein Intensivkurs direkt nach der Ankunft funktionieren alle; entscheidend ist, anzufangen, bevor Sie es brauchen. Und falls die Staatsbürgerschaft je in Ihren Blick rückt, ist das nachzuweisende Sprachniveau viel leichter zu erreichen, wenn Sie schon eine Weile dabei sind.',
   'scout-where-to-live':
     'Fast die gesamte Auswander-Maschinerie fragt „wo?“, bevor sie irgendetwas für dich tun kann — Padrón, Schulen, selbst das zuständige Amt hängen an einer Adresse. Das ist ein Rat von Get Camino, keine gesetzliche Pflicht: Verbringe echte Zeit in deinen Kandidatenregionen, bevor du dich festlegst — und zwar in der Jahreszeit, in der du dort wirklich leben würdest. Ein Mietvertrag ist viel leichter unterschrieben als wieder losgeworden.',
   'choose-visa-type':

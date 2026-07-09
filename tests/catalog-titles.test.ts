@@ -1,5 +1,5 @@
 /**
- * Per-locale catalog-title gates (L1/L3): the 60 obligation titles are the roadmap's legal
+ * Per-locale catalog-title gates (L1/L3): the 61 obligation titles are the roadmap's legal
  * content, so every shipped locale's titles get the same four disciplines, sourced from the
  * CATALOG itself so obligation #61 fails here until every locale follows. Locales enroll via
  * core/i18n/registry.ts — an entry can't ship half-translated.
@@ -17,8 +17,8 @@ const LOCALES = Object.keys(CATALOG_TITLES);
 describe.each(LOCALES)('catalog titles "%s" (localization gates on the legal content)', lang => {
   const titles = CATALOG_TITLES[lang];
 
-  it('completeness — all 60 obligations have a title, and no orphans', () => {
-    expect(objectives.size).toBe(60);
+  it('completeness — all 61 obligations have a title, and no orphans', () => {
+    expect(objectives.size).toBe(61);
     const missing = [...objectives.keys()].filter(id => !(id in titles));
     expect(missing, `obligations missing a ${lang} title`).toEqual([]);
     const orphans = Object.keys(titles).filter(id => !objectives.has(id));

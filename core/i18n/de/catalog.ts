@@ -4,6 +4,7 @@
  * stay Spanish; du register, warm-precise voice.
  */
 export const DE_CATALOG_TITLES: Record<string, string> = {
+  'language-classes': 'Fangen Sie an, Spanisch zu lernen — buchen Sie regelmäßigen Unterricht oder einen strukturierten Kurs (eine örtliche Sprachschule, einen Online-Tutor oder einen Intensivkurs nach der Ankunft). Das erleichtert den Alltag enorm und legt die Grundlage, falls Sie später die Staatsbürgerschaft anstreben.',
   'scout-where-to-live': 'Entscheide, wo in Spanien du leben willst, bevor du dich festlegst — bist du unsicher, plane eine Erkundungsreise und verbringe echte Zeit in 2–3 Kandidatenregionen; wäge Lebenskosten, Gesundheitsversorgung, Klima, Verkehrsanbindung, Expat-/englischsprachige Community und (falls relevant) Schulen ab, bevor du einen Mietvertrag unterschreibst oder kaufst',
   'choose-visa-type': 'Bestimme deine Visakategorie — ordne deine Situation einem spanischen Aufenthalts-/Visatyp zu (Non-Lucrative, Digital Nomad, Arbeit, Studium, Familie)',
   'consulate-appointment': 'Buche den Konsulatstermin zur Einreichung deines Visumantrags (rechne in den USA mit 8–16 Wochen Vorlauf) — Termine laufen über das Cita-previa-System des Konsulats',

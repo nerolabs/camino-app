@@ -11,6 +11,8 @@
  */
 
 export const GUIDE_PROSE: Record<string, string> = {
+  'language-classes':
+    'This is Get Camino\'s advice, not a legal requirement: the sooner you start building real Spanish, the smoother everything else goes — the padrón clerk, the doctor, your neighbours, the lease you\'re signing. Formal classes, a private tutor, or an intensive once you land all work; what matters is starting before you need it. And if citizenship is ever on your horizon, the language level you\'ll need to certify is far easier to reach once you\'ve been at it for a while.',
   'scout-where-to-live':
     'Most of the moving-to-Spain machinery asks "where?" before it can do anything for you — the padrón, schools, even which office handles your paperwork all hang off an address. This is Get Camino\'s advice rather than any legal requirement: spend real time in your candidate areas before committing, in the season you\'d actually live there. A rental contract is much easier to sign than to escape.',
   'choose-visa-type':

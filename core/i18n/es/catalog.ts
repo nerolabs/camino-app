@@ -11,6 +11,7 @@
  * Completeness is enforced at runtime (same test): every CATALOG id must appear here, no orphans.
  */
 export const ES_CATALOG_TITLES: Record<string, string> = {
+  'language-classes': 'Empieza a aprender español — apúntate a clases regulares o a un curso estructurado (una academia local, un tutor online o un intensivo al llegar). Facilita muchísimo el día a día y sienta las bases si más adelante buscas la nacionalidad.',
   'scout-where-to-live': 'Decide en qué parte de España vivir antes de comprometerte — si no lo tienes claro, planifica un viaje de exploración y pasa tiempo real en 2–3 zonas candidatas, sopesando coste de vida, acceso sanitario, clima, transporte, comunidad expat/angloparlante y (si aplica) colegios, antes de firmar un alquiler o comprar',
   'choose-visa-type': 'Identifica tu categoría de visado — encaja tu situación con un tipo de residencia/visado español (no lucrativa, nómada digital, trabajo, estudios, familiar)',
   'consulate-appointment': 'Reserva cita en el consulado para presentar tu solicitud de visado (calcula 8–16 semanas de antelación en EE. UU.) — las citas se reservan por el sistema de cita previa del consulado',

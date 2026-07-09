@@ -5,6 +5,8 @@
  */
 
 export const FR_GUIDE_PROSE: Record<string, string> = {
+  'language-classes':
+    'C\'est le conseil de Get Camino, pas une obligation légale : plus tôt vous commencez à bâtir un vrai niveau d\'espagnol, plus tout le reste se passe bien — l\'employé du padrón, le médecin, vos voisins, le bail que vous signez. Des cours formels, un professeur particulier ou un stage intensif dès l\'arrivée fonctionnent tous ; l\'essentiel est de commencer avant d\'en avoir besoin. Et si la nationalité figure un jour à votre horizon, le niveau de langue à certifier est bien plus facile à atteindre après un peu de pratique.',
   'scout-where-to-live':
     'Presque toute la machinerie d’une installation en Espagne demande « où ? » avant de pouvoir faire quoi que ce soit pour toi — le padrón, les écoles, même le guichet qui traite tes dossiers dépendent d’une adresse. C’est un conseil de Get Camino, pas une exigence légale : passe du vrai temps dans tes zones candidates avant de t’engager, et à la saison où tu y vivrais vraiment. Un bail est bien plus facile à signer qu’à défaire.',
   'choose-visa-type':

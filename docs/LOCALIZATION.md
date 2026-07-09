@@ -21,7 +21,7 @@ and "Lola" never localize**. Nothing here starts until E2E is green (user gate).
 | Surface | Examples | Mechanism |
 |---|---|---|
 | App chrome | nav, buttons, dialogs, plan labels, empty states | i18next JSON catalogs |
-| Catalog content | 60 obligation titles; guide prose; timing clauses | per-locale TS modules keyed by obligation id, tsc-enforced complete |
+| Catalog content | 61 obligation titles; guide prose; timing clauses | per-locale TS modules keyed by obligation id, tsc-enforced complete |
 | Interview | STATIC_QUESTIONS fallbacks; Lola's LLM phrasing | JSON for statics; a language directive in LLM prompts |
 | Generated text | formatTiming, report HTML, weekly email | i18next interpolation + `toLocaleDateString(locale)` |
 | Legal pages | privacy/terms/aviso | per-locale drafts, "English prevails" clause |

@@ -17,7 +17,7 @@ Layers, and when they run:
 
 ---
 
-## 1. Unit / integration (vitest) — 179 passing (+10 opt-in network)
+## 1. Unit / integration (vitest) — 206 passing (+10 opt-in network)
 
 Concentrated on the deterministic core (that's the product's real risk surface):
 
@@ -25,6 +25,12 @@ Concentrated on the deterministic core (that's the product's real risk surface):
 |---|---|---|
 | **Engine** (determinism, ordering, gating) | `engine.test.ts` (20) | same profile → identical plan; a dependency never precedes its dependent; no dupes; 7 persona gating regressions (PH/CO citizenship tracks, unmarried-partner reunification, renewal-only, EU reg, property cluster); `isOverdue` semantics + due-today grace; anchor re-flow (completing residencia re-dates residency-anchored steps firm) |
 | **Interview ↔ catalog contract** | `engine.test.ts` (invariant-2 audit) + `interview` cases | every `applies_if` field has a slot/derivation; derivations (is_eu, visa_type, colony/language); conditional slots (wants_citizenship, knows_where_to_live) |
+| **Plan-delta primitive** (living-roadmap redesign, Phase 0) | `plan-delta.test.ts` (6) | `diffPlans` added/removed/changed by objective id; unchanged plan → empty; added preserves `after` topo order; arrival-date move → `timing` change, no add/remove; `done` churn ignored unless opted in; `summarizeDelta` counts. See `docs/INTERVIEW-REDESIGN.md` |
+| **Interview completeness** (roadmap-anchored % complete, Phase 0) | `completeness.test.ts` (5) | `SLOT_WEIGHT` floor ≥1 and leverage ordering (nationalities/work_situation/intends_long_stay > has_pets); empty profile → 0, full persona → 1; `answeredWeight` monotonic as answers accrue (raw pct intentionally isn't — UI clamps); partial strictly between |
+| **Anonymous interview draft** (resume without a DB, Phase 0) | `interview-draft.test.ts` (5) | save/load round-trip with completeness + lastSlotField; persists only real slot answers (drops derived/stray); null on missing/empty/corrupt; `clearDraft`; no-op when storage unavailable |
+| **Interview ordering & input schema** (Phase 1) | `interview-order.test.ts` (5) | every slot has a unique `order` + valid `input`; `allowOther` only on option/list slots; `nextSlot` opens speaks_spanish → nationalities and front-loads payoff before sensitive (income/assets deferred); a full persona leaves no slot unasked |
+| **Chip localization coverage** (Phase 1) | `interview-chips.test.ts` (3) | every slot has static question copy in all 5 locales; `chips.yes/no/other/notSure` present; every option value on an option slot has a label in all 5 locales (regions via `regionLabel`) — guards against a raw enum ("employed_remote") rendering as a chip |
+| **language-classes advisory gating** (Phase 1) | `language-classes.test.ts` (3) | `speaks_spanish` "None yet"/"A little" → the language-classes step applies; "Conversational"/"Fluent or native" → absent; unknown/unanswered → absent (so the Spanish opener pays off without touching the passport-based DELE exemption) |
 | **This-week selector** | `this-week.test.ts` (4) | overdue / due-soon / beyond buckets; excludes done; never dates pending-anchor; nextUp = earliest beyond window |
 | **Printable report** | `report.test.ts` (4) | estimated marked estimated; pending-anchor dateless; overdue/done honest; hero = first not-done; HTML-escapes titles (no injection) |
 | **Weekly email digest** | `email-digest.test.ts` (6) | incomplete interview → null (no spam); pressing items → capped, overdue-first; nothing-in-window → null; deterministic; done items never appear; unsubscribe token sign/verify + tamper-fail |
@@ -44,7 +50,7 @@ Concentrated on the deterministic core (that's the product's real risk surface):
 | **Render snapshots (localization guard)** | `render-snapshot.test.ts` (8) | full-HTML snapshots of all 3 emails (`welcomeEmail`/`roundupEmail`/`nudgeEmail`, fixed digest + URLs) and the printable report (`reportHtml`, one of every timing state, frozen clock) — in BOTH languages since L1. The en snapshots passed unchanged through the lang-param refactor = byte-identical output for existing users |
 | **es digest (L1)** | in `email-digest.test.ts` (1 of 7) | `buildDigest(…, 'es')` selects the SAME items (selection is locale-free) with Spanish titles, when-labels ("vencía el …"), and tips |
 | **The 4 i18n lint gates (L0)** | `i18n-lint.test.ts` (1 + 4×per-locale) | scans `locales/<lang>/*.json` from disk — adding a locale directory enrolls it automatically (es enrolled at L1). en self-check (no empty strings, well-formed `{{placeholders}}`); per non-English locale: *completeness* (exact en key set), *digit-lint* (translation never changes a number — invariant 3), *placeholder-lint* (`{{var}}` parity), *brand-lint* ("Get Camino"/"Lola" verbatim) |
-| **Per-locale catalog titles (L1/L3)** | `catalog-titles.test.ts` (4×locale) | the 60 obligation titles in Spanish (`core/i18n/es/catalog.ts`): completeness over the full CATALOG (obligation #61 fails until every locale follows), digit-lint on the legal content, substantive-length check, `displayTitle` resolution + English fallback |
+| **Per-locale catalog titles (L1/L3)** | `catalog-titles.test.ts` (4×locale) | the 61 obligation titles in Spanish (`core/i18n/es/catalog.ts`): completeness over the full CATALOG (obligation #62 fails until every locale follows), digit-lint on the legal content, substantive-length check, `displayTitle` resolution + English fallback |
 | **es display formatters (L1)** | in `plan-format.test.ts` (2 of 10) | `changeLanguage('es')` → phase labels, completion narration ("3 días tarde"), and dates ("Vence el …") render in Spanish; en unchanged after a language round-trip |
 | **Per-locale guide prose + helpers (L1/L3)** | `guide-prose-locales.test.ts` (3×locale + 4) | the 60 es explainers: completeness / digit-lint (⊆ es title digits — invariant 3 per locale) / substantive + brand parity with the English twin; `describeTimingLocalized(en)` pinned byte-identical to core `describeTiming` for all 60 (core stays i18n-free — server code imports it); category labels/tips en-parity; es timing sentences render Spanish |
 

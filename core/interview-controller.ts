@@ -9,8 +9,18 @@ export type Profile = Record<string, unknown>;
 export type Slot = {
   field: string;
   type: "list" | "bool" | "band" | "date";
+  // How the answer is captured in the UI (interview redesign — see docs/INTERVIEW-REDESIGN.md):
+  // multi = pick many chips, single = pick one, yesno = Yes/No, date = date entry,
+  // typeahead = filter-as-you-type dropdown (for long option lists like the comunidades).
+  input: "multi" | "single" | "yesno" | "date" | "typeahead";
   prompt_hint: string;
   options?: string[];
+  // Show the Lola text/voice "Other" affordance (free-form, AI-extracted) alongside the chips.
+  // Kept for lists/regions where the options can't be exhaustive; off for fixed bands & yes/no.
+  allowOther?: boolean;
+  // Designed sequence (front-loads roadmap payoff, defers sensitive/refinement). nextSlot() asks
+  // the lowest-`order` currently-applicable slot. Gaps of 10 leave room to insert.
+  order: number;
   sensitive?: boolean;
   required_if?: Condition;
   gates?: string[];
@@ -29,10 +39,23 @@ function evaluate(c: Condition, p: Profile): boolean {
   }
 }
 
+// The interview. Physical array order no longer matters — nextSlot() asks the lowest-`order`
+// currently-applicable slot (see the `order` field). Ordering principle: front-load questions
+// that add visible roadmap steps; defer refinement and sensitive asks. `gates` is retained as
+// documentation of a slot's downstream reach (no longer used for sequencing).
 export const SLOTS: Slot[] = [
+  // ── Opener: easy, relatable, adds a step on Q1 ─────────────────────────────
+  {
+    // Advisory-only: drives the language-classes recommendation. Does NOT touch the DELE A2
+    // exemption — that is legally passport-based (is_spanish_speaking_national), not self-report.
+    field: "speaks_spanish", type: "band", input: "single", order: 10, allowOther: false,
+    options: ["None yet", "A little", "Conversational", "Fluent or native"],
+    prompt_hint: "how much Spanish they already speak",
+  },
+
   // ── Round 1: who they are ──────────────────────────────────────────────────
   {
-    field: "nationalities", type: "list",
+    field: "nationalities", type: "list", input: "multi", order: 20, allowOther: true,
     gates: ["work_situation", "has_spouse_or_partner", "has_children", "annual_income_eur_band",
             "intends_long_stay", "us_resident", "previously_ex_spanish_colony_nationality"],
     // Plain plural, no "(s)": Lola echoes this hint into the spoken question and TTS
@@ -42,19 +65,20 @@ export const SLOTS: Slot[] = [
 
   // ── Round 2: work & income ─────────────────────────────────────────────────
   {
-    field: "work_situation", type: "list",
+    field: "work_situation", type: "list", input: "single", order: 30, allowOther: true,
     gates: ["annual_income_eur_band", "employer_country_is_foreign"],
     options: ["employed_remote", "contractor_freelance", "self_employed", "business_owner",
               "student", "retired", "passive_income", "job_seeker"],
     prompt_hint: "their work situation when they move — remote employee, freelancer, retired, studying, etc.",
   },
   {
-    field: "employer_country_is_foreign", type: "bool",
+    field: "employer_country_is_foreign", type: "bool", input: "yesno", order: 60,
     required_if: { field: "work_situation", op: "eq", value: "employed_remote" },
     prompt_hint: "whether their employer is based outside Spain (vs a Spanish company hiring them)",
   },
   {
-    field: "annual_income_eur_band", type: "band",
+    // Sensitive → deferred despite high leverage; drives visa qualification.
+    field: "annual_income_eur_band", type: "band", input: "single", order: 170, allowOther: false,
     required_if: { field: "is_eu", op: "eq", value: false },
     options: ["under €20k", "€20k–€28k", "€28k–€34k", "€34k–€60k", "€60k+"],
     prompt_hint: "their rough annual household income in euros — determines which visa they qualify for",
@@ -62,51 +86,51 @@ export const SLOTS: Slot[] = [
 
   // ── Round 3: family ─────────────────────────────────────────────────────────
   {
-    field: "has_spouse_or_partner", type: "bool",
+    field: "has_spouse_or_partner", type: "bool", input: "yesno", order: 70,
     gates: ["partner_is_married"],
     prompt_hint: "whether a spouse or partner will be relocating with them",
   },
   {
-    field: "partner_is_married", type: "bool",
+    field: "partner_is_married", type: "bool", input: "yesno", order: 80,
     required_if: { field: "has_spouse_or_partner", op: "eq", value: true },
     prompt_hint: "whether they are legally married or in a registered civil partnership",
   },
   {
-    field: "has_children", type: "bool",
+    field: "has_children", type: "bool", input: "yesno", order: 90,
     prompt_hint: "whether school-age children will be making this move",
   },
 
   // ── Round 4: life in Spain ──────────────────────────────────────────────────
   {
-    field: "intends_long_stay", type: "bool",
+    field: "intends_long_stay", type: "bool", input: "yesno", order: 40,
     gates: ["foreign_assets_eur_band"],
     prompt_hint: "whether this is a long-term move (more than 183 days a year) or a shorter extended stay",
   },
   {
-    field: "arrival_date", type: "date",
+    field: "arrival_date", type: "date", input: "date", order: 50,
     prompt_hint: "roughly when they plan to arrive in Spain — even an approximate month is enough to anchor real deadlines",
   },
   {
-    field: "has_spanish_address", type: "bool",
+    field: "has_spanish_address", type: "bool", input: "yesno", order: 100,
     prompt_hint: "whether they already have a Spanish address — rented or owned",
   },
   {
-    field: "owns_or_drives", type: "bool",
+    field: "owns_or_drives", type: "bool", input: "yesno", order: 150,
     prompt_hint: "whether anyone in the household will drive in Spain",
   },
   {
-    field: "owns_property_in_spain", type: "bool",
+    field: "owns_property_in_spain", type: "bool", input: "yesno", order: 110,
     gates: ["property_purchase"],
     prompt_hint: "whether they own or are actively planning to purchase property in Spain",
   },
   {
-    field: "property_purchase", type: "date",
+    field: "property_purchase", type: "date", input: "date", order: 120,
     required_if: { field: "owns_property_in_spain", op: "eq", value: true },
     prompt_hint: "roughly when they completed (or expect to complete) the property purchase — anchors the notary, registry, and transfer-tax deadlines",
   },
   {
     // Only relevant to movers who don't already own a place; gates the (advisory) scouting step.
-    field: "knows_where_to_live", type: "bool",
+    field: "knows_where_to_live", type: "bool", input: "yesno", order: 130,
     required_if: { not: { field: "owns_property_in_spain", op: "eq", value: true } },
     prompt_hint: "whether they already know which city or region in Spain they'll settle in, or are still deciding where to live",
   },
@@ -115,7 +139,7 @@ export const SLOTS: Slot[] = [
     // (or already own there). "not_sure" is a fine answer. No applies_if tests this field —
     // it personalizes the regional-variation notes on plan steps and stays ready for the
     // per-region content pass.
-    field: "region", type: "band",
+    field: "region", type: "band", input: "typeahead", order: 140, allowOther: false,
     required_if: { any: [
       { field: "knows_where_to_live", op: "eq", value: true },
       { field: "owns_property_in_spain", op: "eq", value: true },
@@ -124,24 +148,24 @@ export const SLOTS: Slot[] = [
     prompt_hint: "which comunidad autónoma (region of Spain) they'll settle in — if they name a city or province, map it to its comunidad; 'not sure yet' is a fine answer",
   },
   {
-    field: "has_pets", type: "bool",
+    field: "has_pets", type: "bool", input: "yesno", order: 160,
     prompt_hint: "whether any pets — dogs, cats, or ferrets — will be making this move with them",
   },
 
   // ── Round 5: sensitive / background ────────────────────────────────────────
   {
-    field: "foreign_assets_eur_band", type: "band", sensitive: true,
+    field: "foreign_assets_eur_band", type: "band", input: "single", order: 180, allowOther: false, sensitive: true,
     required_if: { field: "is_tax_resident", op: "eq", value: true },
     options: ["under €50k", "€50k–€200k", "€200k–€700k", "over €700k", "prefer not to say"],
     prompt_hint: "roughly, total assets held outside Spain — only a range is needed, drives Modelo 720",
   },
   {
-    field: "us_resident", type: "bool",
+    field: "us_resident", type: "bool", input: "yesno", order: 190,
     required_if: { field: "is_eu", op: "eq", value: false },
     prompt_hint: "whether they are currently based in the US — affects consulate and wait times",
   },
   {
-    field: "previously_ex_spanish_colony_nationality", type: "bool",
+    field: "previously_ex_spanish_colony_nationality", type: "bool", input: "yesno", order: 200,
     required_if: { field: "is_eu", op: "eq", value: false },
     prompt_hint: "whether they hold nationality from a former Spanish colony (most Latin American countries, Philippines) — this affects citizenship timelines",
   },
@@ -149,7 +173,7 @@ export const SLOTS: Slot[] = [
     // Decides whether the citizenship track applies at all vs. just rolling residence renewals.
     // Only relevant to non-EU long-stay movers (EU citizens don't naturalise this way; short stays
     // never reach it).
-    field: "wants_citizenship", type: "bool",
+    field: "wants_citizenship", type: "bool", input: "yesno", order: 210,
     required_if: { all: [
       { field: "is_eu", op: "eq", value: false },
       { field: "intends_long_stay", op: "eq", value: true },
@@ -261,6 +285,14 @@ export function derive(p: Profile): void {
     if (d.from.every(f => f in p)) p[d.field] = d.compute(p);
 }
 
+// A slot counts toward the interview if it's already answered, or it's unanswered but its
+// `required_if` gate is currently satisfied (so it will be asked). Shared by interviewProgress
+// and the weighted completeness metric (core/completeness.ts) so gating semantics stay identical.
+export function isSlotApplicable(s: Slot, p: Profile): boolean {
+  if (s.field in p) return true;
+  return !s.required_if || evaluate(s.required_if, p);
+}
+
 // Rough interview progress for the UI. `total` is answered + currently-applicable
 // unanswered slots; it can tick up by one when a branch opens (e.g. saying you have a
 // partner reveals the marriage question), so callers should clamp progress monotonically.
@@ -276,6 +308,7 @@ export function nextSlot(p: Profile): Slot | null {
     (!s.required_if || evaluate(s.required_if, p))
   );
   if (!pool.length) return null;
-  pool.sort((a, b) => (b.gates?.length ?? 0) - (a.gates?.length ?? 0));
+  // Designed sequence: lowest `order` first (front-loads roadmap payoff, defers sensitive).
+  pool.sort((a, b) => a.order - b.order);
   return pool[0];
 }

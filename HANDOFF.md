@@ -5,12 +5,52 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-Last updated: 2026-07-06 (first soft launch to r/GoingToSpain — clean night, post later auto-removed;
-session closed for user travel day).
+Last updated: 2026-07-10 (interview redesign Phase 0–2 checkpoint — on branch, NOT deployed;
+ready for user testing in the morning).
 
 ---
 
-## ⭐ RESUME HERE (2026-07-06 — FIRST SOFT LAUNCH done; web-only; clean, encouraging night)
+## ⭐ RESUME HERE (2026-07-10 — INTERVIEW REDESIGN Phase 0–2 on a branch; test before Phase 3)
+
+**Big body of work, checkpointed on branch `interview-redesign` (NOT merged, NOT deployed).**
+Motivated by PostHog on the soft-launch traffic: the interview funnel bounced hard — `work_situation`
+was the worst question *and* it was Q2, median completion was **7.2 min vs the "3 min" promised**, and
+**LinkedIn converted 0/17 while Reddit converted ~60%** of starters (intent mismatch — optimize for
+Reddit-type traffic, not LinkedIn). Full analysis + the plan live in **`docs/INTERVIEW-REDESIGN.md`**.
+
+**What shipped to the branch (all green: 206 vitest tests, `tsc` clean, `npm run audit` clean):**
+- **Phase 0 — spine (pure, tested):** `core/plan-delta.ts` (`diffPlans` — the one primitive every
+  living-roadmap surface renders from), `core/completeness.ts` (roadmap-anchored % complete, weighted
+  by each slot's catalog leverage), `lib/interviewDraft.ts` (anonymous localStorage resume).
+- **Phase 1 — chips + payoff:** `app/interview.tsx` rewritten — tap-chips for every yes/no & option
+  slot (zero LLM, no spinner), "Other" reveals the text/voice composer (LLM extraction + Lola's
+  contextual clarify kept). New `speaks_spanish` **opener** that adds a `language-classes` roadmap
+  step on Q1 (advisory-only — **DELE stays passport-based**, do not wire self-report into it). Slots
+  reordered (payoff first, sensitive last) via a new `order` field; `nextSlot` sorts by it. **All 21
+  questions audited** for chip phrasing (no "X or Y" on a yes/no). `region` is now a **type-ahead
+  dropdown** (17+2 comunidades + "Not sure" + type-a-city→extraction). Static localized copy for chip
+  questions killed the per-question Haiku call (no more "still be" / "one last question" bugs).
+- **Phase 2 — web two-pane live roadmap:** `components/RoadmapPane.tsx` — the roadmap grows as you
+  answer, new steps highlight (via the Phase-0 delta). Progress reframed "Question N of ~12" → **"X%
+  complete."** Web-only, ≥900px; narrow stays single-column.
+
+**HOW TO TEST IN THE MORNING:** `npx expo start --web` → open `http://localhost:8100/interview` in a
+**wide window (≥900px) to see the two-pane**. Chip taps are instant & offline; the composer questions
+(nationalities, dates, "Other") call `/api/lola` (needs the `.env` key — present). Verified live: "None
+yet" on Q1 → "Start learning Spanish" appears in the right pane, header ticks to "1 step · 2%".
+
+**NEXT (in order):** (1) user tests Phase 0–2; (2) **Phase 3 = mobile "+N steps" delta treatment**
+(same `diffPlans`, different skin; needs a batched native build); (3) **at DEPLOY time**, update the
+two public homework pages (`app/how-i-was-built/log.tsx` + `roadmap.tsx`) — deliberately deferred
+because the pages describe what's *live to users* and this isn't live yet.
+
+**Known v1 simplifications (not bugs):** roadmap-pane removals recompute silently (no narrated "you're
+EU, removed 2" yet); the new-step highlight is a fade, not a slide; `owns_property_in_spain` keeps its
+"or" (own **or** plan to buy — intentional, both → Yes).
+
+---
+
+## Prior resume note (2026-07-06 — FIRST SOFT LAUNCH done; web-only; clean, encouraging night)
 
 **We did the first public exposure: a soft launch (call-for-testers) to r/GoingToSpain**, web-only,
 framed as a free non-commercial tool. Results before it came down: **~1.2K views, 1 positive
@@ -122,7 +162,7 @@ Web is live at **getcamino.app** in **five languages** (en/es/fr/de/it — L0–
 build 30** (device-tested working by user + wife; carries all languages) — Apple + Google +
 email sign-in all WORKING, dictation, Lola voice, universal links, PDF export, delete-account.
 Signed-in **profiles now persist** (a grant bug silently blocked all saves until 2026-07-05 —
-fixed on both DBs; see resume block). The catalog holds **60 obligations** (55 `official` with
+fixed on both DBs; see resume block). The catalog holds **61 obligations** (55 `official` with
 `source_url` / 5 `recommendation`), invariant-2-audited (`npm run audit`, a deploy gate). The
 email loop is live (welcome + weekly cron Mondays 06:00 UTC + one-click unsubscribe), localized
 per `user_metadata.lang` (admin metadata updates MERGE — verified empirically); the Supabase
@@ -139,7 +179,7 @@ user-side). Next phases: TODO.md → store paperwork (4), submissions (5).
 - `docs/MONITORING.md` — Sentry setup (web + server + native), uptime monitor.
 - `docs/APP_STORE.md` — submission pack + the provisioning/entitlement playbook (why profiles
   must be re-minted when a capability changes — learned the hard way on builds 12–15).
-- `core/engine-controller.ts` — **the deterministic engine + 60-obligation CATALOG.**
+- `core/engine-controller.ts` — **the deterministic engine + 61-obligation CATALOG.**
   `buildPlan(profile)` = filter by `applies_if` → topoSort by `depends_on` → resolve timing →
   bucket phases. `isOverdue(o, today?)` = scheduled + past date-level due + not done (due-today
   gets grace). Completing `residencia`/`empadronamiento` back-fills anchors so downstream dates

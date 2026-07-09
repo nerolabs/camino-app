@@ -10,7 +10,8 @@
     "question": "Domanda {{n}} di ~{{total}}",
     "almostThere": "Ci siamo quasi",
     "underAMinute": "Meno di un minuto",
-    "minutesLeft": "Circa {{m}} min rimasti"
+    "minutesLeft": "Circa {{m}} min rimasti",
+    "complete": "{{pct}}% completato"
   },
   "voice": {
     "on": "Voce attiva",
@@ -23,7 +24,9 @@
     "placeholderListening": "Ti ascolto…",
     "micStartA11y": "Detta la tua risposta",
     "micStopA11y": "Ferma la dettatura",
-    "sendA11y": "Invia la tua risposta"
+    "sendA11y": "Invia la tua risposta",
+    "backToChoices": "Torna alle opzioni",
+    "typeRegion": "Digita una regione o città…"
   },
   "done": "È tutto ciò che mi serve — la tua roadmap è pronta.",
   "fallback": {
@@ -33,22 +36,71 @@
     "turnFailed": "Scusa — ci è voluto più del dovuto. La tua risposta è ancora nel campo; me la rimandi?"
   },
   "static": {
+    "speaks_spanish": "Prima di iniziare — come te la cavi con lo spagnolo?",
     "nationalities": "Una veloce — di dove è cittadino ognuno in casa?",
-    "work_situation": "Sul lavoro, dopo il trasferimento — lavorerai da remoto, da freelance, studierai, sarai in pensione o altro?",
+    "work_situation": "Quale sarà la tua situazione lavorativa quando ti trasferisci?",
     "employer_country_is_foreign": "Il tuo datore di lavoro ha sede fuori dalla Spagna?",
     "annual_income_eur_band": "Per trovare il visto giusto mi serve un’idea approssimativa del reddito annuo del nucleo. Quale fascia ci va vicino?",
     "has_spouse_or_partner": "Un coniuge o partner si trasferisce con te?",
-    "partner_is_married": "Siete sposati o in unione civile registrata?",
+    "partner_is_married": "La vostra relazione è registrata legalmente? Vale sia un matrimonio sia un'unione civile.",
     "has_children": "Vengono bambini con te?",
-    "intends_long_stay": "È un vero trasferimento a lungo termine — più di sei mesi l’anno — o piuttosto un soggiorno lungo?",
+    "intends_long_stay": "Starai in Spagna più di sei mesi all'anno?",
     "arrival_date": "Quando conti di arrivare, più o meno? Basta anche solo il mese.",
-    "has_spanish_address": "Hai già una casa pronta, in affitto o di proprietà?",
+    "has_spanish_address": "Hai già un alloggio in Spagna?",
     "owns_or_drives": "Qualcuno guiderà lì?",
-    "owns_property_in_spain": "Pensi di comprare casa in Spagna, o l’hai già comprata?",
-    "region": "In quale parte della Spagna ti sistemerai? Una comunità — o dimmi la città e la colloco io.",
+    "owns_property_in_spain": "Possiedi — o pensi di comprare — un immobile in Spagna?",
+    "region": "In quale parte della Spagna ti stabilirai?",
     "has_pets": "Qualche animale si trasferisce con te?",
     "foreign_assets_eur_band": "Un po’ personale — e scegli solo una fascia — quanto possiedi, all’incirca, fuori dalla Spagna?",
     "us_resident": "Vivi attualmente negli Stati Uniti? (I tempi dei consolati lì sono piuttosto lunghi al momento.)",
-    "previously_ex_spanish_colony_nationality": "Sei cittadino di un’ex colonia spagnola — gran parte dell’America Latina, o le Filippine?"
+    "previously_ex_spanish_colony_nationality": "Hai la cittadinanza di un'ex colonia spagnola? (Quasi tutta l'America Latina e le Filippine.)",
+    "property_purchase": "Più o meno quando si è conclusa (o si concluderà) la compravendita? Basta il mese.",
+    "knows_where_to_live": "Sai già in quale zona della Spagna ti stabilirai?",
+    "wants_citizenship": "A lungo termine, vorresti diventare cittadino spagnolo?"
+  },
+  "chips": {
+    "yes": "Sì",
+    "no": "No",
+    "other": "Qualcos'altro…",
+    "notSure": "Non ancora sicuro"
+  },
+  "options": {
+    "speaks_spanish": {
+      "None yet": "Ancora niente",
+      "A little": "Un po'",
+      "Conversational": "Me la cavo",
+      "Fluent or native": "Fluente o madrelingua"
+    },
+    "work_situation": {
+      "employed_remote": "Dipendente da remoto",
+      "contractor_freelance": "Freelance / a contratto",
+      "self_employed": "Lavoratore autonomo",
+      "business_owner": "Titolare d'impresa",
+      "student": "Studente",
+      "retired": "In pensione",
+      "passive_income": "Rendita / redditi passivi",
+      "job_seeker": "In cerca di lavoro"
+    },
+    "annual_income_eur_band": {
+      "under €20k": "Meno di 20 k€",
+      "€20k–€28k": "20–28 k€",
+      "€28k–€34k": "28–34 k€",
+      "€34k–€60k": "34–60 k€",
+      "€60k+": "Oltre 60 k€"
+    },
+    "foreign_assets_eur_band": {
+      "under €50k": "Meno di 50 k€",
+      "€50k–€200k": "50–200 k€",
+      "€200k–€700k": "200–700 k€",
+      "over €700k": "Oltre 700 k€",
+      "prefer not to say": "Preferisco non dirlo"
+    }
+  },
+  "roadmap": {
+    "title": "La tua roadmap",
+    "complete": "{{pct}}% completato",
+    "empty": "I tuoi passi appariranno qui man mano che rispondi.",
+    "steps_one": "{{count}} passo",
+    "steps_other": "{{count}} passi"
   }
 }

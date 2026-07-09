@@ -14,6 +14,7 @@ export const TEST_PERSONAS: Persona[] = [
     name: 'Andrew — US family, dual-ES household',
     description: 'US nationals, remote worker, wife holds an ES passport (household is EU → eu_citizen path). Tests: EU fast-path, family cluster, driving, Modelo 720 assets.',
     answers: {
+      speaks_spanish:                       'A little',
       nationalities:                        ['US', 'ES'],
       work_situation:                       'employed_remote',
       employer_country_is_foreign:          true,
@@ -35,6 +36,7 @@ export const TEST_PERSONAS: Persona[] = [
     name: 'Susan — US retiree, NLV, aiming for citizenship',
     description: 'US passive income, married, no address yet, still choosing a region. Tests: NLV document cluster, consulate banner (US), scouting step (undecided where), FULL citizenship track incl. DELE + CCSE (wants citizenship, not Spanish-speaking).',
     answers: {
+      speaks_spanish:                       'None yet',
       nationalities:                        ['US'],
       work_situation:                       'passive_income',
       annual_income_eur_band:               '€34k–€60k',
@@ -58,6 +60,7 @@ export const TEST_PERSONAS: Persona[] = [
     name: 'James — UK retiree, renewal-only',
     description: 'British, retired, long stay but plans to keep renewing residence — no citizenship. Tests: rolling-renewal path — nlv-renewal + permanent-residence present, ZERO citizenship items (no DELE / CCSE / application / jura).',
     answers: {
+      speaks_spanish:                       'A little',
       nationalities:                        ['GB'],
       work_situation:                       'retired',
       annual_income_eur_band:               '€34k–€60k',
@@ -82,6 +85,7 @@ export const TEST_PERSONAS: Persona[] = [
     name: 'Sofia — Colombian family, 2-year track, DELE-exempt',
     description: 'Colombian (ex-colony AND Spanish-speaking), wants citizenship. Tests: 2-year latam track, CCSE required, DELE correctly ABSENT (Spanish-speaking exemption), school enrollment.',
     answers: {
+      speaks_spanish:                       'Fluent or native',
       nationalities:                        ['CO'],
       work_situation:                       'passive_income',
       annual_income_eur_band:               '€28k–€34k',
@@ -106,6 +110,7 @@ export const TEST_PERSONAS: Persona[] = [
     name: 'Paolo — Filipino remote worker, DNV',
     description: 'Filipino working remotely for a foreign employer (DNV path), wants citizenship. Ex-colony but NOT Spanish-speaking. Tests: the DELE fix — 2-year latam track present AND DELE A2 still REQUIRED (PH is not exempt), CCSE required, DNV document cluster.',
     answers: {
+      speaks_spanish:                       'Conversational',
       nationalities:                        ['PH'],
       work_situation:                       'employed_remote',
       employer_country_is_foreign:          true,
@@ -130,6 +135,7 @@ export const TEST_PERSONAS: Persona[] = [
     name: 'Elena — Canadian with unmarried partner',
     description: 'Canadian NLV mover whose partner is not married/registered. Tests: family-reunification correctly ABSENT (requires marriage or registered partnership); partner still raises the NLV income threshold.',
     answers: {
+      speaks_spanish:                       'A little',
       nationalities:                        ['CA'],
       work_situation:                       'passive_income',
       annual_income_eur_band:               '€34k–€60k',
@@ -154,6 +160,7 @@ export const TEST_PERSONAS: Persona[] = [
     name: 'Kenji — Japanese freelancer, property buyer',
     description: 'Japanese contractor (DNV), buying property, has a dog, renewal-only. Tests: autónomo/tax cluster, full property cluster (due diligence, notary, registry, ITP, IBI, comunidad — anchored to the purchase date), pet import, DGT exchange (JP has a bilateral agreement), no citizenship items.',
     answers: {
+      speaks_spanish:                       'None yet',
       nationalities:                        ['JP'],
       work_situation:                       'contractor_freelance',
       annual_income_eur_band:               '€60k+',
@@ -176,6 +183,7 @@ export const TEST_PERSONAS: Persona[] = [
     name: 'Mara — German remote worker, short stay',
     description: 'EU national, under 183 days. Tests: EU path with a slim plan — no visa docs, no tax-residency items; citizenship question never asked (EU).',
     answers: {
+      speaks_spanish:                       'Conversational',
       nationalities:                        ['DE'],
       work_situation:                       'employed_remote',
       employer_country_is_foreign:          true,
@@ -195,6 +203,7 @@ export const TEST_PERSONAS: Persona[] = [
     name: 'Minimal — EU, fewest obligations',
     description: 'French national, short stay, rented flat, nothing extra. Tests: the floor — the smallest non-empty plan (padrón + health card) still renders and phases correctly. (NB: with no address at all the plan is EMPTY today — the catalog has no EU-registration item yet; flagged for the sourcing pass.)',
     answers: {
+      speaks_spanish:                       'Conversational',
       nationalities:                        ['FR'],
       work_situation:                       'employed_remote',
       employer_country_is_foreign:          true,

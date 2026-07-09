@@ -5,6 +5,8 @@
  */
 
 export const IT_GUIDE_PROSE: Record<string, string> = {
+  'language-classes':
+    'Questo è il consiglio di Get Camino, non un obbligo di legge: prima inizi a costruire uno spagnolo reale, più tutto il resto fila liscio — l\'impiegato del padrón, il medico, i vicini, il contratto che stai per firmare. Vanno bene lezioni formali, un insegnante privato o un corso intensivo appena arrivi; ciò che conta è iniziare prima di averne bisogno. E se la cittadinanza dovesse mai entrare nel tuo orizzonte, il livello di lingua da certificare è molto più facile da raggiungere quando ci lavori da un po\'.',
   'scout-where-to-live':
     'Quasi tutta la macchina del trasferirsi in Spagna chiede «dove?» prima di poter fare qualcosa per te — il padrón, le scuole, perfino l’ufficio che gestisce le tue pratiche dipendono da un indirizzo. Questo è un consiglio di Get Camino, non un obbligo di legge: passa tempo vero nelle tue zone candidate prima di impegnarti, e nella stagione in cui ci vivresti davvero. Un contratto d’affitto è molto più facile da firmare che da disfare.',
   'choose-visa-type':

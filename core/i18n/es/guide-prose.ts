@@ -8,6 +8,8 @@
  */
 
 export const ES_GUIDE_PROSE: Record<string, string> = {
+  'language-classes':
+    'Este es el consejo de Get Camino, no un requisito legal: cuanto antes empieces a construir un español real, más fácil será todo lo demás — el funcionario del padrón, el médico, tus vecinos, el contrato que vas a firmar. Sirven las clases formales, un profesor particular o un curso intensivo nada más llegar; lo que importa es empezar antes de necesitarlo. Y si la nacionalidad entra alguna vez en tu horizonte, el nivel de idioma que tendrás que certificar es mucho más fácil de alcanzar cuando llevas tiempo practicando.',
   'scout-where-to-live':
     'Casi toda la maquinaria de mudarse a España pregunta «¿dónde?» antes de poder hacer nada por ti — el padrón, los colegios, incluso qué oficina lleva tus trámites cuelgan de una dirección. Esto es un consejo de Get Camino, no un requisito legal: pasa tiempo real en tus zonas candidatas antes de comprometerte, y en la estación en la que de verdad vivirías allí. Un contrato de alquiler es mucho más fácil de firmar que de deshacer.',
   'choose-visa-type':

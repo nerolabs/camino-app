@@ -24,6 +24,7 @@ export function sampleProfile(): Profile {
   // a marketing page. +270d keeps every step comfortably in the future, forever.
   const arrival = new Date(Date.now() + 270 * 86_400_000);
   return {
+    speaks_spanish:                       'None yet',
     nationalities:                        ['US'],
     work_situation:                       'retired',
     annual_income_eur_band:               '€34k–€60k',

@@ -2,15 +2,20 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
-  StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator,
+  StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator, useWindowDimensions,
 } from 'react-native';
 import NavBar from '@/components/NavBar';
+import RoadmapPane from '@/components/RoadmapPane';
 import { palette } from '@/constants/Colors';
 import { nextSlot, derive, interviewProgress, SLOTS, type Slot, type Profile } from '@/core/interview-controller';
-import { guideById, shortClause } from '@/core/guide-content';
+import { interviewCompleteness } from '@/core/completeness';
+import { buildPlan } from '@/core/engine-controller';
+import { diffPlans } from '@/core/plan-delta';
+import { regionLabel, REGION_OPTIONS } from '@/core/regions';
 import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
 import { saveProfile as saveProfileDb } from '@/core/profileDb';
+import { saveDraft, clearDraft } from '@/lib/interviewDraft';
 import { TEST_PERSONAS, type Persona } from '@/core/test-personas';
 import { askAnthropic } from '@/lib/lola';
 import { buildExtractionSystem, parseExtraction, type Extraction } from '@/lib/extractionPrompt';
@@ -31,33 +36,6 @@ function transcriptOf(turns: Turn[]): string {
     .filter(t => !t.text.startsWith('Test persona:'))
     .map(t => `${t.role === 'lola' ? 'Lola' : 'User'}: ${t.text}`)
     .join('\n');
-}
-
-async function phraseQuestion(slot: Slot, turns: Turn[], arrivedFrom?: string): Promise<string> {
-  const transcript = transcriptOf(turns);
-  const midConversation = transcript.length > 0;
-  return askAnthropic({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 120,
-    system: `You are Lola, a warm relocation guide helping someone move to Spain.
-${midConversation
-  ? `You are MID-conversation. Here is everything said so far:
-${transcript}
-
-Ask the NEXT question as a natural follow-up. Crucial rules:
-- Do NOT greet again — no "Hey!", "Hola!", "Hi!". You've already met.
-- Briefly acknowledge what they just told you when it's natural, then move on.
-- NEVER re-ask something they've already answered or clearly implied (e.g. if they mentioned "my wife", you already know a partner is coming — don't ask whether one is). Use that context to phrase this as a confirmation instead.`
-  : `This is your very first question, so a short, warm greeting is welcome.${arrivedFrom
-      ? ` They arrived from Get Camino's guide about "${arrivedFrom}" — acknowledge that interest in a brief clause (no facts about the topic), then ask the question.`
-      : ''}`}
-
-Ask ONE short question to learn: ${slot.prompt_hint}.
-${slot.sensitive ? 'Acknowledge this is personal and they only need to pick a range.' : ''}
-${slot.options ? `Their options will be shown as buttons: ${slot.options.join(', ')}. Don't list them in your question.` : ''}
-Speak directly. One or two sentences max. No bullet points.${languageDirective()}`,
-    messages: [{ role: 'user', content: 'Ask me the next question.' }],
-  });
 }
 
 async function extractAnswer(
@@ -104,13 +82,30 @@ official sources. Never invent an answer for them. Plain text only.${languageDir
 const staticQuestion = (field: string): string | undefined =>
   i18n.exists(`interview:static.${field}`) ? i18n.t(`interview:static.${field}`) : undefined;
 
+// A slot is answered by tapping chips when it's a yes/no or has a fixed option set — everything
+// except open free-text (nationalities) and dates, which use the composer. This is the friction
+// fix: the top clarify offenders (work_situation, income, driving) become a single tap.
+function slotUsesChips(slot: Slot | null): boolean {
+  return !!slot && (slot.type === 'bool' || (slot.options?.length ?? 0) > 0)
+    && slot.input !== 'date' && slot.input !== 'typeahead';
+}
+
+// Comunidad suggestions for the region type-ahead, filtered by a case-insensitive substring of
+// the label. "not_sure" is offered separately as a persistent row, so it's excluded here.
+function regionSuggestions(query: string): { slug: string; label: string }[] {
+  const q = query.trim().toLowerCase();
+  return REGION_OPTIONS
+    .filter(s => s !== 'not_sure')
+    .map(s => ({ slug: s, label: regionLabel(s) ?? s }))
+    .filter(r => !q || r.label.toLowerCase().includes(q));
+}
+
 export default function InterviewScreen() {
   const { t } = useTranslation('interview');
   const router = useRouter();
-  // Context-carrying CTA: /interview?from=<guide-id> lets Lola's greeting acknowledge which
-  // guide brought them here (phrasing only — never facts; those live in the sourced pages).
+  // Context-carrying CTA: /interview?from=<guide-id> is still recorded on interview_started for
+  // attribution; the opener is now deterministic static copy (no LLM greeting to personalize).
   const { from } = useLocalSearchParams<{ from?: string }>();
-  const arrivedFrom = typeof from === 'string' ? guideById.get(from) : undefined;
   const { user } = useAuth();
   const { setProfile: saveProfile, isStaff } = useProfile();
 
@@ -127,6 +122,13 @@ export default function InterviewScreen() {
   const [started, setStarted] = useState(false);
   const [done, setDone] = useState(false);
   const [showDev, setShowDev] = useState(false);
+  // When a chip slot offers "Other", tapping it reveals the free-text/voice composer for this turn.
+  const [otherActive, setOtherActive] = useState(false);
+  // Ids of roadmap steps the latest answer just added — the live-roadmap pane highlights them,
+  // then they settle (cleared on a timer). See docs/INTERVIEW-REDESIGN.md, Phase 2.
+  const [highlightIds, setHighlightIds] = useState<Set<string>>(new Set());
+  const { width } = useWindowDimensions();
+  const twoPane = width >= 900; // web two-pane needs room; phones/tablets stay single-column
   const scrollRef = useRef<ScrollView>(null);
   const progressRef = useRef(0);
   const inputRef = useRef<TextInput>(null);
@@ -148,14 +150,15 @@ export default function InterviewScreen() {
     if (keyboardHeight > 0) setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 50);
   }, [keyboardHeight]);
 
-  // Auto-focus the answer box each time a new question is ready, so the user can just
-  // start typing (or dictating) without clicking into the field first.
+  // Auto-focus the answer box only when the composer is actually shown (free-text/date/Other) —
+  // chip questions are answered by tapping, so focusing a hidden field there is wrong.
   useEffect(() => {
-    if (started && !done && !loading && currentSlot) {
+    const composerShown = !slotUsesChips(currentSlot) || otherActive;
+    if (started && !done && !loading && currentSlot && composerShown) {
       const t = setTimeout(() => inputRef.current?.focus(), 50);
       return () => clearTimeout(t);
     }
-  }, [currentSlot, loading, started, done]);
+  }, [currentSlot, loading, started, done, otherActive]);
 
   // Switching language mid-interview (user finding 2026-07-05): the chrome re-renders via
   // useTranslation, but the CURRENT question is a stored string, generated in the old language —
@@ -219,21 +222,107 @@ export default function InterviewScreen() {
     setTimeout(() => router.push('/plan'), 1200);
   }
 
-  async function start() {
+  // Deterministic question copy — no LLM phrasing call (that's what mangled "still be" and
+  // hallucinated "one last question"). Chip questions and free-text questions alike read this.
+  const questionText = (slot: Slot): string =>
+    staticQuestion(slot.field) ?? t('fallback.question', { hint: slot.prompt_hint });
+
+  // Chip label for an option value. Region names are proper nouns (regionLabel); "not_sure" and
+  // yes/no come from `chips.*`; everything else from the localized `options.<field>` map. The
+  // stored VALUE is always the canonical option string — only the label is localized.
+  function optionLabelFor(field: string, value: string): string {
+    if (field === 'region') return regionLabel(value) ?? (value === 'not_sure' ? t('chips.notSure') : value);
+    const map = t(`options.${field}`, { returnObjects: true, defaultValue: {} }) as Record<string, string>;
+    return (map && map[value]) || value;
+  }
+
+  function chipChoices(slot: Slot): { value: unknown; label: string }[] {
+    if (slot.type === 'bool') return [{ value: true, label: t('chips.yes') }, { value: false, label: t('chips.no') }];
+    return (slot.options ?? []).map(o => ({ value: o, label: optionLabelFor(slot.field, o) }));
+  }
+
+  function start() {
     capture('interview_started', { from: typeof from === 'string' ? from : undefined });
     voice.unlock(); // within this click gesture, so the first spoken turn can auto-play (autoplay policy)
     setStarted(true);
-    setLoading(true);
     const slot = nextSlot({});
-    if (!slot) { setDone(true); setLoading(false); return; }
-    const lola = await phraseQuestion(slot, [], arrivedFrom ? shortClause(arrivedFrom.title) : undefined)
-      .catch(() => staticQuestion(slot.field) ?? t('fallback.question', { hint: slot.prompt_hint }));
+    if (!slot) { setDone(true); return; }
     setCurrentSlot(slot);
-    setTurns([{ role: 'lola', text: lola }]);
-    setLoading(false);
+    setTurns([{ role: 'lola', text: questionText(slot) }]); // instant — no network on Q1
   }
 
-  async function submit(text: string) {
+  // Apply a resolved value for `slot` and move to the next question. Shared by the chip path
+  // (deterministic) and the free-text path (LLM-extracted). `extras` only arrives from extraction.
+  async function advance(
+    slot: Slot, value: unknown, extras?: Record<string, unknown>, remainingSlots: Slot[] = [],
+  ) {
+    const next_profile: Profile = { ...profile, [slot.field]: value };
+    // Opportunistic capture: apply extras the extractor is confident about, into still-unanswered
+    // slots only, and only when the value type-checks against the slot's schema.
+    const autofilled: string[] = [];
+    if (extras && typeof extras === 'object') {
+      for (const s of remainingSlots) {
+        const v = extras[s.field];
+        if (v === undefined || v === null) continue;
+        const ok = s.type === 'bool' ? typeof v === 'boolean'
+                 : s.type === 'date' ? typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v)
+                 : s.type === 'list' ? Array.isArray(v) && v.every(x => typeof x === 'string')
+                 : s.options       ? typeof v === 'string' && s.options.includes(v)
+                 : typeof v === 'string';
+        if (ok) { next_profile[s.field] = v; autofilled.push(s.field); }
+      }
+      if (autofilled.length) capture('interview_slots_autofilled', { fields: autofilled, from: slot.field });
+    }
+    derive(next_profile);
+    // Live roadmap: what did this answer add? Highlight new steps, then let them settle.
+    const delta = diffPlans(buildPlan(profile), buildPlan(next_profile));
+    if (delta.added.length) {
+      const ids = new Set(delta.added.map(o => o.id));
+      setHighlightIds(ids);
+      setTimeout(() => setHighlightIds(new Set()), 2200);
+    }
+    setProfile(next_profile);
+    setOtherActive(false);
+    setInput(''); // clear any typed text (e.g. region type-ahead) before the next question
+
+    const next = nextSlot(next_profile);
+    if (!next) {
+      await persist(next_profile);
+      capture('interview_completed', { answered: interviewProgress(next_profile).answered });
+      clearDraft(); // finished — nothing to resume
+      setTurns(prev => [...prev, { role: 'lola', text: t('done') }]);
+      setDone(true);
+      setTimeout(() => router.push('/plan'), 1800);
+      return;
+    }
+    setCurrentSlot(next);
+    setTurns(prev => [...prev, { role: 'lola', text: questionText(next) }]);
+    saveDraft(next_profile, next.field); // anonymous resume (signed-in already persists to the DB)
+    setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
+  }
+
+  // Chip tap: deterministic, no LLM. The chosen label is echoed as the user's turn.
+  async function submitChip(value: unknown, label: string) {
+    if (!currentSlot || loading) return;
+    if (dictation.listening) dictation.cancel();
+    setLoading(true);
+    setTurns(prev => [...prev, { role: 'user', text: label }]);
+    try {
+      await advance(currentSlot, value);
+    } catch (e) {
+      captureError(e instanceof Error ? e : new Error('interview chip turn failed'), {
+        route: '/interview', field: currentSlot.field,
+      });
+      capture('interview_turn_failed', { field: currentSlot.field });
+      setTurns(prev => [...prev, { role: 'lola', text: t('fallback.turnFailed') }]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Free-text / voice path: nationalities, dates, and "Other". Runs the LLM extraction (and Lola's
+  // contextual clarify reply) — kept precisely because it captures richer data and reduces ambiguity.
+  async function submitFreeText(text: string) {
     if (!currentSlot || !text.trim() || loading) return;
     // CANCEL (not stop) dictation: the recognizer's final async flush must be discarded here,
     // or it re-fills the input we're about to clear (build-27/28 family findings).
@@ -244,66 +333,26 @@ export default function InterviewScreen() {
     setTurns(prev => [...prev, { role: 'user', text }]);
 
     try {
-    const remainingSlots = SLOTS.filter(s => !(s.field in profile) && s.field !== currentSlot.field);
-    const result = await extractAnswer(currentSlot, text, turns, remainingSlots);
+      const remainingSlots = SLOTS.filter(s => !(s.field in profile) && s.field !== currentSlot.field);
+      const result = await extractAnswer(currentSlot, text, turns, remainingSlots);
 
-    if ('clarify' in result) {
-      // Monitor these: every clarify is a real user stuck on a question the extractor fumbled.
-      // The PostHog trend on this event is the tuning loop for the extraction prompts.
-      capture('interview_clarify_needed', { field: currentSlot.field, answer: text.slice(0, 200) });
-      const reask = staticQuestion(currentSlot.field)
-        ?? t('fallback.clarifyReask', { hint: currentSlot.prompt_hint });
-      // Conversational clarify: answer their meta-question in Lola's voice, then re-ask
-      // (no legal facts — see phraseClarify). Falls back to the static re-ask on any error.
-      const reply = await phraseClarify(currentSlot, text, turns, result.clarify, reask)
-        .catch(() => t('fallback.clarifyPrefix', { reask }));
-      setTurns(prev => [...prev, { role: 'lola', text: reply || t('fallback.clarifyPrefix', { reask }) }]);
-      return;
-    }
-
-    const next_profile: Profile = { ...profile, [currentSlot.field]: result.value };
-    // Opportunistic capture: apply extras the extractor is confident about, but ONLY into slots
-    // still unanswered, and only when the value type-checks against the slot's schema. This is the
-    // same single extraction surface — extras just let nextSlot() skip already-answered questions.
-    const autofilled: string[] = [];
-    if (result.extras && typeof result.extras === 'object') {
-      for (const s of remainingSlots) {
-        const v = (result.extras as Record<string, unknown>)[s.field];
-        if (v === undefined || v === null) continue;
-        const ok = s.type === 'bool' ? typeof v === 'boolean'
-                 : s.type === 'date' ? typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v)
-                 : s.type === 'list' ? Array.isArray(v) && v.every(x => typeof x === 'string')
-                 : s.options       ? typeof v === 'string' && s.options.includes(v)
-                 : typeof v === 'string';
-        if (ok) { next_profile[s.field] = v; autofilled.push(s.field); }
+      if ('clarify' in result) {
+        // Monitor these: every clarify is a real user stuck on a question the extractor fumbled.
+        capture('interview_clarify_needed', { field: currentSlot.field, answer: text.slice(0, 200) });
+        const reask = staticQuestion(currentSlot.field)
+          ?? t('fallback.clarifyReask', { hint: currentSlot.prompt_hint });
+        // Conversational clarify: answer their meta-question in Lola's voice, then re-ask
+        // (no legal facts — see phraseClarify). Falls back to the static re-ask on any error.
+        const reply = await phraseClarify(currentSlot, text, turns, result.clarify, reask)
+          .catch(() => t('fallback.clarifyPrefix', { reask }));
+        setTurns(prev => [...prev, { role: 'lola', text: reply || t('fallback.clarifyPrefix', { reask }) }]);
+        return;
       }
-      if (autofilled.length) capture('interview_slots_autofilled', { fields: autofilled, from: currentSlot.field });
-    }
-    derive(next_profile);
-    setProfile(next_profile);
 
-    const next = nextSlot(next_profile);
-    if (!next) {
-      await persist(next_profile);
-      capture('interview_completed', { answered: interviewProgress(next_profile).answered });
-      setTurns(prev => [...prev, { role: 'lola', text: t('done') }]);
-      setDone(true);
-      setTimeout(() => router.push('/plan'), 1800);
-      return;
-    }
-
-    // The next question must arrive even when the LLM doesn't — the static question is the
-    // deterministic fallback (same interview, less charm).
-    const lola = await phraseQuestion(next, [...turns, { role: 'user', text }])
-      .catch(() => staticQuestion(next.field) ?? t('fallback.question', { hint: next.prompt_hint }));
-    setCurrentSlot(next);
-    setTurns(prev => [...prev, { role: 'lola', text: lola }]);
-    setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
+      await advance(currentSlot, result.value, result.extras, remainingSlots);
     } catch (e) {
       // Extraction failed or timed out: own it, restore their answer so nothing is retyped,
       // and let them send again. The spinner must never be a destination (build-28 finding).
-      // Sentry too (user directive): the server times its upstream; this catches everything
-      // the server can't see — network hangs between the app and the API, and the 35s abort.
       captureError(e instanceof Error ? e : new Error('interview turn failed'), {
         route: '/interview', field: currentSlot.field,
       });
@@ -355,11 +404,14 @@ export default function InterviewScreen() {
     );
   }
 
-  const { answered, total } = interviewProgress(profile);
-  const rawProgress = total > 0 ? answered / total : 0;
+  // Roadmap-anchored % complete (Phase 2 reframe): weighted by how much of the roadmap each answer
+  // determines, capped at 95% until nothing's left to ask, and clamped monotonic so opening a
+  // heavier branch never moves the bar backward.
+  const comp = interviewCompleteness(profile);
+  const rawProgress = done ? 1 : Math.min(0.95, comp.pct);
   const progress = done ? 1 : Math.max(progressRef.current, rawProgress);
   progressRef.current = progress;
-  const remainingQ = Math.max(total - answered, 0);
+  const remainingQ = comp.remaining;
   const timeLeft = remainingQ === 0 ? t('progress.almostThere')
                  : remainingQ * 15 < 60 ? t('progress.underAMinute')
                  : t('progress.minutesLeft', { m: Math.round((remainingQ * 15) / 60) });
@@ -370,6 +422,8 @@ export default function InterviewScreen() {
     // inference breaks whenever the view's position vs safe-area padding changes. This can't.
     <View style={[styles.flex, { paddingBottom: keyboardHeight }]}>
       <NavBar />
+      <View style={twoPane ? styles.twoPaneRow : styles.onePane}>
+        <View style={twoPane ? styles.leftPane : styles.onePane}>
       {voice.supported && started && (
         <View style={styles.voiceBar}>
           <TouchableOpacity
@@ -385,7 +439,7 @@ export default function InterviewScreen() {
       {!done && (
         <View style={styles.progressWrap}>
           <View style={styles.progressRow}>
-            <Text style={styles.progressLabel}>{t('progress.question', { n: Math.min(answered + 1, total), total })}</Text>
+            <Text style={styles.progressLabel}>{t('progress.complete', { pct: Math.round(progress * 100) })}</Text>
             <Text style={styles.progressLabel}>{timeLeft}</Text>
           </View>
           <View style={styles.progressTrack}>
@@ -412,60 +466,157 @@ export default function InterviewScreen() {
             </View>
           )}
 
-          {!done && (
-            <View style={styles.inputRow}>
-              <TextInput
-                ref={inputRef}
-                style={[styles.input, { height: Math.min(120, Math.max(38, inputHeight)) }]}
-                value={input}
-                onChangeText={setInput}
-                placeholder={dictation.listening ? t('composer.placeholderListening') : t('composer.placeholder')}
-                placeholderTextColor={palette.muted}
-                // Grows with the answer (regressed at some point — long dictated answers were
-                // stuck in a one-line box). Multiline + measured content height, capped at ~5
-                // lines; Enter still SENDS (submitBehavior on native, key handler on web).
-                multiline
-                onContentSizeChange={e => setInputHeight(e.nativeEvent.contentSize.height + 16)}
-                submitBehavior="submit"
-                onSubmitEditing={() => submit(input)}
-                onKeyPress={(e) => {
-                  const ne = e.nativeEvent as { key?: string; shiftKey?: boolean };
-                  if (Platform.OS === 'web' && ne.key === 'Enter' && !ne.shiftKey) {
-                    (e as { preventDefault?: () => void }).preventDefault?.();
-                    submit(input);
-                  }
-                }}
-                returnKeyType="send"
-                editable={!loading}
-              />
-              {dictation.supported && (
+          {!done && !loading && slotUsesChips(currentSlot) && !otherActive && (
+            <View style={styles.chipsWrap}>
+              {chipChoices(currentSlot!).map(c => (
                 <TouchableOpacity
-                  style={[styles.micBtn, dictation.listening && styles.micBtnActive]}
-                  onPress={toggleMic}
+                  key={String(c.value)}
+                  style={styles.chip}
+                  onPress={() => submitChip(c.value, c.label)}
                   disabled={loading}
-                  accessibilityLabel={dictation.listening ? t('composer.micStopA11y') : t('composer.micStartA11y')}
+                  accessibilityRole="button"
                 >
-                  <Text style={[styles.micIcon, dictation.listening && styles.micIconActive]}>{dictation.listening ? '■' : '🎙'}</Text>
+                  <Text style={styles.chipText}>{c.label}</Text>
+                </TouchableOpacity>
+              ))}
+              {currentSlot?.allowOther && (
+                <TouchableOpacity
+                  style={[styles.chip, styles.chipOther]}
+                  onPress={() => { setOtherActive(true); setTimeout(() => inputRef.current?.focus(), 50); }}
+                  disabled={loading}
+                  accessibilityRole="button"
+                >
+                  <Text style={styles.chipOtherText}>{t('chips.other')}</Text>
                 </TouchableOpacity>
               )}
-              <TouchableOpacity
-                style={[styles.sendBtn, (!input.trim() || loading) && styles.sendBtnDisabled]}
-                accessibilityLabel={t('composer.sendA11y')}
-                onPress={() => submit(input)}
-                disabled={!input.trim() || loading}
-              >
-                <Text style={styles.sendBtnText}>→</Text>
-              </TouchableOpacity>
+            </View>
+          )}
+
+          {!done && !loading && currentSlot?.input === 'typeahead' && !otherActive && (
+            <View style={styles.typeaheadWrap}>
+              <View style={styles.inputRow}>
+                <TextInput
+                  ref={inputRef}
+                  style={[styles.input, { height: 38 }]}
+                  value={input}
+                  onChangeText={setInput}
+                  placeholder={t('composer.typeRegion')}
+                  placeholderTextColor={palette.muted}
+                  onSubmitEditing={() => {
+                    const m = regionSuggestions(input);
+                    if (m.length) submitChip(m[0].slug, m[0].label);
+                    else if (input.trim()) submitFreeText(input); // a city → extraction maps it
+                  }}
+                  onKeyPress={(e) => {
+                    const ne = e.nativeEvent as { key?: string };
+                    if (Platform.OS === 'web' && ne.key === 'Enter') {
+                      (e as { preventDefault?: () => void }).preventDefault?.();
+                      const m = regionSuggestions(input);
+                      if (m.length) submitChip(m[0].slug, m[0].label);
+                      else if (input.trim()) submitFreeText(input);
+                    }
+                  }}
+                  editable={!loading}
+                  returnKeyType="search"
+                />
+              </View>
+              <ScrollView style={styles.suggestions} keyboardShouldPersistTaps="handled" nestedScrollEnabled>
+                {regionSuggestions(input).map(r => (
+                  <TouchableOpacity
+                    key={r.slug}
+                    style={styles.suggestion}
+                    onPress={() => submitChip(r.slug, r.label)}
+                    disabled={loading}
+                    accessibilityRole="button"
+                  >
+                    <Text style={styles.suggestionText}>{r.label}</Text>
+                  </TouchableOpacity>
+                ))}
+                <TouchableOpacity
+                  style={[styles.suggestion, styles.suggestionMuted]}
+                  onPress={() => submitChip('not_sure', t('chips.notSure'))}
+                  disabled={loading}
+                  accessibilityRole="button"
+                >
+                  <Text style={styles.suggestionMutedText}>{t('chips.notSure')}</Text>
+                </TouchableOpacity>
+              </ScrollView>
+            </View>
+          )}
+
+          {!done && ((!slotUsesChips(currentSlot) && currentSlot?.input !== 'typeahead') || otherActive) && (
+            <View>
+              {otherActive && (
+                <TouchableOpacity
+                  style={styles.otherBack}
+                  onPress={() => { setOtherActive(false); setInput(''); }}
+                  disabled={loading}
+                >
+                  <Text style={styles.otherBackText}>← {t('composer.backToChoices')}</Text>
+                </TouchableOpacity>
+              )}
+              <View style={styles.inputRow}>
+                <TextInput
+                  ref={inputRef}
+                  style={[styles.input, { height: Math.min(120, Math.max(38, inputHeight)) }]}
+                  value={input}
+                  onChangeText={setInput}
+                  placeholder={dictation.listening ? t('composer.placeholderListening') : t('composer.placeholder')}
+                  placeholderTextColor={palette.muted}
+                  // Grows with the answer (regressed at some point — long dictated answers were
+                  // stuck in a one-line box). Multiline + measured content height, capped at ~5
+                  // lines; Enter still SENDS (submitBehavior on native, key handler on web).
+                  multiline
+                  onContentSizeChange={e => setInputHeight(e.nativeEvent.contentSize.height + 16)}
+                  submitBehavior="submit"
+                  onSubmitEditing={() => submitFreeText(input)}
+                  onKeyPress={(e) => {
+                    const ne = e.nativeEvent as { key?: string; shiftKey?: boolean };
+                    if (Platform.OS === 'web' && ne.key === 'Enter' && !ne.shiftKey) {
+                      (e as { preventDefault?: () => void }).preventDefault?.();
+                      submitFreeText(input);
+                    }
+                  }}
+                  returnKeyType="send"
+                  editable={!loading}
+                />
+                {dictation.supported && (
+                  <TouchableOpacity
+                    style={[styles.micBtn, dictation.listening && styles.micBtnActive]}
+                    onPress={toggleMic}
+                    disabled={loading}
+                    accessibilityLabel={dictation.listening ? t('composer.micStopA11y') : t('composer.micStartA11y')}
+                  >
+                    <Text style={[styles.micIcon, dictation.listening && styles.micIconActive]}>{dictation.listening ? '■' : '🎙'}</Text>
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity
+                  style={[styles.sendBtn, (!input.trim() || loading) && styles.sendBtnDisabled]}
+                  accessibilityLabel={t('composer.sendA11y')}
+                  onPress={() => submitFreeText(input)}
+                  disabled={!input.trim() || loading}
+                >
+                  <Text style={styles.sendBtnText}>→</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           )}
         </View>
       </ScrollView>
+        </View>
+        {twoPane && started && (
+          <RoadmapPane profile={profile} highlightIds={highlightIds} pct={progress} />
+        )}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   flex:        { flex: 1, backgroundColor: palette.cal },
+  twoPaneRow:  { flex: 1, flexDirection: 'row' },
+  onePane:     { flex: 1 },
+  leftPane:    { flex: 1, minWidth: 0 },
   center:      { flex: 1, backgroundColor: palette.cal, justifyContent: 'center', alignItems: 'center', padding: 32 },
   eyebrow:     { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, letterSpacing: 2, color: palette.amber, textAlign: 'center', marginBottom: 12 },
   headline:    { fontFamily: 'Fraunces_600SemiBold', fontSize: 34, color: palette.indigo, textAlign: 'center', marginBottom: 16 },
@@ -498,6 +649,23 @@ const styles = StyleSheet.create({
   },
   lolaText:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.indigo, lineHeight: 22 },
   userText:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.cal,   lineHeight: 22 },
+  chipsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12, marginBottom: 4 },
+  chip: {
+    backgroundColor: '#FFFFFF', borderRadius: 22, borderWidth: 1, borderColor: '#D8D2C8',
+    paddingVertical: 11, paddingHorizontal: 18,
+    boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+  },
+  chipText:      { fontFamily: 'HankenGrotesk_500Medium', fontSize: 15, color: palette.indigo },
+  chipOther:     { backgroundColor: '#F2EDE6', borderColor: '#E0DCD4', borderStyle: 'dashed' },
+  chipOtherText: { fontFamily: 'HankenGrotesk_500Medium', fontSize: 15, color: palette.muted },
+  otherBack:     { alignSelf: 'flex-start', paddingVertical: 6, paddingHorizontal: 4, marginTop: 8 },
+  otherBackText: { fontFamily: 'HankenGrotesk_500Medium', fontSize: 13, color: palette.cobalt },
+  typeaheadWrap: { marginTop: 12, width: '100%' },
+  suggestions:   { maxHeight: 240, marginTop: 8, backgroundColor: '#FFFFFF', borderRadius: 14, borderWidth: 1, borderColor: '#E0DCD4', overflow: 'hidden' },
+  suggestion:      { paddingVertical: 12, paddingHorizontal: 16, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: '#EFEAE2' },
+  suggestionText:  { fontFamily: 'HankenGrotesk_500Medium', fontSize: 15, color: palette.indigo },
+  suggestionMuted:     { backgroundColor: '#FAF7F2' },
+  suggestionMutedText: { fontFamily: 'HankenGrotesk_500Medium', fontSize: 15, color: palette.muted },
   inputRow:  {
     flexDirection: 'row', alignItems: 'flex-end', gap: 8,
     marginTop: 12, backgroundColor: '#FFFFFF',
