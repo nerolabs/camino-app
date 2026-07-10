@@ -5,7 +5,8 @@
     "sub": "Mudarse a España son cien pequeños pasos — visados, padrón, impuestos, sanidad — y solo funcionan en el orden correcto. He ayudado a otras personas a dar este salto y lo recorreré contigo de principio a fin.",
     "subQuiet": "Responde unas preguntas y construyo tu hoja de ruta personal: pasos reales, plazos reales, nada que no necesites.",
     "start": "Empecemos",
-    "greeting": "Hola, soy Lola. Iré construyendo tu hoja de ruta aquí mismo mientras hablamos: pasos reales, plazos reales, nada que no necesites."
+    "greeting": "Hola, soy Lola. Iré construyendo tu hoja de ruta aquí mismo mientras hablamos: pasos reales, plazos reales, nada que no necesites.",
+    "welcomeBack": "¡Bienvenido de nuevo! Tu hoja de ruta está al {{pct}}%. Sigamos donde lo dejamos."
   },
   "progress": {
     "question": "Pregunta {{n}} de ~{{total}}",

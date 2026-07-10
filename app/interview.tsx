@@ -15,7 +15,7 @@ import { regionLabel, REGION_OPTIONS } from '@/core/regions';
 import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
 import { saveProfile as saveProfileDb } from '@/core/profileDb';
-import { saveDraft, clearDraft } from '@/lib/interviewDraft';
+import { saveDraft, loadDraft, clearDraft } from '@/lib/interviewDraft';
 import { TEST_PERSONAS, type Persona } from '@/core/test-personas';
 import { askAnthropic } from '@/lib/lola';
 import { buildExtractionSystem, parseExtraction, type Extraction } from '@/lib/extractionPrompt';
@@ -283,9 +283,37 @@ export default function InterviewScreen() {
   // Fires interview_started on the FIRST answer, not on mount — since the interview auto-starts,
   // landing on the page is a pageview; engaging with a question is the real "started" signal.
   const startedCapturedRef = useRef(false);
+  // When the current question was shown — powers the per-question `ms` timing on
+  // interview_question_answered (the per-question funnel we previously reconstructed by hand).
+  const askedAtRef = useRef(Date.now());
 
   function start() {
     setStarted(true);
+
+    // Anonymous resume (Phase 0 intent, wired 2026-07-10 analytics audit): a returning visitor
+    // picks up where they left off instead of starting from zero. Signed-in profiles restore via
+    // the DB elsewhere; this covers the "no account needed" majority.
+    const draft = loadDraft();
+    if (draft) {
+      const restored: Profile = { ...draft.answers };
+      derive(restored);
+      const slot = nextSlot(restored);
+      if (slot) {
+        const pct = Math.round(Math.min(0.95, interviewCompleteness(restored).pct) * 100);
+        capture('interview_resumed', { completeness: pct, answered: interviewProgress(restored).answered });
+        setProfile(restored);
+        setPlanCount(buildPlan(restored).length);
+        setCurrentSlot(slot);
+        setTurns([
+          { role: 'lola', text: t('landing.welcomeBack', { pct }) },
+          { role: 'lola', text: questionText(slot) },
+        ]);
+        askedAtRef.current = Date.now();
+        return;
+      }
+      clearDraft(); // draft was already complete/stale — start clean
+    }
+
     const slot = nextSlot({});
     if (!slot) { setDone(true); return; }
     setCurrentSlot(slot);
@@ -295,6 +323,7 @@ export default function InterviewScreen() {
       { role: 'lola', text: t('landing.greeting') },
       { role: 'lola', text: questionText(slot) },
     ]);
+    askedAtRef.current = Date.now();
   }
 
   // Apply a resolved value for `slot` and move to the next question. Shared by the chip path
@@ -308,7 +337,9 @@ export default function InterviewScreen() {
   const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
 
   async function advance(
-    slot: Slot, value: unknown, ackP: Promise<string>, extras?: Record<string, unknown>, remainingSlots: Slot[] = [],
+    slot: Slot, value: unknown, ackP: Promise<string>,
+    mode: 'chip' | 'composer' | 'other' | 'typeahead',
+    extras?: Record<string, unknown>, remainingSlots: Slot[] = [],
   ) {
     if (!startedCapturedRef.current) {
       startedCapturedRef.current = true;
@@ -343,6 +374,23 @@ export default function InterviewScreen() {
     setOtherActive(false);
     setInput(''); // clear any typed text (e.g. region type-ahead) before the next question
 
+    // THE per-question funnel event (2026-07-10 analytics audit). One row per answered question:
+    // which question, HOW it was answered (chip/composer/other/typeahead), how long it took, what
+    // it visibly did to the roadmap, and the running completeness — so drop-off, friction, chip
+    // coverage, and the completeness-at-exit distribution all fall out of one event. Deliberately
+    // carries NO answer values (income/assets bands never leave the device via analytics).
+    const comp = interviewCompleteness(next_profile);
+    capture('interview_question_answered', {
+      field: slot.field,
+      input: mode,
+      ms: Date.now() - askedAtRef.current,
+      added_steps: delta.added.length,
+      removed_steps: delta.removed.length,
+      plan_steps: delta.after.length,
+      completeness: Math.round(comp.pct * 100),
+      two_pane: twoPane,
+    });
+
     const next = nextSlot(next_profile);
     if (!next) {
       await persist(next_profile);
@@ -358,13 +406,17 @@ export default function InterviewScreen() {
     const ack = await Promise.race([ackP, sleep(REACTION_WAIT_MS).then(() => '')]);
     const q = questionText(next);
     setTurns(prev => [...prev, { role: 'lola', text: ack ? `${ack} ${q}` : q }]);
+    askedAtRef.current = Date.now();
     saveDraft(next_profile, next.field); // anonymous resume (signed-in already persists to the DB)
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
   }
 
   // Chip tap: deterministic, no LLM. The chosen label is echoed as the user's turn. `extras`
   // lets a combined chip answer additional slots in the same tap (partner pair).
-  async function submitChip(value: unknown, label: string, extras?: Record<string, unknown>) {
+  async function submitChip(
+    value: unknown, label: string, extras?: Record<string, unknown>,
+    mode: 'chip' | 'typeahead' = 'chip',
+  ) {
     if (!currentSlot || loading) return;
     if (dictation.listening) dictation.cancel();
     setLoading(true);
@@ -373,7 +425,7 @@ export default function InterviewScreen() {
       const ackP = phraseAck(currentSlot, label).catch(() => '');
       const remainingSlots = extras
         ? SLOTS.filter(s => !(s.field in profile) && s.field !== currentSlot.field) : [];
-      await advance(currentSlot, value, ackP, extras, remainingSlots);
+      await advance(currentSlot, value, ackP, mode, extras, remainingSlots);
     } catch (e) {
       captureError(e instanceof Error ? e : new Error('interview chip turn failed'), {
         route: '/interview', field: currentSlot.field,
@@ -398,6 +450,11 @@ export default function InterviewScreen() {
     setTurns(prev => [...prev, { role: 'user', text }]);
 
     try {
+      // Which surface produced this free text: the "Other" escape hatch vs the normal composer.
+      // Other answers also log their raw text (chip-coverage refinement — user decision 2026-07-09;
+      // Other is never offered on sensitive slots, so no sensitive content can flow here).
+      const viaOther = otherActive;
+      if (viaOther) capture('interview_other_answered', { field: currentSlot.field, answer: text.slice(0, 200) });
       // The reaction runs concurrently with extraction, so it's normally resolved by the time
       // the next question is ready — the merged bubble costs no extra wait on composer turns.
       const ackP = phraseAck(currentSlot, text).catch(() => '');
@@ -417,7 +474,7 @@ export default function InterviewScreen() {
         return;
       }
 
-      await advance(currentSlot, result.value, ackP, result.extras, remainingSlots);
+      await advance(currentSlot, result.value, ackP, viaOther ? 'other' : 'composer', result.extras, remainingSlots);
     } catch (e) {
       // Extraction failed or timed out: own it, restore their answer so nothing is retyped,
       // and let them send again. The spinner must never be a destination (build-28 finding).
@@ -472,7 +529,7 @@ export default function InterviewScreen() {
       {!twoPane && started && (
         <TouchableOpacity
           style={styles.mobileStrip}
-          onPress={() => setSheetOpen(true)}
+          onPress={() => { capture('roadmap_sheet_opened', { plan_steps: planCount }); setSheetOpen(true); }}
           accessibilityRole="button"
           accessibilityLabel={t('roadmap.viewA11y')}
         >
@@ -545,7 +602,7 @@ export default function InterviewScreen() {
               {currentSlot?.allowOther && (
                 <TouchableOpacity
                   style={[styles.chip, styles.chipOther]}
-                  onPress={() => { setOtherActive(true); setTimeout(() => inputRef.current?.focus(), 50); }}
+                  onPress={() => { capture('interview_other_opened', { field: currentSlot!.field }); setOtherActive(true); setTimeout(() => inputRef.current?.focus(), 50); }}
                   disabled={loading}
                   accessibilityRole="button"
                 >
@@ -567,7 +624,7 @@ export default function InterviewScreen() {
                   placeholderTextColor={palette.muted}
                   onSubmitEditing={() => {
                     const m = regionSuggestions(input);
-                    if (m.length) submitChip(m[0].slug, m[0].label);
+                    if (m.length) submitChip(m[0].slug, m[0].label, undefined, 'typeahead');
                     else if (input.trim()) submitFreeText(input); // a city → extraction maps it
                   }}
                   onKeyPress={(e) => {
@@ -575,7 +632,7 @@ export default function InterviewScreen() {
                     if (Platform.OS === 'web' && ne.key === 'Enter') {
                       (e as { preventDefault?: () => void }).preventDefault?.();
                       const m = regionSuggestions(input);
-                      if (m.length) submitChip(m[0].slug, m[0].label);
+                      if (m.length) submitChip(m[0].slug, m[0].label, undefined, 'typeahead');
                       else if (input.trim()) submitFreeText(input);
                     }
                   }}
@@ -588,7 +645,7 @@ export default function InterviewScreen() {
                   <TouchableOpacity
                     key={r.slug}
                     style={styles.suggestion}
-                    onPress={() => submitChip(r.slug, r.label)}
+                    onPress={() => submitChip(r.slug, r.label, undefined, 'typeahead')}
                     disabled={loading}
                     accessibilityRole="button"
                   >
@@ -597,7 +654,7 @@ export default function InterviewScreen() {
                 ))}
                 <TouchableOpacity
                   style={[styles.suggestion, styles.suggestionMuted]}
-                  onPress={() => submitChip('not_sure', t('chips.notSure'))}
+                  onPress={() => submitChip('not_sure', t('chips.notSure'), undefined, 'typeahead')}
                   disabled={loading}
                   accessibilityRole="button"
                 >

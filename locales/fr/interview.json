@@ -5,7 +5,8 @@
     "sub": "S’installer en Espagne, ce sont cent petites étapes — visas, padrón, impôts, santé — qui ne fonctionnent que dans le bon ordre. J’ai aidé d’autres personnes à franchir le pas, et je ferai la route avec toi du début à la fin.",
     "subQuiet": "Réponds à quelques questions et je construis ta feuille de route personnelle : de vraies étapes, de vraies échéances, rien d’inutile.",
     "start": "C’est parti",
-    "greeting": "Bonjour, je suis Lola. Je vais construire votre feuille de route ici même, au fil de la conversation — des étapes réelles, des délais réels, rien d'inutile."
+    "greeting": "Bonjour, je suis Lola. Je vais construire votre feuille de route ici même, au fil de la conversation — des étapes réelles, des délais réels, rien d'inutile.",
+    "welcomeBack": "Content de vous revoir — votre feuille de route est à {{pct}}%. Reprenons où nous en étions."
   },
   "progress": {
     "question": "Question {{n}} sur ~{{total}}",

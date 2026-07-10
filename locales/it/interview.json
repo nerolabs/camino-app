@@ -5,7 +5,8 @@
     "sub": "Trasferirsi in Spagna sono cento piccoli passi — visti, padrón, tasse, sanità — e funzionano solo nell’ordine giusto. Ho aiutato altre persone a fare questo salto, e farò la strada con te dall’inizio alla fine.",
     "subQuiet": "Rispondi a qualche domanda e costruisco la tua roadmap personale: passi veri, scadenze vere, niente che non ti serva.",
     "start": "Cominciamo",
-    "greeting": "Ciao, sono Lola. Costruirò la tua roadmap proprio qui mentre parliamo: passi reali, scadenze reali, niente di superfluo."
+    "greeting": "Ciao, sono Lola. Costruirò la tua roadmap proprio qui mentre parliamo: passi reali, scadenze reali, niente di superfluo.",
+    "welcomeBack": "Bentornato — la tua roadmap è al {{pct}}%. Riprendiamo da dove eravamo."
   },
   "progress": {
     "question": "Domanda {{n}} di ~{{total}}",

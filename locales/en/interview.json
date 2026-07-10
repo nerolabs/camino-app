@@ -5,7 +5,8 @@
     "sub": "Moving to Spain is a hundred small steps — visas, padrón, taxes, healthcare — and they only work in the right order. I've helped others make this move, and I'll walk it with you the whole way.",
     "subQuiet": "Answer a few questions and I'll build your personal roadmap: real steps, real deadlines, nothing you don't need.",
     "start": "Let's get started",
-    "greeting": "Hola, I'm Lola. I'll build your roadmap right here as we talk — real steps, real deadlines, nothing you don't need."
+    "greeting": "Hola, I'm Lola. I'll build your roadmap right here as we talk — real steps, real deadlines, nothing you don't need.",
+    "welcomeBack": "Welcome back — your roadmap is {{pct}}% complete. Let's pick up where we left off."
   },
   "progress": {
     "question": "Question {{n}} of ~{{total}}",
