@@ -176,7 +176,7 @@ export default function InterviewScreen() {
 
   // When the keyboard opens/resizes, keep the conversation scrolled to the composer.
   useEffect(() => {
-    if (keyboardHeight > 0) setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 50);
+    if (keyboardHeight > 0) setTimeout(() => scrollRef.current?.scrollToEnd({ animated: false }), 50);
   }, [keyboardHeight]);
 
   // Auto-focus the answer box only when the composer is actually shown (free-text/date/Other) —
@@ -423,7 +423,6 @@ export default function InterviewScreen() {
       setFinalPhase(true);
       setTurns(prev => [...prev, { role: 'lola', text: ackF ? `${ackF}\n\n${fq}` : fq }]);
       saveDraft(next_profile, null); // resumable straight into the final note
-      setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
       return;
     }
     setCurrentSlot(next);
@@ -435,7 +434,6 @@ export default function InterviewScreen() {
     setTurns(prev => [...prev, { role: 'lola', text: ack ? `${ack}\n\n${q}` : q }]);
     askedAtRef.current = Date.now();
     saveDraft(next_profile, next.field); // anonymous resume (signed-in already persists to the DB)
-    setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
   }
 
   // Chip tap: deterministic, no LLM. The chosen label is echoed as the user's turn. `extras`
@@ -627,7 +625,10 @@ export default function InterviewScreen() {
         ref={scrollRef}
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
-        onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
+        // New turns snap flush-bottom in the same frame they render (animated:false) — the
+        // animated version let the question paint below the fold and glide up (user finding
+        // 2026-07-10 on device: 'doesn't feel good').
+        onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: false })}
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.column}>
