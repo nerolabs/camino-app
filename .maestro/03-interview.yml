@@ -16,7 +16,7 @@ appId: ${APP_ID}
     visible: "Hola, I'm Lola.*"        # the greeting bubble — the interview auto-started
     timeout: 20000
 - extendedWaitUntil:
-    visible: ".*when are you hoping to arrive.*"   # the arrival opener (deterministic static copy)
+    visible: ".*when are you planning to arrive.*"   # the arrival opener (deterministic static copy)
     timeout: 20000
 - tapOn: "Type your answer.*"
 - waitForAnimationToEnd:
