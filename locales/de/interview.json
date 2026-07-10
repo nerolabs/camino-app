@@ -105,6 +105,12 @@
     "complete": "{{pct}}% fertig",
     "empty": "Ihre Schritte erscheinen hier, während Sie antworten.",
     "steps_one": "{{count}} Schritt",
-    "steps_other": "{{count}} Schritte"
+    "steps_other": "{{count}} Schritte",
+    "added_one": "+{{count}} neuer Schritt",
+    "added_other": "+{{count}} neue Schritte",
+    "view": "Ansehen",
+    "close": "Fertig",
+    "viewA11y": "Ihren Fahrplan öffnen",
+    "closeA11y": "Den Fahrplan schließen"
   }
 }

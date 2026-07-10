@@ -29,17 +29,19 @@ function shortLabel(full: string): string {
 }
 
 export default function RoadmapPane({
-  profile, highlightIds, pct,
+  profile, highlightIds, pct, sheet = false,
 }: {
   profile: Profile;
   highlightIds: Set<string>;
   pct: number;
+  // Phase 3: the same pane doubles as the mobile bottom-sheet body — full width, no divider.
+  sheet?: boolean;
 }) {
   const { t } = useTranslation('interview');
   const plan = useMemo(() => buildPlan(profile), [profile]);
 
   return (
-    <View style={styles.pane}>
+    <View style={sheet ? styles.sheet : styles.pane}>
       <View style={styles.header}>
         <Text style={styles.title}>{t('roadmap.title')}</Text>
         <Text style={styles.meta}>
@@ -67,6 +69,7 @@ export default function RoadmapPane({
 
 const styles = StyleSheet.create({
   pane:      { width: 400, borderLeftWidth: 1, borderLeftColor: '#E6E1D8', backgroundColor: '#FBF9F5' },
+  sheet:     { flex: 1, width: '100%', backgroundColor: '#FBF9F5' },
   header:    { paddingHorizontal: 22, paddingTop: 22, paddingBottom: 14, borderBottomWidth: 1, borderBottomColor: '#EFEAE2' },
   title:     { fontFamily: 'Fraunces_600SemiBold', fontSize: 20, color: palette.indigo },
   meta:      { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.muted, marginTop: 4 },

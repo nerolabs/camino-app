@@ -105,6 +105,12 @@
     "complete": "{{pct}}% complete",
     "empty": "Your steps will appear here as you answer.",
     "steps_one": "{{count}} step",
-    "steps_other": "{{count}} steps"
+    "steps_other": "{{count}} steps",
+    "added_one": "+{{count}} new step",
+    "added_other": "+{{count}} new steps",
+    "view": "View",
+    "close": "Done",
+    "viewA11y": "Open your roadmap",
+    "closeA11y": "Close the roadmap"
   }
 }

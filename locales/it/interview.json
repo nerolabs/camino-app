@@ -105,6 +105,12 @@
     "complete": "{{pct}}% completato",
     "empty": "I tuoi passi appariranno qui man mano che rispondi.",
     "steps_one": "{{count}} passo",
-    "steps_other": "{{count}} passi"
+    "steps_other": "{{count}} passi",
+    "added_one": "+{{count}} nuovo passo",
+    "added_other": "+{{count}} nuovi passi",
+    "view": "Vedi",
+    "close": "Fatto",
+    "viewA11y": "Apri la tua roadmap",
+    "closeA11y": "Chiudi la roadmap"
   }
 }

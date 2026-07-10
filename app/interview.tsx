@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
-  StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator, useWindowDimensions,
+  StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator, useWindowDimensions, Modal,
 } from 'react-native';
 import NavBar from '@/components/NavBar';
 import RoadmapPane from '@/components/RoadmapPane';
@@ -146,6 +146,11 @@ export default function InterviewScreen() {
   // Ids of roadmap steps the latest answer just added — the live-roadmap pane highlights them,
   // then they settle (cleared on a timer). See docs/INTERVIEW-REDESIGN.md, Phase 2.
   const [highlightIds, setHighlightIds] = useState<Set<string>>(new Set());
+  // Phase 3 (mobile): the narrow layout can't show the two-pane, so a compact strip carries the
+  // living-roadmap signal — total steps + "+N new" after each answer — and opens a full sheet.
+  const [planCount, setPlanCount] = useState(0);
+  const [lastAdded, setLastAdded] = useState(0);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const { width } = useWindowDimensions();
   const twoPane = width >= 900; // web two-pane needs room; phones/tablets stay single-column
   const scrollRef = useRef<ScrollView>(null);
@@ -332,6 +337,8 @@ export default function InterviewScreen() {
     // clearing it if that answer added nothing).
     const delta = diffPlans(buildPlan(profile), buildPlan(next_profile));
     setHighlightIds(new Set(delta.added.map(o => o.id)));
+    setPlanCount(delta.after.length);
+    setLastAdded(delta.added.length);
     setProfile(next_profile);
     setOtherActive(false);
     setInput(''); // clear any typed text (e.g. region type-ahead) before the next question
@@ -461,6 +468,22 @@ export default function InterviewScreen() {
             </ScrollView>
           )}
         </View>
+      )}
+      {!twoPane && started && (
+        <TouchableOpacity
+          style={styles.mobileStrip}
+          onPress={() => setSheetOpen(true)}
+          accessibilityRole="button"
+          accessibilityLabel={t('roadmap.viewA11y')}
+        >
+          <Text style={styles.mobileStripText}>
+            {t('roadmap.title')} · {t('roadmap.steps', { count: planCount })}
+          </Text>
+          {lastAdded > 0 && (
+            <Text style={styles.mobileStripNew}>{t('roadmap.added', { count: lastAdded })}</Text>
+          )}
+          <Text style={styles.mobileStripView}>{t('roadmap.view')} ›</Text>
+        </TouchableOpacity>
       )}
       <View style={twoPane ? styles.twoPaneRow : styles.onePane}>
         <View style={twoPane ? styles.leftPane : styles.onePane}>
@@ -648,6 +671,18 @@ export default function InterviewScreen() {
           <RoadmapPane profile={profile} highlightIds={highlightIds} pct={progress} />
         )}
       </View>
+
+      {/* Phase 3: the mobile roadmap sheet — same pane, full width, slide-up. */}
+      <Modal visible={sheetOpen} animationType="slide" onRequestClose={() => setSheetOpen(false)}>
+        <View style={styles.sheetWrap}>
+          <View style={styles.sheetHeader}>
+            <TouchableOpacity onPress={() => setSheetOpen(false)} accessibilityRole="button" accessibilityLabel={t('roadmap.closeA11y')}>
+              <Text style={styles.sheetClose}>✕ {t('roadmap.close')}</Text>
+            </TouchableOpacity>
+          </View>
+          <RoadmapPane profile={profile} highlightIds={highlightIds} pct={progress} sheet />
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -657,6 +692,17 @@ const styles = StyleSheet.create({
   twoPaneRow:  { flex: 1, flexDirection: 'row' },
   onePane:     { flex: 1 },
   leftPane:    { flex: 1, minWidth: 0 },
+  mobileStrip: {
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    paddingHorizontal: 16, paddingVertical: 10,
+    borderBottomWidth: 1, borderBottomColor: '#EFEAE2', backgroundColor: '#FBF9F5',
+  },
+  mobileStripText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.indigo },
+  mobileStripNew:  { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, color: palette.cal, backgroundColor: palette.olive, borderRadius: 10, paddingHorizontal: 8, paddingVertical: 2, overflow: 'hidden' },
+  mobileStripView: { marginLeft: 'auto', fontFamily: 'HankenGrotesk_500Medium', fontSize: 13, color: palette.cobalt },
+  sheetWrap:   { flex: 1, backgroundColor: '#FBF9F5' },
+  sheetHeader: { flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 16, paddingTop: 14, paddingBottom: 4 },
+  sheetClose:  { fontFamily: 'HankenGrotesk_500Medium', fontSize: 14, color: palette.cobalt },
   devStrip:    { paddingHorizontal: 16, paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: '#EFEAE2', backgroundColor: '#FAF7F2', gap: 6 },
   devRow:      { gap: 8, paddingVertical: 4 },
   personaChip: { backgroundColor: '#FFFFFF', borderRadius: 14, borderWidth: 1, borderColor: '#E0DCD4', paddingVertical: 6, paddingHorizontal: 12 },

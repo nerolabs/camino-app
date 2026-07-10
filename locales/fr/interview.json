@@ -105,6 +105,12 @@
     "complete": "{{pct}}% terminé",
     "empty": "Vos étapes apparaîtront ici au fil de vos réponses.",
     "steps_one": "{{count}} étape",
-    "steps_other": "{{count}} étapes"
+    "steps_other": "{{count}} étapes",
+    "added_one": "+{{count}} nouvelle étape",
+    "added_other": "+{{count}} nouvelles étapes",
+    "view": "Voir",
+    "close": "Fermer",
+    "viewA11y": "Ouvrir votre feuille de route",
+    "closeA11y": "Fermer la feuille de route"
   }
 }

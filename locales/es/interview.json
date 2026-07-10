@@ -105,6 +105,12 @@
     "complete": "{{pct}}% completado",
     "empty": "Tus pasos aparecerán aquí a medida que respondas.",
     "steps_one": "{{count}} paso",
-    "steps_other": "{{count}} pasos"
+    "steps_other": "{{count}} pasos",
+    "added_one": "+{{count}} paso nuevo",
+    "added_other": "+{{count}} pasos nuevos",
+    "view": "Ver",
+    "close": "Listo",
+    "viewA11y": "Abrir tu hoja de ruta",
+    "closeA11y": "Cerrar la hoja de ruta"
   }
 }
