@@ -37,7 +37,7 @@
     "turnFailed": "Pardon — ça a pris plus de temps que prévu. Ta réponse est toujours dans le champ ; tu peux me la renvoyer ?"
   },
   "static": {
-    "speaks_spanish": "Au début, on s'en sort en anglais, mais la vraie vie en Espagne se passe en espagnol — autant connaître votre point de départ. Où en êtes-vous avec l'espagnol ?",
+    "speaks_spanish": "Quelle belle aventure, ce départ pour l'Espagne ! Au début, on se débrouille en français ou en anglais, mais la vraie vie en Espagne se passe en espagnol — autant connaître votre point de départ. Où en êtes-vous avec l'espagnol ?",
     "nationalities": "Vos passeports déterminent la route — visas, démarches et même les délais de nationalité en dépendent. De quels pays chaque membre du foyer est-il citoyen ?",
     "work_situation": "Votre façon de gagner votre vie oriente la voie de résidence adaptée. Quelle sera votre situation professionnelle une fois installé ?",
     "employer_country_is_foreign": "Pour les salariés à distance, cela oriente la voie du visa. Votre employeur est-il basé hors d'Espagne ?",
