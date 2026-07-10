@@ -19,7 +19,7 @@ export function initAnalytics() {
   });
   // Stamped on every event; `interview_version: 2` = the living-roadmap redesign — parity with
   // web so iOS events segment correctly in pre/post comparisons.
-  posthog.register({ environment: APP_ENV, interview_version: 2 });
+  posthog.register({ environment: APP_ENV, interview_version: 2, landing_version: 2 });
 }
 
 // props are JSON-serializable analytics values in practice; cast to satisfy PostHog's JsonType.

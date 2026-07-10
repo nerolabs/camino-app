@@ -13,6 +13,7 @@ import { siteJsonLd } from '@/core/guide-content';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import StoreBadges from '@/components/StoreBadges';
+import HomeSections from '@/components/landing/HomeSections';
 
 // Labels are i18n keys (common:home.photos.*) so captions localize with the rest of the chrome.
 const PHOTOS = [
@@ -123,6 +124,10 @@ export default function LandingPage() {
           <Text style={styles.stripLink}>{t('home.stripLink')}</Text>
         </Text>
       </TouchableOpacity>
+
+      {/* Variant C won the 2026-07-10 landing lab: how-it-works now lives HERE as a live demo,
+          followed by proof, trust, and a final CTA (docs/LANDING-REDESIGN.md). */}
+      <HomeSections />
 
       <StoreBadges />
 

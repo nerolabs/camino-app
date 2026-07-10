@@ -77,7 +77,7 @@ a seeded staging test user (magic-link token → session → storageState; the s
    arrival opener (no button since the 2026-07-10 redesign) → a typed date round-trips the real
    `/api/lola` → the Spanish-level chips arrive.
 3. **Plan empty state (signed out)** — /plan → "No roadmap yet" + footer; a real page, not a crash.
-4. **Content pages load** — how-it-works, the how-i-was-built essay, the build log.
+4. **Content pages load** — /how-it-works redirects home (content folded into the landing, 2026-07-10) where the demo section is asserted; the how-i-was-built essay; the build log.
 5. **Sample plan** — /sample-plan renders the full read-only roadmap (Susan & Tom), phase headers,
    the interview CTA, and signature obligations (non-lucrative visa, empadronamiento).
 6. **SEO surface** — robots.txt is open + points at the sitemap; sitemap.xml lists /guide pages;

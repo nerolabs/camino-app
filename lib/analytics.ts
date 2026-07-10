@@ -36,7 +36,7 @@ export function initAnalytics() {
   // Stamped on every event. `interview_version: 2` = the living-roadmap redesign (chips, live
   // pane, arrival-first). Events missing the property are the pre-redesign bundle — this keeps
   // pre/post comparisons honest when stale cached clients keep reporting after the deploy.
-  posthog.register({ environment: APP_ENV, interview_version: 2 });
+  posthog.register({ environment: APP_ENV, interview_version: 2, landing_version: 2 });
   ready = true;
 }
 

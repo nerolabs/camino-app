@@ -16,7 +16,8 @@ export function GET(request: Request): Response {
     '/privacy', '/terms', '/aviso-legal',
     ...CATALOG.map(o => `/guide/${o.id}`),
   ];
-  const englishOnly = ['/how-it-works', '/how-i-was-built', '/how-i-was-built/log', '/how-i-was-built/roadmap'];
+  // /how-it-works redirects home since 2026-07-10 (content folded into the landing page)
+  const englishOnly = ['/how-i-was-built', '/how-i-was-built/log', '/how-i-was-built/roadmap'];
   const urls = [
     ...localized,
     ...englishOnly,

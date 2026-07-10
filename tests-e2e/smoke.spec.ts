@@ -49,8 +49,11 @@ test('plan (signed out): real page with nav, footer, and the empty state', async
 
 test('how-it-works, the unlisted blog, and the build log load', async ({ page }) => {
   const errors = trackErrors(page);
+  // how-it-works folded into the landing page (2026-07-10): the old URL redirects home,
+  // where the content now lives as the live demo section.
   await page.goto('/how-it-works');
-  await expect(page).toHaveURL(/how-it-works/);
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByText('Watch a roadmap build itself.')).toBeVisible();
   await page.goto('/how-i-was-built');
   await expect(page.getByText('How I was built')).toBeVisible();
   await page.goto('/how-i-was-built/log');

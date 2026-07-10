@@ -567,6 +567,16 @@ const ROWS: Row[] = [
       'Measurement has to survive the change it measures: every analytics event is now stamped with the interview version, because a redesign that also redefines its own metrics can tell itself any story it likes.',
     ],
   },
+  {
+    feature: 'The homepage learns to show, not tell',
+    date: '10 Jul 2026',
+    work: 'The homepage and the "how it works" page merged into one scrolling story — but not by guessing. Four different homepage philosophies were built as local prototypes and walked side by side: one where the page IS the first interview question, one that demos the product in the hero, one that leads with the finished roadmap, and one that keeps the postcard warmth of Spain up top with the demo one scroll below. The postcard won. The new page keeps the rotating photos, then shows a roadmap literally building itself as questions get answered, then the proof: a real sample roadmap and the promise that matters — 100% free, no catch.',
+    decisions: [
+      'Show, don\'t tell: the old page needed three paragraphs to explain the product; the new one plays a fifteen-second loop of it working. The redesigned interview made the mechanism watchable, so the marketing gets to stop describing.',
+      'Emotion opens the door, mechanics close: people move to Spain with their hearts, so Spain stays above the fold and the machinery lives one scroll down — where the skeptics actually are.',
+      'Variants were disposable by design: built outside version control, compared with real hands, and only the winner was ever committed.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {
