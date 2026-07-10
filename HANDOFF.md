@@ -5,7 +5,16 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-Last updated: 2026-07-10 (RELEASED: living-roadmap redesign LIVE on production web at 23d917e —
+Last updated: 2026-07-10 night (SECOND release wave: landing v2 + wife-test batch LIVE on web at
+b38ff3c; iOS build 34 submitting — supersedes 32/33). Highlights since the morning note: six
+user-testing fixes (not-sure chips, reaction spacing, final open note, EMAIL MAGIC LINKS via
+/auth/confirm token_hash flow + 24h OTP on both Supabase projects, snap-flush scroll, housing pair
+merged); the "+N steps" pill promoted from the landing demo into the real interview; cobalt focus
+ring on text fields (amber read as error); and LANDING V2 — home + how-it-works merged into one
+scrolling story (variant C won a 4-way local lab; docs/LANDING-REDESIGN.md is the record;
+landing_version: 2 stamped). Dashboard: PostHog 808581. Prior morning note follows.
+
+Prior note — 2026-07-10 (RELEASED: living-roadmap redesign LIVE on production web at 23d917e —
 6/6 public E2E green against the live site; e2e-ios gate green (run 29090864671, incl. the
 rewritten interview flow); **iOS build 32** cut with --auto-submit (Build ID 3e45ab32, ASC
 6786412055) — supersedes build 31 as the TestFlight/store candidate. v2 analytics flowing
