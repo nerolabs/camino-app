@@ -13,12 +13,12 @@ fixes landed (hamburger cleanup, guide→interview greeting restored determinist
 rewrite ×5, transcript-aware phraseAck, Dynamic-Island inset on the roadmap sheet). User verified
 all four web-visible fixes live the same night. Commits 40e77f3 → 8556921, all pushed.
 
-**FIRST MORNING ACTION — verify build 35 on the phone.** It was cut ~00:55 with `--auto-submit`
-after the e2e-ios gate went green (run 29128387898); the user was asleep before it finished.
-Check `eas build:list` / TestFlight: if it FAILED overnight, diagnose + re-kick (autoIncrement
-burns numbers on failures). On the device, the two native-only items to verify: **(a) the roadmap
-sheet's "✕ Done" clears the Dynamic Island; (b) voice defaults OFF.** Reactions + greeting ride
-along (shared code, already web-verified).
+**FIRST MORNING ACTION — verify build 35 on the phone.** CONFIRMED SHIPPED before session close:
+build number 35 (App Version 1.0.0, Build ID d3cd4e39, cut from 8556921 after e2e-ios gate green,
+run 29128387898), **submitted successfully to App Store Connect at ~01:35** — Apple processing was
+the only step left overnight, so it should be sitting in TestFlight by morning. On the device, the
+two native-only items to verify: **(a) the roadmap sheet's "✕ Done" clears the Dynamic Island;
+(b) voice defaults OFF.** Reactions + greeting ride along (shared code, already web-verified).
 
 **The night's drama, for context (already fixed, lessons on record):**
 1. **phraseAck went haywire on first prod contact** — passing the transcript made Haiku think it
