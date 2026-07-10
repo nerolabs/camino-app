@@ -4,14 +4,18 @@
 added or removed. Forward-looking ideas (tests we *want*) live in `docs/BUILD.md` → "Growing E2E
 coverage"; this file is the honest picture of **current** coverage.
 
-Last updated: 2026-07-10 (living-roadmap release day: 216 passing vitest + 10 opt-in — plan-delta, completeness, draft-resume, ordering/chips, not-sure sentinel, income checks, language-classes; smoke E2E reworked for the auto-start interview + landing v2; Maestro 03 now LLM-free to the send).
+Last updated: 2026-07-10 night (night-feedback batch: +1 public smoke test — guide→interview
+greeting context regression; smoke #2 copy updated for the new arrival-date opener). Earlier same
+day: living-roadmap release — 216 passing vitest + 10 opt-in (plan-delta, completeness,
+draft-resume, ordering/chips, not-sure sentinel, income checks, language-classes); smoke E2E
+reworked for the auto-start interview + landing v2; Maestro 03 now LLM-free to the send.
 
 Layers, and when they run:
 - **Unit / integration** (vitest, `tests/`) — deterministic, offline. Runs in `deploy.sh` and CI
   on **every push**. This is the fast safety net.
 - **Web E2E** (Playwright, `tests-e2e/`) — real browser vs a **deployed** env. Runs
   **automatically on every deploy** (`deploy.sh`, against the unique URL). Staging = all 12;
-  production = the 6 public only.
+  production = the 7 public only.
 - **Mobile E2E** (Maestro, `.maestro/`) — iOS simulator. Runs on **big builds only** (manual
   `e2e-ios` workflow before a store-candidate build).
 
@@ -66,21 +70,24 @@ weekly via mocked-Supabase specs — the audit's gap, closed 2026-07-05). Remain
 
 ---
 
-## 2. Web E2E user flows (Playwright) — 11 tests
+## 2. Web E2E user flows (Playwright) — 12 tests
 
 Runs against a deployed env on every deploy. **Public** = signed-out, no secrets. **Authed** =
 a seeded staging test user (magic-link token → session → storageState; the seed refuses prod).
 
-### Public (6)
+### Public (7)
 1. **Home renders** — hero, "Build my free roadmap" CTA, footer disclaimer; zero uncaught JS errors.
 2. **Interview auto-starts + one live LLM turn** — /interview opens straight into the greeting +
    arrival opener (no button since the 2026-07-10 redesign) → a typed date round-trips the real
    `/api/lola` → the Spanish-level chips arrive.
-3. **Plan empty state (signed out)** — /plan → "No roadmap yet" + footer; a real page, not a crash.
-4. **Content pages load** — /how-it-works redirects home (content folded into the landing, 2026-07-10) where the demo section is asserted; the how-i-was-built essay; the build log.
-5. **Sample plan** — /sample-plan renders the full read-only roadmap (Susan & Tom), phase headers,
+3. **Guide→interview greeting context (regression, 2026-07-10)** — /interview?from=choose-visa-type
+   → the greeting names the guide ("I see you've been reading about…"); guards the context the
+   guide CTA carries, which silently vanished once when the LLM opener became static copy.
+4. **Plan empty state (signed out)** — /plan → "No roadmap yet" + footer; a real page, not a crash.
+5. **Content pages load** — /how-it-works redirects home (content folded into the landing, 2026-07-10) where the demo section is asserted; the how-i-was-built essay; the build log.
+6. **Sample plan** — /sample-plan renders the full read-only roadmap (Susan & Tom), phase headers,
    the interview CTA, and signature obligations (non-lucrative visa, empadronamiento).
-6. **SEO surface** — robots.txt is open + points at the sitemap; sitemap.xml lists /guide pages;
+7. **SEO surface** — robots.txt is open + points at the sitemap; sitemap.xml lists /guide pages;
    the auto `_sitemap` route stays 404.
 
 ### Authed (5, + a setup step that proves the seeded session loads the roadmap)
@@ -185,7 +192,7 @@ actually are. "Covered" means automated; honest exceptions are named, not hidden
 | 2 | Email-me-my-roadmap → magic link → signed-in roadmap | `auth.setup.ts` proves token→session→roadmap per deploy | **PARTIAL** | Real email delivery + `pending_profile` adoption are manual-only; adoption belongs in a handler integration test |
 | 3 | Living-plan ops (done/undo, re-flow, re-model honesty) | Authed E2E #9–10 + engine anchor-re-flow unit + `plansDiffer` units | **GOOD** | Real re-model E2E ("we had a baby" → school step) still planned, §4B7 |
 | 4 | This-week · PDF · region rendering | This-week: unit + authed E2E #8 ✓. PDF: `reportHtml` units + render snapshot. Region: units + seeded `madrid` fixture | **PARTIAL** | No E2E asserts the PDF export button or the regional note on the page (§4B8–9, cheap) |
-| 5 | Guides/SEO (60 pages, sitemap, robots, JSON-LD) | Prose units + digit-lint; smoke #4/#6 (robots, sitemap, content pages) | **GOOD** | A single guide-page E2E (source link + CTA) is a cheap add, §4B10 |
+| 5 | Guides/SEO (60 pages, sitemap, robots, JSON-LD) | Prose units + digit-lint; smoke #5/#7 (robots, sitemap, content pages) | **GOOD** | A single guide-page E2E (source link + CTA) is a cheap add, §4B10 |
 | 6 | Email loop (welcome-once, digest, unsubscribe, nudge) | Digest logic units (6) + unsubscribe-token unit + render snapshots | **PARTIAL** | The welcome-once dedupe (a real 3×-send bug) and the route handlers have NO regression test — top of gap list §4D |
 | 7 | Account deletion · feedback route | Nothing automated (each manually E2E-verified once) | **GAP** | Honest exception for now; right layer = handler integration tests with mocked Supabase/Resend, §4D |
 | 8 | API abuse guards (caps, rate limits, CORS) | `api-guard` units (8) + contract tests now on every staging deploy | **GOOD** | Durable 429 burst verified manually once; deliberately not per-deploy (bursting our own API each deploy is self-harm) — documented exception |

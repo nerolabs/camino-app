@@ -27,7 +27,7 @@ test('interview auto-starts; a typed answer round-trips /api/lola and advances (
   // Living-roadmap redesign (2026-07-10): no start button — the page opens straight into the
   // conversation with Lola's greeting and the arrival-date opener.
   await expect(page.getByText("Hola, I'm Lola", { exact: false })).toBeVisible();
-  await expect(page.getByText(/when are you hoping to arrive/i)).toBeVisible();
+  await expect(page.getByText(/when are you planning to arrive/i)).toBeVisible();
   await expect(page.getByText(/voice (on|off)/i)).toBeVisible();
   // One real /api/lola round-trip: answer the date; the next question (Spanish level) should
   // arrive with its chips. Give the extraction + the reaction race room.
@@ -36,6 +36,16 @@ test('interview auto-starts; a typed answer round-trips /api/lola and advances (
   await composer.press('Enter');
   await expect(page.getByText(/your Spanish/i).last()).toBeVisible({ timeout: 30_000 });
   await expect(page.getByText('None yet')).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('arriving from a guide page personalizes the greeting (regression 2026-07-10)', async ({ page }) => {
+  // The guide CTA carries ?from=<guide-id>; the greeting must name the guide. This context
+  // silently vanished once before, when the LLM opener became static copy — hence this test.
+  const errors = trackErrors(page);
+  await page.goto('/interview?from=choose-visa-type');
+  await expect(page.getByText(/I see you've been reading about/i)).toBeVisible();
+  await expect(page.getByText(/when are you planning to arrive/i)).toBeVisible();
   expect(errors).toEqual([]);
 });
 
