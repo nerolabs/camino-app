@@ -294,27 +294,16 @@ export default function InterviewScreen() {
 
   // Apply a resolved value for `slot` and move to the next question. Shared by the chip path
   // (deterministic) and the free-text path (LLM-extracted). `extras` only arrives from extraction.
-  // Fire a contextual reaction to `userText` and MERGE it into `questionTurn` when it arrives, so
-  // Lola's turn reads as one bubble ("Got it. <next question>"). Non-blocking and best-effort — the
-  // question is already on screen instantly; any error/slowness just leaves it as the bare question.
-  function reactTo(slot: Slot, userText: string, questionTurn: Turn) {
-    const question = questionTurn.text;
-    phraseAck(slot, userText)
-      .then(ack => {
-        if (!ack) return;
-        setTurns(prev => {
-          const idx = prev.lastIndexOf(questionTurn); // reference to THIS turn's question
-          if (idx < 0) return prev;
-          const copy = [...prev];
-          copy[idx] = { role: 'lola', text: `${ack} ${question}` };
-          return copy;
-        });
-      })
-      .catch(() => { /* reaction is decorative — never surface a failure */ });
-  }
+  // How long the merged reaction may hold up the next question. The ack runs CONCURRENTLY with
+  // extraction on composer turns (so it's usually already resolved); on chip turns this is the
+  // whole wait, covered by the typing indicator. Past the cap the question ships bare and the
+  // reaction is DROPPED — a painted bubble never mutates (user finding 2026-07-10: the late
+  // text-swap read as jarring).
+  const REACTION_WAIT_MS = 2000;
+  const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
 
   async function advance(
-    slot: Slot, value: unknown, userText: string, extras?: Record<string, unknown>, remainingSlots: Slot[] = [],
+    slot: Slot, value: unknown, ackP: Promise<string>, extras?: Record<string, unknown>, remainingSlots: Slot[] = [],
   ) {
     if (!startedCapturedRef.current) {
       startedCapturedRef.current = true;
@@ -358,9 +347,10 @@ export default function InterviewScreen() {
       return;
     }
     setCurrentSlot(next);
-    const questionTurn: Turn = { role: 'lola', text: questionText(next) };
-    setTurns(prev => [...prev, questionTurn]);
-    reactTo(slot, userText, questionTurn); // non-blocking contextual reaction, slots in above it
+    // One stable paint: wait (bounded) for the reaction, then render the merged bubble once.
+    const ack = await Promise.race([ackP, sleep(REACTION_WAIT_MS).then(() => '')]);
+    const q = questionText(next);
+    setTurns(prev => [...prev, { role: 'lola', text: ack ? `${ack} ${q}` : q }]);
     saveDraft(next_profile, next.field); // anonymous resume (signed-in already persists to the DB)
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
   }
@@ -373,9 +363,10 @@ export default function InterviewScreen() {
     setLoading(true);
     setTurns(prev => [...prev, { role: 'user', text: label }]);
     try {
+      const ackP = phraseAck(currentSlot, label).catch(() => '');
       const remainingSlots = extras
         ? SLOTS.filter(s => !(s.field in profile) && s.field !== currentSlot.field) : [];
-      await advance(currentSlot, value, label, extras, remainingSlots);
+      await advance(currentSlot, value, ackP, extras, remainingSlots);
     } catch (e) {
       captureError(e instanceof Error ? e : new Error('interview chip turn failed'), {
         route: '/interview', field: currentSlot.field,
@@ -400,6 +391,9 @@ export default function InterviewScreen() {
     setTurns(prev => [...prev, { role: 'user', text }]);
 
     try {
+      // The reaction runs concurrently with extraction, so it's normally resolved by the time
+      // the next question is ready — the merged bubble costs no extra wait on composer turns.
+      const ackP = phraseAck(currentSlot, text).catch(() => '');
       const remainingSlots = SLOTS.filter(s => !(s.field in profile) && s.field !== currentSlot.field);
       const result = await extractAnswer(currentSlot, text, turns, remainingSlots);
 
@@ -416,7 +410,7 @@ export default function InterviewScreen() {
         return;
       }
 
-      await advance(currentSlot, result.value, text, result.extras, remainingSlots);
+      await advance(currentSlot, result.value, ackP, result.extras, remainingSlots);
     } catch (e) {
       // Extraction failed or timed out: own it, restore their answer so nothing is retyped,
       // and let them send again. The spinner must never be a destination (build-28 finding).
