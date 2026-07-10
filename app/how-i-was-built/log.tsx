@@ -557,6 +557,16 @@ const ROWS: Row[] = [
       'Build credits are spent deliberately: the gate goes green first, then one build, verified on device before it counts as done.',
     ],
   },
+  {
+    feature: 'The interview becomes a living roadmap',
+    date: '10 Jul 2026',
+    work: 'The first strangers to use Get Camino told us — through the analytics, not in words — exactly where it lost them: the interview. The worst question was the second one asked, finishing took twice the promised time, and most people who started never saw a roadmap at all. So the interview was rebuilt around one idea: show the value while you answer, not after. Your roadmap now builds live beside the conversation — every answer visibly adds steps (on a phone, a step counter grows as you go). Most questions became single taps instead of typed sentences, every question now says why it\'s being asked, and the opener is the question every mover is already asking themselves: when? Fewer questions, too — an audit traced each one to the steps it unlocks, merged two pairs into single taps, and deleted one that turned out to feed nothing at all. And if you leave halfway, your progress now waits for you when you come back.',
+    decisions: [
+      'Every question must earn its place. The audit traced each question to the roadmap steps it decides; one had quietly been feeding nothing and was deleted, and the income question was kept only by giving it a real job — warning you, conservatively, when a plan looks short of a visa route\'s income requirement.',
+      'Taps beat typing. Questions with fixed answers became buttons; the AI now works only where open answers genuinely need it — and "something else" is always one tap away when the buttons don\'t fit.',
+      'Measurement has to survive the change it measures: every analytics event is now stamped with the interview version, because a redesign that also redefines its own metrics can tell itself any story it likes.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {
