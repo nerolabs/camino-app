@@ -577,6 +577,16 @@ const ROWS: Row[] = [
       'Variants were disposable by design: built outside version control, compared with real hands, and only the winner was ever committed.',
     ],
   },
+  {
+    feature: 'The night-feedback batch: Lola gets her charm back',
+    date: '10 Jul 2026',
+    work: 'An evening testing pass by the builder and his wife produced six findings, fixed the same night. The biggest: toning down Lola\'s reactions earlier that day had gone too far — she\'d stopped noticing things. Her reactions now see the whole conversation again, so she can connect your answers ("the whole family is coming, dog included"), while the hard rule stands: she may never state a fact, number, or deadline outside your sourced roadmap. Also: arriving from a guide page is acknowledged again ("I see you\'ve been reading about the padrón…"), the first question opens with the move itself instead of a clever framing, voice is now opt-in rather than on-by-default, a stale menu item went away, and the roadmap sheet no longer hides its close button under the iPhone\'s Dynamic Island.',
+    decisions: [
+      'Warmth needs memory: a reaction that can\'t see earlier answers can only be generic. The fix wasn\'t "write warmer prompts" — it was giving the bounded surface the transcript.',
+      'Personalization without the LLM: the guide-page greeting is a deterministic template around a localized title — the charm of context, none of the variance.',
+      'Voice flipped to opt-in: taps made turns fast enough that auto-playing audio read as noise, not warmth.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

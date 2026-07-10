@@ -6,6 +6,7 @@
     "subQuiet": "Rispondi a qualche domanda e costruisco la tua roadmap personale: passi veri, scadenze vere, niente che non ti serva.",
     "start": "Cominciamo",
     "greeting": "Ciao, sono Lola. Costruirò la tua roadmap proprio qui mentre parliamo: passi reali, scadenze reali, niente di superfluo.",
+    "fromGuide": "Vedo che ti stavi informando su {{guide}} — la tua roadmap coprirà quello e tutto ciò che gli sta intorno.",
     "welcomeBack": "Bentornato — la tua roadmap è al {{pct}}%. Riprendiamo da dove eravamo."
   },
   "progress": {
@@ -47,7 +48,7 @@
     "partner_is_married": "La Spagna tratta diversamente le relazioni registrate nelle pratiche familiari. La vostra è registrata legalmente? Valgono sia il matrimonio sia l'unione civile.",
     "has_children": "I bambini portano l'iscrizione a scuola nel piano. Vengono bambini con te?",
     "intends_long_stay": "Quanta parte dell'anno passerai qui cambia il tuo quadro fiscale e quali registrazioni servono. Starai in Spagna più di sei mesi all'anno?",
-    "arrival_date": "Che emozione trasferirsi in Spagna! Partiamo da dove probabilmente sei già con la testa: più o meno quando conti di arrivare? Basta il mese — àncora tutte le scadenze della tua roadmap.",
+    "arrival_date": "Che emozione trasferirsi in Spagna! Partiamo dalla domanda più importante: quando pensi di arrivare? Mi basta un mese indicativo — àncora tutte le scadenze della tua roadmap.",
     "has_spanish_address": "E ora, dove atterrerai? Un indirizzo sblocca l'iscrizione in comune — il padrón — e comprare porta il suo blocco di passi. Qual è il tuo piano casa?",
     "owns_or_drives": "Guidare qui può voler dire convertire la patente — o un esame spagnolo — a seconda del paese. Qualcuno in famiglia guiderà?",
     "owns_property_in_spain": "Un immobile porta il suo blocco di passi — notaio, registro, tasse. Possiedi — o pensi di comprare — un immobile in Spagna?",

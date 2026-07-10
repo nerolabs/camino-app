@@ -12,6 +12,9 @@ import { interviewCompleteness } from '@/core/completeness';
 import { buildPlan } from '@/core/engine-controller';
 import { diffPlans } from '@/core/plan-delta';
 import { regionLabel, REGION_OPTIONS } from '@/core/regions';
+import { guideById, shortClause } from '@/core/guide-content';
+import { displayTitle } from '@/lib/catalogTitles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
 import { saveProfile as saveProfileDb } from '@/core/profileDb';
@@ -79,14 +82,19 @@ official sources. Never invent an answer for them. Plain text only.${languageDir
 // 2026-07-10). Runs async and NON-BLOCKING: the next question is already on screen (static/instant);
 // this reaction slots in above it a beat later, or silently no-ops on any error/slowness. Like
 // phraseClarify it may NOT state facts/numbers/deadlines/rules (invariant 3) — just warmth.
-async function phraseAck(slot: Slot, userText: string): Promise<string> {
+// It DOES see the transcript (night finding 2026-07-10: without it the reactions went bland —
+// it couldn't do "your wife AND the dog — the whole pack is coming!"), and gets room for
+// 1–2 sentences rather than a clipped 10-word ack.
+async function phraseAck(slot: Slot, userText: string, turns: Turn[]): Promise<string> {
   const raw = await askAnthropic({
     model: 'claude-haiku-4-5-20251001',
-    max_tokens: 40,
+    max_tokens: 120,
     system: `You are Lola, a warm relocation guide helping someone move to Spain. They were asked about
 "${slot.prompt_hint}" and answered: "${userText}".
-React in ONE brief, natural sentence — at most 10 words. Warm but UNDERSTATED: a light acknowledgement,
-never gushing, never over-complimentary ("Got it", "Nice", "Makes sense", "Perfect"). No emoji.
+${transcriptOf(turns) ? `Conversation so far:\n${transcriptOf(turns)}\n` : ''}
+React in one or two short, natural sentences — warm, playful when it fits, never gushing or
+over-complimentary. When it's natural, connect this answer to something they said earlier in the
+conversation; otherwise a light acknowledgement is plenty. No emoji.
 HARD RULES: do NOT ask a question. Do NOT state any legal fact, deadline, income figure, cost, number,
 or eligibility rule — those live in their roadmap. Plain text.${languageDirective()}`,
     messages: [{ role: 'user', content: 'React to my answer.' }],
@@ -122,8 +130,10 @@ function regionSuggestions(query: string): { slug: string; label: string }[] {
 export default function InterviewScreen() {
   const { t } = useTranslation('interview');
   const router = useRouter();
-  // Context-carrying CTA: /interview?from=<guide-id> is still recorded on interview_started for
-  // attribution; the opener is now deterministic static copy (no LLM greeting to personalize).
+  // Context-carrying CTA: /interview?from=<guide-id> is recorded on interview_started for
+  // attribution AND personalizes the greeting bubble — deterministically, via a localized
+  // template with the guide's title (regression fix 2026-07-10: the old LLM greeting used to
+  // carry this context; the static opener dropped it).
   const { from } = useLocalSearchParams<{ from?: string }>();
   const { user } = useAuth();
   const { setProfile: saveProfile, isStaff } = useProfile();
@@ -158,6 +168,7 @@ export default function InterviewScreen() {
   const [finalPhase, setFinalPhase] = useState(false);
   const { width } = useWindowDimensions();
   const twoPane = width >= 900; // web two-pane needs room; phones/tablets stay single-column
+  const insets = useSafeAreaInsets(); // the roadmap sheet Modal must pad the notch itself
   const scrollRef = useRef<ScrollView>(null);
   const progressRef = useRef(0);
   const inputRef = useRef<TextInput>(null);
@@ -353,9 +364,14 @@ export default function InterviewScreen() {
     if (!slot) { setDone(true); return; }
     setCurrentSlot(slot);
     // Fold the old standalone intro screen into Lola's opening: a warm greeting bubble, then the
-    // first question. Instant — no network on Q1.
+    // first question. Instant — no network on Q1. Arriving from a guide page adds one localized
+    // clause naming that guide, so the context the CTA carried isn't dropped on the floor.
+    const fromGuide = typeof from === 'string' ? guideById.get(from) : undefined;
+    const greeting = fromGuide
+      ? `${t('landing.greeting')} ${t('landing.fromGuide', { guide: shortClause(displayTitle(fromGuide)) })}`
+      : t('landing.greeting');
     setTurns([
-      { role: 'lola', text: t('landing.greeting') },
+      { role: 'lola', text: greeting },
       { role: 'lola', text: questionText(slot) },
     ]);
     askedAtRef.current = Date.now();
@@ -473,7 +489,7 @@ export default function InterviewScreen() {
     setLoading(true);
     setTurns(prev => [...prev, { role: 'user', text: label }]);
     try {
-      const ackP = phraseAck(currentSlot, label).catch(() => '');
+      const ackP = phraseAck(currentSlot, label, turns).catch(() => '');
       const remainingSlots = extras
         ? SLOTS.filter(s => !(s.field in profile) && s.field !== currentSlot.field) : [];
       await advance(currentSlot, value, ackP, mode, extras, remainingSlots);
@@ -537,7 +553,7 @@ export default function InterviewScreen() {
       if (viaOther) capture('interview_other_answered', { field: currentSlot.field, answer: text.slice(0, 200) });
       // The reaction runs concurrently with extraction, so it's normally resolved by the time
       // the next question is ready — the merged bubble costs no extra wait on composer turns.
-      const ackP = phraseAck(currentSlot, text).catch(() => '');
+      const ackP = phraseAck(currentSlot, text, turns).catch(() => '');
       const remainingSlots = SLOTS.filter(s => !(s.field in profile) && s.field !== currentSlot.field);
       const result = await extractAnswer(currentSlot, text, turns, remainingSlots);
 
@@ -827,9 +843,11 @@ export default function InterviewScreen() {
         )}
       </View>
 
-      {/* Phase 3: the mobile roadmap sheet — same pane, full width, slide-up. */}
+      {/* Phase 3: the mobile roadmap sheet — same pane, full width, slide-up. The Modal covers
+          the whole screen, so it must carry the top inset itself or "✕ Done" lands under the
+          Dynamic Island (build-33 finding, IMG_2101). */}
       <Modal visible={sheetOpen} animationType="slide" onRequestClose={() => setSheetOpen(false)}>
-        <View style={styles.sheetWrap}>
+        <View style={[styles.sheetWrap, { paddingTop: insets.top }]}>
           <View style={styles.sheetHeader}>
             <TouchableOpacity onPress={() => setSheetOpen(false)} accessibilityRole="button" accessibilityLabel={t('roadmap.closeA11y')}>
               <Text style={styles.sheetClose}>✕ {t('roadmap.close')}</Text>

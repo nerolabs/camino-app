@@ -89,7 +89,8 @@ export default function NavBar() {
         <Pressable style={styles.overlay} onPress={() => setMenuOpen(false)}>
           <Pressable style={[styles.menu, { marginTop: 12 + insets.top, marginRight: 16 + insets.right }]} onPress={() => {}}>
             <MenuLink label={t('nav.menu.home')} onPress={() => go('/')} />
-            <MenuLink label={t('nav.menu.howItWorks')} onPress={() => go('/how-it-works')} />
+            {/* how-it-works was merged into the landing story (landing v2, 2026-07-10) — the old
+                route just redirects home, so it earns no menu item. */}
             <MenuLink label={t('nav.menu.guides')} onPress={() => go('/guide')} />
             {/* The payoff before the ask — for everyone (user request 2026-07-04: it used to
                 hide when signed in, which read as it vanishing). */}

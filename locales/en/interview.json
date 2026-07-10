@@ -6,6 +6,7 @@
     "subQuiet": "Answer a few questions and I'll build your personal roadmap: real steps, real deadlines, nothing you don't need.",
     "start": "Let's get started",
     "greeting": "Hola, I'm Lola. I'll build your roadmap right here as we talk — real steps, real deadlines, nothing you don't need.",
+    "fromGuide": "I see you've been reading about {{guide}} — your roadmap will cover that and everything around it.",
     "welcomeBack": "Welcome back — your roadmap is {{pct}}% complete. Let's pick up where we left off."
   },
   "progress": {
@@ -47,7 +48,7 @@
     "partner_is_married": "Spain treats registered relationships differently for family paperwork. Is yours legally registered? A marriage or civil partnership both count.",
     "has_children": "Kids bring school enrollment into the plan. Any children coming with you?",
     "intends_long_stay": "How much of the year you'll spend here changes your tax picture and which registrations apply. Will you be in Spain more than six months a year?",
-    "arrival_date": "Very exciting — moving to Spain! Let's start where you probably already are: roughly when are you hoping to arrive? Even just a month is fine — it anchors every deadline on your roadmap.",
+    "arrival_date": "Very exciting — moving to Spain! Let's start with the most important question: when are you planning to arrive? A rough month is all I need — it anchors every deadline on your roadmap.",
     "has_spanish_address": "Now, where will you land? An address unlocks the town-hall registration — the padrón — and buying brings its own cluster of steps. What's your housing plan?",
     "owns_or_drives": "Driving here can mean exchanging your licence — or a Spanish exam — depending on your country. Will anyone in the household be driving?",
     "owns_property_in_spain": "Property brings its own cluster of steps — notary, registry, taxes. Do you own — or plan to buy — property in Spain?",

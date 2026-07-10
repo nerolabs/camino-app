@@ -6,6 +6,7 @@
     "subQuiet": "Réponds à quelques questions et je construis ta feuille de route personnelle : de vraies étapes, de vraies échéances, rien d’inutile.",
     "start": "C’est parti",
     "greeting": "Bonjour, je suis Lola. Je vais construire votre feuille de route ici même, au fil de la conversation — des étapes réelles, des délais réels, rien d'inutile.",
+    "fromGuide": "Je vois que vous vous renseigniez sur {{guide}} — votre feuille de route couvrira ce point et tout ce qui l'entoure.",
     "welcomeBack": "Content de vous revoir — votre feuille de route est à {{pct}}%. Reprenons où nous en étions."
   },
   "progress": {
@@ -47,7 +48,7 @@
     "partner_is_married": "L'Espagne traite différemment les unions enregistrées pour les démarches familiales. La vôtre est-elle enregistrée ? Un mariage ou un PACS comptent tous les deux.",
     "has_children": "Des enfants ajoutent la scolarisation au plan. Des enfants viennent-ils avec vous ?",
     "intends_long_stay": "La part de l'année passée ici change votre situation fiscale et les démarches applicables. Serez-vous en Espagne plus de six mois par an ?",
-    "arrival_date": "Quelle belle aventure, ce départ pour l'Espagne ! Commençons par ce que vous avez sûrement déjà en tête : à peu près quand espérez-vous arriver ? Le mois suffit — cela ancre toutes les échéances de votre feuille de route.",
+    "arrival_date": "Quelle belle aventure, ce départ pour l'Espagne ! Commençons par la question la plus importante : quand prévoyez-vous d'arriver ? Un mois approximatif me suffit — cela ancre toutes les échéances de votre feuille de route.",
     "has_spanish_address": "Et maintenant, où allez-vous atterrir ? Une adresse débloque l'inscription en mairie — le padrón — et acheter apporte son propre lot d'étapes. Quel est votre plan logement ?",
     "owns_or_drives": "Conduire ici peut impliquer d'échanger votre permis — ou un examen espagnol — selon votre pays. Quelqu'un du foyer conduira-t-il ?",
     "owns_property_in_spain": "Un bien immobilier apporte son propre lot d'étapes — notaire, registre, impôts. Possédez-vous — ou comptez-vous acheter — un bien en Espagne ?",

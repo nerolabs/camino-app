@@ -5,12 +5,13 @@ import type { LolaVoice } from './useLolaVoice';
 // Native (iOS/Android) counterpart of the web voice hook. Plays Lola's /api/tts audio via
 // expo-audio. There's no browser autoplay-gesture restriction here, so it just plays when a new
 // turn arrives. expo-audio streams a URL (not a request body), so it hits the GET variant of
-// /api/tts. On by default, matching web; the interview's pill toggles/mutes it.
+// /api/tts. OFF by default, matching web (user decision 2026-07-10 — chips made turns fast,
+// TTS costs); the interview's pill is the opt-in.
 
 const API_BASE = process.env.EXPO_PUBLIC_API_URL ?? '';
 
 export function useLolaVoice(): LolaVoice {
-  const [enabled, setEnabled] = useState(true);
+  const [enabled, setEnabled] = useState(false);
   const playerRef = useRef<ReturnType<typeof createAudioPlayer> | null>(null);
   const lastRef = useRef<string>('');
 

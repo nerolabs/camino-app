@@ -6,6 +6,7 @@
     "subQuiet": "Beantworte ein paar Fragen und ich baue deine persönliche Roadmap: echte Schritte, echte Fristen, nichts, was du nicht brauchst.",
     "start": "Los geht’s",
     "greeting": "Hallo, ich bin Lola. Ich baue Ihren Fahrplan direkt hier auf, während wir sprechen — echte Schritte, echte Fristen, nichts Überflüssiges.",
+    "fromGuide": "Ich sehe, Sie haben sich gerade über {{guide}} informiert — Ihr Fahrplan deckt das ab, und alles, was dazugehört.",
     "welcomeBack": "Willkommen zurück — Ihr Fahrplan ist zu {{pct}}% fertig. Machen wir dort weiter, wo wir aufgehört haben."
   },
   "progress": {
@@ -47,7 +48,7 @@
     "partner_is_married": "Spanien behandelt eingetragene Beziehungen beim Familien-Papierkram anders. Ist Ihre rechtlich eingetragen? Ehe oder eingetragene Partnerschaft zählen beide.",
     "has_children": "Kinder bringen die Schulanmeldung in den Plan. Kommen Kinder mit?",
     "intends_long_stay": "Wie viel des Jahres Sie hier verbringen, ändert Ihre Steuersituation und die nötigen Anmeldungen. Werden Sie mehr als sechs Monate im Jahr in Spanien sein?",
-    "arrival_date": "Wie aufregend — der Umzug nach Spanien! Fangen wir dort an, wo Sie gedanklich sicher schon sind: Wann hoffen Sie ungefähr anzukommen? Der Monat genügt — er verankert alle Fristen in Ihrem Fahrplan.",
+    "arrival_date": "Wie aufregend — der Umzug nach Spanien! Fangen wir mit der wichtigsten Frage an: Wann planen Sie anzukommen? Ein ungefährer Monat genügt mir — er verankert alle Fristen in Ihrem Fahrplan.",
     "has_spanish_address": "Und wo werden Sie landen? Eine Adresse schaltet die Rathaus-Anmeldung frei — den padrón — und Kaufen bringt sein eigenes Bündel an Schritten. Wie sieht Ihr Wohnplan aus?",
     "owns_or_drives": "Autofahren kann hier Führerschein-Umtausch bedeuten — oder eine spanische Prüfung —, je nach Land. Wird jemand im Haushalt fahren?",
     "owns_property_in_spain": "Eine Immobilie bringt ihr eigenes Bündel an Schritten — Notar, Register, Steuern. Besitzen Sie eine Immobilie in Spanien — oder planen Sie einen Kauf?",
