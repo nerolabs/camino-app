@@ -5,12 +5,43 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-Last updated: 2026-07-10 (interview redesign Phase 0–2 checkpoint — on branch, NOT deployed;
-ready for user testing in the morning).
+Last updated: 2026-07-10 evening (interview redesign COMPLETE — Phases 0–3 + audit + user-testing
+fixes, 8 commits on branch `interview-redesign`; user-tested on web; next = release path).
 
 ---
 
-## ⭐ RESUME HERE (2026-07-10 — INTERVIEW REDESIGN Phase 0–2 on a branch; test before Phase 3)
+## ⭐ RESUME HERE (2026-07-10 evening — redesign COMPLETE on branch; next = merge → deploy)
+
+**The full interview redesign is DONE and user-tested on the branch** (8 commits, 213 vitest green,
+tsc clean, catalog audit clean). On top of the Phase 0–2 note below, this landed today:
+- **Fresh-eyes audit** (user-requested): partner pair merged to one 3-chip question; knows_where_to_live
+  folded into the region typeahead (now a derivation); ex-colony skipped when passports show it;
+  employer question moved right after work; **income now gates two conservative advisory warnings**
+  (`nlv/dnv-income-check`, band-UPPER vs household threshold — Sofia persona exercises it); dead
+  `us_resident` removed; completeness weighting bug fixed (COMPUTE_ALSO_READS). Catalog 61→63.
+- **Why-context copy pass**: every question opens with one sentence of why-it-matters, 5 locales,
+  no digits (i18n lint), no legal claims (invariant 3). Q1 is now **arrival_date** ("Very exciting —
+  moving to Spain! …when are you hoping to arrive?") — the question people arrive asking, and the
+  timing anchor so later steps land pre-dated. speaks_spanish is Q2 (per-locale reader's-language
+  framing; es handles native speakers).
+- **Single-paint Lola turns**: reaction runs concurrently with extraction, raced vs a 2s cap on chip
+  taps (typing dots cover it); the merged bubble paints ONCE — no post-paint mutation.
+- **Phase 3 (mobile)**: <900px shows a strip under the nav — "Your roadmap · N steps [+N new] View ›"
+  — opening a full-screen sheet (RoadmapPane `sheet` mode), same persistent highlights. Pure JS;
+  needs the next batched EAS build to reach native.
+- **Ops note:** a long-running Metro instance soured after ~30 core-file hot-reloads (requests
+  accepted but hanging; looked like an extraction bug). After heavy batches: `expo start --clear`.
+
+**RELEASE PATH (next):** (1) merge `interview-redesign` → main; (2) update the two public homework
+pages (`app/how-i-was-built/log.tsx` + `roadmap.tsx`) — the standing rule, deferred to deploy time,
+now due; (3) `npm run deploy:staging` (runs vitest + web E2E vs the unique URL); (4) user+wife verify
+staging; (5) `npm run deploy:production` (web); (6) **iOS**: batched EAS build on user command only
+(e2e-ios gate first — see docs/STORE_PAPERWORK.md; build 31 was the prior candidate, now superseded
+by this redesign).
+
+---
+
+## Prior resume note (2026-07-10 morning — INTERVIEW REDESIGN Phase 0–2 on a branch)
 
 **Big body of work, checkpointed on branch `interview-redesign` (NOT merged, NOT deployed).**
 Motivated by PostHog on the soft-launch traffic: the interview funnel bounced hard — `work_situation`
