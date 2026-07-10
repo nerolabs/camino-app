@@ -5,6 +5,43 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
+## ⭐ MORNING QUEUE — user + wife feedback, 2026-07-10 night (recorded, NOT yet actioned)
+
+Six findings, with root causes pre-diagnosed where known:
+
+1. **How-it-works still in the hamburger** — `components/NavBar.tsx:92` MenuLink → '/how-it-works'
+   (now just redirects home). Remove the menu item. Trivial.
+2. **Guide→interview context lost** — REGRESSION, cause known: the old `start()` passed
+   `arrivedFrom` (from `/interview?from=<guide-id>`) into the LLM greeting; when per-question LLM
+   phrasing was removed (2026-07-10), the personalization was dropped — `from` now feeds analytics
+   only (see the comment in app/interview.tsx near useLocalSearchParams). FIX: deterministic
+   template — when `from` is present, the greeting bubble gains a localized clause using the guide
+   title (shortClause/displayTitle), e.g. "I see you've been reading about {guide} — your roadmap
+   will cover that and everything around it." No LLM needed. ×5 locales.
+3. **Voice defaults** — make voice OFF by default on web (toggle to enable). User leaning off-by-
+   default on mobile too (chips made turns fast; TTS costs). Claude's take: default OFF everywhere,
+   keep the toggle prominent — voice's remaining value is the composer questions + accessibility.
+   Look in hooks/useLolaVoice(.native) for the default. Also kills the local ELEVENLABS log noise.
+4. **Q1 copy** — "Let's start where you probably already are" doesn't land. User suggestion
+   direction: "Very exciting — moving to Spain! Let's start with the most important question:
+   when are you planning to arrive?" Keep "arrive" (the engine anchors on arrival date, not the
+   move decision). Rewrite ×5 locales.
+5. **Reactions degraded to bland** — cause known, twofold: (a) the tone-down (2026-07-10) capped
+   phraseAck at ~10 words / "understated, never gushing"; (b) phraseAck NEVER receives the
+   transcript (unlike phraseClarify), so it can't cross-reference earlier answers ("your wife AND
+   the dog — the whole pack is coming!" / "Murcia — lovely, though the weather beats Canada's").
+   FIX: pass transcriptOf(turns) into phraseAck + relax to 1–2 sentences, warm + playful,
+   references earlier answers when natural; KEEP the no-facts/no-numbers hard rules (invariant 3).
+   Slightly more input tokens per ack — fine.
+6. **iOS roadmap sheet: "✕ Done" under the Dynamic Island** (IMG_2101, build 33) — the Phase-3
+   Modal ignores the top safe-area inset. FIX: useSafeAreaInsets() padding on sheetWrap/sheetHeader
+   in app/interview.tsx (same class as the build-5 safe-area work). Web unaffected; rides build 35.
+
+After fixing: one web deploy + build 35 batch. Then the standing morning plan below (wife's full
+pass, dashboard 808581 watch).
+
+---
+
 Last updated: 2026-07-10 night (SECOND release wave: landing v2 + wife-test batch LIVE on web at
 b38ff3c; iOS build 34 submitting — supersedes 32/33). Highlights since the morning note: six
 user-testing fixes (not-sure chips, reaction spacing, final open note, EMAIL MAGIC LINKS via
