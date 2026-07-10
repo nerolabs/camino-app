@@ -4,7 +4,7 @@
 added or removed. Forward-looking ideas (tests we *want*) live in `docs/BUILD.md` → "Growing E2E
 coverage"; this file is the honest picture of **current** coverage.
 
-Last updated: 2026-07-05 evening (L0–L3 localization day: five languages shipped — en/es/fr/de/it — 146 passing vitest tests + 10 opt-in network; per-locale gates iterate core/i18n/registry.ts; critical-path verdicts in §5).
+Last updated: 2026-07-10 (living-roadmap release day: 216 passing vitest + 10 opt-in — plan-delta, completeness, draft-resume, ordering/chips, not-sure sentinel, income checks, language-classes; smoke E2E reworked for the auto-start interview + landing v2; Maestro 03 now LLM-free to the send).
 
 Layers, and when they run:
 - **Unit / integration** (vitest, `tests/`) — deterministic, offline. Runs in `deploy.sh` and CI

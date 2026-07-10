@@ -880,6 +880,29 @@ signal). Localization: held for an app update pending locale demand data.
       coming, so 100+ is no longer a requirement. The catalog is scoped to what we can source
       honestly (59 obligations, mostly official). Breadth grows only if new primary sources appear.
 
+## Follow-ups queued from the 2026-07-10 release day (redesign + landing v2)
+
+- [ ] **Consulate-appointment title is US-centric** — "allow 8–16 weeks lead time in the US" shows
+      for every non-EU applicant (a UK tester flagged it). Needs a sourced per-country or neutral
+      rewrite in the next sourcing pass (invariant 3: don't touch without the source).
+- [ ] **Distill final-note text into obligations** — `profile.notes` + `interview_final_note` are
+      collecting free-form context; the plan-coach already re-models free text, so wire notes into
+      it (or a batch pass) once enough real notes exist to see the shapes.
+- [ ] **Chip-refinement loop** — review `interview_other_opened/answered` by field after ~2 weeks
+      of traffic; any field >10% Other usage gets its chip set extended (that was the point of
+      keeping Lola on the Other path).
+- [ ] **Roadmap-pane removals are silent** — the design doc's narrated removal ("you're EU — that
+      removed 5 steps, simpler for you") is still the honest nicety to add (v1 recomputes quietly).
+- [ ] **Watch dashboard 808581** (PostHog "Interview v2 — living roadmap") as v2 traffic lands:
+      drop-off by question, exit completeness, clarify rate, Other usage; `landing_version: 2`
+      owns home→interview_started vs the 25% baseline. Then the before/after LinkedIn post.
+- [ ] **Landing variant A** ("the page IS question zero") parked as an A/B candidate once traffic
+      justifies experiments — needs arrival-prefill design (docs/LANDING-REDESIGN.md).
+- [ ] **Arrival-date chips** (This year / Next year / …) if Q1's typed+LLM turn shows friction in
+      per-question `ms` data — the one instant-feel regression accepted for the emotional opener.
+- [ ] **Email magic-link health** — watch `email_link_confirmed {ok:false}` rate after the next
+      weekly send; that's the OTP-expiry dial (both Supabase projects at the 24h max).
+
 ## 🐞 Known issues
 
 - _(none open — `tsc --noEmit` is green.)_
