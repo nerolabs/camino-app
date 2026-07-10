@@ -21,16 +21,21 @@ test('home renders hero + CTA and the footer disclaimer', async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
-test('interview: "Let\'s get started" produces Lola\'s first question (live /api/lola)', async ({ page }) => {
+test('interview auto-starts; a typed answer round-trips /api/lola and advances (live)', async ({ page }) => {
   const errors = trackErrors(page);
   await page.goto('/interview');
+  // Living-roadmap redesign (2026-07-10): no start button — the page opens straight into the
+  // conversation with Lola's greeting and the arrival-date opener.
   await expect(page.getByText("Hola, I'm Lola", { exact: false })).toBeVisible();
-  await page.getByText("Let's get started").click();
-  // First turn arrives via the LLM proxy (or its static fallback) — give it room.
-  await expect(page.getByText(/passport/i)).toBeVisible({ timeout: 30_000 });
-  // The composer and the voice pill should be present once started.
-  await expect(page.getByPlaceholder(/type your answer/i)).toBeVisible();
+  await expect(page.getByText(/when are you hoping to arrive/i)).toBeVisible();
   await expect(page.getByText(/voice (on|off)/i)).toBeVisible();
+  // One real /api/lola round-trip: answer the date; the next question (Spanish level) should
+  // arrive with its chips. Give the extraction + the reaction race room.
+  const composer = page.getByPlaceholder(/type your answer/i);
+  await composer.fill('January 2028');
+  await composer.press('Enter');
+  await expect(page.getByText(/your Spanish/i).last()).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByText('None yet')).toBeVisible();
   expect(errors).toEqual([]);
 });
 
