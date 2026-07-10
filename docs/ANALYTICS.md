@@ -85,6 +85,8 @@ Baselines from the 2026-07-06→08 soft-launch traffic (PostHog, hand-dug):
   the 2s cap drops the reaction; the tuning signal for `REACTION_WAIT_MS`).
 - Income-check exposure (`nlv/dnv-income-check` appearing in a plan) is derivable from Supabase
   profiles (band + household + visa route); no event needed yet.
-- Dashboards: build in the PostHog UI post-deploy — (1) the v2 funnel, (2) per-question drop-off
-  bar (last-field per non-completer), (3) exit-completeness histogram, (4) Other-usage by field,
-  (5) clarify rate on composer turns. Queries follow directly from the table above.
+- Dashboards: BUILT (2026-07-10) — PostHog dashboard **"Interview v2 — living roadmap"**
+  (`/project/214229/dashboard/808581`): the core funnel (visit → started → completed), per-question
+  drop-off (last field per non-completer), exit-completeness histogram, Other-usage by field,
+  clarify rate on LLM turns, and the clarify raw log. SQL tiles are 30-day windows; they populate
+  as v2 production data arrives (v1 baseline already visible: 60 clarifies / 0 v2 LLM turns).
