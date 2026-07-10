@@ -108,5 +108,12 @@
     "thanksSub": "Chaque signalement améliore la feuille de route. Nous les lisons tous.",
     "done": "Terminé",
     "errSend": "L’envoi a échoué — réessaie."
+  },
+  "authConfirm": {
+    "headline": "Ouvrez votre feuille de route",
+    "sub": "Un clic et vous êtes connecté sur cet appareil — ce lien est arrivé dans votre boîte mail, il est à vous seul.",
+    "continue": "Continuer — me connecter",
+    "expiredHeadline": "Ce lien a expiré",
+    "expiredSub": "Pas de souci : saisissez votre e-mail et nous vous envoyons un nouveau code qui vous connecte ici même."
   }
 }

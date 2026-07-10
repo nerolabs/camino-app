@@ -108,5 +108,12 @@
     "thanksSub": "Jede Meldung macht die Roadmap besser. Wir lesen sie alle.",
     "done": "Fertig",
     "errSend": "Das Senden ist fehlgeschlagen — versuch es noch einmal."
+  },
+  "authConfirm": {
+    "headline": "Ihren Fahrplan öffnen",
+    "sub": "Ein Klick und Sie sind auf diesem Gerät angemeldet — dieser Link kam in Ihr Postfach, er gehört nur Ihnen.",
+    "continue": "Weiter — anmelden",
+    "expiredHeadline": "Dieser Link ist abgelaufen",
+    "expiredSub": "Kein Problem: E-Mail eingeben und wir senden einen frischen Code, der Sie direkt hier anmeldet."
   }
 }

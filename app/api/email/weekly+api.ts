@@ -19,6 +19,7 @@ import { createClient, type SupabaseClient, type User } from '@supabase/supabase
 import { buildDigest, interviewComplete } from '@/core/email-digest';
 import type { Profile } from '@/core/interview-controller';
 import { sendEmail, siteOrigin } from '@/lib/serverEmail';
+import { emailAuthLink } from '@/lib/emailAuthLink';
 import { roundupEmail, nudgeEmail, unsubFooter } from '@/lib/emailTemplates';
 import { resolveEmailLang } from '@/lib/serverLocale';
 import { signUnsubToken } from '@/lib/emailTokens';
@@ -88,7 +89,8 @@ export async function POST(request: Request): Promise<Response> {
         if (digest) {
           const last = typeof md.last_roundup_at === 'string' ? Date.parse(md.last_roundup_at) : 0;
           if (Date.now() - last < ROUNDUP_MIN_GAP_MS) { counts.skipped++; continue; }
-          await sendEmail({ to: user.email, headers, ...roundupEmail({ digest, planUrl: `${origin}/plan`, unsubHtml, lang }) });
+          const planUrl = await emailAuthLink(admin, user.email, origin, '/plan'); // magic link, scanner-safe (2026-07-10)
+          await sendEmail({ to: user.email, headers, ...roundupEmail({ digest, planUrl, unsubHtml, lang }) });
           await admin.auth.admin.updateUserById(user.id, { user_metadata: { last_roundup_at: new Date().toISOString() } });
           counts.roundups++; sends++;
           await sleep(SEND_SPACING_MS);
@@ -98,7 +100,8 @@ export async function POST(request: Request): Promise<Response> {
           const needsInterview = !answers || !interviewComplete(answers);
           const oldEnough = Date.now() - Date.parse(user.created_at) > NUDGE_MIN_AGE_MS;
           if (needsInterview && !md.nudged_at && oldEnough) {
-            await sendEmail({ to: user.email, headers, ...nudgeEmail({ interviewUrl: `${origin}/interview`, unsubHtml, lang }) });
+            const interviewUrl = await emailAuthLink(admin, user.email, origin, '/interview');
+            await sendEmail({ to: user.email, headers, ...nudgeEmail({ interviewUrl, unsubHtml, lang }) });
             await admin.auth.admin.updateUserById(user.id, { user_metadata: { nudged_at: new Date().toISOString() } });
             counts.nudges++; sends++;
             await sleep(SEND_SPACING_MS);

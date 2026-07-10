@@ -49,6 +49,7 @@ honest: **change an event → update this file in the same PR.**
 | `interview_final_note` | the optional end note (or Skip) | `skipped`, `answer` (≤500) | Free-form context to distill into obligations; skip-rate |
 | `interview_completed` | after the final note/skip | `answered` | Bottom of interview funnel |
 | `roadmap_sheet_opened` | mobile strip tapped | `plan_steps` | Does the mobile living-roadmap get used? |
+| `email_link_confirmed` | /auth/confirm click | `ok`, `next` | Do email magic links land people signed-in? Failure rate = expired tokens (OTP expiry dial) |
 
 Post-interview surface (unchanged): `roadmap_viewed`, `task_opened`, `task_coach_asked`,
 `plan_view_toggled`, `plan_pdf_exported`, `plan_remodelled`/`_noop`, `roadmap_item_completed`,

@@ -108,5 +108,12 @@
     "thanksSub": "Ogni segnalazione migliora la roadmap. Le leggiamo tutte.",
     "done": "Fatto",
     "errSend": "L’invio non è andato a buon fine — riprova."
+  },
+  "authConfirm": {
+    "headline": "Apri la tua roadmap",
+    "sub": "Un tocco e sei connesso su questo dispositivo — questo link è arrivato alla tua email, quindi è solo tuo.",
+    "continue": "Continua — accedi",
+    "expiredHeadline": "Questo link è scaduto",
+    "expiredSub": "Nessun problema: inserisci la tua email e ti inviamo un nuovo codice che ti connette proprio qui."
   }
 }

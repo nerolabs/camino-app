@@ -19,9 +19,10 @@ vi.mock('@/lib/sentryServer', () => ({ captureServerError: vi.fn() }));
 // client writes the metadata claim.
 const getUser = vi.fn();
 const updateUserById = vi.fn();
+const generateLink = vi.fn();
 vi.mock('@supabase/supabase-js', () => ({
   createClient: () => ({
-    auth: { getUser, admin: { updateUserById } },
+    auth: { getUser, admin: { updateUserById, generateLink } },
   }),
 }));
 
@@ -49,6 +50,7 @@ beforeEach(() => {
   vi.stubEnv('EXPO_PUBLIC_ENV', 'staging');
   getUser.mockResolvedValue({ data: { user: { ...USER, user_metadata: {} } }, error: null });
   updateUserById.mockResolvedValue({ data: {}, error: null });
+  generateLink.mockResolvedValue({ data: { properties: { hashed_token: 'th-w' } }, error: null });
   sendEmail.mockResolvedValue(undefined);
 });
 

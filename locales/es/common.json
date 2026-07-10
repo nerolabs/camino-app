@@ -108,5 +108,12 @@
     "thanksSub": "Cada aviso mejora la hoja de ruta. Los leemos todos.",
     "done": "Listo",
     "errSend": "No se ha enviado — inténtalo otra vez."
+  },
+  "authConfirm": {
+    "headline": "Abre tu hoja de ruta",
+    "sub": "Un toque y quedas conectado en este dispositivo — este enlace llegó a tu correo, así que es solo tuyo.",
+    "continue": "Continuar — iniciar sesión",
+    "expiredHeadline": "Ese enlace ha caducado",
+    "expiredSub": "No pasa nada: escribe tu correo y te enviamos un código nuevo que te conecta aquí mismo."
   }
 }

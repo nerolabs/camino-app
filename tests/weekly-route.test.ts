@@ -24,10 +24,11 @@ vi.mock('@/lib/sentryServer', () => ({ captureServerError: vi.fn() }));
 
 const listUsers = vi.fn();
 const updateUserById = vi.fn();
+const generateLink = vi.fn();
 const profilesSelect = vi.fn();
 vi.mock('@supabase/supabase-js', () => ({
   createClient: () => ({
-    auth: { admin: { listUsers, updateUserById } },
+    auth: { admin: { listUsers, updateUserById, generateLink } },
     from: () => ({ select: profilesSelect }),
   }),
 }));
@@ -50,6 +51,7 @@ function setup(users: Array<{ id: string; email?: string; created_at?: string; u
   profilesSelect.mockResolvedValue({ data: profiles, error: null });
   updateUserById.mockResolvedValue({ error: null });
   sendEmail.mockResolvedValue(undefined);
+  generateLink.mockResolvedValue({ data: { properties: { hashed_token: 'th-abc' } }, error: null });
 }
 
 beforeEach(() => {
@@ -88,6 +90,9 @@ describe('POST /api/email/weekly', () => {
     expect(payload.to).toBe('u1@x.com');
     expect(payload.subject).toContain('Tu semana con Get Camino'); // es roundup subject
     expect(updateUserById).toHaveBeenCalledWith('u1', { user_metadata: { last_roundup_at: expect.any(String) } });
+    // Email links are per-recipient magic links via our scanner-safe confirm page (2026-07-10)
+    const sent = sendEmail.mock.calls[0][0] as { html: string };
+    expect(sent.html).toContain('/auth/confirm?token_hash=th-abc&next=%2Fplan');
   });
 
   it('respects the 6-day roundup gap (recent last_roundup_at → skip)', async () => {

@@ -108,5 +108,12 @@
     "thanksSub": "Every report makes the roadmap better. We read them all.",
     "done": "Done",
     "errSend": "That didn’t go through — please try again."
+  },
+  "authConfirm": {
+    "headline": "Open your roadmap",
+    "sub": "One tap and you're signed in on this device — we sent this link to your email, so it's yours alone.",
+    "continue": "Continue — sign me in",
+    "expiredHeadline": "That link has expired",
+    "expiredSub": "No problem — enter your email and we’ll send a fresh code that signs you in right here."
   }
 }
