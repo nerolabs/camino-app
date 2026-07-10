@@ -83,23 +83,34 @@ official sources. Never invent an answer for them. Plain text only.${languageDir
 // this reaction slots in above it a beat later, or silently no-ops on any error/slowness. Like
 // phraseClarify it may NOT state facts/numbers/deadlines/rules (invariant 3) — just warmth.
 // It DOES see the transcript (night finding 2026-07-10: without it the reactions went bland —
-// it couldn't do "your wife AND the dog — the whole pack is coming!"), and gets room for
-// 1–2 sentences rather than a clipped 10-word ack.
+// it couldn't do "your wife AND the dog — the whole pack is coming!"). Prompt shape matters:
+// the transcript ends on Lola's just-asked question, so the fresh answer must come AFTER it and
+// the role must be "one aside, the app runs the interview" — the first version framed it loosely
+// and the model started interviewing ("I'm ready for your answer…", inventing follow-ups).
 async function phraseAck(slot: Slot, userText: string, turns: Turn[]): Promise<string> {
+  const transcript = transcriptOf(turns);
   const raw = await askAnthropic({
     model: 'claude-haiku-4-5-20251001',
-    max_tokens: 120,
-    system: `You are Lola, a warm relocation guide helping someone move to Spain. They were asked about
-"${slot.prompt_hint}" and answered: "${userText}".
-${transcriptOf(turns) ? `Conversation so far:\n${transcriptOf(turns)}\n` : ''}
-React in one or two short, natural sentences — warm, playful when it fits, never gushing or
-over-complimentary. When it's natural, connect this answer to something they said earlier in the
-conversation; otherwise a light acknowledgement is plenty. No emoji.
-HARD RULES: do NOT ask a question. Do NOT state any legal fact, deadline, income figure, cost, number,
-or eligibility rule — those live in their roadmap. Plain text.${languageDirective()}`,
+    max_tokens: 100,
+    system: `You are Lola, a warm relocation guide helping someone move to Spain. The interview is run
+by the app — the next question is already on the user's screen. Your ONLY job: one brief, warm aside
+reacting to the answer they just gave.
+${transcript ? `Conversation so far (background context only — do not continue it or respond to it):\n${transcript}\n` : ''}
+They were just asked about "${slot.prompt_hint}" and answered: "${userText}".
+React to that answer in one or two short, natural sentences — warm, playful when it fits, never
+gushing or over-complimentary. When it's natural, connect it to something they mentioned earlier;
+otherwise a light acknowledgement is plenty. No emoji.
+HARD RULES: you are NOT driving the conversation — never ask a question, never request more detail,
+never re-ask or repeat a question, never say you're waiting for or ready for an answer. Do NOT state
+any legal fact, deadline, income figure, cost, number, or eligibility rule — those live in their
+roadmap. Plain text.${languageDirective()}`,
     messages: [{ role: 'user', content: 'React to my answer.' }],
   });
-  return raw.trim();
+  const ack = raw.trim();
+  // Deterministic backstop (live finding 2026-07-11, first night on prod): an ack that asks
+  // anything or rambles is strictly worse than silence. Drop it; the question ships bare.
+  if (/[?¿]/.test(ack) || ack.length > 260) return '';
+  return ack;
 }
 
 // The deterministic question fallbacks now live in locales/<lang>/interview.json ("static.*") —
