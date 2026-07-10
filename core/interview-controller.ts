@@ -57,7 +57,7 @@ export const SLOTS: Slot[] = [
   {
     field: "nationalities", type: "list", input: "multi", order: 20, allowOther: true,
     gates: ["work_situation", "has_spouse_or_partner", "has_children", "annual_income_eur_band",
-            "intends_long_stay", "us_resident", "previously_ex_spanish_colony_nationality"],
+            "intends_long_stay", "previously_ex_spanish_colony_nationality"],
     // Plain plural, no "(s)": Lola echoes this hint into the spoken question and TTS
     // reads a parenthetical "(s)" out loud (user report, 2026-07-04).
     prompt_hint: "what passports everyone in the household holds — people sometimes hold more than one",
@@ -158,11 +158,6 @@ export const SLOTS: Slot[] = [
     required_if: { field: "is_tax_resident", op: "eq", value: true },
     options: ["under €50k", "€50k–€200k", "€200k–€700k", "over €700k", "prefer not to say"],
     prompt_hint: "roughly, total assets held outside Spain — only a range is needed, drives Modelo 720",
-  },
-  {
-    field: "us_resident", type: "bool", input: "yesno", order: 190,
-    required_if: { field: "is_eu", op: "eq", value: false },
-    prompt_hint: "whether they are currently based in the US — affects consulate and wait times",
   },
   {
     field: "previously_ex_spanish_colony_nationality", type: "bool", input: "yesno", order: 200,

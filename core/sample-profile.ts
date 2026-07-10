@@ -39,7 +39,6 @@ export function sampleProfile(): Profile {
     knows_where_to_live:                  false,
     has_pets:                             true,
     foreign_assets_eur_band:              '€50k–€200k',
-    us_resident:                          true,
     previously_ex_spanish_colony_nationality: false,
     wants_citizenship:                    true,
   };

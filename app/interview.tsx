@@ -75,6 +75,25 @@ official sources. Never invent an answer for them. Plain text only.${languageDir
   return rawText.trim();
 }
 
+// Conversational reaction to an answer (interview redesign — "contextual reaction", user decision
+// 2026-07-10). Runs async and NON-BLOCKING: the next question is already on screen (static/instant);
+// this reaction slots in above it a beat later, or silently no-ops on any error/slowness. Like
+// phraseClarify it may NOT state facts/numbers/deadlines/rules (invariant 3) — just warmth.
+async function phraseAck(slot: Slot, userText: string): Promise<string> {
+  const raw = await askAnthropic({
+    model: 'claude-haiku-4-5-20251001',
+    max_tokens: 40,
+    system: `You are Lola, a warm relocation guide helping someone move to Spain. They were asked about
+"${slot.prompt_hint}" and answered: "${userText}".
+React in ONE brief, natural sentence — at most 10 words. Warm but UNDERSTATED: a light acknowledgement,
+never gushing, never over-complimentary ("Got it", "Nice", "Makes sense", "Perfect"). No emoji.
+HARD RULES: do NOT ask a question. Do NOT state any legal fact, deadline, income figure, cost, number,
+or eligibility rule — those live in their roadmap. Plain text.${languageDirective()}`,
+    messages: [{ role: 'user', content: 'React to my answer.' }],
+  });
+  return raw.trim();
+}
+
 // The deterministic question fallbacks now live in locales/<lang>/interview.json ("static.*") —
 // same interview, less charm, any language. Reads via the i18n singleton (these are used in
 // async flows, not render). Fields without a static entry fall through to the callers' generic
@@ -160,6 +179,10 @@ export default function InterviewScreen() {
     }
   }, [currentSlot, loading, started, done, otherActive]);
 
+  // Auto-start: the interview opens directly into the conversation — the standalone "Hola, I'm
+  // Lola" intro screen is now Lola's opening bubble (start()). Fires once on mount.
+  useEffect(() => { if (!started) start(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, []);
+
   // Switching language mid-interview (user finding 2026-07-05): the chrome re-renders via
   // useTranslation, but the CURRENT question is a stored string, generated in the old language —
   // so it looked stranded and users reloaded (losing progress). Re-issue just the active prompt
@@ -241,21 +264,51 @@ export default function InterviewScreen() {
     return (slot.options ?? []).map(o => ({ value: o, label: optionLabelFor(slot.field, o) }));
   }
 
+  // Fires interview_started on the FIRST answer, not on mount — since the interview auto-starts,
+  // landing on the page is a pageview; engaging with a question is the real "started" signal.
+  const startedCapturedRef = useRef(false);
+
   function start() {
-    capture('interview_started', { from: typeof from === 'string' ? from : undefined });
-    voice.unlock(); // within this click gesture, so the first spoken turn can auto-play (autoplay policy)
     setStarted(true);
     const slot = nextSlot({});
     if (!slot) { setDone(true); return; }
     setCurrentSlot(slot);
-    setTurns([{ role: 'lola', text: questionText(slot) }]); // instant — no network on Q1
+    // Fold the old standalone intro screen into Lola's opening: a warm greeting bubble, then the
+    // first question. Instant — no network on Q1.
+    setTurns([
+      { role: 'lola', text: t('landing.greeting') },
+      { role: 'lola', text: questionText(slot) },
+    ]);
   }
 
   // Apply a resolved value for `slot` and move to the next question. Shared by the chip path
   // (deterministic) and the free-text path (LLM-extracted). `extras` only arrives from extraction.
+  // Fire a contextual reaction to `userText` and MERGE it into `questionTurn` when it arrives, so
+  // Lola's turn reads as one bubble ("Got it. <next question>"). Non-blocking and best-effort — the
+  // question is already on screen instantly; any error/slowness just leaves it as the bare question.
+  function reactTo(slot: Slot, userText: string, questionTurn: Turn) {
+    const question = questionTurn.text;
+    phraseAck(slot, userText)
+      .then(ack => {
+        if (!ack) return;
+        setTurns(prev => {
+          const idx = prev.lastIndexOf(questionTurn); // reference to THIS turn's question
+          if (idx < 0) return prev;
+          const copy = [...prev];
+          copy[idx] = { role: 'lola', text: `${ack} ${question}` };
+          return copy;
+        });
+      })
+      .catch(() => { /* reaction is decorative — never surface a failure */ });
+  }
+
   async function advance(
-    slot: Slot, value: unknown, extras?: Record<string, unknown>, remainingSlots: Slot[] = [],
+    slot: Slot, value: unknown, userText: string, extras?: Record<string, unknown>, remainingSlots: Slot[] = [],
   ) {
+    if (!startedCapturedRef.current) {
+      startedCapturedRef.current = true;
+      capture('interview_started', { from: typeof from === 'string' ? from : undefined });
+    }
     const next_profile: Profile = { ...profile, [slot.field]: value };
     // Opportunistic capture: apply extras the extractor is confident about, into still-unanswered
     // slots only, and only when the value type-checks against the slot's schema.
@@ -274,13 +327,11 @@ export default function InterviewScreen() {
       if (autofilled.length) capture('interview_slots_autofilled', { fields: autofilled, from: slot.field });
     }
     derive(next_profile);
-    // Live roadmap: what did this answer add? Highlight new steps, then let them settle.
+    // Live roadmap: highlight the steps THIS answer added, and keep them lit through the next
+    // question — they settle only when the following answer arrives (replacing this set, or
+    // clearing it if that answer added nothing).
     const delta = diffPlans(buildPlan(profile), buildPlan(next_profile));
-    if (delta.added.length) {
-      const ids = new Set(delta.added.map(o => o.id));
-      setHighlightIds(ids);
-      setTimeout(() => setHighlightIds(new Set()), 2200);
-    }
+    setHighlightIds(new Set(delta.added.map(o => o.id)));
     setProfile(next_profile);
     setOtherActive(false);
     setInput(''); // clear any typed text (e.g. region type-ahead) before the next question
@@ -296,7 +347,9 @@ export default function InterviewScreen() {
       return;
     }
     setCurrentSlot(next);
-    setTurns(prev => [...prev, { role: 'lola', text: questionText(next) }]);
+    const questionTurn: Turn = { role: 'lola', text: questionText(next) };
+    setTurns(prev => [...prev, questionTurn]);
+    reactTo(slot, userText, questionTurn); // non-blocking contextual reaction, slots in above it
     saveDraft(next_profile, next.field); // anonymous resume (signed-in already persists to the DB)
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
   }
@@ -308,7 +361,7 @@ export default function InterviewScreen() {
     setLoading(true);
     setTurns(prev => [...prev, { role: 'user', text: label }]);
     try {
-      await advance(currentSlot, value);
+      await advance(currentSlot, value, label);
     } catch (e) {
       captureError(e instanceof Error ? e : new Error('interview chip turn failed'), {
         route: '/interview', field: currentSlot.field,
@@ -349,7 +402,7 @@ export default function InterviewScreen() {
         return;
       }
 
-      await advance(currentSlot, result.value, result.extras, remainingSlots);
+      await advance(currentSlot, result.value, text, result.extras, remainingSlots);
     } catch (e) {
       // Extraction failed or timed out: own it, restore their answer so nothing is retyped,
       // and let them send again. The spinner must never be a destination (build-28 finding).
@@ -364,45 +417,8 @@ export default function InterviewScreen() {
     }
   }
 
-  if (!started) {
-    return (
-      <ScrollView style={styles.flex}>
-        <NavBar />
-        <View style={styles.center}>
-          <Text style={styles.eyebrow}>{t('landing.eyebrow')}</Text>
-          <Text style={styles.headline}>{t('landing.headline')}</Text>
-          <Text style={styles.sub}>
-            {t('landing.sub')}
-          </Text>
-          <Text style={styles.subQuiet}>
-            {t('landing.subQuiet')}
-          </Text>
-          <TouchableOpacity style={styles.startBtn} onPress={start}>
-            <Text style={styles.startBtnText}>{t('landing.start')}</Text>
-          </TouchableOpacity>
-
-          {isStaff && (
-            <>
-              <TouchableOpacity onPress={() => setShowDev(v => !v)} style={styles.devToggle}>
-                <Text style={styles.devToggleText}>{showDev ? 'Hide' : 'Dev'} test personas</Text>
-              </TouchableOpacity>
-
-              {showDev && (
-                <View style={styles.devPanel}>
-                  {TEST_PERSONAS.map(p => (
-                    <TouchableOpacity key={p.name} style={styles.personaBtn} onPress={() => loadPersona(p)}>
-                      <Text style={styles.personaName}>{p.name}</Text>
-                      <Text style={styles.personaDesc}>{p.description}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              )}
-            </>
-          )}
-        </View>
-      </ScrollView>
-    );
-  }
+  // The interview auto-starts on mount; this is the one-frame placeholder before that fires.
+  if (!started) return <View style={styles.flex}><NavBar /></View>;
 
   // Roadmap-anchored % complete (Phase 2 reframe): weighted by how much of the roadmap each answer
   // determines, capped at 95% until nothing's left to ask, and clamped monotonic so opening a
@@ -422,6 +438,22 @@ export default function InterviewScreen() {
     // inference breaks whenever the view's position vs safe-area padding changes. This can't.
     <View style={[styles.flex, { paddingBottom: keyboardHeight }]}>
       <NavBar />
+      {isStaff && (
+        <View style={styles.devStrip}>
+          <TouchableOpacity onPress={() => setShowDev(v => !v)}>
+            <Text style={styles.devToggleText}>{showDev ? 'Hide dev' : 'Dev personas'}</Text>
+          </TouchableOpacity>
+          {showDev && (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.devRow}>
+              {TEST_PERSONAS.map(p => (
+                <TouchableOpacity key={p.name} style={styles.personaChip} onPress={() => loadPersona(p)}>
+                  <Text style={styles.personaChipText}>{p.name.split('—')[0].trim()}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          )}
+        </View>
+      )}
       <View style={twoPane ? styles.twoPaneRow : styles.onePane}>
         <View style={twoPane ? styles.leftPane : styles.onePane}>
       {voice.supported && started && (
@@ -617,6 +649,10 @@ const styles = StyleSheet.create({
   twoPaneRow:  { flex: 1, flexDirection: 'row' },
   onePane:     { flex: 1 },
   leftPane:    { flex: 1, minWidth: 0 },
+  devStrip:    { paddingHorizontal: 16, paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: '#EFEAE2', backgroundColor: '#FAF7F2', gap: 6 },
+  devRow:      { gap: 8, paddingVertical: 4 },
+  personaChip: { backgroundColor: '#FFFFFF', borderRadius: 14, borderWidth: 1, borderColor: '#E0DCD4', paddingVertical: 6, paddingHorizontal: 12 },
+  personaChipText: { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.indigo },
   center:      { flex: 1, backgroundColor: palette.cal, justifyContent: 'center', alignItems: 'center', padding: 32 },
   eyebrow:     { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, letterSpacing: 2, color: palette.amber, textAlign: 'center', marginBottom: 12 },
   headline:    { fontFamily: 'Fraunces_600SemiBold', fontSize: 34, color: palette.indigo, textAlign: 'center', marginBottom: 16 },

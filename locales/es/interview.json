@@ -4,7 +4,8 @@
     "headline": "Hola, soy Lola.",
     "sub": "Mudarse a España son cien pequeños pasos — visados, padrón, impuestos, sanidad — y solo funcionan en el orden correcto. He ayudado a otras personas a dar este salto y lo recorreré contigo de principio a fin.",
     "subQuiet": "Responde unas preguntas y construyo tu hoja de ruta personal: pasos reales, plazos reales, nada que no necesites.",
-    "start": "Empecemos"
+    "start": "Empecemos",
+    "greeting": "Hola, soy Lola. Iré construyendo tu hoja de ruta aquí mismo mientras hablamos: pasos reales, plazos reales, nada que no necesites."
   },
   "progress": {
     "question": "Pregunta {{n}} de ~{{total}}",
@@ -52,7 +53,6 @@
     "region": "¿En qué parte de España te instalarás?",
     "has_pets": "¿Alguna mascota se muda contigo?",
     "foreign_assets_eur_band": "Algo personal — y solo eliges una franja — ¿cuánto tienes, aproximadamente, fuera de España?",
-    "us_resident": "¿Resides ahora en EE. UU.? (Las esperas de los consulados andan largas últimamente.)",
     "previously_ex_spanish_colony_nationality": "¿Tienes nacionalidad de una antigua colonia española? (Casi toda Latinoamérica, y también Filipinas.)",
     "property_purchase": "¿Más o menos cuándo se completó (o se completará) la compra? Con el mes basta.",
     "knows_where_to_live": "¿Ya sabes en qué parte de España te instalarás?",

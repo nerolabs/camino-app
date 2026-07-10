@@ -4,7 +4,8 @@
     "headline": "Hola, ich bin Lola.",
     "sub": "Ein Umzug nach Spanien sind hundert kleine Schritte — Visa, Padrón, Steuern, Gesundheit — und sie funktionieren nur in der richtigen Reihenfolge. Ich habe schon anderen bei diesem Schritt geholfen und gehe den Weg mit dir, von Anfang bis Ende.",
     "subQuiet": "Beantworte ein paar Fragen und ich baue deine persönliche Roadmap: echte Schritte, echte Fristen, nichts, was du nicht brauchst.",
-    "start": "Los geht’s"
+    "start": "Los geht’s",
+    "greeting": "Hallo, ich bin Lola. Ich baue Ihren Fahrplan direkt hier auf, während wir sprechen — echte Schritte, echte Fristen, nichts Überflüssiges."
   },
   "progress": {
     "question": "Frage {{n}} von ~{{total}}",
@@ -52,7 +53,6 @@
     "region": "In welche Region Spaniens ziehen Sie?",
     "has_pets": "Zieht ein Haustier mit um?",
     "foreign_assets_eur_band": "Etwas persönlich — und du wählst nur eine Spanne — wie viel hältst du ungefähr außerhalb Spaniens?",
-    "us_resident": "Lebst du derzeit in den USA? (Die Wartezeiten der Konsulate sind dort gerade ziemlich lang.)",
     "previously_ex_spanish_colony_nationality": "Haben Sie die Staatsangehörigkeit einer ehemaligen spanischen Kolonie? (Fast ganz Lateinamerika sowie die Philippinen.)",
     "property_purchase": "Ungefähr wann wurde (oder wird) der Kauf abgeschlossen? Der Monat genügt.",
     "knows_where_to_live": "Wissen Sie schon, in welche Region Spaniens Sie ziehen?",

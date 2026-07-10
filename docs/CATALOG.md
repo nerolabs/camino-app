@@ -5,7 +5,7 @@
 > which interview answers exist, what gets derived from them, and exactly which combination
 > switches each obligation on.
 
-**Totals:** 61 obligations · 20 interview questions · 12 derivations.
+**Totals:** 61 obligations · 19 interview questions · 12 derivations.
 
 ## 1 · The interview (every question asked)
 

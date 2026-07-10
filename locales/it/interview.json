@@ -4,7 +4,8 @@
     "headline": "Hola, sono Lola.",
     "sub": "Trasferirsi in Spagna sono cento piccoli passi — visti, padrón, tasse, sanità — e funzionano solo nell’ordine giusto. Ho aiutato altre persone a fare questo salto, e farò la strada con te dall’inizio alla fine.",
     "subQuiet": "Rispondi a qualche domanda e costruisco la tua roadmap personale: passi veri, scadenze vere, niente che non ti serva.",
-    "start": "Cominciamo"
+    "start": "Cominciamo",
+    "greeting": "Ciao, sono Lola. Costruirò la tua roadmap proprio qui mentre parliamo: passi reali, scadenze reali, niente di superfluo."
   },
   "progress": {
     "question": "Domanda {{n}} di ~{{total}}",
@@ -52,7 +53,6 @@
     "region": "In quale parte della Spagna ti stabilirai?",
     "has_pets": "Qualche animale si trasferisce con te?",
     "foreign_assets_eur_band": "Un po’ personale — e scegli solo una fascia — quanto possiedi, all’incirca, fuori dalla Spagna?",
-    "us_resident": "Vivi attualmente negli Stati Uniti? (I tempi dei consolati lì sono piuttosto lunghi al momento.)",
     "previously_ex_spanish_colony_nationality": "Hai la cittadinanza di un'ex colonia spagnola? (Quasi tutta l'America Latina e le Filippine.)",
     "property_purchase": "Più o meno quando si è conclusa (o si concluderà) la compravendita? Basta il mese.",
     "knows_where_to_live": "Sai già in quale zona della Spagna ti stabilirai?",

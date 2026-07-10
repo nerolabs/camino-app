@@ -4,7 +4,8 @@
     "headline": "Hola, I'm Lola.",
     "sub": "Moving to Spain is a hundred small steps — visas, padrón, taxes, healthcare — and they only work in the right order. I've helped others make this move, and I'll walk it with you the whole way.",
     "subQuiet": "Answer a few questions and I'll build your personal roadmap: real steps, real deadlines, nothing you don't need.",
-    "start": "Let's get started"
+    "start": "Let's get started",
+    "greeting": "Hola, I'm Lola. I'll build your roadmap right here as we talk — real steps, real deadlines, nothing you don't need."
   },
   "progress": {
     "question": "Question {{n}} of ~{{total}}",
@@ -52,7 +53,6 @@
     "region": "Which part of Spain will you settle in?",
     "has_pets": "Any pets making this move with you?",
     "foreign_assets_eur_band": "Slightly personal — and you only pick a range — roughly how much do you hold outside Spain?",
-    "us_resident": "Are you currently based in the US? (Consulate wait times are quite long right now.)",
     "previously_ex_spanish_colony_nationality": "Do you hold nationality from a former Spanish colony? (Most of Latin America, plus the Philippines.)",
     "property_purchase": "Roughly when did (or will) the purchase complete? A month is enough.",
     "knows_where_to_live": "Do you already know which part of Spain you'll settle in?",

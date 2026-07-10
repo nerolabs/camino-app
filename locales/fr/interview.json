@@ -4,7 +4,8 @@
     "headline": "Hola, je suis Lola.",
     "sub": "S’installer en Espagne, ce sont cent petites étapes — visas, padrón, impôts, santé — qui ne fonctionnent que dans le bon ordre. J’ai aidé d’autres personnes à franchir le pas, et je ferai la route avec toi du début à la fin.",
     "subQuiet": "Réponds à quelques questions et je construis ta feuille de route personnelle : de vraies étapes, de vraies échéances, rien d’inutile.",
-    "start": "C’est parti"
+    "start": "C’est parti",
+    "greeting": "Bonjour, je suis Lola. Je vais construire votre feuille de route ici même, au fil de la conversation — des étapes réelles, des délais réels, rien d'inutile."
   },
   "progress": {
     "question": "Question {{n}} sur ~{{total}}",
@@ -52,7 +53,6 @@
     "region": "Dans quelle région d'Espagne vous installerez-vous ?",
     "has_pets": "Un animal fait le voyage avec toi ?",
     "foreign_assets_eur_band": "Un peu personnel — et tu ne choisis qu’une tranche — combien détiens-tu, environ, hors d’Espagne ?",
-    "us_resident": "Es-tu actuellement basé aux États-Unis ? (Les délais des consulats y sont assez longs en ce moment.)",
     "previously_ex_spanish_colony_nationality": "Avez-vous la nationalité d'une ancienne colonie espagnole ? (La majeure partie de l'Amérique latine, ainsi que les Philippines.)",
     "property_purchase": "À peu près quand l'achat a-t-il été (ou sera-t-il) finalisé ? Le mois suffit.",
     "knows_where_to_live": "Savez-vous déjà dans quelle région d'Espagne vous vous installerez ?",
