@@ -5,8 +5,13 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-Last updated: 2026-07-10 evening (interview redesign COMPLETE — Phases 0–3 + audit + user-testing
-fixes, 8 commits on branch `interview-redesign`; user-tested on web; next = release path).
+Last updated: 2026-07-10 (RELEASED: living-roadmap redesign LIVE on production web at 23d917e —
+6/6 public E2E green against the live site; e2e-ios gate green (run 29090864671, incl. the
+rewritten interview flow); **iOS build 32** cut with --auto-submit (Build ID 3e45ab32, ASC
+6786412055) — supersedes build 31 as the TestFlight/store candidate. v2 analytics flowing
+(interview_version stamp); dashboard "Interview v2 — living roadmap" (PostHog 808581) holds the
+v1 baseline (167→42→12; 60 clarifies). Next: wife-testing on TestFlight + prod web, then watch
+the dashboard's before/after.
 
 ---
 
