@@ -18,6 +18,12 @@ export type Slot = {
   // Show the Lola text/voice "Other" affordance (free-form, AI-extracted) alongside the chips.
   // Kept for lists/regions where the options can't be exhaustive; off for fixed bands & yes/no.
   allowOther?: boolean;
+  // Yes/no questions where "Not sure yet" is a TRUE answer for many movers (user finding
+  // 2026-07-10). Stores the literal sentinel 'not_sure', which fails BOTH eq:true and eq:false
+  // gates — uncertain answers never conjure step clusters, and the living roadmap picks the
+  // steps up when the answer firms up (re-plan is the product). Deliberately NOT offered on hard
+  // forks (employer_country_is_foreign decides the visa route) or knowable facts (children).
+  allowNotSure?: boolean;
   // Designed sequence (front-loads roadmap payoff, defers sensitive/refinement). nextSlot() asks
   // the lowest-`order` currently-applicable slot. Gaps of 10 leave room to insert.
   order: number;
@@ -105,7 +111,7 @@ export const SLOTS: Slot[] = [
 
   // ── Round 4: life in Spain ──────────────────────────────────────────────────
   {
-    field: "intends_long_stay", type: "bool", input: "yesno", order: 40,
+    field: "intends_long_stay", type: "bool", input: "yesno", allowNotSure: true, order: 40,
     gates: ["foreign_assets_eur_band"],
     prompt_hint: "whether this is a long-term move (more than 183 days a year) or a shorter extended stay",
   },
@@ -117,15 +123,15 @@ export const SLOTS: Slot[] = [
     prompt_hint: "roughly when they plan to arrive in Spain — even an approximate month is enough to anchor real deadlines",
   },
   {
-    field: "has_spanish_address", type: "bool", input: "yesno", order: 100,
+    field: "has_spanish_address", type: "bool", input: "yesno", allowNotSure: true, order: 100,
     prompt_hint: "whether they already have a Spanish address — rented or owned",
   },
   {
-    field: "owns_or_drives", type: "bool", input: "yesno", order: 150,
+    field: "owns_or_drives", type: "bool", input: "yesno", allowNotSure: true, order: 150,
     prompt_hint: "whether anyone in the household will drive in Spain",
   },
   {
-    field: "owns_property_in_spain", type: "bool", input: "yesno", order: 110,
+    field: "owns_property_in_spain", type: "bool", input: "yesno", allowNotSure: true, order: 110,
     gates: ["property_purchase"],
     prompt_hint: "whether they own or are actively planning to purchase property in Spain",
   },
@@ -144,7 +150,7 @@ export const SLOTS: Slot[] = [
     prompt_hint: "which comunidad autónoma (region of Spain) they'll settle in — if they name a city or province, map it to its comunidad; 'not sure yet' is a fine answer",
   },
   {
-    field: "has_pets", type: "bool", input: "yesno", order: 160,
+    field: "has_pets", type: "bool", input: "yesno", allowNotSure: true, order: 160,
     prompt_hint: "whether any pets — dogs, cats, or ferrets — will be making this move with them",
   },
 
@@ -170,7 +176,7 @@ export const SLOTS: Slot[] = [
     // Decides whether the citizenship track applies at all vs. just rolling residence renewals.
     // Only relevant to non-EU long-stay movers (EU citizens don't naturalise this way; short stays
     // never reach it).
-    field: "wants_citizenship", type: "bool", input: "yesno", order: 210,
+    field: "wants_citizenship", type: "bool", input: "yesno", allowNotSure: true, order: 210,
     required_if: { all: [
       { field: "is_eu", op: "eq", value: false },
       { field: "intends_long_stay", op: "eq", value: true },

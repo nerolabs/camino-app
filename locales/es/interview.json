@@ -113,5 +113,9 @@
     "close": "Listo",
     "viewA11y": "Abrir tu hoja de ruta",
     "closeA11y": "Cerrar la hoja de ruta"
+  },
+  "final": {
+    "question": "Una última cosa: ¿hay algo más sobre tu mudanza que deba saber? Puede afinar tu hoja de ruta. O sáltatelo y ve directo a ella.",
+    "skip": "Saltar — ver mi hoja de ruta"
   }
 }

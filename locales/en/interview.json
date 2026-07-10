@@ -113,5 +113,9 @@
     "close": "Done",
     "viewA11y": "Open your roadmap",
     "closeA11y": "Close the roadmap"
+  },
+  "final": {
+    "question": "One last thing — is there anything else about your move you think I should know? It may shape your roadmap. Or skip straight to it.",
+    "skip": "Skip — show my roadmap"
   }
 }

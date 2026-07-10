@@ -113,5 +113,9 @@
     "close": "Fermer",
     "viewA11y": "Ouvrir votre feuille de route",
     "closeA11y": "Fermer la feuille de route"
+  },
+  "final": {
+    "question": "Une dernière chose — y a-t-il autre chose sur votre projet que je devrais savoir ? Cela peut affiner votre feuille de route. Ou passez directement.",
+    "skip": "Passer — voir ma feuille de route"
   }
 }

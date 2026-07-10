@@ -113,5 +113,9 @@
     "close": "Fatto",
     "viewA11y": "Apri la tua roadmap",
     "closeA11y": "Chiudi la roadmap"
+  },
+  "final": {
+    "question": "Un'ultima cosa — c'è altro sul tuo trasferimento che dovrei sapere? Può affinare la tua roadmap. Oppure salta e vai diretto.",
+    "skip": "Salta — vedi la mia roadmap"
   }
 }

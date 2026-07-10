@@ -17,7 +17,7 @@ Layers, and when they run:
 
 ---
 
-## 1. Unit / integration (vitest) — 213 passing (+10 opt-in network)
+## 1. Unit / integration (vitest) — 216 passing (+10 opt-in network)
 
 Concentrated on the deterministic core (that's the product's real risk surface):
 
@@ -29,6 +29,7 @@ Concentrated on the deterministic core (that's the product's real risk surface):
 | **Interview completeness** (roadmap-anchored % complete, Phase 0) | `completeness.test.ts` (6) | `SLOT_WEIGHT` floor ≥1 and leverage ordering (nationalities/work_situation/intends_long_stay > has_pets); COMPUTE_ALSO_READS credits derivation-body reads (employer_country_is_foreign, ex-colony — 2026-07-10 audit); empty profile → 0, full persona → 1; `answeredWeight` monotonic; partial strictly between |
 | **Anonymous interview draft** (resume without a DB, Phase 0) | `interview-draft.test.ts` (5) | save/load round-trip with completeness + lastSlotField; persists only real slot answers (drops derived/stray); null on missing/empty/corrupt; `clearDraft`; no-op when storage unavailable |
 | **Interview ordering & input schema** (Phase 1 + 2026-07-10 audit) | `interview-order.test.ts` (7) | every slot has a unique `order` + valid `input`; `allowOther` only on option/list slots; `nextSlot` opens speaks_spanish → nationalities and front-loads payoff before sensitive (income/assets deferred); a full persona leaves no slot unasked; employer_country_is_foreign asked directly after work_situation for remote employees; ex-colony question skipped when the passports already show one (asked for the US dual-national fallback) |
+| **"Not sure yet" sentinel** (2026-07-10 wife-test batch) | `not-sure.test.ts` (3) | only the 6 uncertainty-prone yes/no slots offer it (never hard forks); `not_sure` fails both eq gates — no property cluster, gated follow-ups unasked; still counts as answered so the interview completes |
 | **Income threshold advisories** (2026-07-10 audit) | `income-check.test.ts` (4) | NLV/DNV checks fire only when even the band TOP is below the household threshold (28,800+7,200/dep; ~34,000+13,000+4,000); borderline bands stay silent; unanswered income → no gate |
 | **Chip localization coverage** (Phase 1) | `interview-chips.test.ts` (3) | every slot has static question copy in all 5 locales; `chips.yes/no/other/notSure` present; every option value on an option slot has a label in all 5 locales (regions via `regionLabel`) — guards against a raw enum ("employed_remote") rendering as a chip |
 | **language-classes advisory gating** (Phase 1) | `language-classes.test.ts` (3) | `speaks_spanish` "None yet"/"A little" → the language-classes step applies; "Conversational"/"Fluent or native" → absent; unknown/unanswered → absent (so the Spanish opener pays off without touching the passport-based DELE exemption) |

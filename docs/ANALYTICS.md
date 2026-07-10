@@ -46,7 +46,8 @@ honest: **change an event → update this file in the same PR.**
 | `interview_clarify_needed` | extractor fumbled a real answer | `field`, `answer` (≤200) | Extraction quality on composer/Other turns only |
 | `interview_slots_autofilled` | extras filled other slots | `fields`, `from` | Extraction opportunism value |
 | `interview_turn_failed` | a turn errored | `field` | Reliability (pairs with Sentry) |
-| `interview_completed` | last slot answered | `answered` | Bottom of interview funnel |
+| `interview_final_note` | the optional end note (or Skip) | `skipped`, `answer` (≤500) | Free-form context to distill into obligations; skip-rate |
+| `interview_completed` | after the final note/skip | `answered` | Bottom of interview funnel |
 | `roadmap_sheet_opened` | mobile strip tapped | `plan_steps` | Does the mobile living-roadmap get used? |
 
 Post-interview surface (unchanged): `roadmap_viewed`, `task_opened`, `task_coach_asked`,

@@ -113,5 +113,9 @@
     "close": "Fertig",
     "viewA11y": "Ihren Fahrplan öffnen",
     "closeA11y": "Den Fahrplan schließen"
+  },
+  "final": {
+    "question": "Eine letzte Sache — gibt es sonst noch etwas zu Ihrem Umzug, das ich wissen sollte? Es kann Ihren Fahrplan schärfen. Oder überspringen Sie direkt.",
+    "skip": "Überspringen — Fahrplan ansehen"
   }
 }

@@ -151,6 +151,11 @@ export default function InterviewScreen() {
   const [planCount, setPlanCount] = useState(0);
   const [lastAdded, setLastAdded] = useState(0);
   const [sheetOpen, setSheetOpen] = useState(false);
+  // Final open note (user idea 2026-07-10): after the last slot, one optional free-form
+  // "anything else I should know?" with a Skip chip — raw text lands on the profile as `notes`
+  // and in analytics, ready for the distill-into-obligations pipeline (the plan-coach already
+  // consumes free text post-interview).
+  const [finalPhase, setFinalPhase] = useState(false);
   const { width } = useWindowDimensions();
   const twoPane = width >= 900; // web two-pane needs room; phones/tablets stay single-column
   const scrollRef = useRef<ScrollView>(null);
@@ -276,7 +281,12 @@ export default function InterviewScreen() {
         { value: false, label: m.no ?? t('chips.no') },
       ];
     }
-    if (slot.type === 'bool') return [{ value: true, label: t('chips.yes') }, { value: false, label: t('chips.no') }];
+    if (slot.type === 'bool') {
+      const base = [{ value: true, label: t('chips.yes') }, { value: false, label: t('chips.no') }];
+      // 'not_sure' fails both eq:true and eq:false gates — uncertain answers add nothing to the
+      // roadmap now; re-planning picks the steps up when the answer firms (see Slot.allowNotSure).
+      return slot.allowNotSure ? [...base, { value: 'not_sure', label: t('chips.notSure') }] : base;
+    }
     return (slot.options ?? []).map(o => ({ value: o, label: optionLabelFor(slot.field, o) }));
   }
 
@@ -298,6 +308,19 @@ export default function InterviewScreen() {
       const restored: Profile = { ...draft.answers };
       derive(restored);
       const slot = nextSlot(restored);
+      if (!slot) {
+        // Everything answered but never finished — resume straight into the final note.
+        const pct = Math.round(Math.min(0.95, interviewCompleteness(restored).pct) * 100);
+        capture('interview_resumed', { completeness: pct, answered: interviewProgress(restored).answered });
+        setProfile(restored);
+        setPlanCount(buildPlan(restored).length);
+        setFinalPhase(true);
+        setTurns([
+          { role: 'lola', text: t('landing.welcomeBack', { pct }) },
+          { role: 'lola', text: t('final.question') },
+        ]);
+        return;
+      }
       if (slot) {
         const pct = Math.round(Math.min(0.95, interviewCompleteness(restored).pct) * 100);
         capture('interview_resumed', { completeness: pct, answered: interviewProgress(restored).answered });
@@ -311,7 +334,6 @@ export default function InterviewScreen() {
         askedAtRef.current = Date.now();
         return;
       }
-      clearDraft(); // draft was already complete/stale — start clean
     }
 
     const slot = nextSlot({});
@@ -393,13 +415,15 @@ export default function InterviewScreen() {
 
     const next = nextSlot(next_profile);
     if (!next) {
-      capture('interview_question_answered', { ...answeredProps, ack_shown: false }); // final turn: no reaction slot
-      await persist(next_profile);
-      capture('interview_completed', { answered: interviewProgress(next_profile).answered });
-      clearDraft(); // finished — nothing to resume
-      setTurns(prev => [...prev, { role: 'lola', text: t('done') }]);
-      setDone(true);
-      setTimeout(() => router.push('/plan'), 1800);
+      // Last slot answered → the optional final note, not straight to done.
+      const ackF = await Promise.race([ackP, sleep(REACTION_WAIT_MS).then(() => '')]);
+      capture('interview_question_answered', { ...answeredProps, ack_shown: !!ackF });
+      const fq = t('final.question');
+      setCurrentSlot(null);
+      setFinalPhase(true);
+      setTurns(prev => [...prev, { role: 'lola', text: ackF ? `${ackF}\n\n${fq}` : fq }]);
+      saveDraft(next_profile, null); // resumable straight into the final note
+      setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
       return;
     }
     setCurrentSlot(next);
@@ -408,7 +432,7 @@ export default function InterviewScreen() {
     // ack_shown = the reaction made the cap; its false-rate is the tuning signal for REACTION_WAIT_MS.
     capture('interview_question_answered', { ...answeredProps, ack_shown: !!ack });
     const q = questionText(next);
-    setTurns(prev => [...prev, { role: 'lola', text: ack ? `${ack} ${q}` : q }]);
+    setTurns(prev => [...prev, { role: 'lola', text: ack ? `${ack}\n\n${q}` : q }]);
     askedAtRef.current = Date.now();
     saveDraft(next_profile, next.field); // anonymous resume (signed-in already persists to the DB)
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
@@ -440,9 +464,38 @@ export default function InterviewScreen() {
     }
   }
 
+  // Wrap up: store the optional note (profile.notes + analytics), persist, and hand over to the
+  // roadmap. `skipped` distinguishes silence from a real note in the funnel data.
+  async function finishInterview(noteText: string | null) {
+    setLoading(true);
+    try {
+      const text = noteText?.trim() || null;
+      if (text) setTurns(prev => [...prev, { role: 'user', text }]);
+      capture('interview_final_note', { skipped: !text, answer: text ? text.slice(0, 500) : undefined });
+      const p: Profile = text ? { ...profile, notes: text } : profile;
+      if (text) setProfile(p);
+      await persist(p);
+      capture('interview_completed', { answered: interviewProgress(p).answered });
+      clearDraft(); // finished — nothing to resume
+      setFinalPhase(false);
+      setDone(true);
+      setTurns(prev => [...prev, { role: 'lola', text: t('done') }]);
+      setTimeout(() => router.push('/plan'), 1800);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   // Free-text / voice path: nationalities, dates, and "Other". Runs the LLM extraction (and Lola's
   // contextual clarify reply) — kept precisely because it captures richer data and reduces ambiguity.
   async function submitFreeText(text: string) {
+    if (finalPhase) {
+      if (!text.trim() || loading) return;
+      if (dictation.listening) dictation.cancel();
+      setInput(''); setInputHeight(0);
+      await finishInterview(text);
+      return;
+    }
     if (!currentSlot || !text.trim() || loading) return;
     // CANCEL (not stop) dictation: the recognizer's final async flush must be discarded here,
     // or it re-fills the input we're about to clear (build-27/28 family findings).
@@ -586,6 +639,14 @@ export default function InterviewScreen() {
           {loading && (
             <View style={styles.lolaBubble}>
               <ActivityIndicator color={palette.amber} />
+            </View>
+          )}
+
+          {finalPhase && !done && !loading && (
+            <View style={styles.chipsWrap}>
+              <TouchableOpacity style={[styles.chip, styles.chipOther]} onPress={() => finishInterview(null)} accessibilityRole="button">
+                <Text style={styles.chipOtherText}>{t('final.skip')}</Text>
+              </TouchableOpacity>
             </View>
           )}
 
