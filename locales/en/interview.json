@@ -48,7 +48,7 @@
     "has_children": "Kids bring school enrollment into the plan. Any children coming with you?",
     "intends_long_stay": "How much of the year you'll spend here changes your tax picture and which registrations apply. Will you be in Spain more than six months a year?",
     "arrival_date": "Very exciting — moving to Spain! Let's start where you probably already are: roughly when are you hoping to arrive? Even just a month is fine — it anchors every deadline on your roadmap.",
-    "has_spanish_address": "An address unlocks the town-hall registration — the padrón — that much of the rest hangs on. Do you already have a place lined up in Spain?",
+    "has_spanish_address": "Now, where will you land? An address unlocks the town-hall registration — the padrón — and buying brings its own cluster of steps. What's your housing plan?",
     "owns_or_drives": "Driving here can mean exchanging your licence — or a Spanish exam — depending on your country. Will anyone in the household be driving?",
     "owns_property_in_spain": "Property brings its own cluster of steps — notary, registry, taxes. Do you own — or plan to buy — property in Spain?",
     "region": "Some steps vary by comunidad, so this makes your roadmap more precise. Which part of Spain will you settle in?",
@@ -99,6 +99,12 @@
       "yes_registered": "Yes — married or civil partnership",
       "yes_unregistered": "Yes — not registered",
       "no": "No"
+    },
+    "has_spanish_address": {
+      "renting": "Renting — already arranged",
+      "bought": "I own a home in Spain",
+      "will_buy": "Planning to buy",
+      "nothing": "Nothing arranged yet"
     }
   },
   "roadmap": {

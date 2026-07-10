@@ -48,7 +48,7 @@
     "has_children": "Kinder bringen die Schulanmeldung in den Plan. Kommen Kinder mit?",
     "intends_long_stay": "Wie viel des Jahres Sie hier verbringen, ändert Ihre Steuersituation und die nötigen Anmeldungen. Werden Sie mehr als sechs Monate im Jahr in Spanien sein?",
     "arrival_date": "Wie aufregend — der Umzug nach Spanien! Fangen wir dort an, wo Sie gedanklich sicher schon sind: Wann hoffen Sie ungefähr anzukommen? Der Monat genügt — er verankert alle Fristen in Ihrem Fahrplan.",
-    "has_spanish_address": "Eine Adresse schaltet die Rathaus-Anmeldung frei — den padrón —, an dem vieles Weitere hängt. Haben Sie schon eine Unterkunft in Spanien?",
+    "has_spanish_address": "Und wo werden Sie landen? Eine Adresse schaltet die Rathaus-Anmeldung frei — den padrón — und Kaufen bringt sein eigenes Bündel an Schritten. Wie sieht Ihr Wohnplan aus?",
     "owns_or_drives": "Autofahren kann hier Führerschein-Umtausch bedeuten — oder eine spanische Prüfung —, je nach Land. Wird jemand im Haushalt fahren?",
     "owns_property_in_spain": "Eine Immobilie bringt ihr eigenes Bündel an Schritten — Notar, Register, Steuern. Besitzen Sie eine Immobilie in Spanien — oder planen Sie einen Kauf?",
     "region": "Manche Schritte variieren je nach Comunidad — das macht Ihren Fahrplan genauer. In welche Region Spaniens ziehen Sie?",
@@ -99,6 +99,12 @@
       "yes_registered": "Ja — verheiratet oder eingetragen",
       "yes_unregistered": "Ja — nicht eingetragen",
       "no": "Nein"
+    },
+    "has_spanish_address": {
+      "renting": "Zur Miete — schon geregelt",
+      "bought": "Ich besitze ein Zuhause in Spanien",
+      "will_buy": "Ich plane zu kaufen",
+      "nothing": "Noch nichts geregelt"
     }
   },
   "roadmap": {

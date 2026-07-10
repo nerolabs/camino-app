@@ -48,7 +48,7 @@
     "has_children": "I bambini portano l'iscrizione a scuola nel piano. Vengono bambini con te?",
     "intends_long_stay": "Quanta parte dell'anno passerai qui cambia il tuo quadro fiscale e quali registrazioni servono. Starai in Spagna più di sei mesi all'anno?",
     "arrival_date": "Che emozione trasferirsi in Spagna! Partiamo da dove probabilmente sei già con la testa: più o meno quando conti di arrivare? Basta il mese — àncora tutte le scadenze della tua roadmap.",
-    "has_spanish_address": "Un indirizzo sblocca l'iscrizione in comune — il padrón — da cui dipende buona parte del resto. Hai già un alloggio in Spagna?",
+    "has_spanish_address": "E ora, dove atterrerai? Un indirizzo sblocca l'iscrizione in comune — il padrón — e comprare porta il suo blocco di passi. Qual è il tuo piano casa?",
     "owns_or_drives": "Guidare qui può voler dire convertire la patente — o un esame spagnolo — a seconda del paese. Qualcuno in famiglia guiderà?",
     "owns_property_in_spain": "Un immobile porta il suo blocco di passi — notaio, registro, tasse. Possiedi — o pensi di comprare — un immobile in Spagna?",
     "region": "Alcuni passi variano da comunidad a comunidad, quindi questo affina la tua roadmap. In quale parte della Spagna ti stabilirai?",
@@ -99,6 +99,12 @@
       "yes_registered": "Sì — sposati o unione civile",
       "yes_unregistered": "Sì — non registrata",
       "no": "No"
+    },
+    "has_spanish_address": {
+      "renting": "In affitto — già sistemato",
+      "bought": "Ho una casa in Spagna",
+      "will_buy": "Penso di comprare",
+      "nothing": "Ancora niente di fissato"
     }
   },
   "roadmap": {

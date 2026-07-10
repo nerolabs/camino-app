@@ -48,7 +48,7 @@
     "has_children": "Des enfants ajoutent la scolarisation au plan. Des enfants viennent-ils avec vous ?",
     "intends_long_stay": "La part de l'année passée ici change votre situation fiscale et les démarches applicables. Serez-vous en Espagne plus de six mois par an ?",
     "arrival_date": "Quelle belle aventure, ce départ pour l'Espagne ! Commençons par ce que vous avez sûrement déjà en tête : à peu près quand espérez-vous arriver ? Le mois suffit — cela ancre toutes les échéances de votre feuille de route.",
-    "has_spanish_address": "Une adresse débloque l'inscription en mairie — le padrón — dont dépend une bonne partie du reste. Avez-vous déjà un logement en Espagne ?",
+    "has_spanish_address": "Et maintenant, où allez-vous atterrir ? Une adresse débloque l'inscription en mairie — le padrón — et acheter apporte son propre lot d'étapes. Quel est votre plan logement ?",
     "owns_or_drives": "Conduire ici peut impliquer d'échanger votre permis — ou un examen espagnol — selon votre pays. Quelqu'un du foyer conduira-t-il ?",
     "owns_property_in_spain": "Un bien immobilier apporte son propre lot d'étapes — notaire, registre, impôts. Possédez-vous — ou comptez-vous acheter — un bien en Espagne ?",
     "region": "Certaines étapes varient selon la communauté autonome ; cela affine votre feuille de route. Dans quelle région d'Espagne vous installerez-vous ?",
@@ -99,6 +99,12 @@
       "yes_registered": "Oui — mariés ou pacsés",
       "yes_unregistered": "Oui — non enregistrés",
       "no": "Non"
+    },
+    "has_spanish_address": {
+      "renting": "En location — déjà arrangé",
+      "bought": "Je possède un logement en Espagne",
+      "will_buy": "Je compte acheter",
+      "nothing": "Rien d’arrangé encore"
     }
   },
   "roadmap": {

@@ -281,6 +281,19 @@ export default function InterviewScreen() {
         { value: false, label: m.no ?? t('chips.no') },
       ];
     }
+    // Housing pair merged (user finding 2026-07-10): "place lined up?" then "own or buying?"
+    // read as redundant. One question now writes BOTH fields — has_spanish_address is the slot,
+    // owns_property_in_spain arrives via extras. owns_property stays in SLOTS as the free-text
+    // fallback, and property_purchase still follows only when owning/buying.
+    if (slot.field === 'has_spanish_address') {
+      const m = t('options.has_spanish_address', { returnObjects: true, defaultValue: {} }) as Record<string, string>;
+      return [
+        { value: true,  label: m.renting ?? t('chips.yes'),   extras: { owns_property_in_spain: false } },
+        { value: true,  label: m.bought ?? t('chips.yes'),    extras: { owns_property_in_spain: true } },
+        { value: false, label: m.will_buy ?? t('chips.no'),   extras: { owns_property_in_spain: true } },
+        { value: false, label: m.nothing ?? t('chips.notSure'), extras: { owns_property_in_spain: false } },
+      ];
+    }
     if (slot.type === 'bool') {
       const base = [{ value: true, label: t('chips.yes') }, { value: false, label: t('chips.no') }];
       // 'not_sure' fails both eq:true and eq:false gates — uncertain answers add nothing to the
