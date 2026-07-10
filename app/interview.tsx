@@ -380,7 +380,7 @@ export default function InterviewScreen() {
     // coverage, and the completeness-at-exit distribution all fall out of one event. Deliberately
     // carries NO answer values (income/assets bands never leave the device via analytics).
     const comp = interviewCompleteness(next_profile);
-    capture('interview_question_answered', {
+    const answeredProps = {
       field: slot.field,
       input: mode,
       ms: Date.now() - askedAtRef.current,
@@ -389,10 +389,11 @@ export default function InterviewScreen() {
       plan_steps: delta.after.length,
       completeness: Math.round(comp.pct * 100),
       two_pane: twoPane,
-    });
+    };
 
     const next = nextSlot(next_profile);
     if (!next) {
+      capture('interview_question_answered', { ...answeredProps, ack_shown: false }); // final turn: no reaction slot
       await persist(next_profile);
       capture('interview_completed', { answered: interviewProgress(next_profile).answered });
       clearDraft(); // finished — nothing to resume
@@ -404,6 +405,8 @@ export default function InterviewScreen() {
     setCurrentSlot(next);
     // One stable paint: wait (bounded) for the reaction, then render the merged bubble once.
     const ack = await Promise.race([ackP, sleep(REACTION_WAIT_MS).then(() => '')]);
+    // ack_shown = the reaction made the cap; its false-rate is the tuning signal for REACTION_WAIT_MS.
+    capture('interview_question_answered', { ...answeredProps, ack_shown: !!ack });
     const q = questionText(next);
     setTurns(prev => [...prev, { role: 'lola', text: ack ? `${ack} ${q}` : q }]);
     askedAtRef.current = Date.now();

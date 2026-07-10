@@ -9,8 +9,9 @@ honest: **change an event → update this file in the same PR.**
   by design, user decision 2026-07-04). Consequence: **anonymous visitors get a new person per
   session** — cross-session funnels only stitch for signed-in users (`identify`). Within-session
   funnels are exact.
-- `lib/analytics.native.ts` is a **no-op stub — iOS/Android emit NOTHING.** Any mobile-app testing
-  is invisible to PostHog until posthog-react-native lands (fast-follow candidate).
+- `lib/analytics.native.ts`: posthog-react-native, **live since iOS build 31** (a stale comment
+  claimed it was a stub — corrected 2026-07-10). Same project/key; native events carry platform
+  context automatically. The `interview_version: 2` stamp reaches iOS with the next build.
 - Local dev sends nothing (no key in `.env`); every event carries `environment`
   (staging/production) — filter dashboards to production.
 
@@ -39,7 +40,7 @@ honest: **change an event → update this file in the same PR.**
 | `$pageview` /interview | route view | — | Top of funnel (v2 "arrived") |
 | `interview_started` | FIRST answer | `from` (guide id) | Engagement, attribution |
 | `interview_resumed` | draft restored on mount | `completeness`, `answered` | Do people come back? At what depth? |
-| **`interview_question_answered`** | every answered question | `field`, `input` (chip/composer/other/typeahead), `ms` (since question shown), `added_steps`, `removed_steps`, `plan_steps`, `completeness` (0–100), `two_pane` | THE per-question funnel: drop-off point (last event per person), per-question latency, payoff-vs-continuation, exit-completeness distribution |
+| **`interview_question_answered`** | every answered question | `field`, `input` (chip/composer/other/typeahead), `ms` (since question shown), `added_steps`, `removed_steps`, `plan_steps`, `completeness` (0–100), `two_pane`, `ack_shown` | THE per-question funnel: drop-off point (last event per person), per-question latency, payoff-vs-continuation, exit-completeness distribution |
 | `interview_other_opened` | "Something else…" tapped | `field` | Chip-coverage gaps (which chip sets are incomplete) |
 | `interview_other_answered` | free text sent via Other | `field`, `answer` (≤200 chars) | The raw phrasing to refine chip sets from (user decision 2026-07-09). Other is never offered on sensitive slots |
 | `interview_clarify_needed` | extractor fumbled a real answer | `field`, `answer` (≤200) | Extraction quality on composer/Other turns only |
@@ -75,12 +76,13 @@ Baselines from the 2026-07-06→08 soft-launch traffic (PostHog, hand-dug):
 | Payoff→continuation (the thesis) | n/a | higher `added_steps` → higher next-answer rate | `question_answered` self-join by person/order |
 
 ## Known gaps / decisions queued
-- **Native analytics is a no-op.** The iOS wife-test will produce zero events. Fast-follow:
-  posthog-react-native behind the same `capture()` interface.
+- **App Privacy label** (App Store questionnaire, at submission): analytics is live on native —
+  disclose Product Interaction data, not linked to identity for anonymous users (see
+  docs/STORE_PAPERWORK.md).
 - Anonymous cross-session stitching is off by design (cookieless). `interview_resumed` partially
   recovers the story client-side via the localStorage draft.
-- Reaction (ack) drop-rate isn't instrumented (raced vs a 2s cap); add `ack_shown` to
-  `question_answered` if tuning `REACTION_WAIT_MS` ever matters.
+- ~~Reaction (ack) drop-rate~~ — done: `ack_shown` on `question_answered` (false-rate = how often
+  the 2s cap drops the reaction; the tuning signal for `REACTION_WAIT_MS`).
 - Income-check exposure (`nlv/dnv-income-check` appearing in a plan) is derivable from Supabase
   profiles (band + household + visa route); no event needed yet.
 - Dashboards: build in the PostHog UI post-deploy — (1) the v2 funnel, (2) per-question drop-off

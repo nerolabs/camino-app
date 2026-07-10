@@ -1,6 +1,6 @@
-// Product analytics (web) via PostHog. The native counterpart (lib/analytics.native.ts) is a
-// no-op stub for now — native analytics (posthog-react-native) is a fast follow. Same interface
-// both sides so callers are platform-agnostic.
+// Product analytics (web) via PostHog. The native counterpart (lib/analytics.native.ts) is the
+// posthog-react-native implementation (live since build 31) — same interface both sides so
+// callers are platform-agnostic.
 //
 // The key is only present in the staging/production web bundles (set in the EAS envs, NOT in the
 // local .env), so local dev sends nothing and never pollutes the funnel. Every event carries an

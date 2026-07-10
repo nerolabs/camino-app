@@ -17,7 +17,9 @@ export function initAnalytics() {
     host: HOST,
     captureAppLifecycleEvents: true, // app opened/backgrounded — native engagement signal
   });
-  posthog.register({ environment: APP_ENV }); // stamped on every event
+  // Stamped on every event; `interview_version: 2` = the living-roadmap redesign — parity with
+  // web so iOS events segment correctly in pre/post comparisons.
+  posthog.register({ environment: APP_ENV, interview_version: 2 });
 }
 
 // props are JSON-serializable analytics values in practice; cast to satisfy PostHog's JsonType.
