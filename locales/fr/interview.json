@@ -37,7 +37,7 @@
     "turnFailed": "Pardon — ça a pris plus de temps que prévu. Ta réponse est toujours dans le champ ; tu peux me la renvoyer ?"
   },
   "static": {
-    "speaks_spanish": "Quelle belle aventure, ce départ pour l'Espagne ! Au début, on se débrouille en français ou en anglais, mais la vraie vie en Espagne se passe en espagnol — autant connaître votre point de départ. Où en êtes-vous avec l'espagnol ?",
+    "speaks_spanish": "Au début, on se débrouille en français ou en anglais, mais la vraie vie en Espagne se passe en espagnol — autant connaître votre point de départ. Où en êtes-vous avec l'espagnol ?",
     "nationalities": "Vos passeports déterminent la route — visas, démarches et même les délais de nationalité en dépendent. De quels pays chaque membre du foyer est-il citoyen ?",
     "work_situation": "Votre façon de gagner votre vie oriente la voie de résidence adaptée. Quelle sera votre situation professionnelle une fois installé ?",
     "employer_country_is_foreign": "Pour les salariés à distance, cela oriente la voie du visa. Votre employeur est-il basé hors d'Espagne ?",
@@ -46,7 +46,7 @@
     "partner_is_married": "L'Espagne traite différemment les unions enregistrées pour les démarches familiales. La vôtre est-elle enregistrée ? Un mariage ou un PACS comptent tous les deux.",
     "has_children": "Des enfants ajoutent la scolarisation au plan. Des enfants viennent-ils avec vous ?",
     "intends_long_stay": "La part de l'année passée ici change votre situation fiscale et les démarches applicables. Serez-vous en Espagne plus de six mois par an ?",
-    "arrival_date": "Votre date d'arrivée ancre toutes les échéances de la feuille de route. À peu près quand espérez-vous arriver ? Le mois suffit.",
+    "arrival_date": "Quelle belle aventure, ce départ pour l'Espagne ! Commençons par ce que vous avez sûrement déjà en tête : à peu près quand espérez-vous arriver ? Le mois suffit — cela ancre toutes les échéances de votre feuille de route.",
     "has_spanish_address": "Une adresse débloque l'inscription en mairie — le padrón — dont dépend une bonne partie du reste. Avez-vous déjà un logement en Espagne ?",
     "owns_or_drives": "Conduire ici peut impliquer d'échanger votre permis — ou un examen espagnol — selon votre pays. Quelqu'un du foyer conduira-t-il ?",
     "owns_property_in_spain": "Un bien immobilier apporte son propre lot d'étapes — notaire, registre, impôts. Possédez-vous — ou comptez-vous acheter — un bien en Espagne ?",

@@ -37,7 +37,7 @@
     "turnFailed": "Perdona — eso ha tardado más de la cuenta. Tu respuesta sigue en el cuadro; ¿me la envías otra vez?"
   },
   "static": {
-    "speaks_spanish": "¡Qué ilusión mudarse a España! Si ya hablas español llegas con muchísimo terreno ganado — y si estás empezando, también quiero saberlo. ¿Cómo llevas el español ahora mismo?",
+    "speaks_spanish": "Si ya hablas español llegas con muchísimo terreno ganado — y si estás empezando, también quiero saberlo. ¿Cómo llevas el español ahora mismo?",
     "nationalities": "Vuestros pasaportes marcan la ruta — visados, registros e incluso los plazos de nacionalidad dependen de ellos. ¿De dónde es ciudadano cada miembro del hogar?",
     "work_situation": "De qué vivirás orienta qué ruta de residencia encaja. ¿Cuál será tu situación laboral cuando te mudes?",
     "employer_country_is_foreign": "Para empleados en remoto, esto orienta la ruta de visado. ¿Tu empresa tiene sede fuera de España?",
@@ -46,7 +46,7 @@
     "partner_is_married": "España trata distinto las relaciones registradas en el papeleo familiar. ¿La vuestra está registrada legalmente? Sirve tanto un matrimonio como una pareja de hecho.",
     "has_children": "Los niños traen la escolarización al plan. ¿Vienen niños contigo?",
     "intends_long_stay": "Cuánto tiempo del año pases aquí cambia tu situación fiscal y qué registros aplican. ¿Estarás en España más de seis meses al año?",
-    "arrival_date": "Tu fecha de llegada ancla todos los plazos de la hoja de ruta. ¿Más o menos cuándo esperas llegar? Con el mes basta.",
+    "arrival_date": "¡Qué ilusión mudarse a España! Empecemos por donde seguramente ya estás pensando: ¿más o menos cuándo esperas llegar? Con el mes basta — ancla todos los plazos de tu hoja de ruta.",
     "has_spanish_address": "Una dirección desbloquea el empadronamiento, del que cuelga buena parte del resto. ¿Ya tienes una vivienda en España?",
     "owns_or_drives": "Conducir aquí puede suponer canjear el carnet — o un examen español — según tu país. ¿Conducirá alguien del hogar?",
     "owns_property_in_spain": "Una propiedad trae su propio bloque de pasos — notaría, registro, impuestos. ¿Tienes —o piensas comprar— una propiedad en España?",

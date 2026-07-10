@@ -22,9 +22,10 @@ describe('slot schema', () => {
 });
 
 describe('nextSlot ordering', () => {
-  it('opens with speaks_spanish, then nationalities', () => {
-    expect(nextSlot({})?.field).toBe('speaks_spanish');
-    expect(nextSlot({ speaks_spanish: 'None yet' })?.field).toBe('nationalities');
+  it('opens with arrival_date (the question people arrive asking), then speaks_spanish', () => {
+    expect(nextSlot({})?.field).toBe('arrival_date');
+    expect(nextSlot({ arrival_date: '2027-01-01' })?.field).toBe('speaks_spanish');
+    expect(nextSlot({ arrival_date: '2027-01-01', speaks_spanish: 'None yet' })?.field).toBe('nationalities');
   });
 
   it('front-loads roadmap-payoff questions before sensitive ones', () => {
@@ -42,10 +43,10 @@ describe('nextSlot ordering', () => {
       derive(p);
     }
     const at = (f: string) => asked.indexOf(f);
-    expect(at('speaks_spanish')).toBe(0);
+    expect(at('arrival_date')).toBe(0); // the emotional jumping-off point — and the timing anchor
+    expect(at('speaks_spanish')).toBe(1);
     expect(at('nationalities')).toBeLessThan(at('work_situation'));
-    expect(at('work_situation')).toBeLessThan(at('arrival_date'));
-    expect(at('arrival_date')).toBeLessThan(at('annual_income_eur_band')); // sensitive deferred
+    expect(at('work_situation')).toBeLessThan(at('annual_income_eur_band')); // sensitive deferred
     expect(at('annual_income_eur_band')).toBeLessThan(at('foreign_assets_eur_band'));
   });
 
@@ -57,7 +58,7 @@ describe('nextSlot ordering', () => {
 
   it('asks employer_country_is_foreign immediately after work_situation for remote employees', () => {
     // It decides DNV vs work permit — the visa cluster is undetermined until it's answered.
-    const p: Profile = { speaks_spanish: 'A little', nationalities: ['US'], work_situation: 'employed_remote' };
+    const p: Profile = { arrival_date: '2027-01-01', speaks_spanish: 'A little', nationalities: ['US'], work_situation: 'employed_remote' };
     derive(p);
     expect(nextSlot(p)?.field).toBe('employer_country_is_foreign');
   });

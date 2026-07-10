@@ -110,7 +110,10 @@ export const SLOTS: Slot[] = [
     prompt_hint: "whether this is a long-term move (more than 183 days a year) or a shorter extended stay",
   },
   {
-    field: "arrival_date", type: "date", input: "date", order: 50,
+    // THE opener (user decision 2026-07-10): "when are you moving?" is the question people arrive
+    // already asking themselves — the natural, encouraging jumping-off point. It also anchors the
+    // timing of ~24 obligations, so every step that lands afterwards arrives with real dates.
+    field: "arrival_date", type: "date", input: "date", order: 5,
     prompt_hint: "roughly when they plan to arrive in Spain — even an approximate month is enough to anchor real deadlines",
   },
   {

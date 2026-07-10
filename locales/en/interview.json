@@ -37,7 +37,7 @@
     "turnFailed": "Sorry — that took longer than it should have. Your answer is still in the box; mind sending it again?"
   },
   "static": {
-    "speaks_spanish": "Very exciting — moving to Spain! You can get by in English at first, but real life in Spain runs on Spanish, so it helps to know your starting point. Where's your Spanish right now?",
+    "speaks_spanish": "You can get by in English at first, but real life in Spain runs on Spanish — so it helps to know your starting point. Where's your Spanish right now?",
     "nationalities": "Your passports set the route — visas, registrations, even citizenship timelines hang on them. Where's everyone in the household a citizen?",
     "work_situation": "How you'll earn points at which residence route fits. What'll your work situation be when you move?",
     "employer_country_is_foreign": "For remote employees, this points the visa route. Is your employer based outside Spain?",
@@ -46,7 +46,7 @@
     "partner_is_married": "Spain treats registered relationships differently for family paperwork. Is yours legally registered? A marriage or civil partnership both count.",
     "has_children": "Kids bring school enrollment into the plan. Any children coming with you?",
     "intends_long_stay": "How much of the year you'll spend here changes your tax picture and which registrations apply. Will you be in Spain more than six months a year?",
-    "arrival_date": "Your arrival date anchors every deadline on the roadmap. Roughly when are you hoping to arrive? Even just a month is fine.",
+    "arrival_date": "Very exciting — moving to Spain! Let's start where you probably already are: roughly when are you hoping to arrive? Even just a month is fine — it anchors every deadline on your roadmap.",
     "has_spanish_address": "An address unlocks the town-hall registration — the padrón — that much of the rest hangs on. Do you already have a place lined up in Spain?",
     "owns_or_drives": "Driving here can mean exchanging your licence — or a Spanish exam — depending on your country. Will anyone in the household be driving?",
     "owns_property_in_spain": "Property brings its own cluster of steps — notary, registry, taxes. Do you own — or plan to buy — property in Spain?",
