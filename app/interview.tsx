@@ -259,7 +259,18 @@ export default function InterviewScreen() {
     return (map && map[value]) || value;
   }
 
-  function chipChoices(slot: Slot): { value: unknown; label: string }[] {
+  function chipChoices(slot: Slot): { value: unknown; label: string; extras?: Record<string, unknown> }[] {
+    // Partner pair merged (2026-07-10 audit): one tap answers BOTH has_spouse_or_partner and
+    // partner_is_married (advance()'s extras path writes the second field), saving a question.
+    // The follow-up slot stays in SLOTS as a safety net for the free-text path.
+    if (slot.field === 'has_spouse_or_partner') {
+      const m = t('options.has_spouse_or_partner', { returnObjects: true, defaultValue: {} }) as Record<string, string>;
+      return [
+        { value: true, label: m.yes_registered ?? t('chips.yes'), extras: { partner_is_married: true } },
+        { value: true, label: m.yes_unregistered ?? t('chips.yes'), extras: { partner_is_married: false } },
+        { value: false, label: m.no ?? t('chips.no') },
+      ];
+    }
     if (slot.type === 'bool') return [{ value: true, label: t('chips.yes') }, { value: false, label: t('chips.no') }];
     return (slot.options ?? []).map(o => ({ value: o, label: optionLabelFor(slot.field, o) }));
   }
@@ -354,14 +365,17 @@ export default function InterviewScreen() {
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
   }
 
-  // Chip tap: deterministic, no LLM. The chosen label is echoed as the user's turn.
-  async function submitChip(value: unknown, label: string) {
+  // Chip tap: deterministic, no LLM. The chosen label is echoed as the user's turn. `extras`
+  // lets a combined chip answer additional slots in the same tap (partner pair).
+  async function submitChip(value: unknown, label: string, extras?: Record<string, unknown>) {
     if (!currentSlot || loading) return;
     if (dictation.listening) dictation.cancel();
     setLoading(true);
     setTurns(prev => [...prev, { role: 'user', text: label }]);
     try {
-      await advance(currentSlot, value, label);
+      const remainingSlots = extras
+        ? SLOTS.filter(s => !(s.field in profile) && s.field !== currentSlot.field) : [];
+      await advance(currentSlot, value, label, extras, remainingSlots);
     } catch (e) {
       captureError(e instanceof Error ? e : new Error('interview chip turn failed'), {
         route: '/interview', field: currentSlot.field,
@@ -502,9 +516,9 @@ export default function InterviewScreen() {
             <View style={styles.chipsWrap}>
               {chipChoices(currentSlot!).map(c => (
                 <TouchableOpacity
-                  key={String(c.value)}
+                  key={c.label}
                   style={styles.chip}
-                  onPress={() => submitChip(c.value, c.label)}
+                  onPress={() => submitChip(c.value, c.label, c.extras)}
                   disabled={loading}
                   accessibilityRole="button"
                 >

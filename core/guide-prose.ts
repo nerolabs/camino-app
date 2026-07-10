@@ -11,6 +11,10 @@
  */
 
 export const GUIDE_PROSE: Record<string, string> = {
+  'dnv-income-check':
+    'The same arithmetic, for the digital nomad route: your income band against the threshold for a household your size suggests a gap. Bands are rough and this isn\'t a verdict — but remote-income evidence is the heart of a DNV application, so a shortfall is worth resolving on paper before anything is booked. An adviser can tell you what counts as provable income, and whether a different route serves you better.',
+  'nlv-income-check':
+    'This is arithmetic on your own answers, done for you: comparing your income band against the NLV threshold for a household your size suggests a gap. It isn\'t a verdict — bands are rough, and consulates look at the whole evidence picture — but it\'s far better to discover this at the planning stage than at the appointment. A session with an immigration adviser on how to evidence your means, or whether another route fits better, is money well spent here.',
   'language-classes':
     'This is Get Camino\'s advice, not a legal requirement: the sooner you start building real Spanish, the smoother everything else goes — the padrón clerk, the doctor, your neighbours, the lease you\'re signing. Formal classes, a private tutor, or an intensive once you land all work; what matters is starting before you need it. And if citizenship is ever on your horizon, the language level you\'ll need to certify is far easier to reach once you\'ve been at it for a while.',
   'scout-where-to-live':

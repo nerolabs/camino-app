@@ -4,6 +4,8 @@
  * stay Spanish; tu register, warm-precise voice.
  */
 export const IT_CATALOG_TITLES: Record<string, string> = {
+  'dnv-income-check': 'Attenzione: la tua fascia di reddito sembra sotto il requisito del visto per nomadi digitali — circa €34,000/anno (200% del salario minimo spagnolo) più ~€13,000 per il coniuge e ~€4,000 per figlio per il tuo nucleo. Valuta come dimostrerai il tuo reddito da remoto, o considera vie alternative, prima di prenotare l\'appuntamento in consolato',
+  'nlv-income-check': 'Attenzione: la tua fascia di reddito sembra sotto il requisito della NLV — €28,800/anno più €7,200/anno per familiare a carico (400% dell\'IPREM) per il tuo nucleo. Valuta come dimostrerai mezzi passivi sufficienti, o considera vie alternative, prima di prenotare l\'appuntamento in consolato',
   'language-classes': 'Inizia a imparare lo spagnolo — iscriviti a lezioni regolari o a un corso strutturato (un\'accademia locale, un tutor online o un intensivo all\'arrivo). Rende molto più facile la vita quotidiana e getta le basi se un giorno punti alla cittadinanza.',
   'scout-where-to-live': 'Decidi dove vivere in Spagna prima di impegnarti — se sei indeciso, pianifica un viaggio esplorativo e passa tempo vero in 2–3 zone candidate, pesando costo della vita, accesso alla sanità, clima, trasporti, comunità expat/anglofona e (se rilevante) scuole, prima di firmare un affitto o comprare',
   'choose-visa-type': 'Individua la tua categoria di visto — abbina la tua situazione a un tipo di residenza/visto spagnolo (non lucrativo, nomade digitale, lavoro, studio, famiglia)',

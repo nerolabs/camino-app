@@ -30,6 +30,19 @@ function collectFields(c: ConditionLike, out: Set<string>): void {
 const SLOT_FIELDS = new Set(SLOTS.map(s => s.field));
 const DERIV_FROM = new Map(DERIVATIONS.map(d => [d.field, d.from]));
 
+// A derivation's `from` list is its TRIGGER set (derive() runs it once those fields exist), not
+// its full read set — some compute bodies also read optional fields (visa_type branches on
+// employer_country_is_foreign for remote employees; is_ex_colony_national ORs in the explicit
+// answer). Credit those reads here so the leverage weights don't under-count the questions.
+// (2026-07-10 interview audit: employer_country_is_foreign was weighted 1 despite deciding the
+// ~20-obligation DNV-vs-work-permit branch.)
+const COMPUTE_ALSO_READS: Record<string, string[]> = {
+  visa_type: ['employer_country_is_foreign'],
+  is_ex_colony_national: ['previously_ex_spanish_colony_nationality'],
+};
+for (const [field, extra] of Object.entries(COMPUTE_ALSO_READS))
+  DERIV_FROM.set(field, [...(DERIV_FROM.get(field) ?? []), ...extra]);
+
 // Expand a referenced field to the underlying answerable slot fields it ultimately depends on.
 // A catalog condition may test a derived field (e.g. `visa_type`), which derives from
 // `is_eu` + `work_situation` + …; `is_eu` derives from `nationalities`; etc. Resolve transitively

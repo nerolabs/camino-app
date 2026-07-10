@@ -36,7 +36,7 @@ export function sampleProfile(): Profile {
     has_spanish_address:                  false,
     owns_or_drives:                       true,
     owns_property_in_spain:               false,
-    knows_where_to_live:                  false,
+    region:                               'not_sure',
     has_pets:                             true,
     foreign_assets_eur_band:              '€50k–€200k',
     previously_ex_spanish_colony_nationality: false,

@@ -279,6 +279,22 @@ export const CATALOG: Obligation[] = [
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -60 },
   },
   {
+    // Advisory income check (2026-07-10 audit): fires only when even the TOP of the user's income
+    // band is below the NLV threshold for their household (see income_may_fall_short_nlv). The
+    // figures are the same sourced numbers as nlv-income-proof; this step just does the arithmetic
+    // for the user's own household instead of leaving it to them.
+    id: 'nlv-income-check',
+    title: 'Heads-up: your income band looks below the NLV requirement — €28,800/yr plus €7,200/yr per dependent (400% of IPREM) for your household. Review how you\'ll evidence sufficient passive means, or talk through alternative routes, before booking the consulate appointment',
+    category: 'visa', severity: 'recommended',
+    source: 'recommendation',
+    applies_if: { all: [
+      { field: 'visa_type', op: 'eq', value: 'nlv' },
+      { field: 'income_may_fall_short_nlv', op: 'eq', value: true },
+    ] },
+    depends_on: ['choose-visa-type'],
+    timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -180 },
+  },
+  {
     id: 'nlv-health-insurance',
     source_url: 'https://www.inclusion.gob.es/en/web/migraciones/w/autorizacion-inicial-de-residencia-temporal-no-lucrativa',
     webinar_url: 'https://www.youtube.com/watch?v=tZJk56EH1ms&t=277s',
@@ -322,6 +338,19 @@ export const CATALOG: Obligation[] = [
     applies_if: { field: 'visa_type', op: 'eq', value: 'dnv' },
     depends_on: ['choose-visa-type'],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -60 },
+  },
+  {
+    // Advisory income check — DNV twin of nlv-income-check; same conservative band-upper logic.
+    id: 'dnv-income-check',
+    title: 'Heads-up: your income band looks below the digital-nomad-visa requirement — about €34,000/yr (200% of Spain\'s minimum wage) plus ~€13,000 for a spouse and ~€4,000 per child for your household. Review how you\'ll evidence your remote income, or talk through alternative routes, before booking the consulate appointment',
+    category: 'visa', severity: 'recommended',
+    source: 'recommendation',
+    applies_if: { all: [
+      { field: 'visa_type', op: 'eq', value: 'dnv' },
+      { field: 'income_may_fall_short_dnv', op: 'eq', value: true },
+    ] },
+    depends_on: ['choose-visa-type'],
+    timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -180 },
   },
   {
     id: 'dnv-coverage-certificate',

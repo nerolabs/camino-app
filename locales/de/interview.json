@@ -55,7 +55,6 @@
     "foreign_assets_eur_band": "Etwas persönlich — und du wählst nur eine Spanne — wie viel hältst du ungefähr außerhalb Spaniens?",
     "previously_ex_spanish_colony_nationality": "Haben Sie die Staatsangehörigkeit einer ehemaligen spanischen Kolonie? (Fast ganz Lateinamerika sowie die Philippinen.)",
     "property_purchase": "Ungefähr wann wurde (oder wird) der Kauf abgeschlossen? Der Monat genügt.",
-    "knows_where_to_live": "Wissen Sie schon, in welche Region Spaniens Sie ziehen?",
     "wants_citizenship": "Längerfristig — möchten Sie spanische Staatsbürger:in werden?"
   },
   "chips": {
@@ -94,6 +93,11 @@
       "€200k–€700k": "200–700 k€",
       "over €700k": "Über 700 k€",
       "prefer not to say": "Möchte ich nicht sagen"
+    },
+    "has_spouse_or_partner": {
+      "yes_registered": "Ja — verheiratet oder eingetragen",
+      "yes_unregistered": "Ja — nicht eingetragen",
+      "no": "Nein"
     }
   },
   "roadmap": {

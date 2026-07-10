@@ -11,6 +11,8 @@
  * Completeness is enforced at runtime (same test): every CATALOG id must appear here, no orphans.
  */
 export const ES_CATALOG_TITLES: Record<string, string> = {
+  'dnv-income-check': 'Aviso: tu franja de ingresos parece quedar por debajo del requisito del visado de nómada digital — unos €34,000/año (200% del salario mínimo español) más ~€13,000 por cónyuge y ~€4,000 por hijo para tu hogar. Revisa cómo acreditarás tus ingresos remotos, o valora rutas alternativas, antes de reservar la cita del consulado',
+  'nlv-income-check': 'Aviso: tu franja de ingresos parece quedar por debajo del requisito de la NLV — €28,800/año más €7,200/año por dependiente (400% del IPREM) para tu hogar. Revisa cómo acreditarás medios pasivos suficientes, o valora rutas alternativas, antes de reservar la cita del consulado',
   'language-classes': 'Empieza a aprender español — apúntate a clases regulares o a un curso estructurado (una academia local, un tutor online o un intensivo al llegar). Facilita muchísimo el día a día y sienta las bases si más adelante buscas la nacionalidad.',
   'scout-where-to-live': 'Decide en qué parte de España vivir antes de comprometerte — si no lo tienes claro, planifica un viaje de exploración y pasa tiempo real en 2–3 zonas candidatas, sopesando coste de vida, acceso sanitario, clima, transporte, comunidad expat/angloparlante y (si aplica) colegios, antes de firmar un alquiler o comprar',
   'choose-visa-type': 'Identifica tu categoría de visado — encaja tu situación con un tipo de residencia/visado español (no lucrativa, nómada digital, trabajo, estudios, familiar)',

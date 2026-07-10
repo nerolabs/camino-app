@@ -72,7 +72,10 @@ export const SLOTS: Slot[] = [
     prompt_hint: "their work situation when they move — remote employee, freelancer, retired, studying, etc.",
   },
   {
-    field: "employer_country_is_foreign", type: "bool", input: "yesno", order: 60,
+    // Immediately after work_situation (2026-07-10 audit): deriveVisaType branches on this for
+    // remote employees (DNV vs work permit) — the visa cluster can't populate until it's answered,
+    // so it must not trail three unrelated questions.
+    field: "employer_country_is_foreign", type: "bool", input: "yesno", order: 35,
     required_if: { field: "work_situation", op: "eq", value: "employed_remote" },
     prompt_hint: "whether their employer is based outside Spain (vs a Spanish company hiring them)",
   },
@@ -81,7 +84,7 @@ export const SLOTS: Slot[] = [
     field: "annual_income_eur_band", type: "band", input: "single", order: 170, allowOther: false,
     required_if: { field: "is_eu", op: "eq", value: false },
     options: ["under €20k", "€20k–€28k", "€28k–€34k", "€34k–€60k", "€60k+"],
-    prompt_hint: "their rough annual household income in euros — determines which visa they qualify for",
+    prompt_hint: "their rough annual household income in euros — checked against the NLV/DNV visa income thresholds for their household",
   },
 
   // ── Round 3: family ─────────────────────────────────────────────────────────
@@ -129,21 +132,11 @@ export const SLOTS: Slot[] = [
     prompt_hint: "roughly when they completed (or expect to complete) the property purchase — anchors the notary, registry, and transfer-tax deadlines",
   },
   {
-    // Only relevant to movers who don't already own a place; gates the (advisory) scouting step.
-    field: "knows_where_to_live", type: "bool", input: "yesno", order: 130,
-    required_if: { not: { field: "owns_property_in_spain", op: "eq", value: true } },
-    prompt_hint: "whether they already know which city or region in Spain they'll settle in, or are still deciding where to live",
-  },
-  {
-    // Region-awareness v1 (2026-07-04): asked only of movers who know where they're going
-    // (or already own there). "not_sure" is a fine answer. No applies_if tests this field —
-    // it personalizes the regional-variation notes on plan steps and stays ready for the
-    // per-region content pass.
-    field: "region", type: "band", input: "typeahead", order: 140, allowOther: false,
-    required_if: { any: [
-      { field: "knows_where_to_live", op: "eq", value: true },
-      { field: "owns_property_in_spain", op: "eq", value: true },
-    ] },
+    // Asked of everyone (2026-07-10 audit): the old "do you know where you'll settle?" yes/no was
+    // redundant with this typeahead — "Not sure yet" is a first-class row, and knows_where_to_live
+    // is now DERIVED from this answer (gates the advisory scouting step). Also personalizes the
+    // regional-variation notes on plan steps.
+    field: "region", type: "band", input: "typeahead", order: 130, allowOther: false,
     options: REGION_OPTIONS,
     prompt_hint: "which comunidad autónoma (region of Spain) they'll settle in — if they name a city or province, map it to its comunidad; 'not sure yet' is a fine answer",
   },
@@ -160,8 +153,14 @@ export const SLOTS: Slot[] = [
     prompt_hint: "roughly, total assets held outside Spain — only a range is needed, drives Modelo 720",
   },
   {
+    // Skipped when the passports already show an ex-colony country (2026-07-10 audit): at
+    // ask-time is_ex_colony_national is purely passport-derived (the explicit answer is absent),
+    // so this only reaches dual nationals whose passports don't reveal it — the OR-fallback case.
     field: "previously_ex_spanish_colony_nationality", type: "bool", input: "yesno", order: 200,
-    required_if: { field: "is_eu", op: "eq", value: false },
+    required_if: { all: [
+      { field: "is_eu", op: "eq", value: false },
+      { not: { field: "is_ex_colony_national", op: "eq", value: true } },
+    ] },
     prompt_hint: "whether they hold nationality from a former Spanish colony (most Latin American countries, Philippines) — this affects citizenship timelines",
   },
   {
@@ -203,6 +202,17 @@ const INCOME_BAND_MIDPOINT: Record<string, number> = {
   "€28k–€34k":   31_000,
   "€34k–€60k":   47_000,
   "€60k+":        80_000,
+};
+
+// Upper bound of each income band — used by the threshold warnings, which stay CONSERVATIVE
+// (honesty invariant): warn only when even the TOP of the band can't reach the visa threshold,
+// so a borderline band never gets scare-mongered.
+const INCOME_BAND_UPPER: Record<string, number> = {
+  "under €20k":   20_000,
+  "€20k–€28k":   28_000,
+  "€28k–€34k":   34_000,
+  "€34k–€60k":   60_000,
+  "€60k+":  Infinity,
 };
 
 const ASSETS_BAND_MIDPOINT: Record<string, number> = {
@@ -253,6 +263,12 @@ export const DERIVATIONS: Derivation[] = [
   { field: "is_tax_resident", from: ["intends_long_stay"],
     compute: (p) => p.intends_long_stay === true },
 
+  // Was an interview slot until the 2026-07-10 audit: "do you know where you'll settle?" is fully
+  // implied by the region answer ("not_sure" is a first-class option), so one question now feeds
+  // both the scouting gate and the regional display notes.
+  { field: "knows_where_to_live", from: ["region"],
+    compute: (p) => p.region !== "not_sure" },
+
   { field: "foreign_assets_eur", from: ["foreign_assets_eur_band"],
     compute: (p) => ASSETS_BAND_MIDPOINT[p.foreign_assets_eur_band as string] ?? 0 },
 
@@ -267,6 +283,17 @@ export const DERIVATIONS: Derivation[] = [
 
   { field: "dnv_income_threshold", from: ["has_spouse_or_partner", "has_children"],
     compute: (p) => 34_000 + (p.has_spouse_or_partner ? 13_000 : 0) + (p.has_children ? 4_000 : 0) },
+
+  // Income-vs-threshold checks (2026-07-10 audit: the income question previously gated nothing).
+  // Both compare the band's UPPER bound so the warning only fires when the threshold is genuinely
+  // out of reach. Threshold derivations run earlier in this array, so they're present by now.
+  { field: "income_may_fall_short_nlv", from: ["annual_income_eur_band", "nlv_income_threshold"],
+    compute: (p) => (INCOME_BAND_UPPER[p.annual_income_eur_band as string] ?? Infinity)
+                    < (p.nlv_income_threshold as number) },
+
+  { field: "income_may_fall_short_dnv", from: ["annual_income_eur_band", "dnv_income_threshold"],
+    compute: (p) => (INCOME_BAND_UPPER[p.annual_income_eur_band as string] ?? Infinity)
+                    < (p.dnv_income_threshold as number) },
 
   { field: "visa_type", from: ["is_eu", "work_situation"],
     compute: (p) => deriveVisaType(p) },

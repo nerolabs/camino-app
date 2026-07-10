@@ -4,6 +4,8 @@
  * Spanish institutional terms stay Spanish; tu register, warm-precise voice.
  */
 export const FR_CATALOG_TITLES: Record<string, string> = {
+  'dnv-income-check': 'Attention : votre tranche de revenus semble inférieure à l\'exigence du visa nomade numérique — environ €34,000/an (200% du salaire minimum espagnol) plus ~€13,000 pour un conjoint et ~€4,000 par enfant pour votre foyer. Réfléchissez à la manière de justifier vos revenus à distance, ou envisagez d\'autres voies, avant de réserver le rendez-vous au consulat',
+  'nlv-income-check': 'Attention : votre tranche de revenus semble inférieure à l\'exigence de la NLV — €28,800/an plus €7,200/an par personne à charge (400% de l\'IPREM) pour votre foyer. Réfléchissez à la manière de justifier des moyens passifs suffisants, ou envisagez d\'autres voies, avant de réserver le rendez-vous au consulat',
   'language-classes': 'Commencez à apprendre l\'espagnol — inscrivez-vous à des cours réguliers ou à une formation structurée (une académie locale, un tuteur en ligne ou un stage intensif à l\'arrivée). Cela facilite énormément le quotidien et pose les bases si vous visez un jour la nationalité.',
   'scout-where-to-live': 'Décide où vivre en Espagne avant de t’engager — si tu hésites, prévois un voyage de repérage et passe du vrai temps dans 2–3 zones candidates, en pesant coût de la vie, accès aux soins, climat, transports, communauté expat/anglophone et (le cas échéant) écoles, avant de signer un bail ou d’acheter',
   'choose-visa-type': 'Identifie ta catégorie de visa — fais correspondre ta situation à un type de résidence/visa espagnol (non lucratif, nomade numérique, travail, études, famille)',

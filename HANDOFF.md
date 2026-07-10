@@ -162,7 +162,7 @@ Web is live at **getcamino.app** in **five languages** (en/es/fr/de/it — L0–
 build 30** (device-tested working by user + wife; carries all languages) — Apple + Google +
 email sign-in all WORKING, dictation, Lola voice, universal links, PDF export, delete-account.
 Signed-in **profiles now persist** (a grant bug silently blocked all saves until 2026-07-05 —
-fixed on both DBs; see resume block). The catalog holds **61 obligations** (55 `official` with
+fixed on both DBs; see resume block). The catalog holds **63 obligations** (55 `official` with
 `source_url` / 5 `recommendation`), invariant-2-audited (`npm run audit`, a deploy gate). The
 email loop is live (welcome + weekly cron Mondays 06:00 UTC + one-click unsubscribe), localized
 per `user_metadata.lang` (admin metadata updates MERGE — verified empirically); the Supabase
@@ -179,7 +179,7 @@ user-side). Next phases: TODO.md → store paperwork (4), submissions (5).
 - `docs/MONITORING.md` — Sentry setup (web + server + native), uptime monitor.
 - `docs/APP_STORE.md` — submission pack + the provisioning/entitlement playbook (why profiles
   must be re-minted when a capability changes — learned the hard way on builds 12–15).
-- `core/engine-controller.ts` — **the deterministic engine + 61-obligation CATALOG.**
+- `core/engine-controller.ts` — **the deterministic engine + 63-obligation CATALOG.**
   `buildPlan(profile)` = filter by `applies_if` → topoSort by `depends_on` → resolve timing →
   bucket phases. `isOverdue(o, today?)` = scheduled + past date-level due + not done (due-today
   gets grace). Completing `residencia`/`empadronamiento` back-fills anchors so downstream dates

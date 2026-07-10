@@ -8,6 +8,10 @@
  */
 
 export const ES_GUIDE_PROSE: Record<string, string> = {
+  'dnv-income-check':
+    'La misma aritmética, para la ruta del nómada digital: tu franja de ingresos frente al umbral para un hogar de tu tamaño sugiere un déficit. Las franjas son aproximadas y esto no es un veredicto — pero la prueba de ingresos remotos es el corazón de una solicitud de DNV, así que conviene resolver el desfase sobre el papel antes de reservar nada. Un asesor puede decirte qué cuenta como ingreso demostrable y si otra ruta te sirve mejor.',
+  'nlv-income-check':
+    'Es aritmética sobre tus propias respuestas, hecha por ti: comparar tu franja de ingresos con el umbral de la NLV para un hogar de tu tamaño sugiere un déficit. No es un veredicto — las franjas son aproximadas y los consulados miran el conjunto de las pruebas — pero es mucho mejor descubrirlo al planificar que en la cita. Una sesión con un asesor de extranjería sobre cómo acreditar tus medios, o sobre si otra ruta encaja mejor, es dinero bien invertido aquí.',
   'language-classes':
     'Este es el consejo de Get Camino, no un requisito legal: cuanto antes empieces a construir un español real, más fácil será todo lo demás — el funcionario del padrón, el médico, tus vecinos, el contrato que vas a firmar. Sirven las clases formales, un profesor particular o un curso intensivo nada más llegar; lo que importa es empezar antes de necesitarlo. Y si la nacionalidad entra alguna vez en tu horizonte, el nivel de idioma que tendrás que certificar es mucho más fácil de alcanzar cuando llevas tiempo practicando.',
   'scout-where-to-live':

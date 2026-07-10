@@ -54,4 +54,40 @@ describe('nextSlot ordering', () => {
     derive(susan);
     expect(nextSlot(susan)).toBeNull();
   });
+
+  it('asks employer_country_is_foreign immediately after work_situation for remote employees', () => {
+    // It decides DNV vs work permit — the visa cluster is undetermined until it's answered.
+    const p: Profile = { speaks_spanish: 'A little', nationalities: ['US'], work_situation: 'employed_remote' };
+    derive(p);
+    expect(nextSlot(p)?.field).toBe('employer_country_is_foreign');
+  });
+
+  it('skips the ex-colony question when the passports already show one (2026-07-10 audit)', () => {
+    const co: Profile = { nationalities: ['CO'] };
+    derive(co);
+    expect(co.is_ex_colony_national).toBe(true);
+    // walk the whole interview: the question never comes up for a Colombian passport…
+    const asked: string[] = [];
+    const p: Profile = { ...co };
+    for (let i = 0; i < SLOTS.length + 5; i++) {
+      const s = nextSlot(p); if (!s) break;
+      asked.push(s.field);
+      p[s.field] = s.type === 'bool' ? true : s.type === 'date' ? '2026-09-01'
+                 : s.type === 'list' ? ['retired'] : s.options?.[0] ?? 'x';
+      derive(p);
+    }
+    expect(asked).not.toContain('previously_ex_spanish_colony_nationality');
+    // …but still reaches a US passport (the dual-national OR-fallback case)
+    const us: Profile = { nationalities: ['US'] };
+    derive(us);
+    const askedUs: string[] = [];
+    for (let i = 0; i < SLOTS.length + 5; i++) {
+      const s = nextSlot(us); if (!s) break;
+      askedUs.push(s.field);
+      us[s.field] = s.type === 'bool' ? true : s.type === 'date' ? '2026-09-01'
+                  : s.type === 'list' ? ['retired'] : s.options?.[0] ?? 'x';
+      derive(us);
+    }
+    expect(askedUs).toContain('previously_ex_spanish_colony_nationality');
+  });
 });

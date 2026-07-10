@@ -4,6 +4,8 @@
  * stay Spanish; du register, warm-precise voice.
  */
 export const DE_CATALOG_TITLES: Record<string, string> = {
+  'dnv-income-check': 'Hinweis: Ihre Einkommensspanne liegt offenbar unter der Anforderung des Digital-Nomad-Visums — rund €34,000/Jahr (200% des spanischen Mindestlohns) plus ~€13,000 für Ehepartner und ~€4,000 pro Kind für Ihren Haushalt. Überlegen Sie, wie Sie Ihr Remote-Einkommen nachweisen, oder prüfen Sie alternative Wege, bevor Sie den Konsulatstermin buchen',
+  'nlv-income-check': 'Hinweis: Ihre Einkommensspanne liegt offenbar unter der NLV-Anforderung — €28,800/Jahr plus €7,200/Jahr pro abhängiger Person (400% des IPREM) für Ihren Haushalt. Überlegen Sie, wie Sie ausreichende passive Mittel nachweisen, oder prüfen Sie alternative Wege, bevor Sie den Konsulatstermin buchen',
   'language-classes': 'Fangen Sie an, Spanisch zu lernen — buchen Sie regelmäßigen Unterricht oder einen strukturierten Kurs (eine örtliche Sprachschule, einen Online-Tutor oder einen Intensivkurs nach der Ankunft). Das erleichtert den Alltag enorm und legt die Grundlage, falls Sie später die Staatsbürgerschaft anstreben.',
   'scout-where-to-live': 'Entscheide, wo in Spanien du leben willst, bevor du dich festlegst — bist du unsicher, plane eine Erkundungsreise und verbringe echte Zeit in 2–3 Kandidatenregionen; wäge Lebenskosten, Gesundheitsversorgung, Klima, Verkehrsanbindung, Expat-/englischsprachige Community und (falls relevant) Schulen ab, bevor du einen Mietvertrag unterschreibst oder kaufst',
   'choose-visa-type': 'Bestimme deine Visakategorie — ordne deine Situation einem spanischen Aufenthalts-/Visatyp zu (Non-Lucrative, Digital Nomad, Arbeit, Studium, Familie)',

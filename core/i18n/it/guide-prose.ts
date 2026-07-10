@@ -5,6 +5,10 @@
  */
 
 export const IT_GUIDE_PROSE: Record<string, string> = {
+  'dnv-income-check':
+    'La stessa aritmetica, per la via del nomade digitale: la tua fascia di reddito rispetto alla soglia per un nucleo della tua dimensione suggerisce un divario. Le fasce sono approssimative e questo non è un verdetto — ma la prova del reddito da remoto è il cuore di una domanda DNV, quindi conviene risolvere il divario sulla carta prima di prenotare qualsiasi cosa. Un consulente può dirti cosa conta come reddito dimostrabile e se un\'altra via ti serve meglio.',
+  'nlv-income-check':
+    'È aritmetica sulle tue stesse risposte, fatta per te: confrontare la tua fascia di reddito con la soglia NLV per un nucleo della tua dimensione suggerisce un divario. Non è un verdetto — le fasce sono approssimative e i consolati guardano l\'insieme delle prove — ma è molto meglio scoprirlo in fase di pianificazione che all\'appuntamento. Una sessione con un consulente di immigrazione su come dimostrare i tuoi mezzi, o su una via alternativa, qui è denaro ben speso.',
   'language-classes':
     'Questo è il consiglio di Get Camino, non un obbligo di legge: prima inizi a costruire uno spagnolo reale, più tutto il resto fila liscio — l\'impiegato del padrón, il medico, i vicini, il contratto che stai per firmare. Vanno bene lezioni formali, un insegnante privato o un corso intensivo appena arrivi; ciò che conta è iniziare prima di averne bisogno. E se la cittadinanza dovesse mai entrare nel tuo orizzonte, il livello di lingua da certificare è molto più facile da raggiungere quando ci lavori da un po\'.',
   'scout-where-to-live':

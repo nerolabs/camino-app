@@ -5,6 +5,10 @@
  */
 
 export const FR_GUIDE_PROSE: Record<string, string> = {
+  'dnv-income-check':
+    'La même arithmétique, pour la voie du nomade numérique : votre tranche de revenus face au seuil pour un foyer de votre taille suggère un écart. Les tranches sont approximatives et ce n\'est pas un verdict — mais la preuve de revenus à distance est le cœur d\'un dossier DNV, alors mieux vaut résoudre l\'écart sur le papier avant toute réservation. Un conseiller peut vous dire ce qui compte comme revenu démontrable, et si une autre voie vous convient mieux.',
+  'nlv-income-check':
+    'C\'est de l\'arithmétique sur vos propres réponses, faite pour vous : comparer votre tranche de revenus au seuil de la NLV pour un foyer de votre taille suggère un écart. Ce n\'est pas un verdict — les tranches sont approximatives et les consulats regardent l\'ensemble du dossier — mais il vaut bien mieux le découvrir au stade de la planification qu\'au rendez-vous. Une séance avec un conseiller en immigration sur la façon de justifier vos moyens, ou sur une autre voie plus adaptée, est un bon investissement ici.',
   'language-classes':
     'C\'est le conseil de Get Camino, pas une obligation légale : plus tôt vous commencez à bâtir un vrai niveau d\'espagnol, plus tout le reste se passe bien — l\'employé du padrón, le médecin, vos voisins, le bail que vous signez. Des cours formels, un professeur particulier ou un stage intensif dès l\'arrivée fonctionnent tous ; l\'essentiel est de commencer avant d\'en avoir besoin. Et si la nationalité figure un jour à votre horizon, le niveau de langue à certifier est bien plus facile à atteindre après un peu de pratique.',
   'scout-where-to-live':

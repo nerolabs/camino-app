@@ -5,6 +5,10 @@
  */
 
 export const DE_GUIDE_PROSE: Record<string, string> = {
+  'dnv-income-check':
+    'Dieselbe Arithmetik für die Digital-Nomad-Route: Ihre Einkommensspanne gegenüber der Schwelle für einen Haushalt Ihrer Größe deutet auf eine Lücke hin. Spannen sind grob, und das ist kein Urteil — aber der Nachweis von Remote-Einkommen ist das Herz eines DNV-Antrags, also sollte eine Lücke auf dem Papier geklärt sein, bevor etwas gebucht wird. Eine Beratung klärt, was als nachweisbares Einkommen zählt und ob ein anderer Weg besser dient.',
+  'nlv-income-check':
+    'Das ist Arithmetik über Ihre eigenen Antworten, für Sie erledigt: Der Vergleich Ihrer Einkommensspanne mit der NLV-Schwelle für einen Haushalt Ihrer Größe deutet auf eine Lücke hin. Es ist kein Urteil — Spannen sind grob, und Konsulate betrachten das Gesamtbild der Nachweise — aber es ist weit besser, das in der Planungsphase zu entdecken als beim Termin. Eine Beratung dazu, wie Sie Ihre Mittel nachweisen oder ob ein anderer Weg besser passt, ist hier gut investiertes Geld.',
   'language-classes':
     'Das ist der Rat von Get Camino, keine gesetzliche Pflicht: Je früher Sie echtes Spanisch aufbauen, desto reibungsloser läuft alles andere — die Sachbearbeiterin beim padrón, die Ärztin, Ihre Nachbarn, der Mietvertrag, den Sie unterschreiben. Formeller Unterricht, ein Privatlehrer oder ein Intensivkurs direkt nach der Ankunft funktionieren alle; entscheidend ist, anzufangen, bevor Sie es brauchen. Und falls die Staatsbürgerschaft je in Ihren Blick rückt, ist das nachzuweisende Sprachniveau viel leichter zu erreichen, wenn Sie schon eine Weile dabei sind.',
   'scout-where-to-live':

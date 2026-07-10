@@ -55,7 +55,6 @@
     "foreign_assets_eur_band": "Slightly personal — and you only pick a range — roughly how much do you hold outside Spain?",
     "previously_ex_spanish_colony_nationality": "Do you hold nationality from a former Spanish colony? (Most of Latin America, plus the Philippines.)",
     "property_purchase": "Roughly when did (or will) the purchase complete? A month is enough.",
-    "knows_where_to_live": "Do you already know which part of Spain you'll settle in?",
     "wants_citizenship": "Longer term, are you hoping to become a Spanish citizen?"
   },
   "chips": {
@@ -94,6 +93,11 @@
       "€200k–€700k": "€200k–€700k",
       "over €700k": "Over €700k",
       "prefer not to say": "Prefer not to say"
+    },
+    "has_spouse_or_partner": {
+      "yes_registered": "Yes — married or civil partnership",
+      "yes_unregistered": "Yes — not registered",
+      "no": "No"
     }
   },
   "roadmap": {

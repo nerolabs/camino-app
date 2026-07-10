@@ -228,3 +228,40 @@ Lead with easy, relatable, high-payoff taps; push sensitive/low-payoff to the en
    `severity` (required steps worth more than recommended). *Leaning count-only for v1.*
 3. **Cold-start seed:** pre-populate the 1–2 universal steps (empadronamiento/NIE) so the
    Q1 canvas isn't empty — confirm which are truly universal in the catalog.
+
+---
+
+## 2026-07-10 fresh-eyes audit (post-Phase-2, user-requested)
+
+Full leverage trace: every slot resolved through the derivation closure to the obligations it
+influences, plus timing anchors and derivation compute-body reads (the two places a naive
+`applies_if` scan lies — arrival_date anchors 24 obligations' dates while gating none).
+
+**Removed / merged / folded:**
+- `us_resident` REMOVED (2026-07-10 morning): nothing read it — dead, US-centric question.
+- Partner pair MERGED: `has_spouse_or_partner` renders 3 chips ("Yes — married or civil
+  partnership" / "Yes — not registered" / "No"); one tap writes both fields via the extras path.
+  `partner_is_married` stays in SLOTS as a safety net for the free-text path only.
+- `knows_where_to_live` FOLDED into the region typeahead: asked of everyone, "Not sure yet" is a
+  first-class row, and knows_where_to_live is now a DERIVATION (`region !== 'not_sure'`).
+- Ex-colony question SKIPPED when passports already show an ex-colony country (pure OR-fallback
+  reach: dual nationals whose passports don't reveal it).
+- `employer_country_is_foreign` moved to order 35 (decides DNV-vs-work-permit; the visa cluster
+  sat undetermined while three unrelated questions played out).
+
+**Income question now earns its place (user decision — kept over removal):** two advisory
+obligations, `nlv-income-check` / `dnv-income-check`, gated on new derivations
+`income_may_fall_short_{nlv,dnv}`. CONSERVATIVE by construction: they compare the band's UPPER
+bound against the household threshold (thresholds already derived from the sourced figures in the
+income-proof titles), so a borderline band never warns. Sofia (CO family, 28–34k, couple+child →
+threshold 43,200) is the persona that exercises it.
+
+**Weighting bug fixed:** derivation `from` lists are trigger sets, not read sets —
+`deriveVisaType` also reads employer_country_is_foreign; `is_ex_colony_national` also reads the
+explicit answer. `COMPUTE_ALSO_READS` in core/completeness.ts credits these; tests lock it.
+
+**Flagged, not done:** `consulate-appointment` title hardcodes "8–16 weeks in the US" for every
+non-EU applicant — needs a sourced per-country (or neutral) rewrite in the sourcing pass.
+
+Net: 18 slots (was 19 pre-redesign, 21 at Phase-1 peak), 63 obligations, 15 derivations. Typical
+non-EU path ≈ 15–16 questions, EU short path ≈ 10.

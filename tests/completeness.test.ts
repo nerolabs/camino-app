@@ -19,6 +19,14 @@ describe('SLOT_WEIGHT', () => {
     expect(SLOT_WEIGHT['work_situation']).toBeGreaterThan(SLOT_WEIGHT['has_pets']);
     expect(SLOT_WEIGHT['intends_long_stay']).toBeGreaterThan(SLOT_WEIGHT['has_pets']);
   });
+
+  it('credits fields read by derivation compute bodies, not just trigger sets (2026-07-10 audit)', () => {
+    // deriveVisaType branches on employer_country_is_foreign (DNV vs work permit — the whole
+    // remote-employee visa cluster); is_ex_colony_national ORs in the explicit answer. Neither is
+    // in the derivations' `from` lists, so without COMPUTE_ALSO_READS they'd weigh 1.
+    expect(SLOT_WEIGHT['employer_country_is_foreign']).toBeGreaterThan(SLOT_WEIGHT['has_pets']);
+    expect(SLOT_WEIGHT['previously_ex_spanish_colony_nationality']).toBeGreaterThan(1);
+  });
 });
 
 describe('interviewCompleteness', () => {

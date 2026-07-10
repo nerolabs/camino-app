@@ -195,6 +195,7 @@ exports[`plan structure is frozen (localization must not change engine behavior)
   "digital-certificate | first_weeks | recommended | scheduled",
   "exit-tax-return | before_you_go | recommended | scheduled",
   "modelo-030 | first_weeks | recommended | scheduled",
+  "nlv-income-check | before_you_go | recommended | scheduled",
   "permanent-residence | when_settled | recommended | scheduled",
   "spanish-bank-account | first_weeks | recommended | scheduled",
   "tax-planning-consultation | before_you_go | recommended | scheduled",
