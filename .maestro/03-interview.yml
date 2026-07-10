@@ -1,15 +1,9 @@
-# P0: the interview starts and accepts a native-typed answer. Proves the native-critical path:
-# launch → navigate → a real /api/lola turn phrases Question 1 → the native keyboard types an
-# answer that lands → send posts it (the user's message appears in the conversation).
-#
-# Scoping note (runs #6–#9): we deliberately DON'T assert "Question 2 appears". That step needs a
-# SECOND sequential live LLM call (extract + phrase), and under CI latency it's genuinely
-# nondeterministic — flow 03 failed BOTH retry attempts in run #9 on exactly that wait, while
-# everything up to the answer-sent was solid. Same principle as excluding the deep-link flow: a
-# gate must not hinge on two back-to-back LLM round-trips. The "answering advances to the next
-# question" logic is identical to web (extractAnswer/phraseQuestion), covered by manual testing
-# every build + the planned full-interview Playwright flow (docs/TEST-COVERAGE.md §4B). Anchors on
-# the deterministic progress label + the user's own message, never on Lola's LLM wording.
+# P0: the interview auto-starts and accepts a native-typed answer. Proves the native-critical
+# path: launch → navigate → the interview opens straight into the conversation (greeting + the
+# arrival-date opener). Since the 2026-07-10 living-roadmap redesign the opener is STATIC copy —
+# no LLM round-trip is needed to see Question 1, so this flow is now fully deterministic up to
+# the send. We still deliberately DON'T assert "Question 2 appears" (that needs a live extraction
+# under CI latency — same scoping as before); the user's own message posting proves the send path.
 appId: ${APP_ID}
 ---
 - launchApp:
@@ -19,18 +13,17 @@ appId: ${APP_ID}
     timeout: 45000
 - tapOn: "Build my free roadmap.*"
 - extendedWaitUntil:
-    visible: "Hola, I'm Lola.*"
+    visible: "Hola, I'm Lola.*"        # the greeting bubble — the interview auto-started
     timeout: 20000
-- tapOn: "Let's get started"
 - extendedWaitUntil:
-    visible: "Question 1 of.*"     # a real /api/lola turn phrased question 1
-    timeout: 90000
+    visible: ".*when are you hoping to arrive.*"   # the arrival opener (deterministic static copy)
+    timeout: 20000
 - tapOn: "Type your answer.*"
 - waitForAnimationToEnd:
     timeout: 4000
-- inputText: "I'm a US citizen"
-- assertVisible: "I'm a US citizen"   # native keyboard input landed (Send now enabled)
+- inputText: "January 2028"
+- assertVisible: "January 2028"        # native keyboard input landed (Send now enabled)
 - tapOn: "Send your answer"
 - extendedWaitUntil:
-    visible: "I'm a US citizen"        # the answer posted to the conversation (send worked)
+    visible: "January 2028"            # the answer posted to the conversation (send worked)
     timeout: 20000

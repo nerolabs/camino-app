@@ -72,8 +72,9 @@ a seeded staging test user (magic-link token → session → storageState; the s
 
 ### Public (6)
 1. **Home renders** — hero, "Build my free roadmap" CTA, footer disclaimer; zero uncaught JS errors.
-2. **Interview starts (live LLM)** — /interview → "Let's get started" → a real `/api/lola` turn →
-   Lola's first question (passport) appears → composer + voice pill present.
+2. **Interview auto-starts + one live LLM turn** — /interview opens straight into the greeting +
+   arrival opener (no button since the 2026-07-10 redesign) → a typed date round-trips the real
+   `/api/lola` → the Spanish-level chips arrive.
 3. **Plan empty state (signed out)** — /plan → "No roadmap yet" + footer; a real page, not a crash.
 4. **Content pages load** — how-it-works, the how-i-was-built essay, the build log.
 5. **Sample plan** — /sample-plan renders the full read-only roadmap (Susan & Tom), phase headers,
@@ -103,10 +104,11 @@ navigates, and drives the interview with a real LLM turn (the web suite covers t
 1. **01-home** — launch (clear state) → the home screen renders (Build my free roadmap, the
    Get Camino wordmark, the sample-roadmap link).
 2. **02-sample-plan** — launch → tap the sample-roadmap link → "SAMPLE ROADMAP" + Susan's plan.
-3. **03-interview** — launch → "Build my free roadmap" → Lola's landing → "Let's get started" →
-   Question 1 (a real `/api/lola` turn) → type an answer, **verified it landed** → send →
-   **the answer posts to the conversation**. Exercises native keyboard input + one live LLM turn.
-   *Deliberately stops before "Question 2" — that needs a SECOND sequential LLM call and is
+3. **03-interview** — launch → "Build my free roadmap" → the interview auto-starts (greeting +
+   the static arrival opener; no LLM wait since the 2026-07-10 redesign) → type an answer,
+   **verified it landed** → send → **the answer posts to the conversation**. Exercises native
+   keyboard input; fully deterministic up to the send.
+   *Deliberately stops before "Question 2" — that needs a live extraction call and is
    CI-latency-nondeterministic (failed both retries in run #9). "Answering advances the interview"
    is identical logic to web (covered manually every build + the planned full-interview web flow,
    §4B). A gate must not hinge on two back-to-back LLM round-trips.*
