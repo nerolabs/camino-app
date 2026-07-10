@@ -5,51 +5,59 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-## ⭐ MORNING QUEUE — user + wife feedback, 2026-07-10 night (recorded, NOT yet actioned)
+## ⭐ RESUME HERE (2026-07-11 morning — night batch SHIPPED; build 35 auto-submitted overnight)
 
-Six findings, with root causes pre-diagnosed where known:
+**The six-item night-feedback queue is DONE, live on production web, and riding to iOS.** All six
+fixes landed (hamburger cleanup, guide→interview greeting restored deterministically via
+`landing.fromGuide` ×5 locales, voice OFF by default web+native, Q1 "most important question"
+rewrite ×5, transcript-aware phraseAck, Dynamic-Island inset on the roadmap sheet). User verified
+all four web-visible fixes live the same night. Commits 40e77f3 → 8556921, all pushed.
 
-1. **How-it-works still in the hamburger** — `components/NavBar.tsx:92` MenuLink → '/how-it-works'
-   (now just redirects home). Remove the menu item. Trivial.
-2. **Guide→interview context lost** — REGRESSION, cause known: the old `start()` passed
-   `arrivedFrom` (from `/interview?from=<guide-id>`) into the LLM greeting; when per-question LLM
-   phrasing was removed (2026-07-10), the personalization was dropped — `from` now feeds analytics
-   only (see the comment in app/interview.tsx near useLocalSearchParams). FIX: deterministic
-   template — when `from` is present, the greeting bubble gains a localized clause using the guide
-   title (shortClause/displayTitle), e.g. "I see you've been reading about {guide} — your roadmap
-   will cover that and everything around it." No LLM needed. ×5 locales.
-3. **Voice defaults** — make voice OFF by default on web (toggle to enable). User leaning off-by-
-   default on mobile too (chips made turns fast; TTS costs). Claude's take: default OFF everywhere,
-   keep the toggle prominent — voice's remaining value is the composer questions + accessibility.
-   Look in hooks/useLolaVoice(.native) for the default. Also kills the local ELEVENLABS log noise.
-4. **Q1 copy** — "Let's start where you probably already are" doesn't land. User suggestion
-   direction: "Very exciting — moving to Spain! Let's start with the most important question:
-   when are you planning to arrive?" Keep "arrive" (the engine anchors on arrival date, not the
-   move decision). Rewrite ×5 locales.
-5. **Reactions degraded to bland** — cause known, twofold: (a) the tone-down (2026-07-10) capped
-   phraseAck at ~10 words / "understated, never gushing"; (b) phraseAck NEVER receives the
-   transcript (unlike phraseClarify), so it can't cross-reference earlier answers ("your wife AND
-   the dog — the whole pack is coming!" / "Murcia — lovely, though the weather beats Canada's").
-   FIX: pass transcriptOf(turns) into phraseAck + relax to 1–2 sentences, warm + playful,
-   references earlier answers when natural; KEEP the no-facts/no-numbers hard rules (invariant 3).
-   Slightly more input tokens per ack — fine.
-6. **iOS roadmap sheet: "✕ Done" under the Dynamic Island** (IMG_2101, build 33) — the Phase-3
-   Modal ignores the top safe-area inset. FIX: useSafeAreaInsets() padding on sheetWrap/sheetHeader
-   in app/interview.tsx (same class as the build-5 safe-area work). Web unaffected; rides build 35.
+**FIRST MORNING ACTION — verify build 35 on the phone.** It was cut ~00:55 with `--auto-submit`
+after the e2e-ios gate went green (run 29128387898); the user was asleep before it finished.
+Check `eas build:list` / TestFlight: if it FAILED overnight, diagnose + re-kick (autoIncrement
+burns numbers on failures). On the device, the two native-only items to verify: **(a) the roadmap
+sheet's "✕ Done" clears the Dynamic Island; (b) voice defaults OFF.** Reactions + greeting ride
+along (shared code, already web-verified).
 
-After fixing: one web deploy + build 35 batch. Then the standing morning plan below (wife's full
-pass, dashboard 808581 watch).
+**The night's drama, for context (already fixed, lessons on record):**
+1. **phraseAck went haywire on first prod contact** — passing the transcript made Haiku think it
+   WAS the interviewer ("I'm ready for your answer whenever you share it…", inventing follow-up
+   questions — screenshot-confirmed by the user). Fix (bfc4868): prompt restructured (transcript
+   labeled background-only, fresh answer AFTER it, "the app runs the interview" role) **plus a
+   deterministic backstop — any ack containing `?`/`¿` or >260 chars is dropped silently**.
+   Verified 2× per scenario against live /api/lola before redeploying; user then confirmed live
+   quality ("much tidier, still has all the right context"). LESSON: a bounded LLM surface that
+   gains conversation context needs an explicit non-driver role AND a deterministic output filter.
+2. **The Q1 copy change broke BOTH E2E layers' assertions** — caught Playwright pre-deploy
+   (smoke #2), but the Maestro one (`03-interview.yml` "hoping to arrive") cost a full failed
+   e2e-ios run (29126194857, both attempts). Swept and fixed everywhere incl. the landing demo's
+   `q1` ×5 (8556921). LESSON: copy changes need a repo-wide grep across `tests-e2e/`, `.maestro/`,
+   AND `locales/*/common.json` (the landing demo mirrors interview copy).
+
+**Also new tonight:** +1 public Playwright test (guide→interview greeting regression — smoke #3,
+runs on every deploy; TEST-COVERAGE.md renumbered, now 7 public + 5 authed); build-log row +
+roadmap "Just shipped" item on the homework pages; three production web deploys, each 7/7 E2E
+green against the live site.
+
+**NEXT (morning):** (1) build 35 device verification (above); (2) wife's full pass on prod web +
+TestFlight — "lots more testing tomorrow" per the user; (3) watch PostHog dashboard 808581 as
+interview-v2 traffic accumulates (v1 baseline 167→42→12, 60 clarifies) — reactions are also worth
+an eye there (ack drop-rate has no metric yet; consider capturing when the backstop fires);
+(4) then the standing queue: TODO.md items 6–10 (STRATEGY.md actionables) and the growth thread
+(mod-permission-first channels, Jerez FB angle — see soft-launch lessons below).
 
 ---
 
-Last updated: 2026-07-10 night (SECOND release wave: landing v2 + wife-test batch LIVE on web at
-b38ff3c; iOS build 34 submitting — supersedes 32/33). Highlights since the morning note: six
-user-testing fixes (not-sure chips, reaction spacing, final open note, EMAIL MAGIC LINKS via
-/auth/confirm token_hash flow + 24h OTP on both Supabase projects, snap-flush scroll, housing pair
-merged); the "+N steps" pill promoted from the landing demo into the real interview; cobalt focus
-ring on text fields (amber read as error); and LANDING V2 — home + how-it-works merged into one
-scrolling story (variant C won a 4-way local lab; docs/LANDING-REDESIGN.md is the record;
-landing_version: 2 stamped). Dashboard: PostHog 808581. Prior morning note follows.
+Last updated: 2026-07-11 ~01:00 (THIRD release wave in 24h: night-feedback batch live on web,
+build 35 submitted to TestFlight overnight — supersedes 34/33/32). Prior wave same day: landing
+v2 + wife-test batch (b38ff3c). Highlights of that wave: six user-testing fixes (not-sure chips,
+reaction spacing, final open note, EMAIL MAGIC LINKS via /auth/confirm token_hash flow + 24h OTP
+on both Supabase projects, snap-flush scroll, housing pair merged); the "+N steps" pill promoted
+from the landing demo into the real interview; cobalt focus ring on text fields (amber read as
+error); and LANDING V2 — home + how-it-works merged into one scrolling story (variant C won a
+4-way local lab; docs/LANDING-REDESIGN.md is the record; landing_version: 2 stamped). Dashboard:
+PostHog 808581. Prior morning note follows.
 
 Prior note — 2026-07-10 (RELEASED: living-roadmap redesign LIVE on production web at 23d917e —
 6/6 public E2E green against the live site; e2e-ios gate green (run 29090864671, incl. the
