@@ -54,7 +54,7 @@ function RotatingPhoto({ wide }: { wide: boolean }) {
   const containerStyle = wide ? styles.photoContainerWide : styles.photoContainerMobile;
   // Explicit pixel height, not '100%': expo-image's wrapper collapses to height 0 in the
   // static web build when the height comes from a percentage inside a flex child.
-  const h = wide ? 600 : 280;
+  const h = wide ? 380 : 280;
   const imgStyle = { width: '100%' as const, height: h };
 
   return (
@@ -144,9 +144,9 @@ const styles = StyleSheet.create({
 
   // Hero section
   heroSection:     { backgroundColor: palette.cal },
-  heroSectionWide: { flexDirection: 'row', alignItems: 'stretch', minHeight: 600 },
+  heroSectionWide: { flexDirection: 'row', alignItems: 'center', maxWidth: 1080, width: '100%', alignSelf: 'center', paddingVertical: 48, paddingHorizontal: 24, gap: 28 },
   heroText:        { padding: 32, paddingTop: 40, paddingBottom: 48 },
-  heroTextWide:    { flex: 1, padding: 56, justifyContent: 'center', maxWidth: 560 },
+  heroTextWide:    { flex: 1, padding: 0, justifyContent: 'center', maxWidth: 520 },
   lolaGlyph:       { width: 52, height: 52, borderRadius: 26, backgroundColor: palette.amber, justifyContent: 'center', alignItems: 'center', marginBottom: 24 },
   lolaGlyphStar:   { fontSize: 22, color: palette.cal },
   heroEyebrow:     { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.cobalt, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 14 },
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
 
   // Rotating photo
   photoFill:            { width: '100%', height: '100%' },
-  photoContainerWide:   { flex: 1, position: 'relative', height: 600, overflow: 'hidden' },
+  photoContainerWide:   { flex: 1, position: 'relative', height: 380, borderRadius: 18, overflow: 'hidden' },
   photoContainerMobile: { height: 280, position: 'relative', overflow: 'hidden' },
   photoLabel:           { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(21,36,59,0.5)', paddingHorizontal: 16, paddingVertical: 10 },
   photoLabelText:       { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.cal },
