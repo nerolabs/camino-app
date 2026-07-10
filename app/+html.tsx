@@ -46,6 +46,14 @@ body {
   outline: 3px solid #BD8318 !important;
   outline-offset: 2px;
 }
+/* Text fields are focused PROGRAMMATICALLY on every interview turn, so the ring shows for
+   everyone — and 3px amber on an input reads as an error state (user finding 2026-07-10).
+   Fields always sit on light backgrounds, so a calm 2px brand-cobalt ring says "your turn"
+   without alarm; the amber ring stays for keyboard nav over links/buttons/dark bands. */
+textarea:focus-visible, input:focus-visible {
+  outline: 2px solid #2B5AA3 !important;
+  outline-offset: 0;
+}
 :focus:not(:focus-visible) {
   outline: none;
 }`;

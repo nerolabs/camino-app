@@ -27,7 +27,7 @@ import { capture } from '@/lib/analytics';
 import { captureError } from '@/lib/monitoring';
 import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
 
-type Turn = { role: 'lola' | 'user'; text: string };
+type Turn = { role: 'lola' | 'user'; text: string; addedSteps?: number };
 
 // Render the conversation so far as a plain transcript the model can reason over.
 // Drops the dev-persona marker line so it never leaks into a real prompt.
@@ -405,6 +405,19 @@ export default function InterviewScreen() {
     setHighlightIds(new Set(delta.added.map(o => o.id)));
     setPlanCount(delta.after.length);
     setLastAdded(delta.added.length);
+    if (delta.added.length) {
+      // The landing demo's "+N steps" pill, in the real conversation: stamp the answer that did it.
+      setTurns(prev => {
+        for (let i = prev.length - 1; i >= 0; i--) {
+          if (prev[i].role === 'user') {
+            const copy = [...prev];
+            copy[i] = { ...copy[i], addedSteps: delta.added.length };
+            return copy;
+          }
+        }
+        return prev;
+      });
+    }
     setProfile(next_profile);
     setOtherActive(false);
     setInput(''); // clear any typed text (e.g. region type-ahead) before the next question
@@ -645,9 +658,16 @@ export default function InterviewScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.column}>
-          {turns.map((t, i) => (
-            <View key={i} style={t.role === 'lola' ? styles.lolaBubble : styles.userBubble}>
-              <Text style={t.role === 'lola' ? styles.lolaText : styles.userText}>{t.text}</Text>
+          {turns.map((turn, i) => (
+            <View key={i}>
+              <View style={turn.role === 'lola' ? styles.lolaBubble : styles.userBubble}>
+                <Text style={turn.role === 'lola' ? styles.lolaText : styles.userText}>{turn.text}</Text>
+              </View>
+              {!!turn.addedSteps && (
+                <View style={styles.answerPill}>
+                  <Text style={styles.answerPillText}>{t('roadmap.added', { count: turn.addedSteps })}</Text>
+                </View>
+              )}
             </View>
           ))}
           {loading && (
@@ -861,6 +881,8 @@ const styles = StyleSheet.create({
   scroll:        { flex: 1 },
   scrollContent: { flexGrow: 1, paddingVertical: 28, paddingHorizontal: 16, alignItems: 'center' },
   column:        { width: '100%', maxWidth: 640 },
+  answerPill: { alignSelf: 'flex-end', backgroundColor: palette.olive, borderRadius: 10, paddingHorizontal: 8, paddingVertical: 3, marginTop: -6, marginBottom: 12 },
+  answerPillText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, color: palette.cal },
   lolaBubble: {
     alignSelf: 'flex-start', backgroundColor: '#FFFFFF',
     borderRadius: 18, borderBottomLeftRadius: 4,
