@@ -28,7 +28,6 @@ test('interview auto-starts; a typed answer round-trips /api/lola and advances (
   // conversation with Lola's greeting and the arrival-date opener.
   await expect(page.getByText("Hola, I'm Lola", { exact: false })).toBeVisible();
   await expect(page.getByText(/when are you planning to arrive/i)).toBeVisible();
-  await expect(page.getByText(/voice (on|off)/i)).toBeVisible();
   // One real /api/lola round-trip: answer the date; the next question (Spanish level) should
   // arrive with its chips. Give the extraction + the reaction race room.
   const composer = page.getByPlaceholder(/type your answer/i);
@@ -82,6 +81,20 @@ test('sample plan renders the full read-only roadmap + interview CTA', async ({ 
   // A few signature obligations that the sample persona must surface:
   await expect(page.getByText(/non-lucrative/i).first()).toBeVisible();
   await expect(page.getByText(/Empadronamiento/i).first()).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('contact page renders; Report-a-problem deep link pre-selects the topic', async ({ page }) => {
+  // The hamburger's "Report a problem" rides /contact?topic=problem (2026-07-11). The page
+  // must render the topic chips and honor the pre-selection. RN-Web doesn't surface
+  // accessibilityState.selected as aria-selected on buttons, so assert what the user sees:
+  // the selected chip carries the cobalt fill (#2B5AA3), the others the neutral one.
+  const errors = trackErrors(page);
+  await page.goto('/contact?topic=problem');
+  await expect(page.getByText('Contact us')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Report a problem' })).toHaveCSS('background-color', 'rgb(43, 90, 163)');
+  await expect(page.getByRole('button', { name: 'General', exact: true })).not.toHaveCSS('background-color', 'rgb(43, 90, 163)');
+  await expect(page.getByPlaceholder(/write your message/i)).toBeVisible();
   expect(errors).toEqual([]);
 });
 

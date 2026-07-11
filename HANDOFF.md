@@ -5,7 +5,53 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-## ⭐ RESUME HERE (2026-07-11 morning — night batch SHIPPED; build 35 auto-submitted overnight)
+## ⭐ RESUME HERE (2026-07-11 evening — Cristina batch LIVE; build 36 riding; ASC paperwork DONE minus trader)
+
+**The day in three threads:**
+
+1. **Cristina's full fresh-eyes pass → a 5-item batch, shipped same day** (verified on staging
+   by the user, then production + build 36): **(a) TTS voice REMOVED everywhere** (hooks, voice
+   pill, /api/tts, ElevenLabs privacy-page mentions, contract tests — mic dictation stays;
+   ElevenLabs plan + EAS env vars can now be cancelled/deleted, user-side); **(b)** copy
+   realigned "conversation" → **"short interview"** ×5 locales (hero, how-it-works step,
+   store-badge line, fr greeting); **(c)** standard **mic glyph** drawn in RN views (emoji
+   retired); **(d)** interview ending: final note now ACKNOWLEDGED (`final.ack`) then
+   **"Getting your roadmap ready — 3…2…1" countdown** before /plan (no more abrupt jump);
+   **(e)** **/contact page** (topic chips General/Feedback/Problem → /api/feedback with
+   whitelisted topic in subject; footer link; hamburger Report-a-problem deep-links
+   ?topic=problem). Smoke #7 (contact) caught a real bug on first run: static-export params
+   arrive post-hydration — pre-selection needs an effect, not a useState initializer.
+   Public smoke now 8; contract suite 7 (tts cases retired); 216 vitest; TEST-COVERAGE updated.
+   NOTE: **TestFlight build 35's voice toggle silently breaks** once prod loses /api/tts —
+   known + accepted; build 36 removes the toggle.
+
+2. **App Store paperwork is DONE except the trader declaration.** All ASC fields entered +
+   fixed via browser session (name→'Get Camino: Your Road to Spain', Travel/Lifestyle order,
+   © 2026 AELaboratories, review notes pasted, MANUAL release, pricing $0×175 countries,
+   availability all, privacy label rebuilt to 7 honest data types incl. Other Financial Info
+   — income bands — and PUBLISHED). Screenshots: 5 captured on build 35, retaken twice for
+   staff-only leaks (webinar pill, Dev personas strip — capture signed-out!), status bars
+   normalized to 9:41 (real signal/wifi pixels kept), captioned brand frames generated →
+   **docs/store-assets/framed/ is the upload set** (scripts/clean-store-shots.mjs +
+   frame-store-shots.mjs; Fraunces/HankenGrotesk TTFs installed to ~/Library/Fonts for the
+   renderer). **⏸ TRADER STATUS BLOCKED on an Apple support case** (org identity Proxim.us →
+   AELaboratories, with a supervisor): submission CAN proceed without it but EU storefronts
+   (incl. Spain) stay withheld until Trader is declared + verified post-case. Playbook:
+   docs/STORE_PAPERWORK.md (now with Step 2.5 pricing — the original playbook missed it).
+   When build 36 attaches: remove the ElevenLabs/TTS line from the ASC review notes.
+
+3. **Wife-pass logistics:** test script + triage sheet at docs/testing/ (2026-07-11 files).
+
+**NEXT:** (1) build 36 device verify (mic glyph, countdown, contact page, NO voice toggle);
+(2) trader declaration the moment Apple's case resolves (then align legal pages' operator
+identity — currently Proxim.us/Vashon — with the AELaboratories trader info + ASC copyright);
+(3) attach build 36 + upload framed screenshots (Media Manager 6.9" slot; if only 6.5" offered,
+regenerate at 1284×2778) + fix review notes → SUBMIT (manual release parks approval until the
+launch moment); (4) PostHog 808581 for interview-v2 + the new contact_sent event.
+
+---
+
+## Prior resume note (2026-07-11 morning — night batch SHIPPED; build 35 auto-submitted overnight)
 
 **The six-item night-feedback queue is DONE, live on production web, and riding to iOS.** All six
 fixes landed (hamburger cleanup, guide→interview greeting restored deterministically via

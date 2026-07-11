@@ -28,6 +28,10 @@ export async function POST(request: Request): Promise<Response> {
   if (message.length > MAX_MESSAGE) return Response.json({ error: 'message too long' }, { status: 413 });
 
   const field = (v: unknown) => (typeof v === 'string' ? v.slice(0, MAX_FIELD) : '');
+  // Topic comes from the contact page's selector; anything unexpected collapses to 'general'
+  // so the subject line can never be attacker-chosen text.
+  const topic = ['general', 'feedback', 'problem'].includes(body.topic as string)
+    ? (body.topic as string) : 'general';
   const ctx = {
     email:    field(body.email),      // optional reply-to, self-reported
     platform: field(body.platform),   // ios / android / web
@@ -39,7 +43,7 @@ export async function POST(request: Request): Promise<Response> {
   try {
     await sendEmail({
       to: TEAM_INBOX,
-      subject: `Get Camino feedback (${ctx.env}${ctx.platform ? ` · ${ctx.platform}` : ''})`,
+      subject: `Get Camino ${topic} (${ctx.env}${ctx.platform ? ` · ${ctx.platform}` : ''})`,
       html: `<div style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:21px;color:#15243B;">
         <p style="white-space:pre-wrap;">${esc(message)}</p>
         <hr style="border:none;border-top:1px solid #E8E4DC;">

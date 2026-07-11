@@ -16,12 +16,6 @@
     "minutesLeft": "About {{m}} min left",
     "complete": "{{pct}}% complete"
   },
-  "voice": {
-    "on": "Voice on",
-    "off": "Voice off",
-    "turnOffA11y": "Turn Lola’s voice off",
-    "turnOnA11y": "Turn Lola’s voice on"
-  },
   "composer": {
     "placeholder": "Type your answer…",
     "placeholderListening": "Listening…",
@@ -123,6 +117,8 @@
   },
   "final": {
     "question": "One last thing — is there anything else about your move you think I should know? It may shape your roadmap. Or skip straight to it.",
-    "skip": "Skip — show my roadmap"
+    "skip": "Skip — show my roadmap",
+    "ack": "Got it — I've saved that with your plan. That's everything I need.",
+    "countdown": "Getting your roadmap ready — {{n}}…"
   }
 }

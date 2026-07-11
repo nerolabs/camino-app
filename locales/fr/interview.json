@@ -5,7 +5,7 @@
     "sub": "S’installer en Espagne, ce sont cent petites étapes — visas, padrón, impôts, santé — qui ne fonctionnent que dans le bon ordre. J’ai aidé d’autres personnes à franchir le pas, et je ferai la route avec toi du début à la fin.",
     "subQuiet": "Réponds à quelques questions et je construis ta feuille de route personnelle : de vraies étapes, de vraies échéances, rien d’inutile.",
     "start": "C’est parti",
-    "greeting": "Bonjour, je suis Lola. Je vais construire votre feuille de route ici même, au fil de la conversation — des étapes réelles, des délais réels, rien d'inutile.",
+    "greeting": "Bonjour, je suis Lola. Je vais construire votre feuille de route ici même, au fil de l'entretien — des étapes réelles, des délais réels, rien d'inutile.",
     "fromGuide": "Je vois que vous vous renseigniez sur {{guide}} — votre feuille de route couvrira ce point et tout ce qui l'entoure.",
     "welcomeBack": "Content de vous revoir — votre feuille de route est à {{pct}}%. Reprenons où nous en étions."
   },
@@ -15,12 +15,6 @@
     "underAMinute": "Moins d’une minute",
     "minutesLeft": "Encore ~{{m}} min",
     "complete": "{{pct}}% terminé"
-  },
-  "voice": {
-    "on": "Voix activée",
-    "off": "Voix coupée",
-    "turnOffA11y": "Couper la voix de Lola",
-    "turnOnA11y": "Activer la voix de Lola"
   },
   "composer": {
     "placeholder": "Écris ta réponse…",
@@ -123,6 +117,8 @@
   },
   "final": {
     "question": "Une dernière chose — y a-t-il autre chose sur votre projet que je devrais savoir ? Cela peut affiner votre feuille de route. Ou passez directement.",
-    "skip": "Passer — voir ma feuille de route"
+    "skip": "Passer — voir ma feuille de route",
+    "ack": "C'est noté — je le garde avec ta feuille de route. J'ai tout ce qu'il me faut.",
+    "countdown": "Préparation de ta feuille de route — {{n}}…"
   }
 }

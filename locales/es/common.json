@@ -29,7 +29,7 @@
   },
   "home": {
     "eyebrow": "Mudarse a España",
-    "headline": "Tu mudanza a España, planificada en una conversación.",
+    "headline": "Tu mudanza a España, planificada en una entrevista corta.",
     "sub": "Del visado adecuado a la ciudad adecuada, colegios y papeleo — Lola descubre qué te aplica, en el orden correcto.",
     "cta": "Crea mi hoja de ruta gratis →",
     "disclaimer": "Gratis · Unos 3 minutos · Sin cuenta para empezar",
@@ -74,7 +74,7 @@
       "s6d": "feb 2027",
       "s7": "Escolarización",
       "s7d": "mar 2027",
-      "step1": "Cuéntale a Lola tu situación — una conversación corta, no un formulario.",
+      "step1": "Cuéntale a Lola tu situación — una entrevista corta, no un formulario.",
       "step2": "Recibe tu hoja de ruta personal — cada paso que te aplica, en el orden correcto.",
       "step3": "Recorredla juntos — se replanifica cuando la vida cambia; un breve correo semanal mantiene a la vista lo que vence."
     },
@@ -105,13 +105,14 @@
     "note": "Solo orientación — no es asesoramiento legal ni fiscal.",
     "privacy": "Privacidad",
     "terms": "Términos",
-    "avisoLegal": "Aviso legal"
+    "avisoLegal": "Aviso legal",
+    "contact": "Contacto"
   },
   "storeBadges": {
     "eyebrow": "LLÉVALO CONTIGO",
     "titleLive": "Lleva Get Camino en tu móvil.",
     "titleSoon": "La app web ya funciona. Las apps para el móvil están en camino.",
-    "subLive": "Tu hoja de ruta, con voz incluida, en iPhone y Android.",
+    "subLive": "Tu hoja de ruta completa, en iPhone y Android.",
     "subSoon": "Todo funciona aquí mismo, en tu navegador — sin instalar nada. Las apps nativas para iPhone y Android están en desarrollo.",
     "downloadOn": "Descárgala en",
     "comingSoonTo": "Muy pronto en",
@@ -153,23 +154,30 @@
     "errSend": "No se pudo enviar el correo — inténtalo de nuevo.",
     "errCode": "Ese código no coincide — revisa el correo o envía uno nuevo."
   },
-  "feedback": {
-    "title": "Informar de un problema",
-    "sub": "¿Algo roto, confuso o que falta? Cuéntanoslo — con una frase basta.",
-    "inputA11y": "Describe el problema",
-    "placeholder": "¿Qué ha pasado?",
-    "send": "Enviar",
-    "cancel": "Cancelar",
-    "thanksTitle": "Gracias — recibido.",
-    "thanksSub": "Cada aviso mejora la hoja de ruta. Los leemos todos.",
-    "done": "Listo",
-    "errSend": "No se ha enviado — inténtalo otra vez."
-  },
   "authConfirm": {
     "headline": "Abre tu hoja de ruta",
     "sub": "Un toque y quedas conectado en este dispositivo — este enlace llegó a tu correo, así que es solo tuyo.",
     "continue": "Continuar — iniciar sesión",
     "expiredHeadline": "Ese enlace ha caducado",
     "expiredSub": "No pasa nada: escribe tu correo y te enviamos un código nuevo que te conecta aquí mismo."
+  },
+  "contact": {
+    "title": "Contacto",
+    "sub": "Preguntas, ideas, algo roto — lo leemos todo, y respondemos si dejas un correo.",
+    "topicLabel": "¿De qué se trata?",
+    "topics": {
+      "general": "General",
+      "feedback": "Comentarios",
+      "problem": "Informar de un problema"
+    },
+    "emailLabel": "Tu correo (opcional — para poder responderte)",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "messagePlaceholder": "Escribe tu mensaje…",
+    "messageA11y": "Tu mensaje",
+    "send": "Enviar",
+    "thanksTitle": "Gracias — recibido.",
+    "thanksSub": "Leemos todos los mensajes. Si dejaste un correo, te responderemos.",
+    "again": "Enviar otro mensaje",
+    "errSend": "No se ha enviado — inténtalo otra vez."
   }
 }

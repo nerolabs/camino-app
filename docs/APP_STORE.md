@@ -91,8 +91,9 @@ Suggested 5-shot story (portrait, device frames optional):
 3. Roadmap — phases + stats + a penalty banner visible.
 4. Step sheet — official ↗ pill + Lola's coaching thread.
 5. Sample plan — "This is Susan & Tom's plan." banner.
-Plan: capture on your device (build 11 or later) or Simulator; I can annotate/frame them if you
-drop raw PNGs into `docs/store-assets/`.
+Plan: capture on your device on **build 35** (the current public candidate — landing v2 + the
+live-roadmap interview; earlier builds no longer match the shipping UI); I can annotate/frame
+them if you drop raw PNGs into `docs/store-assets/`.
 
 ## Remaining checklist
 

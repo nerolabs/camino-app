@@ -9,7 +9,6 @@ import { supabase } from '@/core/supabase';
 import { useWide } from '@/lib/useWide';
 import { SUPPORTED_LOCALES, setAppLocale, type LocaleCode } from '@/lib/i18n';
 import SignInButtons from '@/components/SignInButtons';
-import FeedbackDialog from '@/components/FeedbackDialog';
 import DeleteAccountDialog from '@/components/DeleteAccountDialog';
 
 // One nav for every width (user decision 2026-07-03: desktop gets the burger too — parity with
@@ -27,7 +26,6 @@ export default function NavBar() {
   const wide = useWide();
   const { t, i18n } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
 
@@ -106,7 +104,9 @@ export default function NavBar() {
                 §10): always visible, current language shown by its own name. */}
             <MenuLink label={t('language.current', { name: currentLocale.name })} onPress={() => { setMenuOpen(false); setLangOpen(true); }} />
             {/* Subtle but always at hand — one tap from anywhere (user request 2026-07-03). */}
-            <MenuLink label={t('nav.menu.reportProblem')} onPress={() => { setMenuOpen(false); setFeedbackOpen(true); }} />
+            {/* Kept as its own menu item (user decision 2026-07-11), but it now rides the
+                general contact page with the problem topic pre-selected. */}
+            <MenuLink label={t('nav.menu.reportProblem')} onPress={() => go('/contact?topic=problem')} />
             {user && (
               <>
                 <MenuLink label={t('nav.menu.signOut')} onPress={() => { setMenuOpen(false); signOut(); }} />
@@ -140,7 +140,6 @@ export default function NavBar() {
         </Pressable>
       </Modal>
 
-      <FeedbackDialog visible={feedbackOpen} onClose={() => setFeedbackOpen(false)} />
       <DeleteAccountDialog visible={deleteOpen} onClose={() => setDeleteOpen(false)} />
     </View>
   );

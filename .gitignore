@@ -51,3 +51,4 @@ test-results/
 
 # Playwright captured auth state (contains a live staging session)
 tests-e2e/.auth/
+docs/store-assets/clean/

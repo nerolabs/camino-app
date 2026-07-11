@@ -4,7 +4,10 @@
 added or removed. Forward-looking ideas (tests we *want*) live in `docs/BUILD.md` → "Growing E2E
 coverage"; this file is the honest picture of **current** coverage.
 
-Last updated: 2026-07-10 night (night-feedback batch: +1 public smoke test — guide→interview
+Last updated: 2026-07-11 (Cristina-pass batch: TTS/voice retired → the 3 /api/tts contract
+tests removed with the route and smoke #2's voice-pill assertion dropped; +1 public smoke —
+/contact renders and the ?topic=problem deep link pre-selects the topic. Public smoke suite is
+now 8). Prior: 2026-07-10 night (night-feedback batch: +1 public smoke test — guide→interview
 greeting context regression; smoke #2 copy updated for the new arrival-date opener). Earlier same
 day: living-roadmap release — 216 passing vitest + 10 opt-in (plan-delta, completeness,
 draft-resume, ordering/chips, not-sure sentinel, income checks, language-classes); smoke E2E
@@ -14,8 +17,8 @@ Layers, and when they run:
 - **Unit / integration** (vitest, `tests/`) — deterministic, offline. Runs in `deploy.sh` and CI
   on **every push**. This is the fast safety net.
 - **Web E2E** (Playwright, `tests-e2e/`) — real browser vs a **deployed** env. Runs
-  **automatically on every deploy** (`deploy.sh`, against the unique URL). Staging = all 12;
-  production = the 7 public only.
+  **automatically on every deploy** (`deploy.sh`, against the unique URL). Staging = all 13;
+  production = the 8 public only.
 - **Mobile E2E** (Maestro, `.maestro/`) — iOS simulator. Runs on **big builds only** (manual
   `e2e-ios` workflow before a store-candidate build).
 
@@ -42,7 +45,7 @@ Concentrated on the deterministic core (that's the product's real risk surface):
 | **Weekly email digest** | `email-digest.test.ts` (6) | incomplete interview → null (no spam); pressing items → capped, overdue-first; nothing-in-window → null; deterministic; done items never appear; unsubscribe token sign/verify + tamper-fail |
 | **Guide prose** | `guide-prose.test.ts` (3) | covers every obligation & nothing else; substantive (no stubs); **digit-lint** (never introduces a number the title lacks — invariant 3) |
 | **Date normalization** | `date-input.test.ts` (7) | strict ISO; "2026-April-25"; Spanish months; unambiguous numerics only; today/hoy; rejects junk; preview label |
-| **API contract** (opt-in + per-staging-deploy) | `api.contract.test.ts` (10) | /api/lola 400/413/role validation; /api/tts 400/413 + GET audio happy path; **Spanish-extraction gate** (3): real extraction prompt (`lib/extractionPrompt.ts`) via the deployed /api/lola — "Somos estadounidenses"→`["US"]`, "trabajo en remoto…"→`employed_remote`, "estamos casados"→`true`. Runs in `deploy.sh` on every STAGING deploy (against the unique URL) and via `npm run test:api` |
+| **API contract** (opt-in + per-staging-deploy) | `api.contract.test.ts` (7) | /api/lola 400/413/role validation (the /api/tts cases retired with the route, 2026-07-11); **Spanish-extraction gate** (3): real extraction prompt (`lib/extractionPrompt.ts`) via the deployed /api/lola — "Somos estadounidenses"→`["US"]`, "trabajo en remoto…"→`employed_remote`, "estamos casados"→`true`. Runs in `deploy.sh` on every STAGING deploy (against the unique URL) and via `npm run test:api` |
 | **Plan structure = frozen (localization guard)** | `plan-snapshot.test.ts` (10) | every persona's plan snapshotted as `id\|phase\|severity\|timing-state` (clock frozen) — the engine takes NO locale, so this proves localization surgery never changes WHICH steps / order / timing; + no-dupes/non-empty |
 | **Abuse guards** | `api-guard.test.ts` (8) | `isAllowedOrigin` (own origins, per-deploy `camino--*`, localhost, foreign & look-alike rejects, referer); `corsPreflight` grants allowed / denies foreign / no-origin |
 | **Email origin** | `server-email.test.ts` (3) | `siteOrigin` is the canonical host per env, never derived from request.url (the leak it exists to prevent) |
@@ -64,8 +67,9 @@ Concentrated on the deterministic core (that's the product's real risk surface):
 the display layer (formatters, hints — the surfaces localization touches most) be unit-tested.
 
 **Still not unit-tested (known gaps, ranked):** **all API route handlers now have integration
-tests** (lola/tts via the opt-in contract suite; welcome/feedback/account-delete/unsubscribe/
-weekly via mocked-Supabase specs — the audit's gap, closed 2026-07-05). Remaining low-risk:
+tests** (lola via the opt-in contract suite; welcome/feedback/account-delete/unsubscribe/
+weekly via mocked-Supabase specs — the audit's gap, closed 2026-07-05; /api/tts retired
+2026-07-11 with Lola's voice). Remaining low-risk:
 `lib/analytics.ts` / `lib/monitoring.ts` (thin wrappers). See the strategy below.
 
 ---
@@ -75,7 +79,7 @@ weekly via mocked-Supabase specs — the audit's gap, closed 2026-07-05). Remain
 Runs against a deployed env on every deploy. **Public** = signed-out, no secrets. **Authed** =
 a seeded staging test user (magic-link token → session → storageState; the seed refuses prod).
 
-### Public (7)
+### Public (8)
 1. **Home renders** — hero, "Build my free roadmap" CTA, footer disclaimer; zero uncaught JS errors.
 2. **Interview auto-starts + one live LLM turn** — /interview opens straight into the greeting +
    arrival opener (no button since the 2026-07-10 redesign) → a typed date round-trips the real
@@ -87,7 +91,10 @@ a seeded staging test user (magic-link token → session → storageState; the s
 5. **Content pages load** — /how-it-works redirects home (content folded into the landing, 2026-07-10) where the demo section is asserted; the how-i-was-built essay; the build log.
 6. **Sample plan** — /sample-plan renders the full read-only roadmap (Susan & Tom), phase headers,
    the interview CTA, and signature obligations (non-lucrative visa, empadronamiento).
-7. **SEO surface** — robots.txt is open + points at the sitemap; sitemap.xml lists /guide pages;
+7. **Contact page + topic deep link (2026-07-11)** — /contact?topic=problem renders the form and
+   the "Report a problem" chip arrives pre-selected (aria-selected) — guards the hamburger's
+   report-a-problem route into the generalized contact page.
+8. **SEO surface** — robots.txt is open + points at the sitemap; sitemap.xml lists /guide pages;
    the auto `_sitemap` route stays 404.
 
 ### Authed (5, + a setup step that proves the seeded session loads the roadmap)

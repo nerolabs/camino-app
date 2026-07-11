@@ -16,12 +16,6 @@
     "minutesLeft": "Noch ca. {{m}} Min.",
     "complete": "{{pct}}% fertig"
   },
-  "voice": {
-    "on": "Stimme an",
-    "off": "Stimme aus",
-    "turnOffA11y": "Lolas Stimme ausschalten",
-    "turnOnA11y": "Lolas Stimme einschalten"
-  },
   "composer": {
     "placeholder": "Schreib deine Antwort…",
     "placeholderListening": "Ich höre zu…",
@@ -123,6 +117,8 @@
   },
   "final": {
     "question": "Eine letzte Sache — gibt es sonst noch etwas zu Ihrem Umzug, das ich wissen sollte? Es kann Ihren Fahrplan schärfen. Oder überspringen Sie direkt.",
-    "skip": "Überspringen — Fahrplan ansehen"
+    "skip": "Überspringen — Fahrplan ansehen",
+    "ack": "Notiert — das speichere ich zu deinem Plan. Ich habe alles, was ich brauche.",
+    "countdown": "Deine Roadmap wird vorbereitet — {{n}}…"
   }
 }

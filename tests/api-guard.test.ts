@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { isAllowedOrigin, corsPreflight } from '../lib/apiGuard';
 
-// The abuse guards for the paid routes (/api/lola, /api/tts). These pure/Web-API functions were
+// The abuse guards for the paid routes (/api/lola). These pure/Web-API functions were
 // previously only verified by live burst tests; unit-testing them locks the CORS/origin logic so
 // a refactor can't quietly reopen the endpoints.
 

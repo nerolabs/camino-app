@@ -29,7 +29,7 @@
   },
   "home": {
     "eyebrow": "S’installer en Espagne",
-    "headline": "Votre installation en Espagne, planifiée en une conversation.",
+    "headline": "Votre installation en Espagne, planifiée en un court entretien.",
     "sub": "Du bon visa à la bonne ville, écoles et démarches — Lola détermine ce qui s'applique à vous, dans le bon ordre.",
     "cta": "Créer ma feuille de route gratuite →",
     "disclaimer": "Gratuit · Environ 3 minutes · Aucun compte requis pour commencer",
@@ -74,7 +74,7 @@
       "s6d": "févr. 2027",
       "s7": "Scolarisation",
       "s7d": "mars 2027",
-      "step1": "Racontez votre situation à Lola — une courte conversation, pas un formulaire.",
+      "step1": "Racontez votre situation à Lola — un court entretien, pas un formulaire.",
       "step2": "Recevez votre feuille de route personnelle — chaque étape qui s'applique, dans le bon ordre.",
       "step3": "Avancez ensemble — elle se replanifie quand la vie change ; un court e-mail hebdomadaire garde l'échéant en vue."
     },
@@ -105,13 +105,14 @@
     "note": "Simple orientation — ni conseil juridique ni conseil fiscal.",
     "privacy": "Confidentialité",
     "terms": "Conditions",
-    "avisoLegal": "Aviso legal"
+    "avisoLegal": "Aviso legal",
+    "contact": "Contact"
   },
   "storeBadges": {
     "eyebrow": "EMPORTE-LE AVEC TOI",
     "titleLive": "Emporte Get Camino sur ton téléphone.",
     "titleSoon": "L’app web fonctionne déjà. Les apps mobiles arrivent.",
-    "subLive": "Ta feuille de route, voix comprise, sur iPhone et Android.",
+    "subLive": "Ta feuille de route complète, sur iPhone et Android.",
     "subSoon": "Tout fonctionne ici, dans ton navigateur — rien à installer. Les apps natives iPhone et Android sont en préparation.",
     "downloadOn": "Télécharger sur",
     "comingSoonTo": "Bientôt sur",
@@ -153,23 +154,30 @@
     "errSend": "L’e-mail n’a pas pu partir — réessaie.",
     "errCode": "Ce code ne correspond pas — vérifie l’e-mail ou renvoies-en un."
   },
-  "feedback": {
-    "title": "Signaler un problème",
-    "sub": "Quelque chose de cassé, de confus ou de manquant ? Dis-le-nous — une phrase suffit.",
-    "inputA11y": "Décris le problème",
-    "placeholder": "Que s’est-il passé ?",
-    "send": "Envoyer",
-    "cancel": "Annuler",
-    "thanksTitle": "Gracias — bien reçu.",
-    "thanksSub": "Chaque signalement améliore la feuille de route. Nous les lisons tous.",
-    "done": "Terminé",
-    "errSend": "L’envoi a échoué — réessaie."
-  },
   "authConfirm": {
     "headline": "Ouvrez votre feuille de route",
     "sub": "Un clic et vous êtes connecté sur cet appareil — ce lien est arrivé dans votre boîte mail, il est à vous seul.",
     "continue": "Continuer — me connecter",
     "expiredHeadline": "Ce lien a expiré",
     "expiredSub": "Pas de souci : saisissez votre e-mail et nous vous envoyons un nouveau code qui vous connecte ici même."
+  },
+  "contact": {
+    "title": "Contact",
+    "sub": "Questions, idées, quelque chose de cassé — nous lisons tout, et répondons si tu laisses un e-mail.",
+    "topicLabel": "De quoi s'agit-il ?",
+    "topics": {
+      "general": "Général",
+      "feedback": "Retour d'expérience",
+      "problem": "Signaler un problème"
+    },
+    "emailLabel": "Ton e-mail (facultatif — pour pouvoir te répondre)",
+    "emailPlaceholder": "toi@exemple.com",
+    "messagePlaceholder": "Écris ton message…",
+    "messageA11y": "Ton message",
+    "send": "Envoyer",
+    "thanksTitle": "Gracias — bien reçu.",
+    "thanksSub": "Nous lisons tous les messages. Si tu as laissé un e-mail, nous te répondrons.",
+    "again": "Envoyer un autre message",
+    "errSend": "L’envoi a échoué — réessaie."
   }
 }

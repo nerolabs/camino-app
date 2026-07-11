@@ -15,6 +15,8 @@ export default function Footer() {
       <Text style={styles.footerLogo}>{t('nav.wordmark')}</Text>
       <Text style={styles.footerNote}>{t('footer.note')}</Text>
       <View style={styles.links}>
+        <TouchableOpacity onPress={() => go('/contact')}><Text style={styles.link}>{t('footer.contact')}</Text></TouchableOpacity>
+        <Text style={styles.dot}>·</Text>
         <TouchableOpacity onPress={() => go('/privacy')}><Text style={styles.link}>{t('footer.privacy')}</Text></TouchableOpacity>
         <Text style={styles.dot}>·</Text>
         <TouchableOpacity onPress={() => go('/terms')}><Text style={styles.link}>{t('footer.terms')}</Text></TouchableOpacity>

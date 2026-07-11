@@ -29,7 +29,7 @@
   },
   "home": {
     "eyebrow": "Trasferirsi in Spagna",
-    "headline": "Il tuo trasferimento in Spagna, pianificato in una conversazione.",
+    "headline": "Il tuo trasferimento in Spagna, pianificato in una breve intervista.",
     "sub": "Dal visto giusto alla città giusta, scuole e burocrazia — Lola capisce cosa vale per te, nell'ordine giusto.",
     "cta": "Crea la mia roadmap gratuita →",
     "disclaimer": "Gratis · Circa 3 minuti · Nessun account per iniziare",
@@ -74,7 +74,7 @@
       "s6d": "feb 2027",
       "s7": "Iscrizione a scuola",
       "s7d": "mar 2027",
-      "step1": "Racconta a Lola la tua situazione — una breve conversazione, non un modulo.",
+      "step1": "Racconta a Lola la tua situazione — una breve intervista, non un modulo.",
       "step2": "Ricevi la tua roadmap personale — ogni passo che ti riguarda, nell'ordine giusto.",
       "step3": "Percorretela insieme — si ripianifica quando la vita cambia; una breve email settimanale tiene in vista le scadenze."
     },
@@ -105,13 +105,14 @@
     "note": "Solo orientamento — non è consulenza legale né fiscale.",
     "privacy": "Privacy",
     "terms": "Termini",
-    "avisoLegal": "Aviso legal"
+    "avisoLegal": "Aviso legal",
+    "contact": "Contatti"
   },
   "storeBadges": {
     "eyebrow": "PORTALO CON TE",
     "titleLive": "Porta Get Camino sul tuo telefono.",
     "titleSoon": "La web app funziona già oggi. Le app per il telefono stanno arrivando.",
-    "subLive": "La tua roadmap, voce compresa, su iPhone e Android.",
+    "subLive": "La tua roadmap completa, su iPhone e Android.",
     "subSoon": "Funziona tutto qui, nel tuo browser — niente da installare. Le app native per iPhone e Android sono in lavorazione.",
     "downloadOn": "Scarica su",
     "comingSoonTo": "Presto su",
@@ -153,23 +154,30 @@
     "errSend": "Non è stato possibile inviare l’e-mail — riprova.",
     "errCode": "Quel codice non corrisponde — controlla l’e-mail o richiedine uno nuovo."
   },
-  "feedback": {
-    "title": "Segnala un problema",
-    "sub": "Qualcosa di rotto, confuso o mancante? Diccelo — basta una frase.",
-    "inputA11y": "Descrivi il problema",
-    "placeholder": "Cos’è successo?",
-    "send": "Invia",
-    "cancel": "Annulla",
-    "thanksTitle": "Gracias — ricevuto.",
-    "thanksSub": "Ogni segnalazione migliora la roadmap. Le leggiamo tutte.",
-    "done": "Fatto",
-    "errSend": "L’invio non è andato a buon fine — riprova."
-  },
   "authConfirm": {
     "headline": "Apri la tua roadmap",
     "sub": "Un tocco e sei connesso su questo dispositivo — questo link è arrivato alla tua email, quindi è solo tuo.",
     "continue": "Continua — accedi",
     "expiredHeadline": "Questo link è scaduto",
     "expiredSub": "Nessun problema: inserisci la tua email e ti inviamo un nuovo codice che ti connette proprio qui."
+  },
+  "contact": {
+    "title": "Contatti",
+    "sub": "Domande, idee, qualcosa di rotto — leggiamo tutto, e rispondiamo se lasci un'e-mail.",
+    "topicLabel": "Di cosa si tratta?",
+    "topics": {
+      "general": "Generale",
+      "feedback": "Feedback",
+      "problem": "Segnala un problema"
+    },
+    "emailLabel": "La tua e-mail (facoltativa — per poterti rispondere)",
+    "emailPlaceholder": "tu@esempio.com",
+    "messagePlaceholder": "Scrivi il tuo messaggio…",
+    "messageA11y": "Il tuo messaggio",
+    "send": "Invia",
+    "thanksTitle": "Gracias — ricevuto.",
+    "thanksSub": "Leggiamo ogni messaggio. Se hai lasciato un'e-mail, ti risponderemo.",
+    "again": "Invia un altro messaggio",
+    "errSend": "L’invio non è andato a buon fine — riprova."
   }
 }

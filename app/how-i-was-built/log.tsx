@@ -587,6 +587,16 @@ const ROWS: Row[] = [
       'Voice flipped to opt-in: taps made turns fast enough that auto-playing audio read as noise, not warmth.',
     ],
   },
+  {
+    feature: 'Voice retired, a calmer finish, and a real contact page',
+    date: '11 Jul 2026',
+    work: 'A full fresh-eyes pass (Cristina) closed the week: Lola\'s spoken voice is gone entirely — opt-in wasn\'t enough; text-to-speech never fit the fast chip interview — while microphone dictation stays for those who need it. The marketing copy caught up ("a short interview", not "a conversation"). The interview\'s ending got its missing beat: your final note is acknowledged, then "Getting your roadmap ready — 3… 2… 1" hands over to the roadmap instead of an abrupt jump. The mic button now draws the standard dictation glyph instead of an emoji. And "Report a problem" grew into a proper Contact page — general questions, feedback, or problem reports, one form, linked from every footer.',
+    decisions: [
+      'Kill features by verdict, not sunk cost: TTS had server proxying, caching, and autoplay-unlock engineering behind it — and none of that argued against the observed experience.',
+      'Endings deserve design: the countdown isn\'t decoration, it\'s the acknowledgment that the user just gave you their story and something is being built from it.',
+      'One contact surface, topics not channels: the topic selector collapses server-side to a fixed list, so the email subject can never be attacker-chosen text.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

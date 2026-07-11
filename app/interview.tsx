@@ -25,12 +25,25 @@ import { buildExtractionSystem, parseExtraction, type Extraction } from '@/lib/e
 import { useTranslation } from 'react-i18next';
 import i18n, { languageDirective } from '@/lib/i18n';
 import { useDictation } from '@/hooks/useDictation';
-import { useLolaVoice } from '@/hooks/useLolaVoice';
 import { capture } from '@/lib/analytics';
 import { captureError } from '@/lib/monitoring';
 import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
 
 type Turn = { role: 'lola' | 'user'; text: string; addedSteps?: number };
+
+// The standard voice-to-text microphone glyph (capsule + cradle + stem), drawn in Views —
+// no icon library in the bundle, and the old 🎙 emoji read off-pattern next to every other
+// app's dictation button (user finding 2026-07-11). Palette-colored, crisp on both platforms.
+function MicGlyph({ color }: { color: string }) {
+  return (
+    <View style={styles.micGlyph}>
+      <View style={[styles.micCapsule, { backgroundColor: color }]} />
+      <View style={[styles.micArc, { borderColor: color }]} />
+      <View style={[styles.micStem, { backgroundColor: color }]} />
+      <View style={[styles.micBase, { backgroundColor: color }]} />
+    </View>
+  );
+}
 
 // Render the conversation so far as a plain transcript the model can reason over.
 // Drops the dev-persona marker line so it never leaks into a real prompt.
@@ -161,6 +174,9 @@ export default function InterviewScreen() {
   const [loading, setLoading] = useState(false);
   const [started, setStarted] = useState(false);
   const [done, setDone] = useState(false);
+  // The handover beat: after Lola's closing line paints, "Getting your roadmap ready — 3…2…1"
+  // ticks down, THEN we navigate. Replaces the abrupt jump to /plan (Cristina, 2026-07-11).
+  const [countdown, setCountdown] = useState<number | null>(null);
   const [showDev, setShowDev] = useState(false);
   // When a chip slot offers "Other", tapping it reveals the free-text/voice composer for this turn.
   const [otherActive, setOtherActive] = useState(false);
@@ -185,16 +201,19 @@ export default function InterviewScreen() {
   const inputRef = useRef<TextInput>(null);
   // Voice dictation — web uses the browser SpeechRecognition API, native uses
   // expo-speech-recognition (platform-split in hooks/useDictation). Streams into the input.
+  // (Lola's spoken TTS voice was removed 2026-07-11 — user testing: not a good fit for the
+  // faster chip interview. Dictation INPUT stays; only the output voice is gone.)
   const dictation = useDictation(setInput);
-  // Lola's spoken voice (web /api/tts → ElevenLabs). Off by default; speaks new Lola turns.
-  const voice = useLolaVoice();
   const keyboardHeight = useKeyboardHeight(); // exact OS-reported overlap — see hooks/useKeyboardHeight
 
-  // Speak each new Lola message when voice is on (skips the dev-persona marker).
+  // Tick the handover countdown once a second; at zero, the roadmap takes over.
   useEffect(() => {
-    const last = turns[turns.length - 1];
-    if (last?.role === 'lola' && !last.text.startsWith('Test persona:')) voice.speak(last.text);
-  }, [turns, voice.speak]);
+    if (countdown === null) return;
+    if (countdown <= 0) { router.push('/plan'); return; }
+    const timer = setTimeout(() => setCountdown(c => (c === null ? null : c - 1)), 1000);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countdown]);
 
   // When the keyboard opens/resizes, keep the conversation scrolled to the composer.
   useEffect(() => {
@@ -237,15 +256,8 @@ export default function InterviewScreen() {
   }, [i18n.language, started, done, loading, currentSlot]);
 
   function toggleMic() {
-    if (dictation.listening) {
-      dictation.stop();
-    } else {
-      // Lola yields the floor: opening the mic cuts her current line outright (build-27
-      // finding — the old behavior only DUCKED her via the recognizer's audio session, and
-      // the duck never released; now playback stops here and later turns play at full volume).
-      voice.stop();
-      dictation.start(input);
-    }
+    if (dictation.listening) dictation.stop();
+    else dictation.start(input);
   }
 
   async function loadPersona(persona: Persona) {
@@ -530,8 +542,10 @@ export default function InterviewScreen() {
       clearDraft(); // finished — nothing to resume
       setFinalPhase(false);
       setDone(true);
-      setTurns(prev => [...prev, { role: 'lola', text: t('done') }]);
-      setTimeout(() => router.push('/plan'), 1800);
+      // A note gets acknowledged before the handover (the old cut to /plan mid-thought was
+      // jarring); the skip path keeps the plain closing line. Then the countdown owns the beat.
+      setTurns(prev => [...prev, { role: 'lola', text: text ? t('final.ack') : t('done') }]);
+      setTimeout(() => setCountdown(3), 900); // let the closing bubble land first
     } finally {
       setLoading(false);
     }
@@ -651,18 +665,6 @@ export default function InterviewScreen() {
       )}
       <View style={twoPane ? styles.twoPaneRow : styles.onePane}>
         <View style={twoPane ? styles.leftPane : styles.onePane}>
-      {voice.supported && started && (
-        <View style={styles.voiceBar}>
-          <TouchableOpacity
-            style={styles.voiceToggle}
-            onPress={voice.toggle}
-            accessibilityLabel={voice.enabled ? t('voice.turnOffA11y') : t('voice.turnOnA11y')}
-          >
-            <Text style={styles.voiceToggleIcon}>{voice.enabled ? '🔊' : '🔇'}</Text>
-            <Text style={styles.voiceToggleText}>{voice.enabled ? t('voice.on') : t('voice.off')}</Text>
-          </TouchableOpacity>
-        </View>
-      )}
       {!done && (
         <View style={styles.progressWrap}>
           <View style={styles.progressRow}>
@@ -700,6 +702,14 @@ export default function InterviewScreen() {
           {loading && (
             <View style={styles.lolaBubble}>
               <ActivityIndicator color={palette.amber} />
+            </View>
+          )}
+
+          {done && countdown !== null && (
+            <View style={styles.countdownPill}>
+              <Text style={styles.countdownText}>
+                {t('final.countdown', { n: Math.max(1, countdown) })}
+              </Text>
             </View>
           )}
 
@@ -832,7 +842,9 @@ export default function InterviewScreen() {
                     disabled={loading}
                     accessibilityLabel={dictation.listening ? t('composer.micStopA11y') : t('composer.micStartA11y')}
                   >
-                    <Text style={[styles.micIcon, dictation.listening && styles.micIconActive]}>{dictation.listening ? '■' : '🎙'}</Text>
+                    {dictation.listening
+                      ? <View style={styles.stopSquare} />
+                      : <MicGlyph color={palette.muted} />}
                   </TouchableOpacity>
                 )}
                 <TouchableOpacity
@@ -898,10 +910,6 @@ const styles = StyleSheet.create({
   subQuiet:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.muted, textAlign: 'center', lineHeight: 23, marginBottom: 36, maxWidth: 440 },
   startBtn:    { backgroundColor: palette.cobalt, borderRadius: 12, paddingVertical: 16, paddingHorizontal: 40 },
   startBtnText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cal },
-  voiceBar:        { width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 16, paddingTop: 12, flexDirection: 'row', justifyContent: 'flex-end' },
-  voiceToggle:     { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 5, paddingHorizontal: 10, borderRadius: 16, backgroundColor: '#F2EDE6' },
-  voiceToggleIcon: { fontSize: 14, lineHeight: 18 },
-  voiceToggleText: { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.muted },
   progressWrap:  { width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 16, paddingTop: 14, paddingBottom: 2, gap: 7 },
   progressRow:   { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   progressLabel: { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.muted },
@@ -957,8 +965,14 @@ const styles = StyleSheet.create({
   },
   micBtn:          { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F2EDE6' },
   micBtnActive:    { backgroundColor: palette.amber },
-  micIcon:         { fontSize: 17, lineHeight: 22 },
-  micIconActive:   { color: palette.cal, fontSize: 13 },
+  micGlyph:        { width: 18, height: 21, alignItems: 'center' },
+  micCapsule:      { width: 8, height: 11, borderRadius: 4 },
+  micArc:          { position: 'absolute', top: 5, width: 14, height: 10, borderWidth: 2, borderTopWidth: 0, borderBottomLeftRadius: 7, borderBottomRightRadius: 7 },
+  micStem:         { width: 2, height: 3, marginTop: 4 },
+  micBase:         { width: 9, height: 2, borderRadius: 1, marginTop: 1 },
+  stopSquare:      { width: 12, height: 12, borderRadius: 2, backgroundColor: palette.cal },
+  countdownPill:   { alignSelf: 'center', marginTop: 16, paddingVertical: 8, paddingHorizontal: 18, borderRadius: 20, backgroundColor: '#F2EDE6' },
+  countdownText:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.indigo },
   sendBtn:         { backgroundColor: palette.cobalt, width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center' },
   sendBtnDisabled: { backgroundColor: palette.muted },
   sendBtnText:     { color: palette.cal, fontSize: 20, lineHeight: 24 },

@@ -7,8 +7,10 @@ review. This is TODO **Phase 4 → Phase 5 (iOS)**. The *copy* is already drafte
 App: **Get Camino** · ASC App ID **6786412055** · bundle **`com.nerolabs.camino`** ·
 Legal identity: **AELaboratories** (sole proprietor) · Copyright: **© 2026 AELaboratories**.
 
-> **Prerequisite:** a public-candidate build must be on TestFlight, device-verified. As of this
-> writing that's **build 31** (dispatch e2e-ios → build → verify first). You attach it at the end.
+> **Prerequisite:** a public-candidate build must be on TestFlight, device-verified. As of
+> 2026-07-11 that's **build 35** (cut from 8556921 after the e2e-ios gate, submitted to ASC
+> overnight — device-verify the two native items first: roadmap sheet "✕ Done" clears the
+> Dynamic Island; voice defaults OFF). You attach it at the end.
 
 ---
 
@@ -32,6 +34,21 @@ Left nav: **App Information**.
   (no violence, sexual content, gambling, etc.). Result should be **4+**. Save.
 
 ### DSA / trader status (EU Digital Services Act) — **required, easy to miss**
+
+> **⏸ BLOCKED 2026-07-11 — open Apple support case.** The developer account is an
+> organization account under the old identity (Proxim.us, PO Box 1973 Vashon); switching
+> to sole-prop isn't possible without a new personal account, so the play is an Apple
+> support case to change the org name/address to **AELaboratories** — currently with a
+> supervisor. Until it resolves, the trader declaration stays "non-trader."
+> **When the case closes:** (1) declare Trader with the AELaboratories details;
+> (2) complete Apple's trader verification (email/phone confirm — allow a few days);
+> (3) align the legal pages (/privacy, /terms, /aviso-legal currently name Proxim.us /
+> Vashon — the public EU trader info, ASC copyright line, and legal pages should all
+> state the same operator identity, per TODO 6b's open wording choice).
+> Everything else on this playbook is DONE as of 2026-07-11 (fields, privacy label
+> published, pricing/availability); submission itself can proceed without trader status,
+> but the app would be **withheld from all EU storefronts (incl. Spain) until Trader is
+> declared + verified** — decide at submission time whether to parallelize or wait.
 - Still in **App Information** (or under **App Store → General → App Information**), find
   **"Trader Status."** Because you distribute to the EU, you must declare **Trader.**
   - Choose **Trader.**
@@ -64,6 +81,16 @@ Apple asks: *collected? linked to identity? used for tracking? purpose?* Our hon
 
 ---
 
+## Step 2.5 — Pricing and Availability · ~5 min · [YOU] *(added 2026-07-11 — the original
+playbook missed this; ASC blocks submission without it)*
+Left nav: **Monetization → Pricing and Availability.**
+- **Price Schedule → Add Pricing → USD 0 (Free).** No paid agreement needed for free apps.
+- **App Availability → Set Up Availability → all countries/regions** (Spain + EU + US at minimum).
+- Leave "Apple Silicon Mac" and "Vision Pro" availability **unchecked** — surfaces we've never
+  tested; opt in later deliberately if ever.
+
+---
+
 ## Step 3 — The version page ("1.0 Prepare for Submission") · ~30 min · [YOU]
 Left nav: the version (e.g. **iOS App 1.0**). Paste from `docs/APP_STORE.md`:
 
@@ -77,7 +104,8 @@ Left nav: the version (e.g. **iOS App 1.0**). Paste from `docs/APP_STORE.md`:
 
 ### Screenshots (required) — [YOU capture · CLAUDE frames]
 - Apple currently requires **one 6.9" set (1320×2868)**; a 6.5" set is optional but nice.
-- Capture 5 shots on your iPhone (build 11+ is fine) — the story in `docs/APP_STORE.md`:
+- Capture 5 shots on your iPhone on **build 35** (so the shots match what the reviewer sees —
+  it carries landing v2 + the live-roadmap interview) — the story in `docs/APP_STORE.md`:
   home hero · Lola mid-interview · roadmap with a penalty banner · step sheet with the official ↗
   pill · sample-plan banner.
 - Drop raw PNGs into `docs/store-assets/` → Claude annotates/frames them → upload the framed set.
@@ -85,7 +113,7 @@ Left nav: the version (e.g. **iOS App 1.0**). Paste from `docs/APP_STORE.md`:
   `scripts/gen-icon.mjs`) — confirm it reads well small.
 
 ### Build
-- **Build section → +** → select the **TestFlight build** you're shipping (build 31 once verified).
+- **Build section → +** → select the **TestFlight build** you're shipping (build 35 once verified).
   Export-compliance is pre-answered (`ITSAppUsesNonExemptEncryption=false` in config) so no manual
   step.
 

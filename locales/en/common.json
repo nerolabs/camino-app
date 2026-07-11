@@ -24,7 +24,7 @@
   },
   "home": {
     "eyebrow": "Moving to Spain",
-    "headline": "Your move to Spain, planned in one conversation.",
+    "headline": "Your move to Spain, planned in one short interview.",
     "sub": "From the right visa to the right city, schools to paperwork — Lola figures out what applies to you, in the right order.",
     "cta": "Build my free roadmap →",
     "disclaimer": "Free · Takes about 3 minutes · No account needed to start",
@@ -69,7 +69,7 @@
       "s6d": "Feb 2027",
       "s7": "School enrollment (escolarización)",
       "s7d": "Mar 2027",
-      "step1": "Tell Lola your situation — a short conversation, not a form.",
+      "step1": "Tell Lola your situation — a short interview, not a form.",
       "step2": "Get your personal roadmap — every step that applies, in the right order.",
       "step3": "Work through it together — it re-plans as life changes; a short weekly email keeps what's due in view."
     },
@@ -105,13 +105,14 @@
     "note": "Guidance only — not legal or tax advice.",
     "privacy": "Privacy",
     "terms": "Terms",
-    "avisoLegal": "Aviso legal"
+    "avisoLegal": "Aviso legal",
+    "contact": "Contact"
   },
   "storeBadges": {
     "eyebrow": "TAKE IT WITH YOU",
     "titleLive": "Get Get Camino on your phone.",
     "titleSoon": "The web app works today. The phone apps are coming.",
-    "subLive": "Your roadmap, voice and all, on iPhone and Android.",
+    "subLive": "Your full roadmap, on iPhone and Android.",
     "subSoon": "Everything runs right here in your browser — no install needed. Native iPhone and Android apps are in the works.",
     "downloadOn": "Download on the",
     "comingSoonTo": "Coming soon to",
@@ -153,23 +154,30 @@
     "close": "Close",
     "err": "That didn’t work — nothing was deleted. Try again, or reach us via Report a problem."
   },
-  "feedback": {
-    "title": "Report a problem",
-    "sub": "Something broken, confusing, or missing? Tell us — a sentence is plenty.",
-    "inputA11y": "Describe the problem",
-    "placeholder": "What happened?",
-    "send": "Send",
-    "cancel": "Cancel",
-    "thanksTitle": "Gracias — got it.",
-    "thanksSub": "Every report makes the roadmap better. We read them all.",
-    "done": "Done",
-    "errSend": "That didn’t go through — please try again."
-  },
   "authConfirm": {
     "headline": "Open your roadmap",
     "sub": "One tap and you're signed in on this device — we sent this link to your email, so it's yours alone.",
     "continue": "Continue — sign me in",
     "expiredHeadline": "That link has expired",
     "expiredSub": "No problem — enter your email and we’ll send a fresh code that signs you in right here."
+  },
+  "contact": {
+    "title": "Contact us",
+    "sub": "Questions, ideas, something broken — we read everything, and reply when you leave an email.",
+    "topicLabel": "What's it about?",
+    "topics": {
+      "general": "General",
+      "feedback": "Feedback",
+      "problem": "Report a problem"
+    },
+    "emailLabel": "Your email (optional — so we can reply)",
+    "emailPlaceholder": "you@example.com",
+    "messagePlaceholder": "Write your message…",
+    "messageA11y": "Your message",
+    "send": "Send",
+    "thanksTitle": "Gracias — got it.",
+    "thanksSub": "We read every message. If you left an email, we'll get back to you.",
+    "again": "Send another message",
+    "errSend": "That didn’t go through — please try again."
   }
 }

@@ -29,7 +29,7 @@
   },
   "home": {
     "eyebrow": "Auswandern nach Spanien",
-    "headline": "Ihr Umzug nach Spanien — geplant in einem Gespräch.",
+    "headline": "Ihr Umzug nach Spanien — geplant in einem kurzen Interview.",
     "sub": "Vom richtigen Visum zur richtigen Stadt, Schulen bis Papierkram — Lola findet heraus, was für Sie gilt, in der richtigen Reihenfolge.",
     "cta": "Meine kostenlose Roadmap erstellen →",
     "disclaimer": "Kostenlos · Dauert etwa 3 Minuten · Kein Konto nötig, um anzufangen",
@@ -74,7 +74,7 @@
       "s6d": "Feb. 2027",
       "s7": "Schulanmeldung",
       "s7d": "März 2027",
-      "step1": "Erzählen Sie Lola Ihre Situation — ein kurzes Gespräch, kein Formular.",
+      "step1": "Erzählen Sie Lola Ihre Situation — ein kurzes Interview, kein Formular.",
       "step2": "Erhalten Sie Ihren persönlichen Fahrplan — jeder Schritt, der gilt, in der richtigen Reihenfolge.",
       "step3": "Gehen Sie ihn gemeinsam — er plant um, wenn sich das Leben ändert; eine kurze wöchentliche E-Mail hält Fälliges im Blick."
     },
@@ -105,13 +105,14 @@
     "note": "Nur Orientierung — keine Rechts- oder Steuerberatung.",
     "privacy": "Datenschutz",
     "terms": "Nutzungsbedingungen",
-    "avisoLegal": "Aviso legal"
+    "avisoLegal": "Aviso legal",
+    "contact": "Kontakt"
   },
   "storeBadges": {
     "eyebrow": "NIMM ES MIT",
     "titleLive": "Hol dir Get Camino aufs Handy.",
     "titleSoon": "Die Web-App funktioniert schon heute. Die Handy-Apps kommen.",
-    "subLive": "Deine Roadmap, Stimme inklusive, auf iPhone und Android.",
+    "subLive": "Deine komplette Roadmap, auf iPhone und Android.",
     "subSoon": "Alles läuft direkt hier im Browser — nichts zu installieren. Native Apps für iPhone und Android sind in Arbeit.",
     "downloadOn": "Laden im",
     "comingSoonTo": "Bald im",
@@ -153,23 +154,30 @@
     "errSend": "Die E-Mail konnte nicht gesendet werden — versuch es noch einmal.",
     "errCode": "Der Code passt nicht — prüfe die E-Mail oder fordere einen neuen an."
   },
-  "feedback": {
-    "title": "Problem melden",
-    "sub": "Etwas kaputt, verwirrend oder fehlt? Sag es uns — ein Satz reicht.",
-    "inputA11y": "Beschreibe das Problem",
-    "placeholder": "Was ist passiert?",
-    "send": "Senden",
-    "cancel": "Abbrechen",
-    "thanksTitle": "Gracias — angekommen.",
-    "thanksSub": "Jede Meldung macht die Roadmap besser. Wir lesen sie alle.",
-    "done": "Fertig",
-    "errSend": "Das Senden ist fehlgeschlagen — versuch es noch einmal."
-  },
   "authConfirm": {
     "headline": "Ihren Fahrplan öffnen",
     "sub": "Ein Klick und Sie sind auf diesem Gerät angemeldet — dieser Link kam in Ihr Postfach, er gehört nur Ihnen.",
     "continue": "Weiter — anmelden",
     "expiredHeadline": "Dieser Link ist abgelaufen",
     "expiredSub": "Kein Problem: E-Mail eingeben und wir senden einen frischen Code, der Sie direkt hier anmeldet."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "sub": "Fragen, Ideen, etwas kaputt — wir lesen alles und antworten, wenn du eine E-Mail hinterlässt.",
+    "topicLabel": "Worum geht es?",
+    "topics": {
+      "general": "Allgemein",
+      "feedback": "Feedback",
+      "problem": "Problem melden"
+    },
+    "emailLabel": "Deine E-Mail (optional — damit wir antworten können)",
+    "emailPlaceholder": "du@beispiel.com",
+    "messagePlaceholder": "Schreib deine Nachricht…",
+    "messageA11y": "Deine Nachricht",
+    "send": "Senden",
+    "thanksTitle": "Gracias — angekommen.",
+    "thanksSub": "Wir lesen jede Nachricht. Wenn du eine E-Mail hinterlassen hast, melden wir uns.",
+    "again": "Noch eine Nachricht senden",
+    "errSend": "Das Senden ist fehlgeschlagen — versuch es noch einmal."
   }
 }

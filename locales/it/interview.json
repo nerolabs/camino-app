@@ -16,12 +16,6 @@
     "minutesLeft": "Circa {{m}} min rimasti",
     "complete": "{{pct}}% completato"
   },
-  "voice": {
-    "on": "Voce attiva",
-    "off": "Voce spenta",
-    "turnOffA11y": "Spegni la voce di Lola",
-    "turnOnA11y": "Attiva la voce di Lola"
-  },
   "composer": {
     "placeholder": "Scrivi la tua risposta…",
     "placeholderListening": "Ti ascolto…",
@@ -123,6 +117,8 @@
   },
   "final": {
     "question": "Un'ultima cosa — c'è altro sul tuo trasferimento che dovrei sapere? Può affinare la tua roadmap. Oppure salta e vai diretto.",
-    "skip": "Salta — vedi la mia roadmap"
+    "skip": "Salta — vedi la mia roadmap",
+    "ack": "Annotato — lo conservo con il tuo piano. Ho tutto quello che mi serve.",
+    "countdown": "Preparo la tua roadmap — {{n}}…"
   }
 }

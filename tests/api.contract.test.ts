@@ -95,28 +95,3 @@ run('interview extraction is language-agnostic (Spanish in → English slugs out
     expect((parsed as { value: unknown }).value).toBe(true);
   }, 45_000);
 });
-
-run('/api/tts contract', () => {
-  it('400 when text is empty (POST and GET)', async () => {
-    const post = await fetch(`${BASE}/api/tts`, {
-      method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ text: '' }),
-    });
-    expect(post.status).toBe(400);
-    const get = await fetch(`${BASE}/api/tts?text=`);
-    expect(get.status).toBe(400);
-  });
-
-  it('413 when text exceeds the cap', async () => {
-    const res = await fetch(`${BASE}/api/tts`, {
-      method: 'POST', headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ text: 'x'.repeat(1001) }),
-    });
-    expect(res.status).toBe(413);
-  });
-
-  it('GET happy path returns audio/mpeg (constant text → CDN-cacheable)', async () => {
-    const res = await fetch(`${BASE}/api/tts?text=Hola`);
-    expect(res.status).toBe(200);
-    expect(res.headers.get('content-type')).toContain('audio/mpeg');
-  });
-});

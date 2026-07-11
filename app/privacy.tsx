@@ -9,7 +9,7 @@ import LegalPage, { type LegalContent } from '@/components/LegalPage';
 
 const EN: LegalContent = {
   title: 'Privacy',
-  updated: '4 July 2026',
+  updated: '11 July 2026',
   intro: "The short version: we collect your email and your interview answers so we can build and save your roadmap and send you the emails you asked for. We don't sell data, we don't run ads, we don't want your documents, and you can delete everything yourself, in the app, at any time.",
   sections: [
     { h: 'Who we are', body: [
@@ -28,11 +28,10 @@ const EN: LegalContent = {
       'No payment details (Get Camino is free), no precise location, no advertising identifiers, no data sales to anyone, ever.',
     ]},
     { h: 'How AI is involved', body: [
-      'Lola\'s conversation runs on Anthropic\'s Claude: the text you type in the interview and in step conversations is processed to phrase questions and understand answers. Which steps apply to you, and every date, is computed by our own deterministic engine — not by AI.',
-      'Lola\'s voice is synthesized by ElevenLabs from Lola\'s own lines. Your text is not sent to ElevenLabs.',
+      'Lola runs on Anthropic\'s Claude: the text you type in the interview and in step conversations is processed to phrase questions and understand answers. Which steps apply to you, and every date, is computed by our own deterministic engine — not by AI.',
     ]},
     { h: 'Who processes data for us', body: [
-      'Supabase (accounts and database), Resend (sending email, EU region), PostHog (analytics, EU region, cookieless on web), Sentry (error reporting), Anthropic (conversation processing), ElevenLabs (voice), and Expo/EAS Hosting with Cloudflare (hosting). Some of these providers process data in the United States.',
+      'Supabase (accounts and database), Resend (sending email, EU region), PostHog (analytics, EU region, cookieless on web), Sentry (error reporting), Anthropic (interview processing), and Expo/EAS Hosting with Cloudflare (hosting). Some of these providers process data in the United States.',
     ]},
     { h: 'Emails', body: [
       'We send transactional email (sign-in links, a one-time welcome) and a weekly roundup of what\'s due on your roadmap. The roundup has one-click unsubscribe; it also simply stops when there\'s nothing useful to say.',
@@ -51,7 +50,7 @@ const EN: LegalContent = {
 
 const ES: LegalContent = {
   title: 'Privacidad',
-  updated: '4 de julio de 2026',
+  updated: '11 de julio de 2026',
   intro: 'La versión corta: recogemos tu correo y tus respuestas de la entrevista para construir y guardar tu hoja de ruta y enviarte los correos que pediste. No vendemos datos, no ponemos anuncios, no queremos tus documentos, y puedes borrarlo todo tú mismo, en la app, cuando quieras.',
   sections: [
     { h: 'Quiénes somos', body: [
@@ -71,10 +70,9 @@ const ES: LegalContent = {
     ]},
     { h: 'Cómo interviene la IA', body: [
       'La conversación de Lola funciona con Claude, de Anthropic: el texto que escribes en la entrevista y en las conversaciones de cada paso se procesa para formular preguntas y entender respuestas. Qué pasos te aplican, y cada fecha, lo calcula nuestro propio motor determinista — no la IA.',
-      'La voz de Lola la sintetiza ElevenLabs a partir de las propias líneas de Lola. Tu texto no se envía a ElevenLabs.',
     ]},
     { h: 'Quién procesa datos por nosotros', body: [
-      'Supabase (cuentas y base de datos), Resend (envío de correo, región UE), PostHog (analítica, región UE, sin cookies en web), Sentry (informes de errores), Anthropic (procesamiento de la conversación), ElevenLabs (voz) y Expo/EAS Hosting con Cloudflare (alojamiento). Algunos de estos proveedores procesan datos en Estados Unidos.',
+      'Supabase (cuentas y base de datos), Resend (envío de correo, región UE), PostHog (analítica, región UE, sin cookies en web), Sentry (informes de errores), Anthropic (procesamiento de la entrevista) y Expo/EAS Hosting con Cloudflare (alojamiento). Algunos de estos proveedores procesan datos en Estados Unidos.',
     ]},
     { h: 'Correos', body: [
       'Enviamos correo transaccional (enlaces de acceso, una bienvenida única) y un resumen semanal de lo que vence en tu hoja de ruta. El resumen tiene baja en un clic; y, sencillamente, deja de llegar cuando no hay nada útil que decir.',
