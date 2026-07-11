@@ -42,12 +42,19 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 
 3. **Wife-pass logistics:** test script + triage sheet at docs/testing/ (2026-07-11 files).
 
-**NEXT:** (1) build 36 device verify (mic glyph, countdown, contact page, NO voice toggle);
-(2) trader declaration the moment Apple's case resolves (then align legal pages' operator
-identity — currently Proxim.us/Vashon — with the AELaboratories trader info + ASC copyright);
-(3) attach build 36 + upload framed screenshots (Media Manager 6.9" slot; if only 6.5" offered,
-regenerate at 1284×2778) + fix review notes → SUBMIT (manual release parks approval until the
-launch moment); (4) PostHog 808581 for interview-v2 + the new contact_sent event.
+**SESSION CLOSE (2026-07-11 ~21:00):** build 36 confirmed IN_PROGRESS on EAS (id 43d2e8c1,
+cut from 83b3e71 after the e2e-ios gate went green first-try, run 29161778493), --auto-submit
+riding to TestFlight overnight. Production web verified live (8/8 public E2E). Everything
+committed + pushed through the close-out commit.
+
+**TOMORROW = SUBMISSION DAY — the runbook is `docs/testing/2026-07-12-submission-day.md`:**
+(1) build 36 device verify (NO voice toggle, mic glyph, countdown ending, contact page);
+(2) Cristina fresh-eyes round; (3) trader-case check → attach build 36 + upload
+docs/store-assets/framed/ screenshots (6.9" slot via Media Manager) + swap the ElevenLabs
+line out of the ASC review notes → **Add for Review** (manual release parks approval until
+the launch moment; EU/Spain follows the trader declaration whenever Apple's case resolves).
+Then: PostHog 808581 (interview-v2 + new contact_sent), and user-side cleanup (cancel
+ElevenLabs plan, delete ELEVENLABS_* EAS vars, delete the stray "TEST-COVERAGE 2.md").
 
 ---
 

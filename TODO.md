@@ -3,9 +3,20 @@
 Living list of what we're tracking against. Update as work moves. Newest context at top.
 See `HANDOFF.md` for the fuller picture and `core/SOURCING.md` for obligation provenance.
 
-Last updated: 2026-07-06 (FIRST SOFT LAUNCH to r/GoingToSpain — web-only call-for-testers; ~1.2K
+Last updated: 2026-07-11 (SUBMISSION EVE — full details in HANDOFF.md's resume block). The
+week in brief: interview redesign + landing v2 + three fix waves from real user testing
+(wife + Cristina passes) all LIVE on web; **voice/TTS retired entirely** (mic dictation
+stays — cancel the ElevenLabs plan, user-side); /contact page shipped; **ASC paperwork DONE
+except the trader declaration** (blocked on an Apple identity-change case — submission can
+proceed, EU/Spain distribution waits for it); screenshots captured + framed
+(docs/store-assets/framed/); **build 36 = the submission candidate** (cut 2026-07-11 evening,
+auto-submitted to TestFlight). Phase 4 items 12–13 effectively closed; Phase 5 (submit)
+starts 2026-07-12 — runbook: docs/testing/2026-07-12-submission-day.md.
+
+Earlier (2026-07-06): FIRST SOFT LAUNCH to r/GoingToSpain — web-only call-for-testers; ~1.2K
 views + 2 full conversions EN+ES + 0 errors before AutoMod removed it for "too many reports";
-LOLA_GLOBAL_PER_DAY bumped 2000→25000; ElevenLabs plan upgraded → CAMINO-7 401 resolved).
+LOLA_GLOBAL_PER_DAY bumped 2000→25000; ElevenLabs plan upgraded → CAMINO-7 401 resolved
+(plan now cancellable — TTS retired 2026-07-11).
 
 **SOFT LAUNCH #1 (2026-07-06) — the growth learning:** DM mods/admins for permission BEFORE
 posting; Reddit's report-to-remove machinery pulled a humble, disclosed, free-tool post despite
