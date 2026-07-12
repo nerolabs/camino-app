@@ -87,9 +87,11 @@ This FINALIZES the Track-A queue and supersedes "then open C1a" above):**
   FEEDBACK_GLOBAL_PER_DAY → 1000 (plaintext env); (6) C3 then C4 as the day allows.
 - **Rulings on record (do not re-ask):** C9 (a)+(b) GO, (c)+(d) → post-launch ledger;
   PROVIDERS.md migration CLOSED (user monitors billing/email himself); /de fix approved;
-  C2b held to mid-morning. **Open user decisions, neither blocking the morning:** the
-  Marketing-seat conversion items (ruling pass pending; housekeeping sub-list proposed
-  for blanket approval) and C5's EU-representative spend (only when C5 opens).
+  C2b held to mid-morning; **Marketing seat FULLY TRIAGED — all five conversion items +
+  housekeeping approved → TODO's C10 (a–f); the council report is now 100% ruled.**
+  C10 sequences after C1–C9, except C10a housekeeping may ride any deploy (the
+  /questions/modelo-720 routing bug is a real defect — fix early). **The one open user
+  decision, not blocking the morning:** C5's EU-representative spend (only when C5 opens).
 
 ---
 

@@ -7,7 +7,9 @@ for obligation provenance.
 
 Last updated: 2026-07-13 night (pre-morning rulings: C9 (a)+(b) GO / (c)+(d) → ledger ·
 PROVIDERS migration closed as user-monitored · /de mistranslation fix approved · C2b held
-for mid-morning behind the user's Turnstile setup). Prior state, 2026-07-12 late night:
+for mid-morning behind the user's Turnstile setup · **Marketing seat fully triaged — all
+five conversion items + housekeeping approved → C10; the council report is now 100%
+ruled**). Prior state, 2026-07-12 late night:
 **Build 38 (v1.0.0 (38), Build ID 4f60d8e0) is BUILT +
 SUBMITTED to App Store Connect** (e2e-ios gate skipped under an explicit ONE-TIME user waiver —
 recorded in docs/testing/2026-07-12-build37-triage.md; not a precedent). **The five-seat
@@ -200,14 +202,36 @@ touch the engine's determinism — they close the seams around it.
             Sentry alert covers its 429s, so a hit cap pages instead of silently dropping
             real feedback). (The Turnstile piece is C2b — user: hold for MID-MORNING
             2026-07-13, after the widget + keys exist.)
-- **Marketing report — UNTRIAGED except one item** (user 2026-07-13 night: the /de "Damit
-  gehen Sie nach Hause" mistranslation fix is APPROVED — rides the first morning deploy,
-  with the standing three-layer copy grep). Rest of the seat still awaits a user pass:
-  top-5 conversion list (real cited step in the hero · EU/non-EU segmentation · the full
-  German native pass · deterministic-engine line at the point of AI-doubt · a "the catch /
-  when you still need a professional" section) + promise-audit housekeeping (27-vs-32 step
-  teaser, 73-vs-78 sitemap guide URLs, /guides→/guide redirect + branded 404, future-dated
-  changelog rendering, /questions/modelo-720 deep-link check).
+- [ ] **C10 — Marketing seat, FULLY TRIAGED 2026-07-13 night: all five conversion items
+      APPROVED** (user: "1/ yes, 2, yes, 3/ yes, 4/ yes, 5/ yes") **+ the housekeeping
+      list under blanket approve**. The council report is now 100% ruled. Sequencing:
+      after the C1–C9 queue, except C10a pieces may ride any convenient deploy (the
+      modelo-720 routing bug is a real defect — fix early). The /de "Damit gehen Sie
+      nach Hause" line itself is already queued for the FIRST morning deploy.
+      - [ ] **C10a — housekeeping batch (cheap; ride any deploy):** "27 steps" teaser vs
+            actual 32 — compute, don't hardcode (the home-strip precedent) · reconcile
+            guide-index 73 vs 78 sitemap /guide/ URLs (find the orphans) · /guides→/guide
+            redirect + branded 404 · future-dated changelog rendering (13 July shown on
+            12 July — likely timezone) · **/questions/modelo-720 deep-link renders the
+            generic "Do I need a visa?" answer — routing bug + regression test** ·
+            visible government domain on source links (the citation promise is
+            half-delivered in presentation).
+      - [ ] **C10b — deterministic-engine line at the point of AI-doubt** (seat #4):
+            "AI asks the questions. It never decides your deadlines." ×5 locales, in the
+            conversion path — not three clicks away in the privacy policy. (The "name
+            the founder" half of this finding stays in the 🗄 ledger — already ruled.)
+      - [ ] **C10c — "the catch / when you still need a professional"** (seat #5): a
+            three-sentence section answering the last objections + one footer line
+            answering HOW it's free ("am I the product"). ×5.
+      - [ ] **C10d — a real cited, dated step in the hero** (seat #1): replace the four
+            abstract emoji trust bullets with the concrete artifact (the /guide/nie
+            step, verbatim with its citation + verified stamp). Homepage design work.
+      - [ ] **C10e — EU/non-EU hero segmentation** (seat #2): surface "EU citizen? Your
+            list is different and shorter — but not empty" (today buried in /questions)
+            as a hero hook line or two-path entry. Opens the EU segment.
+      - [ ] **C10f — [USER] full German native-speaker pass** (seat #3), extending to
+            the other locales per the standing native-passes item; the seat's point:
+            this persona equates sloppy German with sloppy visa data.
 
 ## 🗄 Post-launch ledger (council items DEFERRED by user ruling — trigger ≈ PMF / 1000+ real users with profiles)
 
