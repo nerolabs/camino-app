@@ -723,6 +723,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     regional: true, id: 'wealth-tax',
+    verified_at: '2026-07-12', // regional-specifics pass (Madrid + Andalucía reliefs verified)
     source_url: 'https://sede.agenciatributaria.gob.es/Sede/procedimientoini/G611.shtml',
     webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=794s',
     title: 'File annual wealth-tax return (Modelo 714) during the renta period — applies when net assets exceed the €700,000 state allowance (regions vary; e.g. €500k in Catalonia), with a further ~€300k exemption for your main home',
@@ -882,6 +883,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     regional: true, id: 'property-transfer-tax',
+    verified_at: '2026-07-12', // regional-specifics pass (4 comunidades verified; see core/regional-specifics.ts)
     source_url: 'https://administracion.gob.es/pag_Home/Tu-espacio-europeo/derechos-obligaciones/ciudadanos/residencia/compraventa-bienes-inmuebles/impuestos.html',
     title: 'Pay property transfer tax (ITP) on a resale property — roughly 6–11% of the price, set by each autonomous community',
     category: 'tax', severity: 'penalty',

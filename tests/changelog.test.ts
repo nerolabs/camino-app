@@ -34,7 +34,8 @@ describe('regulatory changelog', () => {
   it('every touched-since-default item declares its own verified_at', () => {
     // The 2026-07-12 consulate rewrite and the 2026-07-10 additions must not silently
     // claim the catalog-wide default.
-    for (const id of ['consulate-appointment', 'nlv-income-check', 'dnv-income-check', 'language-classes']) {
+    for (const id of ['consulate-appointment', 'nlv-income-check', 'dnv-income-check', 'language-classes',
+                      'property-transfer-tax', 'wealth-tax']) {
       const o = CATALOG.find(x => x.id === id)!;
       expect(o.verified_at, `${id} should carry an explicit verified_at`).toBeTruthy();
     }

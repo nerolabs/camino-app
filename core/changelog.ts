@@ -21,6 +21,17 @@ export type ChangelogEntry = {
 export const CHANGELOG: ChangelogEntry[] = [
   {
     date: '2026-07-12',
+    title: 'First regional specifics: ITP and wealth-tax figures, verified per comunidad',
+    details: [
+      'Transfer-tax (ITP) rates for resale homes now show on the roadmap for Andalucía (7%), Madrid (6%), Cataluña (progressive 10%→13% since its June 2025 reform), and the Comunitat Valenciana — each verified on that region’s own tax portal.',
+      'The verification pass caught a change most summaries still miss: the Comunitat Valenciana cut its general rate from 10% to 9% effective 1 June 2026.',
+      'Wealth-tax regional reliefs recorded for Madrid and Andalucía (100% regional relief; the state solidarity tax can still apply above €3M).',
+      'Deliberately staged: the other comunidades, bracketed wealth-tax scales, and school-enrollment windows (which change every year) wait for their own verification passes rather than shipping secondhand.',
+    ],
+    ids: ['property-transfer-tax', 'wealth-tax'],
+  },
+  {
+    date: '2026-07-12',
     title: 'Consulate appointment step neutralized',
     details: [
       'The step title quoted a US-specific wait estimate ("8–16 weeks") to every applicant, whichever country they apply from — a UK tester caught it. Wait times vary widely by consulate, and the step now says exactly that, in all five languages.',

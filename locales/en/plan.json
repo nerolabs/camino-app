@@ -223,5 +223,11 @@
     "cta": "Build my own roadmap",
     "depsLabel": "BEFORE THIS, THEY’LL NEED",
     "closingTitle": "Your list would be different."
+  },
+  "regionalFacts": {
+    "itp_flat": "In {{region}}, the general transfer-tax (ITP) rate on a resale home is {{rate}} of the price — reduced rates exist for some buyers and price bands.",
+    "itp_brackets": "In {{region}}, ITP on a resale home is progressive: {{low}} up to {{cap}}, rising in brackets to {{high}} at the top.",
+    "wealth_relief": "{{region}} applies a {{pct}} regional relief on this tax — in practice most residents pay none, though the state solidarity tax can still apply above {{threshold}}.",
+    "source": "Verified {{date}} · the region’s official source"
   }
 }

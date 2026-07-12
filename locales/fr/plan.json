@@ -223,5 +223,11 @@
     "cta": "Créer ma propre feuille de route",
     "depsLabel": "AVANT CELA, IL FAUDRA",
     "closingTitle": "Ta liste serait différente."
+  },
+  "regionalFacts": {
+    "itp_flat": "En {{region}}, le taux général de l’ITP à l’achat d’un logement ancien est de {{rate}} du prix — des taux réduits existent pour certains acheteurs et tranches.",
+    "itp_brackets": "En {{region}}, l’ITP sur l’ancien est progressif : {{low}} jusqu’à {{cap}}, montant par tranches jusqu’à {{high}}.",
+    "wealth_relief": "{{region}} applique un abattement régional de {{pct}} sur cet impôt — en pratique la plupart des résidents ne paient rien, mais l’impôt d’État de solidarité peut s’appliquer au-delà de {{threshold}}.",
+    "source": "Vérifié le {{date}} · source officielle de la région"
   }
 }

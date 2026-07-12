@@ -29,6 +29,7 @@ import {
 } from '@/lib/plan-format';
 import { verifiedOn } from '@/core/changelog';
 import { shareUrl } from '@/lib/shareLink';
+import { regionalSpecific } from '@/core/regional-specifics';
 
 // Signed-out users just watched their roadmap appear — the capture moment. One email field:
 // it saves the roadmap, creates the account (silently — the profile rides in auth metadata
@@ -612,6 +613,24 @@ export default function PlanScreen() {
                             ? t('sheet.regionalBodyWithRegion', { region: regionLabel(profile?.region) })
                             : t('sheet.regionalBody')}
                         </Text>
+                        {(() => {
+                          // Verified per-comunidad figure (core/regional-specifics.ts) —
+                          // digits live in the data file; the sentence is the locale's.
+                          const fact = regionalSpecific(selected.id, profile?.region as string | undefined);
+                          if (!fact) return null;
+                          return (
+                            <View style={styles.regionalFact}>
+                              <Text style={styles.regionalFactText}>
+                                {t(`regionalFacts.${fact.template}`, { region: regionLabel(profile?.region), ...fact.values })}
+                              </Text>
+                              <TouchableOpacity onPress={() => openExternal(fact.source_url)}>
+                                <Text style={styles.regionalFactSource}>
+                                  {t('regionalFacts.source', { date: formatVerified(fact.verified_at) })} ↗
+                                </Text>
+                              </TouchableOpacity>
+                            </View>
+                          );
+                        })()}
                       </>
                     )}
                     {deps.length > 0 && (
@@ -803,6 +822,9 @@ const styles = StyleSheet.create({
   pillWebinarText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, color: palette.amber },
   verifiedLine:   { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted, marginTop: 6 },
   shareCaveat:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, lineHeight: 19, color: palette.muted, marginTop: 10, marginBottom: 4, fontStyle: 'italic' },
+  regionalFact:      { backgroundColor: '#EEF2F9', borderRadius: 10, padding: 12, marginTop: 8 },
+  regionalFactText:  { fontFamily: 'HankenGrotesk_500Medium', fontSize: 13, lineHeight: 19, color: palette.indigo },
+  regionalFactSource:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, color: palette.cobalt, marginTop: 6 },
   shareClose:     { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.muted, marginTop: 12, alignSelf: 'center' },
   sheetSectionLabel: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, color: palette.muted,
                        letterSpacing: 1.1, marginTop: 18, marginBottom: 6 },
