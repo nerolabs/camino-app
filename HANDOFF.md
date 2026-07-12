@@ -5,7 +5,63 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-## ⭐ RESUME HERE (2026-07-12 night — the BIG day: submission pivoted one build; trust batch LIVE; build 37 riding)
+## ⭐ RESUME HERE (2026-07-12 late night — build 38 SUBMITTED; the COUNCIL reported; user triage IN)
+
+1. **Build 38 = v1.0.0 (38), Build ID 4f60d8e0 — built + submitted to App Store Connect**
+   (--auto-submit; Apple processing → TestFlight). Cut from 681eea6 with the e2e-ios gate
+   SKIPPED under an explicit ONE-TIME user waiver (recorded in
+   docs/testing/2026-07-12-build37-triage.md — NOT a precedent). **Cristina's full device
+   pass on 38 is THE submission gate** (share sheet dismiss-then-present fix, the two new
+   interview questions, regional fact cards, stamps, A6 empty state), then ASC Part 3
+   (trader-case check → attach 38 → Add for Review).
+
+2. **The agent council reported** — five independent cold-start commissioners (Tech
+   w/ repo+live-API access · Legal · PR · Marketing · Ops), convened on the user's charge
+   ("almost no context, understand the purpose… a lot of push back on the technology and
+   its reliability"). **Full report + cross-seat synthesis:
+   docs/audits/2026-07-12-council-report.md.** The unanimous shape: *the engineering earns
+   trust; the seams spend it* — the Lola chat surface, the freshness treadmill, and the
+   paper/identity around the product. Tech's verdict: "would I stake my own move on it?
+   Not unsupervised" + a five-item path to yes. Notable live evidence: Lola told a
+   below-NLV income "that's a solid range" (engine's plan warning was correct); a DUI
+   question was silently "absorbed"; /api/lola honored a caller-supplied system prompt
+   from foreign curl; volunteered health data stored silently.
+
+3. **User triaged the ENTIRE report the same night — rulings now structural in TODO.md:**
+   - **FIX (the 🏛 Council fix queue, C1–C8):** C1 the Lola honesty package (validate ALL
+     three LLM write-paths with the shared slot validator · neutral acks + deterministic
+     in-chat threshold flags — never praise a failing answer · honest can't-assess replies
+     to stakes questions · first-bubble AI disclosure [EU AI Act Art. 50 applies
+     2026-08-02] · no-health/criminal microcopy · free-text out of analytics) · C2 /api/lola
+     lockdown (server-side system prompts + per-token Turnstile [USER: widget + keys] +
+     budget-429 alerts) · C3 penalty-bearing obligations never silently dropped (Modelo 720
+     is the worst case) · C4 share-link payload → #fragment · C5 GDPR drafting pass ·
+     C6 legal-figures single-source registry · C7 audit-matrix into CI + real dependent
+     count · C8 household scope statement. Priority: **C1 + C2 first** (user: "WAY up
+     there" / "Severe" / "BIG ISSUE. PLEASE FIX.").
+   - **DETAILED, awaiting go (C9):** the Ops "stranger contract" (feedback auto-ack,
+     200/day cap raise + alerts, billing-loop break) — user asked for specifics before
+     ruling; provided in chat + TODO C9.
+   - **DEFERRED by explicit ruling (the 🗄 Post-launch ledger, trigger ≈1000 real users):**
+     entity/US-LLC + legal-page truth · repo privacy/curation ("transparency rules the
+     day — nothing to lose until there is something to lose"; incl. the council report's
+     public curl example) · terms assent + E&O ("altitude first") · bus-factor hour +
+     backups · founder name. **Do not re-litigate — the rationale is on record in the
+     ledger.** Marketing's report is the one UNTRIAGED seat (user pass pending).
+   - **New standing directive (the 🔁 Freshness beat):** quarterly statutory/regional
+     re-verification + January budget-law deep pass + a mechanized stale-stamp/dead-URL
+     CI alarm (post-C6), AND the **migration invariant** (candidate invariant #5):
+     catalog/engine changes must honor every saved profile — **a replan never requires a
+     new interview**; if new info is truly required, a delta-interview asks only the
+     missing slots.
+
+4. **Sequencing note:** the council fix queue is fully specced but NOT started — awaiting
+   the user's call on ordering vs Cristina's build-38 verdict (the fixes are web/shared
+   code and deploy to web immediately; anything native-visible rides build 39).
+
+---
+
+## Prior resume note (2026-07-12 night — the BIG day: submission pivoted one build; trust batch LIVE; build 37 riding)
 
 **The plan changed mid-day (user call): don't submit on 36 — ship the backlog's trust features,
 cut build 37 for a full Cristina shred, and submit on 38.** The day, compressed:

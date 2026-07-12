@@ -5,15 +5,17 @@ actionable lives above the fold; the done/historical record is below it** (reorg
 2026-07-12, user request). See `HANDOFF.md` for the fuller picture and `core/SOURCING.md`
 for obligation provenance.
 
-Last updated: 2026-07-12 evening. **Plan changed mid-day (user call): submission moved behind
-one more build** — build 37 (riding to TestFlight now) is the **Cristina-shred build** carrying
-the day's trust batch; **build 38 = the expected submission candidate**. ASC paperwork remains
-DONE except the trader declaration (Apple identity case open). The day shipped: ElevenLabs
-fully retired (plan + EAS vars + ASC notes), `docs/PROVIDERS.md`, per-surface Sentry alerts,
-feedback rate limiting, contact fixes, final-note distillation + narrated removals, neutral
-consulate title ×5, /changelog + verified stamps, share links, 3 sample personas, /questions
-(8 Q&As), the first verified regional tranche (incl. catching Valencia's June ITP cut), and
-five production web deploys — all E2E-gated.
+Last updated: 2026-07-12 late night. **Build 38 (v1.0.0 (38), Build ID 4f60d8e0) is BUILT +
+SUBMITTED to App Store Connect** (e2e-ios gate skipped under an explicit ONE-TIME user waiver —
+recorded in docs/testing/2026-07-12-build37-triage.md; not a precedent). **The five-seat
+council report landed the same night and was fully user-triaged** — rulings live in the
+🏛 Council fix queue, 🗄 Post-launch ledger, and 🔁 Freshness beat sections below; full report:
+docs/audits/2026-07-12-council-report.md. ASC paperwork remains DONE except the trader
+declaration (Apple identity case open). Earlier the same day (all shipped): ElevenLabs retired,
+docs/PROVIDERS.md, per-surface Sentry alerts, feedback rate limiting, contact fixes, final-note
+distillation + narrated removals, /changelog + verified stamps, share links, 3 sample personas,
+/questions, the COMPLETE verified regional map, the full engine audit (15 findings) + sourcing
+backlog (catalog 63→73), and five+ production web deploys — all E2E-gated.
 
 ## 🔒 Security — TOP PRIORITY (standing)
 
@@ -35,9 +37,11 @@ five production web deploys — all E2E-gated.
        student routes, job-seeker honesty, EU-licence clock, married-to-a-Spaniard 1-year
        citizenship, EHIC, Schengen 90/180) — catalog 64→73, all ×5 locales. OPEN REMNANT:
        **B6 modelo-200 clarifier** (needs a has_spanish_company question — post-38).
-1. [ ] **Build 37 on TestFlight → Cristina shreds it** (share dialog, stamps, regional cards,
-       changelog, interview ending, contact fixes). Her findings + the audit's fixes together
-       → **build 38 = the submission candidate** (cut only after the audit closes).
+1. [ ] **Build 38 (v1.0.0 (38)) is ON TESTFLIGHT → Cristina's full device pass = THE
+       submission gate** (share sheet fix — dismiss-then-present, EX-19 + has_spanish_company
+       questions, regional fact cards, verified stamps, changelog, A6 short-stay empty state,
+       contact fixes). Build 37's shred rolled into 38; 38's e2e-ios gate was SKIPPED under
+       the one-time user waiver (docs/testing/2026-07-12-build37-triage.md).
 2. [ ] **Then ASC Part 3** (runbook, adjusted): trader case check → attach the candidate
        build → final page read → **Add for Review** (manual release; expect one rejection
        cycle). All other ASC paperwork is DONE (fields, label, screenshots, review notes).
@@ -66,6 +70,176 @@ five production web deploys — all E2E-gated.
        event. +4 plan-coach tests.
 10. [x] **DONE 2026-07-12** — removals narrated: "−N steps — simpler for you" pill under
        the answer + strip counter, ×5 locales, deterministic from the same plan delta.
+
+## 🏛 Council fix queue (2026-07-12 — user-triaged the same night; full report: docs/audits/2026-07-12-council-report.md)
+
+Five independent cold-start commissioners (Tech/Legal/PR/Marketing/Ops) reviewed the product.
+User triage rulings are embedded per item; everything deferred landed in the 🗄 Post-launch
+ledger below, with the user's rationale on record. **Execution order: C1 + C2 first** (user:
+"I would put this bug WAY up there" / "Severe" / "BIG ISSUE. PLEASE FIX."). None of these
+touch the engine's determinism — they close the seams around it.
+
+- [ ] **C1 — The Lola honesty package** (converged finding #1: Tech C1 + PR SEV2×2 +
+      Legal #2/#5 — one coherent fix; user: fix, high priority). **WHY:** the whole trust
+      claim is "the LLM never authors plan data," but the schema firewall is enforced at only
+      one of three LLM write-paths, and the chat's *tone* contradicts the engine exactly when
+      stakes are highest (praised a below-NLV income band; silently "absorbed" a DUI
+      question; silently stored volunteered health data). Six pieces:
+      - [ ] **C1a — validate every LLM write-path identically:** extract the interview
+            extras-path slot validator (app/interview.tsx ~428–438) into a shared
+            `sanitizeProfileDelta()` (type/enum/date checks against SLOTS; unknown keys
+            dropped) and run BOTH the plan-page re-model delta (app/plan.tsx ~196) and the
+            final-note distillation delta (app/interview.tsx ~554) through it before
+            merge/persist. Regression test: a garbage delta is rejected field-by-field.
+      - [ ] **C1b — never praise; flag at answer time (deterministic):** ack templates go
+            neutral (no praise adjectives); after each slot commit run the same engine checks
+            the plan uses (income band-top vs NLV/DNV threshold), and a failing answer's ack
+            IS the heads-up — localized template, engine-computed, zero LLM: "Noted —
+            heads-up: that band is below the €X/yr the NLV asks for; your roadmap will flag
+            this." The plan-level warning step stays; the chat stops undermining it.
+      - [ ] **C1c — stakes questions get an honest reply:** detect a question in free/final
+            text (deterministic: `?`/`¿` or interrogative openers) → the reply must carry the
+            can't-assess line + handoff ("I can't assess personal cases — that's one for the
+            consulate or an immigration lawyer. I've saved your note with your plan.") + a
+            guide link when a keyword maps (criminal-record → criminal-record-check guide).
+            Never a bare "Got it" to a question. Regression tests ×5 locales, incl. the
+            probes legal counsel ran live (overstay/disclosure/DUI/health).
+      - [ ] **C1d — first-bubble AI disclosure:** "I'm Lola, an AI assistant — this is
+            guidance, not legal advice." ×5 locales. **WHY (documented per user request):**
+            EU AI Act Art. 50 chatbot transparency applies from **2026-08-02** — i.e. at
+            launch; the same line strengthens the UPL posture (Legal #5) and pre-empts the
+            "AI pretending to be human" PR story. One line, three risks.
+      - [ ] **C1e — free-text microcopy:** at the open note boxes: "No health or
+            criminal-record details, please — Lola doesn't need them and they're stored with
+            your plan." ×5. (Legal #2: volunteered health data is still GDPR Art. 9
+            special-category data once stored.)
+      - [ ] **C1f — free-text OUT of analytics events** (chip/enum events stay) + one privacy-
+            policy paragraph on volunteered sensitive data and its deletion path. (Legal #2.)
+- [ ] **C2 — /api/lola lockdown** (converged #5: Tech H2 + Ops #6; user: "BIG ISSUE. PLEASE
+      FIX."). **WHY:** proven live as an open unauthenticated Claude proxy honoring a
+      caller-supplied system prompt; the origin allowlist is a documented no-op on EAS
+      Hosting; an abuser draining the 25k/day budget 429s every real user mid-interview —
+      availability, not just cost. Three layers:
+      - [ ] **C2a — server-side system prompts (quick win, kills the open proxy):** the route
+            stops accepting caller `system`; clients send `mode: 'phrase'|'extract'|'coach'|
+            'distill'` and the server builds the prompt. A stolen URL is then only good for
+            OUR personas, not free general-purpose Claude. Contract tests updated.
+      - [ ] **C2b — per-token Turnstile (ABSORBS backlog item 20, already designed):**
+            short-lived HMAC session token (reuse lib/emailTokens.ts) minted on a Turnstile
+            solve at interview start (web); /api/lola requires it; native rides signed
+            app-side counters as today; covers /api/feedback too. **[USER prerequisite:
+            create the Cloudflare Turnstile widget + set site/secret keys in EAS env
+            (`sensitive` visibility!) — Claude never handles secrets.]**
+      - [ ] **C2c — alert before the cliff:** Sentry event when global-budget 429s fire on
+            lola OR feedback — an attack should page us, not silently lock users out.
+- [ ] **C3 — penalty-bearing obligations are NEVER silently dropped** (Legal #6; user:
+      "Please fix. Assume the worst case situation is Modelo 720"). **WHY:** "Prefer not to
+      say" on foreign assets can currently remove Modelo 720 — the most penalty-laden trap in
+      the domain — so the privacy-respecting design would cause the worst harm story. **FIX:**
+      engine rule — an obligation gated on an unanswered/declined field that carries penalty
+      severity is INCLUDED with conditional copy ("If your foreign assets exceed €50,000…")
+      instead of dropped. Audit which catalog items qualify (modelo-720 first, then modelo-720
+      cousins: wealth-tax, modelo-100 exposure); conditional-copy variants ×5; test: declined
+      foreign-assets still yields modelo-720.
+- [ ] **C4 — share-link payload → `#fragment`** (Legal #7; user: "Please fix"). **WHY:** the
+      `?d=` query string (which carries exact figures like `foreign_assets_eur`) lands in
+      server logs, browser history, and messenger link-preview fetchers; a `#fragment` never
+      leaves the browser. **FIX:** lib/shareLink.ts emits `#d=…`; /shared reads
+      `location.hash` (keep the `?d=` read-path for already-shared links); the share modal
+      names financial details in its caveat; /privacy gains a share-links paragraph. Tests
+      updated.
+- [ ] **C5 — GDPR drafting pass** (Legal #1 + #2 paper half; user: "Please fix"). Privacy
+      policy: lawful-basis mapping (contract → roadmap; consent → emails + free text),
+      transfer-mechanism language (DPF/SCCs — Anthropic/Supabase/PostHog/Sentry all offer
+      them), concrete retention, the volunteered-sensitive-data + share-link paragraphs, date
+      bump; translate the legal pages' "short version" summary blocks ×5 (Legal #8, cheap).
+      **[USER decision, spend: appoint an EU-representative service (~€500–1,500/yr) — the
+      one piece drafting can't cover; candidate for the 1000-user ledger if deferred.]**
+- [ ] **C6 — single-source every legal number** (Tech H3; user: agreed + TODO). **WHY:**
+      €28,800 lives as an engine constant AND hand-typed prose in two obligation titles;
+      nothing tests they agree; a budget-law change must be caught in N places today. **FIX:**
+      a `core/legal-figures.ts` registry (value + source_url + verified_at per figure — the
+      regional-specifics pattern applied to national figures); titles/prose interpolate; test
+      asserts every catalog digit traces to the registry; per-figure `verified_at` replaces
+      the blanket DEFAULT_VERIFIED on those steps so stamps stop overstating freshness.
+- [ ] **C7 — audit-matrix into CI + real dependent count** (Tech M5 + M7; user: agreed +
+      TODO). **FIX:** add the 181×16 matrix to ci.yml (fast, offline, deterministic — the one
+      tool that catches the condition-level bug class that actually recurred); and
+      `family_extra_count` gains a real dependent count (children-count question when
+      `has_children`, allowNotSure → conservative default of 1) so the NLV threshold stops
+      understating for families with 2+ children; the threshold step copy states the
+      per-dependent formula.
+- [ ] **C8 — household scope honesty** (Tech H4; user: agreed + TODO). **WHY:** one
+      `work_situation` per household means a dual-career couple's second route is missing BY
+      OMISSION — the least visible failure, hitting exactly the combinatorially complex
+      families the purpose statement names. **FIX (near-term honesty, not the rebuild):** a
+      scope line on the plan header + interview when a partner is present — "Camino models
+      the primary applicant's route; a working partner should run their own 3-minute
+      interview" (share links make the second run cheap) ×5 locales. The person-structured
+      profile is a post-launch structural bet, not a pre-launch patch.
+- [ ] **C9 — the stranger contract (Ops #3/#4) — remediation DETAILED, awaiting user go**
+      (user asked for specifics before ruling; details in the 2026-07-12 council-response
+      chat + report §7): (a) auto-ack email on /api/feedback when the submitter left an
+      address — honest copy: built by one person, typical reply within ~4–5 days, not legal
+      advice, urgent → your consulate's cita-previa page, links to /questions + /changelog;
+      (b) raise FEEDBACK_GLOBAL_PER_DAY 200 → ~1000 (env change) + the C2c Sentry alert
+      covers its 429s; (c) a weekly triage slot + five canned replies (a doc, not code);
+      (d) **[USER, ~15 min] break the circular billing loop:** Namecheap auto-renew ON +
+      register getcamino.app 2–3 years ahead + registrant/renewal contact → an EXTERNAL
+      mailbox (the gmail), Google Workspace billing contact external too, and Sentry alert
+      routing → the monitored inbox. (The Turnstile piece is C2b.)
+- **Marketing report — UNTRIAGED** (the only seat without user rulings yet): top-5 conversion
+  list (real cited step in the hero · EU/non-EU segmentation · German native pass — "Damit
+  gehen Sie nach Hause" on /de is a genuine mistranslation · deterministic-engine line at the
+  point of AI-doubt · a "the catch / when you still need a professional" section) + promise-
+  audit housekeeping (27-vs-32 step teaser, 73-vs-78 sitemap guide URLs, /guides→/guide
+  redirect + branded 404, future-dated changelog rendering, /questions/modelo-720 deep-link
+  check). Awaiting a user pass.
+
+## 🗄 Post-launch ledger (council items DEFERRED by user ruling — trigger ≈ PMF / 1000+ real users with profiles)
+
+User rationale, on record 2026-07-12 (do not re-litigate; each item has its trigger): *"we
+are still iterating… we don't know if this product has market fit"* · *"liabilities for a
+startup are like an airplane that just took off — getting to altitude is WAY more important"*
+· *"transparency rules the day — nothing to lose until there is something to lose."*
+
+- [ ] **Incorporate (US LLC) + make every legal page name the real entity** (Legal #4, PR
+      SEV1) — the sole-prop state is deliberate and short-lived; at PMF: 1/ hide the repo,
+      2/ incorporate, 3/ fix terms/privacy/aviso to the real entity (user's stated sequence).
+- [ ] **Repo goes private / curate STRATEGY.md + HANDOFF.md out of public view** (PR SEV1) —
+      transparency project by design, warts accepted, INCLUDING the council report's live
+      /api/lola curl example (user ruling; C2a defangs it anyway). At 1000+ users this
+      position "changes entirely" (user's words).
+- [ ] **Terms-assent screen + E&O insurance** (Legal #3) — deferred: altitude before
+      downside protection.
+- [ ] **Bus-factor hour + continuity** (Ops #1, Tech M6): credentials to a password manager
+      with emergency access, second admin on Apple/Supabase, one-page continuity note,
+      documented Supabase backups/PITR, cold-restore runbook. After real users/revenue —
+      "there is nothing to lose right now."
+- [ ] **Founder name/face on-site + FAQ meta-questions** (PR SEV3 + Marketing) — bundles
+      naturally with the repo/entity decision at PMF.
+
+## 🔁 The freshness beat (converged council finding #2 — user directive 2026-07-12)
+
+**WHY:** staleness is the failure mode that actually ends a user's move — a rule that quietly
+changed between passes, behind a stamp still asserting freshness. The stamps only mean
+something if they move. (Absorbs the standing regional re-verification item below.)
+
+- [ ] **Mechanize the alarm (builds on C6):** a monthly GitHub Action that FAILS when any
+      `verified_at` exceeds its class max-age, HTTP-checks every `source_url` (they already
+      rot — two replaced in the July click-test), and emails the checklist to the monitored
+      inbox. The work stays human; the *remembering* becomes a machine's job.
+- [ ] **The beat (standing, calendar-blocked):** QUARTERLY re-verify statutory figures +
+      `core/regional-specifics.ts` · EVERY JANUARY a deep pass when budget laws land
+      (IPREM/SMI movers) · every ~6 months a full catalog sweep. **Proposed staleness
+      metric:** % of official facts within their class SLO (statutory ~180 days · procedural
+      ~365 days) + age-of-oldest-stamp; surface both internally first, on /changelog later.
+- [ ] **The migration invariant (user directive — candidate invariant #5 for THESIS.md):**
+      catalog/engine changes must honor every saved profile — **a replan NEVER requires a new
+      interview.** New slots ship with safe unknown-handling (C3's penalty rule is the
+      pattern); when new info is truly required, a DELTA-interview asks ONLY the missing
+      slots (`nextSlot` already asks only unanswered required slots — formalize + test that
+      property as a guarantee, then write it into THESIS.md).
 
 ## 🧹 Fresh-eyes findings queue (2026-07-11/12 audit — none block submission)
 
@@ -115,11 +289,10 @@ five production web deploys — all E2E-gated.
 - [x] **DONE 2026-07-13** — foral + special territories verified (PV 4%/7% via Bizkaia+Gipuzkoa portals; Navarra 6%; Ceuta/Melilla 6%−50%→3%). Was: regional pass, remaining territories: País Vasco + Navarra (FORAL — per-territorio
       rates: Bizkaia/Gipuzkoa/Álava + Navarra's own regime) · Ceuta/Melilla (special
       regime). Each needs its own official-source session.
-- [ ] **Standing (quarterly, or each January when budget laws land): re-verify
-      `core/regional-specifics.ts` against official sources** — this week alone caught
-      THREE changes secondhand sources still miss (Valencia ITP 10→9%, Murcia ITP
-      8→7.75%, Valencia wealth exemption €500k→€1M). The "last verified" stamps only
-      mean something if they move.
+- [x] **Standing regional re-verification → ABSORBED 2026-07-12 into the 🔁 Freshness beat
+      above** (same cadence — quarterly + each January — now generalized to ALL statutory
+      figures and paired with the mechanized stale-stamp/dead-URL alarm). Original rationale
+      kept there: this week alone caught THREE changes secondhand sources still miss.
 - Deliberately NOT planned: school-enrollment windows (change every year — would need an
   annual ritual to ship honestly; revisit only with that commitment) · IBI rates
   (municipal, not regional — likely never fits the table honestly).
@@ -171,14 +344,12 @@ Playwright · 7 API contract · 3 Maestro flows (pinned 2.6.1).
 
 ### Phase 6 — post-launch growth (STRATEGY.md order — these ARE the STRATEGY actionables, formerly "roadmap items 6–10")
 
-20. [ ] **Turnstile on interview start** (web) — land BEFORE the public launch moment.
-    **Status (2026-07-05): hardening, not a gap.** The `/api/lola` abuse posture is verified
-    sound — payload caps + strict CORS + durable Supabase counters (per-IP 30/min + global
-    25000/day) + provider spend caps. Remaining value: convert IP-based → **per-token**
-    limiting (short-lived HMAC session token minted on a Turnstile solve, reuse
-    `lib/emailTokens.ts`) so a rotating-IP abuser can't drain the daily budget and 429 real
-    users. Native rides the counters. (/api/feedback got its own counters 2026-07-12 —
-    the per-token upgrade here would cover it too.)
+20. [~] **Turnstile on interview start → ABSORBED 2026-07-12 into council fix C2b** (user:
+    "BIG ISSUE. PLEASE FIX." — promoted from post-launch growth to the council queue after
+    the Tech commissioner proved the open-proxy risk live with curl; the 2026-07-05
+    "hardening, not a gap" assessment is superseded: abuse and legitimate-user 429s share
+    one lever, so this is an availability fix, not just hardening). Design unchanged:
+    per-token HMAC on a Turnstile solve, reuse `lib/emailTokens.ts`; covers /api/feedback too.
 21. [x] **Region-by-region specifics — COMMON-REGIME COMPLETE 2026-07-13** (tranche 2:
     the remaining 10 comunidades' ITP + Cataluña/CV wealth scales, verified via the
     Ministry of Hacienda's official Medidas-2026 compilation; caught Murcia's 8→7.75%
@@ -223,7 +394,9 @@ Playwright · 7 API contract · 3 Maestro flows (pinned 2.6.1).
 30. [ ] **Monetization** (gestor/advisor referrals) + referral disclosure + E&O insurance.
 31. [ ] **At-revenue ops**: US LLC migration (ASC/Play agreement transfers + legal-pages
     text) · professional legal review · bus-factor hour (credentials to password manager +
-    second admin on Apple/Supabase — parked until real money, user decision).
+    second admin on Apple/Supabase — parked until real money, user decision). **Parking
+    RE-CONFIRMED by user 2026-07-12 against the council's Ops #1 CRITICAL finding** — see
+    the 🗄 Post-launch ledger above for the full deferred set + trigger (≈1000 real users).
 32. [ ] **Scale revisits**: weekly-email MAX_SENDS cap · rate-limit posture · PostHog
     retention dashboards · iPad support.
 
