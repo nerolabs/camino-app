@@ -618,6 +618,17 @@ const ROWS: Row[] = [
     ],
   },
   {
+    feature: 'The trust batch: changelog, verified stamps, share links, four sample lives, real regional rates',
+    date: '12 Jul 2026',
+    work: 'One afternoon, four features that had waited in the backlog. A public changelog now records every catalog correction, dated and in plain language — and every step carries a "last verified" date linking to it. Your roadmap became shareable: a read-only link that encodes your answers (never your notes) and renders through the same engine, no account needed. The sample plan became four sample lives — US retirees, a German family on the EU path, a Canadian digital nomad, a British couple who already own a home here. And the first verified regional figures shipped: real transfer-tax rates for the four biggest expat regions plus the Madrid/Andalucía wealth-tax reliefs, each checked that day on the region\'s own tax portal.',
+    decisions: [
+      'The verification pass paid for itself immediately: the Comunitat Valenciana had cut its transfer-tax rate from 10% to 9% six weeks earlier — most summaries on the internet still say 10%. That find is the changelog\'s first regional entry.',
+      'Regional digits live in exactly one data file; every language interpolates the same values — a translation cannot change a number by construction.',
+      'Share links are stateless on purpose: the plan is a pure function of the profile, so sharing the profile IS sharing the roadmap. No database, no revocation server — and the trade-offs are written down next to the code.',
+      'What did NOT ship is recorded too: school-enrollment windows move every year, so they wait for their own verification pass rather than shipping secondhand.',
+    ],
+  },
+  {
     feature: 'Submission-day hardening',
     date: '12 Jul 2026',
     work: 'The morning of the App Store submission, one more fresh-eyes pass — this time over everything around the app. The contact form got volume limits (a human files a few reports; a flood now gets turned away politely), and two small bugs in it were fixed before any user met them: iOS reports mislabeling themselves as web, and a signed-in visitor\'s email not pre-filling. The store screenshots were regenerated from a retake after the review caught one still showing the retired voice button. And the operational side got its own audit: every third-party service behind the app mapped into one document — who charges money, where the renewal notices go — so nothing expires in an unwatched inbox.',

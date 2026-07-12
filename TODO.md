@@ -137,13 +137,24 @@ Playwright · 7 API contract · 3 Maestro flows (pinned 2.6.1).
     `lib/emailTokens.ts`) so a rotating-IP abuser can't drain the daily budget and 429 real
     users. Native rides the counters. (/api/feedback got its own counters 2026-07-12 —
     the per-token upgrade here would cover it too.)
-21. [ ] **Region-by-region specifics content pass** (17 comunidades, each against its own
-    official source — invariant 3; renders under the shipped regional flags).
-22. [ ] **Public regulatory changelog + "last verified" stamps** — trust engine, correction
-    process, most linkable asset.
-23. [ ] **SEO expansion**: question-shaped pages + 3–5 persona sample plans (× locales —
-    compounding).
-24. [ ] **Read-only roadmap share link.**
+21. [~] **Region-by-region specifics — FIRST TRANCHE SHIPPED 2026-07-12** (core/
+    regional-specifics.ts): ITP for Andalucía/Madrid/Cataluña/C.Valenciana + wealth-tax
+    reliefs for Madrid/Andalucía, each verified same-day on that region's own portal
+    (the pass caught Valencia's 10%→9% cut effective 1 Jun 2026). REMAINING (own
+    verification passes): the other 13 comunidades' ITP · bracketed wealth scales
+    (Cataluña/CV) · school windows (move yearly — never ship secondhand) · IBI is
+    municipal, may never fit honestly.
+22. [x] **DONE 2026-07-12** — /changelog (public, from core/changelog.ts) + "last
+    verified" stamps on every guide page and the roadmap step sheet (verified_at
+    catalog field; DEFAULT_VERIFIED = the 2026-07-04 click-test pass). Footer link ×5.
+23. [~] **SEO expansion — personas SHIPPED 2026-07-12**: /sample-plan/{eu-family,
+    digital-nomad,property-owners}, localized ×5, cross-linked, sitemapped, tested.
+    REMAINING: question-shaped pages (framework + curated EN set, digit-guarded) —
+    deferred behind build 37 (web-only).
+24. [x] **DONE 2026-07-12** — read-only share links: stateless (payload = profile,
+    invariant 4 made literal; notes stripped both directions), /shared render by the
+    real engine, Share dialog with privacy caveat on /plan, noindex + robots. Long-URL/
+    no-revocation trade-off on record in lib/shareLink.ts; short tokens = later upgrade.
 25. [ ] **The launch moment**: communities with sourced guide links, webinar-creator
     partnerships, Product Hunt / HN — with the "built in N days" pre-emption paragraph
     written first. `webinar_url` → user-facing rides a MovingToSpain partnership if it lands.

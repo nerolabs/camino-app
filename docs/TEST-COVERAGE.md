@@ -4,9 +4,12 @@
 added or removed. Forward-looking ideas (tests we *want*) live in `docs/BUILD.md` → "Growing E2E
 coverage"; this file is the honest picture of **current** coverage.
 
-Last updated: 2026-07-12 evening (final-note distillation + narrated removals: +4 plan-coach
+Last updated: 2026-07-12 night (the trust batch: +17 vitest — changelog structural honesty (4),
+share-link codec (5), sample personas (4), regional specifics (4) — vitest now 239; +2 public
+smoke — #9 changelog page + guide stamp, #10 shared-roadmap render + junk dead-end — public
+suite now 10). Earlier same evening (final-note distillation + narrated removals: +4 plan-coach
 tests — distillFinalNote parses fenced JSON to typed changes, empty-changes honesty, fail-open
-{error} contract, and the per-step framing regression; vitest now 222). Earlier same day
+{error} contract, and the per-step framing regression; vitest 222). Earlier same day
 (submission-day hardening: /api/feedback gained volumeGuard counters →
 +2 feedback-route tests — the 429 path with nothing reaching the inbox, and guard-runs-only-
 after-validation so junk can't burn the budget; vitest 218). Prior: 2026-07-11
@@ -30,7 +33,7 @@ Layers, and when they run:
 
 ---
 
-## 1. Unit / integration (vitest) — 222 passing (+10 opt-in network)
+## 1. Unit / integration (vitest) — 239 passing (+10 opt-in network)
 
 Concentrated on the deterministic core (that's the product's real risk surface):
 
