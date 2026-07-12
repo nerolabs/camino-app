@@ -1,17 +1,209 @@
 # Camino — TODO / status tracker
 
-Living list of what we're tracking against. Update as work moves. Newest context at top.
-See `HANDOFF.md` for the fuller picture and `core/SOURCING.md` for obligation provenance.
+Living list of what we're tracking against. Update as work moves. **Everything currently
+actionable lives above the fold; the done/historical record is below it** (reorganized
+2026-07-12, user request). See `HANDOFF.md` for the fuller picture and `core/SOURCING.md`
+for obligation provenance.
 
-Last updated: 2026-07-11 (SUBMISSION EVE — full details in HANDOFF.md's resume block). The
-week in brief: interview redesign + landing v2 + three fix waves from real user testing
-(wife + Cristina passes) all LIVE on web; **voice/TTS retired entirely** (mic dictation
-stays — cancel the ElevenLabs plan, user-side); /contact page shipped; **ASC paperwork DONE
-except the trader declaration** (blocked on an Apple identity-change case — submission can
-proceed, EU/Spain distribution waits for it); screenshots captured + framed
-(docs/store-assets/framed/); **build 36 = the submission candidate** (cut 2026-07-11 evening,
-auto-submitted to TestFlight). Phase 4 items 12–13 effectively closed; Phase 5 (submit)
-starts 2026-07-12 — runbook: docs/testing/2026-07-12-submission-day.md.
+Last updated: 2026-07-12 (**SUBMISSION DAY** — runbook: `docs/testing/2026-07-12-submission-day.md`).
+**Build 36 = the submission candidate** (TestFlight, auto-submitted overnight; voice/TTS fully
+retired, mic dictation stays, /contact shipped). ASC paperwork DONE except the trader
+declaration (Apple identity case open — submission proceeds, EU/Spain distribution waits).
+Done this morning: ElevenLabs plan cancelled + `ELEVENLABS_*` EAS vars deleted; ASC review
+notes updated live (dictation-only voice bullet); `docs/PROVIDERS.md` written (the SaaS
+account map + contact-migration plan).
+
+## 🔒 Security — TOP PRIORITY (standing)
+
+- [ ] **Verify no secrets are ever committed to the (public) GitHub repo.** Re-check before every
+      push and before sharing the repo. Standing guarantees: `.env` is gitignored; the Anthropic
+      key now lives server-side only (`app/api/lola+api.ts`). Quick audit:
+      `git ls-files | grep -iE '(^|/)\.env'` → empty, and `git grep -I 'sk-ant-' HEAD` → no matches.
+      **Last audited 2026-07-04: CLEAN** — no `.env` tracked; no `sk-ant-`, Resend-key (`re_…`) or
+      JWT patterns in any tracked file (TODO.md's own audit-command text self-matches, benign;
+      `SUPABASE_SERVICE_ROLE_KEY` appears only as `process.env` reads in API routes). Supabase
+      URL/anon key remain the only `EXPO_PUBLIC_` values (public-safe under RLS).
+
+## 📍 NOW — submission day queue (2026-07-12)
+
+1. [ ] **Build 36 device verify** (no voice anywhere, mic glyph, countdown ending, contact
+       page, Dynamic-Island + language-switch regression checks) — runbook Part 1.
+2. [ ] **RETAKE the interview screenshot on build 36** — the current framed
+       `interview-screen-mid-point.PNG` shows the REMOVED "Voice on" pill (fresh-eyes catch).
+       Raw PNG → `docs/store-assets/` → Claude re-frames → **REPLACE in ASC Media Manager**
+       (all 5 shots are already uploaded there; the other 4 verified clean).
+3. [ ] **Cristina fresh-eyes round** (runbook Part 2; polish findings = build 37, don't hold).
+4. [ ] **Trader case check → attach build 36 → final page read → Add for Review.**
+       Manual release parks approval until the launch moment; expect one rejection cycle.
+5. [ ] After: watch ASC status (24–48h typical); PostHog 808581 (interview-v2 funnel +
+       the new `contact_sent`).
+6. [ ] **[USER] docs/PROVIDERS.md migration checklist** — route all billing/notification
+       email to andrew@getcamino.app (Namecheap first; Apple only AFTER the trader case).
+
+## 🧹 Fresh-eyes findings queue (2026-07-11/12 audit — none block submission)
+
+- [ ] **"Takes about 3 minutes" claim** (landing + lead screenshot) vs v1's measured 7.2-min
+      median — check the v2 median in PostHog once traffic accumulates; change the copy if
+      it's still 5+ (invariant: never trade truth for comfort).
+- [ ] **contact.tsx version field** — `Constants.expoConfig?.ios?.buildNumber` is undefined
+      under EAS remote versioning, so iOS feedback reports read "1.0.0 (web)". Use
+      `Constants.nativeBuildVersion`. Build-37 material.
+- [ ] **contact.tsx email prefill** — `useState(user?.email)` initializer misses late-loading
+      auth (same bug class smoke #7 caught for `topic`); react to it in an effect. Build 37 / web.
+- [ ] **Interview countdown** — navigating away during the 3-second handover still fires
+      `router.push('/plan')`; cancel it on leave. Small polish.
+- [ ] **/api/feedback has no volume limit** (`apiGuard` covers only /api/lola) — payloads are
+      capped but an abuser can flood the team inbox / burn Resend quota. Fold into item 20.
+- [ ] **Privacy copy vs analytics reality** — interview answer text rides PostHog events
+      (`interview_final_note.answer`, ≤500 chars) while the privacy page describes analytics
+      as "which screens are used". Tweak that sentence, or stop capturing answer bodies.
+- [ ] Tiny: set `git config --global user.email` on this machine (commits currently fall back
+      to andrewedmond@Andrews-MacBook-Air.local).
+
+## 🎯 THE OPEN BACKLOG (item numbers preserved — docs and memories reference them)
+
+**Standing (every batch):** security audit (§ above) · homework pages per release
+(`app/how-i-was-built/{log,roadmap}.tsx`) · keep `docs/TEST-COVERAGE.md` current ·
+STRATEGY.md backtest · EAS builds only on user command · i18n lint gates · web E2E
+auto-runs on every deploy (deploy.sh gate) · every bug that reaches a person earns a
+regression test. Current suites: 216 vitest (+7 skipped) · 8 public + 12 authed
+Playwright · 7 API contract · 3 Maestro flows (pinned 2.6.1).
+
+### Localization — verification tail (Phase 2)
+
+5. [ ] **[USER/Cristina] verification passes over the LIVE production es surface** — the
+   human gate (shipped at ~95% by decision 2026-07-05); then fr/de/it native-speaker passes
+   as people are available. Corrections are pure data edits; the lint gates + frozen
+   snapshots re-verify every change.
+
+### Phase 3 — Android track (user-side; the 14-day clock burns in parallel)
+
+8. [ ] **[USER] Buy the test device** (~$100–250: Moto G Play new / Galaxy A16 / refurb
+   Pixel 7a — Play-certified, Android 14+).
+9. [ ] **Play developer account** (personal, $25 — sole-prop decision) + first Android build
+   (verify the old preview APK on-device, then a production .aab) + store listing +
+   data-safety form (mirror the Apple nutrition answers).
+10. [ ] **Closed test: 12+ testers × 14 days** (personal-account requirement) — start the
+    moment a build installs; calendar time burns in parallel. Recruit from the
+    family-testing circle; the English build is fine to start.
+11. [ ] **Android fix round** (expect one: back gesture, keyboard behavior, dictation quirks).
+
+### Phase 4 — polish + ops tail
+
+15. [ ] **Polish batch**: back-to-top floating affordance (roadmap/guides) · monitoring
+    tune-up (per-surface Sentry alert rules; refresh MONITORING.md's stale native section) ·
+    small findings from device testing.
+16. [ ] **[USER] Gestor consult + trademark search** — before brand spend / launch moment;
+    may trail submission. Also: user read-through of the three legal pages' wording
+    (professional legal review is item 31, at revenue).
+
+### Phase 5 — 🚀 Submissions
+
+17. [~] **iOS: TODAY** — see 📍 NOW above.
+18. [ ] **Android**: promote to production once the 14-day closed test clears.
+19. Web needs no submission — its "launch" is the Phase-6 marketing moment.
+
+### Phase 6 — post-launch growth (STRATEGY.md order — these ARE the STRATEGY actionables, formerly "roadmap items 6–10")
+
+20. [ ] **Turnstile on interview start** (web) — land BEFORE the public launch moment.
+    **Status (2026-07-05): hardening, not a gap.** The `/api/lola` abuse posture is verified
+    sound — payload caps + strict CORS + durable Supabase counters (per-IP 30/min + global
+    25000/day) + provider spend caps. Remaining value: convert IP-based → **per-token**
+    limiting (short-lived HMAC session token minted on a Turnstile solve, reuse
+    `lib/emailTokens.ts`) so a rotating-IP abuser can't drain the daily budget and 429 real
+    users. Native rides the counters. **NEW 2026-07-12: give `/api/feedback` the same
+    treatment** (currently unlimited volume — see fresh-eyes queue).
+21. [ ] **Region-by-region specifics content pass** (17 comunidades, each against its own
+    official source — invariant 3; renders under the shipped regional flags).
+22. [ ] **Public regulatory changelog + "last verified" stamps** — trust engine, correction
+    process, most linkable asset.
+23. [ ] **SEO expansion**: question-shaped pages + 3–5 persona sample plans (× locales —
+    compounding).
+24. [ ] **Read-only roadmap share link.**
+25. [ ] **The launch moment**: communities with sourced guide links, webinar-creator
+    partnerships, Product Hunt / HN — with the "built in N days" pre-emption paragraph
+    written first. `webinar_url` → user-facing rides a MovingToSpain partnership if it lands.
+    **Channel plan (soft-launch #1 lesson, 2026-07-06): DM mods/admins for permission BEFORE
+    posting** — r/GoingToSpain pulled a humble, disclosed post via report-to-remove despite
+    1.2K views + 2 real conversions. Order: city/local FB groups (JEREZ angle is the
+    strongest), visa-specific FB groups (NLV/DNV/Beckham), r/SpainPersonalFinance,
+    r/expats, expat forums, the webinar-creator warm list.
+26. [ ] **Uniqueness bets**: timeline simulation · move-budget view · cita checklists.
+27. [ ] **"My account" page** (email prefs + language + delete move out of the hamburger).
+28. [ ] **Parked polish**: per-step problem-report link · scout-step prominence · a real blog
+    surface · narrated roadmap-pane removals (see 2026-07-10 follow-ups below).
+
+### Phase 7 — the tail (at revenue / at demand)
+
+29. [ ] **Tier-3+ languages**: Dutch, Portuguese; then Romanian/Polish/Arabic/Chinese by
+    data. es-419 and localized slugs likewise demand-driven.
+30. [ ] **Monetization** (gestor/advisor referrals) + referral disclosure + E&O insurance.
+31. [ ] **At-revenue ops**: US LLC migration (ASC/Play agreement transfers + legal-pages
+    text) · professional legal review · bus-factor hour (credentials to password manager +
+    second admin on Apple/Supabase — parked until real money, user decision).
+32. [ ] **Scale revisits**: weekly-email MAX_SENDS cap · rate-limit posture · PostHog
+    retention dashboards · iPad support.
+
+### 🔒 Blocked on upstream (revisit when the dependency changes)
+
+33. [ ] **Re-fold native authed E2E into CI** (blocked on Maestro #2610 — closed-stale, not
+    fixed). The `04-authed-roadmap` deep-link flow is written, tagged `authed`, excluded in
+    CI. Covered meanwhile by the 12 authed Playwright tests + manual on-device sign-in.
+    **Re-enable when** #2610 is fixed OR a pre-1.40 pin proves out on the iOS-18.x simulator.
+    **Do NOT coordinate-tap the dialog.** Context: docs/BUILD.md + memory
+    `maestro-ios-deeplink-flake`.
+
+### Follow-ups queued from the 2026-07-10 release day (redesign + landing v2)
+
+- [ ] **Consulate-appointment title is US-centric** — "allow 8–16 weeks lead time in the US"
+      shows for every non-EU applicant (UK tester flag). Needs a sourced per-country or
+      neutral rewrite in the next sourcing pass (invariant 3).
+- [ ] **Distill final-note text into obligations** — `profile.notes` + `interview_final_note`
+      are collecting free-form context; wire notes into the plan-coach re-model (or a batch
+      pass) once enough real notes exist to see the shapes.
+- [ ] **Chip-refinement loop** — review `interview_other_opened/answered` by field after ~2
+      weeks of traffic; any field >10% Other usage gets its chip set extended.
+- [ ] **Roadmap-pane removals are silent** — the narrated removal ("you're EU — that removed
+      5 steps, simpler for you") is still the honest nicety to add (v1 recomputes quietly).
+- [ ] **Watch dashboard 808581** (PostHog "Interview v2 — living roadmap") as v2 traffic
+      lands: drop-off by question, exit completeness, clarify rate, Other usage;
+      `landing_version: 2` owns home→interview_started vs the 25% baseline. Then the
+      before/after LinkedIn post. (Ack drop-rate has no metric yet — consider capturing when
+      the phraseAck backstop fires.)
+- [ ] **Landing variant A** ("the page IS question zero") parked as an A/B candidate once
+      traffic justifies experiments — needs arrival-prefill design (docs/LANDING-REDESIGN.md).
+- [ ] **Arrival-date chips** (This year / Next year / …) if Q1's typed+LLM turn shows
+      friction in per-question `ms` data.
+- [ ] **Email magic-link health** — watch `email_link_confirmed {ok:false}` rate after the
+      next weekly send; that's the OTP-expiry dial (both Supabase projects at the 24h max).
+
+**Explicitly NOT building (user decisions, unchanged):** push notifications (the weekly
+email IS the retention loop) · document vault · country #2 · household sharing (wait for
+demand).
+
+## 🐞 Known issues
+
+- _(none open — `tsc --noEmit` green; 216 vitest green; catalog audit clean 2026-07-12.)_
+- Known + accepted: TestFlight build 35's voice toggle is silently dead (prod lost /api/tts);
+  build 36 removes the toggle.
+
+## Invariants (do not break — see ./docs/THESIS.md)
+
+1. Engine is deterministic — no LLM in plan-building.
+2. Interview is derived from the catalog (every `applies_if` field has a slot or derivation).
+3. Lola never invents deadlines/costs/laws — hence the `source` field + SOURCING.md.
+4. The plan is a pure function of the profile.
+
+---
+
+# ⬇️ BELOW THE FOLD — the done / historical archive
+
+Everything below is DONE or superseded, kept verbatim as the historical record (it feeds
+the how-i-was-built log and future audits). **Checkbox states are frozen as of 2026-07-12** —
+every item still open on that date was carried into the open backlog above. Do not work
+from this section.
+
+## Soft launch #1 (2026-07-06) — the original note
 
 Earlier (2026-07-06): FIRST SOFT LAUNCH to r/GoingToSpain — web-only call-for-testers; ~1.2K
 views + 2 full conversions EN+ES + 0 errors before AutoMod removed it for "too many reports";
@@ -25,18 +217,7 @@ FB groups (user lives in JEREZ — best angle), visa-specific FB groups, then r/
 r/expats, expat forums, and the webinar-creator warm list (partnership). This is a pre-launch test
 of item 25; the moat (sourced steps, deterministic, EN+ES) demonstrably works for strangers.
 
-## 🔒 Security — TOP PRIORITY
-
-- [ ] **Verify no secrets are ever committed to the (public) GitHub repo.** Re-check before every
-      push and before sharing the repo. Standing guarantees: `.env` is gitignored; the Anthropic
-      key now lives server-side only (`app/api/lola+api.ts`). Quick audit:
-      `git ls-files | grep -iE '(^|/)\.env'` → empty, and `git grep -I 'sk-ant-' HEAD` → no matches.
-      **Last audited 2026-07-04: CLEAN** — no `.env` tracked; no `sk-ant-`, Resend-key (`re_…`) or
-      JWT patterns in any tracked file (TODO.md's own audit-command text self-matches, benign;
-      `SUPABASE_SERVICE_ROLE_KEY` appears only as `process.env` reads in API routes). Supabase
-      URL/anon key remain the only `EXPO_PUBLIC_` values (public-safe under RLS).
-
-## 🎯 THE SEQUENCED BACKLOG v2 — canonical priority order (re-audited 2026-07-04 late)
+## 🎯 THE SEQUENCED BACKLOG v2 (re-audited 2026-07-04) — ⚠️ SUPERSEDED 2026-07-12 by the open backlog above; frozen record
 
 Second full audit of the day. **Closed since v1:** source-link QA (55/55, 2 fixed) ·
 API volume-limiting (durable counters + strict CORS + provider caps) · a11y round 2 ·
@@ -891,36 +1072,3 @@ signal). Localization: held for an app update pending locale demand data.
       coming, so 100+ is no longer a requirement. The catalog is scoped to what we can source
       honestly (59 obligations, mostly official). Breadth grows only if new primary sources appear.
 
-## Follow-ups queued from the 2026-07-10 release day (redesign + landing v2)
-
-- [ ] **Consulate-appointment title is US-centric** — "allow 8–16 weeks lead time in the US" shows
-      for every non-EU applicant (a UK tester flagged it). Needs a sourced per-country or neutral
-      rewrite in the next sourcing pass (invariant 3: don't touch without the source).
-- [ ] **Distill final-note text into obligations** — `profile.notes` + `interview_final_note` are
-      collecting free-form context; the plan-coach already re-models free text, so wire notes into
-      it (or a batch pass) once enough real notes exist to see the shapes.
-- [ ] **Chip-refinement loop** — review `interview_other_opened/answered` by field after ~2 weeks
-      of traffic; any field >10% Other usage gets its chip set extended (that was the point of
-      keeping Lola on the Other path).
-- [ ] **Roadmap-pane removals are silent** — the design doc's narrated removal ("you're EU — that
-      removed 5 steps, simpler for you") is still the honest nicety to add (v1 recomputes quietly).
-- [ ] **Watch dashboard 808581** (PostHog "Interview v2 — living roadmap") as v2 traffic lands:
-      drop-off by question, exit completeness, clarify rate, Other usage; `landing_version: 2`
-      owns home→interview_started vs the 25% baseline. Then the before/after LinkedIn post.
-- [ ] **Landing variant A** ("the page IS question zero") parked as an A/B candidate once traffic
-      justifies experiments — needs arrival-prefill design (docs/LANDING-REDESIGN.md).
-- [ ] **Arrival-date chips** (This year / Next year / …) if Q1's typed+LLM turn shows friction in
-      per-question `ms` data — the one instant-feel regression accepted for the emotional opener.
-- [ ] **Email magic-link health** — watch `email_link_confirmed {ok:false}` rate after the next
-      weekly send; that's the OTP-expiry dial (both Supabase projects at the 24h max).
-
-## 🐞 Known issues
-
-- _(none open — `tsc --noEmit` is green.)_
-
-## Invariants (do not break — see ./docs/THESIS.md)
-
-1. Engine is deterministic — no LLM in plan-building.
-2. Interview is derived from the catalog (every `applies_if` field has a slot or derivation).
-3. Lola never invents deadlines/costs/laws — hence the `source` field + SOURCING.md.
-4. The plan is a pure function of the profile.

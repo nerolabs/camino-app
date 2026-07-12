@@ -10,7 +10,8 @@ This is the Expo app. Two files give you the full picture — read both before w
 3. **`./docs/STRATEGY.md`** — the standing strategy & risk review (position, growth,
    legal/PR/personal risks). Consult it whenever planning, prioritizing, or shipping
    anything user-facing; backtest its calls as reality comes in and update it when it's
-   wrong. Its actionable queue lives in TODO.md items 6–10.
+   wrong. Its actionable queue lives in TODO.md's open backlog (Phase 6 growth items 20–28
+   plus the ops items 16 and 31).
 
 ## Standing rules
 
