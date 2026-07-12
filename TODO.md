@@ -40,9 +40,9 @@ account map + contact-migration plan).
 
 **Moved up for today (user, 2026-07-12):**
 
-7. [ ] Set `git config --global user.email` on this machine (commits currently fall back to
-       andrewedmond@Andrews-MacBook-Air.local). Needs the user's pick: the GitHub account
-       email (links commits to the profile) vs andrew@getcamino.app.
+7. [x] **DONE 2026-07-12** — git identity set globally: Andrew Edmond
+       <andrew@getcamino.app>. (If GitHub doesn't show these commits as yours, add
+       andrew@getcamino.app to github.com → Settings → Emails.)
 8. [x] **DONE 2026-07-12** — consulate title neutralized ("wait times vary widely by
        consulate") across title ×5, guide prose ×5, SOURCING.md note; the dead US-only
        ConsulateBanner (gated on the deleted `us_resident` slot) removed from /plan +
