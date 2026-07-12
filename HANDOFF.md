@@ -59,6 +59,22 @@ stamps, regional cards, changelog, interview ending) → triage → **build 38 =
 ASC is DONE); (3) PROVIDERS.md email migration (user-side); (4) watch PostHog 808581 (+ new
 events: share_link_created, shared_plan_viewed, interview_note_distilled, question_cta_clicked).
 
+**LATE-NIGHT ADDENDUM (2026-07-12 → 13, THE ENGINE AUDIT — user call: ahead of everything):**
+The build-37 shred found condition-level bugs the mechanical audit can't see (Cristina's
+dual-US/ES run: Spanish spouse offered the FOREIGN-national EX-18; the US spouse had NO
+residence step; the "Andrew" test persona was ASSERTING the bug). Full audit ran the same
+night — **docs/audits/2026-07-12-engine-audit.md is the record**: all 64 conditions reviewed,
+15 findings (A1–A15), 10 FIXED + DEPLOYED (padrón address-gating, job-seeker→NLV routing,
+short-stay residence cluster, buyer NIE incl. EU, EU licences, EU citizenship exclusion,
+mixed-household EX-19 + clarifying question — catalog 63→64), 5 ranked into the sourcing
+backlog (B1–B8; note **B7 married-to-a-Spaniard 1-year citizenship track**). NEW STANDING
+TOOL: `scripts/audit-matrix.ts` (181 profiles × 16 class expectations — run it during any
+catalog/condition work). NEW FIX DISCIPLINE: grep tests for assertions encoding the behavior
+being changed (FOUR such tests found in one day). Suite: 259 vitest; 4 persona snapshots
+deliberately updated; 4 public changelog entries. Build-37 triage: 7 rows, 6 fixed (share
+sheet + styling, EU empty-state, EX-18/EX-19), all riding **build 38** (unblocked on my side
+once Cristina's shred wraps).
+
 ---
 
 ## Prior resume note (2026-07-11 evening — Cristina batch LIVE; build 36 riding; ASC paperwork DONE minus trader)
