@@ -168,7 +168,28 @@
     "tease": "In deinem eigenen Plan begleitet dich Lola durch diesen Schritt, du hakst ihn ab, und die Termine ordnen sich nach dem, was wirklich passiert.",
     "closingTitle": "Dein Umzug wird nicht wie der von {{name}} aussehen.",
     "closingBody": "Anderer Pass, andere Arbeit, andere Familie oder andere Pläne — andere Roadmap. Erzähl Lola von deinem Umzug und bekomme die Version, die wirklich deine ist, mit echten Fristen in der richtigen Reihenfolge.",
-    "closingCta": "Mein 3-Minuten-Interview starten →"
+    "closingCta": "Mein 3-Minuten-Interview starten →",
+    "moreLabel": "Weitere Beispiel-Situationen",
+    "personas": {
+      "retirees": {
+        "tag": "US-Rentner mit Non-Lucrative-Visum"
+      },
+      "eu-family": {
+        "name": "Anna & Max",
+        "tag": "eine EU-Familie — ganz ohne Visum",
+        "blurb": "ein deutsches Paar mit zwei Kindern, unterwegs nach Valencia mit EU-Freizügigkeit — kein Visums-Cluster, aber Schulanmeldung, Registrierung und Gesundheit haben trotzdem eine Reihenfolge"
+      },
+      "digital-nomad": {
+        "name": "Maya",
+        "tag": "Solo-Remote-Workerin mit Digital-Nomad-Visum",
+        "blurb": "eine kanadische Entwicklerin, die ihren Remote-Job behält und mit dem Digital-Nomad-Visum nach Barcelona zieht"
+      },
+      "property-owners": {
+        "name": "James & Priya",
+        "tag": "Briten mit Haus in Spanien",
+        "blurb": "ein britisches Paar, das bereits in Andalusien gekauft hat — Notar, Register und Steuern sind real, und die britischen Führerscheine haben eine Sechs-Monats-Frist"
+      }
+    }
   },
   "changeNote": {
     "errTitle": "Hmm, das ist nicht durchgegangen",

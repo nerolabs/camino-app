@@ -69,7 +69,9 @@ describe('locale wiring stays in sync', () => {
   it('every web locale has its complete app/<locale> route tree (the SEO pages)', () => {
     // The trees are hand-copied re-exports (deliberately STATIC dirs — see app/es/_layout.tsx);
     // this is the guard that a new language can't ship with its web pages silently missing.
-    const expected = ['_layout.tsx', 'index.tsx', 'sample-plan.tsx', 'privacy.tsx', 'terms.tsx',
+    // sample-plan became a directory 2026-07-12 (persona pages ride /sample-plan/<id>).
+    const expected = ['_layout.tsx', 'index.tsx', 'sample-plan/index.tsx', 'sample-plan/[persona].tsx',
+                      'privacy.tsx', 'terms.tsx',
                       'aviso-legal.tsx', 'guide/index.tsx', 'guide/[id].tsx'];
     for (const locale of APP_WEB_LOCALES) {
       for (const file of expected) {

@@ -86,7 +86,28 @@
     "tease": "En tu propio plan, Lola te acompaña en este paso, lo marcas hecho y las fechas se recalculan según lo que pase de verdad.",
     "closingTitle": "Tu mudanza no será como la de {{name}}.",
     "closingBody": "Otro pasaporte, otro trabajo, otra familia u otros planes — otra hoja de ruta. Cuéntale a Lola tu mudanza y consigue la versión que de verdad es tuya, con plazos reales en el orden correcto.",
-    "closingCta": "Empezar mi entrevista de 3 minutos →"
+    "closingCta": "Empezar mi entrevista de 3 minutos →",
+    "moreLabel": "Más situaciones de ejemplo",
+    "personas": {
+      "retirees": {
+        "tag": "jubilados de EE. UU. con visado no lucrativo"
+      },
+      "eu-family": {
+        "name": "Anna y Max",
+        "tag": "una familia de la UE — sin visado",
+        "blurb": "una pareja alemana con dos hijos que se muda a Valencia con la libre circulación de la UE — nada de visados, pero la escolarización, el registro y la sanidad siguen teniendo un orden"
+      },
+      "digital-nomad": {
+        "name": "Maya",
+        "tag": "teletrabajadora sola con visado de nómada digital",
+        "blurb": "una desarrolladora canadiense que conserva su trabajo remoto, rumbo a Barcelona con el visado de nómada digital"
+      },
+      "property-owners": {
+        "name": "James y Priya",
+        "tag": "británicos con casa en España",
+        "blurb": "una pareja británica que ya compró casa en Andalucía — la cadena de notaría, registro e impuestos es real, y sus carnés británicos tienen un plazo de seis meses"
+      }
+    }
   },
   "format": {
     "phase": {

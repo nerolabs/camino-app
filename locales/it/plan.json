@@ -168,7 +168,28 @@
     "tease": "Nel tuo piano, Lola ti accompagna in questo passo, tu lo spunti, e le date si ricalcolano secondo ciò che succede davvero.",
     "closingTitle": "Il tuo trasferimento non sarà come quello di {{name}}.",
     "closingBody": "Altro passaporto, altro lavoro, altra famiglia o altri piani — altra roadmap. Racconta a Lola il tuo trasferimento e ottieni la versione che è davvero tua, con scadenze vere nell’ordine giusto.",
-    "closingCta": "Inizia la mia intervista di 3 minuti →"
+    "closingCta": "Inizia la mia intervista di 3 minuti →",
+    "moreLabel": "Altre situazioni di esempio",
+    "personas": {
+      "retirees": {
+        "tag": "pensionati USA con visto non lucrativo"
+      },
+      "eu-family": {
+        "name": "Anna e Max",
+        "tag": "una famiglia UE — senza visto",
+        "blurb": "una coppia tedesca con due figli, diretta a Valencia con la libera circolazione UE — niente visti, ma scuola, registrazione e sanità hanno comunque un ordine"
+      },
+      "digital-nomad": {
+        "name": "Maya",
+        "tag": "lavoratrice remota con visto da nomade digitale",
+        "blurb": "una sviluppatrice canadese che tiene il suo lavoro da remoto, destinazione Barcellona con il visto da nomade digitale"
+      },
+      "property-owners": {
+        "name": "James e Priya",
+        "tag": "britannici con casa in Spagna",
+        "blurb": "una coppia britannica che ha già comprato casa in Andalusia — la catena notaio, registro e imposte è reale, e le loro patenti britanniche hanno sei mesi di tempo"
+      }
+    }
   },
   "changeNote": {
     "errTitle": "Hmm, non è passato",

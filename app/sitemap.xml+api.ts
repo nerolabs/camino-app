@@ -6,6 +6,7 @@
  * and the homework pages stay English-only, so no variants for them).
  */
 import { CATALOG } from '@/core/engine-controller';
+import { EXTRA_PERSONAS } from '@/core/sample-personas';
 import { siteOrigin } from '@/lib/serverEmail';
 import { WEB_LOCALES } from '@/lib/serverLocale';
 
@@ -14,6 +15,7 @@ export function GET(request: Request): Response {
   const localized = [
     '/', '/sample-plan', '/guide',
     '/privacy', '/terms', '/aviso-legal',
+    ...EXTRA_PERSONAS.map(p => `/sample-plan/${p.id}`),
     ...CATALOG.map(o => `/guide/${o.id}`),
   ];
   // /how-it-works redirects home since 2026-07-10 (content folded into the landing page)

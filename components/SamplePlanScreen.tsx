@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, Link } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 import { derive } from '@/core/interview-controller';
 import { buildPlan, type Objective } from '@/core/engine-controller';
-import { sampleProfile } from '@/core/sample-profile';
+import { personaById, DEFAULT_PERSONA_ID, SAMPLE_PERSONAS } from '@/core/sample-personas';
 import {
   formatTiming, timingDetail, openExternal,
   phaseLabel, PHASE_ICONS, PHASE_ORDER,
@@ -21,18 +21,29 @@ import { capture } from '@/lib/analytics';
 // The payoff, before the ask: a real roadmap — the actual engine run on a canned persona — shown
 // read-only to anyone, so visitors see what they're building BEFORE investing in the interview.
 // No mark-done / re-plan / coach here; the interview is the only path to a personalized plan.
+// Since 2026-07-12 (SEO expansion): several personas — /sample-plan renders the default
+// (Susan & Tom), /sample-plan/<id> the others. Same component, different canned profile.
 
-export default function SamplePlanScreen() {
+export default function SamplePlanScreen({ personaId = DEFAULT_PERSONA_ID }: { personaId?: string }) {
   const { t } = useTranslation('plan');
   const router = useRouter();
   const top = useBackToTop();
-  useEffect(() => { capture('sample_plan_viewed'); }, []);
+  const persona = personaById.get(personaId) ?? personaById.get(DEFAULT_PERSONA_ID)!;
+  useEffect(() => { capture('sample_plan_viewed', { persona: persona.id }); }, [persona.id]);
+
+  // Display name/blurb: the default persona keeps its original keys (translated 2026-07-05);
+  // the newer personas live under sample.personas.<id>.
+  const kName  = persona.id === DEFAULT_PERSONA_ID ? 'sample.name'  : `sample.personas.${persona.id}.name`;
+  const kBlurb = persona.id === DEFAULT_PERSONA_ID ? 'sample.blurb' : `sample.personas.${persona.id}.blurb`;
+  const canonical = persona.id === DEFAULT_PERSONA_ID
+    ? 'https://getcamino.app/sample-plan'
+    : `https://getcamino.app/sample-plan/${persona.id}`;
 
   const objectives = useMemo(() => {
-    const p = sampleProfile();
+    const p = persona.profile();
     derive(p);
     return buildPlan(p);
-  }, []);
+  }, [persona]);
   const titleById = useMemo(() => new Map(objectives.map(o => [o.id, displayTitle(o)])), [objectives]);
 
   // Tap-to-expand: deterministic detail only (timing, severity, prerequisites, official source).
@@ -56,9 +67,13 @@ export default function SamplePlanScreen() {
     <ScrollView style={styles.scroll} ref={top.ref} onScroll={top.onScroll} scrollEventThrottle={16}>
       <Seo
         localized
-        title="A sample roadmap for moving to Spain | Get Camino"
-        description="Susan &amp; Tom's real, engine-built relocation roadmap — every step, deadline and official source — so you can see what Get Camino builds before answering a single question."
-        canonical="https://getcamino.app/sample-plan"
+        title={persona.id === DEFAULT_PERSONA_ID
+          ? 'A sample roadmap for moving to Spain | Get Camino'
+          : `${t(kName)}'s roadmap for moving to Spain — a real sample plan | Get Camino`}
+        description={persona.id === DEFAULT_PERSONA_ID
+          ? "Susan & Tom's real, engine-built relocation roadmap — every step, deadline and official source — so you can see what Get Camino builds before answering a single question."
+          : `${t(kName)} — ${t(kBlurb)}. A real, engine-built relocation roadmap: every step, deadline and official source.`}
+        canonical={canonical}
       />
       <NavBar />
       <View style={styles.content}>
@@ -66,9 +81,9 @@ export default function SamplePlanScreen() {
         {/* ── Sample framing: whose plan this is + how to get yours ── */}
         <View style={styles.sampleBanner}>
           <Text style={styles.sampleEyebrow}>{t('sample.eyebrow')}</Text>
-          <Text style={styles.sampleTitle}>{t('sample.title', { name: t('sample.name') })}</Text>
+          <Text style={styles.sampleTitle}>{t('sample.title', { name: t(kName) })}</Text>
           <Text style={styles.sampleBody}>
-            {t('sample.body', { name: t('sample.name'), blurb: t('sample.blurb'), count: objectives.length })}
+            {t('sample.body', { name: t(kName), blurb: t(kBlurb), count: objectives.length })}
           </Text>
           <TouchableOpacity style={styles.ctaBtn} onPress={() => startInterview('banner')}>
             <Text style={styles.ctaBtnText}>{t('sample.cta')}</Text>
@@ -144,7 +159,7 @@ export default function SamplePlanScreen() {
                         <Text style={styles.detailText}>{sevBlurb(obj.severity)} {sourceBlurb(obj.source)}</Text>
                         {deps.length > 0 && (
                           <>
-                            <Text style={styles.detailLabel}>{t('sample.depsLabel', { name: t('sample.name').toUpperCase() })}</Text>
+                            <Text style={styles.detailLabel}>{t('sample.depsLabel', { name: t(kName).toUpperCase() })}</Text>
                             {deps.map((d, i) => <Text key={i} style={styles.detailDep}>• {d}</Text>)}
                           </>
                         )}
@@ -167,13 +182,28 @@ export default function SamplePlanScreen() {
 
         {/* ── Closing CTA ── */}
         <View style={styles.closingCta}>
-          <Text style={styles.closingTitle}>{t('sample.closingTitle', { name: t('sample.name') })}</Text>
+          <Text style={styles.closingTitle}>{t('sample.closingTitle', { name: t(kName) })}</Text>
           <Text style={styles.closingBody}>
             {t('sample.closingBody')}
           </Text>
           <TouchableOpacity style={styles.ctaBtn} onPress={() => startInterview('footer')}>
             <Text style={styles.ctaBtnText}>{t('sample.closingCta')}</Text>
           </TouchableOpacity>
+        </View>
+
+        {/* Other sample situations (SEO expansion 2026-07-12): each persona lights up a
+            different branch of the catalog — EU path, digital-nomad visa, property cluster. */}
+        <View style={styles.moreRow}>
+          <Text style={styles.moreLabel}>{t('sample.moreLabel')}</Text>
+          {SAMPLE_PERSONAS.filter(p => p.id !== persona.id).map(p => (
+            <Link
+              key={p.id}
+              href={(p.id === DEFAULT_PERSONA_ID ? '/sample-plan' : `/sample-plan/${p.id}`) as never}
+              style={styles.moreLink}
+            >
+              {t(p.id === DEFAULT_PERSONA_ID ? 'sample.name' : `sample.personas.${p.id}.name`)} — {t(`sample.personas.${p.id}.tag`)} →
+            </Link>
+          ))}
         </View>
       </View>
       <Footer />
@@ -233,6 +263,9 @@ const styles = StyleSheet.create({
   detailTease:   { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, lineHeight: 18, color: palette.amber, marginTop: 10, fontStyle: 'italic' },
 
   closingCta:    { backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 14, padding: 20, marginTop: 6, alignItems: 'flex-start' },
+  moreRow:       { marginTop: 22, gap: 8 },
+  moreLabel:     { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, letterSpacing: 1.2, color: palette.muted, textTransform: 'uppercase', marginBottom: 2 },
+  moreLink:      { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cobalt },
   closingTitle:  { fontFamily: 'Fraunces_600SemiBold', fontSize: 22, color: palette.indigo, marginBottom: 8 },
   closingBody:   { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, lineHeight: 22, color: palette.indigo, marginBottom: 14 },
 });

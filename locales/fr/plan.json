@@ -168,7 +168,28 @@
     "tease": "Dans ton propre plan, Lola t’accompagne sur cette étape, tu la coches, et les dates se recalculent selon ce qui se passe vraiment.",
     "closingTitle": "Ton installation ne ressemblera pas à celle de {{name}}.",
     "closingBody": "Autre passeport, autre travail, autre famille ou autres projets — autre feuille de route. Raconte ton installation à Lola et obtiens la version qui est vraiment la tienne, avec de vraies échéances dans le bon ordre.",
-    "closingCta": "Commencer mon entretien de 3 minutes →"
+    "closingCta": "Commencer mon entretien de 3 minutes →",
+    "moreLabel": "D’autres situations d’exemple",
+    "personas": {
+      "retirees": {
+        "tag": "retraités américains en visa non lucratif"
+      },
+      "eu-family": {
+        "name": "Anna & Max",
+        "tag": "une famille de l’UE — sans visa",
+        "blurb": "un couple allemand avec deux enfants, direction Valence grâce à la libre circulation — aucun visa, mais l’école, l’enregistrement et la santé gardent un ordre"
+      },
+      "digital-nomad": {
+        "name": "Maya",
+        "tag": "télétravailleuse solo en visa nomade numérique",
+        "blurb": "une développeuse canadienne qui garde son emploi à distance, cap sur Barcelone avec le visa nomade numérique"
+      },
+      "property-owners": {
+        "name": "James & Priya",
+        "tag": "Britanniques propriétaires en Espagne",
+        "blurb": "un couple britannique qui a déjà acheté en Andalousie — la chaîne notaire, registre et impôts est bien réelle, et leurs permis britanniques ont six mois de sursis"
+      }
+    }
   },
   "changeNote": {
     "errTitle": "Hmm, ça n’est pas passé",

@@ -86,7 +86,28 @@
     "tease": "In your own plan, Lola coaches you through this step, you check it off, and the dates re-flow around what actually happens.",
     "closingTitle": "Your move won't look like {{name}}'s.",
     "closingBody": "Different passport, work, family, or plans — different roadmap. Tell Lola about your move and get the version that's actually yours, with real deadlines in the right order.",
-    "closingCta": "Start my 3-minute interview →"
+    "closingCta": "Start my 3-minute interview →",
+    "moreLabel": "More sample situations",
+    "personas": {
+      "retirees": {
+        "tag": "US retirees on the non-lucrative visa"
+      },
+      "eu-family": {
+        "name": "Anna & Max",
+        "tag": "an EU family — no visa needed",
+        "blurb": "a German couple with two kids, moving to Valencia on EU freedom of movement — no visa cluster at all, but school enrollment, registration, and healthcare still have an order"
+      },
+      "digital-nomad": {
+        "name": "Maya",
+        "tag": "a solo remote worker on the digital-nomad visa",
+        "blurb": "a Canadian software developer keeping her remote job, heading for Barcelona on the digital-nomad visa"
+      },
+      "property-owners": {
+        "name": "James & Priya",
+        "tag": "UK owners of a Spanish home",
+        "blurb": "a British couple who already bought a house in Andalucía — the notary, registry, and tax chain is real, and their UK licences are on a six-month clock"
+      }
+    }
   },
   "format": {
     "phase": {
