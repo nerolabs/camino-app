@@ -61,6 +61,8 @@
     "ctaBody": "Se questo passo vale per te — e quando scade — dipende da passaporto, lavoro, famiglia e piani. Rispondi a qualche domanda e Get Camino costruisce la tua roadmap completa, ogni passo nell’ordine giusto con scadenze vere.",
     "ctaButton": "Crea la mia roadmap gratuita →",
     "ctaNote": "Gratis · circa 3 minuti · nessun account per iniziare",
-    "moreIn": "ALTRO IN {{category}}"
+    "moreIn": "ALTRO IN {{category}}",
+    "lastVerified": "Ultima verifica: {{date}}",
+    "changelogLink": "Guarda cosa abbiamo corretto →"
   }
 }

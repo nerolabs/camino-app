@@ -179,5 +179,6 @@
     "noopBody": "I’ve saved that, and nothing in your plan needed to move because of it.",
     "remodelTitle": "That was useful — I’ve remodelled your plan!",
     "seePlan": "See my updated plan"
-  }
+  },
+  "lastVerified": "Facts last verified {{date}} · changelog"
 }

@@ -61,6 +61,8 @@
     "ctaBody": "Que cette étape s’applique même à toi — et quand elle est due — dépend de ton passeport, de ton travail, de ta famille et de tes projets. Réponds à quelques questions et Get Camino construit ta feuille de route complète, chaque étape dans le bon ordre avec de vraies échéances.",
     "ctaButton": "Créer ma feuille de route gratuite →",
     "ctaNote": "Gratuit · environ 3 minutes · aucun compte requis pour commencer",
-    "moreIn": "PLUS DANS {{category}}"
+    "moreIn": "PLUS DANS {{category}}",
+    "lastVerified": "Dernière vérification : {{date}}",
+    "changelogLink": "Voir ce que nous avons corrigé →"
   }
 }

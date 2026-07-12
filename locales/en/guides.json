@@ -61,6 +61,8 @@
     "ctaBody": "Whether this step even applies — and when it's due — depends on your passport, work, family and plans. Answer a few questions and Get Camino builds your full roadmap, every step in the right order with real deadlines.",
     "ctaButton": "Build my free roadmap →",
     "ctaNote": "Free · about 3 minutes · no account needed to start",
-    "moreIn": "MORE IN {{category}}"
+    "moreIn": "MORE IN {{category}}",
+    "lastVerified": "Last verified {{date}}",
+    "changelogLink": "See what we’ve corrected →"
   }
 }

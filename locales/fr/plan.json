@@ -179,5 +179,6 @@
     "noopBody": "J’ai enregistré ça, et rien dans ton plan n’avait besoin de bouger pour autant.",
     "remodelTitle": "Très utile — j’ai refait ton plan !",
     "seePlan": "Voir mon plan à jour"
-  }
+  },
+  "lastVerified": "Faits vérifiés le {{date}} · corrections"
 }

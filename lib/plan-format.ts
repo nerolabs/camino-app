@@ -61,6 +61,13 @@ function daysBetween(a: Date, b: Date): number {
   return Math.round((a.getTime() - b.getTime()) / 86_400_000);
 }
 
+// "Last verified" stamp date (changelog feature, 2026-07-12) — an ISO date from the
+// catalog/changelog rendered in the app language.
+export function formatVerified(iso: string): string {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
 // "Completed 12 May · 3 days late" / "· on time" / "· 2 days early", measured against
 // the step's own scheduled due date when there is one.
 export function completionLine(obj: Objective): string {

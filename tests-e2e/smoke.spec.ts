@@ -98,6 +98,18 @@ test('contact page renders; Report-a-problem deep link pre-selects the topic', a
   expect(errors).toEqual([]);
 });
 
+test('changelog page renders entries + guide stamps carry the verified date', async ({ page }) => {
+  // The trust surface (2026-07-12): /changelog lists dated corrections, and every guide
+  // page stamps when its facts were last checked, linking back here.
+  const errors = trackErrors(page);
+  await page.goto('/changelog');
+  await expect(page.getByText('RULES CHANGE. WE SAY SO.')).toBeVisible();
+  await expect(page.getByText('Consulate appointment step neutralized')).toBeVisible();
+  await page.goto('/guide/empadronamiento');
+  await expect(page.getByText(/Last verified/)).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
 test('robots.txt is open (blog un-gated 2026-07-03) and points at the sitemap', async ({ request }) => {
   const robots = await request.get('/robots.txt');
   expect(robots.status()).toBe(200);

@@ -25,8 +25,9 @@ import { displayTitle } from '@/lib/catalogTitles';
 import {
   diffSummary, plansDiffer, completionLine, formatTiming, timingDetail, openExternal,
   phaseLabel, PHASE_ICONS, PHASE_ORDER, SEV_COLOR, sevLabel, sevBlurb,
-  sourceShort, sourceBlurb, SOURCE_COLOR,
+  sourceShort, sourceBlurb, SOURCE_COLOR, formatVerified,
 } from '@/lib/plan-format';
+import { verifiedOn } from '@/core/changelog';
 
 // Signed-out users just watched their roadmap appear — the capture moment. One email field:
 // it saves the roadmap, creates the account (silently — the profile rides in auth metadata
@@ -448,6 +449,13 @@ export default function PlanScreen() {
                     </TouchableOpacity>
                   )}
                 </View>
+                {/* Trust stamp (changelog feature 2026-07-12): when this step's facts were
+                    last checked; taps through to the public correction record. */}
+                <TouchableOpacity onPress={() => { setSelected(null); router.push('/changelog' as never); }}>
+                  <Text style={styles.verifiedLine}>
+                    {t('lastVerified', { date: formatVerified(verifiedOn(selected)) })}
+                  </Text>
+                </TouchableOpacity>
 
                 {/* ── Lola task coach (the living element) ───────────────── */}
                 <View style={styles.thread}>
@@ -747,6 +755,7 @@ const styles = StyleSheet.create({
   pillWebinar:   { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: '#FBF3E2',
                    borderWidth: 1, borderColor: palette.amber, borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5 },
   pillWebinarText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, color: palette.amber },
+  verifiedLine:   { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted, marginTop: 6 },
   sheetSectionLabel: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, color: palette.muted,
                        letterSpacing: 1.1, marginTop: 18, marginBottom: 6 },
   sheetTiming:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cobalt, marginBottom: 4 },

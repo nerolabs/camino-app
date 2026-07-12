@@ -40,6 +40,11 @@ export type Obligation = {
   // The specifics (rates, allowances, windows) are set per comunidad autónoma — the plan
   // flags these and names the user's region when known. National source stays canonical.
   regional?: boolean;
+  // "Last verified" stamp override (YYYY-MM-DD). Presentational data only — the engine
+  // never reads it. Items untouched since the 2026-07-04 full click-test pass inherit
+  // that date as the default (core/changelog.ts DEFAULT_VERIFIED); set this when an item
+  // is re-verified or corrected later.
+  verified_at?: string;
 };
 
 export type Resolved =
@@ -60,6 +65,7 @@ export type Objective = {
   timing: Resolved; phase: Phase;
   done: boolean; completedOn: Date | null;
   regional?: boolean;
+  verified_at?: string; // "last verified" stamp override (presentational; see core/changelog.ts)
 };
 
 const SEV_RANK: Record<Severity, number> = { penalty: 4, required: 3, recommended: 2, info: 1 };
@@ -194,6 +200,7 @@ export const CATALOG: Obligation[] = [
   {
     id: 'language-classes',
     title: 'Start learning Spanish — book regular classes or a structured course (a local academy, an online tutor, or an intensive once you arrive). It makes daily life far easier, and builds the foundation if you later pursue citizenship.',
+    verified_at: '2026-07-10', // added with the interview redesign
     category: 'admin', severity: 'recommended',
     source: 'recommendation',
     applies_if: { field: 'speaks_spanish', op: 'in', value: ['None yet', 'A little'] },
@@ -236,6 +243,7 @@ export const CATALOG: Obligation[] = [
     id: 'consulate-appointment',
     webinar_url: 'https://www.youtube.com/watch?v=uH927kx3igU&t=43s',
     title: 'Book consulate appointment to lodge your visa application — wait times vary widely by consulate, so book as early as you can; appointments run through the consulate’s cita previa system',
+    verified_at: '2026-07-12', // title neutralized (see /changelog)
     category: 'visa', severity: 'required',
     source: 'official',
     source_url: 'https://sede.maec.gob.es/pagina/index/directorio/citaprevia',
@@ -285,6 +293,7 @@ export const CATALOG: Obligation[] = [
     // for the user's own household instead of leaving it to them.
     id: 'nlv-income-check',
     title: 'Heads-up: your income band looks below the NLV requirement — €28,800/yr plus €7,200/yr per dependent (400% of IPREM) for your household. Review how you\'ll evidence sufficient passive means, or talk through alternative routes, before booking the consulate appointment',
+    verified_at: '2026-07-10', // added with the interview redesign (figures verified then)
     category: 'visa', severity: 'recommended',
     source: 'recommendation',
     applies_if: { all: [
@@ -343,6 +352,7 @@ export const CATALOG: Obligation[] = [
     // Advisory income check — DNV twin of nlv-income-check; same conservative band-upper logic.
     id: 'dnv-income-check',
     title: 'Heads-up: your income band looks below the digital-nomad-visa requirement — about €34,000/yr (200% of Spain\'s minimum wage) plus ~€13,000 for a spouse and ~€4,000 per child for your household. Review how you\'ll evidence your remote income, or talk through alternative routes, before booking the consulate appointment',
+    verified_at: '2026-07-10', // added with the interview redesign (figures verified then)
     category: 'visa', severity: 'recommended',
     source: 'recommendation',
     applies_if: { all: [
@@ -1015,6 +1025,7 @@ export function buildPlan(p: Record<string, unknown>): Objective[] {
       id: o.id, title: o.title, category: o.category, severity: o.severity,
       source: o.source, source_url: o.source_url, webinar_url: o.webinar_url, depends_on: o.depends_on, timing, phase: phaseOf(timing, arrival),
       regional: o.regional,
+      verified_at: o.verified_at,
       done: pr?.state === 'done',
       completedOn: pr?.completedOn ? new Date(pr.completedOn) : null,
     };

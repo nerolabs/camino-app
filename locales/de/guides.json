@@ -61,6 +61,8 @@
     "ctaBody": "Ob dieser Schritt für dich überhaupt gilt — und wann er fällig ist — hängt von Pass, Arbeit, Familie und Plänen ab. Beantworte ein paar Fragen und Get Camino baut deine komplette Roadmap, jeder Schritt in der richtigen Reihenfolge mit echten Fristen.",
     "ctaButton": "Meine kostenlose Roadmap erstellen →",
     "ctaNote": "Kostenlos · etwa 3 Minuten · kein Konto nötig, um anzufangen",
-    "moreIn": "MEHR IN {{category}}"
+    "moreIn": "MEHR IN {{category}}",
+    "lastVerified": "Zuletzt geprüft: {{date}}",
+    "changelogLink": "Sieh, was wir korrigiert haben →"
   }
 }

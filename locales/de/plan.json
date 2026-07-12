@@ -179,5 +179,6 @@
     "noopBody": "Ich habe das gespeichert, und nichts in deinem Plan musste sich deshalb bewegen.",
     "remodelTitle": "Sehr nützlich — ich habe deinen Plan neu gebaut!",
     "seePlan": "Meinen aktuellen Plan ansehen"
-  }
+  },
+  "lastVerified": "Fakten zuletzt geprüft am {{date}} · Protokoll"
 }

@@ -18,7 +18,7 @@ export function GET(request: Request): Response {
   ];
   // /how-it-works redirects home since 2026-07-10 (content folded into the landing page)
   // /contact is one route localized client-side (no per-locale static tree), so it lists once.
-  const englishOnly = ['/contact', '/how-i-was-built', '/how-i-was-built/log', '/how-i-was-built/roadmap'];
+  const englishOnly = ['/contact', '/changelog', '/how-i-was-built', '/how-i-was-built/log', '/how-i-was-built/roadmap'];
   const urls = [
     ...localized,
     ...englishOnly,

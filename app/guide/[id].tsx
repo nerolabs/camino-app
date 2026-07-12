@@ -8,7 +8,8 @@ import {
 } from '@/core/guide-content';
 import { displayProse, categoryLabel, categoryTip, describeTimingLocalized } from '@/lib/guideLocale';
 import { displayTitle } from '@/lib/catalogTitles';
-import { sevLabel, sevBlurb, sourceBlurb, openExternal } from '@/lib/plan-format';
+import { sevLabel, sevBlurb, sourceBlurb, openExternal, formatVerified } from '@/lib/plan-format';
+import { verifiedOn } from '@/core/changelog';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { capture } from '@/lib/analytics';
@@ -97,6 +98,14 @@ export default function GuidePage() {
               <Text style={styles.sourceLink}>{t('detail.sourceLink')}</Text>
             </TouchableOpacity>
           )}
+
+          {/* The trust stamp (changelog feature): when this step's facts were last checked,
+              linking to the public record of corrections. */}
+          <TouchableOpacity onPress={() => router.push('/changelog' as never)}>
+            <Text style={styles.verified}>
+              {t('detail.lastVerified', { date: formatVerified(verifiedOn(g)) })} · {t('detail.changelogLink')}
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.tipCard}>
@@ -149,6 +158,7 @@ const styles = StyleSheet.create({
   factText:   { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, lineHeight: 23, color: palette.indigo },
   depLink:    { fontFamily: 'HankenGrotesk_500Medium', fontSize: 14, lineHeight: 24, color: palette.cobalt },
   sourceLink: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cobalt, marginTop: 16 },
+  verified:   { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: palette.muted, marginTop: 10 },
 
   tipCard:    { backgroundColor: '#FBF3E2', borderWidth: 1, borderColor: palette.amber, borderRadius: 14, padding: 18, marginBottom: 14 },
   tipLabel:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 10, letterSpacing: 1.2, color: palette.amber, marginBottom: 6 },

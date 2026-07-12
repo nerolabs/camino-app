@@ -61,6 +61,8 @@
     "ctaBody": "Que este paso te aplique siquiera — y cuándo vence — depende de tu pasaporte, tu trabajo, tu familia y tus planes. Responde unas preguntas y Get Camino construye tu hoja de ruta completa, cada paso en el orden correcto y con plazos reales.",
     "ctaButton": "Crea mi hoja de ruta gratis →",
     "ctaNote": "Gratis · unos 3 minutos · sin cuenta para empezar",
-    "moreIn": "MÁS EN {{category}}"
+    "moreIn": "MÁS EN {{category}}",
+    "lastVerified": "Última verificación: {{date}}",
+    "changelogLink": "Mira lo que hemos corregido →"
   }
 }

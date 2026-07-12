@@ -179,5 +179,6 @@
     "noopBody": "Lo he guardado, y nada en tu plan necesitaba moverse por ello.",
     "remodelTitle": "Qué útil — ¡he rehecho tu plan!",
     "seePlan": "Ver mi plan actualizado"
-  }
+  },
+  "lastVerified": "Datos verificados el {{date}} · correcciones"
 }
