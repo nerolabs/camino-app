@@ -228,6 +228,7 @@
     "itp_flat": "In {{region}}, l’aliquota generale dell’ITP sull’acquisto di una casa usata è il {{rate}} del prezzo — esistono aliquote ridotte per alcuni acquirenti e fasce.",
     "itp_brackets": "In {{region}}, l’ITP sull’usato è progressiva: {{low}} fino a {{cap}}, salendo a scaglioni fino a {{high}}.",
     "wealth_relief": "{{region}} applica uno sgravio regionale del {{pct}} su questa imposta — in pratica la maggior parte non paga nulla, ma l’imposta statale di solidarietà può applicarsi oltre {{threshold}}.",
-    "source": "Verificato il {{date}} · fonte ufficiale della regione"
+    "source": "Verificato il {{date}} · fonte ufficiale",
+    "wealth_scale": "In {{region}}, l’imposta sul patrimonio parte sopra una franchigia personale di {{exempt}} (più l’esenzione per l’abitazione principale), con aliquote fino al {{top}}."
   }
 }

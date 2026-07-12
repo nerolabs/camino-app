@@ -20,6 +20,17 @@ export type ChangelogEntry = {
 // Newest first. Rendered verbatim on /changelog.
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: '2026-07-13',
+    title: 'Regional coverage completed: all 15 common-regime comunidades verified',
+    details: [
+      'Transfer-tax (ITP) figures now cover every common-regime comunidad — the ten remaining regions (Asturias, Cantabria, La Rioja, Castilla-La Mancha, Canarias, Extremadura, Illes Balears, Castilla y León, Galicia, Murcia) verified against the Ministry of Hacienda’s official 2026 compilation of regional tax measures, which cites each region’s own statute.',
+      'Two more changes most summaries haven’t caught yet: Murcia cut its general rate from 8% to 7.75% (July 2025 — the regional agency’s own FAQ still showed the old rate; we verified against the law as published in the BOE), and the Comunitat Valenciana raised its wealth-tax personal exemption from €500,000 to €1,000,000 effective the end of 2025.',
+      'Wealth-tax figures added for Cataluña and the Comunitat Valenciana (exemption + top rate).',
+      'Still honestly out of scope: País Vasco and Navarra (foral regimes with per-territory rates — they need their own pass) and Ceuta/Melilla. Those regions simply show no figure rather than a secondhand one.',
+    ],
+    ids: ['property-transfer-tax', 'wealth-tax'],
+  },
+  {
     date: '2026-07-12',
     title: 'Engine audit, continued: short stays, EU driving licences, EU citizenship',
     details: [

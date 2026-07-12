@@ -157,7 +157,12 @@ Playwright · 7 API contract · 3 Maestro flows (pinned 2.6.1).
     `lib/emailTokens.ts`) so a rotating-IP abuser can't drain the daily budget and 429 real
     users. Native rides the counters. (/api/feedback got its own counters 2026-07-12 —
     the per-token upgrade here would cover it too.)
-21. [~] **Region-by-region specifics — FIRST TRANCHE SHIPPED 2026-07-12** (core/
+21. [x] **Region-by-region specifics — COMMON-REGIME COMPLETE 2026-07-13** (tranche 2:
+    the remaining 10 comunidades' ITP + Cataluña/CV wealth scales, verified via the
+    Ministry of Hacienda's official Medidas-2026 compilation; caught Murcia's 8→7.75%
+    cut — the ATRM FAQ was stale — and CV's wealth exemption €500k→€1M). REMAINING
+    honest gaps: País Vasco/Navarra (foral), Ceuta/Melilla, school windows, IBI.
+    ~~FIRST TRANCHE SHIPPED 2026-07-12~~ (core/
     regional-specifics.ts): ITP for Andalucía/Madrid/Cataluña/C.Valenciana + wealth-tax
     reliefs for Madrid/Andalucía, each verified same-day on that region's own portal
     (the pass caught Valencia's 10%→9% cut effective 1 Jun 2026). REMAINING (own

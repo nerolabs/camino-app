@@ -25,7 +25,7 @@ describe('regional specifics (TODO 21, staged)', () => {
 
   it('every fact carries an https official source and an ISO verification date', () => {
     for (const f of REGIONAL_SPECIFICS) {
-      expect(f.source_url).toMatch(/^https:\/\/(www\.)?(atc\.gencat\.cat|atv\.gva\.es|comunidad\.madrid|juntadeandalucia\.es)\//);
+      expect(f.source_url).toMatch(/^https:\/\/(www\.)?(atc\.gencat\.cat|atv\.gva\.es|comunidad\.madrid|juntadeandalucia\.es|hacienda\.gob\.es|boe\.es|atriga\.gal)\//);
       expect(f.verified_at).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     }
   });
@@ -48,7 +48,10 @@ describe('regional specifics (TODO 21, staged)', () => {
     expect(regionalSpecific('property-transfer-tax', 'madrid')?.values.rate).toBe('6 %');
     expect(regionalSpecific('property-transfer-tax', 'comunidad-valenciana')?.values.rate).toBe('9 %');
     expect(regionalSpecific('property-transfer-tax', 'cataluna')?.template).toBe('itp_brackets');
-    expect(regionalSpecific('property-transfer-tax', 'galicia')).toBeUndefined(); // staged, not yet verified
+    expect(regionalSpecific('property-transfer-tax', 'galicia')?.values.rate).toBe('8 %');   // tranche 2
+    expect(regionalSpecific('property-transfer-tax', 'murcia')?.values.rate).toBe('7.75 %'); // Ley 3/2025 catch
+    expect(regionalSpecific('wealth-tax', 'comunidad-valenciana')?.values.exempt).toBe('€1,000,000'); // Ley 5/2025 catch
+    expect(regionalSpecific('property-transfer-tax', 'pais-vasco')).toBeUndefined();  // foral — own pass
     expect(regionalSpecific('property-transfer-tax', 'not_sure')).toBeUndefined();
     expect(regionalSpecific('wealth-tax', 'madrid')?.template).toBe('wealth_relief');
   });

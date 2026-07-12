@@ -228,6 +228,7 @@
     "itp_flat": "En {{region}}, el tipo general del ITP al comprar vivienda de segunda mano es el {{rate}} del precio — existen tipos reducidos para algunos compradores y tramos.",
     "itp_brackets": "En {{region}}, el ITP de la vivienda usada es progresivo: {{low}} hasta {{cap}}, subiendo por tramos hasta {{high}}.",
     "wealth_relief": "{{region}} aplica una bonificación autonómica del {{pct}} en este impuesto — en la práctica la mayoría no paga nada, aunque el impuesto estatal de solidaridad puede aplicarse por encima de {{threshold}}.",
-    "source": "Verificado el {{date}} · fuente oficial de la comunidad"
+    "source": "Verificado el {{date}} · fuente oficial",
+    "wealth_scale": "En {{region}}, el impuesto sobre el patrimonio empieza por encima de un mínimo exento de {{exempt}} (más la exención de vivienda habitual), con tipos que suben hasta el {{top}} en lo más alto."
   }
 }

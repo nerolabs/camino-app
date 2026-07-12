@@ -11,10 +11,15 @@
  *  - IN: ITP resale-property rates for Andalucía, Madrid, Cataluña, C. Valenciana (the
  *    four biggest expat regions), + the wealth-tax regional reliefs for Madrid and
  *    Andalucía (clean, stable facts).
- *  - NOT YET (needs its own verification pass): the other 13 comunidades' ITP; wealth-tax
- *    scales for Cataluña/C. Valenciana (bracketed, nuanced); school-enrollment windows
- *    everywhere (they move EVERY year — a wrong month is worse than no month); IBI (set
- *    per municipality, not per comunidad — may never fit this table honestly).
+ *  - TRANCHE 2 (2026-07-13): the remaining 10 common-regime comunidades' ITP + the
+ *    Cataluña/C. Valenciana wealth scales — verified in the Ministry of Hacienda's
+ *    official "Tributación Autonómica, Medidas 2026" Cap-IV compilation (statute-cited,
+ *    updated Apr 2026). Two more live catches: Murcia's ITP cut 8%→7.75% (Ley 3/2025 —
+ *    ATRM's own FAQ was stale) and CV's wealth exemption €500k→€1M (Ley 5/2025).
+ *  - STILL NOT COVERED (honest gaps): País Vasco + Navarra (FORAL regimes — per-territorio
+ *    rates, need their own pass), Ceuta/Melilla (special regime), school-enrollment windows
+ *    (move EVERY year — a wrong month is worse than no month), IBI (municipal — may never
+ *    fit this table honestly).
  *
  * Notable finds from the verification pass, kept as comments so the next pass starts warm:
  *  - Cataluña reformed ITP mid-2025 (progressive 10→13% since 27 Jun 2025; 20% for large
@@ -58,6 +63,71 @@ export const REGIONAL_SPECIFICS: RegionalSpecific[] = [
     source_url: 'https://atv.gva.es/es/itpajd',
     verified_at: '2026-07-12',
   },
+  // ── ITP tranche 2 (2026-07-13, all verified in the Ministry of Hacienda's official
+  //    "Tributación Autonómica — Medidas 2026, Capítulo IV" compilation, updated Apr 2026,
+  //    which cites each region's statute; Galicia additionally on ATRIGA, Murcia on BOE) ──
+  {
+    region: 'asturias', obligation_id: 'property-transfer-tax',
+    template: 'itp_brackets', values: { low: '8 %', cap: '€300,000', high: '10 %' },
+    source_url: 'https://www.hacienda.gob.es/sgfal/financiacionterritorial/autonomica/capitulo-iv-tributacion-autonomica-2026.pdf',
+    verified_at: '2026-07-13',
+  },
+  {
+    region: 'cantabria', obligation_id: 'property-transfer-tax',
+    template: 'itp_flat', values: { rate: '9 %' },
+    source_url: 'https://www.hacienda.gob.es/sgfal/financiacionterritorial/autonomica/capitulo-iv-tributacion-autonomica-2026.pdf',
+    verified_at: '2026-07-13',
+  },
+  {
+    region: 'la-rioja', obligation_id: 'property-transfer-tax',
+    template: 'itp_flat', values: { rate: '7 %' },
+    source_url: 'https://www.hacienda.gob.es/sgfal/financiacionterritorial/autonomica/capitulo-iv-tributacion-autonomica-2026.pdf',
+    verified_at: '2026-07-13',
+  },
+  {
+    region: 'castilla-la-mancha', obligation_id: 'property-transfer-tax',
+    template: 'itp_flat', values: { rate: '9 %' },
+    source_url: 'https://www.hacienda.gob.es/sgfal/financiacionterritorial/autonomica/capitulo-iv-tributacion-autonomica-2026.pdf',
+    verified_at: '2026-07-13',
+  },
+  {
+    region: 'canarias', obligation_id: 'property-transfer-tax',
+    template: 'itp_flat', values: { rate: '6.5 %' },
+    source_url: 'https://www.hacienda.gob.es/sgfal/financiacionterritorial/autonomica/capitulo-iv-tributacion-autonomica-2026.pdf',
+    verified_at: '2026-07-13',
+  },
+  {
+    region: 'extremadura', obligation_id: 'property-transfer-tax',
+    template: 'itp_brackets', values: { low: '8 %', cap: '€360,000', high: '11 %' },
+    source_url: 'https://www.hacienda.gob.es/sgfal/financiacionterritorial/autonomica/capitulo-iv-tributacion-autonomica-2026.pdf',
+    verified_at: '2026-07-13',
+  },
+  {
+    region: 'baleares', obligation_id: 'property-transfer-tax',
+    template: 'itp_brackets', values: { low: '8 %', cap: '€400,000', high: '13 %' },
+    source_url: 'https://www.hacienda.gob.es/sgfal/financiacionterritorial/autonomica/capitulo-iv-tributacion-autonomica-2026.pdf',
+    verified_at: '2026-07-13',
+  },
+  {
+    region: 'castilla-y-leon', obligation_id: 'property-transfer-tax',
+    template: 'itp_brackets', values: { low: '8 %', cap: '€250,000', high: '10 %' },
+    source_url: 'https://www.hacienda.gob.es/sgfal/financiacionterritorial/autonomica/capitulo-iv-tributacion-autonomica-2026.pdf',
+    verified_at: '2026-07-13',
+  },
+  {
+    region: 'galicia', obligation_id: 'property-transfer-tax',
+    template: 'itp_flat', values: { rate: '8 %' },
+    source_url: 'https://www.atriga.gal/es_ES/preguntas-frecuentes/imposto-sobre-transmisions-patrimoniais-e-actos-xuridicos-documentados',
+    verified_at: '2026-07-13',
+  },
+  {
+    // Cut from 8% by Ley 3/2025 (BORM 24-7-2025) — ATRM's own FAQ still said 8% at
+    // verification time; the BOE-published law is the primary source.
+    region: 'murcia', obligation_id: 'property-transfer-tax',
+    template: 'itp_flat', values: { rate: '7.75 %' },
+    source_url: 'https://www.boe.es/buscar/doc.php?id=BOE-A-2025-16147',
+    verified_at: '2026-07-13',
+  },
   // ── Wealth tax (regional reliefs) ───────────────────────────────────────────
   {
     region: 'madrid', obligation_id: 'wealth-tax',
@@ -70,6 +140,21 @@ export const REGIONAL_SPECIFICS: RegionalSpecific[] = [
     template: 'wealth_relief', values: { pct: '100 %', threshold: '€3 million' },
     source_url: 'https://www.juntadeandalucia.es/organismos/economiahaciendayfondoseuropeos/areas/tributos-juego/tributos/paginas/impuestos-cedidos-patrimonio.html',
     verified_at: '2026-07-12',
+  },
+  // ── Wealth-tax scales (2026-07-13, Hacienda Cap-IV compilation) ─────────────
+  {
+    region: 'cataluna', obligation_id: 'wealth-tax',
+    template: 'wealth_scale', values: { exempt: '€500,000', top: '2.75 %' },
+    source_url: 'https://www.hacienda.gob.es/sgfal/financiacionterritorial/autonomica/capitulo-iv-tributacion-autonomica-2026.pdf',
+    verified_at: '2026-07-13',
+  },
+  {
+    // Raised from €500,000 by Ley 5/2025, effective 31-12-2025 — most secondhand
+    // summaries still carry the old figure.
+    region: 'comunidad-valenciana', obligation_id: 'wealth-tax',
+    template: 'wealth_scale', values: { exempt: '€1,000,000', top: '3.5 %' },
+    source_url: 'https://www.hacienda.gob.es/sgfal/financiacionterritorial/autonomica/capitulo-iv-tributacion-autonomica-2026.pdf',
+    verified_at: '2026-07-13',
   },
 ];
 

@@ -228,6 +228,7 @@
     "itp_flat": "In {{region}}, the general transfer-tax (ITP) rate on a resale home is {{rate}} of the price — reduced rates exist for some buyers and price bands.",
     "itp_brackets": "In {{region}}, ITP on a resale home is progressive: {{low}} up to {{cap}}, rising in brackets to {{high}} at the top.",
     "wealth_relief": "{{region}} applies a {{pct}} regional relief on this tax — in practice most residents pay none, though the state solidarity tax can still apply above {{threshold}}.",
-    "source": "Verified {{date}} · the region’s official source"
+    "source": "Verified {{date}} · official source",
+    "wealth_scale": "In {{region}}, the wealth tax starts above a {{exempt}} personal exemption (plus the primary-home allowance), with rates rising to {{top}} at the top."
   }
 }

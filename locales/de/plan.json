@@ -228,6 +228,7 @@
     "itp_flat": "In {{region}} beträgt der allgemeine ITP-Satz beim Kauf einer Bestandsimmobilie {{rate}} des Preises — für manche Käufer und Preisstufen gelten ermäßigte Sätze.",
     "itp_brackets": "In {{region}} ist die ITP für Bestandsimmobilien progressiv: {{low}} bis {{cap}}, in Stufen steigend bis {{high}}.",
     "wealth_relief": "{{region}} gewährt bei dieser Steuer eine regionale Ermäßigung von {{pct}} — praktisch zahlen die meisten nichts; die staatliche Solidaritätssteuer kann oberhalb von {{threshold}} greifen.",
-    "source": "Geprüft am {{date}} · offizielle Quelle der Region"
+    "source": "Geprüft am {{date}} · offizielle Quelle",
+    "wealth_scale": "In {{region}} greift die Vermögensteuer oberhalb eines Freibetrags von {{exempt}} (plus Hauptwohnsitz-Freibetrag), mit Sätzen bis {{top}} an der Spitze."
   }
 }
