@@ -44,18 +44,11 @@ five production web deploys — all E2E-gated.
 3. [ ] After submission: watch ASC status (24–48h); PostHog 808581 (interview-v2 funnel,
        `contact_sent`, the new `share_link_created` / `shared_plan_viewed` /
        `interview_note_distilled` / `question_cta_clicked`).
-4. [ ] **FULL ENGINE/CATALOG FRESH-EYES AUDIT SESSION (user call, 2026-07-12 evening — before
-       submission).** The build-37 shred proved the mechanical audit can't catch WRONG
-       conditions (Spanish national offered EX-18; mixed household's non-EU spouse had no
-       step; the Andrew persona ASSERTED the bug). Method for the session: a persona-MATRIX
-       sweep — generate plans for a grid of realistic profiles (EU/non-EU/mixed × solo/
-       couple/kids × every work_situation × owns/rents × regions) and review each plan for
-       wrong-inclusions AND missing steps, condition by condition; plus a student-path pass
-       (catalog has exactly ONE student-gated item — no enrollment/homologación steps).
-       Last deep cross-check was 2026-07-03; the catalog has moved 60→64 since.
+4. [x] ~~Full engine-audit session (original scoping note)~~ — superseded by item 0 above
+       (executed 2026-07-12→13; docs/audits/2026-07-12-engine-audit.md is the record).
 5. [ ] **[USER] docs/PROVIDERS.md migration checklist** — route all billing/notification
        email to andrew@getcamino.app (Namecheap first; Apple only AFTER the trader case).
-5. [x] ~~Build 36 device verify~~ — superseded by the 37-shred plan (36 was live-checked by
+6. [x] ~~Build 36 device verify~~ — superseded by the 37-shred plan (36 was live-checked by
        the user on web + used for the screenshot retake; 37 gets the full device pass).
 
 **Moved up for today (user, 2026-07-12):**

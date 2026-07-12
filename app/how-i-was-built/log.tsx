@@ -608,6 +608,17 @@ const ROWS: Row[] = [
     ],
   },
   {
+    feature: 'The engine audit: one night, fifteen findings, and a catalog that grew to 73',
+    date: '13 Jul 2026',
+    work: 'A real household using the product found what no test had: a Spanish passport holder offered the foreigner registration, a mixed household whose American spouse had no residence step at all. So the whole rule engine got audited in one sitting — every condition on every obligation, against a new tool that builds plans for 181 realistic profiles and checks class-level expectations. Fifteen findings; the fixes shipped the same night: the padrón no longer vanishes for movers still choosing housing, job seekers aren\'t routed to the no-work visa, short-stay tourists don\'t get the residence-visa roadmap, EU licences aren\'t sent to the driving exam, EU citizens can finally say they want citizenship. Then the audit\'s backlog: nine new officially-sourced steps (employer-sponsored work visas, self-employment, students, the Schengen clock, the EHIC — and the one-year citizenship fast-track for spouses of Spanish citizens), the driving-licence exchange list corrected against the DGT\'s own table, corporate tax gated behind one new question, and verified regional tax figures completed for every region on the map, foral territories included.',
+    decisions: [
+      'The audit\'s sharpest lesson: FOUR tests were found asserting bugs as correct behavior — including a persona modeled on the reporting household. Tests encode beliefs; the fix discipline now includes auditing the tests too.',
+      'The verification habit paid three times in one pass: Valencia\'s transfer tax, Murcia\'s transfer tax, and Valencia\'s wealth exemption had all changed recently — official regional FAQs were stale on two of them; the law as published won.',
+      'Every figure that couldn\'t be verified at the source stayed OUT: school windows (they move yearly) and municipal IBI rates show nothing rather than something secondhand.',
+      'The matrix tool stays: 181 profiles × 16 expectations run on every future catalog change, so condition bugs of this class can\'t come back quietly.',
+    ],
+  },
+  {
     feature: 'The final note learns to act — and removals speak up',
     date: '12 Jul 2026',
     work: 'The interview\'s closing "anything else I should know?" note is no longer just stored — it\'s distilled through the same bounded extractor as the roadmap\'s "something changed" box, so "the dog is coming too" adds the pet steps before you even reach your roadmap. Answers that simplify your plan now say so: a "−N steps — simpler for you" pill joins the "+N new steps" one, instead of steps vanishing silently. And a UK tester\'s flag fixed a US-centric step title: the consulate-appointment step no longer quotes US wait times to everyone — wait times vary widely by consulate, and the step now says exactly that, in all five languages.',

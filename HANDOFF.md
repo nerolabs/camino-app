@@ -59,6 +59,18 @@ stamps, regional cards, changelog, interview ending) → triage → **build 38 =
 ASC is DONE); (3) PROVIDERS.md email migration (user-side); (4) watch PostHog 808581 (+ new
 events: share_link_created, shared_plan_viewed, interview_note_distilled, question_cta_clicked).
 
+**FINAL STATE AT SESSION CLOSE (2026-07-13, after the remnants + regional-completion push):**
+Everything the audit surfaced is now SHIPPED except what's deliberately parked. Catalog **73**
+(from 63 at day start). The remnants batch closed: DGT licence-exchange list corrected against
+the DGT's own convenio table (6 countries wrongly promised an exchange incl. MX/VE/CU; 13
+wrongly sent to the exam incl. PH/MA/UA/TR), B6 has_spanish_company clarifier → modelo-200
+only for Spanish companies, income question gated on visa_type∈{nlv,dnv}, A6 short-stay
+empty-state ×5, and the regional map COMPLETED (País Vasco 4%/7% foral-portal-verified,
+Navarra 6%, Ceuta/Melilla 6%−50%→3%; only school windows + IBI stay out, permanently). Home
+strip's "all 60 guides" → live CATALOG.length count (user catch). Suite: **263 vitest · 10
+public + 5 authed Playwright · 7 contract · matrix 181×16**. Homework pages carry the audit
+night. All deployed; working tree clean.
+
 **LATE-NIGHT ADDENDUM (2026-07-12 → 13, THE ENGINE AUDIT — user call: ahead of everything):**
 The build-37 shred found condition-level bugs the mechanical audit can't see (Cristina's
 dual-US/ES run: Spanish spouse offered the FOREIGN-national EX-18; the US spouse had NO
