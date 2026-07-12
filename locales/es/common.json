@@ -35,7 +35,7 @@
     "disclaimer": "Gratis · Unos 3 minutos · Sin cuenta para empezar",
     "sampleLink": "¿Aún no lo ves claro? Mira cómo funciona aquí abajo ↓ — o echa un vistazo a una hoja de ruta de ejemplo →",
     "strip": "Visados · Dónde vivir · Colegios · Banca · NIE · TIE · Empadronamiento · Modelo 720 · Conducir · Trabajo remoto",
-    "stripLink": "  ·  Explora las 60 guías →",
+    "stripLink": "  ·  Explora las {{count}} guías →",
     "browseGuidesA11y": "Ver todas las guías",
     "photoA11y": "{{label}}, España",
     "photos": {
@@ -134,7 +134,7 @@
   },
   "deleteAccount": {
     "title": "¿Eliminar tu cuenta?",
-    "warning": "Esto elimina permanentemente tu cuenta, tus respuestas y tu hoja de ruta — de inmediato, sin deshacer y sin periodo de recuperación. Las 60 guías gratuitas siguen abiertas para todo el mundo.",
+    "warning": "Esto elimina permanentemente tu cuenta, tus respuestas y tu hoja de ruta — de inmediato, sin deshacer y sin periodo de recuperación. Las guías gratuitas siguen abiertas para todo el mundo.",
     "confirm": "Eliminar mi cuenta permanentemente",
     "keep": "Conservar mi cuenta",
     "doneTitle": "Cuenta eliminada.",

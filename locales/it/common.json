@@ -35,7 +35,7 @@
     "disclaimer": "Gratis · Circa 3 minuti · Nessun account per iniziare",
     "sampleLink": "Non sei ancora sicuro? Guardalo all'opera qui sotto ↓ — o dai un'occhiata a un esempio →",
     "strip": "Visti · Dove vivere · Scuole · Banca · NIE · TIE · Empadronamiento · Modelo 720 · Guidare · Lavoro da remoto",
-    "stripLink": "  ·  Esplora tutte le 60 guide →",
+    "stripLink": "  ·  Esplora tutte le {{count}} guide →",
     "browseGuidesA11y": "Vedi tutte le guide",
     "photoA11y": "{{label}}, Spagna",
     "photos": {
@@ -134,7 +134,7 @@
   },
   "deleteAccount": {
     "title": "Eliminare il tuo account?",
-    "warning": "Questo elimina definitivamente il tuo account, le tue risposte e la tua roadmap — subito, senza annullamento né finestra di recupero. Le 60 guide gratuite restano aperte a tutti.",
+    "warning": "Questo elimina definitivamente il tuo account, le tue risposte e la tua roadmap — subito, senza annullamento né finestra di recupero. Le guide gratuite restano aperte a tutti.",
     "confirm": "Elimina il mio account definitivamente",
     "keep": "Conserva il mio account",
     "doneTitle": "Account eliminato.",

@@ -10,6 +10,7 @@ import { palette } from '@/constants/Colors';
 import { useWide } from '@/lib/useWide';
 import { useReducedMotion } from '@/lib/useReducedMotion';
 import { siteJsonLd } from '@/core/guide-content';
+import { CATALOG } from '@/core/engine-controller';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import StoreBadges from '@/components/StoreBadges';
@@ -121,7 +122,9 @@ export default function LandingPage() {
       <TouchableOpacity style={styles.strip} onPress={() => router.push('/guide')} accessibilityLabel={t('home.browseGuidesA11y')}>
         <Text style={styles.stripText}>
           {t('home.strip')}
-          <Text style={styles.stripLink}>{t('home.stripLink')}</Text>
+          {/* Live count (user catch 2026-07-13: a hardcoded "60" survived the catalog growing
+              to 73) — interpolate from the CATALOG so this can never rot again. */}
+          <Text style={styles.stripLink}>{t('home.stripLink', { count: CATALOG.length })}</Text>
         </Text>
       </TouchableOpacity>
 

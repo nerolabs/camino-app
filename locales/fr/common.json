@@ -35,7 +35,7 @@
     "disclaimer": "Gratuit · Environ 3 minutes · Aucun compte requis pour commencer",
     "sampleLink": "Pas encore convaincu ? Regardez-le à l'œuvre ci-dessous ↓ — ou jetez un œil à un exemple →",
     "strip": "Visas · Où vivre · Écoles · Banque · NIE · TIE · Empadronamiento · Modelo 720 · Conduire · Télétravail",
-    "stripLink": "  ·  Explore les 60 guides →",
+    "stripLink": "  ·  Explore les {{count}} guides →",
     "browseGuidesA11y": "Voir tous les guides",
     "photoA11y": "{{label}}, Espagne",
     "photos": {
@@ -134,7 +134,7 @@
   },
   "deleteAccount": {
     "title": "Supprimer ton compte ?",
-    "warning": "Cela supprime définitivement ton compte, tes réponses et ta feuille de route — immédiatement, sans annulation possible ni délai de récupération. Les 60 guides gratuits restent ouverts à tous.",
+    "warning": "Cela supprime définitivement ton compte, tes réponses et ta feuille de route — immédiatement, sans annulation possible ni délai de récupération. Les guides gratuits restent ouverts à tous.",
     "confirm": "Supprimer mon compte définitivement",
     "keep": "Conserver mon compte",
     "doneTitle": "Compte supprimé.",

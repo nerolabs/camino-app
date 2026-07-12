@@ -35,7 +35,7 @@
     "disclaimer": "Kostenlos · Dauert etwa 3 Minuten · Kein Konto nötig, um anzufangen",
     "sampleLink": "Noch unsicher? Sehen Sie unten zu, wie es arbeitet ↓ — oder werfen Sie einen Blick auf ein Beispiel →",
     "strip": "Visa · Wo wohnen · Schulen · Banking · NIE · TIE · Empadronamiento · Modelo 720 · Autofahren · Remote-Arbeit",
-    "stripLink": "  ·  Alle 60 Ratgeber entdecken →",
+    "stripLink": "  ·  Alle {{count}} Ratgeber entdecken →",
     "browseGuidesA11y": "Alle Ratgeber ansehen",
     "photoA11y": "{{label}}, Spanien",
     "photos": {
@@ -134,7 +134,7 @@
   },
   "deleteAccount": {
     "title": "Konto löschen?",
-    "warning": "Das löscht dein Konto, deine Antworten und deine Roadmap endgültig — sofort, ohne Rückgängig und ohne Wiederherstellungsfrist. Die 60 kostenlosen Ratgeber bleiben für alle offen.",
+    "warning": "Das löscht dein Konto, deine Antworten und deine Roadmap endgültig — sofort, ohne Rückgängig und ohne Wiederherstellungsfrist. Die kostenlosen Ratgeber bleiben für alle offen.",
     "confirm": "Mein Konto endgültig löschen",
     "keep": "Konto behalten",
     "doneTitle": "Konto gelöscht.",
