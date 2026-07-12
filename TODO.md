@@ -42,6 +42,10 @@ backlog (catalog 63→73), and five+ production web deploys — all E2E-gated.
        questions, regional fact cards, verified stamps, changelog, A6 short-stay empty state,
        contact fixes). Build 37's shred rolled into 38; 38's e2e-ios gate was SKIPPED under
        the one-time user waiver (docs/testing/2026-07-12-build37-triage.md).
+       **MORNING PLAN (user call at session close): two parallel tracks** — Cristina shreds
+       38 (user relays findings) WHILE we work the 🏛 Council fix queue below, C1 + C2 first.
+       Her fixes + native-visible council fixes ride build 39 if needed; web fixes deploy
+       as they land. Homework-pages row for the 38/council night rides the first deploy.
 2. [ ] **Then ASC Part 3** (runbook, adjusted): trader case check → attach the candidate
        build → final page read → **Add for Review** (manual release; expect one rejection
        cycle). All other ASC paperwork is DONE (fields, label, screenshots, review notes).

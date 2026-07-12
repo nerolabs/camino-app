@@ -55,9 +55,25 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
      new interview**; if new info is truly required, a delta-interview asks only the
      missing slots.
 
-4. **Sequencing note:** the council fix queue is fully specced but NOT started — awaiting
-   the user's call on ordering vs Cristina's build-38 verdict (the fixes are web/shared
-   code and deploy to web immediately; anything native-visible rides build 39).
+4. **THE MORNING PLAN (user call at session close — two parallel tracks):**
+   - **Track A (us):** work the 🏛 Council fix queue, **C1 + C2 first** (the Lola honesty
+     package; the /api/lola lockdown — C2a server-side system prompts is the quick win).
+     Fixes are web/shared code → deploy to web as they land; anything native-visible
+     rides build 39. [USER prerequisite for C2b when we get there: create the Cloudflare
+     Turnstile widget + set site/secret keys in EAS env, `sensitive` visibility.]
+   - **Track B (Cristina, in parallel):** full device + web shred of build 38 as-is —
+     "99% of the user feedback can be captured there" (user). The user relays her
+     findings while we work Track A; her pass remains THE submission gate → then ASC
+     Part 3 (trader check → attach 38 → Add for Review).
+   - **Standing rule note:** the homework pages (app/how-i-was-built/{log,roadmap}.tsx)
+     do NOT yet carry the build-38-submitted/council-night row — deliberately deferred to
+     the first Track-A deploy (the pages describe what's live; precedent 2026-07-10).
+     Also pending user-side: C9d billing-loop break (~15 min) + PROVIDERS.md migration.
+
+**SESSION CLOSE (2026-07-12 ~night's end):** build 38 submitted and processing at Apple;
+council report + full user triage committed (docs/audits/2026-07-12-council-report.md +
+TODO's three new sections); working tree clean, all pushed through 7629955. Nothing in
+flight. First morning action: confirm 38 is in TestFlight for Cristina, then open C1a.
 
 ---
 
