@@ -5,13 +5,15 @@ actionable lives above the fold; the done/historical record is below it** (reorg
 2026-07-12, user request). See `HANDOFF.md` for the fuller picture and `core/SOURCING.md`
 for obligation provenance.
 
-Last updated: 2026-07-12 (**SUBMISSION DAY** — runbook: `docs/testing/2026-07-12-submission-day.md`).
-**Build 36 = the submission candidate** (TestFlight, auto-submitted overnight; voice/TTS fully
-retired, mic dictation stays, /contact shipped). ASC paperwork DONE except the trader
-declaration (Apple identity case open — submission proceeds, EU/Spain distribution waits).
-Done this morning: ElevenLabs plan cancelled + `ELEVENLABS_*` EAS vars deleted; ASC review
-notes updated live (dictation-only voice bullet); `docs/PROVIDERS.md` written (the SaaS
-account map + contact-migration plan).
+Last updated: 2026-07-12 evening. **Plan changed mid-day (user call): submission moved behind
+one more build** — build 37 (riding to TestFlight now) is the **Cristina-shred build** carrying
+the day's trust batch; **build 38 = the expected submission candidate**. ASC paperwork remains
+DONE except the trader declaration (Apple identity case open). The day shipped: ElevenLabs
+fully retired (plan + EAS vars + ASC notes), `docs/PROVIDERS.md`, per-surface Sentry alerts,
+feedback rate limiting, contact fixes, final-note distillation + narrated removals, neutral
+consulate title ×5, /changelog + verified stamps, share links, 3 sample personas, /questions
+(8 Q&As), the first verified regional tranche (incl. catching Valencia's June ITP cut), and
+five production web deploys — all E2E-gated.
 
 ## 🔒 Security — TOP PRIORITY (standing)
 
@@ -24,19 +26,22 @@ account map + contact-migration plan).
       `SUPABASE_SERVICE_ROLE_KEY` appears only as `process.env` reads in API routes). Supabase
       URL/anon key remain the only `EXPO_PUBLIC_` values (public-safe under RLS).
 
-## 📍 NOW — submission day queue (2026-07-12)
+## 📍 NOW (updated 2026-07-12 evening — plan changed: build 37 = Cristina-shred, 38 = candidate)
 
-1. [ ] **Build 36 device verify** (no voice anywhere, mic glyph, countdown ending, contact
-       page, Dynamic-Island + language-switch regression checks) — runbook Part 1.
-2. [x] **DONE 2026-07-12** — interview screenshot retaken on build 36, re-framed, and
-       uploaded to ASC by the user (replaced the voice-pill shot).
-3. [ ] **Cristina fresh-eyes round** (runbook Part 2; polish findings = build 37, don't hold).
-4. [ ] **Trader case check → attach build 36 → final page read → Add for Review.**
-       Manual release parks approval until the launch moment; expect one rejection cycle.
-5. [ ] After: watch ASC status (24–48h typical); PostHog 808581 (interview-v2 funnel +
-       the new `contact_sent`).
-6. [ ] **[USER] docs/PROVIDERS.md migration checklist** — route all billing/notification
+1. [ ] **Build 37 lands on TestFlight** (riding now, cut from b3feecf with --auto-submit) →
+       **Cristina shreds it**: the trust batch is all-new native UI (share dialog, verified
+       stamps, regional fact cards, changelog, interview ending, contact fixes). Triage per
+       the usual buses; fixes → **build 38 = the submission candidate**.
+2. [ ] **Then ASC Part 3** (runbook, adjusted): trader case check → attach the candidate
+       build → final page read → **Add for Review** (manual release; expect one rejection
+       cycle). All other ASC paperwork is DONE (fields, label, screenshots, review notes).
+3. [ ] After submission: watch ASC status (24–48h); PostHog 808581 (interview-v2 funnel,
+       `contact_sent`, the new `share_link_created` / `shared_plan_viewed` /
+       `interview_note_distilled` / `question_cta_clicked`).
+4. [ ] **[USER] docs/PROVIDERS.md migration checklist** — route all billing/notification
        email to andrew@getcamino.app (Namecheap first; Apple only AFTER the trader case).
+5. [x] ~~Build 36 device verify~~ — superseded by the 37-shred plan (36 was live-checked by
+       the user on web + used for the screenshot retake; 37 gets the full device pass).
 
 **Moved up for today (user, 2026-07-12):**
 

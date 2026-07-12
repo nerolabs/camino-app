@@ -5,7 +5,63 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-## ⭐ RESUME HERE (2026-07-11 evening — Cristina batch LIVE; build 36 riding; ASC paperwork DONE minus trader)
+## ⭐ RESUME HERE (2026-07-12 night — the BIG day: submission pivoted one build; trust batch LIVE; build 37 riding)
+
+**The plan changed mid-day (user call): don't submit on 36 — ship the backlog's trust features,
+cut build 37 for a full Cristina shred, and submit on 38.** The day, compressed:
+
+1. **Morning (submission prep, all DONE):** ElevenLabs fully retired (plan cancelled, EAS vars
+   deleted from prod+preview, ASC review-notes ElevenLabs line swapped live via Chrome for a
+   dictation-only bullet — docs/APP_STORE.md holds the canonical block). Interview screenshot
+   retaken on 36 (fresh-eyes had caught the retired voice pill in the framed set), re-framed,
+   uploaded to ASC by the user. **docs/PROVIDERS.md** written: the full SaaS map (7 paid /
+   7 free) + the migrate-everything-to-andrew@getcamino.app checklist. git identity set
+   (andrew@getcamino.app). TODO.md **reorganized**: actionable above the fold, history frozen
+   below (+ CLAUDE.md's items-6–10 pointer fixed).
+
+2. **Mid-day fixes (live on prod web):** /api/feedback volume-guarded (5/min IP, 200/day global,
+   FEEDBACK_* env overrides, +2 tests); contact.tsx version via nativeBuildVersion + email
+   prefill effect; final-note DISTILLATION (distillFinalNote — shared plan-coach extractor;
+   "the dog is coming too" reshapes the roadmap before the countdown, +4 tests); narrated
+   REMOVALS ("−N steps — simpler for you" pill ×5 locales); consulate-appointment title
+   neutralized ×5 + guide prose ×5 + dead ConsulateBanner removed (UK-tester flag; SOURCING.md
+   entry); privacy page discloses answer-text analytics (EN+ES, date bumped). "3 minutes"
+   claim RESOLVED (user measures ~3 min; moved to the new post-launch health checklist in
+   TODO). Sentry per-surface alert rules created via Chrome (Native iOS + Server, production,
+   new-issue → email). MONITORING.md refreshed (native section was 10 days stale). How-i-was-
+   built ESSAY got its era update (5 new sections: languages/strangers/redesign/voice-kill/
+   submission) + the log gained the missing soft-launch row.
+
+3. **Afternoon (the trust batch — TODO 21–24 ALL SHIPPED, five prod deploys, each E2E-green):**
+   - **/changelog** (core/changelog.ts data → page) + **"last verified" stamps** on every
+     guide + the step sheet (`verified_at` field; default = the 2026-07-04 click-test).
+   - **Share links, stateless**: payload = the profile (lib/shareLink.ts; notes stripped both
+     directions, junk → friendly dead-end at /shared, noindex + robots). Share dialog on /plan
+     with the privacy caveat.
+   - **3 new sample personas** (/sample-plan/{eu-family,digital-nomad,property-owners} — real
+     engine runs, ×5 locales, cross-linked; sample-plan.tsx → components/SamplePlanScreen).
+   - **/questions**: 8 curated Q&As, digit-GUARDED against related catalog titles (the
+     guide-prose rule mechanized for prose), FAQPage JSON-LD, footer link ×5.
+   - **Regional specifics, first verified tranche** (core/regional-specifics.ts): ITP for
+     Andalucía 7% / Madrid 6% / Cataluña progressive 10→13% / **C. Valenciana 9% — the pass
+     caught the 10%→9% cut effective 1 Jun 2026 that secondhand sources still miss**; wealth
+     reliefs Madrid+Andalucía. Every figure verified same-day on the region's own portal;
+     digits live ONLY in the data file (templates ×5 interpolate). Step sheet shows the fact
+     card + "Verified <date> · official source". STAGED remainder recorded in the module.
+   - Suites: **242 vitest** (+20 today) · **10 public + 5 authed Playwright** (+2 today) ·
+     7 contract. TEST-COVERAGE current.
+
+**IN FLIGHT AT CLOSE:** build 37 (--auto-submit, cut from b3feecf on user command) — TestFlight
+processing; two e2e-ios runs were still executing at cut time (informational; check
+29193752759 landed green). **NEXT: (1) Cristina shreds 37** (all-new native UI: share dialog,
+stamps, regional cards, changelog, interview ending) → triage → **build 38 = candidate**;
+(2) ASC Part 3 on the candidate (trader check → attach → Add for Review — everything else in
+ASC is DONE); (3) PROVIDERS.md email migration (user-side); (4) watch PostHog 808581 (+ new
+events: share_link_created, shared_plan_viewed, interview_note_distilled, question_cta_clicked).
+
+---
+
+## Prior resume note (2026-07-11 evening — Cristina batch LIVE; build 36 riding; ASC paperwork DONE minus trader)
 
 **The day in three threads:**
 

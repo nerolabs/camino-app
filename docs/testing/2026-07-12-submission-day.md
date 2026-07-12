@@ -1,5 +1,11 @@
 # Submission day — 2026-07-12 (fresh-eyes pass + App Store submission)
 
+> **⚠️ SUPERSEDED mid-day (user decision ~15:00):** submission postponed one build. The day
+> pivoted to shipping the trust batch (changelog/stamps, share links, personas, /questions,
+> regional facts) → **build 37 = Cristina-shred build**, **build 38 = expected candidate**.
+> Parts 1–2 below effectively completed (screenshot retaken/uploaded, prod web verified);
+> Part 3 (attach + Add for Review) moves to the candidate build. Current queue: TODO.md 📍 NOW.
+
 Yesterday shipped the Cristina batch (voice retired, "short interview" copy, countdown
 ending, /contact) to production web AND build 36 (auto-submitted to TestFlight overnight).
 Today: verify build 36 fresh-eyed, then submit to the App Store.

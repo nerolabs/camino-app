@@ -97,9 +97,10 @@ Suggested 5-shot story (portrait, device frames optional):
 3. Roadmap — phases + stats + a penalty banner visible.
 4. Step sheet — official ↗ pill + Lola's coaching thread.
 5. Sample plan — "This is Susan & Tom's plan." banner.
-Plan: capture on your device on **build 35** (the current public candidate — landing v2 + the
-live-roadmap interview; earlier builds no longer match the shipping UI); I can annotate/frame
-them if you drop raw PNGs into `docs/store-assets/`.
+✅ **DONE 2026-07-11/12** — captured on builds 35→36 (interview shot retaken on 36 after the
+voice-pill catch), cleaned + framed via `scripts/clean-store-shots.mjs` / `frame-store-shots.mjs`,
+uploaded to ASC. To refresh a shot later: drop the raw PNG in `docs/store-assets/` and re-run
+both scripts — `docs/store-assets/framed/` is always the upload set.
 
 ## Remaining checklist
 
@@ -109,13 +110,18 @@ them if you drop raw PNGs into `docs/store-assets/`.
       `com.nerolabs.camino` in Authorized Client IDs on **both** projects (production by user;
       staging completed + verified during the completeness check). Native-only flow — no Apple
       secret. Remaining: on-device verify in build 12.
-- [ ] App Store icon 1024×1024 — we already generate an opaque icon; confirm the marketing icon
-      reads well at small sizes. *(exists via `scripts/gen-icon.mjs`)*
-- [ ] Screenshots per above. **[YOU capture / I polish]**
-- [ ] Age rating questionnaire → expect **4+** (no objectionable content). **[YOU click through]**
-- [ ] Copyright line: `© 2026 AELaboratories` (sole proprietorship d/b/a — user decision 2026-07-04); trade rep info if EU DSA prompts. **[YOU]**
-- [ ] Paste metadata + privacy answers into App Store Connect, attach build (12+ recommended so
-      the keyboard fix + interview intelligence ride along), **Submit for review**. **[YOU]**
+- [x] App Store icon 1024×1024 — **DONE** (opaque marketing icon via `scripts/gen-icon.mjs`,
+      in ASC with the listing).
+- [x] Screenshots — **DONE 2026-07-12**: 5 shots at 1320×2868 (6.9"), status bars normalized,
+      brand-framed (`scripts/clean-store-shots.mjs` + `frame-store-shots.mjs`), uploaded to ASC.
+      The interview shot was retaken on build 36 after a fresh-eyes catch (it showed the retired
+      voice pill).
+- [x] Age rating (4+), pricing ($0 ×175 countries), availability, privacy label (7 honest data
+      types), copyright `© 2026 AELaboratories`, review notes — **ALL ENTERED IN ASC 2026-07-11/12.**
+- [ ] **⏸ Trader status (EU DSA)** — blocked on the Apple identity case (Proxim.us →
+      AELaboratories); submission can proceed, EU storefronts wait.
+- [ ] **Attach the candidate build + Add for Review. [YOU]** Candidate = build 38 expected
+      (post-Cristina-shred of 37); release stays MANUAL.
 
 ## Lesson learned: adding entitlements invalidates the provisioning profile (build 12 saga)
 

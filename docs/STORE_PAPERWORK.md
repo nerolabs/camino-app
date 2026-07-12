@@ -8,9 +8,10 @@ App: **Get Camino** · ASC App ID **6786412055** · bundle **`com.nerolabs.camin
 Legal identity: **AELaboratories** (sole proprietor) · Copyright: **© 2026 AELaboratories**.
 
 > **Prerequisite:** a public-candidate build must be on TestFlight, device-verified. As of
-> 2026-07-11 that's **build 35** (cut from 8556921 after the e2e-ios gate, submitted to ASC
-> overnight — device-verify the two native items first: roadmap sheet "✕ Done" clears the
-> Dynamic Island; voice defaults OFF). You attach it at the end.
+> 2026-07-12 evening: **build 37 is riding to TestFlight** (the Cristina-shred build — trust
+> batch, share links, regional facts). The submission candidate is expected to be **build 38**
+> after her findings land; build 36 remains the last device-verified fallback. You attach the
+> candidate at the end.
 
 ---
 
@@ -121,8 +122,9 @@ Left nav: the version (e.g. **iOS App 1.0**). Paste from `docs/APP_STORE.md`:
 - **Sign-in required?** — **No** (browse + interview + sample plan work logged-out). If you toggle
   "sign-in required" off, you don't need a demo account; still paste the review notes.
 - **Notes:** paste the "App Review notes" block from `docs/APP_STORE.md` verbatim (explains: no
-  account needed, the AI is advisory-only over a fixed human-verified catalog, TTS via ElevenLabs,
-  income as bands, "tap Sample plan for the full experience without login").
+  account needed, the AI is advisory-only over a fixed human-verified catalog, dictation-only
+  voice input — TTS retired 2026-07-11 — income as bands, "tap Sample plan for the full
+  experience without login"). ✅ Pasted + updated live in ASC 2026-07-12.
 - **Contact info:** your name / phone / email for the reviewer.
 
 ---
