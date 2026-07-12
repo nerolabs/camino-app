@@ -13,8 +13,7 @@
   },
   "banners": {
     "penaltyOne": "1 item carries a financial penalty if missed.",
-    "penaltyMany": "{{count}} items carry financial penalties if missed.",
-    "consulate": "US consulate wait times are currently 8–16 weeks. Book your appointment as early as possible."
+    "penaltyMany": "{{count}} items carry financial penalties if missed."
   },
   "toolbar": {
     "thisWeek": "This week",

@@ -13,8 +13,7 @@
   },
   "banners": {
     "penaltyOne": "1 étape entraîne une sanction financière si elle est manquée.",
-    "penaltyMany": "{{count}} étapes entraînent des sanctions financières si elles sont manquées.",
-    "consulate": "Les délais du consulat aux États-Unis sont actuellement de 8–16 semaines. Réserve ton rendez-vous au plus tôt."
+    "penaltyMany": "{{count}} étapes entraînent des sanctions financières si elles sont manquées."
   },
   "toolbar": {
     "thisWeek": "Cette semaine",

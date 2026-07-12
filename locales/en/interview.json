@@ -113,7 +113,11 @@
     "view": "View",
     "close": "Done",
     "viewA11y": "Open your roadmap",
-    "closeA11y": "Close the roadmap"
+    "closeA11y": "Close the roadmap",
+    "removed_one": "−{{count}} step — simpler for you",
+    "removed_other": "−{{count}} steps — simpler for you",
+    "removedShort_one": "−{{count}}",
+    "removedShort_other": "−{{count}}"
   },
   "final": {
     "question": "One last thing — is there anything else about your move you think I should know? It may shape your roadmap. Or skip straight to it.",

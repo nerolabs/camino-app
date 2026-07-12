@@ -13,8 +13,7 @@
   },
   "banners": {
     "penaltyOne": "1 paso conlleva sanción económica si se te pasa.",
-    "penaltyMany": "{{count}} pasos conllevan sanción económica si se te pasan.",
-    "consulate": "Las esperas del consulado en EE. UU. rondan ahora las 8–16 semanas. Reserva tu cita lo antes posible."
+    "penaltyMany": "{{count}} pasos conllevan sanción económica si se te pasan."
   },
   "toolbar": {
     "thisWeek": "Esta semana",

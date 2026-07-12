@@ -113,7 +113,11 @@
     "view": "Voir",
     "close": "Fermer",
     "viewA11y": "Ouvrir votre feuille de route",
-    "closeA11y": "Fermer la feuille de route"
+    "closeA11y": "Fermer la feuille de route",
+    "removed_one": "−{{count}} étape — plus simple pour toi",
+    "removed_other": "−{{count}} étapes — plus simple pour toi",
+    "removedShort_one": "−{{count}}",
+    "removedShort_other": "−{{count}}"
   },
   "final": {
     "question": "Une dernière chose — y a-t-il autre chose sur votre projet que je devrais savoir ? Cela peut affiner votre feuille de route. Ou passez directement.",

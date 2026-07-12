@@ -13,8 +13,7 @@
   },
   "banners": {
     "penaltyOne": "1 passo comporta una sanzione economica se saltato.",
-    "penaltyMany": "{{count}} passi comportano sanzioni economiche se saltati.",
-    "consulate": "I tempi d’attesa dei consolati negli USA sono attualmente di 8–16 settimane. Prenota il tuo appuntamento il prima possibile."
+    "penaltyMany": "{{count}} passi comportano sanzioni economiche se saltati."
   },
   "toolbar": {
     "thisWeek": "Questa settimana",

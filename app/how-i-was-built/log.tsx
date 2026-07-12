@@ -608,6 +608,16 @@ const ROWS: Row[] = [
     ],
   },
   {
+    feature: 'The final note learns to act — and removals speak up',
+    date: '12 Jul 2026',
+    work: 'The interview\'s closing "anything else I should know?" note is no longer just stored — it\'s distilled through the same bounded extractor as the roadmap\'s "something changed" box, so "the dog is coming too" adds the pet steps before you even reach your roadmap. Answers that simplify your plan now say so: a "−N steps — simpler for you" pill joins the "+N new steps" one, instead of steps vanishing silently. And a UK tester\'s flag fixed a US-centric step title: the consulate-appointment step no longer quotes US wait times to everyone — wait times vary widely by consulate, and the step now says exactly that, in all five languages.',
+    decisions: [
+      'Same bounded surface, new door: the note extractor emits typed profile fields only — the engine still authors every step and date, and a note that maps to nothing simply stays prose.',
+      'Honesty cuts both ways: the live roadmap celebrated additions but hid removals; narrating "simpler for you" is the same truthfulness pointed the other direction.',
+      'A soft, country-specific estimate had no place in a universal step title — the consulate\'s own booking page (the step\'s existing official source) is the truth, and the title now defers to it.',
+    ],
+  },
+  {
     feature: 'Submission-day hardening',
     date: '12 Jul 2026',
     work: 'The morning of the App Store submission, one more fresh-eyes pass — this time over everything around the app. The contact form got volume limits (a human files a few reports; a flood now gets turned away politely), and two small bugs in it were fixed before any user met them: iOS reports mislabeling themselves as web, and a signed-in visitor\'s email not pre-filling. The store screenshots were regenerated from a retake after the review caught one still showing the retired voice button. And the operational side got its own audit: every third-party service behind the app mapped into one document — who charges money, where the renewal notices go — so nothing expires in an unwatched inbox.',

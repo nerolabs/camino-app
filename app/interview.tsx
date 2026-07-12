@@ -11,6 +11,7 @@ import { nextSlot, derive, interviewProgress, SLOTS, type Slot, type Profile } f
 import { interviewCompleteness } from '@/core/completeness';
 import { buildPlan } from '@/core/engine-controller';
 import { diffPlans } from '@/core/plan-delta';
+import { distillFinalNote } from '@/lib/plan-coach';
 import { regionLabel, REGION_OPTIONS } from '@/core/regions';
 import { guideById, shortClause } from '@/core/guide-content';
 import { displayTitle } from '@/lib/catalogTitles';
@@ -29,7 +30,7 @@ import { capture } from '@/lib/analytics';
 import { captureError } from '@/lib/monitoring';
 import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
 
-type Turn = { role: 'lola' | 'user'; text: string; addedSteps?: number };
+type Turn = { role: 'lola' | 'user'; text: string; addedSteps?: number; removedSteps?: number };
 
 // The standard voice-to-text microphone glyph (capsule + cradle + stem), drawn in Views —
 // no icon library in the bundle, and the old 🎙 emoji read off-pattern next to every other
@@ -187,6 +188,7 @@ export default function InterviewScreen() {
   // living-roadmap signal — total steps + "+N new" after each answer — and opens a full sheet.
   const [planCount, setPlanCount] = useState(0);
   const [lastAdded, setLastAdded] = useState(0);
+  const [lastRemoved, setLastRemoved] = useState(0);
   const [sheetOpen, setSheetOpen] = useState(false);
   // Final open note (user idea 2026-07-10): after the last slot, one optional free-form
   // "anything else I should know?" with a Skip chip — raw text lands on the profile as `notes`
@@ -439,24 +441,14 @@ export default function InterviewScreen() {
     derive(next_profile);
     // Live roadmap: highlight the steps THIS answer added, and keep them lit through the next
     // question — they settle only when the following answer arrives (replacing this set, or
-    // clearing it if that answer added nothing).
+    // clearing it if that answer added nothing). Removals get narrated too (2026-07-12): an
+    // answer that simplifies the roadmap ("we're EU") says so instead of shrinking silently.
     const delta = diffPlans(buildPlan(profile), buildPlan(next_profile));
     setHighlightIds(new Set(delta.added.map(o => o.id)));
     setPlanCount(delta.after.length);
     setLastAdded(delta.added.length);
-    if (delta.added.length) {
-      // The landing demo's "+N steps" pill, in the real conversation: stamp the answer that did it.
-      setTurns(prev => {
-        for (let i = prev.length - 1; i >= 0; i--) {
-          if (prev[i].role === 'user') {
-            const copy = [...prev];
-            copy[i] = { ...copy[i], addedSteps: delta.added.length };
-            return copy;
-          }
-        }
-        return prev;
-      });
-    }
+    setLastRemoved(delta.removed.length);
+    stampLastUserTurn(delta.added.length, delta.removed.length);
     setProfile(next_profile);
     setOtherActive(false);
     setInput(''); // clear any typed text (e.g. region type-ahead) before the next question
@@ -527,6 +519,22 @@ export default function InterviewScreen() {
     }
   }
 
+  // Stamp the most recent user bubble with what its answer visibly did to the roadmap —
+  // the "+N steps" pill, and (2026-07-12) the "−N steps — simpler" narration for removals.
+  function stampLastUserTurn(added: number, removed: number) {
+    if (!added && !removed) return;
+    setTurns(prev => {
+      for (let i = prev.length - 1; i >= 0; i--) {
+        if (prev[i].role === 'user') {
+          const copy = [...prev];
+          copy[i] = { ...copy[i], addedSteps: added || undefined, removedSteps: removed || undefined };
+          return copy;
+        }
+      }
+      return prev;
+    });
+  }
+
   // Wrap up: store the optional note (profile.notes + analytics), persist, and hand over to the
   // roadmap. `skipped` distinguishes silence from a real note in the funnel data.
   async function finishInterview(noteText: string | null) {
@@ -535,7 +543,27 @@ export default function InterviewScreen() {
       const text = noteText?.trim() || null;
       if (text) setTurns(prev => [...prev, { role: 'user', text }]);
       capture('interview_final_note', { skipped: !text, answer: text ? text.slice(0, 500) : undefined });
-      const p: Profile = text ? { ...profile, notes: text } : profile;
+      let p: Profile = text ? { ...profile, notes: text } : profile;
+      if (text) {
+        // Distill the note through the same bounded extractor the plan-coach uses — typed
+        // profile fields only, the engine re-derives everything — so "the dog is coming too"
+        // shapes the roadmap NOW instead of sitting unread in `notes`. Fail-open: any
+        // extraction trouble just keeps the raw note.
+        const distilled = await distillFinalNote(text);
+        if (!('error' in distilled) && Object.keys(distilled.changes).length) {
+          p = { ...p, ...distilled.changes };
+          derive(p);
+          const delta = diffPlans(buildPlan(profile), buildPlan(p));
+          setPlanCount(delta.after.length);
+          setHighlightIds(new Set(delta.added.map(o => o.id)));
+          stampLastUserTurn(delta.added.length, delta.removed.length);
+          capture('interview_note_distilled', {
+            fields: Object.keys(distilled.changes),
+            added_steps: delta.added.length,
+            removed_steps: delta.removed.length,
+          });
+        }
+      }
       if (text) setProfile(p);
       await persist(p);
       capture('interview_completed', { answered: interviewProgress(p).answered });
@@ -660,6 +688,9 @@ export default function InterviewScreen() {
           {lastAdded > 0 && (
             <Text style={styles.mobileStripNew}>{t('roadmap.added', { count: lastAdded })}</Text>
           )}
+          {lastRemoved > 0 && (
+            <Text style={styles.mobileStripNew}>{t('roadmap.removedShort', { count: lastRemoved })}</Text>
+          )}
           <Text style={styles.mobileStripView}>{t('roadmap.view')} ›</Text>
         </TouchableOpacity>
       )}
@@ -695,6 +726,11 @@ export default function InterviewScreen() {
               {!!turn.addedSteps && (
                 <View style={styles.answerPill}>
                   <Text style={styles.answerPillText}>{t('roadmap.added', { count: turn.addedSteps })}</Text>
+                </View>
+              )}
+              {!!turn.removedSteps && (
+                <View style={styles.answerPill}>
+                  <Text style={styles.answerPillText}>{t('roadmap.removed', { count: turn.removedSteps })}</Text>
                 </View>
               )}
             </View>

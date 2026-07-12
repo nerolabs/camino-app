@@ -375,3 +375,13 @@ re-verified individually.
   requirements, where to apply (extranjería offices / comisarías / consulates), and the
   normalized application form, matching the step's EX-15 reference. Browser-verified
   2026-07-04.
+
+## `consulate-appointment` title neutralized (2026-07-12)
+
+The "(allow 8–16 weeks lead time in the US)" clause was removed from the title, its five
+translations, the guide prose (×5), and the plan page's US-only banner (dead code since the
+`us_resident` slot was deleted in the 2026-07-10 interview audit). Trigger: a UK tester saw
+the US figure presented as if it applied to them. The 8–16-week range was always logged here
+as a soft, country-specific estimate (see "Left as `webinar` on purpose"), so no sourced fact
+was lost — the wording is now "wait times vary widely by consulate; book as early as you can,"
+with the consulate's own cita-previa page (the existing `source_url`) as the source of truth.

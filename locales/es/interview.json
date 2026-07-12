@@ -113,7 +113,11 @@
     "view": "Ver",
     "close": "Listo",
     "viewA11y": "Abrir tu hoja de ruta",
-    "closeA11y": "Cerrar la hoja de ruta"
+    "closeA11y": "Cerrar la hoja de ruta",
+    "removed_one": "−{{count}} paso — más sencillo para ti",
+    "removed_other": "−{{count}} pasos — más sencillo para ti",
+    "removedShort_one": "−{{count}}",
+    "removedShort_other": "−{{count}}"
   },
   "final": {
     "question": "Una última cosa: ¿hay algo más sobre tu mudanza que deba saber? Puede afinar tu hoja de ruta. O sáltatelo y ve directo a ella.",

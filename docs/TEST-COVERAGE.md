@@ -4,9 +4,12 @@
 added or removed. Forward-looking ideas (tests we *want*) live in `docs/BUILD.md` → "Growing E2E
 coverage"; this file is the honest picture of **current** coverage.
 
-Last updated: 2026-07-12 (submission-day hardening: /api/feedback gained volumeGuard counters →
+Last updated: 2026-07-12 evening (final-note distillation + narrated removals: +4 plan-coach
+tests — distillFinalNote parses fenced JSON to typed changes, empty-changes honesty, fail-open
+{error} contract, and the per-step framing regression; vitest now 222). Earlier same day
+(submission-day hardening: /api/feedback gained volumeGuard counters →
 +2 feedback-route tests — the 429 path with nothing reaching the inbox, and guard-runs-only-
-after-validation so junk can't burn the budget; vitest now 218). Prior: 2026-07-11
+after-validation so junk can't burn the budget; vitest 218). Prior: 2026-07-11
 (Cristina-pass batch: TTS/voice retired → the 3 /api/tts contract
 tests removed with the route and smoke #2's voice-pill assertion dropped; +1 public smoke —
 /contact renders and the ?topic=problem deep link pre-selects the topic. Public smoke suite is
@@ -27,7 +30,7 @@ Layers, and when they run:
 
 ---
 
-## 1. Unit / integration (vitest) — 218 passing (+10 opt-in network)
+## 1. Unit / integration (vitest) — 222 passing (+10 opt-in network)
 
 Concentrated on the deterministic core (that's the product's real risk surface):
 

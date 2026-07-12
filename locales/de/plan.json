@@ -13,8 +13,7 @@
   },
   "banners": {
     "penaltyOne": "1 Schritt zieht bei Versäumnis eine Geldstrafe nach sich.",
-    "penaltyMany": "{{count}} Schritte ziehen bei Versäumnis Geldstrafen nach sich.",
-    "consulate": "Die Wartezeiten der US-Konsulate liegen derzeit bei 8–16 Wochen. Buche deinen Termin so früh wie möglich."
+    "penaltyMany": "{{count}} Schritte ziehen bei Versäumnis Geldstrafen nach sich."
   },
   "toolbar": {
     "thisWeek": "Diese Woche",

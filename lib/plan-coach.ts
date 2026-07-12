@@ -47,18 +47,18 @@ export function changeHint(obj: Objective): string {
   return i18n.exists(key) ? i18n.t(key) : i18n.t('plan:coach.hints.generic');
 }
 
-// Layer 2 of the living plan: translate a free-text "here's what changed" into a
-// typed delta over PROFILE FIELDS ONLY.
-export async function parseProfileChange(
-  freeText: string, objectiveTitle: string,
+// Layer 2 of the living plan: translate free text into a typed delta over PROFILE FIELDS
+// ONLY. Shared by the per-step "what changed" flow and the interview's final-note
+// distillation — only the situational framing differs.
+async function extractChanges(
+  freeText: string, situation: string,
 ): Promise<{ changes: Record<string, unknown> } | { error: true }> {
   try {
     const rawText = await askAnthropic({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 300,
-      system: `The user is updating their Spain relocation plan. They're looking at this step:
-"${objectiveTitle}". They'll describe what they did or learned. Translate it into changes to
-these profile fields ONLY:
+      system: `The user is updating their Spain relocation plan. ${situation} Translate what
+they wrote into changes to these profile fields ONLY:
 ${fieldGuide()}
 
 Respond with ONLY JSON: {"changes": { "<field>": <typed value>, ... }} containing just the
@@ -77,6 +77,25 @@ English, …) — the fields and typed values above are always returned exactly 
   } catch {
     return { error: true };
   }
+}
+
+// The per-step "Something changed?" flow: the user is looking at a specific roadmap step.
+export async function parseProfileChange(
+  freeText: string, objectiveTitle: string,
+): Promise<{ changes: Record<string, unknown> } | { error: true }> {
+  return extractChanges(freeText, `They're looking at this step:
+"${objectiveTitle}". They'll describe what they did or learned.`);
+}
+
+// The interview's closing note ("anything else I should know?") often carries real profile
+// facts — "the dog is coming too", "my mother joins us next year". Distill them so the note
+// shapes the roadmap immediately; anything that maps to no field stays as prose in `notes`.
+export async function distillFinalNote(
+  freeText: string,
+): Promise<{ changes: Record<string, unknown> } | { error: true }> {
+  return extractChanges(freeText, `They just finished the interview and left one final,
+optional free-form note ("anything else I should know?"). It may contain facts that belong
+in their profile — or nothing actionable at all.`);
 }
 
 // Context-aware task coach. Lola explains HOW to accomplish a specific step and answers

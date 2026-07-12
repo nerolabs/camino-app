@@ -11,40 +11,35 @@ you filter by tag.
   **production** environments (baked into the web bundle at export, like the PostHog key). Not set
   locally, so `expo start` reports nothing.
 - The DSN lives in Sentry → Settings → Project `camino` → Client Keys (DSN).
+- **`SENTRY_AUTH_TOKEN`** (secret, user-set) in the EAS build env lets EAS Build upload native
+  source maps, so iOS stack traces are readable rather than minified.
 
-## What's captured (as of 2026-07-02)
+## What's captured (refreshed 2026-07-12)
 
 | Surface | Module | What |
 |---|---|---|
 | **Web** | `lib/monitoring.ts` (`@sentry/browser`) | JS errors + `browserTracing` (page-load / navigation transactions + Web Vitals: LCP/CLS/INP = "time to load"). `tracesSampleRate` 0.2 prod / 1.0 staging. |
-| **Backend** | `lib/sentryServer.ts` | Minimal event envelope via `fetch` (the Node/Cloudflare SDKs don't fit the EAS Hosting Workers runtime). Wired into `/api/lola` + `/api/tts` catch + upstream-error paths, tagged `platform=server`. |
-| **Native** | `lib/monitoring.native.ts` | **No-op stub for now** — see below. |
+| **Backend** | `lib/sentryServer.ts` | Minimal event envelope via `fetch` (the Node/Cloudflare SDKs don't fit the EAS Hosting Workers runtime). Wired into the catch + upstream-error paths of `/api/lola`, `/api/feedback`, and the email/account routes, tagged `platform=server`. |
+| **Native** | `lib/monitoring.native.ts` (`@sentry/react-native` + its Expo plugin in `app.config.ts`) | Real `Sentry.init` since build 8 (2026-07-02): crashes, errors, app-start, tagged `platform=ios` + environment. Source maps upload during EAS Build via `SENTRY_AUTH_TOKEN`. |
 
 `initMonitoring()` is called once in `app/_layout.tsx`. `captureError()` is available for manual
 client captures. Both no-op when there's no DSN.
 
-## Native (next)
+## Alerting / uptime (live)
 
-Native uses `@sentry/react-native` + its Expo config plugin (crashes, app-start time, navigation
-perf). To wire it:
-
-1. `npx @sentry/wizard@latest -i reactNative` (or add `@sentry/react-native` + the
-   `@sentry/react-native/expo` plugin to `app.config.ts` manually), and replace the
-   `lib/monitoring.native.ts` stub with a real `Sentry.init`.
-2. Set **`SENTRY_AUTH_TOKEN`** (a **secret** — you set it, not Claude) in the EAS build
-   environments so EAS Build uploads source maps for readable stack traces.
-3. Rebuild (dev/preview) — native only reports from a build that includes the SDK.
-
-## Alerting / uptime (todo)
-
-- Sentry alert rules currently default to "high priority issues." Tune them per surface.
-- Add an uptime monitor hitting the site + `/api/lola` (Better Stack / Grafana Cloud / Sentry
-  Uptime) for paging when the backend is down.
-- Optional: backend latency tracing (transaction envelopes), not just error capture.
+- **Issue alert** "high priority issues" → email (verified live 2026-07-02: fired on a test
+  error). One rule across surfaces for now; per-surface rules (filter on the `platform` tag,
+  e.g. a lower-noise native rule once real users arrive) are the next tune-up — Sentry →
+  Alerts → Create Alert → filter `platform:ios` etc.
+- **Uptime monitor** on `https://getcamino.app` — GET every 1 min, environment=production,
+  3 consecutive fails → issue → email. Downtime pages laptop-independently.
+- The **slow-turn alarm** (interview turns slower than they should be) rides the same project
+  (added with the family-testing rounds).
+- Optional later: backend latency tracing (transaction envelopes), not just error capture.
 
 ## Verifying
 
 Load a deployed URL and trigger an error; it should POST to
 `https://o4511666388598784.ingest.de.sentry.io/api/4511666670469200/envelope/` (HTTP 200) and
-appear in Issues within seconds, tagged with its environment + platform. (Verified on staging
-2026-07-02.)
+appear in Issues within seconds, tagged with its environment + platform. (Web verified on
+staging 2026-07-02; native verified on device from build 8.)

@@ -28,10 +28,8 @@ account map + contact-migration plan).
 
 1. [ ] **Build 36 device verify** (no voice anywhere, mic glyph, countdown ending, contact
        page, Dynamic-Island + language-switch regression checks) — runbook Part 1.
-2. [ ] **RETAKE the interview screenshot on build 36** — the current framed
-       `interview-screen-mid-point.PNG` shows the REMOVED "Voice on" pill (fresh-eyes catch).
-       Raw PNG → `docs/store-assets/` → Claude re-frames → **REPLACE in ASC Media Manager**
-       (all 5 shots are already uploaded there; the other 4 verified clean).
+2. [x] **DONE 2026-07-12** — interview screenshot retaken on build 36, re-framed, and
+       uploaded to ASC by the user (replaced the voice-pill shot).
 3. [ ] **Cristina fresh-eyes round** (runbook Part 2; polish findings = build 37, don't hold).
 4. [ ] **Trader case check → attach build 36 → final page read → Add for Review.**
        Manual release parks approval until the launch moment; expect one rejection cycle.
@@ -39,6 +37,22 @@ account map + contact-migration plan).
        the new `contact_sent`).
 6. [ ] **[USER] docs/PROVIDERS.md migration checklist** — route all billing/notification
        email to andrew@getcamino.app (Namecheap first; Apple only AFTER the trader case).
+
+**Moved up for today (user, 2026-07-12):**
+
+7. [ ] Set `git config --global user.email` on this machine (commits currently fall back to
+       andrewedmond@Andrews-MacBook-Air.local). Needs the user's pick: the GitHub account
+       email (links commits to the profile) vs andrew@getcamino.app.
+8. [x] **DONE 2026-07-12** — consulate title neutralized ("wait times vary widely by
+       consulate") across title ×5, guide prose ×5, SOURCING.md note; the dead US-only
+       ConsulateBanner (gated on the deleted `us_resident` slot) removed from /plan +
+       its string ×5.
+9. [x] **DONE 2026-07-12** — final-note distillation: `distillFinalNote` (shared
+       plan-coach extractor, typed fields only, fail-open) runs at interview finish;
+       roadmap updates + pills stamp before the countdown; `interview_note_distilled`
+       event. +4 plan-coach tests.
+10. [x] **DONE 2026-07-12** — removals narrated: "−N steps — simpler for you" pill under
+       the answer + strip counter, ×5 locales, deterministic from the same plan delta.
 
 ## 🧹 Fresh-eyes findings queue (2026-07-11/12 audit — none block submission)
 
@@ -54,11 +68,10 @@ account map + contact-migration plan).
 - [x] **/api/feedback volume limit — DONE 2026-07-12**: `volumeGuard('feedback')` after
       validation (5/min per IP, 200/day global; `FEEDBACK_*` env overrides) + strict-CORS
       OPTIONS, same posture as /api/lola. +2 route tests (429 path; guard-after-validation).
-- [ ] **Privacy copy vs analytics reality** — interview answer text rides PostHog events
-      (`interview_final_note.answer`, ≤500 chars) while the privacy page describes analytics
-      as "which screens are used". Tweak that sentence, or stop capturing answer bodies.
-- [ ] Tiny: set `git config --global user.email` on this machine (commits currently fall back
-      to andrewedmond@Andrews-MacBook-Air.local).
+- [x] **Privacy copy vs analytics reality — FIXED 2026-07-12**: the Technical bullet now
+      says some interview events include answer text (EN+ES, page date bumped). Kept the
+      capture — it feeds the interview-quality dashboard and chip refinement.
+- [x] ~~git config user.email~~ — moved up to today's queue (item 7 above).
 
 ## 📈 Post-launch product health checklist (start once the app is live)
 
@@ -99,9 +112,11 @@ Playwright · 7 API contract · 3 Maestro flows (pinned 2.6.1).
 
 ### Phase 4 — polish + ops tail
 
-15. [ ] **Polish batch**: back-to-top floating affordance (roadmap/guides) · monitoring
-    tune-up (per-surface Sentry alert rules; refresh MONITORING.md's stale native section) ·
-    small findings from device testing.
+15. [ ] **Polish batch — mostly closed 2026-07-12**: ~~back-to-top~~ (was stale — shipped
+    2026-07-04: plan, sample-plan, guide index) · ~~MONITORING.md refresh~~ (done — native
+    section was 10 days stale, now reflects real native Sentry + live alerting/uptime).
+    REMAINING: per-surface Sentry alert rules (dashboard work — filter on the `platform`
+    tag; Claude can drive Chrome) · small findings from device testing.
 16. [ ] **[USER] Gestor consult + trademark search** — before brand spend / launch moment;
     may trail submission. Also: user read-through of the three legal pages' wording
     (professional legal review is item 31, at revenue).
@@ -164,16 +179,10 @@ Playwright · 7 API contract · 3 Maestro flows (pinned 2.6.1).
 
 ### Follow-ups queued from the 2026-07-10 release day (redesign + landing v2)
 
-- [ ] **Consulate-appointment title is US-centric** — "allow 8–16 weeks lead time in the US"
-      shows for every non-EU applicant (UK tester flag). Needs a sourced per-country or
-      neutral rewrite in the next sourcing pass (invariant 3).
-- [ ] **Distill final-note text into obligations** — `profile.notes` + `interview_final_note`
-      are collecting free-form context; wire notes into the plan-coach re-model (or a batch
-      pass) once enough real notes exist to see the shapes.
+- [x] ~~Consulate-appointment title~~ · ~~final-note distillation~~ · ~~narrated removals~~ —
+      all three moved up to today's queue (items 8–10 above).
 - [ ] **Chip-refinement loop** — review `interview_other_opened/answered` by field after ~2
       weeks of traffic; any field >10% Other usage gets its chip set extended.
-- [ ] **Roadmap-pane removals are silent** — the narrated removal ("you're EU — that removed
-      5 steps, simpler for you") is still the honest nicety to add (v1 recomputes quietly).
 - [ ] **Watch dashboard 808581** (PostHog "Interview v2 — living roadmap") as v2 traffic
       lands: drop-off by question, exit completeness, clarify rate, Other usage;
       `landing_version: 2` owns home→interview_started vs the 25% baseline. Then the

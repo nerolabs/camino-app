@@ -70,19 +70,6 @@ function PenaltyBanner({ objectives }: { objectives: Objective[] }) {
   );
 }
 
-function ConsulateBanner({ profile }: { profile: Record<string, unknown> }) {
-  const { t } = useTranslation('plan');
-  if (!profile.us_resident || profile.is_eu) return null;
-  return (
-    <View style={styles.alertBanner}>
-      <Text style={styles.alertBannerIcon}>🕐</Text>
-      <Text style={styles.alertBannerText}>
-        {t('banners.consulate')}
-      </Text>
-    </View>
-  );
-}
-
 export default function PlanScreen() {
   const { t } = useTranslation('plan');
   const { profile, setProfile, isStaff, profileLoaded } = useProfile();
@@ -368,7 +355,6 @@ export default function PlanScreen() {
           </View>
         </View>
 
-        <ConsulateBanner profile={profile} />
         <PenaltyBanner objectives={objectives} />
 
         {view === 'week' ? (

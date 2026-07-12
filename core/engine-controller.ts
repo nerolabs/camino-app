@@ -235,7 +235,7 @@ export const CATALOG: Obligation[] = [
   {
     id: 'consulate-appointment',
     webinar_url: 'https://www.youtube.com/watch?v=uH927kx3igU&t=43s',
-    title: 'Book consulate appointment to lodge your visa application (allow 8–16 weeks lead time in the US) — appointments are booked through the consulate’s cita previa system',
+    title: 'Book consulate appointment to lodge your visa application — wait times vary widely by consulate, so book as early as you can; appointments run through the consulate’s cita previa system',
     category: 'visa', severity: 'required',
     source: 'official',
     source_url: 'https://sede.maec.gob.es/pagina/index/directorio/citaprevia',

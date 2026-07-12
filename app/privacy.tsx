@@ -9,7 +9,7 @@ import LegalPage, { type LegalContent } from '@/components/LegalPage';
 
 const EN: LegalContent = {
   title: 'Privacy',
-  updated: '11 July 2026',
+  updated: '12 July 2026',
   intro: "The short version: we collect your email and your interview answers so we can build and save your roadmap and send you the emails you asked for. We don't sell data, we don't run ads, we don't want your documents, and you can delete everything yourself, in the app, at any time.",
   sections: [
     { h: 'Who we are', body: [
@@ -21,7 +21,7 @@ const EN: LegalContent = {
       'Your answers: what you tell Lola in the interview — nationalities, family situation, work situation, an income band, rough dates, and plans like driving, schooling, buying property, or pets. This is what your roadmap is computed from.',
       'Progress and preferences: which steps you\'ve marked done (and on which dates), and email preferences like unsubscribing from the weekly roundup.',
       'Feedback: whatever you type into "Report a problem", plus basic context (platform, app version, which screen).',
-      'Technical: error reports (so we can fix crashes) and product analytics (which screens are used). On the web our analytics are cookieless — nothing is stored on your device to track you across visits.',
+      'Technical: error reports (so we can fix crashes) and product analytics — which screens are used, and some interview events include the text of the answer (it\'s how we find questions that confuse people and fix them). On the web our analytics are cookieless — nothing is stored on your device to track you across visits.',
     ]},
     { h: 'What we deliberately do not collect', body: [
       'No document uploads — we\'ve chosen not to be a store of passports and certificates.',
@@ -50,7 +50,7 @@ const EN: LegalContent = {
 
 const ES: LegalContent = {
   title: 'Privacidad',
-  updated: '11 de julio de 2026',
+  updated: '12 de julio de 2026',
   intro: 'La versión corta: recogemos tu correo y tus respuestas de la entrevista para construir y guardar tu hoja de ruta y enviarte los correos que pediste. No vendemos datos, no ponemos anuncios, no queremos tus documentos, y puedes borrarlo todo tú mismo, en la app, cuando quieras.',
   sections: [
     { h: 'Quiénes somos', body: [
@@ -62,7 +62,7 @@ const ES: LegalContent = {
       'Tus respuestas: lo que le cuentas a Lola en la entrevista — nacionalidades, situación familiar, situación laboral, una franja de ingresos, fechas aproximadas y planes como conducir, escolarizar, comprar vivienda o mascotas. De ahí se calcula tu hoja de ruta.',
       'Progreso y preferencias: qué pasos has marcado como hechos (y en qué fechas), y preferencias de correo como darte de baja del resumen semanal.',
       'Comentarios: lo que escribas en «Informar de un problema», más contexto básico (plataforma, versión de la app, pantalla).',
-      'Técnico: informes de errores (para arreglar fallos) y analítica de producto (qué pantallas se usan). En la web nuestra analítica es sin cookies — no se guarda nada en tu dispositivo para rastrearte entre visitas.',
+      'Técnico: informes de errores (para arreglar fallos) y analítica de producto — qué pantallas se usan, y algunos eventos de la entrevista incluyen el texto de la respuesta (así encontramos las preguntas que confunden y las arreglamos). En la web nuestra analítica es sin cookies — no se guarda nada en tu dispositivo para rastrearte entre visitas.',
     ]},
     { h: 'Lo que deliberadamente no recogemos', body: [
       'Sin subida de documentos — hemos decidido no ser un almacén de pasaportes y certificados.',

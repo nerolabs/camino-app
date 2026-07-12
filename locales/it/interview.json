@@ -113,7 +113,11 @@
     "view": "Vedi",
     "close": "Fatto",
     "viewA11y": "Apri la tua roadmap",
-    "closeA11y": "Chiudi la roadmap"
+    "closeA11y": "Chiudi la roadmap",
+    "removed_one": "−{{count}} passo — più semplice per te",
+    "removed_other": "−{{count}} passi — più semplice per te",
+    "removedShort_one": "−{{count}}",
+    "removedShort_other": "−{{count}}"
   },
   "final": {
     "question": "Un'ultima cosa — c'è altro sul tuo trasferimento che dovrei sapere? Può affinare la tua roadmap. Oppure salta e vai diretto.",
