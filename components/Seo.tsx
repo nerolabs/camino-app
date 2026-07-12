@@ -14,12 +14,14 @@ import { WEB_LOCALES } from '@/lib/i18n';
 
 const DEFAULT_IMAGE = 'https://getcamino.app/og-card.png';
 
-export default function Seo({ title, description, canonical, image = DEFAULT_IMAGE, jsonLd, localized }: {
+export default function Seo({ title, description, canonical, image = DEFAULT_IMAGE, jsonLd, localized, noindex }: {
   title: string; description: string; canonical: string; image?: string;
   // schema.org structured data (an object or several) — rendered as application/ld+json.
   jsonLd?: object | object[];
   // This page has /<locale>/ variants (the [locale] tree re-exports it).
   localized?: boolean;
+  // Personal/ephemeral content (e.g. /shared roadmaps) — keep out of search indexes.
+  noindex?: boolean;
 }) {
   const pathname = usePathname();
   const seg = pathname?.split('/')[1];
@@ -44,6 +46,7 @@ export default function Seo({ title, description, canonical, image = DEFAULT_IMA
     <Head>
       <title>{title}</title>
       <meta name="description" content={description} />
+      {noindex && <meta name="robots" content="noindex" />}
       <link rel="canonical" href={selfUrl} />
       {localized && <link rel="alternate" hrefLang="en" href={enUrl} />}
       {localized && WEB_LOCALES.map(l => (

@@ -180,5 +180,27 @@
     "remodelTitle": "Très utile — j’ai refait ton plan !",
     "seePlan": "Voir mon plan à jour"
   },
-  "lastVerified": "Faits vérifiés le {{date}} · corrections"
+  "lastVerified": "Faits vérifiés le {{date}} · corrections",
+  "share": {
+    "button": "↗ Partager",
+    "a11y": "Partage un lien en lecture seule vers ta feuille de route",
+    "title": "Partage ta feuille de route",
+    "body": "Toute personne avec le lien voit une copie en lecture seule — tes étapes et tes dates, telles que le moteur les construit. Rien n’est modifiable, aucun compte requis.",
+    "caveat": "Le lien lui-même encode tes réponses (nationalités, dates, projets — jamais tes notes). Partage-le seulement avec des gens à qui tu confierais ces informations.",
+    "copy": "Copier le lien",
+    "copied": "Copié ✓",
+    "share": "Partager…",
+    "close": "Fermer"
+  },
+  "shared": {
+    "eyebrow": "UNE FEUILLE DE ROUTE PARTAGÉE · LECTURE SEULE",
+    "title": "Le chemin de quelqu’un vers l’Espagne",
+    "body": "{{count}} étapes, construites à partir de ses réponses par le même moteur qui construirait les tiennes — exigences réelles, ordre réel, sources officielles pour chaque règle.",
+    "metaDescription": "Une feuille de route Get Camino en lecture seule, partagée par son propriétaire.",
+    "invalid": "Ce lien de partage semble incomplet",
+    "invalidBody": "Les liens sont parfois tronqués en route — demande à l’expéditeur de le recopier. Ou regarde à quoi ressemblerait ta propre feuille de route ; environ trois minutes.",
+    "cta": "Créer ma propre feuille de route",
+    "depsLabel": "AVANT CELA, IL FAUDRA",
+    "closingTitle": "Ta liste serait différente."
+  }
 }

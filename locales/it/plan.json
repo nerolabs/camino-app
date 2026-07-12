@@ -180,5 +180,27 @@
     "remodelTitle": "Utilissimo — ho rifatto il tuo piano!",
     "seePlan": "Vedi il mio piano aggiornato"
   },
-  "lastVerified": "Dati verificati il {{date}} · correzioni"
+  "lastVerified": "Dati verificati il {{date}} · correzioni",
+  "share": {
+    "button": "↗ Condividi",
+    "a11y": "Condividi un link in sola lettura alla tua roadmap",
+    "title": "Condividi la tua roadmap",
+    "body": "Chi ha il link vede una copia in sola lettura — i tuoi passi e le tue date, esattamente come li costruisce il motore. Niente è modificabile, nessun account richiesto.",
+    "caveat": "Il link stesso codifica le tue risposte (nazionalità, date, piani — mai le tue note). Condividilo solo con chi racconteresti queste cose.",
+    "copy": "Copia link",
+    "copied": "Copiato ✓",
+    "share": "Condividi…",
+    "close": "Chiudi"
+  },
+  "shared": {
+    "eyebrow": "UNA ROADMAP CONDIVISA · SOLA LETTURA",
+    "title": "La strada di qualcuno verso la Spagna",
+    "body": "{{count}} passi, costruiti dalle sue risposte dallo stesso motore che costruirebbe i tuoi — requisiti veri, ordine vero, fonti ufficiali per ogni regola.",
+    "metaDescription": "Una roadmap Get Camino in sola lettura, condivisa dal proprietario.",
+    "invalid": "Questo link sembra incompleto",
+    "invalidBody": "I link a volte si troncano per strada — chiedi di copiarlo di nuovo. Oppure guarda come sarebbe la tua roadmap; ci vogliono circa tre minuti.",
+    "cta": "Crea la mia roadmap",
+    "depsLabel": "PRIMA DI QUESTO SERVIRÀ",
+    "closingTitle": "La tua lista sarebbe diversa."
+  }
 }

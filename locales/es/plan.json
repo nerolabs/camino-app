@@ -180,5 +180,27 @@
     "remodelTitle": "Qué útil — ¡he rehecho tu plan!",
     "seePlan": "Ver mi plan actualizado"
   },
-  "lastVerified": "Datos verificados el {{date}} · correcciones"
+  "lastVerified": "Datos verificados el {{date}} · correcciones",
+  "share": {
+    "button": "↗ Compartir",
+    "a11y": "Comparte un enlace de solo lectura a tu hoja de ruta",
+    "title": "Comparte tu hoja de ruta",
+    "body": "Cualquiera con el enlace ve una copia de solo lectura — tus pasos y fechas, tal y como los construye el motor. No puede editar nada y no necesita cuenta.",
+    "caveat": "El propio enlace codifica tus respuestas (nacionalidades, fechas, planes — nunca tus notas). Compártelo solo con quien le contarías esas cosas.",
+    "copy": "Copiar enlace",
+    "copied": "Copiado ✓",
+    "share": "Compartir…",
+    "close": "Cerrar"
+  },
+  "shared": {
+    "eyebrow": "UNA HOJA DE RUTA COMPARTIDA · SOLO LECTURA",
+    "title": "El camino de alguien hacia España",
+    "body": "{{count}} pasos, construidos a partir de sus respuestas por el mismo motor que construiría los tuyos — requisitos reales, orden real, fuentes oficiales en cada regla.",
+    "metaDescription": "Una hoja de ruta de Get Camino en solo lectura, compartida por su dueño.",
+    "invalid": "Este enlace parece incompleto",
+    "invalidBody": "Los enlaces a veces se cortan por el camino — pide que te lo copien de nuevo. O mira cómo sería tu propia hoja de ruta; toma unos tres minutos.",
+    "cta": "Crear mi propia hoja de ruta",
+    "depsLabel": "ANTES DE ESTO NECESITARÁ",
+    "closingTitle": "Tu lista sería distinta."
+  }
 }

@@ -180,5 +180,27 @@
     "remodelTitle": "That was useful — I’ve remodelled your plan!",
     "seePlan": "See my updated plan"
   },
-  "lastVerified": "Facts last verified {{date}} · changelog"
+  "lastVerified": "Facts last verified {{date}} · changelog",
+  "share": {
+    "button": "↗ Share",
+    "a11y": "Share a read-only link to your roadmap",
+    "title": "Share your roadmap",
+    "body": "Anyone with the link sees a read-only copy — your steps and dates, exactly as the engine builds them. They can’t edit anything, and no account is needed.",
+    "caveat": "The link itself encodes your answers (nationalities, dates, plans — never your notes). Share it only with people you’d tell those things to.",
+    "copy": "Copy link",
+    "copied": "Copied ✓",
+    "share": "Share…",
+    "close": "Close"
+  },
+  "shared": {
+    "eyebrow": "A SHARED ROADMAP · READ-ONLY",
+    "title": "Someone’s road to Spain",
+    "body": "{{count}} steps, built from their answers by the same engine that would build yours — real requirements, real order, official sources on every rule.",
+    "metaDescription": "A read-only Get Camino roadmap, shared by its owner.",
+    "invalid": "This share link looks incomplete",
+    "invalidBody": "Links can get truncated in transit — ask the sender to copy it again. Or see what your own roadmap would look like; it takes about three minutes.",
+    "cta": "Build my own roadmap",
+    "depsLabel": "BEFORE THIS, THEY’LL NEED",
+    "closingTitle": "Your list would be different."
+  }
 }

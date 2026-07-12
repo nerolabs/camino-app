@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput, ActivityIndicator, Platform, useWindowDimensions } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Pressable, TextInput, ActivityIndicator, Platform, Share, useWindowDimensions } from 'react-native';
 import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
 import { dateLocale, currentLang } from '@/lib/i18n';
 import { palette } from '@/constants/Colors';
@@ -28,6 +28,7 @@ import {
   sourceShort, sourceBlurb, SOURCE_COLOR, formatVerified,
 } from '@/lib/plan-format';
 import { verifiedOn } from '@/core/changelog';
+import { shareUrl } from '@/lib/shareLink';
 
 // Signed-out users just watched their roadmap appear — the capture moment. One email field:
 // it saves the roadmap, creates the account (silently — the profile rides in auth metadata
@@ -96,6 +97,20 @@ export default function PlanScreen() {
   const [changeText, setChangeText] = useState('');
   const [thinking, setThinking] = useState(false);
   const [changeNote, setChangeNote] = useState<{ title: string; body: string } | null>(null);
+  // Read-only share link (TODO 24): dialog + copied state; the URL encodes the profile.
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
+  async function doShare() {
+    if (!profile) return; // the toolbar (and thus the dialog) only renders with a plan
+    const url = shareUrl(Platform.OS === 'web' ? window.location.origin : 'https://getcamino.app', profile);
+    capture('share_link_created');
+    if (Platform.OS === 'web') {
+      try { await navigator.clipboard.writeText(url); setShareCopied(true); } catch { /* clipboard denied — leave the dialog open */ }
+    } else {
+      Share.share({ message: url }).catch(() => {});
+      setShareOpen(false);
+    }
+  }
   const [dateOpen, setDateOpen] = useState(false);
   const [taskChat, setTaskChat] = useState<{ role: 'lola' | 'user'; text: string }[]>([]);
   const [taskInput, setTaskInput] = useState('');
@@ -311,6 +326,14 @@ export default function PlanScreen() {
             accessibilityLabel={t('toolbar.exportA11y')}
           >
             <Text style={styles.exportLink}>{t('toolbar.exportPdf')}</Text>
+          </TouchableOpacity>
+          {/* Read-only share link (TODO 24): the dialog carries the privacy caveat —
+              the link encodes the profile (lib/shareLink.ts). */}
+          <TouchableOpacity
+            onPress={() => { setShareCopied(false); setShareOpen(true); }}
+            accessibilityLabel={t('share.a11y')}
+          >
+            <Text style={styles.exportLink}>{t('share.button')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -633,6 +656,29 @@ export default function PlanScreen() {
         </Pressable>
       </Pressable>
     </Modal>
+
+    <Modal
+      visible={shareOpen}
+      transparent
+      animationType="fade"
+      onRequestClose={() => setShareOpen(false)}
+    >
+      <Pressable style={styles.celebrateBackdrop} onPress={() => setShareOpen(false)}>
+        <Pressable style={styles.celebrateCard} onPress={e => e.stopPropagation()}>
+          <Text style={styles.celebrateTitle}>{t('share.title')}</Text>
+          <Text style={styles.celebrateBody}>{t('share.body')}</Text>
+          <Text style={styles.shareCaveat}>{t('share.caveat')}</Text>
+          <TouchableOpacity style={styles.celebrateBtn} onPress={doShare}>
+            <Text style={styles.celebrateBtnText}>
+              {shareCopied ? t('share.copied') : Platform.OS === 'web' ? t('share.copy') : t('share.share')}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setShareOpen(false)}>
+            <Text style={styles.shareClose}>{t('share.close')}</Text>
+          </TouchableOpacity>
+        </Pressable>
+      </Pressable>
+    </Modal>
     <BackToTop visible={top.visible} scrollToTop={top.scrollToTop} />
     </View>
   );
@@ -756,6 +802,8 @@ const styles = StyleSheet.create({
                    borderWidth: 1, borderColor: palette.amber, borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5 },
   pillWebinarText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, color: palette.amber },
   verifiedLine:   { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted, marginTop: 6 },
+  shareCaveat:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, lineHeight: 19, color: palette.muted, marginTop: 10, marginBottom: 4, fontStyle: 'italic' },
+  shareClose:     { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.muted, marginTop: 12, alignSelf: 'center' },
   sheetSectionLabel: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, color: palette.muted,
                        letterSpacing: 1.1, marginTop: 18, marginBottom: 6 },
   sheetTiming:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cobalt, marginBottom: 4 },

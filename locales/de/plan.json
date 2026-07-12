@@ -180,5 +180,27 @@
     "remodelTitle": "Sehr nützlich — ich habe deinen Plan neu gebaut!",
     "seePlan": "Meinen aktuellen Plan ansehen"
   },
-  "lastVerified": "Fakten zuletzt geprüft am {{date}} · Protokoll"
+  "lastVerified": "Fakten zuletzt geprüft am {{date}} · Protokoll",
+  "share": {
+    "button": "↗ Teilen",
+    "a11y": "Teile einen schreibgeschützten Link zu deiner Roadmap",
+    "title": "Teile deine Roadmap",
+    "body": "Wer den Link hat, sieht eine schreibgeschützte Kopie — deine Schritte und Termine, genau wie die Engine sie baut. Nichts ist editierbar, kein Konto nötig.",
+    "caveat": "Der Link selbst kodiert deine Antworten (Nationalitäten, Daten, Pläne — nie deine Notizen). Teile ihn nur mit Menschen, denen du diese Dinge erzählen würdest.",
+    "copy": "Link kopieren",
+    "copied": "Kopiert ✓",
+    "share": "Teilen…",
+    "close": "Schließen"
+  },
+  "shared": {
+    "eyebrow": "EINE GETEILTE ROADMAP · NUR LESEN",
+    "title": "Jemandes Weg nach Spanien",
+    "body": "{{count}} Schritte, aus den Antworten der Person gebaut — vom selben Motor, der auch deine bauen würde: echte Anforderungen, echte Reihenfolge, offizielle Quellen zu jeder Regel.",
+    "metaDescription": "Eine schreibgeschützte Roadmap von Get Camino, vom Besitzer geteilt.",
+    "invalid": "Dieser Link scheint unvollständig",
+    "invalidBody": "Links werden unterwegs manchmal abgeschnitten — bitte um eine neue Kopie. Oder sieh, wie deine eigene Roadmap aussähe; dauert etwa drei Minuten.",
+    "cta": "Meine eigene Roadmap erstellen",
+    "depsLabel": "VORHER WIRD GEBRAUCHT",
+    "closingTitle": "Deine Liste wäre anders."
+  }
 }

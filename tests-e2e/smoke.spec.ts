@@ -110,6 +110,18 @@ test('changelog page renders entries + guide stamps carry the verified date', as
   expect(errors).toEqual([]);
 });
 
+test('shared roadmap link renders read-only; junk payload gets the friendly dead-end', async ({ page }) => {
+  // Stateless share links (2026-07-12): the payload IS the profile. A US retiree arriving
+  // 2027-03-01, precomputed with lib/shareLink.encodeShare — the engine renders it live.
+  const errors = trackErrors(page);
+  await page.goto('/shared?d=eyJuYXRpb25hbGl0aWVzIjpbIlVTIl0sImFycml2YWxfZGF0ZSI6IjIwMjctMDMtMDEiLCJ3b3JrX3NpdHVhdGlvbiI6InJldGlyZWQifQ');
+  await expect(page.getByText('A SHARED ROADMAP · READ-ONLY')).toBeVisible();
+  await expect(page.getByText('Before you go', { exact: false }).first()).toBeVisible();
+  await page.goto('/shared?d=corrupted!!!');
+  await expect(page.getByText('This share link looks incomplete')).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
 test('robots.txt is open (blog un-gated 2026-07-03) and points at the sitemap', async ({ request }) => {
   const robots = await request.get('/robots.txt');
   expect(robots.status()).toBe(200);
