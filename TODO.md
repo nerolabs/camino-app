@@ -112,11 +112,11 @@ Playwright · 7 API contract · 3 Maestro flows (pinned 2.6.1).
 
 ### Phase 4 — polish + ops tail
 
-15. [ ] **Polish batch — mostly closed 2026-07-12**: ~~back-to-top~~ (was stale — shipped
-    2026-07-04: plan, sample-plan, guide index) · ~~MONITORING.md refresh~~ (done — native
-    section was 10 days stale, now reflects real native Sentry + live alerting/uptime).
-    REMAINING: per-surface Sentry alert rules (dashboard work — filter on the `platform`
-    tag; Claude can drive Chrome) · small findings from device testing.
+15. [x] **Polish batch — CLOSED 2026-07-12**: ~~back-to-top~~ (was stale — shipped
+    2026-07-04) · ~~MONITORING.md refresh~~ (done) · ~~per-surface Sentry alert rules~~
+    (done — "Native iOS" + "Server" new-production-issue rules created via Chrome,
+    2026-07-12; android twin when that build ships). Small device-testing findings roll
+    into the normal triage flow.
 16. [ ] **[USER] Gestor consult + trademark search** — before brand spend / launch moment;
     may trail submission. Also: user read-through of the three legal pages' wording
     (professional legal review is item 31, at revenue).

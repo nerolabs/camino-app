@@ -27,10 +27,11 @@ client captures. Both no-op when there's no DSN.
 
 ## Alerting / uptime (live)
 
-- **Issue alert** "high priority issues" → email (verified live 2026-07-02: fired on a test
-  error). One rule across surfaces for now; per-surface rules (filter on the `platform` tag,
-  e.g. a lower-noise native rule once real users arrive) are the next tune-up — Sentry →
-  Alerts → Create Alert → filter `platform:ios` etc.
+- **Issue alerts** (per-surface since 2026-07-12): "high priority issues" (the original
+  catch-all, all surfaces) + "Native iOS — new production issue" (`platform=ios`) +
+  "Server — new production issue" (`platform=server`) — both new-issue triggers,
+  production environment only, notify → email. Add a `platform=android` twin when the
+  Android build ships.
 - **Uptime monitor** on `https://getcamino.app` — GET every 1 min, environment=production,
   3 consecutive fails → issue → email. Downtime pages laptop-independently.
 - The **slow-turn alarm** (interview turns slower than they should be) rides the same project
