@@ -43,6 +43,31 @@ into the catalog on vibes (invariant 3).
   advisory-only/empty (correct!). Consider sourced niceties: EHIC card, travel-insurance
   note — plus friendly "short stays travel light" empty-state copy (A6).
 
+## Tranche 2 — the condition-by-condition pass (same night)
+
+| # | Sev | Finding | Status |
+|---|-----|---------|--------|
+| A9 | HIGH | The whole non-EU residence cluster (choose-visa-type, consulate, criminal, medical, apostille, sworn-translation, residencia — plus escolarizacion, family-reunification) ignored `intends_long_stay`: a short-stay US tourist got the full residence-visa roadmap. | **FIXED** — NON_EU_LONG_STAY gate; short-stay Schengen guidance = backlog B-item |
+| A10 | MED | EU short-stay property buyers need a NIE but never saw it (and non-EU short-stay buyers lost theirs under a naive A9 fix). | **FIXED** — nie condition: non-EU (long-stay OR buying) OR EU-non-Spanish short-stay buyer; long-stay EU get theirs via EX-18 |
+| A11 | LOW | spanish-bank-account was non-EU-only; EU movers benefit equally. | **FIXED** — long-stay, any nationality |
+| A12 | MED | EU licences are valid in Spain, but pure-EU drivers were given dgt-exchange/exam. Mixed households' non-EU drivers must KEEP theirs (the household lesson again). | **FIXED** — (non-EU OR non_eu_family_member) gate; EU register-after-2-years advisory = backlog B5 |
+| A13 | MED | modelo-200 (corporate tax) fires for every `business_owner` — wrong unless the company is Spanish/has Spanish PE. Needs a `has_spanish_company`-style clarifier. | **BACKLOG B6** (question + sourcing, not a patch) |
+| A14 | MED | Citizenship cluster excluded EU citizens entirely (slot gate + 5 conditions), with a comment asserting the wrong claim ("EU citizens don't naturalise this way" — they do, same 10-year track). Spanish nationals now excluded from the ask instead. EU anchor note: their citizenship steps show as pending until a residency anchor exists — honest display. | **FIXED** — slot gate is_spanish_national=false + long-stay; NON_EU dropped from 5 conditions |
+| A15 | LOW | Share-dialog styling (user screenshot): the celebrate-card centering shrink-wrapped the button and floated the prose. | **FIXED** — left-aligned stretch layout, caveat as callout, full-width button |
+
+**Backlog additions:** B5 EU-licence advisory (register/renew via DGT after 2 years — sourced) ·
+B6 modelo-200 clarifier (has_spanish_company) · B7 **married-to-a-Spaniard citizenship track
+(1 year residence!)** — highly relevant to mixed households; needs mjusticia sourcing ·
+B8 short-stay Schengen guidance (90/180, visa-waiver vs visa countries).
+
+**Condition checklist status:** all 64 obligations reviewed once (this pass) — every applies_if
+read against the table dump; findings above are the exceptions; everything else ✓ (notably:
+NLV/DNV clusters, tax cluster incl. nonresident-property-tax, property chain, pet-import,
+citizenship dependency shape, timing anchors). Derivations reviewed: visa_type (A2 fixed),
+is_eu/is_spanish_national/household_mixed_eu (new, tested), is_tax_resident (= long-stay proxy,
+acceptable v1), nationality_has_dgt_agreement (list-based — verify the list in a sourcing pass),
+income thresholds (verified 2026-07-10), is_self_employed_in_spain ✓.
+
 ## Additional findings (during A1/A2 implementation)
 
 | # | Sev | Finding | Status |

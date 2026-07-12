@@ -60,6 +60,20 @@ for (const pass of Object.keys(PASSPORTS))
 // property variants on a slimmer axis (housing mostly independent of passport/work)
 for (const pass of ['us', 'de', 'us+es'])
   for (const hh of HOUSEHOLD) GRID.push(mk(pass, 'retired', hh, 'owns'));
+// short-stay variants (audit A9): the residence cluster must vanish
+for (const pass of ['us', 'de', 'us+es']) {
+  const g = mk(pass, 'retired', 'couple', 'renting');
+  (g.profile as Record<string, unknown>).intends_long_stay = false;
+  g.name = pass + '/short-stay/couple';
+  GRID.push(g);
+}
+// EU long-stay wanting citizenship (audit A14)
+{
+  const g = mk('de', 'employed_remote', 'solo', 'renting');
+  (g.profile as Record<string, unknown>).wants_citizenship = true;
+  g.name = 'de/citizenship-wanter';
+  GRID.push(g);
+}
 
 // ── Class-level expectations (each encodes a rule a whole CLASS must satisfy) ──
 type Expect = { name: string; applies: (g: Grid) => boolean; check: (ids: Set<string>, g: Grid) => string | null };
@@ -70,10 +84,29 @@ const solo = (g: Grid) => g.profile.has_spouse_or_partner !== true && g.profile.
 
 const EXPECTATIONS: Expect[] = [
   { name: 'every long-stay plan registers on the padrón (address known)',
-    applies: () => true,
+    applies: g => g.profile.intends_long_stay === true,
     check: ids => ids.has('empadronamiento') ? null : 'missing empadronamiento' },
+  { name: 'short-stay plans never carry the residence-visa cluster (audit A9)',
+    applies: g => g.profile.intends_long_stay !== true,
+    check: ids => {
+      for (const id of ['choose-visa-type', 'consulate-appointment', 'residencia', 'empadronamiento'])
+        if (ids.has(id)) return `has ${id}`;
+      return null;
+    } },
+  { name: 'pure-EU households get no DGT steps; mixed households with a non-EU driver do (audit A12)',
+    applies: g => isEu(g) && g.profile.owns_or_drives === true && g.profile.intends_long_stay === true,
+    check: (ids, g) => {
+      const hasDgt = ids.has('dgt-exchange') || ids.has('dgt-exam');
+      const mixedDriver = g.profile.non_eu_family_member === true;
+      if (mixedDriver && !hasDgt) return 'mixed household missing DGT';
+      if (!mixedDriver && hasDgt) return 'pure-EU household has DGT';
+      return null;
+    } },
+  { name: 'EU long-stay citizenship wanters see the track (audit A14)',
+    applies: g => isEu(g) && g.profile.wants_citizenship === true,
+    check: ids => ids.has('citizenship-track-standard') && ids.has('ccse-exam') ? null : 'missing citizenship track' },
   { name: 'non-EU long-stay always has a visa route + NIE + TIE',
-    applies: g => !isEu(g),
+    applies: g => !isEu(g) && g.profile.intends_long_stay === true,
     check: ids => {
       for (const id of ['choose-visa-type', 'nie', 'residencia'])
         if (!ids.has(id)) return `missing ${id}`;
@@ -90,32 +123,33 @@ const EXPECTATIONS: Expect[] = [
     applies: isSpanish,
     check: ids => ids.has('eu-registration-certificate') ? 'has eu-registration-certificate' : null },
   { name: 'non-Spanish EU long-stay gets EX-18',
-    applies: g => isEu(g) && !isSpanish(g),
+    applies: g => isEu(g) && !isSpanish(g) && g.profile.intends_long_stay === true,
     check: ids => ids.has('eu-registration-certificate') ? null : 'missing eu-registration-certificate' },
   { name: 'mixed household moving with family gets the EX-19 family card',
     applies: g => isEu(g) && !solo(g) && (g.profile.nationalities as string[]).some(n => !['ES', 'DE'].includes(n) || n === 'US') && g.profile.non_eu_family_member === true,
-    check: ids => ids.has('eu-family-member-card') ? null : 'missing eu-family-member-card' },
+    check: (ids, g) => g.profile.intends_long_stay === true && !ids.has('eu-family-member-card') ? 'missing eu-family-member-card' : null },
   { name: 'families with children get school enrollment',
-    applies: g => g.profile.has_children === true,
+    applies: g => g.profile.has_children === true && g.profile.intends_long_stay === true,
     check: ids => ids.has('escolarizacion') ? null : 'missing escolarizacion' },
   { name: 'property owners get the property cluster',
     applies: g => g.profile.owns_property_in_spain === true,
     check: ids => ids.has('ibi-property-tax') || ids.has('property-transfer-tax') ? null : 'missing property cluster' },
   { name: 'drivers get exactly one DGT path (exchange or exam)',
-    applies: g => g.profile.owns_or_drives === true,
+    applies: g => g.profile.owns_or_drives === true && g.profile.intends_long_stay === true
+      && (!isEu(g) || g.profile.non_eu_family_member === true), // audit A12: pure-EU licences stay valid
     check: ids => (ids.has('dgt-exchange') || ids.has('dgt-exam')) ? null : 'missing any DGT step' },
   { name: 'job seekers never get the NLV cluster (audit A2)',
     applies: g => g.profile.work_situation === 'job_seeker',
     check: ids => [...ids].some(i => i.startsWith('nlv-')) ? 'has NLV-cluster steps' : null },
   { name: 'assets over €50k → Modelo 720',
-    applies: () => true, // grid band is €50k–€200k
+    applies: g => g.profile.intends_long_stay === true, // grid band is €50k–€200k; short stays aren't tax resident
     check: ids => ids.has('modelo-720') ? null : 'missing modelo-720' },
   { name: 'every plan has healthcare SOMEWHERE (public card, private req, or convenio)',
-    applies: () => true,
+    applies: g => g.profile.intends_long_stay === true,
     check: ids => (ids.has('tarjeta-sanitaria') || ids.has('nlv-health-insurance') || ids.has('student-visa-health-insurance') || ids.has('convenio-especial'))
       ? null : 'no healthcare step at all' },
   { name: 'long-stay tax residents file Modelo 100 + 030',
-    applies: () => true,
+    applies: g => g.profile.intends_long_stay === true,
     check: ids => {
       for (const id of ['modelo-100', 'modelo-030']) if (!ids.has(id)) return `missing ${id}`;
       return null;

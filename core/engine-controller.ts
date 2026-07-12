@@ -190,6 +190,11 @@ function phaseOf(r: Resolved, arrival: Date): Phase {
 // ── Shared conditions ──────────────────────────────────────────────────────────
 const NON_EU: Condition = { field: 'is_eu', op: 'eq', value: false };
 const HAS_ADDRESS: Condition = { field: 'has_spanish_address', op: 'eq', value: true };
+// Audit A9 (2026-07-12): the residence-visa cluster is about LONG-STAY national visas —
+// a short-stay non-EU visitor (visa-waiver tourism) must not be handed the full visa
+// roadmap. Short-stay Schengen guidance is backlog (B-item), not these steps.
+const LONG_STAY: Condition = { field: 'intends_long_stay', op: 'eq', value: true };
+const NON_EU_LONG_STAY: Condition = { all: [NON_EU, LONG_STAY] };
 // The citizenship track (language/culture exams, application, jura, eligibility clock) only applies
 // if the user actually wants to naturalise — many people just renew their residence indefinitely.
 // Gated on the `wants_citizenship` interview slot (non-EU long-stay movers).
@@ -235,7 +240,7 @@ export const CATALOG: Obligation[] = [
     category: 'visa', severity: 'required',
     source: 'official',
     source_url: 'https://www.inclusion.gob.es/en/web/migraciones/autorizaciones',
-    applies_if: NON_EU,
+    applies_if: NON_EU_LONG_STAY, // audit A9: residence-visa steps are long-stay only
     depends_on: [],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -180 },
   },
@@ -247,7 +252,7 @@ export const CATALOG: Obligation[] = [
     category: 'visa', severity: 'required',
     source: 'official',
     source_url: 'https://sede.maec.gob.es/pagina/index/directorio/citaprevia',
-    applies_if: NON_EU,
+    applies_if: NON_EU_LONG_STAY, // audit A9: residence-visa steps are long-stay only
     depends_on: ['choose-visa-type'],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -150 },
   },
@@ -258,7 +263,7 @@ export const CATALOG: Obligation[] = [
     title: 'Obtain a national criminal-record check, apostilled and translated into Spanish — must be issued within 90 days of applying, so allow several weeks (US: an FBI-approved channeler speeds it up)',
     category: 'visa', severity: 'required',
     source: 'official',
-    applies_if: NON_EU,
+    applies_if: NON_EU_LONG_STAY, // audit A9: residence-visa steps are long-stay only
     depends_on: ['choose-visa-type'],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -120 },
   },
@@ -269,7 +274,7 @@ export const CATALOG: Obligation[] = [
     title: 'Obtain a medical certificate (issued within 90 days, on official letterhead, translated into Spanish) confirming no diseases per the International Health Regulations',
     category: 'visa', severity: 'required',
     source: 'official',
-    applies_if: NON_EU,
+    applies_if: NON_EU_LONG_STAY, // audit A9: residence-visa steps are long-stay only
     depends_on: ['choose-visa-type'],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -45 },
   },
@@ -398,7 +403,17 @@ export const CATALOG: Obligation[] = [
     source: 'official',
     source_url: 'https://www.interior.gob.es/opencms/es/servicios-al-ciudadano/tramites-y-gestiones/extranjeria/ciudadanos-de-la-union-europea/numero-de-Identidad-de-extranjero-nie/',
     webinar_url: 'https://www.youtube.com/watch?v=C_UxMIqTd0Q&t=716s',
-    applies_if: NON_EU,
+    applies_if: { any: [ // audit A9/A10
+      { all: [NON_EU, { any: [LONG_STAY, { field: 'owns_property_in_spain', op: 'eq', value: true }] }] },
+      // EU short-stay property buyers genuinely need a NIE (long-stay EU get theirs via EX-18;
+      // Spanish nationals have a DNI instead)
+      { all: [
+        { field: 'is_eu', op: 'eq', value: true },
+        { field: 'is_spanish_national', op: 'eq', value: false },
+        { field: 'owns_property_in_spain', op: 'eq', value: true },
+        { not: LONG_STAY },
+      ] },
+    ] },
     depends_on: [],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: 30 },
   },
@@ -447,7 +462,7 @@ export const CATALOG: Obligation[] = [
     title: 'Apply for your residence card (TIE) — start the process (fingerprinting/huella) within 30 days of entry; appointment waits can run several weeks in big cities',
     category: 'residency', severity: 'required',
     source: 'official',
-    applies_if: NON_EU,
+    applies_if: NON_EU_LONG_STAY, // audit A9: residence-visa steps are long-stay only
     depends_on: ['empadronamiento', 'nie'],
     timing: { kind: 'relative_to_obligation', after: 'nie', offset_days: 0 },
   },
@@ -506,6 +521,7 @@ export const CATALOG: Obligation[] = [
     source: 'official',
     applies_if: {
       all: [
+        { any: [NON_EU, { field: 'non_eu_family_member', op: 'eq', value: true }] }, // audit A12: EU licences stay valid (EU advisory = backlog B5)
         { field: 'owns_or_drives', op: 'eq', value: true },
         { field: 'nationality_has_dgt_agreement', op: 'eq', value: true },
       ],
@@ -522,6 +538,7 @@ export const CATALOG: Obligation[] = [
     source: 'official',
     applies_if: {
       all: [
+        { any: [NON_EU, { field: 'non_eu_family_member', op: 'eq', value: true }] }, // audit A12: EU licences stay valid (EU advisory = backlog B5)
         { field: 'owns_or_drives', op: 'eq', value: true },
         { not: { field: 'nationality_has_dgt_agreement', op: 'eq', value: true } },
       ],
@@ -537,7 +554,7 @@ export const CATALOG: Obligation[] = [
     title: 'Enroll your child in school — the ordinary admission window runs in spring (≈March–May) for the September start; arriving off-cycle uses the "fuera de plazo" process',
     category: 'family', severity: 'required',
     source: 'official',
-    applies_if: { field: 'has_children', op: 'eq', value: true },
+    applies_if: { all: [{ field: 'has_children', op: 'eq', value: true }, LONG_STAY] }, // audit A9
     depends_on: ['empadronamiento'],
     timing: { kind: 'relative_to_obligation', after: 'empadronamiento', offset_days: 7 },
   },
@@ -550,6 +567,7 @@ export const CATALOG: Obligation[] = [
     applies_if: {
       all: [
         NON_EU,
+        LONG_STAY, // audit A9
         { field: 'has_spouse_or_partner', op: 'eq', value: true },
         // Reagrupación familiar requires marriage or a registered partnership — an unmarried
         // partner can't be reunified this way, so don't show it to them.
@@ -570,7 +588,6 @@ export const CATALOG: Obligation[] = [
     source: 'official',
     applies_if: {
       all: [
-        NON_EU,
         WANTS_CITIZENSHIP,
         { field: 'is_ex_colony_national', op: 'eq', value: false },
       ],
@@ -614,7 +631,7 @@ export const CATALOG: Obligation[] = [
     category: 'admin', severity: 'required',
     source: 'official',
     source_url: 'https://www.mjusticia.gob.es/es/ciudadania/tramites/legalizacion-unica-apostilla',
-    applies_if: NON_EU,
+    applies_if: NON_EU_LONG_STAY, // audit A9: residence-visa steps are long-stay only
     depends_on: ['choose-visa-type'],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -90 },
   },
@@ -624,7 +641,7 @@ export const CATALOG: Obligation[] = [
     category: 'admin', severity: 'required',
     source: 'official',
     source_url: 'https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Traductores-Interpretes-Jurados.aspx',
-    applies_if: NON_EU,
+    applies_if: NON_EU_LONG_STAY, // audit A9: residence-visa steps are long-stay only
     depends_on: ['apostille-documents'],
     timing: { kind: 'relative_to_obligation', after: 'apostille-documents', offset_days: 7 },
   },
@@ -699,7 +716,7 @@ export const CATALOG: Obligation[] = [
     category: 'banking', severity: 'recommended',
     source: 'recommendation',
     webinar_url: 'https://www.youtube.com/watch?v=8zyT1TG9S5E&t=191', // "Buying a Home in Spain" — bank account
-    applies_if: NON_EU,
+    applies_if: LONG_STAY, // audit A11: EU movers benefit too (dep:[nie] stays; unordered when nie absent)
     depends_on: ['nie'],
     timing: { kind: 'asap' },
   },
@@ -984,7 +1001,6 @@ export const CATALOG: Obligation[] = [
     // Exemption is for nationals of SPANISH-SPEAKING countries — not the ex-colony set. A Filipino
     // applicant gets the 2-year citizenship track (ex-colony) but still must pass DELE.
     applies_if: { all: [
-      NON_EU,
       WANTS_CITIZENSHIP,
       { field: 'is_spanish_speaking_national', op: 'eq', value: false },
     ] },
@@ -998,7 +1014,7 @@ export const CATALOG: Obligation[] = [
     title: 'Pass CCSE constitutional and sociocultural knowledge exam (Instituto Cervantes) — required for naturalization',
     category: 'admin', severity: 'required',
     source: 'official',
-    applies_if: { all: [NON_EU, WANTS_CITIZENSHIP] },
+    applies_if: WANTS_CITIZENSHIP, // audit A14: EU citizens naturalise by residence too
     depends_on: ['residencia'],
     timing: { kind: 'relative_to_event', anchor: 'residency_established', offset_days: 1825 },
   },
@@ -1009,7 +1025,7 @@ export const CATALOG: Obligation[] = [
     category: 'residency', severity: 'required',
     source: 'official',
     source_url: 'https://www.mjusticia.gob.es/es/ciudadania/tramites/nacionalidad-residencia',
-    applies_if: { all: [NON_EU, WANTS_CITIZENSHIP] },
+    applies_if: WANTS_CITIZENSHIP, // audit A14
     depends_on: ['citizenship-track-standard', 'citizenship-track-latam', 'ccse-exam'],
     timing: { kind: 'relative_to_event', anchor: 'residency_established', offset_days: 3650 },
   },
@@ -1019,7 +1035,7 @@ export const CATALOG: Obligation[] = [
     category: 'residency', severity: 'required',
     source: 'official',
     source_url: 'https://www.mjusticia.gob.es/es/ciudadania/tramites/nacionalidad-residencia',
-    applies_if: { all: [NON_EU, WANTS_CITIZENSHIP] },
+    applies_if: WANTS_CITIZENSHIP, // audit A14
     depends_on: ['citizenship-application'],
     timing: { kind: 'relative_to_obligation', after: 'citizenship-application', offset_days: 365 },
   },

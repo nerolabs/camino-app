@@ -690,7 +690,9 @@ export default function PlanScreen() {
       <Pressable style={styles.celebrateBackdrop} onPress={() => setShareOpen(false)}>
         <Pressable style={styles.celebrateCard} onPress={e => e.stopPropagation()}>
           <Text style={styles.celebrateTitle}>{t('share.title')}</Text>
-          <Text style={styles.celebrateBody}>{t('share.body')}</Text>
+          {/* Left-aligned + stretched: the celebrate card centers its children, which made
+              this dialog's prose float and the button shrink-wrap (user finding, 2026-07-12). */}
+          <Text style={styles.shareBody}>{t('share.body')}</Text>
           <Text style={styles.shareCaveat}>{t('share.caveat')}</Text>
           {/* Cobalt, not the celebrate modal's amber — amber is Lola's (brand invariant). */}
           <TouchableOpacity style={styles.shareBtn} onPress={doShare}>
@@ -827,12 +829,13 @@ const styles = StyleSheet.create({
                    borderWidth: 1, borderColor: palette.amber, borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5 },
   pillWebinarText:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, color: palette.amber },
   verifiedLine:   { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted, marginTop: 6 },
-  shareCaveat:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, lineHeight: 19, color: palette.muted, marginTop: 10, marginBottom: 4, fontStyle: 'italic' },
+  shareBody:      { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, lineHeight: 22, color: palette.indigo, alignSelf: 'stretch', textAlign: 'left', marginBottom: 12 },
+  shareCaveat:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, lineHeight: 19, color: palette.muted, alignSelf: 'stretch', textAlign: 'left', backgroundColor: '#F2EDE6', borderRadius: 10, padding: 12, marginBottom: 14 },
   regionalFact:      { backgroundColor: '#EEF2F9', borderRadius: 10, padding: 12, marginTop: 8 },
   regionalFactText:  { fontFamily: 'HankenGrotesk_500Medium', fontSize: 13, lineHeight: 19, color: palette.indigo },
   regionalFactSource:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, color: palette.cobalt, marginTop: 6 },
   shareClose:     { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.muted, marginTop: 12, alignSelf: 'center' },
-  shareBtn:       { backgroundColor: palette.cobalt, borderRadius: 10, paddingVertical: 13, alignItems: 'center', marginTop: 10 },
+  shareBtn:       { backgroundColor: palette.cobalt, borderRadius: 10, paddingVertical: 13, paddingHorizontal: 24, alignItems: 'center', alignSelf: 'stretch', marginTop: 2 },
   sheetSectionLabel: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, color: palette.muted,
                        letterSpacing: 1.1, marginTop: 18, marginBottom: 6 },
   sheetTiming:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cobalt, marginBottom: 4 },

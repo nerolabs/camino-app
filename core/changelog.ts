@@ -21,6 +21,18 @@ export type ChangelogEntry = {
 export const CHANGELOG: ChangelogEntry[] = [
   {
     date: '2026-07-12',
+    title: 'Engine audit, continued: short stays, EU driving licences, EU citizenship',
+    details: [
+      'The residence-visa cluster (visa category, consulate, criminal check, apostilles, TIE…) now correctly applies only to LONG-stay moves — a short-stay visitor was being handed the full residence roadmap.',
+      'Short-stay property buyers keep exactly what they need: the NIE (you can’t buy without it — now including EU buyers, who were missing it), the notary/registry chain, and the non-resident property tax.',
+      'EU driving licences are valid in Spain — pure-EU households no longer see a licence exchange or driving test. A mixed household’s non-EU driver still gets theirs.',
+      'EU citizens CAN naturalise by residence (the same ten-year track as everyone) — the interview now asks them too, and the citizenship steps no longer exclude them. The married-to-a-Spaniard one-year track is a known gap, queued for a sourcing pass.',
+      'A Spanish bank account is now suggested to every long-stay mover, not only non-EU ones.',
+    ],
+    ids: ['choose-visa-type', 'nie', 'dgt-exchange', 'dgt-exam', 'citizenship-track-standard', 'spanish-bank-account'],
+  },
+  {
+    date: '2026-07-12',
     title: 'Engine audit: the padrón no longer vanishes for movers still choosing housing',
     details: [
       'Town-hall registration (empadronamiento) and the public health card were only shown once you had a Spanish address — so anyone still deciding where to live got a roadmap missing its most fundamental arrival step, and downstream dates (like the Hacienda registration) sat undated. Applicability was confused with timing: the padrón applies to every long-stay mover; the address is just not known yet. Fixed — both steps now appear for all long-stay movers (the health card keeps its non-lucrative-visa carve-out), dated from your arrival.',

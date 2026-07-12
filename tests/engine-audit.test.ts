@@ -48,6 +48,59 @@ describe('audit A1 — padrón/health card: applicability is long-stay, timing i
   });
 });
 
+describe('audit A9 — the residence-visa cluster is long-stay only', () => {
+  it('a short-stay American gets NO visa roadmap (and no padrón/tax cluster)', () => {
+    const ids = mover({ intends_long_stay: false });
+    for (const id of ['choose-visa-type', 'consulate-appointment', 'criminal-background-check',
+                      'apostille-documents', 'residencia', 'nie', 'empadronamiento', 'modelo-100'])
+      expect(ids.has(id), `short stay must not include ${id}`).toBe(false);
+  });
+
+  it('a short-stay non-EU PROPERTY BUYER still gets the NIE + property cluster', () => {
+    const ids = mover({ intends_long_stay: false, owns_property_in_spain: true, property_purchase: '2026-11-01' });
+    expect(ids.has('nie')).toBe(true);            // can't buy without it
+    expect(ids.has('completion-deed-notary')).toBe(true);
+    expect(ids.has('nonresident-property-tax')).toBe(true); // IRNR: owner but not tax resident
+    expect(ids.has('choose-visa-type')).toBe(false); // still no residence visa
+  });
+});
+
+describe('audit A10 — EU short-stay property buyers need a NIE too', () => {
+  it('a German buying a holiday home gets the NIE; a Spanish national never does', () => {
+    const de = mover({ nationalities: ['DE'], intends_long_stay: false,
+                       owns_property_in_spain: true, property_purchase: '2026-11-01' });
+    expect(de.has('nie')).toBe(true);
+    const es = mover({ nationalities: ['ES'], intends_long_stay: false,
+                       owns_property_in_spain: true, property_purchase: '2026-11-01' });
+    expect(es.has('nie')).toBe(false); // DNI holders
+  });
+
+  it('a long-stay EU mover does NOT get a separate NIE step (EX-18 assigns it)', () => {
+    expect(mover({ nationalities: ['DE'] }).has('nie')).toBe(false);
+  });
+});
+
+describe('audit A12 — EU licences stay valid; mixed households keep the DGT path', () => {
+  it('a pure-EU driver gets no DGT step', () => {
+    const ids = mover({ nationalities: ['DE'], owns_or_drives: true });
+    expect(ids.has('dgt-exchange') || ids.has('dgt-exam')).toBe(false);
+  });
+  it('the mixed household with a non-EU driver keeps it', () => {
+    const ids = mover({ nationalities: ['US', 'ES'], owns_or_drives: true,
+                        has_spouse_or_partner: true, partner_is_married: true, non_eu_family_member: true });
+    expect(ids.has('dgt-exchange') || ids.has('dgt-exam')).toBe(true);
+  });
+});
+
+describe('audit A14 — EU citizens naturalise by residence like everyone else', () => {
+  it('a German long-stay who wants citizenship sees the 10-year track + CCSE + DELE', () => {
+    const ids = mover({ nationalities: ['DE'], wants_citizenship: true });
+    expect(ids.has('citizenship-track-standard')).toBe(true);
+    expect(ids.has('ccse-exam')).toBe(true);
+    expect(ids.has('dele-a2-exam')).toBe(true); // German isn't Spanish-speaking-national
+  });
+});
+
 describe('audit A2 — job seekers are never routed to the "no work" visa', () => {
   it('job_seeker derives no visa_type and gets NO NLV-cluster steps', () => {
     const p: Profile = { nationalities: ['US'], work_situation: 'job_seeker', intends_long_stay: true } as Profile;

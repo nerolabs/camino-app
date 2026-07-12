@@ -190,11 +190,14 @@ export const SLOTS: Slot[] = [
   },
   {
     // Decides whether the citizenship track applies at all vs. just rolling residence renewals.
-    // Only relevant to non-EU long-stay movers (EU citizens don't naturalise this way; short stays
-    // never reach it).
+    // Audit A14 (2026-07-12): the old gate excluded EU citizens with a comment claiming
+    // they "don't naturalise this way" — wrong: EU citizens naturalise by residence exactly
+    // like everyone else (same 10-year track). Ask every long-stay mover except Spanish
+    // passport holders (who already have it). NB the married-to-a-Spaniard 1-year track is
+    // a separate, missing obligation — audit backlog B7.
     field: "wants_citizenship", type: "bool", input: "yesno", allowNotSure: true, order: 210,
     required_if: { all: [
-      { field: "is_eu", op: "eq", value: false },
+      { field: "is_spanish_national", op: "eq", value: false },
       { field: "intends_long_stay", op: "eq", value: true },
     ] },
     prompt_hint: "whether, longer term, they hope to become a Spanish citizen — or plan to just keep renewing their residence to stay. Frame it as: some people aim for citizenship, others are happy renewing their residence indefinitely; there's no wrong answer",
