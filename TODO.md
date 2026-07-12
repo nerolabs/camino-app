@@ -102,6 +102,35 @@ five production web deploys — all E2E-gated.
 - [ ] The dashboard-watch items in the 2026-07-10 follow-ups below (funnel by question,
       clarify rate, Other usage, magic-link health) graduate into this checklist at launch.
 
+## 🧾 Post-audit remnants (2026-07-13 — everything left from the audit + backlog night)
+
+- [ ] **B6 — modelo-200 clarifier**: corporate tax fires for every `business_owner`; only
+      right if the company is Spanish / has Spanish PE. Needs a `has_spanish_company`
+      question (+ ×5 copy, condition, tests). Post-38.
+- [ ] **Verify the `nationality_has_dgt_agreement` country list** — the derivation deciding
+      licence exchange vs driving exam is list-based and never had its own sourcing pass
+      (dgt.es's bilateral-agreement list is the source).
+- [ ] **A6 — "short stays travel light" empty-state copy on /plan** — short-stay plans are
+      now honestly tiny/advisory-only; the plan page should say why (the interview pane
+      already does for EU). ×5.
+- [ ] **Income-question refinement (user-noticed 2026-07-13):** `annual_income_eur_band`
+      is skipped for EU/mixed households BY DESIGN (it only feeds the NLV/DNV threshold
+      checks — the 2026-07-10 "earn its place" audit) — but post-A2/B1 it's still asked of
+      non-EU profiles whose route also can't use it (job_seeker, work_permit,
+      self_employment, student). Consider gating on `visa_type ∈ {nlv, dnv}` instead;
+      update interview-order tests accordingly.
+- [ ] **Regional pass, remaining territories**: País Vasco + Navarra (FORAL — per-territorio
+      rates: Bizkaia/Gipuzkoa/Álava + Navarra's own regime) · Ceuta/Melilla (special
+      regime). Each needs its own official-source session.
+- [ ] **Standing (quarterly, or each January when budget laws land): re-verify
+      `core/regional-specifics.ts` against official sources** — this week alone caught
+      THREE changes secondhand sources still miss (Valencia ITP 10→9%, Murcia ITP
+      8→7.75%, Valencia wealth exemption €500k→€1M). The "last verified" stamps only
+      mean something if they move.
+- Deliberately NOT planned: school-enrollment windows (change every year — would need an
+  annual ritual to ship honestly; revisit only with that commitment) · IBI rates
+  (municipal, not regional — likely never fits the table honestly).
+
 ## 🎯 THE OPEN BACKLOG (item numbers preserved — docs and memories reference them)
 
 **Standing (every batch):** security audit (§ above) · homework pages per release
