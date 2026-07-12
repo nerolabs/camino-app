@@ -73,14 +73,20 @@ doesn't enforce it; public review usually does.
 
 > Get Camino builds a personalized relocation roadmap for moving to Spain.
 > • No account is required to browse, view the sample plan (/sample-plan), or complete the full
->   interview; Google sign-in is only needed to SAVE a plan across devices. [If Apple account
->   added: Sign in with Apple is offered alongside Google.]
+>   interview; Sign in with Apple, Google, or an email code is only needed to SAVE a plan
+>   across devices.
 > • AI usage: a language model phrases interview questions, extracts typed answers, and gives
 >   advisory coaching. It cannot create or alter legal requirements, deadlines or costs — those
 >   come from a fixed, human-verified catalog with links to official government sources shown in
 >   the app. Content is guidance, not legal/tax advice (stated in-app).
-> • Text-to-speech voice is generated via ElevenLabs; speech recognition uses the OS dictation.
+> • Voice input: dictating answers uses the OS speech recognition (hence the microphone and
+>   speech-recognition permissions). The app does not generate or play synthesized speech.
+> • Income and assets are collected as bands, never exact figures.
 > • Demo: tap "Sample plan" from the home screen for the full roadmap experience without login.
+
+*(Updated 2026-07-11 for build 36: ElevenLabs TTS removed from the app, so the voice bullet now
+describes dictation only. This block matches what should be in ASC — when swapping, replace the
+whole block, not just the ElevenLabs line.)*
 
 ## Screenshots **[YOU + me]**
 

@@ -18,6 +18,11 @@ Open TestFlight → confirm **build 36** installed (it will not auto-update).
       feedback@getcamino.app with "problem" in the subject.
 - [ ] Regression spot-check: roadmap sheet "✕ Done" still clears the Dynamic Island;
       one language switch mid-interview.
+- [ ] **RETAKE the interview screenshot while you're in there** (fresh-eyes catch 2026-07-11
+      night: the current framed interview-screen-mid-point.PNG shows the "Voice on" pill —
+      UI build 36 REMOVED). Capture the same mid-interview moment on build 36, drop the raw
+      PNG into docs/store-assets/, and Claude re-runs clean + frame. The other 4 shots are
+      verified clean — no voice UI anywhere.
 
 ## Part 2 — Fresh eyes (Cristina, ~20 min, phone + web)
 
@@ -41,7 +46,9 @@ for polish findings; only a broken core flow blocks).
 - [ ] ASC → version page → **attach build 36**.
 - [ ] **Upload screenshots** from docs/store-assets/framed/ ("View All Sizes in Media
       Manager" → the 6.9" slot; if only 6.5" is offered, Claude regenerates at 1284×2778).
-- [ ] **Review notes**: remove the ElevenLabs/TTS sentence (Claude has the replacement ready).
+- [ ] **Review notes**: replace the WHOLE block with the updated one in docs/APP_STORE.md
+      (rewritten 2026-07-11 night — ElevenLabs line gone, Apple/email sign-in wording fixed,
+      income-bands line added).
 - [ ] Final read of the version page top to bottom.
 - [ ] **Add for Review.** Expect one rejection cycle; it's normal. Manual release means
       approval just parks until the launch moment.
