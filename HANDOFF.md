@@ -75,6 +75,22 @@ council report + full user triage committed (docs/audits/2026-07-12-council-repo
 TODO's three new sections); working tree clean, all pushed through 7629955. Nothing in
 flight. First morning action: confirm 38 is in TestFlight for Cristina, then open C1a.
 
+**ADDENDUM (2026-07-13 night — pre-morning rulings; TODO.md carries them, commit 12b4ed6.
+This FINALIZES the Track-A queue and supersedes "then open C1a" above):**
+- **The queue, in order:** (0) confirm 38 on TestFlight → hand to Cristina (Track B);
+  (1) **FIRST DEPLOY = C2a** (server-side system prompts) **+ the /de "Damit gehen Sie
+  nach Hause" fix** (approved; three-layer copy grep) **+ the deferred homework-pages
+  row**; (2) C2c budget-429 Sentry alert (lola + feedback); (3) C1a→f, deploying in
+  coherent sub-batches; (4) **MID-MORNING: PROMPT THE USER — Cloudflare Turnstile widget
+  + site/secret keys in EAS env (`sensitive` visibility), per his explicit ask to be
+  prompted** → then C2b; (5) C9a auto-ack (~4–5-day reply line, user-approved) + C9b
+  FEEDBACK_GLOBAL_PER_DAY → 1000 (plaintext env); (6) C3 then C4 as the day allows.
+- **Rulings on record (do not re-ask):** C9 (a)+(b) GO, (c)+(d) → post-launch ledger;
+  PROVIDERS.md migration CLOSED (user monitors billing/email himself); /de fix approved;
+  C2b held to mid-morning. **Open user decisions, neither blocking the morning:** the
+  Marketing-seat conversion items (ruling pass pending; housekeeping sub-list proposed
+  for blanket approval) and C5's EU-representative spend (only when C5 opens).
+
 ---
 
 ## Prior resume note (2026-07-12 night — the BIG day: submission pivoted one build; trust batch LIVE; build 37 riding)
