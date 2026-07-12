@@ -147,10 +147,11 @@ Playwright · 7 API contract · 3 Maestro flows (pinned 2.6.1).
 22. [x] **DONE 2026-07-12** — /changelog (public, from core/changelog.ts) + "last
     verified" stamps on every guide page and the roadmap step sheet (verified_at
     catalog field; DEFAULT_VERIFIED = the 2026-07-04 click-test pass). Footer link ×5.
-23. [~] **SEO expansion — personas SHIPPED 2026-07-12**: /sample-plan/{eu-family,
-    digital-nomad,property-owners}, localized ×5, cross-linked, sitemapped, tested.
-    REMAINING: question-shaped pages (framework + curated EN set, digit-guarded) —
-    deferred behind build 37 (web-only).
+23. [x] **DONE 2026-07-12** — personas: /sample-plan/{eu-family,digital-nomad,
+    property-owners} (localized ×5, cross-linked, sitemapped, tested) + question pages:
+    /questions + 8 curated Q&As (EN, FAQPage JSON-LD, digit-guarded against related
+    catalog titles, guide links + interview CTA). Later: localize questions; grow the
+    set from real search queries.
 24. [x] **DONE 2026-07-12** — read-only share links: stateless (payload = profile,
     invariant 4 made literal; notes stripped both directions), /shared render by the
     real engine, Share dialog with privacy caveat on /plan, noindex + robots. Long-URL/

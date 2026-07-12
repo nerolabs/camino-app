@@ -7,6 +7,7 @@
  */
 import { CATALOG } from '@/core/engine-controller';
 import { EXTRA_PERSONAS } from '@/core/sample-personas';
+import { QUESTIONS } from '@/core/questions';
 import { siteOrigin } from '@/lib/serverEmail';
 import { WEB_LOCALES } from '@/lib/serverLocale';
 
@@ -20,7 +21,9 @@ export function GET(request: Request): Response {
   ];
   // /how-it-works redirects home since 2026-07-10 (content folded into the landing page)
   // /contact is one route localized client-side (no per-locale static tree), so it lists once.
-  const englishOnly = ['/contact', '/changelog', '/how-i-was-built', '/how-i-was-built/log', '/how-i-was-built/roadmap'];
+  const englishOnly = ['/contact', '/changelog', '/questions',
+    ...QUESTIONS.map(q => `/questions/${q.slug}`),
+    '/how-i-was-built', '/how-i-was-built/log', '/how-i-was-built/roadmap'];
   const urls = [
     ...localized,
     ...englishOnly,
