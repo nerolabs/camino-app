@@ -98,10 +98,10 @@ Playwright · 7 API contract · 3 Maestro flows (pinned 2.6.1).
 
 ### Localization — verification tail (Phase 2)
 
-5. [ ] **[USER/Cristina] verification passes over the LIVE production es surface** — the
-   human gate (shipped at ~95% by decision 2026-07-05); then fr/de/it native-speaker passes
-   as people are available. Corrections are pure data edits; the lint gates + frozen
-   snapshots re-verify every change.
+5. [x] **DONE 2026-07-12 — Cristina's human-eyes language pass COMPLETE** (user confirmation).
+   The es surface is native-speaker verified; fr/de/it remain machine-drafted + lint-gated
+   (native passes opportunistic, non-blocking — corrections stay pure data edits against the
+   frozen snapshots).
 
 ### Phase 3 — Android track (user-side; the 14-day clock burns in parallel)
 

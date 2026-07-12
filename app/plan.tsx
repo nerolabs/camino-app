@@ -108,8 +108,13 @@ export default function PlanScreen() {
     if (Platform.OS === 'web') {
       try { await navigator.clipboard.writeText(url); setShareCopied(true); } catch { /* clipboard denied — leave the dialog open */ }
     } else {
-      Share.share({ message: url }).catch(() => {});
+      // iOS refuses to present the share sheet while an RN Modal is open (it tries to
+      // present from the root view controller, which the Modal covers) — the tap looked
+      // dead on build 37. Dismiss the dialog first, then present after the animation.
       setShareOpen(false);
+      setTimeout(() => {
+        Share.share(Platform.OS === 'ios' ? { url } : { message: url }).catch(() => {});
+      }, 500);
     }
   }
   const [dateOpen, setDateOpen] = useState(false);
@@ -687,7 +692,8 @@ export default function PlanScreen() {
           <Text style={styles.celebrateTitle}>{t('share.title')}</Text>
           <Text style={styles.celebrateBody}>{t('share.body')}</Text>
           <Text style={styles.shareCaveat}>{t('share.caveat')}</Text>
-          <TouchableOpacity style={styles.celebrateBtn} onPress={doShare}>
+          {/* Cobalt, not the celebrate modal's amber — amber is Lola's (brand invariant). */}
+          <TouchableOpacity style={styles.shareBtn} onPress={doShare}>
             <Text style={styles.celebrateBtnText}>
               {shareCopied ? t('share.copied') : Platform.OS === 'web' ? t('share.copy') : t('share.share')}
             </Text>
@@ -826,6 +832,7 @@ const styles = StyleSheet.create({
   regionalFactText:  { fontFamily: 'HankenGrotesk_500Medium', fontSize: 13, lineHeight: 19, color: palette.indigo },
   regionalFactSource:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, color: palette.cobalt, marginTop: 6 },
   shareClose:     { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.muted, marginTop: 12, alignSelf: 'center' },
+  shareBtn:       { backgroundColor: palette.cobalt, borderRadius: 10, paddingVertical: 13, alignItems: 'center', marginTop: 10 },
   sheetSectionLabel: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, color: palette.muted,
                        letterSpacing: 1.1, marginTop: 18, marginBottom: 6 },
   sheetTiming:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cobalt, marginBottom: 4 },
