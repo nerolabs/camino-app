@@ -21,6 +21,18 @@ export type ChangelogEntry = {
 export const CHANGELOG: ChangelogEntry[] = [
   {
     date: '2026-07-13',
+    title: 'Audit remnants cleared: the licence-exchange list, corporate tax, and full-map regional coverage',
+    details: [
+      'The driving-licence exchange list was wrong in both directions: six countries were promised an exchange Spain doesn’t offer (including Mexico, Venezuela and Cuba), and thirteen agreement countries were wrongly sent to the driving exam (including the Philippines, Morocco, Ukraine and Turkey). Corrected against the DGT’s own convenio table.',
+      'Corporate tax (Modelo 200) no longer appears for every business owner — one new interview question settles whether the company is Spanish, which is what the filing actually depends on (and answering “not sure” never earns a penalty item on a guess).',
+      'The income question is now asked exactly of the people whose route reads it (non-lucrative and digital-nomad applicants) — everyone else keeps that sensitive answer to themselves.',
+      'Regional coverage reaches the full map: País Vasco (the three territorios currently align — 4% on a resale home, 7% on other property, verified on the Bizkaia and Gipuzkoa foral portals), Navarra (6%, Hacienda Foral guide), and Ceuta/Melilla (the state 6% rate with the 50% statutory rebate — effectively 3%).',
+      'Short-stay visitors with an (honestly) empty roadmap now get an explanation instead of a blank page: short stays travel light.',
+    ],
+    ids: ['dgt-exchange', 'dgt-exam', 'modelo-200', 'property-transfer-tax'],
+  },
+  {
+    date: '2026-07-13',
     title: 'Nine new steps: the work, self-employment and student routes get real coverage',
     details: [
       'The audit’s sourcing backlog, cleared: the employer-sponsored work visa (your employer files it — form EX-03, Ministry of Inclusion hoja 12), the self-employment authorization (hoja 14), securing university admission before the student visa, and foreign-degree recognition (homologación/equivalencia via Valida-TE, RD 889/2022).',

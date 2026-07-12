@@ -4,7 +4,9 @@
     "loadingTitle": "Carico la tua roadmap…",
     "loadingBody": "Un attimo, stiamo recuperando il tuo piano.",
     "noneTitle": "Ancora nessuna roadmap",
-    "noneBody": "Completa l’intervista e la tua roadmap apparirà qui."
+    "noneBody": "Completa l’intervista e la tua roadmap apparirà qui.",
+    "shortStayTitle": "I soggiorni brevi viaggiano leggeri",
+    "shortStayBody": "Per un soggiorno sotto la soglia del lungo periodo, la Spagna non ti chiede davvero nulla in anticipo — niente padrón, niente carta di soggiorno, niente registrazioni fiscali. I consigli che si applicano (come la TEAM per i passaporti UE, o il conteggio Schengen) compaiono sopra quando servono. Se i piani diventano un vero trasloco, dillo a Lola e la roadmap completa si costruisce da sola."
   },
   "emailCard": {
     "title": "Non perdere questa roadmap",
@@ -229,6 +231,8 @@
     "itp_brackets": "In {{region}}, l’ITP sull’usato è progressiva: {{low}} fino a {{cap}}, salendo a scaglioni fino a {{high}}.",
     "wealth_relief": "{{region}} applica uno sgravio regionale del {{pct}} su questa imposta — in pratica la maggior parte non paga nulla, ma l’imposta statale di solidarietà può applicarsi oltre {{threshold}}.",
     "source": "Verificato il {{date}} · fonte ufficiale",
-    "wealth_scale": "In {{region}}, l’imposta sul patrimonio parte sopra una franchigia personale di {{exempt}} (più l’esenzione per l’abitazione principale), con aliquote fino al {{top}}."
+    "wealth_scale": "In {{region}}, l’imposta sul patrimonio parte sopra una franchigia personale di {{exempt}} (più l’esenzione per l’abitazione principale), con aliquote fino al {{top}}.",
+    "itp_foral": "In {{region}}, le aliquote le fissa ogni territorio histórico (Álava, Bizkaia, Gipuzkoa) — oggi allineate: comprare una casa usata è tassato al {{rate}} in tutti e tre (altri immobili al {{general}}), con varianti ridotte per l’abitazione principale.",
+    "itp_bonif": "In {{region}} si applica l’aliquota statale del {{rate}} con uno sconto del {{bonif}} sull’imposta — un {{effective}} effettivo sull’acquisto di una casa usata."
   }
 }

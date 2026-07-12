@@ -5,7 +5,7 @@
 > which interview answers exist, what gets derived from them, and exactly which combination
 > switches each obligation on.
 
-**Totals:** 73 obligations · 20 interview questions · 17 derivations.
+**Totals:** 73 obligations · 21 interview questions · 17 derivations.
 
 ## 1 · The interview (every question asked)
 
@@ -15,22 +15,23 @@
 | 2 | `nationalities` | list | always | what passports everyone in the household holds — people sometimes hold more than one |
 | 3 | `work_situation` | list | always | their work situation when they move — remote employee, freelancer, retired, studying, etc. |
 | 4 | `employer_country_is_foreign` | bool | work_situation = "employed_remote" | whether their employer is based outside Spain (vs a Spanish company hiring them) |
-| 5 | `annual_income_eur_band` | band | is_eu = false | their rough annual household income in euros — checked against the NLV/DNV visa income thresholds for their ho… |
-| 6 | `has_spouse_or_partner` | bool | always | whether a spouse or partner will be relocating with them |
-| 7 | `partner_is_married` | bool | has_spouse_or_partner = true | whether they are legally married or in a registered civil partnership |
-| 8 | `non_eu_family_member` | bool | household_mixed_eu = true AND (has_spouse_or_partner = true OR has_children = true) | whether anyone moving with them does NOT hold an EU (or Spanish) passport of their own |
-| 9 | `has_children` | bool | always | whether school-age children will be making this move |
-| 10 | `intends_long_stay` | bool | always | whether this is a long-term move (more than 183 days a year) or a shorter extended stay |
-| 11 | `arrival_date` | date | always | roughly when they plan to arrive in Spain — even an approximate month is enough to anchor real deadlines |
-| 12 | `has_spanish_address` | bool | always | whether they already have a Spanish address — rented or owned |
-| 13 | `owns_or_drives` | bool | always | whether anyone in the household will drive in Spain |
-| 14 | `owns_property_in_spain` | bool | always | whether they own or are actively planning to purchase property in Spain |
-| 15 | `property_purchase` | date | owns_property_in_spain = true | roughly when they completed (or expect to complete) the property purchase — anchors the notary, registry, and … |
-| 16 | `region` | band | always | which comunidad autónoma (region of Spain) they'll settle in — if they name a city or province, map it to its … |
-| 17 | `has_pets` | bool | always | whether any pets — dogs, cats, or ferrets — will be making this move with them |
-| 18 | `foreign_assets_eur_band` | band | is_tax_resident = true | roughly, total assets held outside Spain — only a range is needed, drives Modelo 720 |
-| 19 | `previously_ex_spanish_colony_nationality` | bool | is_eu = false AND NOT is_ex_colony_national = true | whether they hold nationality from a former Spanish colony (most Latin American countries, Philippines) — this… |
-| 20 | `wants_citizenship` | bool | is_spanish_national = false AND intends_long_stay = true | whether, longer term, they hope to become a Spanish citizen — or plan to just keep renewing their residence to… |
+| 5 | `has_spanish_company` | bool | work_situation = "business_owner" | whether their company is (or will become) a Spanish company — vs keeping a business incorporated abroad |
+| 6 | `annual_income_eur_band` | band | (visa_type = "nlv" OR visa_type = "dnv") | their rough annual household income in euros — checked against the NLV/DNV visa income thresholds for their ho… |
+| 7 | `has_spouse_or_partner` | bool | always | whether a spouse or partner will be relocating with them |
+| 8 | `partner_is_married` | bool | has_spouse_or_partner = true | whether they are legally married or in a registered civil partnership |
+| 9 | `non_eu_family_member` | bool | household_mixed_eu = true AND (has_spouse_or_partner = true OR has_children = true) | whether anyone moving with them does NOT hold an EU (or Spanish) passport of their own |
+| 10 | `has_children` | bool | always | whether school-age children will be making this move |
+| 11 | `intends_long_stay` | bool | always | whether this is a long-term move (more than 183 days a year) or a shorter extended stay |
+| 12 | `arrival_date` | date | always | roughly when they plan to arrive in Spain — even an approximate month is enough to anchor real deadlines |
+| 13 | `has_spanish_address` | bool | always | whether they already have a Spanish address — rented or owned |
+| 14 | `owns_or_drives` | bool | always | whether anyone in the household will drive in Spain |
+| 15 | `owns_property_in_spain` | bool | always | whether they own or are actively planning to purchase property in Spain |
+| 16 | `property_purchase` | date | owns_property_in_spain = true | roughly when they completed (or expect to complete) the property purchase — anchors the notary, registry, and … |
+| 17 | `region` | band | always | which comunidad autónoma (region of Spain) they'll settle in — if they name a city or province, map it to its … |
+| 18 | `has_pets` | bool | always | whether any pets — dogs, cats, or ferrets — will be making this move with them |
+| 19 | `foreign_assets_eur_band` | band | is_tax_resident = true | roughly, total assets held outside Spain — only a range is needed, drives Modelo 720 |
+| 20 | `previously_ex_spanish_colony_nationality` | bool | is_eu = false AND NOT is_ex_colony_national = true | whether they hold nationality from a former Spanish colony (most Latin American countries, Philippines) — this… |
+| 21 | `wants_citizenship` | bool | is_spanish_national = false AND intends_long_stay = true | whether, longer term, they hope to become a Spanish citizen — or plan to just keep renewing their residence to… |
 
 ## 2 · Derivations (fields computed, never asked)
 
@@ -105,7 +106,7 @@
 | `modelo-130` | penalty | official | is_self_employed_in_spain = true | `register-autonomo` | yearly (months: 1,4,7,10) |
 | `modelo-303` | penalty | official | is_self_employed_in_spain = true | `register-autonomo` | yearly (months: 1,4,7,10) |
 | `modelo-390` | penalty | official | is_self_employed_in_spain = true | `modelo-303` | yearly (months: 1) |
-| `modelo-200` | penalty | official | work_situation = "business_owner" | `residencia` | yearly (months: 7) |
+| `modelo-200` | penalty | official | work_situation = "business_owner" AND has_spanish_company = true | `residencia` | yearly (months: 7) |
 | `work-visa-employer-sponsored` | required | official | visa_type = "work_permit" AND intends_long_stay = true | `choose-visa-type` | -180d before arrival |
 | `self-employment-visa-authorization` | required | official | visa_type = "self_employment" AND intends_long_stay = true | `choose-visa-type` | -180d before arrival |
 | `university-admission` | recommended | recommendation | visa_type = "student" AND intends_long_stay = true | — | -270d before arrival |
@@ -137,7 +138,7 @@
 Every field that any `applies_if` tests, and the obligations that hinge on it. This is the
 review view: change an answer, these are the items that can appear or disappear.
 
-| Field | Gates (126 references) |
+| Field | Gates (127 references) |
 |---|---|
 | `intends_long_stay` | `choose-visa-type` · `consulate-appointment` · `criminal-background-check` · `medical-certificate` · `empadronamiento` · `nie` · `eu-registration-certificate` · `eu-family-member-card` · `residencia` · `tarjeta-sanitaria` · `escolarizacion` · `family-reunification` · `tax-planning-consultation` · `apostille-documents` · `sworn-translation` · `spanish-bank-account` · `work-visa-employer-sponsored` · `self-employment-visa-authorization` · `university-admission` · `homologacion-titulos` · `job-seeker-route-reality` · `dgt-eu-licence-check` · `citizenship-married-to-spanish` · `ehic-card` · `schengen-90-180` · `permanent-residence` |
 | `visa_type` | `nlv-income-proof` · `nlv-income-check` · `nlv-health-insurance` · `convenio-especial` · `dnv-remote-work-proof` · `dnv-income-proof` · `dnv-income-check` · `dnv-coverage-certificate` · `tarjeta-sanitaria` · `nlv-letter-of-intent` · `nlv-non-work-declaration` · `dnv-qualification-proof` · `dnv-company-activity-proof` · `dnv-employer-permission-letter` · `beckham-law` · `work-visa-employer-sponsored` · `self-employment-visa-authorization` · `university-admission` · `homologacion-titulos` · `student-visa-health-insurance` · `nlv-renewal` · `dnv-renewal` |
@@ -160,6 +161,7 @@ review view: change an answer, these are the items that can appear or disappear.
 | `income_may_fall_short_dnv` | `dnv-income-check` |
 | `has_children` | `escolarizacion` |
 | `has_spouse_or_partner` | `family-reunification` |
+| `has_spanish_company` | `modelo-200` |
 | `has_pets` | `pet-import` |
 | `is_spanish_speaking_national` | `dele-a2-exam` |
 
@@ -225,4 +227,4 @@ flowchart LR
 
 ## 6 · Direct-gate fields (asked, used as-is by obligations)
 
-`speaks_spanish` · `owns_property_in_spain` · `intends_long_stay` · `work_situation` · `non_eu_family_member` · `owns_or_drives` · `has_children` · `has_spouse_or_partner` · `partner_is_married` · `wants_citizenship` · `has_pets`
+`speaks_spanish` · `owns_property_in_spain` · `intends_long_stay` · `work_situation` · `non_eu_family_member` · `owns_or_drives` · `has_children` · `has_spouse_or_partner` · `partner_is_married` · `wants_citizenship` · `has_spanish_company` · `has_pets`

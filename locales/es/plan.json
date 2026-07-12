@@ -4,7 +4,9 @@
     "loadingTitle": "Cargando tu hoja de ruta…",
     "loadingBody": "Un momento mientras recuperamos tu plan.",
     "noneTitle": "Aún no hay hoja de ruta",
-    "noneBody": "Completa la entrevista y tu hoja de ruta aparecerá aquí."
+    "noneBody": "Completa la entrevista y tu hoja de ruta aparecerá aquí.",
+    "shortStayTitle": "Las estancias cortas viajan ligeras",
+    "shortStayBody": "Para una estancia por debajo del umbral de larga duración, España no te exige nada por adelantado — ni padrón, ni tarjeta de residencia, ni registros fiscales. Los consejos que sí apliquen (como la TSE para pasaportes de la UE, o el conteo Schengen) aparecen arriba cuando tocan. Si tus planes se convierten en una mudanza de verdad, cuéntaselo a Lola y la hoja de ruta completa se construye sola."
   },
   "emailCard": {
     "title": "No pierdas esta hoja de ruta",
@@ -229,6 +231,8 @@
     "itp_brackets": "En {{region}}, el ITP de la vivienda usada es progresivo: {{low}} hasta {{cap}}, subiendo por tramos hasta {{high}}.",
     "wealth_relief": "{{region}} aplica una bonificación autonómica del {{pct}} en este impuesto — en la práctica la mayoría no paga nada, aunque el impuesto estatal de solidaridad puede aplicarse por encima de {{threshold}}.",
     "source": "Verificado el {{date}} · fuente oficial",
-    "wealth_scale": "En {{region}}, el impuesto sobre el patrimonio empieza por encima de un mínimo exento de {{exempt}} (más la exención de vivienda habitual), con tipos que suben hasta el {{top}} en lo más alto."
+    "wealth_scale": "En {{region}}, el impuesto sobre el patrimonio empieza por encima de un mínimo exento de {{exempt}} (más la exención de vivienda habitual), con tipos que suben hasta el {{top}} en lo más alto.",
+    "itp_foral": "En {{region}}, los tipos los fija cada territorio histórico (Álava, Bizkaia, Gipuzkoa) — hoy alineados: comprar vivienda usada tributa al {{rate}} en los tres (otros inmuebles al {{general}}), con variantes reducidas para vivienda habitual.",
+    "itp_bonif": "En {{region}} se aplica el tipo estatal del {{rate}} con una bonificación del {{bonif}} en la cuota — un {{effective}} efectivo al comprar vivienda usada."
   }
 }

@@ -52,7 +52,8 @@
     "previously_ex_spanish_colony_nationality": "Les ressortissants d'anciennes colonies espagnoles bénéficient d'un délai de nationalité bien plus court. Avez-vous la nationalité de l'une d'elles — la majeure partie de l'Amérique latine, ou les Philippines ?",
     "property_purchase": "La date d'achat ancre les échéances du notaire, du registre et des impôts. À peu près quand a-t-il été (ou sera-t-il) finalisé ? Le mois suffit.",
     "wants_citizenship": "Cela décide si nous planifions la voie complète vers la nationalité, ou simplement vos renouvellements de résidence. À plus long terme, souhaitez-vous devenir citoyen espagnol ?",
-    "non_eu_family_member": "Encore une sur les passeports — quelqu’un du foyer fait-il ce déménagement avec un passeport ni UE ni espagnol ? Il aura sa propre démarche de résidence."
+    "non_eu_family_member": "Encore une sur les passeports — quelqu’un du foyer fait-il ce déménagement avec un passeport ni UE ni espagnol ? Il aura sa propre démarche de résidence.",
+    "has_spanish_company": "Une question sur l’entreprise — ta société est-elle (ou deviendra-t-elle) espagnole ? Qui garde une société à l’étranger échappe entièrement aux déclarations d’entreprise espagnoles."
   },
   "chips": {
     "yes": "Oui",

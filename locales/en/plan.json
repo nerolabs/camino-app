@@ -4,7 +4,9 @@
     "loadingTitle": "Loading your roadmap…",
     "loadingBody": "One moment while we fetch your plan.",
     "noneTitle": "No roadmap yet",
-    "noneBody": "Complete the interview and your roadmap will appear here."
+    "noneBody": "Complete the interview and your roadmap will appear here.",
+    "shortStayTitle": "Short stays travel light",
+    "shortStayBody": "For a stay under the long-term threshold there’s genuinely nothing Spain requires of you in advance — no padrón, no residence card, no tax registrations. Any tips that do apply (like the EHIC for EU passports, or the Schengen day-count) appear above as they’re relevant. If your plans grow into a real move, tell Lola and the full roadmap builds itself."
   },
   "emailCard": {
     "title": "Don’t lose this roadmap",
@@ -229,6 +231,8 @@
     "itp_brackets": "In {{region}}, ITP on a resale home is progressive: {{low}} up to {{cap}}, rising in brackets to {{high}} at the top.",
     "wealth_relief": "{{region}} applies a {{pct}} regional relief on this tax — in practice most residents pay none, though the state solidarity tax can still apply above {{threshold}}.",
     "source": "Verified {{date}} · official source",
-    "wealth_scale": "In {{region}}, the wealth tax starts above a {{exempt}} personal exemption (plus the primary-home allowance), with rates rising to {{top}} at the top."
+    "wealth_scale": "In {{region}}, the wealth tax starts above a {{exempt}} personal exemption (plus the primary-home allowance), with rates rising to {{top}} at the top.",
+    "itp_foral": "In {{region}}, rates are set per territorio histórico (Álava, Bizkaia, Gipuzkoa) — currently aligned: buying a resale home is taxed at {{rate}} in all three (other property at {{general}}), with reduced variants for a primary residence.",
+    "itp_bonif": "In {{region}}, the state transfer-tax rate of {{rate}} applies with a {{bonif}} rebate on the bill — an effective {{effective}} on a resale home."
   }
 }

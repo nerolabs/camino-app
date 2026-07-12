@@ -843,9 +843,16 @@ export const CATALOG: Obligation[] = [
     id: 'modelo-200',
     source_url: 'https://sede.agenciatributaria.gob.es/Sede/procedimientoini/GE04.shtml',
     title: 'File annual corporation tax return (Modelo 200) for a Spanish-registered company — due 25 July',
+    verified_at: '2026-07-13', // audit B6: the title always said "Spanish-registered" — now the condition asks
     category: 'tax', severity: 'penalty',
     source: 'official',
-    applies_if: { field: 'work_situation', op: 'eq', value: 'business_owner' },
+    // Audit B6 (2026-07-13): was gated on business_owner alone — a penalty item shown to
+    // owners of FOREIGN companies who never file it. The has_spanish_company clarifier
+    // settles it (not_sure fails eq, so the unsure don't get a penalty item on a guess).
+    applies_if: { all: [
+      { field: 'work_situation', op: 'eq', value: 'business_owner' },
+      { field: 'has_spanish_company', op: 'eq', value: true },
+    ] },
     depends_on: ['residencia'],
     timing: { kind: 'absolute_recurring', rrule: 'FREQ=YEARLY;BYMONTH=7' },
   },

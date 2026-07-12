@@ -4,7 +4,9 @@
     "loadingTitle": "Deine Roadmap wird geladen…",
     "loadingBody": "Einen Moment, wir holen deinen Plan.",
     "noneTitle": "Noch keine Roadmap",
-    "noneBody": "Schließe das Interview ab und deine Roadmap erscheint hier."
+    "noneBody": "Schließe das Interview ab und deine Roadmap erscheint hier.",
+    "shortStayTitle": "Kurzaufenthalte reisen leicht",
+    "shortStayBody": "Für einen Aufenthalt unter der Langzeitschwelle verlangt Spanien wirklich nichts im Voraus — kein Padrón, keine Aufenthaltskarte, keine Steuerregistrierungen. Tipps, die doch gelten (wie die EHIC für EU-Pässe oder die Schengen-Tageszählung), erscheinen oben, wenn sie relevant sind. Wird aus den Plänen ein echter Umzug, sag es Lola — und die volle Roadmap baut sich von selbst."
   },
   "emailCard": {
     "title": "Verlier diese Roadmap nicht",
@@ -229,6 +231,8 @@
     "itp_brackets": "In {{region}} ist die ITP für Bestandsimmobilien progressiv: {{low}} bis {{cap}}, in Stufen steigend bis {{high}}.",
     "wealth_relief": "{{region}} gewährt bei dieser Steuer eine regionale Ermäßigung von {{pct}} — praktisch zahlen die meisten nichts; die staatliche Solidaritätssteuer kann oberhalb von {{threshold}} greifen.",
     "source": "Geprüft am {{date}} · offizielle Quelle",
-    "wealth_scale": "In {{region}} greift die Vermögensteuer oberhalb eines Freibetrags von {{exempt}} (plus Hauptwohnsitz-Freibetrag), mit Sätzen bis {{top}} an der Spitze."
+    "wealth_scale": "In {{region}} greift die Vermögensteuer oberhalb eines Freibetrags von {{exempt}} (plus Hauptwohnsitz-Freibetrag), mit Sätzen bis {{top}} an der Spitze.",
+    "itp_foral": "In {{region}} legt jedes territorio histórico (Álava, Bizkaia, Gipuzkoa) die Sätze selbst fest — derzeit gleichauf: der Kauf einer Bestandswohnung wird in allen dreien mit {{rate}} besteuert (übrige Immobilien {{general}}), mit ermäßigten Varianten für den Hauptwohnsitz.",
+    "itp_bonif": "In {{region}} gilt der staatliche Satz von {{rate}} mit {{bonif}} Nachlass auf die Steuer — effektiv {{effective}} beim Kauf einer Bestandswohnung."
   }
 }

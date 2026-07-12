@@ -4,7 +4,9 @@
     "loadingTitle": "Chargement de ta feuille de route…",
     "loadingBody": "Un instant, nous récupérons ton plan.",
     "noneTitle": "Pas encore de feuille de route",
-    "noneBody": "Termine l’entretien et ta feuille de route apparaîtra ici."
+    "noneBody": "Termine l’entretien et ta feuille de route apparaîtra ici.",
+    "shortStayTitle": "Les courts séjours voyagent léger",
+    "shortStayBody": "Pour un séjour sous le seuil du long terme, l’Espagne n’exige vraiment rien à l’avance — pas de padrón, pas de carte de résidence, pas d’enregistrements fiscaux. Les conseils qui s’appliquent (comme la CEAM pour les passeports UE, ou le décompte Schengen) apparaissent ci-dessus quand c’est pertinent. Si tes projets deviennent un vrai déménagement, dis-le à Lola et la feuille de route complète se construit d’elle-même."
   },
   "emailCard": {
     "title": "Ne perds pas cette feuille de route",
@@ -229,6 +231,8 @@
     "itp_brackets": "En {{region}}, l’ITP sur l’ancien est progressif : {{low}} jusqu’à {{cap}}, montant par tranches jusqu’à {{high}}.",
     "wealth_relief": "{{region}} applique un abattement régional de {{pct}} sur cet impôt — en pratique la plupart des résidents ne paient rien, mais l’impôt d’État de solidarité peut s’appliquer au-delà de {{threshold}}.",
     "source": "Vérifié le {{date}} · source officielle",
-    "wealth_scale": "En {{region}}, l’impôt sur la fortune démarre au-delà d’un abattement personnel de {{exempt}} (plus l’exonération de la résidence principale), avec des taux montant jusqu’à {{top}}."
+    "wealth_scale": "En {{region}}, l’impôt sur la fortune démarre au-delà d’un abattement personnel de {{exempt}} (plus l’exonération de la résidence principale), avec des taux montant jusqu’à {{top}}.",
+    "itp_foral": "En {{region}}, les taux sont fixés par territorio histórico (Álava, Bizkaia, Gipuzkoa) — aujourd’hui alignés : l’achat d’un logement ancien est taxé à {{rate}} dans les trois (autres biens à {{general}}), avec des variantes réduites pour la résidence principale.",
+    "itp_bonif": "En {{region}}, le taux d’État de {{rate}} s’applique avec un abattement de {{bonif}} sur la facture — soit un {{effective}} effectif sur un logement ancien."
   }
 }

@@ -52,7 +52,8 @@
     "previously_ex_spanish_colony_nationality": "Staatsangehörige ehemaliger spanischer Kolonien haben eine deutlich kürzere Frist zur Staatsbürgerschaft. Haben Sie eine solche Staatsangehörigkeit — fast ganz Lateinamerika oder die Philippinen?",
     "property_purchase": "Das Kaufdatum verankert die Fristen für Notar, Register und Steuern. Wann wurde (oder wird) der Kauf ungefähr abgeschlossen? Der Monat genügt.",
     "wants_citizenship": "Das entscheidet, ob wir den vollen Weg zur Staatsbürgerschaft planen oder nur Ihre Aufenthaltsverlängerungen. Möchten Sie längerfristig spanische Staatsbürger:in werden?",
-    "non_eu_family_member": "Noch eine zu den Pässen — zieht jemand mit, der sich auf einen Pass verlässt, der weder EU noch spanisch ist? Für diese Person gibt es einen eigenen Aufenthaltsschritt."
+    "non_eu_family_member": "Noch eine zu den Pässen — zieht jemand mit, der sich auf einen Pass verlässt, der weder EU noch spanisch ist? Für diese Person gibt es einen eigenen Aufenthaltsschritt.",
+    "has_spanish_company": "Eine Firmen-Frage — ist dein Unternehmen eine spanische Gesellschaft (oder wird es eine)? Wer seine Firma im Ausland behält, überspringt Spaniens Unternehmenserklärungen komplett."
   },
   "chips": {
     "yes": "Ja",

@@ -52,7 +52,8 @@
     "previously_ex_spanish_colony_nationality": "Los nacionales de antiguas colonias españolas tienen un reloj de nacionalidad mucho más corto. ¿Tienes nacionalidad de alguna — casi toda Latinoamérica, o Filipinas?",
     "property_purchase": "La fecha de compra ancla los plazos de notaría, registro e impuestos. ¿Más o menos cuándo se completó (o se completará)? Con el mes basta.",
     "wants_citizenship": "Esto decide si planificamos la vía completa de nacionalidad o solo mantenemos al día tus renovaciones de residencia. A largo plazo, ¿te gustaría obtener la nacionalidad española?",
-    "non_eu_family_member": "Una más sobre pasaportes — ¿alguien de los que se mudan depende de un pasaporte que no sea de la UE ni español? Tendrá su propio trámite de residencia."
+    "non_eu_family_member": "Una más sobre pasaportes — ¿alguien de los que se mudan depende de un pasaporte que no sea de la UE ni español? Tendrá su propio trámite de residencia.",
+    "has_spanish_company": "Una pregunta sobre la empresa — ¿tu negocio es (o va a ser) una sociedad española? Quien mantiene su empresa en el extranjero se salta por completo las declaraciones societarias españolas."
   },
   "chips": {
     "yes": "Sí",

@@ -52,7 +52,8 @@
     "previously_ex_spanish_colony_nationality": "Nationals of former Spanish colonies are on a much shorter citizenship clock. Do you hold nationality from one — most of Latin America, or the Philippines?",
     "property_purchase": "The purchase date anchors the notary, registry and tax deadlines. Roughly when did (or will) it complete? A month is enough.",
     "wants_citizenship": "This decides whether we plan the full citizenship track, or just keep your residence renewals tidy. Longer term, are you hoping to become a Spanish citizen?",
-    "non_eu_family_member": "One more on passports — is anyone making this move relying on a passport that isn’t EU or Spanish? They’ll have their own residence step."
+    "non_eu_family_member": "One more on passports — is anyone making this move relying on a passport that isn’t EU or Spanish? They’ll have their own residence step.",
+    "has_spanish_company": "One company question — is your business (or will it become) a Spanish company? Owners who keep a foreign company skip Spain’s corporate filings entirely."
   },
   "chips": {
     "yes": "Yes",

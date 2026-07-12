@@ -418,6 +418,18 @@ export default function PlanScreen() {
               </View>
             )}
           </>
+        ) : objectives.length === 0 ? (
+          /* Audit A6 (2026-07-13): a profile CAN honestly produce a near-empty plan — a
+             short-stay EU visitor has no required steps at all. Say why, instead of a
+             blank page that reads as broken. */
+          <View style={styles.shortStayCard}>
+            <Text style={styles.shortStayTitle}>
+              {profile.intends_long_stay === false ? t('empty.shortStayTitle') : t('empty.noneTitle')}
+            </Text>
+            <Text style={styles.shortStayBody}>
+              {profile.intends_long_stay === false ? t('empty.shortStayBody') : t('empty.noneBody')}
+            </Text>
+          </View>
         ) : (
           byPhase.map(({ phase, items }) => (
             <View key={phase} style={styles.section}>
@@ -836,6 +848,9 @@ const styles = StyleSheet.create({
   regionalFactSource:{ fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, color: palette.cobalt, marginTop: 6 },
   shareClose:     { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.muted, marginTop: 12, alignSelf: 'center' },
   shareBtn:       { backgroundColor: palette.cobalt, borderRadius: 10, paddingVertical: 13, paddingHorizontal: 24, alignItems: 'center', alignSelf: 'stretch', marginTop: 2 },
+  shortStayCard:  { backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8E4DC', borderRadius: 14, padding: 22, marginTop: 10 },
+  shortStayTitle: { fontFamily: 'Fraunces_600SemiBold', fontSize: 22, color: palette.indigo, marginBottom: 8 },
+  shortStayBody:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, lineHeight: 22, color: palette.muted },
   sheetSectionLabel: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, color: palette.muted,
                        letterSpacing: 1.1, marginTop: 18, marginBottom: 6 },
   sheetTiming:   { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cobalt, marginBottom: 4 },

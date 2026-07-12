@@ -104,22 +104,22 @@ five production web deploys — all E2E-gated.
 
 ## 🧾 Post-audit remnants (2026-07-13 — everything left from the audit + backlog night)
 
-- [ ] **B6 — modelo-200 clarifier**: corporate tax fires for every `business_owner`; only
+- [x] **DONE 2026-07-13** — B6 modelo-200 clarifier: corporate tax fires for every `business_owner`; only
       right if the company is Spanish / has Spanish PE. Needs a `has_spanish_company`
       question (+ ×5 copy, condition, tests). Post-38.
-- [ ] **Verify the `nationality_has_dgt_agreement` country list** — the derivation deciding
+- [x] **DONE 2026-07-13 (major)** — DGT list corrected vs the official convenio table: 6 countries wrongly promised an exchange (CU/GY/MX/SR/TT/VE), 13 wrongly sent to the exam (incl. PH/MA/UA/TR). Was: verify the `nationality_has_dgt_agreement` country list — the derivation deciding
       licence exchange vs driving exam is list-based and never had its own sourcing pass
       (dgt.es's bilateral-agreement list is the source).
-- [ ] **A6 — "short stays travel light" empty-state copy on /plan** — short-stay plans are
+- [x] **DONE 2026-07-13** — A6 short-stay empty-state copy on /plan ×5 — short-stay plans are
       now honestly tiny/advisory-only; the plan page should say why (the interview pane
       already does for EU). ×5.
-- [ ] **Income-question refinement (user-noticed 2026-07-13):** `annual_income_eur_band`
+- [x] **DONE 2026-07-13** — income gated on visa_type ∈ {nlv,dnv} (+2 tests). Was: `annual_income_eur_band`
       is skipped for EU/mixed households BY DESIGN (it only feeds the NLV/DNV threshold
       checks — the 2026-07-10 "earn its place" audit) — but post-A2/B1 it's still asked of
       non-EU profiles whose route also can't use it (job_seeker, work_permit,
       self_employment, student). Consider gating on `visa_type ∈ {nlv, dnv}` instead;
       update interview-order tests accordingly.
-- [ ] **Regional pass, remaining territories**: País Vasco + Navarra (FORAL — per-territorio
+- [x] **DONE 2026-07-13** — foral + special territories verified (PV 4%/7% via Bizkaia+Gipuzkoa portals; Navarra 6%; Ceuta/Melilla 6%−50%→3%). Was: regional pass, remaining territories: País Vasco + Navarra (FORAL — per-territorio
       rates: Bizkaia/Gipuzkoa/Álava + Navarra's own regime) · Ceuta/Melilla (special
       regime). Each needs its own official-source session.
 - [ ] **Standing (quarterly, or each January when budget laws land): re-verify

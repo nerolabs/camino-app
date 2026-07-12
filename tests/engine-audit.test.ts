@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { derive, type Profile } from '../core/interview-controller';
+import { derive, isSlotApplicable, SLOTS, type Profile } from '../core/interview-controller';
 import { buildPlan } from '../core/engine-controller';
 
 // Regressions from the 2026-07-12 engine audit (docs/audits/2026-07-12-engine-audit.md).
@@ -98,6 +98,46 @@ describe('audit A14 — EU citizens naturalise by residence like everyone else',
     expect(ids.has('citizenship-track-standard')).toBe(true);
     expect(ids.has('ccse-exam')).toBe(true);
     expect(ids.has('dele-a2-exam')).toBe(true); // German isn't Spanish-speaking-national
+  });
+});
+
+describe('audit B6 — corporate tax only for Spanish companies', () => {
+  it('a business owner with a Spanish company files Modelo 200; a foreign-company owner does not', () => {
+    const withEs = mover({ work_situation: 'business_owner', has_spanish_company: true });
+    expect(withEs.has('modelo-200')).toBe(true);
+    const foreign = mover({ work_situation: 'business_owner', has_spanish_company: false });
+    expect(foreign.has('modelo-200')).toBe(false);
+    // not_sure never earns a penalty item on a guess
+    const unsure = mover({ work_situation: 'business_owner', has_spanish_company: 'not_sure' as unknown as boolean });
+    expect(unsure.has('modelo-200')).toBe(false);
+  });
+  it('the clarifier is asked only of business owners', () => {
+    const SLOT = SLOTS.find(s => s.field === 'has_spanish_company')!;
+    const owner = { nationalities: ['US'], work_situation: 'business_owner', intends_long_stay: true } as Profile;
+    derive(owner);
+    expect(isSlotApplicable(SLOT, owner)).toBe(true);
+    const retiree = { nationalities: ['US'], work_situation: 'retired', intends_long_stay: true } as Profile;
+    derive(retiree);
+    expect(isSlotApplicable(SLOT, retiree)).toBe(false);
+  });
+});
+
+describe('income question earns its place (user-noticed, 2026-07-13)', () => {
+  const INCOME = SLOTS.find(s => s.field === 'annual_income_eur_band')!;
+  const applicable = (over: Partial<Profile>) => {
+    const p: Profile = { nationalities: ['US'], work_situation: 'retired', intends_long_stay: true, ...over } as Profile;
+    derive(p);
+    return isSlotApplicable(INCOME, p);
+  };
+  it('asked exactly on the routes that read it (NLV, DNV)', () => {
+    expect(applicable({})).toBe(true); // retired → NLV
+    expect(applicable({ work_situation: 'employed_remote', employer_country_is_foreign: true })).toBe(true); // DNV
+  });
+  it('never asked when no route can use it', () => {
+    expect(applicable({ nationalities: ['DE'] })).toBe(false);            // EU
+    expect(applicable({ work_situation: 'student' })).toBe(false);        // student route
+    expect(applicable({ work_situation: 'job_seeker' })).toBe(false);     // no route (A2)
+    expect(applicable({ work_situation: 'business_owner' })).toBe(false); // self-employment route
   });
 });
 

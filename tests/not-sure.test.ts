@@ -19,8 +19,10 @@ const base: Profile = {
 describe('not_sure sentinel', () => {
   it('only uncertainty-prone yes/no slots offer it', () => {
     const allowed = SLOTS.filter(s => s.allowNotSure).map(s => s.field).sort();
-    expect(allowed).toEqual(['has_pets', 'has_spanish_address', 'intends_long_stay',
-      'owns_or_drives', 'owns_property_in_spain', 'wants_citizenship'].sort());
+    // has_spanish_company joined 2026-07-13 (audit B6): genuinely undecidable pre-move,
+    // and not_sure correctly withholds the Modelo-200 penalty item rather than guessing.
+    expect(allowed).toEqual(['has_pets', 'has_spanish_address', 'has_spanish_company',
+      'intends_long_stay', 'owns_or_drives', 'owns_property_in_spain', 'wants_citizenship'].sort());
     // hard forks / knowable facts never offer it
     for (const f of ['employer_country_is_foreign', 'has_children', 'partner_is_married'])
       expect(SLOTS.find(s => s.field === f)?.allowNotSure).toBeFalsy();

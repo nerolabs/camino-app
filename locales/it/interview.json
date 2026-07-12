@@ -52,7 +52,8 @@
     "previously_ex_spanish_colony_nationality": "I cittadini di ex colonie spagnole hanno tempi per la cittadinanza molto più brevi. Hai la cittadinanza di una di esse — quasi tutta l'America Latina o le Filippine?",
     "property_purchase": "La data d'acquisto àncora le scadenze di notaio, registro e tasse. Più o meno quando si è conclusa (o si concluderà)? Basta il mese.",
     "wants_citizenship": "Questo decide se pianifichiamo il percorso completo verso la cittadinanza o solo i rinnovi della residenza. A lungo termine, vorresti diventare cittadino spagnolo?",
-    "non_eu_family_member": "Un’altra sui passaporti — qualcuno che si trasferisce conta su un passaporto né UE né spagnolo? Avrà il suo passaggio di residenza dedicato."
+    "non_eu_family_member": "Un’altra sui passaporti — qualcuno che si trasferisce conta su un passaporto né UE né spagnolo? Avrà il suo passaggio di residenza dedicato.",
+    "has_spanish_company": "Una domanda sull’azienda — la tua impresa è (o diventerà) una società spagnola? Chi tiene la società all’estero salta del tutto le dichiarazioni societarie spagnole."
   },
   "chips": {
     "yes": "Sì",

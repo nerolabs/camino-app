@@ -86,9 +86,25 @@ export const SLOTS: Slot[] = [
     prompt_hint: "whether their employer is based outside Spain (vs a Spanish company hiring them)",
   },
   {
+    // Audit B6 (2026-07-13): Spanish corporate tax (Modelo 200) only applies if the company
+    // itself is Spanish (or gains a Spanish permanent establishment) — a business owner
+    // keeping a foreign company doesn't file it. One question settles it instead of
+    // over-applying a penalty item to every owner.
+    field: "has_spanish_company", type: "bool", input: "yesno", allowNotSure: true, order: 36,
+    required_if: { field: "work_situation", op: "eq", value: "business_owner" },
+    prompt_hint: "whether their company is (or will become) a Spanish company — vs keeping a business incorporated abroad",
+  },
+  {
     // Sensitive → deferred despite high leverage; drives visa qualification.
     field: "annual_income_eur_band", type: "band", input: "single", order: 170, allowOther: false,
-    required_if: { field: "is_eu", op: "eq", value: false },
+    // Earn-its-place, tightened 2026-07-13 (user-noticed): the band exists ONLY to power
+    // the NLV/DNV threshold warnings — so ask exactly the people on those routes. The old
+    // is_eu=false gate still collected a sensitive number from job seekers, sponsored
+    // workers, the self-employed and students, whose routes never read it.
+    required_if: { any: [
+      { field: "visa_type", op: "eq", value: "nlv" },
+      { field: "visa_type", op: "eq", value: "dnv" },
+    ] },
     options: ["under €20k", "€20k–€28k", "€28k–€34k", "€34k–€60k", "€60k+"],
     prompt_hint: "their rough annual household income in euros — checked against the NLV/DNV visa income thresholds for their household",
   },
@@ -212,8 +228,16 @@ const EU = new Set([
   "CH",           // Switzerland
 ]);
 
-// Countries with DGT bilateral exchange agreement (no theory/practical exam)
-const DGT_AGREEMENT = new Set(["GB","AR","BO","BR","CH","CL","CO","CR","CU","DO","EC","GT","GY","HN","JP","KR","MX","NI","PA","PE","PY","SR","SV","TT","UY","VE"]);
+// Countries with a DGT bilateral exchange agreement (car/motorcycle licences exchange
+// without an exam; some require tests only for truck/bus categories). Verified 2026-07-13
+// against the DGT's own convenio table (dgt.es → canjes → países con convenio) — the old
+// list promised an exchange to 6 countries NOT on it (CU, GY, MX, SR, TT, VE) and wrongly
+// sent 13 agreement countries to the exam (incl. PH, MA, UA, TR). Re-verify on the same
+// page when this next comes up: agreements get signed and lapse.
+const DGT_AGREEMENT = new Set([
+  "AD","AR","BO","BR","CH","CL","CO","CR","DO","DZ","EC","GB","GE","GT","HN","JP","KR",
+  "MA","MC","MD","MK","NI","NZ","PA","PE","PH","PY","RS","SV","TN","TR","UA","UY",
+]);
 
 // Former Spanish colonies → 2-year citizenship track
 const EX_COLONY = new Set(["AR","BO","CL","CO","CR","CU","DO","EC","GT","GQ","HN","MX","NI","PA","PE","PH","PR","PY","SV","UY","VE"]);
