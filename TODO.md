@@ -5,7 +5,10 @@ actionable lives above the fold; the done/historical record is below it** (reorg
 2026-07-12, user request). See `HANDOFF.md` for the fuller picture and `core/SOURCING.md`
 for obligation provenance.
 
-Last updated: 2026-07-12 late night. **Build 38 (v1.0.0 (38), Build ID 4f60d8e0) is BUILT +
+Last updated: 2026-07-13 night (pre-morning rulings: C9 (a)+(b) GO / (c)+(d) → ledger ·
+PROVIDERS migration closed as user-monitored · /de mistranslation fix approved · C2b held
+for mid-morning behind the user's Turnstile setup). Prior state, 2026-07-12 late night:
+**Build 38 (v1.0.0 (38), Build ID 4f60d8e0) is BUILT +
 SUBMITTED to App Store Connect** (e2e-ios gate skipped under an explicit ONE-TIME user waiver —
 recorded in docs/testing/2026-07-12-build37-triage.md; not a precedent). **The five-seat
 council report landed the same night and was fully user-triaged** — rulings live in the
@@ -54,8 +57,11 @@ backlog (catalog 63→73), and five+ production web deploys — all E2E-gated.
        `interview_note_distilled` / `question_cta_clicked`).
 4. [x] ~~Full engine-audit session (original scoping note)~~ — superseded by item 0 above
        (executed 2026-07-12→13; docs/audits/2026-07-12-engine-audit.md is the record).
-5. [ ] **[USER] docs/PROVIDERS.md migration checklist** — route all billing/notification
-       email to andrew@getcamino.app (Namecheap first; Apple only AFTER the trader case).
+5. [x] **[USER] docs/PROVIDERS.md migration checklist — RULED 2026-07-13 night: no
+       migration for now.** User: "I am okay on the providers stuff for now… I will
+       monitor emails / billing as time goes on. Your work is done here and documented
+       for my reference." The doc stays as the reference map; billing-loop hardening
+       (C9d) sits in the 🗄 Post-launch ledger under the same ruling.
 6. [x] ~~Build 36 device verify~~ — superseded by the 37-shred plan (36 was live-checked by
        the user on web + used for the screenshot retake; 37 gets the full device pass).
 
@@ -181,24 +187,27 @@ touch the engine's determinism — they close the seams around it.
       the primary applicant's route; a working partner should run their own 3-minute
       interview" (share links make the second run cheap) ×5 locales. The person-structured
       profile is a post-launch structural bet, not a pre-launch patch.
-- [ ] **C9 — the stranger contract (Ops #3/#4) — remediation DETAILED, awaiting user go**
-      (user asked for specifics before ruling; details in the 2026-07-12 council-response
-      chat + report §7): (a) auto-ack email on /api/feedback when the submitter left an
-      address — honest copy: built by one person, typical reply within ~4–5 days, not legal
-      advice, urgent → your consulate's cita-previa page, links to /questions + /changelog;
-      (b) raise FEEDBACK_GLOBAL_PER_DAY 200 → ~1000 (env change) + the C2c Sentry alert
-      covers its 429s; (c) a weekly triage slot + five canned replies (a doc, not code);
-      (d) **[USER, ~15 min] break the circular billing loop:** Namecheap auto-renew ON +
-      register getcamino.app 2–3 years ahead + registrant/renewal contact → an EXTERNAL
-      mailbox (the gmail), Google Workspace billing contact external too, and Sentry alert
-      routing → the monitored inbox. (The Turnstile piece is C2b.)
-- **Marketing report — UNTRIAGED** (the only seat without user rulings yet): top-5 conversion
-  list (real cited step in the hero · EU/non-EU segmentation · German native pass — "Damit
-  gehen Sie nach Hause" on /de is a genuine mistranslation · deterministic-engine line at the
-  point of AI-doubt · a "the catch / when you still need a professional" section) + promise-
-  audit housekeeping (27-vs-32 step teaser, 73-vs-78 sitemap guide URLs, /guides→/guide
-  redirect + branded 404, future-dated changelog rendering, /questions/modelo-720 deep-link
-  check). Awaiting a user pass.
+- [ ] **C9 — the stranger contract (Ops #3/#4) — RULED 2026-07-13 night: (a)+(b) GO;
+      (c)+(d) → the 🗄 Post-launch ledger** (user: "(a) and (b) seem more than enough for
+      now"). Queue after the C1 package:
+      - [ ] **C9a — auto-ack email on /api/feedback** when the submitter left an address —
+            honest copy: built by one person, typical reply within ~4–5 days, not legal
+            advice, urgent → your consulate's cita-previa page, links to /questions +
+            /changelog. Rides the existing Resend pipeline (lib/serverEmail.ts +
+            lib/emailTemplates.ts), ×5 locales. NOTE: the reply-time line is a personal
+            commitment — the copy carries whatever cadence the user will actually keep.
+      - [ ] **C9b — raise FEEDBACK_GLOBAL_PER_DAY 200 → ~1000** (env change; the C2c
+            Sentry alert covers its 429s, so a hit cap pages instead of silently dropping
+            real feedback). (The Turnstile piece is C2b — user: hold for MID-MORNING
+            2026-07-13, after the widget + keys exist.)
+- **Marketing report — UNTRIAGED except one item** (user 2026-07-13 night: the /de "Damit
+  gehen Sie nach Hause" mistranslation fix is APPROVED — rides the first morning deploy,
+  with the standing three-layer copy grep). Rest of the seat still awaits a user pass:
+  top-5 conversion list (real cited step in the hero · EU/non-EU segmentation · the full
+  German native pass · deterministic-engine line at the point of AI-doubt · a "the catch /
+  when you still need a professional" section) + promise-audit housekeeping (27-vs-32 step
+  teaser, 73-vs-78 sitemap guide URLs, /guides→/guide redirect + branded 404, future-dated
+  changelog rendering, /questions/modelo-720 deep-link check).
 
 ## 🗄 Post-launch ledger (council items DEFERRED by user ruling — trigger ≈ PMF / 1000+ real users with profiles)
 
@@ -222,6 +231,15 @@ startup are like an airplane that just took off — getting to altitude is WAY m
       "there is nothing to lose right now."
 - [ ] **Founder name/face on-site + FAQ meta-questions** (PR SEV3 + Marketing) — bundles
       naturally with the repo/entity decision at PMF.
+- [ ] **C9c — weekly support-triage slot + five canned replies** (Ops #4; deferred
+      2026-07-13, user: "(a) and (b) seem more than enough for now") — a doc plus a
+      recurring ~30-min calendar block. Softer trigger than the ledger default: consider
+      as soon as real feedback volume exists.
+- [ ] **C9d — break the circular billing loop** (Ops #3; deferred 2026-07-13 — user is
+      monitoring emails/billing personally for now, same ruling as the PROVIDERS.md
+      migration): Namecheap auto-renew ON + register getcamino.app 2–3 years ahead +
+      registrant/renewal contacts → an EXTERNAL mailbox (the gmail), Google Workspace
+      billing contact external too, Sentry alert routing → the monitored inbox.
 
 ## 🔁 The freshness beat (converged council finding #2 — user directive 2026-07-12)
 
