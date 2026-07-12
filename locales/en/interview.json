@@ -51,7 +51,8 @@
     "foreign_assets_eur_band": "Residents declare foreign assets above certain levels — this just decides whether those steps apply to you. You only pick a range: roughly how much do you hold outside Spain?",
     "previously_ex_spanish_colony_nationality": "Nationals of former Spanish colonies are on a much shorter citizenship clock. Do you hold nationality from one — most of Latin America, or the Philippines?",
     "property_purchase": "The purchase date anchors the notary, registry and tax deadlines. Roughly when did (or will) it complete? A month is enough.",
-    "wants_citizenship": "This decides whether we plan the full citizenship track, or just keep your residence renewals tidy. Longer term, are you hoping to become a Spanish citizen?"
+    "wants_citizenship": "This decides whether we plan the full citizenship track, or just keep your residence renewals tidy. Longer term, are you hoping to become a Spanish citizen?",
+    "non_eu_family_member": "One more on passports — is anyone making this move relying on a passport that isn’t EU or Spanish? They’ll have their own residence step."
   },
   "chips": {
     "yes": "Yes",
@@ -117,7 +118,8 @@
     "removed_one": "−{{count}} step — simpler for you",
     "removed_other": "−{{count}} steps — simpler for you",
     "removedShort_one": "−{{count}}",
-    "removedShort_other": "−{{count}}"
+    "removedShort_other": "−{{count}}",
+    "emptyEu": "Good news — with an EU passport there’s no visa paperwork to add. Your steps appear as we pin down your timing and situation."
   },
   "final": {
     "question": "One last thing — is there anything else about your move you think I should know? It may shape your roadmap. Or skip straight to it.",

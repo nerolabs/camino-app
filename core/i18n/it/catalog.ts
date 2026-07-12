@@ -21,6 +21,7 @@ export const IT_CATALOG_TITLES: Record<string, string> = {
   'empadronamiento': 'Empadronamiento (padrón municipal — iscriviti all’anagrafe del tuo comune)',
   'nie': 'Ottieni il tuo NIE (Número de Identidad de Extranjero, modulo EX-15) — necessario per quasi ogni pratica ufficiale o finanziaria',
   'eu-registration-certificate': 'Iscriviti al Registro centrale degli stranieri e ottieni il certificato di registrazione di cittadino UE (certificado de registro, modulo EX-18) — obbligatorio per i cittadini UE/SEE che restano più di 3 mesi; si chiede di persona entro 3 mesi dall’ingresso (non serve ai cittadini spagnoli)',
+  'eu-family-member-card': 'Richiedi la carta di soggiorno di familiare di cittadino dell’Unione (tarjeta de familiar, modulo EX-19) per i membri del nucleo senza passaporto UE — si presenta di persona entro 3 mesi dall’ingresso; la ricevuta della domanda prova la residenza legale finché non arriva la carta',
   'residencia': 'Richiedi la carta di residenza (TIE) — avvia la pratica (impronte/huella) entro 30 giorni dall’ingresso; l’attesa per l’appuntamento può durare settimane nelle grandi città',
   'tarjeta-sanitaria': 'Richiedi la tessera sanitaria pubblica (tarjeta sanitaria) quando contribuisci alla previdenza o hai diritto alla copertura pubblica — chi ha la NLV mantiene l’assicurazione privata',
   'exit-tax-return': 'Comunica all’agenzia fiscale del tuo paese il cambio di residenza fiscale',

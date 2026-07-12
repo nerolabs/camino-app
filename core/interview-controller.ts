@@ -105,6 +105,22 @@ export const SLOTS: Slot[] = [
     prompt_hint: "whether they are legally married or in a registered civil partnership",
   },
   {
+    // Mixed-passport households (build-37 shred, 2026-07-12): "everyone's passports" is a
+    // SET — it can't say who holds what. [US, ES] is one dual citizen (needs nothing) or a
+    // US spouse + Spanish spouse (the US spouse needs the EU family-member card, EX-19).
+    // When the household shows both EU/Spanish and non-EU passports and more than one
+    // person is moving, ask directly instead of guessing.
+    field: "non_eu_family_member", type: "bool", input: "yesno", order: 95,
+    required_if: { all: [
+      { field: "household_mixed_eu", op: "eq", value: true },
+      { any: [
+        { field: "has_spouse_or_partner", op: "eq", value: true },
+        { field: "has_children", op: "eq", value: true },
+      ] },
+    ] },
+    prompt_hint: "whether anyone moving with them does NOT hold an EU (or Spanish) passport of their own",
+  },
+  {
     field: "has_children", type: "bool", input: "yesno", order: 90,
     prompt_hint: "whether school-age children will be making this move",
   },
@@ -268,6 +284,20 @@ export const DERIVATIONS: Derivation[] = [
   // only exempt when a passport positively shows a Spanish-speaking country.
   { field: "is_spanish_speaking_national", from: ["nationalities"],
     compute: (p) => (p.nationalities as string[]).some(n => SPANISH_SPEAKING.has(n)) },
+
+  // A Spanish passport holder is not a "foreign national" in Spain — the EU foreigner
+  // registration (EX-18) cannot apply to them (build-37 shred finding: a dual US/ES
+  // citizen was offered the Central Register of Foreign Nationals, 2026-07-12).
+  { field: "is_spanish_national", from: ["nationalities"],
+    compute: (p) => (p.nationalities as string[]).includes("ES") },
+
+  // The household's passports include both EU/EEA and non-EU — ambiguous by itself (one
+  // dual citizen vs a mixed couple), so it only GATES the clarifying question above.
+  { field: "household_mixed_eu", from: ["nationalities"],
+    compute: (p) => {
+      const ns = p.nationalities as string[];
+      return ns.some(n => EU.has(n)) && ns.some(n => !EU.has(n));
+    } },
 
   { field: "is_tax_resident", from: ["intends_long_stay"],
     compute: (p) => p.intends_long_stay === true },

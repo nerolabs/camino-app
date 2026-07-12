@@ -12,7 +12,7 @@ export type Persona = {
 export const TEST_PERSONAS: Persona[] = [
   {
     name: 'Andrew — US family, dual-ES household',
-    description: 'US nationals, remote worker, wife holds an ES passport (household is EU → eu_citizen path). Tests: EU fast-path, family cluster, driving, Modelo 720 assets.',
+    description: 'US remote worker, wife holds an ES passport (household is EU → eu_citizen path). Tests: EU fast-path, the MIXED-household clarifier (build-37 shred: the Spanish spouse must NOT get the foreign-national EX-18; the US spouse needs the EX-19 family card), family cluster, driving, Modelo 720 assets.',
     answers: {
       speaks_spanish:                       'A little',
       nationalities:                        ['US', 'ES'],
@@ -21,6 +21,7 @@ export const TEST_PERSONAS: Persona[] = [
       has_spouse_or_partner:                true,
       partner_is_married:                   true,
       has_children:                         true,
+      non_eu_family_member:                 true,
       intends_long_stay:                    true,
       arrival_date:                         '2026-09-01',
       has_spanish_address:                  true,

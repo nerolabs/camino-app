@@ -21,6 +21,23 @@ export type ChangelogEntry = {
 export const CHANGELOG: ChangelogEntry[] = [
   {
     date: '2026-07-12',
+    title: 'Mixed-passport households: the missing family-member card added',
+    details: [
+      'A household answer like "American and Spanish passports" is ambiguous — one dual citizen, or a mixed couple? The engine treated any EU passport as covering the whole household, leaving the non-EU spouse with no residence step at all.',
+      'The interview now asks one clarifying question when a household mixes EU/Spanish and non-EU passports, and the catalog gained the EU family-member residence card (tarjeta de familiar de ciudadano de la Unión, form EX-19) — applied for in person within 3 months of entry, verified against the Ministry of Inclusion’s official guidance. Catalog: 63 → 64.',
+    ],
+    ids: ['eu-family-member-card'],
+  },
+  {
+    date: '2026-07-12',
+    title: 'Spanish passport holders no longer offered the foreign-national registration',
+    details: [
+      'A tester with dual US/Spanish citizenship was shown "Register in the Central Register of Foreign Nationals" — a step whose own description says it isn’t needed for Spanish nationals. The rule treated every EU passport alike; a Spanish citizen is not a foreign national in Spain. The condition now excludes Spanish passports (other EU/EEA nationals still get it, correctly).',
+    ],
+    ids: ['eu-registration-certificate'],
+  },
+  {
+    date: '2026-07-12',
     title: 'First regional specifics: ITP and wealth-tax figures, verified per comunidad',
     details: [
       'Transfer-tax (ITP) rates for resale homes now show on the roadmap for Andalucía (7%), Madrid (6%), Cataluña (progressive 10%→13% since its June 2025 reform), and the Comunitat Valenciana — each verified on that region’s own tax portal.',

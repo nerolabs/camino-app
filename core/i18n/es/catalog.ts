@@ -28,6 +28,7 @@ export const ES_CATALOG_TITLES: Record<string, string> = {
   'empadronamiento': 'Empadronamiento (padrón municipal — inscríbete en el censo de tu municipio)',
   'nie': 'Consigue tu NIE (Número de Identidad de Extranjero, formulario EX-15) — necesario para casi cualquier trámite oficial o financiero',
   'eu-registration-certificate': 'Inscríbete en el Registro Central de Extranjeros y consigue tu certificado de registro de ciudadano de la UE (certificado de registro, formulario EX-18) — obligatorio para nacionales UE/EEE que se quedan más de 3 meses; se solicita en persona dentro de los 3 meses tras la entrada (no aplica a nacionales españoles)',
+  'eu-family-member-card': 'Solicita la tarjeta de residencia de familiar de ciudadano de la Unión (formulario EX-19) para los miembros del hogar sin pasaporte de la UE — se solicita en persona dentro de los 3 meses desde la entrada; el resguardo de la solicitud acredita la residencia legal hasta que llegue la tarjeta',
   'residencia': 'Solicita tu tarjeta de residencia (TIE) — inicia el trámite (toma de huella) dentro de los 30 días tras la entrada; la espera de cita puede ser de varias semanas en ciudades grandes',
   'tarjeta-sanitaria': 'Solicita la tarjeta sanitaria pública cuando cotices a la Seguridad Social o tengas derecho a cobertura pública — con la NLV mantienes el seguro privado',
   'exit-tax-return': 'Notifica a la agencia tributaria de tu país de origen el cambio de residencia fiscal',

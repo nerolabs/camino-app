@@ -404,11 +404,33 @@ export const CATALOG: Obligation[] = [
     // long-stay; Spanish nationals themselves don't need it — the title says so.
     id: 'eu-registration-certificate',
     title: 'Register in the Central Register of Foreign Nationals and get your EU citizen registration certificate (certificado de registro, form EX-18) — required for EU/EEA nationals staying more than 3 months; apply in person within 3 months of entry (not needed for Spanish nationals)',
+    verified_at: '2026-07-12', // condition corrected: Spanish nationals excluded (build-37 shred)
     category: 'admin', severity: 'required',
     source: 'official',
     source_url: 'https://www.inclusion.gob.es/en/web/migraciones/w/65.-certificado-de-registro-de-ciudadano-de-la-union-europea',
+    // The title always said "(not needed for Spanish nationals)" — the condition now enforces
+    // it. A Spanish passport holder is not a foreign national (build-37 shred, 2026-07-12).
     applies_if: { all: [
       { field: 'is_eu', op: 'eq', value: true },
+      { field: 'is_spanish_national', op: 'eq', value: false },
+      { field: 'intends_long_stay', op: 'eq', value: true },
+    ] },
+    depends_on: [],
+    timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: 90 },
+  },
+  {
+    // Build-37 shred (2026-07-12): a mixed household (EU/Spanish + non-EU passports) rode
+    // the EU path with NOTHING for the non-EU member. Directive 2004/38 route: family
+    // members of Spanish/EU citizens without EU nationality need the tarjeta de familiar.
+    id: 'eu-family-member-card',
+    title: 'Apply for the EU family-member residence card (tarjeta de familiar de ciudadano de la Unión, form EX-19) for household members without an EU passport — apply in person within 3 months of entry; the application receipt proves legal residence until the card arrives',
+    verified_at: '2026-07-12',
+    category: 'admin', severity: 'required',
+    source: 'official',
+    source_url: 'https://www.inclusion.gob.es/en/web/migraciones/w/62.-tarjeta-de-residencia-de-familiar-de-ciudadano-de-la-union-europea',
+    applies_if: { all: [
+      { field: 'is_eu', op: 'eq', value: true },
+      { field: 'non_eu_family_member', op: 'eq', value: true },
       { field: 'intends_long_stay', op: 'eq', value: true },
     ] },
     depends_on: [],

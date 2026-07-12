@@ -123,9 +123,15 @@ describe('gating regressions', () => {
     expect(james.has('scout-where-to-live')).toBe(false); // knows where to live
   });
 
-  it('EU registration: present for EU long-stay (Andrew), absent for EU short-stay (Mara)', () => {
-    expect(ids(planFor('Andrew')).has('eu-registration-certificate')).toBe(true);
-    expect(ids(planFor('Mara')).has('eu-registration-certificate')).toBe(false);
+  it('EU registration: EX-18 only for non-Spanish EU nationals; mixed households get EX-19 (build-37 shred)', () => {
+    // Andrew's household holds a SPANISH passport — the Spanish spouse is not a "foreign
+    // national" (no EX-18), and the US spouse needs the EU family-member card instead.
+    // This test previously asserted the buggy behavior; Cristina's real interview caught it.
+    const andrew = ids(planFor('Andrew'));
+    expect(andrew.has('eu-registration-certificate')).toBe(false);
+    expect(andrew.has('eu-family-member-card')).toBe(true);
+    expect(ids(planFor('Mara')).has('eu-registration-certificate')).toBe(false); // short stay
+    // (EX-18-present for a non-Spanish EU long-stay is pinned in tests/spanish-national.test.ts)
   });
 
   it('Kenji (property buyer): purchase cluster present and anchored firm to the purchase date', () => {

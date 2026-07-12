@@ -4,7 +4,11 @@
 added or removed. Forward-looking ideas (tests we *want*) live in `docs/BUILD.md` → "Growing E2E
 coverage"; this file is the honest picture of **current** coverage.
 
-Last updated: 2026-07-12 night, second entry (+3 vitest — question pages: slug/shape sanity,
+Last updated: 2026-07-12 night, third entry (build-37 shred fixes: +6 spanish-national tests —
+EX-18 excluded for Spanish passports, EX-19 present for mixed households, solo-dual silent,
+DE+US couple gets BOTH; engine test rewritten — it had been ASSERTING the EX-18 bug via the
+Andrew persona; Andrew plan snapshot deliberately updated (EX-18→EX-19); catalog-titles
+completeness 63→64; vitest 248). Second entry (+3 vitest — question pages: slug/shape sanity,
 related ids exist, the mechanical digit guard; vitest 242). Earlier (the trust batch: +17 vitest — changelog structural honesty (4),
 share-link codec (5), sample personas (4), regional specifics (4) — vitest now 239; +2 public
 smoke — #9 changelog page + guide stamp, #10 shared-roadmap render + junk dead-end — public
@@ -34,7 +38,7 @@ Layers, and when they run:
 
 ---
 
-## 1. Unit / integration (vitest) — 242 passing (+10 opt-in network)
+## 1. Unit / integration (vitest) — 248 passing (+10 opt-in network)
 
 Concentrated on the deterministic core (that's the product's real risk surface):
 

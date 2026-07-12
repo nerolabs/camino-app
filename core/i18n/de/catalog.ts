@@ -21,6 +21,7 @@ export const DE_CATALOG_TITLES: Record<string, string> = {
   'empadronamiento': 'Empadronamiento (Padrón municipal — trag dich ins Melderegister deiner Gemeinde ein)',
   'nie': 'Besorge deine NIE (Número de Identidad de Extranjero, Formular EX-15) — nötig für fast alle offiziellen und finanziellen Vorgänge',
   'eu-registration-certificate': 'Trag dich ins Zentrale Ausländerregister ein und hole dein EU-Bürger-Registrierungszertifikat (Certificado de registro, Formular EX-18) — Pflicht für EU-/EWR-Bürger, die länger als 3 Monate bleiben; persönlich innerhalb von 3 Monaten nach Einreise beantragen (für spanische Staatsangehörige nicht nötig)',
+  'eu-family-member-card': 'Beantrage die Aufenthaltskarte für Familienangehörige von Unionsbürgern (tarjeta de familiar, Formular EX-19) für Haushaltsmitglieder ohne EU-Pass — persönlich innerhalb von 3 Monaten nach Einreise; die Antragsbestätigung belegt den legalen Aufenthalt, bis die Karte kommt',
   'residencia': 'Beantrage deine Aufenthaltskarte (TIE) — starte den Vorgang (Fingerabdrücke/Huella) innerhalb von 30 Tagen nach Einreise; die Terminwartezeit kann in Großstädten mehrere Wochen betragen',
   'tarjeta-sanitaria': 'Beantrage die öffentliche Gesundheitskarte (Tarjeta sanitaria), sobald du in die Sozialversicherung einzahlst oder Anspruch auf öffentliche Versorgung hast — NLV-Inhaber behalten stattdessen ihre Privatversicherung',
   'exit-tax-return': 'Melde der Steuerbehörde deines Heimatlands den Wechsel deiner steuerlichen Ansässigkeit',

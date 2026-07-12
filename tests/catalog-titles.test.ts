@@ -17,8 +17,8 @@ const LOCALES = Object.keys(CATALOG_TITLES);
 describe.each(LOCALES)('catalog titles "%s" (localization gates on the legal content)', lang => {
   const titles = CATALOG_TITLES[lang];
 
-  it('completeness — all 63 obligations have a title, and no orphans', () => {
-    expect(objectives.size).toBe(63);
+  it('completeness — all 64 obligations have a title, and no orphans', () => {
+    expect(objectives.size).toBe(64);
     const missing = [...objectives.keys()].filter(id => !(id in titles));
     expect(missing, `obligations missing a ${lang} title`).toEqual([]);
     const orphans = Object.keys(titles).filter(id => !objectives.has(id));

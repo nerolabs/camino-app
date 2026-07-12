@@ -8,7 +8,7 @@ exports[`plan structure is frozen (localization must not change engine behavior)
   "dgt-exam | when_settled | required | scheduled",
   "empadronamiento | first_weeks | required | scheduled",
   "escolarizacion | first_weeks | required | scheduled",
-  "eu-registration-certificate | first_weeks | required | scheduled",
+  "eu-family-member-card | first_weeks | required | scheduled",
   "tarjeta-sanitaria | first_weeks | required | scheduled",
   "digital-certificate | when_settled | recommended | pending_anchor",
   "exit-tax-return | before_you_go | recommended | scheduled",

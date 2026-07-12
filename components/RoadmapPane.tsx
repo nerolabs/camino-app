@@ -51,7 +51,12 @@ export default function RoadmapPane({
 
       {plan.length === 0 ? (
         <View style={styles.empty}>
-          <Text style={styles.emptyText}>{t('roadmap.empty')}</Text>
+          {/* EU passports legitimately zero out the early adders (no visa cluster, no NIE) —
+              without this line the pane sits silent for most of the interview and reads as
+              broken (build-37 shred finding, 2026-07-12). Deterministic: derived flag only. */}
+          <Text style={styles.emptyText}>
+            {profile.is_eu ? t('roadmap.emptyEu') : t('roadmap.empty')}
+          </Text>
         </View>
       ) : (
         <ScrollView style={styles.list} contentContainerStyle={styles.listContent}>

@@ -51,7 +51,8 @@
     "foreign_assets_eur_band": "Los residentes declaran bienes en el extranjero a partir de ciertos niveles — esto solo decide si esos pasos te aplican. Solo eliges una franja: ¿aproximadamente cuánto tienes fuera de España?",
     "previously_ex_spanish_colony_nationality": "Los nacionales de antiguas colonias españolas tienen un reloj de nacionalidad mucho más corto. ¿Tienes nacionalidad de alguna — casi toda Latinoamérica, o Filipinas?",
     "property_purchase": "La fecha de compra ancla los plazos de notaría, registro e impuestos. ¿Más o menos cuándo se completó (o se completará)? Con el mes basta.",
-    "wants_citizenship": "Esto decide si planificamos la vía completa de nacionalidad o solo mantenemos al día tus renovaciones de residencia. A largo plazo, ¿te gustaría obtener la nacionalidad española?"
+    "wants_citizenship": "Esto decide si planificamos la vía completa de nacionalidad o solo mantenemos al día tus renovaciones de residencia. A largo plazo, ¿te gustaría obtener la nacionalidad española?",
+    "non_eu_family_member": "Una más sobre pasaportes — ¿alguien de los que se mudan depende de un pasaporte que no sea de la UE ni español? Tendrá su propio trámite de residencia."
   },
   "chips": {
     "yes": "Sí",
@@ -117,7 +118,8 @@
     "removed_one": "−{{count}} paso — más sencillo para ti",
     "removed_other": "−{{count}} pasos — más sencillo para ti",
     "removedShort_one": "−{{count}}",
-    "removedShort_other": "−{{count}}"
+    "removedShort_other": "−{{count}}",
+    "emptyEu": "Buenas noticias — con pasaporte de la UE no hay papeleo de visado que añadir. Tus pasos aparecerán al concretar tu calendario y tu situación."
   },
   "final": {
     "question": "Una última cosa: ¿hay algo más sobre tu mudanza que deba saber? Puede afinar tu hoja de ruta. O sáltatelo y ve directo a ella.",
