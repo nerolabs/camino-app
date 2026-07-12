@@ -28,13 +28,13 @@ five production web deploys — all E2E-gated.
 
 ## 📍 NOW (updated 2026-07-12 night — user call: ENGINE AUDIT AHEAD OF EVERYTHING)
 
-0. [ ] **⭐ THE FULL ENGINE/CATALOG AUDIT — blocks build 38 and submission** (user decision
-       2026-07-12 evening, upgraded from item 4 below). Working doc:
-       docs/audits/2026-07-12-engine-audit.md · matrix tool: scripts/audit-matrix.ts.
-       Scope: persona-matrix sweep (wrong-inclusions AND missing steps per profile class) +
-       condition-by-condition review of all 64 obligations (docs/CATALOG.md is the substrate)
-       + slot/derivation review + the student-path gap. Fixes land like today's (tests +
-       changelog + locales); unfixable-today items get severity-ranked backlog entries.
+0. [x] **⭐ THE FULL ENGINE/CATALOG AUDIT — COMPLETE 2026-07-13** (incl. the sourcing +
+       regional backlogs, both user-directed pre-38): 15 findings, 10 condition fixes, all
+       64 conditions reviewed, matrix tool standing (181×16), regional coverage complete
+       for the common regime, and NINE new sourced obligations (work/self-employment/
+       student routes, job-seeker honesty, EU-licence clock, married-to-a-Spaniard 1-year
+       citizenship, EHIC, Schengen 90/180) — catalog 64→73, all ×5 locales. OPEN REMNANT:
+       **B6 modelo-200 clarifier** (needs a has_spanish_company question — post-38).
 1. [ ] **Build 37 on TestFlight → Cristina shreds it** (share dialog, stamps, regional cards,
        changelog, interview ending, contact fixes). Her findings + the audit's fixes together
        → **build 38 = the submission candidate** (cut only after the audit closes).

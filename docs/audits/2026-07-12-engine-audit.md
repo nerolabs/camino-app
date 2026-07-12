@@ -30,7 +30,12 @@ into the catalog on vibes (invariant 3).
 | A4 | MED | Student path thin: exactly ONE student-gated item (visa health insurance). No enrollment/homologación steps for anyone; EU students see nothing student-shaped at all. (From the shred, row 6.) | **BACKLOG B2** — sourcing session |
 | A5 | — | (from the shred, already fixed today) Spanish nationals offered EX-18; mixed households missing EX-19. | FIXED pre-audit; matrix expectations encode both |
 
-## Ranked backlog (needs sourced content — do NOT patch on vibes)
+## Ranked backlog — ✅ CLEARED 2026-07-13 (all items below shipped as sourced obligations;
+see the /changelog entries and core/engine-controller.ts "Sourcing backlog B1–B8" section;
+catalog 64 → 73). B6 (modelo-200 clarifier) remains the one open item — it needs a new
+interview question, queued behind build 38.
+
+## The original ranked backlog (for the record)
 
 - **B1 — work-route steps** (work_permit + self_employment visas): employer-files-it advisory
   for sponsored work; cuenta-propia evidence list. Sources: inclusion.gob.es autorizaciones.

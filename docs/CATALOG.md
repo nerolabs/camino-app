@@ -5,7 +5,7 @@
 > which interview answers exist, what gets derived from them, and exactly which combination
 > switches each obligation on.
 
-**Totals:** 64 obligations · 20 interview questions · 17 derivations.
+**Totals:** 73 obligations · 20 interview questions · 17 derivations.
 
 ## 1 · The interview (every question asked)
 
@@ -106,6 +106,15 @@
 | `modelo-303` | penalty | official | is_self_employed_in_spain = true | `register-autonomo` | yearly (months: 1,4,7,10) |
 | `modelo-390` | penalty | official | is_self_employed_in_spain = true | `modelo-303` | yearly (months: 1) |
 | `modelo-200` | penalty | official | work_situation = "business_owner" | `residencia` | yearly (months: 7) |
+| `work-visa-employer-sponsored` | required | official | visa_type = "work_permit" AND intends_long_stay = true | `choose-visa-type` | -180d before arrival |
+| `self-employment-visa-authorization` | required | official | visa_type = "self_employment" AND intends_long_stay = true | `choose-visa-type` | -180d before arrival |
+| `university-admission` | recommended | recommendation | visa_type = "student" AND intends_long_stay = true | — | -270d before arrival |
+| `homologacion-titulos` | recommended | official | visa_type = "student" AND intends_long_stay = true | — | -180d before arrival |
+| `job-seeker-route-reality` | recommended | recommendation | is_eu = false AND intends_long_stay = true AND work_situation = "job_seeker" | — | -180d before arrival |
+| `dgt-eu-licence-check` | recommended | official | is_eu = true AND is_spanish_national = false AND owns_or_drives = true AND intends_long_stay = true | — | +730d after arrival |
+| `citizenship-married-to-spanish` | info | official | is_spanish_national = true AND non_eu_family_member = true AND partner_is_married = true AND intends_long_stay = true | `eu-family-member-card` | +365d after arrival |
+| `ehic-card` | recommended | recommendation | is_eu = true AND NOT intends_long_stay = true | — | -30d before arrival |
+| `schengen-90-180` | recommended | recommendation | is_eu = false AND NOT intends_long_stay = true | — | -60d before arrival |
 | `student-visa-health-insurance` | required | official | visa_type = "student" | `choose-visa-type` | -45d before arrival |
 | `nlv-renewal` | required | official | visa_type = "nlv" | `residencia` | +305d after residency_established |
 | `dnv-renewal` | required | official | visa_type = "dnv" | `residencia` | +1035d after residency_established |
@@ -128,21 +137,22 @@
 Every field that any `applies_if` tests, and the obligations that hinge on it. This is the
 review view: change an answer, these are the items that can appear or disappear.
 
-| Field | Gates (103 references) |
+| Field | Gates (126 references) |
 |---|---|
-| `visa_type` | `nlv-income-proof` · `nlv-income-check` · `nlv-health-insurance` · `convenio-especial` · `dnv-remote-work-proof` · `dnv-income-proof` · `dnv-income-check` · `dnv-coverage-certificate` · `tarjeta-sanitaria` · `nlv-letter-of-intent` · `nlv-non-work-declaration` · `dnv-qualification-proof` · `dnv-company-activity-proof` · `dnv-employer-permission-letter` · `beckham-law` · `student-visa-health-insurance` · `nlv-renewal` · `dnv-renewal` |
-| `intends_long_stay` | `choose-visa-type` · `consulate-appointment` · `criminal-background-check` · `medical-certificate` · `empadronamiento` · `nie` · `eu-registration-certificate` · `eu-family-member-card` · `residencia` · `tarjeta-sanitaria` · `escolarizacion` · `family-reunification` · `tax-planning-consultation` · `apostille-documents` · `sworn-translation` · `spanish-bank-account` · `permanent-residence` |
-| `is_eu` | `choose-visa-type` · `consulate-appointment` · `criminal-background-check` · `medical-certificate` · `nie` · `eu-registration-certificate` · `eu-family-member-card` · `residencia` · `dgt-exchange` · `dgt-exam` · `family-reunification` · `apostille-documents` · `sworn-translation` · `permanent-residence` |
+| `intends_long_stay` | `choose-visa-type` · `consulate-appointment` · `criminal-background-check` · `medical-certificate` · `empadronamiento` · `nie` · `eu-registration-certificate` · `eu-family-member-card` · `residencia` · `tarjeta-sanitaria` · `escolarizacion` · `family-reunification` · `tax-planning-consultation` · `apostille-documents` · `sworn-translation` · `spanish-bank-account` · `work-visa-employer-sponsored` · `self-employment-visa-authorization` · `university-admission` · `homologacion-titulos` · `job-seeker-route-reality` · `dgt-eu-licence-check` · `citizenship-married-to-spanish` · `ehic-card` · `schengen-90-180` · `permanent-residence` |
+| `visa_type` | `nlv-income-proof` · `nlv-income-check` · `nlv-health-insurance` · `convenio-especial` · `dnv-remote-work-proof` · `dnv-income-proof` · `dnv-income-check` · `dnv-coverage-certificate` · `tarjeta-sanitaria` · `nlv-letter-of-intent` · `nlv-non-work-declaration` · `dnv-qualification-proof` · `dnv-company-activity-proof` · `dnv-employer-permission-letter` · `beckham-law` · `work-visa-employer-sponsored` · `self-employment-visa-authorization` · `university-admission` · `homologacion-titulos` · `student-visa-health-insurance` · `nlv-renewal` · `dnv-renewal` |
+| `is_eu` | `choose-visa-type` · `consulate-appointment` · `criminal-background-check` · `medical-certificate` · `nie` · `eu-registration-certificate` · `eu-family-member-card` · `residencia` · `dgt-exchange` · `dgt-exam` · `family-reunification` · `apostille-documents` · `sworn-translation` · `job-seeker-route-reality` · `dgt-eu-licence-check` · `ehic-card` · `schengen-90-180` · `permanent-residence` |
 | `owns_property_in_spain` | `scout-where-to-live` · `nie` · `property-legal-due-diligence` · `completion-deed-notary` · `land-registry-registration` · `property-transfer-tax` · `ibi-property-tax` · `community-fees` · `nonresident-property-tax` |
 | `is_tax_resident` | `exit-tax-return` · `modelo-720` · `digital-certificate` · `modelo-030` · `modelo-100` · `wealth-tax` · `nonresident-property-tax` |
+| `work_situation` | `dnv-coverage-certificate` · `nlv-non-work-declaration` · `dnv-employer-permission-letter` · `beckham-law` · `modelo-200` · `job-seeker-route-reality` |
 | `wants_citizenship` | `citizenship-track-standard` · `citizenship-track-latam` · `dele-a2-exam` · `ccse-exam` · `citizenship-application` · `citizenship-jura` |
-| `work_situation` | `dnv-coverage-certificate` · `nlv-non-work-declaration` · `dnv-employer-permission-letter` · `beckham-law` · `modelo-200` |
 | `is_self_employed_in_spain` | `register-autonomo` · `autonomo-social-security` · `modelo-130` · `modelo-303` · `modelo-390` |
-| `non_eu_family_member` | `eu-family-member-card` · `dgt-exchange` · `dgt-exam` |
-| `is_spanish_national` | `nie` · `eu-registration-certificate` |
+| `is_spanish_national` | `nie` · `eu-registration-certificate` · `dgt-eu-licence-check` · `citizenship-married-to-spanish` |
+| `non_eu_family_member` | `eu-family-member-card` · `dgt-exchange` · `dgt-exam` · `citizenship-married-to-spanish` |
+| `owns_or_drives` | `dgt-exchange` · `dgt-exam` · `dgt-eu-licence-check` |
 | `foreign_assets_eur` | `modelo-720` · `wealth-tax` |
-| `owns_or_drives` | `dgt-exchange` · `dgt-exam` |
 | `nationality_has_dgt_agreement` | `dgt-exchange` · `dgt-exam` |
+| `partner_is_married` | `family-reunification` · `citizenship-married-to-spanish` |
 | `is_ex_colony_national` | `citizenship-track-standard` · `citizenship-track-latam` |
 | `speaks_spanish` | `language-classes` |
 | `knows_where_to_live` | `scout-where-to-live` |
@@ -150,13 +160,12 @@ review view: change an answer, these are the items that can appear or disappear.
 | `income_may_fall_short_dnv` | `dnv-income-check` |
 | `has_children` | `escolarizacion` |
 | `has_spouse_or_partner` | `family-reunification` |
-| `partner_is_married` | `family-reunification` |
 | `has_pets` | `pet-import` |
 | `is_spanish_speaking_national` | `dele-a2-exam` |
 
 ## 5 · Field-flow graph (questions → derived fields)
 
-Obligations hang off these fields per the tables above; drawing all 64 would be
+Obligations hang off these fields per the tables above; drawing all 73 would be
 unreadable, so this graph shows how raw answers become the derived switches.
 
 ```mermaid

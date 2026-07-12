@@ -21,6 +21,17 @@ export type ChangelogEntry = {
 export const CHANGELOG: ChangelogEntry[] = [
   {
     date: '2026-07-13',
+    title: 'Nine new steps: the work, self-employment and student routes get real coverage',
+    details: [
+      'The audit’s sourcing backlog, cleared: the employer-sponsored work visa (your employer files it — form EX-03, Ministry of Inclusion hoja 12), the self-employment authorization (hoja 14), securing university admission before the student visa, and foreign-degree recognition (homologación/equivalencia via Valida-TE, RD 889/2022).',
+      'Honesty steps added: Spain has no general job-seeker visa (the roadmap now says so instead of routing job seekers to the wrong visa), and short-stay visitors get the Schengen 90/180 rule spelled out.',
+      'EU movers: your licence stays valid, but the DGT’s own rules require renewal after 2 years of residence for indefinite or 15+-year licences — the roadmap now carries that clock.',
+      'And the fastest citizenship track in the book: the spouse of a Spanish citizen can apply after just 1 year of legal residence (mjusticia-verified). Mixed households now see it from day one. Catalog: 64 → 73.',
+    ],
+    ids: ['work-visa-employer-sponsored', 'self-employment-visa-authorization', 'university-admission', 'homologacion-titulos', 'job-seeker-route-reality', 'dgt-eu-licence-check', 'citizenship-married-to-spanish', 'ehic-card', 'schengen-90-180'],
+  },
+  {
+    date: '2026-07-13',
     title: 'Regional coverage completed: all 15 common-regime comunidades verified',
     details: [
       'Transfer-tax (ITP) figures now cover every common-regime comunidad — the ten remaining regions (Asturias, Cantabria, La Rioja, Castilla-La Mancha, Canarias, Extremadura, Illes Balears, Castilla y León, Galicia, Murcia) verified against the Ministry of Hacienda’s official 2026 compilation of regional tax measures, which cites each region’s own statute.',

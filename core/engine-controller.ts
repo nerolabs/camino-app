@@ -851,6 +851,126 @@ export const CATALOG: Obligation[] = [
   },
 
   // ── Healthcare ────────────────────────────────────────────────────────────
+  // ── Sourcing backlog B1–B8 (2026-07-13, engine-audit follow-through; every source
+  //    verified same-day — see docs/audits/2026-07-12-engine-audit.md) ────────────────
+  {
+    // B1a: the cuenta-ajena route is EMPLOYER-filed — the single most important fact for
+    // work-route movers (Hoja 12, form EX-03).
+    id: 'work-visa-employer-sponsored',
+    title: 'Work visa (cuenta ajena): your Spanish employer files the residence-and-work authorization for you (form EX-03) before you move — this route can\'t be self-filed, so secure the job offer first and coordinate timing with the employer\'s filing',
+    verified_at: '2026-07-13',
+    category: 'visa', severity: 'required',
+    source: 'official',
+    source_url: 'https://www.inclusion.gob.es/en/web/migraciones/w/autorizacion-inicial-de-residencia-temporal-y-trabajo-por-cuenta-ajena-hi-16-',
+    applies_if: { all: [{ field: 'visa_type', op: 'eq', value: 'work_permit' }, LONG_STAY] },
+    depends_on: ['choose-visa-type'],
+    timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -180 },
+  },
+  {
+    // B1b: cuenta propia (Hoja 14) — business plan + funds, approved before the consulate visa.
+    id: 'self-employment-visa-authorization',
+    title: 'Self-employment visa (cuenta propia): apply for the initial residence-and-work authorization with a viable business plan, proof of sufficient funds and any licences your activity needs — the authorization comes before the consulate visa',
+    verified_at: '2026-07-13',
+    category: 'visa', severity: 'required',
+    source: 'official',
+    source_url: 'https://www.inclusion.gob.es/en/web/migraciones/w/autorizacion-inicial-de-residencia-temporal-y-trabajo-por-cuenta-propia',
+    applies_if: { all: [{ field: 'visa_type', op: 'eq', value: 'self_employment' }, LONG_STAY] },
+    depends_on: ['choose-visa-type'],
+    timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -180 },
+  },
+  {
+    // B2a: the student visa hangs off admission — sequence the applications first.
+    id: 'university-admission',
+    title: 'Secure your study place first — the student visa hangs off an admission letter from a Spanish institution, so program applications, their deadlines and your acceptance come before any visa paperwork',
+    verified_at: '2026-07-13',
+    category: 'visa', severity: 'recommended',
+    source: 'recommendation',
+    applies_if: { all: [{ field: 'visa_type', op: 'eq', value: 'student' }, LONG_STAY] },
+    depends_on: [],
+    timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -270 },
+  },
+  {
+    // B2b: foreign-degree recognition (RD 889/2022; Valida-TE) — slow-moving files, start early.
+    id: 'homologacion-titulos',
+    title: 'If you\'ll study on — or practice a regulated profession with — a foreign degree, start its official recognition early (homologación or equivalencia via the Ministry\'s Valida-TE portal); these files move slowly',
+    verified_at: '2026-07-13',
+    category: 'admin', severity: 'recommended',
+    source: 'official',
+    source_url: 'https://www.ciencia.gob.es/Universidades/validate.html',
+    applies_if: { all: [{ field: 'visa_type', op: 'eq', value: 'student' }, LONG_STAY] },
+    depends_on: [],
+    timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -180 },
+  },
+  {
+    // B3: the honest job-seeker reality (audit A2's other half).
+    id: 'job-seeker-route-reality',
+    title: 'Heads-up: Spain has no general job-seeker visa — non-EU movers planning to find work locally normally need an employer-sponsored authorization arranged BEFORE moving. Line up the job first, or talk through realistic routes with an immigration adviser',
+    verified_at: '2026-07-13',
+    category: 'visa', severity: 'recommended',
+    source: 'recommendation',
+    applies_if: { all: [NON_EU, LONG_STAY, { field: 'work_situation', op: 'eq', value: 'job_seeker' }] },
+    depends_on: [],
+    timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -180 },
+  },
+  {
+    // B5: EU licences stay valid, but the DGT's own rule requires renewal after 2 years of
+    // residence for indefinite/15+-year licences. Spanish licences need nothing.
+    id: 'dgt-eu-licence-check',
+    title: 'Your EU driving licence stays valid in Spain — but if it has indefinite validity or more than 15 years to run, you must renew it with the DGT once 2 years of residence have passed; exchanging earlier is voluntary',
+    verified_at: '2026-07-13',
+    category: 'admin', severity: 'recommended',
+    source: 'official',
+    source_url: 'https://sede.dgt.gob.es/es/permisos-de-conducir/canjes-de-permisos/canjes-de-permisos-extranjeros/canjes-inscripcion-renovacion-y-sustitucion-de-permisos-de-la-ue-y-eee/renovacion-de-permisos-de-la-ue-y-eee/',
+    applies_if: { all: [
+      { field: 'is_eu', op: 'eq', value: true },
+      { field: 'is_spanish_national', op: 'eq', value: false },
+      { field: 'owns_or_drives', op: 'eq', value: true },
+      LONG_STAY,
+    ] },
+    depends_on: [],
+    timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: 730 },
+  },
+  {
+    // B7: the household finding that keeps giving — the spouse of a Spanish citizen
+    // naturalises after ONE year of legal residence (mjusticia), not ten.
+    id: 'citizenship-married-to-spanish',
+    title: 'Citizenship fast-track for the spouse of a Spanish citizen: after just 1 year of legal residence (married and not separated; marriages celebrated abroad must be registered in Spain), the non-Spanish spouse can apply for Spanish nationality',
+    verified_at: '2026-07-13',
+    category: 'admin', severity: 'info',
+    source: 'official',
+    source_url: 'https://www.mjusticia.gob.es/es/ciudadania/tramites/nacionalidad-residencia',
+    applies_if: { all: [
+      { field: 'is_spanish_national', op: 'eq', value: true },
+      { field: 'non_eu_family_member', op: 'eq', value: true },
+      { field: 'partner_is_married', op: 'eq', value: true },
+      LONG_STAY,
+    ] },
+    depends_on: ['eu-family-member-card'],
+    timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: 365 },
+  },
+  {
+    // B4: short-stay EU niceties — the EHIC covers necessary public care like a local.
+    id: 'ehic-card',
+    title: 'Order your European Health Insurance Card (EHIC) before travelling — for a short stay it covers medically necessary public healthcare in Spain like a local, free from your home health service',
+    verified_at: '2026-07-13',
+    category: 'health', severity: 'recommended',
+    source: 'recommendation',
+    source_url: 'https://europa.eu/youreurope/citizens/health/unplanned-healthcare/temporary-stays/index_en.htm',
+    applies_if: { all: [{ field: 'is_eu', op: 'eq', value: true }, { not: LONG_STAY }] },
+    depends_on: [],
+    timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -30 },
+  },
+  {
+    // B8: the Schengen clock for short-stay non-EU visitors.
+    id: 'schengen-90-180',
+    title: 'Short stays run on the Schengen clock: at most 90 days in any 180-day window — and some passports need a Schengen visa even for tourism. Check the rule for your passport before booking',
+    verified_at: '2026-07-13',
+    category: 'visa', severity: 'recommended',
+    source: 'recommendation',
+    applies_if: { all: [NON_EU, { not: LONG_STAY }] },
+    depends_on: [],
+    timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -60 },
+  },
   {
     id: 'student-visa-health-insurance',
     source_url: 'https://www.inclusion.gob.es/en/web/migraciones/w/estancia-por-estudios',
