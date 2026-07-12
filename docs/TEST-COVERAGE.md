@@ -4,7 +4,10 @@
 added or removed. Forward-looking ideas (tests we *want*) live in `docs/BUILD.md` → "Growing E2E
 coverage"; this file is the honest picture of **current** coverage.
 
-Last updated: 2026-07-11 (Cristina-pass batch: TTS/voice retired → the 3 /api/tts contract
+Last updated: 2026-07-12 (submission-day hardening: /api/feedback gained volumeGuard counters →
++2 feedback-route tests — the 429 path with nothing reaching the inbox, and guard-runs-only-
+after-validation so junk can't burn the budget; vitest now 218). Prior: 2026-07-11
+(Cristina-pass batch: TTS/voice retired → the 3 /api/tts contract
 tests removed with the route and smoke #2's voice-pill assertion dropped; +1 public smoke —
 /contact renders and the ?topic=problem deep link pre-selects the topic. Public smoke suite is
 now 8). Prior: 2026-07-10 night (night-feedback batch: +1 public smoke test — guide→interview
@@ -24,7 +27,7 @@ Layers, and when they run:
 
 ---
 
-## 1. Unit / integration (vitest) — 216 passing (+10 opt-in network)
+## 1. Unit / integration (vitest) — 218 passing (+10 opt-in network)
 
 Concentrated on the deterministic core (that's the product's real risk surface):
 
@@ -55,7 +58,7 @@ Concentrated on the deterministic core (that's the product's real risk surface):
 | **Change hints** | `plan-coach.test.ts` (2) | `changeHint` per category + generic fallback |
 | **Welcome route (dedupe)** | `welcome-route.test.ts` (5) | the welcome-once handler with mocked Supabase/Resend: 401 unauth; already-welcomed → no send, no write; **claim-before-send ordering** (the anti-3×-send property); send failure rolls the claim back; `user_metadata.lang` → localized welcome |
 | **Profile persistence (dedupe of silent data loss)** | `profile-db.test.ts` (5) | saveProfile upsert error → captureError with code+op (the anti-silent-data-loss guard after the 2026-07-05 grant incident); success → no alert; loadProfileRow is_staff-migration fallback stays quiet; both-reads-fail → alert |
-| **API route handlers** | `feedback-route` (6) · `account-delete-route` (4) · `unsubscribe-route` (6) · `weekly-route` (6) | mocked Supabase/Resend. feedback: caps (400/413), hardcoded recipient (no caller redirect), HTML-escape, Sentry-on-fail. account-delete: token-owner only, profile-row-before-user order, 401s, 500-not-partial. unsubscribe: REAL HMAC gate (forged/cross-uid rejected), opt-out write, GET+POST. weekly: CRON_SECRET gate, opt-out skip, roundup-vs-nudge, 6-day gap, per-user lang, metadata writes, **per-recipient magic links** (sent html carries /auth/confirm?token_hash=…&next= — scanner-safe, 2026-07-10) |
+| **API route handlers** | `feedback-route` (8) · `account-delete-route` (4) · `unsubscribe-route` (6) · `weekly-route` (6) | mocked Supabase/Resend. feedback: caps (400/413), hardcoded recipient (no caller redirect), HTML-escape, Sentry-on-fail, **volume guard 429 + guard-after-validation (2026-07-12)**. account-delete: token-owner only, profile-row-before-user order, 401s, 500-not-partial. unsubscribe: REAL HMAC gate (forged/cross-uid rejected), opt-out write, GET+POST. weekly: CRON_SECRET gate, opt-out skip, roundup-vs-nudge, 6-day gap, per-user lang, metadata writes, **per-recipient magic links** (sent html carries /auth/confirm?token_hash=…&next= — scanner-safe, 2026-07-10) |
 | **Render snapshots (localization guard)** | `render-snapshot.test.ts` (8) | full-HTML snapshots of all 3 emails (`welcomeEmail`/`roundupEmail`/`nudgeEmail`, fixed digest + URLs) and the printable report (`reportHtml`, one of every timing state, frozen clock) — in BOTH languages since L1. The en snapshots passed unchanged through the lang-param refactor = byte-identical output for existing users |
 | **es digest (L1)** | in `email-digest.test.ts` (1 of 7) | `buildDigest(…, 'es')` selects the SAME items (selection is locale-free) with Spanish titles, when-labels ("vencía el …"), and tips |
 | **The 4 i18n lint gates (L0)** | `i18n-lint.test.ts` (1 + 4×per-locale) | scans `locales/<lang>/*.json` from disk — adding a locale directory enrolls it automatically (es enrolled at L1). en self-check (no empty strings, well-formed `{{placeholders}}`); per non-English locale: *completeness* (exact en key set), *digit-lint* (translation never changes a number — invariant 3), *placeholder-lint* (`{{var}}` parity), *brand-lint* ("Get Camino"/"Lola" verbatim) |

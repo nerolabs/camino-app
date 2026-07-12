@@ -42,23 +42,32 @@ account map + contact-migration plan).
 
 ## 🧹 Fresh-eyes findings queue (2026-07-11/12 audit — none block submission)
 
-- [ ] **"Takes about 3 minutes" claim** (landing + lead screenshot) vs v1's measured 7.2-min
-      median — check the v2 median in PostHog once traffic accumulates; change the copy if
-      it's still 5+ (invariant: never trade truth for comfort).
-- [ ] **contact.tsx version field** — `Constants.expoConfig?.ios?.buildNumber` is undefined
-      under EAS remote versioning, so iOS feedback reports read "1.0.0 (web)". Use
-      `Constants.nativeBuildVersion`. Build-37 material.
-- [ ] **contact.tsx email prefill** — `useState(user?.email)` initializer misses late-loading
-      auth (same bug class smoke #7 caught for `topic`); react to it in an effect. Build 37 / web.
-- [ ] **Interview countdown** — navigating away during the 3-second handover still fires
-      `router.push('/plan')`; cancel it on leave. Small polish.
-- [ ] **/api/feedback has no volume limit** (`apiGuard` covers only /api/lola) — payloads are
-      capped but an abuser can flood the team inbox / burn Resend quota. Fold into item 20.
+- [x] ~~"Takes about 3 minutes" claim~~ — **RESOLVED 2026-07-12 (user decision):** the v2 chip
+      interview takes ~3 min in the user's own runs; not a concern now. Moved to the
+      post-launch health checklist below (median AND average, TODO only if materially off).
+- [x] **contact.tsx version field — FIXED 2026-07-12**: `Constants.nativeBuildVersion`
+      (reads the built Info.plist; null on web). Rides build 37 / next web deploy.
+- [x] **contact.tsx email prefill — FIXED 2026-07-12**: effect fills the field from
+      late-loading auth, only while untouched. Rides build 37 / next web deploy.
+- [x] ~~Interview countdown~~ — **ACCEPTED AS-IS 2026-07-12 (user decision):** very edge case;
+      not worth the code.
+- [x] **/api/feedback volume limit — DONE 2026-07-12**: `volumeGuard('feedback')` after
+      validation (5/min per IP, 200/day global; `FEEDBACK_*` env overrides) + strict-CORS
+      OPTIONS, same posture as /api/lola. +2 route tests (429 path; guard-after-validation).
 - [ ] **Privacy copy vs analytics reality** — interview answer text rides PostHog events
       (`interview_final_note.answer`, ≤500 chars) while the privacy page describes analytics
       as "which screens are used". Tweak that sentence, or stop capturing answer bodies.
 - [ ] Tiny: set `git config --global user.email` on this machine (commits currently fall back
       to andrewedmond@Andrews-MacBook-Air.local).
+
+## 📈 Post-launch product health checklist (start once the app is live)
+
+- [ ] **Interview duration vs the "about 3 minutes" promise** — median AND average
+      (PostHog 808581, v2 events only). User-measured ~3 min on 2026-07-12, so the copy
+      stands; if real-user data comes back materially different, open a TODO and change
+      the landing + screenshot copy (invariant: never trade truth for comfort).
+- [ ] The dashboard-watch items in the 2026-07-10 follow-ups below (funnel by question,
+      clarify rate, Other usage, magic-link health) graduate into this checklist at launch.
 
 ## 🎯 THE OPEN BACKLOG (item numbers preserved — docs and memories reference them)
 
@@ -111,8 +120,8 @@ Playwright · 7 API contract · 3 Maestro flows (pinned 2.6.1).
     25000/day) + provider spend caps. Remaining value: convert IP-based → **per-token**
     limiting (short-lived HMAC session token minted on a Turnstile solve, reuse
     `lib/emailTokens.ts`) so a rotating-IP abuser can't drain the daily budget and 429 real
-    users. Native rides the counters. **NEW 2026-07-12: give `/api/feedback` the same
-    treatment** (currently unlimited volume — see fresh-eyes queue).
+    users. Native rides the counters. (/api/feedback got its own counters 2026-07-12 —
+    the per-token upgrade here would cover it too.)
 21. [ ] **Region-by-region specifics content pass** (17 comunidades, each against its own
     official source — invariant 3; renders under the shipped regional flags).
 22. [ ] **Public regulatory changelog + "last verified" stamps** — trust engine, correction

@@ -6,8 +6,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 const sendEmail = vi.fn();
 const captureServerError = vi.fn();
+const volumeGuard = vi.fn();
 vi.mock('@/lib/serverEmail', () => ({ sendEmail: (...a: unknown[]) => sendEmail(...a) }));
 vi.mock('@/lib/sentryServer', () => ({ captureServerError: (...a: unknown[]) => captureServerError(...a) }));
+vi.mock('@/lib/apiGuard', () => ({
+  volumeGuard: (...a: unknown[]) => volumeGuard(...a),
+  corsPreflight: () => new Response(null, { status: 204 }),
+}));
 
 import { POST } from '../app/api/feedback+api';
 
@@ -18,7 +23,12 @@ const req = (body: unknown, raw = false) =>
     body: raw ? (body as string) : JSON.stringify(body),
   });
 
-beforeEach(() => { vi.clearAllMocks(); vi.stubEnv('EXPO_PUBLIC_ENV', 'production'); sendEmail.mockResolvedValue(undefined); });
+beforeEach(() => {
+  vi.clearAllMocks();
+  vi.stubEnv('EXPO_PUBLIC_ENV', 'production');
+  sendEmail.mockResolvedValue(undefined);
+  volumeGuard.mockResolvedValue(null); // fail-open default, like the real guard
+});
 
 describe('POST /api/feedback', () => {
   it('400 on non-JSON body', async () => {
@@ -53,6 +63,22 @@ describe('POST /api/feedback', () => {
     expect(payload.html).not.toContain('<script>alert');
     expect(payload.html).toContain('z'.repeat(200));      // capped
     expect(payload.html).not.toContain('z'.repeat(201));  // ...not beyond
+  });
+
+  it('429 when the volume guard trips — nothing reaches the inbox (fresh-eyes 2026-07-12)', async () => {
+    volumeGuard.mockResolvedValue(Response.json({ error: 'rate limit exceeded' }, { status: 429 }));
+    const res = await POST(req({ message: 'flood attempt' }));
+    expect(res.status).toBe(429);
+    expect(sendEmail).not.toHaveBeenCalled();
+  });
+
+  it('the guard runs only after validation — malformed junk never burns the budget', async () => {
+    await POST(req({ message: '' }));
+    await POST(req('not json{', true));
+    expect(volumeGuard).not.toHaveBeenCalled();
+    await POST(req({ message: 'legit' }));
+    expect(volumeGuard).toHaveBeenCalledWith('feedback', expect.anything(),
+      { ipPerMinute: 5, globalPerDay: 200 });
   });
 
   it('send failure → 500 + Sentry', async () => {

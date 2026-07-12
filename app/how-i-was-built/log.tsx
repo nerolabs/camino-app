@@ -558,6 +558,16 @@ const ROWS: Row[] = [
     ],
   },
   {
+    feature: 'The first strangers',
+    date: '6 Jul 2026',
+    work: 'The first public exposure: one plainly-disclosed post in a moving-to-Spain community, web only. About 1,200 views and two complete stranger journeys — first visit to finished roadmap — one in English, one in Spanish, zero user-facing errors. Hours later the post was auto-removed by the community\'s moderation machinery, the standard fate of anything reported as self-promotion. The overnight watch stood down; the always-on error and uptime alerts kept the site paged regardless.',
+    decisions: [
+      'Ask the moderators first: pre-approval is the only reliable immunity to report-driven removal — now the standing rule for every channel that follows.',
+      'The funnel data outlived the post: it said the interview was the wall (the worst question was asked second, completion took twice the promise, most starters never finished) — and that verdict set the next week\'s agenda.',
+      'A daily spending cap on the AI budget was raised deliberately ahead of traffic, with the provider\'s own hard limit kept as the real backstop.',
+    ],
+  },
+  {
     feature: 'The interview becomes a living roadmap',
     date: '10 Jul 2026',
     work: 'The first strangers to use Get Camino told us — through the analytics, not in words — exactly where it lost them: the interview. The worst question was the second one asked, finishing took twice the promised time, and most people who started never saw a roadmap at all. So the interview was rebuilt around one idea: show the value while you answer, not after. Your roadmap now builds live beside the conversation — every answer visibly adds steps (on a phone, a step counter grows as you go). Most questions became single taps instead of typed sentences, every question now says why it\'s being asked, and the opener is the question every mover is already asking themselves: when? Fewer questions, too — an audit traced each one to the steps it unlocks, merged two pairs into single taps, and deleted one that turned out to feed nothing at all. And if you leave halfway, your progress now waits for you when you come back.',
@@ -595,6 +605,16 @@ const ROWS: Row[] = [
       'Kill features by verdict, not sunk cost: TTS had server proxying, caching, and autoplay-unlock engineering behind it — and none of that argued against the observed experience.',
       'Endings deserve design: the countdown isn\'t decoration, it\'s the acknowledgment that the user just gave you their story and something is being built from it.',
       'One contact surface, topics not channels: the topic selector collapses server-side to a fixed list, so the email subject can never be attacker-chosen text.',
+    ],
+  },
+  {
+    feature: 'Submission-day hardening',
+    date: '12 Jul 2026',
+    work: 'The morning of the App Store submission, one more fresh-eyes pass — this time over everything around the app. The contact form got volume limits (a human files a few reports; a flood now gets turned away politely), and two small bugs in it were fixed before any user met them: iOS reports mislabeling themselves as web, and a signed-in visitor\'s email not pre-filling. The store screenshots were regenerated from a retake after the review caught one still showing the retired voice button. And the operational side got its own audit: every third-party service behind the app mapped into one document — who charges money, where the renewal notices go — so nothing expires in an unwatched inbox.',
+    decisions: [
+      'Guard anything that reaches a human inbox, not just anything that costs API money — the same durable counters now protect the feedback route.',
+      'Rate limits run after validation, so malformed junk can never burn the budget legitimate users share.',
+      'The working to-do list got the same treatment as the product: everything actionable above the fold, the done history frozen below it — a tracker you have to archaeology through is a tracker you stop trusting.',
     ],
   },
 ];

@@ -56,6 +56,7 @@ const SECTIONS: Section[] = [
   {
     h: 'In progress',
     items: [
+      { title: 'The iOS App Store submission', note: 'The build is in TestFlight, the paperwork is done, the screenshots are honest (retaken when a fresh-eyes pass caught one still showing a feature we\'d removed). Review takes as long as it takes — release stays manual, for a launch moment we choose. EU storefronts follow a pending trader-status declaration.' },
       { title: 'The languages get their human pass', note: 'Machine-drafted, mechanically linted — and now verified by native speakers, sentence by sentence, before launch. Corrections land as reviewable diffs against frozen snapshots.' },
       { title: 'Family testing & edge-case cleanup', note: 'Real relatives, real phones, real bug reports — the app earns its release the honest way.' },
     ],

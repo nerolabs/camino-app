@@ -7,7 +7,8 @@ import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 
 // Public since 3 Jul 2026 (nav menu + sitemap). A narrative of how Get Camino was built —
-// revised as the product matures (major revision 4 Jul: the family-testing/E2E/localization era).
+// revised as the product matures (major revisions: 4 Jul the family-testing/E2E era;
+// 12 Jul the languages/strangers/redesign/submission era).
 
 type Block = { h: string; p: string[] };
 
@@ -55,9 +56,9 @@ const SECTIONS: Block[] = [
     h: 'Depth from real sources',
     p: [
       'Then we earned the substance. We mined relocation-webinar transcripts to expand the ' +
-      'catalog from a couple of dozen obligations to nearly sixty — then did the unglamorous ' +
-      'grounding pass: verifying each against official government sources until the large ' +
-      'majority carried a canonical citation, tagging every item with its provenance, and ' +
+      'catalog from a couple of dozen obligations to more than sixty — then did the unglamorous ' +
+      'grounding pass: verifying each against official government sources until every ' +
+      'requirement carried a canonical citation, tagging every item with its provenance, and ' +
       'pulling anything we couldn’t stand behind into a backlog until we could.',
       'That discipline caught real errors. A tax-form penalty we’d absorbed from secondary ' +
       'sources had actually been struck down; a form we listed had been abolished. The point of ' +
@@ -105,8 +106,8 @@ const SECTIONS: Block[] = [
     p: [
       'Once the web experience had earned its shape, we brought the iOS app to full parity — ' +
       'native sign-in, dictation, Lola’s spoken voice, crash reporting, analytics — a train of ' +
-      'TestFlight builds (twenty-nine and counting), verified on real devices before we called ' +
-      'anything done.',
+      'TestFlight builds (thirty-six by submission day), verified on real devices before we ' +
+      'called anything done.',
       'Then we did something teams skip: we stopped building and audited everything with fresh ' +
       'eyes. The audit found real problems — a language-exam rule that mis-handled Filipino ' +
       'applicants, an interview question whose answer was collected and then silently thrown away, ' +
@@ -162,10 +163,12 @@ const SECTIONS: Block[] = [
     h: 'The robots test the app now',
     p: [
       'Hand-testing stops scaling exactly when a product starts working. So the app tests ' +
-      'itself: twelve automated web journeys — including signing in and reworking a real ' +
-      'roadmap — and native flows that run on an iOS simulator in CI, on free public-repo ' +
-      'runners, costing nothing per run. The tests sign in through the same magic-link machinery ' +
-      'real users ride; a test-only backdoor would test the backdoor.',
+      'itself: over two hundred unit and integration checks on every push, twenty automated web ' +
+      'journeys — including signing in and reworking a real roadmap, eight of them re-run ' +
+      'against the live site on every production deploy — and native flows that run on an iOS ' +
+      'simulator in CI, on free public-repo runners, costing nothing per run. The tests sign in ' +
+      'through the same magic-link machinery real users ride; a test-only backdoor would test ' +
+      'the backdoor.',
       'The suite earned its keep before it was even finished: its first run caught a rendering ' +
       'error firing on every single page load — one that humans, including us, had scrolled ' +
       'straight past for days. That’s the argument for automated eyes in one sentence.',
@@ -178,12 +181,79 @@ const SECTIONS: Block[] = [
       'a distinctive compound matching the domain we already own, chosen deliberately before ' +
       'spending anything on a brand we might have had to fight for. The operating entity got ' +
       'honest: a sole proprietorship now, incorporation when revenue proves the model, because ' +
-      'the migration is mostly behind-the-scenes paperwork and waiting costs little. And the ' +
-      'launch got bigger in the way that matters: a moving-to-Spain product that doesn’t speak ' +
-      'Spanish lacks authenticity, so Spanish ships before launch — verified by a native speaker, ' +
-      'governed by the same rule as everything else here: a translation may never change a ' +
-      'number. The invariants we wrote on day one keep absorbing surfaces that didn’t exist when ' +
-      'we wrote them. That’s how you know they were the right ones.',
+      'the migration is mostly behind-the-scenes paperwork and waiting costs little. The ' +
+      'invariants we wrote on day one keep absorbing surfaces that didn’t exist when we wrote ' +
+      'them — languages, store listings, marketing pages. That’s how you know they were the ' +
+      'right ones.',
+    ],
+  },
+  {
+    h: 'Five languages in one day',
+    p: [
+      'The launch got a language requirement — a moving-to-Spain product that doesn’t speak ' +
+      'Spanish lacks authenticity — and the invariants got their hardest test. We refused to ' +
+      'touch a single string until the regression harness existed: frozen plan snapshots, ' +
+      'pixel-frozen emails, and a build rule that a translation may never change a number. ' +
+      'Then Spanish shipped in a day. Then, the same afternoon, the plumbing proved itself: ' +
+      'French, German, and Italian followed — the full interview, sixty step titles, sixty ' +
+      'guides, the emails, the printable roadmap. The engine never learned what a language is; ' +
+      'which steps you get, their order, and every date are provably identical in all five.',
+    ],
+  },
+  {
+    h: 'The first strangers',
+    p: [
+      'Then we let real people find it. A single, plainly-disclosed post in a moving-to-Spain ' +
+      'community: about twelve hundred views, and two complete stranger journeys — first visit ' +
+      'to finished roadmap — one in English, one in Spanish, zero errors. The thesis worked for ' +
+      'people who owe us nothing, in two languages, on the first night.',
+      'The post itself was removed hours later by the community’s automation — the standard ' +
+      'fate of anything that smells like self-promotion, however honest. Lesson filed: ask the ' +
+      'moderators first. But the real gift was the funnel data. It said, without sentiment: the ' +
+      'interview was the wall. The worst-performing question was the second one asked, ' +
+      'finishing took twice what we promised, and most people who started never saw a roadmap ' +
+      'at all.',
+    ],
+  },
+  {
+    h: 'The redesign the data demanded',
+    p: [
+      'So the interview stopped being a form and became the product. Your roadmap now builds ' +
+      'live beside the conversation — every answer visibly adds steps, already dated. Most ' +
+      'questions became single taps; the AI works only where open answers genuinely need it. ' +
+      'Every question opens with why it’s being asked, and one that turned out to feed nothing ' +
+      'was deleted outright. Leave halfway and your progress waits for you.',
+      'One discipline made the redesign trustworthy: every analytics event is stamped with the ' +
+      'interview version it came from. A redesign that also redefines its own metrics can tell ' +
+      'itself any story it likes — ours has to beat the old numbers on the old terms.',
+    ],
+  },
+  {
+    h: 'Killing our own feature',
+    p: [
+      'Lola had a spoken voice. Real engineering went into it — a server proxy, caching, the ' +
+      'autoplay-unlock dance, a native audio path. User testing kept saying the same thing ' +
+      'anyway: read-aloud never fit an interview you tap through in seconds. We made it ' +
+      'opt-in; that wasn’t enough. The day before submission, we removed it entirely. ' +
+      'Microphone dictation stays — input earned its place, output never did. Sunk cost is ' +
+      'not an argument; the observed experience is.',
+      'The postscript is the fresh-eyes habit paying rent: a submission-eve review caught our ' +
+      'App Store screenshots still showing the voice button we’d just killed. Retaken on the ' +
+      'shipping build. What you show has to match what you ship — the honesty invariants turn ' +
+      'out to apply to marketing assets, too.',
+    ],
+  },
+  {
+    h: 'Earning the submission',
+    p: [
+      'The last week before the App Store wasn’t a feature sprint; it was waves of human ' +
+      'passes. My wife — the former QA engineer — and a native-speaker reviewer each ran ' +
+      'fresh-eyes rounds, and every finding got triaged onto one of two buses: web fixes ship ' +
+      'the same day, native fixes batch into the next build. Store paperwork became playbooks ' +
+      'in the repo — reviewer notes, privacy declarations, a screenshot pipeline — so none of ' +
+      'it depends on anyone’s memory. The app went into review with every test layer green ' +
+      'and a release button we deliberately kept manual: approval parks until the launch ' +
+      'moment we choose.',
     ],
   },
   {
@@ -245,8 +315,8 @@ export default function HowIWasBuilt() {
           And the code itself is public — github.com/nerolabs/camino-app ↗
         </Text>
         <Text style={styles.footer}>
-          Written while the product is young and revised as it grows — last revised July 2026,
-          after the family-testing week. The receipts above stay current either way.
+          Written while the product is young and revised as it grows — last revised 12 July 2026,
+          on App Store submission day. The receipts above stay current either way.
         </Text>
       </View>
       <Footer />

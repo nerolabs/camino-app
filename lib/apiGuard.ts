@@ -1,6 +1,7 @@
 /**
- * Shared abuse guards for the paid API routes (today just /api/lola — /api/tts retired
- * with Lola's spoken voice, 2026-07-11). Server-only.
+ * Shared abuse guards for the API routes that cost money or reach a human inbox
+ * (/api/lola — LLM spend; /api/feedback — team-inbox flooding + Resend quota).
+ * /api/tts retired with Lola's spoken voice, 2026-07-11. Server-only.
  *
  * Layers (each independent, each fail-open so legitimate users are never locked out):
  *
@@ -114,7 +115,7 @@ async function bumpCounter(bucket: string, windowSeconds: number): Promise<numbe
  * Returns a 429 Response to send, or null to proceed.
  */
 export async function volumeGuard(
-  route: 'lola',
+  route: 'lola' | 'feedback',
   request: Request,
   limits: { ipPerMinute: number; globalPerDay: number },
 ): Promise<Response | null> {

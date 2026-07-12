@@ -36,6 +36,12 @@ export default function Contact() {
     if (TOPICS.includes(params.topic as Topic)) setTopic(params.topic as Topic);
   }, [params.topic]);
   const [email, setEmail] = useState(user?.email ?? '');
+  // Auth loads async — same late-hydration class as the topic param above: on a cold
+  // signed-in load the initializer runs before the session exists. Prefill only while
+  // the field is untouched, so we never clobber what the user typed.
+  useEffect(() => {
+    if (user?.email) setEmail(prev => prev || user.email!);
+  }, [user?.email]);
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
@@ -53,7 +59,9 @@ export default function Contact() {
           topic,
           email: email.trim(),
           platform: Platform.OS,
-          version: `${Constants.expoConfig?.version ?? '?'} (${Constants.expoConfig?.ios?.buildNumber ?? 'web'})`,
+          // nativeBuildVersion reads the built Info.plist / versionCode (EAS remote
+          // versioning never writes buildNumber into expoConfig); null on web.
+          version: `${Constants.expoConfig?.version ?? '?'} (${Constants.nativeBuildVersion ?? 'web'})`,
           route: '/contact',
         }),
       });
