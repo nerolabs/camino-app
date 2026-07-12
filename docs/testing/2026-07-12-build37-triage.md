@@ -16,3 +16,10 @@ the submission candidate** (web-visible fixes deploy immediately as usual).
 Side note for the record: Cristina's shred is delayed for the best possible reason — she's
 out following her own Camino roadmap (driving-test steps). Her es language pass is complete
 (TODO item 5 closed).
+
+---
+
+**BUILD 38 CUT (2026-07-13, from 9307de4):** the e2e-ios gate was SKIPPED — explicit one-time
+user authorization ("you have my permission THIS ONE TIME"), rationale: 38 carries two days of
+JS-only changes already behind 263 unit tests + the 181×16 matrix + 15 web E2E on production,
+and Cristina's full device pass moves to 38 as the submission gate. Not a precedent.
