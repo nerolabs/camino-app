@@ -74,11 +74,17 @@ describe('ordering & completeness', () => {
     }
   });
 
-  it('plans contain no duplicates and are non-empty for every persona', () => {
+  // Audit A1 (2026-07-12): short-stay EU personas now have HONESTLY EMPTY plans — no padrón
+  // (habitual residents only), no health card (EHIC covers visits), no tax residency. The
+  // old non-empty floor came from the address-gated padrón bug. Friendly empty-state copy
+  // for short stays is audit backlog A6.
+  const HONESTLY_EMPTY = new Set(['Mara — German remote worker, short stay', 'Minimal — EU, fewest obligations']);
+
+  it('plans contain no duplicates and are non-empty for every persona (short-stay EU excepted)', () => {
     for (const persona of TEST_PERSONAS) {
       const profile: Profile = { ...persona.answers }; derive(profile);
       const plan = buildPlan(profile);
-      expect(plan.length, persona.name).toBeGreaterThan(0);
+      if (!HONESTLY_EMPTY.has(persona.name)) expect(plan.length, persona.name).toBeGreaterThan(0);
       expect(new Set(plan.map(o => o.id)).size).toBe(plan.length);
     }
   });

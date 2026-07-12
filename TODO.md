@@ -26,12 +26,18 @@ five production web deploys — all E2E-gated.
       `SUPABASE_SERVICE_ROLE_KEY` appears only as `process.env` reads in API routes). Supabase
       URL/anon key remain the only `EXPO_PUBLIC_` values (public-safe under RLS).
 
-## 📍 NOW (updated 2026-07-12 evening — plan changed: build 37 = Cristina-shred, 38 = candidate)
+## 📍 NOW (updated 2026-07-12 night — user call: ENGINE AUDIT AHEAD OF EVERYTHING)
 
-1. [ ] **Build 37 lands on TestFlight** (riding now, cut from b3feecf with --auto-submit) →
-       **Cristina shreds it**: the trust batch is all-new native UI (share dialog, verified
-       stamps, regional fact cards, changelog, interview ending, contact fixes). Triage per
-       the usual buses; fixes → **build 38 = the submission candidate**.
+0. [ ] **⭐ THE FULL ENGINE/CATALOG AUDIT — blocks build 38 and submission** (user decision
+       2026-07-12 evening, upgraded from item 4 below). Working doc:
+       docs/audits/2026-07-12-engine-audit.md · matrix tool: scripts/audit-matrix.ts.
+       Scope: persona-matrix sweep (wrong-inclusions AND missing steps per profile class) +
+       condition-by-condition review of all 64 obligations (docs/CATALOG.md is the substrate)
+       + slot/derivation review + the student-path gap. Fixes land like today's (tests +
+       changelog + locales); unfixable-today items get severity-ranked backlog entries.
+1. [ ] **Build 37 on TestFlight → Cristina shreds it** (share dialog, stamps, regional cards,
+       changelog, interview ending, contact fixes). Her findings + the audit's fixes together
+       → **build 38 = the submission candidate** (cut only after the audit closes).
 2. [ ] **Then ASC Part 3** (runbook, adjusted): trader case check → attach the candidate
        build → final page read → **Add for Review** (manual release; expect one rejection
        cycle). All other ASC paperwork is DONE (fields, label, screenshots, review notes).

@@ -259,7 +259,12 @@ function deriveVisaType(p: Profile): string | null {
   if (work === "contractor_freelance") return "dnv";
   if (work === "student") return "student";
   if (work === "self_employed" || work === "business_owner") return "self_employment";
-  // retired, passive_income, job_seeker, none → NLV if income qualifies
+  // Audit A2 (2026-07-12): a job seeker was derived to the NLV — the visa whose core
+  // condition is NOT working in Spain, complete with the notarized no-work declaration.
+  // There is no general non-EU job-seeker route; honest answer is "unknown" (they keep
+  // choose-visa-type + the generic document mechanics, never the NLV cluster).
+  if (work === "job_seeker") return null;
+  // retired, passive_income → NLV if income qualifies
   return "nlv";
 }
 

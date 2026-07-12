@@ -37,7 +37,11 @@ for (const persona of TEST_PERSONAS) {
     const p: Profile = { ...persona.answers };
     derive(p);
     const plan = buildPlan(p);
-    if (plan.length === 0) errors.push(`persona "${persona.name}": produces an EMPTY plan`);
+    // Audit A1 (2026-07-12): an EU citizen NOT staying long-term legitimately has no
+    // required steps (no padrón, no health card, no tax residency) — an empty plan is the
+    // honest answer for that class, not a broken catalog. Everyone else must be non-empty.
+    const honestlyEmptyClass = (p as Record<string, unknown>).is_eu === true && p.intends_long_stay !== true;
+    if (plan.length === 0 && !honestlyEmptyClass) errors.push(`persona "${persona.name}": produces an EMPTY plan`);
   } catch (e) {
     errors.push(`persona "${persona.name}": buildPlan threw — ${String(e)}`);
   }

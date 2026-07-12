@@ -72,12 +72,12 @@
 | `dnv-income-proof` | required | official | visa_type = "dnv" | `choose-visa-type` | -60d before arrival |
 | `dnv-income-check` | recommended | recommendation | visa_type = "dnv" AND income_may_fall_short_dnv = true | `choose-visa-type` | -180d before arrival |
 | `dnv-coverage-certificate` | required | official | visa_type = "dnv" AND work_situation = "employed_remote" | `choose-visa-type` | -60d before arrival |
-| `empadronamiento` | required | official | has_spanish_address = true | — | ASAP (window from arrival) |
+| `empadronamiento` | required | official | intends_long_stay = true | — | ASAP (window from arrival) |
 | `nie` | required | official | is_eu = false | — | +30d after arrival |
 | `eu-registration-certificate` | required | official | is_eu = true AND is_spanish_national = false AND intends_long_stay = true | — | +90d after arrival |
 | `eu-family-member-card` | required | official | is_eu = true AND non_eu_family_member = true AND intends_long_stay = true | — | +90d after arrival |
 | `residencia` | required | official | is_eu = false | `empadronamiento`<br>`nie` | +0d after `nie` |
-| `tarjeta-sanitaria` | required | official | has_spanish_address = true AND NOT visa_type = "nlv" | `empadronamiento` | +14d after `empadronamiento` |
+| `tarjeta-sanitaria` | required | official | intends_long_stay = true AND NOT visa_type = "nlv" | `empadronamiento` | +14d after `empadronamiento` |
 | `exit-tax-return` | recommended | recommendation | is_tax_resident = true | — | -30d before arrival |
 | `modelo-720` | penalty | official | is_tax_resident = true AND foreign_assets_eur gt 50000 | — | yearly (months: 1,2,3) |
 | `dgt-exchange` | required | official | owns_or_drives = true AND nationality_has_dgt_agreement = true | `residencia` | +183d after residency_established |
@@ -134,11 +134,10 @@ review view: change an answer, these are the items that can appear or disappear.
 | `visa_type` | `nlv-income-proof` · `nlv-income-check` · `nlv-health-insurance` · `convenio-especial` · `dnv-remote-work-proof` · `dnv-income-proof` · `dnv-income-check` · `dnv-coverage-certificate` · `tarjeta-sanitaria` · `nlv-letter-of-intent` · `nlv-non-work-declaration` · `dnv-qualification-proof` · `dnv-company-activity-proof` · `dnv-employer-permission-letter` · `beckham-law` · `student-visa-health-insurance` · `nlv-renewal` · `dnv-renewal` |
 | `owns_property_in_spain` | `scout-where-to-live` · `property-legal-due-diligence` · `completion-deed-notary` · `land-registry-registration` · `property-transfer-tax` · `ibi-property-tax` · `community-fees` · `nonresident-property-tax` |
 | `is_tax_resident` | `exit-tax-return` · `modelo-720` · `digital-certificate` · `modelo-030` · `modelo-100` · `wealth-tax` · `nonresident-property-tax` |
+| `intends_long_stay` | `empadronamiento` · `eu-registration-certificate` · `eu-family-member-card` · `tarjeta-sanitaria` · `tax-planning-consultation` · `permanent-residence` |
 | `wants_citizenship` | `citizenship-track-standard` · `citizenship-track-latam` · `dele-a2-exam` · `ccse-exam` · `citizenship-application` · `citizenship-jura` |
 | `work_situation` | `dnv-coverage-certificate` · `nlv-non-work-declaration` · `dnv-employer-permission-letter` · `beckham-law` · `modelo-200` |
 | `is_self_employed_in_spain` | `register-autonomo` · `autonomo-social-security` · `modelo-130` · `modelo-303` · `modelo-390` |
-| `intends_long_stay` | `eu-registration-certificate` · `eu-family-member-card` · `tax-planning-consultation` · `permanent-residence` |
-| `has_spanish_address` | `empadronamiento` · `tarjeta-sanitaria` |
 | `foreign_assets_eur` | `modelo-720` · `wealth-tax` |
 | `owns_or_drives` | `dgt-exchange` · `dgt-exam` |
 | `nationality_has_dgt_agreement` | `dgt-exchange` · `dgt-exam` |
@@ -217,4 +216,4 @@ flowchart LR
 
 ## 6 · Direct-gate fields (asked, used as-is by obligations)
 
-`speaks_spanish` · `owns_property_in_spain` · `work_situation` · `has_spanish_address` · `intends_long_stay` · `non_eu_family_member` · `owns_or_drives` · `has_children` · `has_spouse_or_partner` · `partner_is_married` · `wants_citizenship` · `has_pets`
+`speaks_spanish` · `owns_property_in_spain` · `work_situation` · `intends_long_stay` · `non_eu_family_member` · `owns_or_drives` · `has_children` · `has_spouse_or_partner` · `partner_is_married` · `wants_citizenship` · `has_pets`

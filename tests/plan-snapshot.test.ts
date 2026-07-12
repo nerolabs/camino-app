@@ -31,12 +31,16 @@ describe('plan structure is frozen (localization must not change engine behavior
     });
   }
 
-  it('every persona plan is non-empty and has no duplicate steps', () => {
+  // Audit A1 (2026-07-12): short-stay EU personas legitimately carry no required steps —
+  // their fingerprints above pin the (near-)empty shape deliberately.
+  const SHORT_STAY_EU = new Set(['Mara — German remote worker, short stay', 'Minimal — EU, fewest obligations']);
+
+  it('every persona plan is non-empty (short-stay EU excepted) and has no duplicate steps', () => {
     for (const persona of TEST_PERSONAS) {
       const p: Profile = { ...persona.answers };
       derive(p);
       const plan = buildPlan(p);
-      expect(plan.length, persona.name).toBeGreaterThan(0);
+      if (!SHORT_STAY_EU.has(persona.name)) expect(plan.length, persona.name).toBeGreaterThan(0);
       const ids = plan.map(o => o.id);
       expect(new Set(ids).size, `${persona.name} has duplicate ids`).toBe(ids.length);
     }

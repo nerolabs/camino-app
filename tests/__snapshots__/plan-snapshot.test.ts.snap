@@ -58,6 +58,7 @@ exports[`plan structure is frozen (localization must not change engine behavior)
   "apostille-documents | before_you_go | required | scheduled",
   "consulate-appointment | before_you_go | required | scheduled",
   "criminal-background-check | before_you_go | required | scheduled",
+  "empadronamiento | first_weeks | required | scheduled",
   "medical-certificate | before_you_go | required | scheduled",
   "nie | first_weeks | required | scheduled",
   "nlv-health-insurance | before_you_go | required | scheduled",
@@ -73,7 +74,7 @@ exports[`plan structure is frozen (localization must not change engine behavior)
   "digital-certificate | first_weeks | recommended | scheduled",
   "exit-tax-return | before_you_go | recommended | scheduled",
   "language-classes | before_you_go | recommended | scheduled",
-  "modelo-030 | when_settled | recommended | pending_anchor",
+  "modelo-030 | first_weeks | recommended | scheduled",
   "permanent-residence | when_settled | recommended | scheduled",
   "spanish-bank-account | first_weeks | recommended | scheduled",
   "tax-planning-consultation | before_you_go | recommended | scheduled",
@@ -122,19 +123,9 @@ exports[`plan structure is frozen (localization must not change engine behavior)
 ]
 `;
 
-exports[`plan structure is frozen (localization must not change engine behavior) > Mara — German remote worker, short stay — structural fingerprint 1`] = `
-[
-  "empadronamiento | first_weeks | required | scheduled",
-  "tarjeta-sanitaria | first_weeks | required | scheduled",
-]
-`;
+exports[`plan structure is frozen (localization must not change engine behavior) > Mara — German remote worker, short stay — structural fingerprint 1`] = `[]`;
 
-exports[`plan structure is frozen (localization must not change engine behavior) > Minimal — EU, fewest obligations — structural fingerprint 1`] = `
-[
-  "empadronamiento | first_weeks | required | scheduled",
-  "tarjeta-sanitaria | first_weeks | required | scheduled",
-]
-`;
+exports[`plan structure is frozen (localization must not change engine behavior) > Minimal — EU, fewest obligations — structural fingerprint 1`] = `[]`;
 
 exports[`plan structure is frozen (localization must not change engine behavior) > Paolo — Filipino remote worker, DNV — structural fingerprint 1`] = `
 [
@@ -212,6 +203,7 @@ exports[`plan structure is frozen (localization must not change engine behavior)
   "apostille-documents | before_you_go | required | scheduled",
   "consulate-appointment | before_you_go | required | scheduled",
   "criminal-background-check | before_you_go | required | scheduled",
+  "empadronamiento | first_weeks | required | scheduled",
   "medical-certificate | before_you_go | required | scheduled",
   "nie | first_weeks | required | scheduled",
   "nlv-health-insurance | before_you_go | required | scheduled",
@@ -229,7 +221,7 @@ exports[`plan structure is frozen (localization must not change engine behavior)
   "digital-certificate | first_weeks | recommended | scheduled",
   "exit-tax-return | before_you_go | recommended | scheduled",
   "language-classes | before_you_go | recommended | scheduled",
-  "modelo-030 | when_settled | recommended | pending_anchor",
+  "modelo-030 | first_weeks | recommended | scheduled",
   "permanent-residence | when_settled | recommended | scheduled",
   "scout-where-to-live | before_you_go | recommended | scheduled",
   "spanish-bank-account | first_weeks | recommended | scheduled",

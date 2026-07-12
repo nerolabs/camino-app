@@ -21,6 +21,16 @@ export type ChangelogEntry = {
 export const CHANGELOG: ChangelogEntry[] = [
   {
     date: '2026-07-12',
+    title: 'Engine audit: the padrón no longer vanishes for movers still choosing housing',
+    details: [
+      'Town-hall registration (empadronamiento) and the public health card were only shown once you had a Spanish address — so anyone still deciding where to live got a roadmap missing its most fundamental arrival step, and downstream dates (like the Hacienda registration) sat undated. Applicability was confused with timing: the padrón applies to every long-stay mover; the address is just not known yet. Fixed — both steps now appear for all long-stay movers (the health card keeps its non-lucrative-visa carve-out), dated from your arrival.',
+      'Same audit: job seekers were being routed to the non-lucrative visa — the visa whose defining condition is NOT working in Spain, complete with its notarized no-work declaration. There is no general job-seeker visa; the roadmap now says so honestly (the visa-category step stays, the misleading cluster is gone).',
+      'And a class of travelers got simpler: EU citizens visiting short-term now correctly see no required steps at all — short stays don’t register on the padrón and don’t trigger tax residency.',
+    ],
+    ids: ['empadronamiento', 'tarjeta-sanitaria'],
+  },
+  {
+    date: '2026-07-12',
     title: 'Mixed-passport households: the missing family-member card added',
     details: [
       'A household answer like "American and Spanish passports" is ambiguous — one dual citizen, or a mixed couple? The engine treated any EU passport as covering the whole household, leaving the non-EU spouse with no residence step at all.',

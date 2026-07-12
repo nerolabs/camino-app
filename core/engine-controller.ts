@@ -378,11 +378,16 @@ export const CATALOG: Obligation[] = [
   {
     id: 'empadronamiento',
     title: 'Empadronamiento (padrón municipal — register on your town’s census)',
+    verified_at: '2026-07-12', // engine audit A1: applicability was confused with timing
     category: 'admin', severity: 'required',
     source: 'official',
     source_url: 'https://www.boe.es/buscar/act.php?id=BOE-A-1985-5392',
     webinar_url: 'https://www.youtube.com/watch?v=gtruvbQhphE&t=3576s',
-    applies_if: HAS_ADDRESS,
+    // Audit A1 (2026-07-12): was gated on HAS_ADDRESS — movers who hadn't picked housing
+    // never saw the padrón at all (and residencia silently lost its prerequisite). The
+    // padrón applies to EVERY long-stay mover; the address is a timing detail, not an
+    // applicability condition.
+    applies_if: { field: 'intends_long_stay', op: 'eq', value: true },
     depends_on: [],
     timing: { kind: 'asap' },
   },
@@ -453,7 +458,12 @@ export const CATALOG: Obligation[] = [
     category: 'health', severity: 'required',
     source: 'official',
     source_url: 'https://www.sanidad.gob.es/areas/saludDigital/tarjetaSanitariaSNS/home.htm',
-    applies_if: { all: [HAS_ADDRESS, { not: { field: 'visa_type', op: 'eq', value: 'nlv' } }] },
+    // Audit A1 (2026-07-12): same applicability-vs-timing confusion as the padrón — the
+    // health card applies to every long-stay mover outside the NLV's private-cover carve-out.
+    applies_if: { all: [
+      { field: 'intends_long_stay', op: 'eq', value: true },
+      { not: { field: 'visa_type', op: 'eq', value: 'nlv' } },
+    ] },
     depends_on: ['empadronamiento'],
     timing: { kind: 'relative_to_obligation', after: 'empadronamiento', offset_days: 14 },
   },

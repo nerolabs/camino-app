@@ -26,7 +26,7 @@ describe('regulatory changelog', () => {
   it('verified stamps: default applies, overrides win, and no stamp predates the founding pass', () => {
     const consulate = CATALOG.find(o => o.id === 'consulate-appointment')!;
     expect(verifiedOn(consulate)).toBe('2026-07-12');
-    const untouched = CATALOG.find(o => o.id === 'empadronamiento')!;
+    const untouched = CATALOG.find(o => o.id === 'nie')!; // empadronamiento got its own stamp in audit A1
     expect(verifiedOn(untouched)).toBe(DEFAULT_VERIFIED);
     for (const o of CATALOG) expect(verifiedOn(o) >= '2026-06-30').toBe(true);
   });

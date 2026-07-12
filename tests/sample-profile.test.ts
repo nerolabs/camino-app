@@ -33,7 +33,9 @@ describe('sampleProfile', () => {
     expect(ids).toContain('scout-where-to-live');         // knows_where_to_live: false
     expect(ids).toContain('modelo-720');                  // foreign assets > €50k
     expect(ids.some(id => id.startsWith('citizenship'))).toBe(true); // wants_citizenship: true
-    // And empadronamiento must be ABSENT — no Spanish address yet (it's address-gated):
-    expect(ids).not.toContain('empadronamiento');
+    // Audit A1 (2026-07-12): empadronamiento applies to every long-stay mover — the old
+    // assertion here was ENCODING the address-gating bug (the padrón vanished for anyone
+    // still choosing housing). Susan & Tom now correctly see it, dated from arrival.
+    expect(ids).toContain('empadronamiento');
   });
 });

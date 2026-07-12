@@ -4,7 +4,7 @@
 added or removed. Forward-looking ideas (tests we *want*) live in `docs/BUILD.md` → "Growing E2E
 coverage"; this file is the honest picture of **current** coverage.
 
-Last updated: 2026-07-12 night, third entry (build-37 shred fixes: +6 spanish-national tests —
+Last updated: 2026-07-12 late night (ENGINE AUDIT tranche 1: +4 engine-audit tests — padrón present pre-address, health-card long-stay rule + NLV carve-out, short-stay-EU advisory-only, job_seeker never NLV; scripts/audit-matrix.ts = the NEW persona-matrix layer, 177 profiles × 13 class expectations, run manually during audits; 4 persona snapshots deliberately updated (padrón gain + modelo-030 firming; short-stay EU honestly empty); sample-profile + engine + audit-script assertions that ENCODED the old bug corrected; vitest 252). Third entry (build-37 shred fixes: +6 spanish-national tests —
 EX-18 excluded for Spanish passports, EX-19 present for mixed households, solo-dual silent,
 DE+US couple gets BOTH; engine test rewritten — it had been ASSERTING the EX-18 bug via the
 Andrew persona; Andrew plan snapshot deliberately updated (EX-18→EX-19); catalog-titles
@@ -38,7 +38,7 @@ Layers, and when they run:
 
 ---
 
-## 1. Unit / integration (vitest) — 248 passing (+10 opt-in network)
+## 1. Unit / integration (vitest) — 252 passing (+10 opt-in network)
 
 Concentrated on the deterministic core (that's the product's real risk surface):
 
