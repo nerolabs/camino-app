@@ -69,8 +69,9 @@ test('no-op re-model stays honest (live extractor call)', async ({ page }) => {
 });
 
 test('sign out returns to the signed-out app', async ({ page }) => {
-  await page.goto('/');
-  await page.getByLabel('Menu').click();
+  // Sign out + delete moved from the hamburger to the account page (2026-07-13); the menu now
+  // just links to /account, where the actions live.
+  await page.goto('/account');
   await page.getByText('Sign out', { exact: true }).click();
   await expect(page.getByText('Sign in', { exact: true }).first()).toBeVisible({ timeout: 15_000 });
 });

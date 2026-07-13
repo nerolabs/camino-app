@@ -39,17 +39,21 @@ The council FIX queue is fully shipped to WEB (commit bf3c1e1). Build 39 carries
 native-visible JS from that batch. These items are gated to ride build 39 (user directive — do
 NOT cut the build until they're in, so we don't burn another build):
 
-1. [ ] **Secure mobile / native Lola — the non-spoofable exemption (BLOCKING).** Native Lola is
-       DOWN in prod since C2a (sessionGate 401s native — no Turnstile widget). Decision: exempt
-       native via **device attestation** — `@expo/app-integrity` (Apple App Attest / Google Play
-       Integrity), **zero UX impact** (silent, hardware-backed). Native attests → a session
-       endpoint verifies → mints the SAME HMAC session token → `/api/lola`. **Client turnkey**
-       via the Expo module (⚠️ alpha). **Server verification is custom** (Apple attestation +
-       Google integrity token) and needs a REAL DEVICE to test → build it WITH build 39, not
-       stubbed. **[USER setup, one-time: App Attest capability on the iOS App ID.]** Full
-       findings: chat 2026-07-13. **SCOPE (user 2026-07-13): build 39 is iOS → App Attest ONLY.
-       Play Integrity (Android) DEFERRED to the Android/Play Store track — Google Cloud account
-       not set up yet, out of scope until then.**
+1. [~] **Secure mobile / native Lola — device attestation (CODE BUILT 2026-07-13; on-device
+       completion + enable at build 39).** Native Lola is DOWN in prod since C2a (sessionGate
+       401s native). Exempt native via **iOS App Attest** (`@expo/app-integrity` 56.0.3, zero-UX,
+       hardware-backed) → `/api/session` verifies → mints the SAME HMAC session token → `/api/lola`.
+       **DONE:** App Attest capability on the App ID (Apple Dev portal, user saved 2026-07-13) ·
+       entitlement in app.config.ts · client flow (`lib/nativeAttest.native.ts` + web stub,
+       wired into `getSessionToken`) · server challenge + attest branches on `/api/session` ·
+       verifier `lib/appAttest.ts` (CBOR + authData + nonce/rpIdHash/aaguid/counter/keyId checks) ·
+       +7 vitest (device-independent pieces). **REMAINING (build 39, needs a real device):**
+       (a) finish `verifyChain` — X.509 chain validation to the Apple App Attest Root CA (currently
+       returns false = safe default, so verifyAttestation can't succeed yet); (b) round-trip a real
+       device attestation green; (c) set `NATIVE_ATTESTATION_ENABLED=1` in prod EAS env. **Two
+       safety gates keep native off until then: the flag (501) AND verifyChain (false).**
+       **SCOPE:** iOS only. Play Integrity (Android) deferred to the Play Store track (Google
+       Cloud account not set up). Full findings: chat 2026-07-13.
 2. [x] **C8 interview twin — DONE** (RoadmapPane partner-scope note ×5) — the household-scope line's lighter half in the interview (the
        /plan header is done); shown once a partner is present.
 3. [x] **Arrival-date chips — DONE** (few/later/next → language-agnostic extractor; composer kept) (This year / Next year / …) — small interview UX; also parked as a

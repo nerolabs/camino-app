@@ -12,7 +12,11 @@
  */
 import { captureServerError } from '@/lib/sentryServer';
 import { corsPreflight, volumeGuard } from '@/lib/apiGuard';
-import { mintSession } from '@/lib/session';
+import { mintSession, mintChallenge, verifyChallenge } from '@/lib/session';
+import { verifyAttestation } from '@/lib/appAttest';
+
+// Apple App Attest app identity ("<TeamID>.<BundleID>"). Overridable via env for other envs.
+const APP_ATTEST_APP_ID = process.env.APP_ATTEST_APP_ID ?? 'VB9CHJM4AN.com.nerolabs.camino';
 
 const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
@@ -61,23 +65,48 @@ export async function POST(request: Request) {
     if (limited) return limited;
 
     const signingSecret = process.env.CRON_SECRET;
-    const secret = turnstileSecret();
-    if (!process.env.EXPO_PUBLIC_TURNSTILE_SITE_KEY || !secret || !signingSecret) {
-      // Not configured (e.g. local dev): the paid routes won't be enforcing either.
-      return Response.json({ error: 'not configured' }, { status: 501 });
+    if (!signingSecret) return Response.json({ error: 'not configured' }, { status: 501 });
+
+    const body = (await request.json()) as {
+      kind?: string; token?: unknown; keyId?: unknown; attestation?: unknown; challenge?: unknown;
+    };
+
+    // ── Native: issue an App Attest challenge (a signed nonce; no Turnstile needed) ──
+    if (body.kind === 'challenge') {
+      return Response.json({ challenge: await mintChallenge(signingSecret) });
     }
 
-    const body = (await request.json()) as { token?: unknown };
+    // ── Native: verify an App Attest attestation → mint the same session token (C2b) ──
+    // FLAG-GATED: until NATIVE_ATTESTATION_ENABLED is set (after on-device validation in build 39),
+    // this reports not-enabled and native stays gated — the current safe state.
+    if (body.kind === 'attest') {
+      if (process.env.NATIVE_ATTESTATION_ENABLED !== '1')
+        return Response.json({ error: 'native attestation not enabled' }, { status: 501 });
+      const { keyId, attestation, challenge } = body;
+      if (typeof keyId !== 'string' || typeof attestation !== 'string' || typeof challenge !== 'string')
+        return Response.json({ error: 'keyId, attestation, challenge required' }, { status: 400 });
+      if (!(await verifyChallenge(signingSecret, challenge)))
+        return Response.json({ error: 'stale or invalid challenge' }, { status: 403 });
+      const r = await verifyAttestation({ attestationB64: attestation, keyIdB64: keyId, challenge, appId: APP_ATTEST_APP_ID });
+      if (!r.ok) {
+        console.error('[appAttest] verification failed:', r.reason);
+        return Response.json({ error: 'attestation failed' }, { status: 403 });
+      }
+      return Response.json({ session: await mintSession(signingSecret) });
+    }
+
+    // ── Web: Cloudflare Turnstile (default) ──
+    const secret = turnstileSecret();
+    if (!process.env.EXPO_PUBLIC_TURNSTILE_SITE_KEY || !secret) {
+      return Response.json({ error: 'not configured' }, { status: 501 });
+    }
     if (typeof body.token !== 'string' || !body.token) {
       return Response.json({ error: 'token is required' }, { status: 400 });
     }
-
     if (!(await siteverify(secret, body.token, clientIp(request)))) {
       return Response.json({ error: 'challenge failed' }, { status: 403 });
     }
-
-    const session = await mintSession(signingSecret);
-    return Response.json({ session });
+    return Response.json({ session: await mintSession(signingSecret) });
   } catch (e) {
     console.error('session route error', e);
     await captureServerError(e, { route: '/api/session', method: 'POST' });

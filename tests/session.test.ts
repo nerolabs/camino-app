@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest';
-import { mintSession, verifySession, sessionGate, SESSION_TTL_MS } from '@/lib/session';
+import { mintSession, verifySession, sessionGate, SESSION_TTL_MS, mintChallenge, verifyChallenge } from '@/lib/session';
 
 // C2b: short-lived HMAC session tokens minted after a Turnstile solve, required on the paid
 // routes. These pin the token crypto and the server gate's enforce/fail-open behavior.
@@ -39,6 +39,25 @@ describe('mint/verify session tokens', () => {
     expect(await verifySession(SECRET, undefined)).toBe(false);
     expect(await verifySession(SECRET, 'nonsense')).toBe(false);
     expect(await verifySession(SECRET, '99999999')).toBe(false); // no dot
+  });
+});
+
+describe('App Attest challenge (C2b native)', () => {
+  it('mints a challenge that verifies with the same secret before expiry', async () => {
+    const now = 5_000_000;
+    const c = await mintChallenge(SECRET, now);
+    expect(c.split('.')).toHaveLength(3); // exp.random.sig
+    expect(await verifyChallenge(SECRET, c, now + 1_000)).toBe(true);
+  });
+  it('rejects an expired, tampered, wrong-secret, or malformed challenge', async () => {
+    const now = 5_000_000;
+    const c = await mintChallenge(SECRET, now);
+    expect(await verifyChallenge(SECRET, c, now + 6 * 60_000)).toBe(false);   // expired (5-min TTL)
+    expect(await verifyChallenge('other', c, now + 1_000)).toBe(false);        // wrong secret
+    const [exp, rand] = c.split('.');
+    expect(await verifyChallenge(SECRET, `${exp}.${rand}.deadbeef`, now + 1_000)).toBe(false); // tampered sig
+    expect(await verifyChallenge(SECRET, 'not-a-challenge', now)).toBe(false);
+    expect(await verifyChallenge(SECRET, null, now)).toBe(false);
   });
 });
 

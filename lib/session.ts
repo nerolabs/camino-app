@@ -37,6 +37,33 @@ export async function verifySession(
   return diff === 0;
 }
 
+// ── App Attest challenge (C2b native) ────────────────────────────────────────
+// A short-lived HMAC-signed nonce, so we need no DB to prevent replay: the client embeds it in
+// its attestation and sends it back; the server checks the signature + freshness, then binds it
+// into the App Attest nonce derivation. Format: `<expiryMs>.<randomHex>.<hmacHex>`.
+const CHALLENGE_TTL_MS = 5 * 60_000;
+
+export async function mintChallenge(secret: string, now: number = Date.now()): Promise<string> {
+  const exp = now + CHALLENGE_TTL_MS;
+  const rand = [...crypto.getRandomValues(new Uint8Array(16))].map(b => b.toString(16).padStart(2, '0')).join('');
+  const sig = await hmacHex(secret, `challenge:${exp}:${rand}`);
+  return `${exp}.${rand}.${sig}`;
+}
+
+export async function verifyChallenge(secret: string, challenge: string | null | undefined, now: number = Date.now()): Promise<boolean> {
+  if (!challenge) return false;
+  const parts = challenge.split('.');
+  if (parts.length !== 3) return false;
+  const [expS, rand, sig] = parts;
+  const exp = Number(expS);
+  if (!Number.isFinite(exp) || exp <= now) return false;
+  const expected = await hmacHex(secret, `challenge:${exp}:${rand}`);
+  if (expected.length !== sig.length) return false;
+  let d = 0;
+  for (let i = 0; i < expected.length; i++) d |= expected.charCodeAt(i) ^ sig.charCodeAt(i);
+  return d === 0;
+}
+
 /**
  * Server gate for the paid routes. Returns a 401 Response to send, or null to proceed.
  *  - Enforced only where Turnstile is configured (TURNSTILE_SECRET_KEY set) — so local dev with

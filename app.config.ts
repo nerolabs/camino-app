@@ -21,6 +21,14 @@ const config: ExpoConfig = {
     // AASA file lists which paths deep-link). Apple fetches the AASA via its CDN on install,
     // so AASA changes need a fresh install to take effect on a device.
     associatedDomains: ['applinks:getcamino.app'],
+    // App Attest (build 39): the entitlement @expo/app-integrity needs to prove requests come from
+    // a genuine, unmodified install on a real device — the non-spoofable native equivalent of the
+    // web's Turnstile (council fix C2b). "production" = App Store / TestFlight builds; the App
+    // Attest capability is enabled on the App ID (developer portal, 2026-07-13) so EAS re-mints the
+    // provisioning profile with this entitlement on the next build.
+    entitlements: {
+      'com.apple.developer.devicecheck.appattest-environment': 'production',
+    },
     infoPlist: {
       // App uses only standard HTTPS (exempt encryption) — avoids the manual export-compliance step.
       ITSAppUsesNonExemptEncryption: false,

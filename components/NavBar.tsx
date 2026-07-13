@@ -9,7 +9,6 @@ import { supabase } from '@/core/supabase';
 import { useWide } from '@/lib/useWide';
 import { SUPPORTED_LOCALES, setAppLocale, type LocaleCode } from '@/lib/i18n';
 import SignInButtons from '@/components/SignInButtons';
-import DeleteAccountDialog from '@/components/DeleteAccountDialog';
 
 // One nav for every width (user decision 2026-07-03: desktop gets the burger too — parity with
 // mobile, and Sign out declutters into the menu). Actions stay on the bar (Sign in / CTA / ☰);
@@ -22,11 +21,10 @@ import DeleteAccountDialog from '@/components/DeleteAccountDialog';
 export default function NavBar() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const wide = useWide();
   const { t, i18n } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
 
   const go = (path: string) => { setMenuOpen(false); router.push(path as never); };
@@ -107,14 +105,10 @@ export default function NavBar() {
             {/* Kept as its own menu item (user decision 2026-07-11), but it now rides the
                 general contact page with the problem topic pre-selected. */}
             <MenuLink label={t('nav.menu.reportProblem')} onPress={() => go('/contact?topic=problem')} />
+            {/* Phase 6 #27: sign out + delete now live on the account page (user 2026-07-13), so
+                the menu carries just the one link to it. Apple 5.1.1(v) — deletion stays in-app. */}
             {user && (
-              <>
-                {/* Phase 6 #27: the consolidated account home (email prefs + language + delete). */}
-                <MenuLink label={t('nav.menu.account')} onPress={() => go('/account')} />
-                <MenuLink label={t('nav.menu.signOut')} onPress={() => { setMenuOpen(false); signOut(); }} />
-                {/* Apple 5.1.1(v): account deletion must be reachable in-app. Quiet, but here. */}
-                <MenuLink label={t('nav.menu.deleteAccount')} onPress={() => { setMenuOpen(false); setDeleteOpen(true); }} />
-              </>
+              <MenuLink label={t('nav.menu.account')} onPress={() => go('/account')} />
             )}
           </Pressable>
         </Pressable>
@@ -142,7 +136,6 @@ export default function NavBar() {
         </Pressable>
       </Modal>
 
-      <DeleteAccountDialog visible={deleteOpen} onClose={() => setDeleteOpen(false)} />
     </View>
   );
 }

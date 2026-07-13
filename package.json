@@ -23,6 +23,7 @@
     "@anthropic-ai/sdk": "^0.107.0",
     "@expo-google-fonts/fraunces": "^0.4.1",
     "@expo-google-fonts/hanken-grotesk": "^0.4.3",
+    "@expo/app-integrity": "^56.0.3",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@sentry/browser": "^10.63.0",
     "@sentry/react-native": "~7.11.0",

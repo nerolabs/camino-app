@@ -9,6 +9,7 @@
  * likewise off there, so nothing breaks.
  */
 import { Platform } from 'react-native';
+import { getNativeSession } from '@/lib/nativeAttest';
 
 const API_BASE = process.env.EXPO_PUBLIC_API_URL ?? '';
 const SITE_KEY = process.env.EXPO_PUBLIC_TURNSTILE_SITE_KEY;
@@ -90,7 +91,9 @@ async function acquire(): Promise<string | null> {
  * Returns null on web when Turnstile isn't configured, and always null on native.
  */
 export async function getSessionToken(): Promise<string | null> {
-  if (Platform.OS !== 'web' || !SITE_KEY) return null;
+  // Native: App Attest (lib/nativeAttest.native.ts) mints the session; web falls through to Turnstile.
+  if (Platform.OS !== 'web') return getNativeSession();
+  if (!SITE_KEY) return null;
   const now = Date.now();
   if (cached && cached.exp - 60_000 > now) return cached.session;
   if (inFlight) return inFlight;
