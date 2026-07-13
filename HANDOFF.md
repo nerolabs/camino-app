@@ -78,6 +78,29 @@ by design. The post-launch ledger (entity, repo privacy, E&O, bus-factor) stays 
 until ≈1000 real users — do not re-litigate. Suite at close: **345 vitest · 10 public +
 5 authed Playwright · 10 contract · matrix 181×16 in CI.**
 
+**ADDENDUM (2026-07-13 day — THE PIVOT TO REAL USERS; supersedes "absorb tonight's
+findings" above):** user ruling after a strategy challenge: **"No more internal
+shredding. Real user data."** — only a data-loss/harm-class find blocks a build now;
+cosmetics ride OTA/web. What landed this turn:
+- **OTA updates WIRED (build 40+):** `runtimeVersion: { policy: 'fingerprint' }` +
+  `updates.url` in app.config.ts (fingerprint, NOT appVersion — we ship native changes
+  while `version` stays 1.0.0, the exact appVersion mismatch hazard). Publish =
+  **`npm run ota:production`** (gated on audit+tests; pins EXPO_PUBLIC_API_URL inline
+  because update bundles bake env at publish time and that var lives only in eas.json
+  build profiles, not the EAS environment). Builds ≤39 have no update config → can never
+  receive an incompatible bundle. Serves iOS AND the future Android closed test (same
+  production channel).
+- **Android track OPEN:** Redmi 13 bought (€85). **HARD PREREQUISITE FOUND:** Android has
+  no session-mint path (`nativeAttest.native.ts` is iOS-only; prod `sessionGate` 401s) —
+  an .aab cut today ships with Lola/extraction DEAD. Play Integrity (App Attest's twin)
+  must land before the first closed-test build — full spec in docs/ANDROID_LAUNCH.md's
+  new ⛔ block; TODO Phase 3 item 8b. Playbook also corrected: data-safety must declare
+  "Other financial info" (income band) to mirror the Apple label.
+- **User focus = marketing + pushing Android along;** Claude-side next: Play Integrity
+  session path, then the growth-asset drafts (Jerez post, mod-DMs, pre-emption paragraph,
+  Search Console).
+- Cleanup: stray editor dupes deleted (`lib/appAttest 2.ts`, `docs/TEST-COVERAGE 2.md`).
+
 ---
 
 ## Prior resume note (2026-07-12 late night — build 38 SUBMITTED; the COUNCIL reported; user triage IN)

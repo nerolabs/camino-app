@@ -699,6 +699,16 @@ const ROWS: Row[] = [
       'Emphasis without new copy: the bubbles were already written as "context, then the question," so bolding the question was a rendering choice, not a rewrite — the words are identical, just easier to scan.',
     ],
   },
+  {
+    feature: 'Testing ends, the release candidate goes out — with over-the-air fixes wired in',
+    date: '13 Jul 2026',
+    work: 'The call was made to stop hunting for bugs internally and let real users be the test: the App Store release-candidate build was cut and sent to review. Before cutting it, the app gained over-the-air updates — future fixes to the app\'s logic and copy reach installed phones on next launch, without a new App Store review each time. The Android track also moved: a test device is in hand, and the launch playbook was re-checked, catching that Android would need its own hardware "this is a real install" proof (the sibling of the iPhone\'s App Attest) before its first test build — otherwise the interview would ship dead on Android.',
+    decisions: [
+      'Internal testing has diminishing returns past a point: two expert testers going a full evening without a find means the next thousand bugs belong to strangers — and the monitoring, regression-test discipline, and now OTA updates exist precisely to absorb them fast.',
+      'Update compatibility is fingerprinted, not versioned by hand: an over-the-air fix mathematically cannot land on an app binary whose native internals don\'t match it.',
+      'Playbooks get re-read before they\'re executed: the Android guide was written before the endpoint lockdown existed; replaying it against today\'s code surfaced a step that would have shipped a broken interview to twelve testers.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

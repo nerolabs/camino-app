@@ -81,16 +81,20 @@ NOT cut the build until they're in, so we don't burn another build):
        student routes, job-seeker honesty, EU-licence clock, married-to-a-Spaniard 1-year
        citizenship, EHIC, Schengen 90/180) — catalog 64→73, all ×5 locales. (The B6
        modelo-200 clarifier remnant closed 2026-07-13 — see the remnants section.)
-1. [ ] **THE RELEASE-CANDIDATE PATH (updated 2026-07-13 session close).** Build 39 is on
-       TestFlight, device-tested, "working amazing" — native Lola live via App Attest, all
-       council fixes aboard. But three client fixes landed AFTER 39 was cut (session
-       pre-warm so the gate isn't felt after Q1 · bold-question emphasis in Lola bubbles ·
-       plus anything from tonight's continued testing), so:
-       **(a)** more build-39 + web testing (user: "getting harder to find bugs — like
-       really hard"); **(b)** on user command, cut **build 40 = THE App Store release
-       candidate** (e2e-ios gate first — no waiver this time); **(c)** full device pass on
-       40 = the submission gate. _Supersedes the build-38 plan: 38 was shredded, 39
-       absorbed the findings + the entire council queue._
+1. [ ] **THE RELEASE-CANDIDATE PATH (RE-RULED 2026-07-13 day: "No more internal
+       shredding. Real user data.").** Build 39 is on TestFlight, device-tested, "working
+       amazing." **User ruling supersedes (a): internal shredding STOPS — build 40 goes
+       out on the strength of the existing suite + Sentry + the OTA path; only a
+       data-loss/harm-class find blocks it, cosmetics ride OTA/web later.** Build 40
+       carries: session pre-warm · bold-question emphasis · **OTA updates wired
+       2026-07-13 (EAS Update, `runtimeVersion: fingerprint` + `updates.url` in
+       app.config.ts; publish = `npm run ota:production`, gated on audit+tests;
+       post-launch JS fixes no longer burn an Apple review cycle).**
+       Path: **(a)** e2e-ios gate green — no waiver; **(b)** cut build 40 `--auto-submit`;
+       **(c)** device sanity pass (not a shred) = the submission gate. _Supersedes the
+       build-38 plan: 38 was shredded, 39 absorbed the findings + the entire council
+       queue._ User focus shifts to MARKETING + the Android track (Phase 3 — Redmi
+       bought; see 8b's new Play Integrity prerequisite)._
 2. [ ] **Then ASC Part 3** (runbook, adjusted): trader case check → attach build 40 →
        final page read → **Add for Review** (manual release; expect one rejection cycle).
        All other ASC paperwork is DONE (fields, label, screenshots, review notes).
@@ -441,11 +445,18 @@ Playwright · 7 API contract · 3 Maestro flows (pinned 2.6.1).
 
 ### Phase 3 — Android track (user-side; the 14-day clock burns in parallel)
 
-8. [ ] **[USER] Buy the test device** (~$100–250: Moto G Play new / Galaxy A16 / refurb
-   Pixel 7a — Play-certified, Android 14+).
+8. [x] **DONE 2026-07-13 — [USER] test device bought: Redmi 13, €85.**
+8b. [ ] **⛔ Play Integrity session path — HARD PREREQUISITE before the first .aab**
+   (found 2026-07-13: `sessionGate` 401s session-less clients in prod and
+   `lib/nativeAttest.native.ts` is iOS-only, so an Android build today ships with
+   Lola/extraction DEAD). Mirror the App Attest flow: client verdict → `/api/session`
+   verifies via Google's Play Integrity API (user-side: Google Cloud service-account key
+   → EAS env, `sensitive`) → same HMAC session token; flag-gated like
+   `NATIVE_ATTESTATION_ENABLED`. Full spec: docs/ANDROID_LAUNCH.md (new ⛔ block).
 9. [ ] **Play developer account** (personal, $25 — sole-prop decision) + first Android build
    (verify the old preview APK on-device, then a production .aab) + store listing +
-   data-safety form (mirror the Apple nutrition answers).
+   data-safety form (mirror the Apple nutrition answers — incl. "Other financial info" =
+   income band, playbook corrected 2026-07-13).
 10. [ ] **Closed test: 12+ testers × 14 days** (personal-account requirement) — start the
     moment a build installs; calendar time burns in parallel. Recruit from the
     family-testing circle; the English build is fine to start.

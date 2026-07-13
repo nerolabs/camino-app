@@ -12,6 +12,25 @@ polished *while the clock runs.*
 
 Bundle / package id: **`com.nerolabs.camino`** · App name: **Get Camino: Your Road to Spain**
 Legal identity: **AELaboratories** (sole proprietor, own SSN — user decision 2026-07-04).
+Test device: **Redmi 13 PURCHASED 2026-07-13 (€85)** — Phase 0 can run any time.
+
+> ## ⛔ NEW HARD PREREQUISITE (found 2026-07-13): Play Integrity BEFORE the first closed-test build
+>
+> Since the C2 lockdown, `/api/lola` and `/api/feedback` require a session token in production
+> (`sessionGate` in `lib/session.ts` returns 401 without one). Web mints it via Turnstile; iOS
+> mints it via App Attest (live on build 39). **Android has NO minting path yet** —
+> `lib/nativeAttest.native.ts` is iOS-only and returns `null` on Android — so an Android build
+> cut today ships with the interview's Lola/extraction **dead in production**. Do not start the
+> closed test on a build like that; 12 testers would meet a broken core flow.
+>
+> **The fix is the deferred Play Integrity twin of App Attest** (Claude session + a user-side
+> Google Cloud step): client integrity verdict on Android → `/api/session` verifies it via
+> Google's Play Integrity API (needs a Google Cloud service account key as an EAS env var,
+> `sensitive` visibility) → mints the same HMAC session token. Flag-gate it like
+> `NATIVE_ATTESTATION_ENABLED` was: build flag-off → verify against a real device verdict →
+> flip. Note Play Integrity only returns verdicts for apps **installed via Play**, so the
+> closed-test track (a normal Play install) is exactly where it can be proven. Sequence it
+> between Phase 1 (account, has wait time anyway) and Phase 2 (the build).
 
 ---
 
@@ -58,7 +77,8 @@ This is the "$25 account" step. Budget **1–3 days of waiting** because Google 
 
 We need a **production Android App Bundle (.aab)** to upload to the closed track. (The old preview
 APK — build `a538b9d7` — points at the *staging* DB and is APK not AAB; don't use it for the real
-test.)
+test.) **⛔ Do not cut this build until the Play Integrity prerequisite above is in the tree**
+(flag-off is fine — that's the App Attest playbook) — otherwise the interview ships dead.
 
 1. **You give the go-ahead** (EAS build credits are only spent on your command). Then Claude runs:
    ```
@@ -107,7 +127,9 @@ wrote for Apple in `docs/APP_STORE.md` — same facts):
    - **Crash logs & diagnostics** (Sentry) — collected, **not** linked to identity.
    - **Data is encrypted in transit:** Yes. **Users can request deletion:** Yes → provide the
      in-app delete-account path + the URL. **No data sold. No tracking for ads.**
-   - Location / photos / contacts / financial account / health: **not collected.**
+   - **Financial info → "Other financial info": collected** (the income *band* — mirrors the
+     Apple label's "Other Financial Info" entry added 2026-07-11; don't declare payment info).
+   - Location / photos / contacts / payment info / health: **not collected.**
 6. **Government apps** — No. **Financial features** — No.
 7. **Privacy policy URL:** `https://getcamino.app/privacy`
 
@@ -165,8 +187,11 @@ one fix round — TODO Phase 3 item 11):
 - **Dictation** — `expo-speech-recognition` streams on-device.
 - **Safe area / notch** — nav clears the Redmi's camera cutout; nothing clipped.
 - **Cold start** — with no saved plan, app lands home; no spinner past ~35s.
-- File anything broken; Claude fixes → you re-build (`eas build --platform android`) → new closed
-  release. Fixes during the 14 days **don't reset the clock** (same track, same testers).
+- File anything broken; Claude fixes. **JS-only fixes now ride OTA** (`npm run ota:production` —
+  EAS Update, wired 2026-07-13 for build 40+; the closed-test .aab shares the production channel,
+  so testers pick fixes up on next app restart, no new release or Google review). Only
+  native-affecting changes need a re-build (`eas build --platform android`) → new closed release.
+  Fixes during the 14 days **don't reset the clock** (same track, same testers).
 
 ---
 

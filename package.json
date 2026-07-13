@@ -9,6 +9,7 @@
     "web": "expo start --web",
     "deploy:staging": "bash scripts/deploy.sh staging",
     "deploy:production": "bash scripts/deploy.sh production",
+    "ota:production": "npm run --silent audit && npm run --silent test && EXPO_PUBLIC_API_URL=https://getcamino.app npx eas-cli update --channel production --environment production --auto",
     "audit": "npx tsx scripts/audit-catalog.ts",
     "audit:matrix": "npx tsx scripts/audit-matrix.ts",
     "freshness": "npx tsx scripts/freshness-check.ts",
