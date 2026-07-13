@@ -80,11 +80,16 @@ export async function POST(request: Request) {
     // FLAG-GATED: until NATIVE_ATTESTATION_ENABLED is set (after on-device validation in build 39),
     // this reports not-enabled and native stays gated — the current safe state.
     if (body.kind === 'attest') {
-      if (process.env.NATIVE_ATTESTATION_ENABLED !== '1')
-        return Response.json({ error: 'native attestation not enabled' }, { status: 501 });
       const { keyId, attestation, challenge } = body;
       if (typeof keyId !== 'string' || typeof attestation !== 'string' || typeof challenge !== 'string')
         return Response.json({ error: 'keyId, attestation, challenge required' }, { status: 400 });
+      if (process.env.NATIVE_ATTESTATION_ENABLED !== '1') {
+        // BUILD-39 CAPTURE: attestations are public (not secret). Log the real device attestation so
+        // verifyChain can be completed + tested against it, then this capture line + the log are
+        // removed and the flag is flipped on. Retrieve via `eas deploy` logs / the hosting dashboard.
+        console.log('[appAttest:capture]', JSON.stringify({ keyId, challenge, attestation }));
+        return Response.json({ error: 'native attestation not enabled' }, { status: 501 });
+      }
       if (!(await verifyChallenge(signingSecret, challenge)))
         return Response.json({ error: 'stale or invalid challenge' }, { status: 403 });
       const r = await verifyAttestation({ attestationB64: attestation, keyIdB64: keyId, challenge, appId: APP_ATTEST_APP_ID });

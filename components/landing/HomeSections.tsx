@@ -79,6 +79,11 @@ function DemoLoop() {
 function MiniRoadmap() {
   const steps = useMemo(() => buildPlan(sampleProfile())
     .filter(o => o.timing.state === 'scheduled')
+    // Show the SOONEST steps, not the first in dependency order — otherwise the preview surfaced
+    // Susan & Tom's far-future citizenship track (CCSE 2032, naturalisation 2037) and read as
+    // "everything's a decade out." The near-term steps are the compelling "you start here" proof.
+    .sort((a, b) => (a.timing.state === 'scheduled' ? a.timing.due.getTime() : 0)
+                  - (b.timing.state === 'scheduled' ? b.timing.due.getTime() : 0))
     .slice(0, 4)
     .map(o => ({
       title: displayTitle(o).split('—')[0].trim(),
