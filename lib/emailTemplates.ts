@@ -75,6 +75,31 @@ export function welcomeEmail(opts: { planUrl: string; unsubHtml: string; lang?: 
   return { subject: S.subject, html, text };
 }
 
+// ── Feedback auto-ack (C9a) ──────────────────────────────────────────────────────
+// Sent to a feedback submitter who left an address. Honest about the one-person cadence, points
+// urgent cases at the consulate, and offers /questions + /changelog as self-serve. No unsubscribe
+// footer — it's a one-off transactional reply, not a subscription. Shell adds the not-advice line.
+
+export function feedbackAckEmail(opts: { questionsUrl: string; changelogUrl: string; lang?: EmailLang }): RenderedEmail {
+  const lang = opts.lang ?? 'en';
+  const S = emailStrings(lang).feedbackAck;
+  const html = shell(
+    p(S.thanks) +
+    p(S.reply) +
+    p(S.meantime) +
+    `<div style="margin:24px 0;">${button(opts.questionsUrl, S.questionsBtn)}</div>` +
+    p(`<a href="${opts.changelogUrl}" style="color:${C.cobalt};text-decoration:none;font-weight:600;">${esc(S.changelogLink)}</a>`),
+    '',
+    lang,
+  );
+  const text = [
+    S.thanks, '', S.reply, '', S.meantime,
+    interp(S.questionsText, { url: opts.questionsUrl }),
+    interp(S.changelogText, { url: opts.changelogUrl }),
+  ].join('\n');
+  return { subject: S.subject, html, text };
+}
+
 // ── Weekly roundup ─────────────────────────────────────────────────────────────
 
 function itemHtml(it: DigestItem, R: ReturnType<typeof emailStrings>['roundup']): string {

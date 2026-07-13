@@ -92,5 +92,15 @@
     "sourcePrefix": "Fonte ufficiale: ",
     "footerHonesty": "Le date stimate si affinano quando si confermano date vere; i passi senza data iniziano quando avviene il loro traguardo — Get Camino non inventa mai una scadenza.",
     "footerMade": "Creato con Get Camino (getcamino.app). Solo orientamento — non è consulenza legale né fiscale; le carte le firma un gestor."
+  },
+  "feedbackAck": {
+    "subject": "Abbiamo ricevuto il tuo messaggio — Get Camino",
+    "thanks": "Grazie — il tuo messaggio mi è arrivato.",
+    "reply": "Get Camino è costruito e gestito da una sola persona, quindi una risposta richiede di solito circa quattro o cinque giorni. Se qualcosa è urgente, la pagina degli appuntamenti (cita previa) del tuo consolato è la via più rapida — non posso aiutarti con i casi urgenti.",
+    "meantime": "Nel frattempo, forse qui trovi già la tua risposta:",
+    "questionsBtn": "Domande frequenti",
+    "changelogLink": "Guarda cosa è cambiato di recente →",
+    "questionsText": "Domande frequenti: {{url}}",
+    "changelogText": "Cosa è cambiato di recente: {{url}}"
   }
 }

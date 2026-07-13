@@ -12,6 +12,9 @@ import { interviewCompleteness } from '@/core/completeness';
 import { buildPlan } from '@/core/engine-controller';
 import { diffPlans } from '@/core/plan-delta';
 import { distillFinalNote } from '@/lib/plan-coach';
+import { sanitizeProfileDelta, valueOkForSlot } from '@/lib/profileDelta';
+import { incomeAck } from '@/lib/stakesAck';
+import { isQuestion, stakesGuideId } from '@/lib/stakesQuestion';
 import { regionLabel, REGION_OPTIONS } from '@/core/regions';
 import { guideById, shortClause } from '@/core/guide-content';
 import { displayTitle } from '@/lib/catalogTitles';
@@ -22,9 +25,9 @@ import { saveProfile as saveProfileDb } from '@/core/profileDb';
 import { saveDraft, loadDraft, clearDraft } from '@/lib/interviewDraft';
 import { TEST_PERSONAS, type Persona } from '@/core/test-personas';
 import { askAnthropic } from '@/lib/lola';
-import { buildExtractionSystem, parseExtraction, type Extraction } from '@/lib/extractionPrompt';
+import { parseExtraction, type Extraction } from '@/lib/extractionPrompt';
 import { useTranslation } from 'react-i18next';
-import i18n, { languageDirective } from '@/lib/i18n';
+import i18n, { currentLang, dateLocale } from '@/lib/i18n';
 import { useDictation } from '@/hooks/useDictation';
 import { capture } from '@/lib/analytics';
 import { captureError } from '@/lib/monitoring';
@@ -59,9 +62,8 @@ async function extractAnswer(
   slot: Slot, userText: string, turns: Turn[], remaining: Slot[]
 ): Promise<Extraction> {
   const rawText = await askAnthropic({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 350,
-    system: buildExtractionSystem({ slot, transcript: transcriptOf(turns), remaining }),
+    mode: 'extract',
+    params: { slotField: slot.field, transcript: transcriptOf(turns), remaining: remaining.map(s => s.field) },
     messages: [{ role: 'user', content: userText }],
   });
   return parseExtraction(rawText);
@@ -76,17 +78,11 @@ async function phraseClarify(
   slot: Slot, userText: string, turns: Turn[], extractorHint: string | undefined, reask: string,
 ): Promise<string> {
   const rawText = await askAnthropic({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 220,
-    system: `You are Lola, Get Camino's warm, honest relocation guide, mid-interview. You asked about
-"${slot.prompt_hint}" and the user replied with a question or confusion rather than an answer.
-${transcriptOf(turns) ? `Conversation so far:\n${transcriptOf(turns)}\n` : ''}
-${extractorHint ? `What seems ambiguous: ${extractorHint}\n` : ''}
-Reply in 1–3 short, warm sentences: first help them — explain what the question means in plain
-words, or why you're asking it — then naturally re-ask (you can adapt: "${reask}").
-HARD RULES: never state legal facts, deadlines, income thresholds, costs, or eligibility rules —
-if they ask for those, say their personalized roadmap right after this interview covers it with
-official sources. Never invent an answer for them. Plain text only.${languageDirective()}`,
+    mode: 'clarify',
+    params: {
+      slotField: slot.field, transcript: transcriptOf(turns),
+      extractorHint, reask, lang: currentLang(),
+    },
     messages: [{ role: 'user', content: userText }],
   });
   return rawText.trim();
@@ -102,22 +98,9 @@ official sources. Never invent an answer for them. Plain text only.${languageDir
 // the role must be "one aside, the app runs the interview" — the first version framed it loosely
 // and the model started interviewing ("I'm ready for your answer…", inventing follow-ups).
 async function phraseAck(slot: Slot, userText: string, turns: Turn[]): Promise<string> {
-  const transcript = transcriptOf(turns);
   const raw = await askAnthropic({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 100,
-    system: `You are Lola, a warm relocation guide helping someone move to Spain. The interview is run
-by the app — the next question is already on the user's screen. Your ONLY job: one brief, warm aside
-reacting to the answer they just gave.
-${transcript ? `Conversation so far (background context only — do not continue it or respond to it):\n${transcript}\n` : ''}
-They were just asked about "${slot.prompt_hint}" and answered: "${userText}".
-React to that answer in one or two short, natural sentences — warm, playful when it fits, never
-gushing or over-complimentary. When it's natural, connect it to something they mentioned earlier;
-otherwise a light acknowledgement is plenty. No emoji.
-HARD RULES: you are NOT driving the conversation — never ask a question, never request more detail,
-never re-ask or repeat a question, never say you're waiting for or ready for an answer. Do NOT state
-any legal fact, deadline, income figure, cost, number, or eligibility rule — those live in their
-roadmap. Plain text.${languageDirective()}`,
+    mode: 'ack',
+    params: { slotField: slot.field, transcript: transcriptOf(turns), userText, lang: currentLang() },
     messages: [{ role: 'user', content: 'React to my answer.' }],
   });
   const ack = raw.trim();
@@ -126,6 +109,28 @@ roadmap. Plain text.${languageDirective()}`,
   if (/[?¿]/.test(ack) || ack.length > 260) return '';
   return ack;
 }
+
+// C1b (council fix): on the income slot the reaction is engine-computed, NEVER the LLM's — so
+// Lola can't praise (or soften) an answer the roadmap is about to flag (the live finding: she
+// called a below-NLV band "a solid range"). Returns the deterministic ack — a heads-up naming the
+// household threshold when the same conservative check the plan uses fails, a neutral "noted"
+// otherwise — or null for every other slot, which keeps its warm LLM reaction.
+function stakesAck(slot: Slot, p: Profile): string | null {
+  if (slot.field !== 'annual_income_eur_band') return null;
+  const a = incomeAck(p);
+  if (a.kind === 'short') {
+    const amount = `€${Math.round(a.threshold).toLocaleString(dateLocale())}`;
+    return i18n.t(a.route === 'dnv' ? 'interview:stakes.incomeShortDnv' : 'interview:stakes.incomeShortNlv', { amount });
+  }
+  return i18n.t('interview:stakes.incomeNoted');
+}
+
+// Slots whose reaction is deterministic (stakesAck) skip the LLM ack call entirely.
+const usesDeterministicAck = (slot: Slot): boolean => slot.field === 'annual_income_eur_band';
+
+// C1d (council fix): the AI disclosure ("this is helpful guidance, not legal advice" — EU AI Act
+// Art. 50, applies 2026-08-02) is folded into the FIRST bubble's greeting (landing.greeting), so
+// the opener discloses without a separate committee-style notice. See start().
 
 // The deterministic question fallbacks now live in locales/<lang>/interview.json ("static.*") —
 // same interview, less charm, any language. Reads via the i18n singleton (these are used in
@@ -395,9 +400,10 @@ export default function InterviewScreen() {
     const greeting = fromGuide
       ? `${t('landing.greeting')} ${t('landing.fromGuide', { guide: shortClause(displayTitle(fromGuide)) })}`
       : t('landing.greeting');
+    // One opening bubble: the warm intro + AI disclosure (folded into landing.greeting), a blank
+    // line, then the first question — reads like one person talking, not three separate notices.
     setTurns([
-      { role: 'lola', text: greeting },
-      { role: 'lola', text: questionText(slot) },
+      { role: 'lola', text: `${greeting}\n\n${questionText(slot)}` },
     ]);
     askedAtRef.current = Date.now();
   }
@@ -429,16 +435,14 @@ export default function InterviewScreen() {
       for (const s of remainingSlots) {
         const v = extras[s.field];
         if (v === undefined || v === null) continue;
-        const ok = s.type === 'bool' ? typeof v === 'boolean'
-                 : s.type === 'date' ? typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v)
-                 : s.type === 'list' ? Array.isArray(v) && v.every(x => typeof x === 'string')
-                 : s.options       ? typeof v === 'string' && s.options.includes(v)
-                 : typeof v === 'string';
-        if (ok) { next_profile[s.field] = v; autofilled.push(s.field); }
+        // Same type/enum/date check every LLM write-path uses (C1a — lib/profileDelta.ts).
+        if (valueOkForSlot(s, v)) { next_profile[s.field] = v; autofilled.push(s.field); }
       }
       if (autofilled.length) capture('interview_slots_autofilled', { fields: autofilled, from: slot.field });
     }
     derive(next_profile);
+    // C1b: a stakes answer's reaction is engine-computed (null for ordinary slots → LLM ack).
+    const detAck = stakesAck(slot, next_profile);
     // Live roadmap: highlight the steps THIS answer added, and keep them lit through the next
     // question — they settle only when the following answer arrives (replacing this set, or
     // clearing it if that answer added nothing). Removals get narrated too (2026-07-12): an
@@ -473,7 +477,7 @@ export default function InterviewScreen() {
     const next = nextSlot(next_profile);
     if (!next) {
       // Last slot answered → the optional final note, not straight to done.
-      const ackF = await Promise.race([ackP, sleep(REACTION_WAIT_MS).then(() => '')]);
+      const ackF = detAck ?? await Promise.race([ackP, sleep(REACTION_WAIT_MS).then(() => '')]);
       capture('interview_question_answered', { ...answeredProps, ack_shown: !!ackF });
       const fq = t('final.question');
       setCurrentSlot(null);
@@ -484,7 +488,7 @@ export default function InterviewScreen() {
     }
     setCurrentSlot(next);
     // One stable paint: wait (bounded) for the reaction, then render the merged bubble once.
-    const ack = await Promise.race([ackP, sleep(REACTION_WAIT_MS).then(() => '')]);
+    const ack = detAck ?? await Promise.race([ackP, sleep(REACTION_WAIT_MS).then(() => '')]);
     // ack_shown = the reaction made the cap; its false-rate is the tuning signal for REACTION_WAIT_MS.
     capture('interview_question_answered', { ...answeredProps, ack_shown: !!ack });
     const q = questionText(next);
@@ -504,7 +508,8 @@ export default function InterviewScreen() {
     setLoading(true);
     setTurns(prev => [...prev, { role: 'user', text: label }]);
     try {
-      const ackP = phraseAck(currentSlot, label, turns).catch(() => '');
+      const ackP = usesDeterministicAck(currentSlot)
+        ? Promise.resolve('') : phraseAck(currentSlot, label, turns).catch(() => '');
       const remainingSlots = extras
         ? SLOTS.filter(s => !(s.field in profile) && s.field !== currentSlot.field) : [];
       await advance(currentSlot, value, ackP, mode, extras, remainingSlots);
@@ -542,7 +547,9 @@ export default function InterviewScreen() {
     try {
       const text = noteText?.trim() || null;
       if (text) setTurns(prev => [...prev, { role: 'user', text }]);
-      capture('interview_final_note', { skipped: !text, answer: text ? text.slice(0, 500) : undefined });
+      // C1f: no free text in analytics — the note invites exactly the volunteered sensitive data
+      // we must not store off-device. Keep the deterministic signals (skipped, is-it-a-question).
+      capture('interview_final_note', { skipped: !text, is_question: text ? isQuestion(text) : undefined });
       let p: Profile = text ? { ...profile, notes: text } : profile;
       if (text) {
         // Distill the note through the same bounded extractor the plan-coach uses — typed
@@ -550,15 +557,17 @@ export default function InterviewScreen() {
         // shapes the roadmap NOW instead of sitting unread in `notes`. Fail-open: any
         // extraction trouble just keeps the raw note.
         const distilled = await distillFinalNote(text);
-        if (!('error' in distilled) && Object.keys(distilled.changes).length) {
-          p = { ...p, ...distilled.changes };
+        // C1a: never spread the model's raw JSON — sanitize to real, type-checked fields first.
+        const changes = 'error' in distilled ? {} : sanitizeProfileDelta(distilled.changes);
+        if (Object.keys(changes).length) {
+          p = { ...p, ...changes };
           derive(p);
           const delta = diffPlans(buildPlan(profile), buildPlan(p));
           setPlanCount(delta.after.length);
           setHighlightIds(new Set(delta.added.map(o => o.id)));
           stampLastUserTurn(delta.added.length, delta.removed.length);
           capture('interview_note_distilled', {
-            fields: Object.keys(distilled.changes),
+            fields: Object.keys(changes),
             added_steps: delta.added.length,
             removed_steps: delta.removed.length,
           });
@@ -572,7 +581,16 @@ export default function InterviewScreen() {
       setDone(true);
       // A note gets acknowledged before the handover (the old cut to /plan mid-thought was
       // jarring); the skip path keeps the plain closing line. Then the countdown owns the beat.
-      setTurns(prev => [...prev, { role: 'lola', text: text ? t('final.ack') : t('done') }]);
+      // C1c: a note that asks a personal-case question ("will my DUI disqualify me?") gets an
+      // honest can't-assess handoff — never a bare "thanks, noted" — plus the covering guide.
+      let closing = text ? t('final.ack') : t('done');
+      if (text && isQuestion(text)) {
+        closing = t('stakes.cantAssess');
+        if (stakesGuideId(text) === 'criminal-background-check') {
+          closing += '\n\n' + t('stakes.guideCriminal');
+        }
+      }
+      setTurns(prev => [...prev, { role: 'lola', text: closing }]);
       setTimeout(() => setCountdown(3), 900); // let the closing bubble land first
     } finally {
       setLoading(false);
@@ -603,16 +621,19 @@ export default function InterviewScreen() {
       // Other answers also log their raw text (chip-coverage refinement — user decision 2026-07-09;
       // Other is never offered on sensitive slots, so no sensitive content can flow here).
       const viaOther = otherActive;
-      if (viaOther) capture('interview_other_answered', { field: currentSlot.field, answer: text.slice(0, 200) });
+      // C1f: log THAT "Other" was used on this field (drives the chip-refinement rate), never the
+      // raw text. The refinement loop keys on per-field Other RATE, not content.
+      if (viaOther) capture('interview_other_answered', { field: currentSlot.field });
       // The reaction runs concurrently with extraction, so it's normally resolved by the time
       // the next question is ready — the merged bubble costs no extra wait on composer turns.
-      const ackP = phraseAck(currentSlot, text, turns).catch(() => '');
+      const ackP = usesDeterministicAck(currentSlot)
+        ? Promise.resolve('') : phraseAck(currentSlot, text, turns).catch(() => '');
       const remainingSlots = SLOTS.filter(s => !(s.field in profile) && s.field !== currentSlot.field);
       const result = await extractAnswer(currentSlot, text, turns, remainingSlots);
 
       if ('clarify' in result) {
         // Monitor these: every clarify is a real user stuck on a question the extractor fumbled.
-        capture('interview_clarify_needed', { field: currentSlot.field, answer: text.slice(0, 200) });
+        capture('interview_clarify_needed', { field: currentSlot.field }); // C1f: field only, no raw text
         const reask = staticQuestion(currentSlot.field)
           ?? t('fallback.clarifyReask', { hint: currentSlot.prompt_hint });
         // Conversational clarify: answer their meta-question in Lola's voice, then re-ask
@@ -750,11 +771,15 @@ export default function InterviewScreen() {
           )}
 
           {finalPhase && !done && !loading && (
-            <View style={styles.chipsWrap}>
-              <TouchableOpacity style={[styles.chip, styles.chipOther]} onPress={() => finishInterview(null)} accessibilityRole="button">
-                <Text style={styles.chipOtherText}>{t('final.skip')}</Text>
-              </TouchableOpacity>
-            </View>
+            <>
+              {/* C1e: microcopy so volunteered sensitive data isn't invited into the open note. */}
+              <Text style={styles.noteHint}>{t('final.noteHint')}</Text>
+              <View style={styles.chipsWrap}>
+                <TouchableOpacity style={[styles.chip, styles.chipOther]} onPress={() => finishInterview(null)} accessibilityRole="button">
+                  <Text style={styles.chipOtherText}>{t('final.skip')}</Text>
+                </TouchableOpacity>
+              </View>
+            </>
           )}
 
           {!done && !loading && slotUsesChips(currentSlot) && !otherActive && (
@@ -970,6 +995,7 @@ const styles = StyleSheet.create({
   lolaText:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.indigo, lineHeight: 22 },
   userText:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.cal,   lineHeight: 22 },
   chipsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12, marginBottom: 4 },
+  noteHint: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, lineHeight: 19, color: palette.muted, marginTop: 12, maxWidth: 440 },
   chip: {
     backgroundColor: '#FFFFFF', borderRadius: 22, borderWidth: 1, borderColor: '#D8D2C8',
     paddingVertical: 11, paddingHorizontal: 18,

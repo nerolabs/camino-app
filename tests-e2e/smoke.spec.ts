@@ -28,6 +28,11 @@ test('interview auto-starts; a typed answer round-trips /api/lola and advances (
   // conversation with Lola's greeting and the arrival-date opener.
   await expect(page.getByText("Hola, I'm Lola", { exact: false })).toBeVisible();
   await expect(page.getByText(/when are you planning to arrive/i)).toBeVisible();
+  // C2b: the live round-trip needs a Turnstile solve. On PRODUCTION the real Managed challenge
+  // can't be passed by an automated browser (staging runs Cloudflare's always-pass TEST keys, so
+  // the full flow is verified there) — and prod is confirmed by a manual human check each deploy.
+  // So on production we assert the page + intro load, then stop before the gated LLM turn.
+  if (process.env.E2E_TURNSTILE_LIVE === '1') { expect(errors).toEqual([]); return; }
   // One real /api/lola round-trip: answer the date; the next question (Spanish level) should
   // arrive with its chips. Give the extraction + the reaction race room.
   const composer = page.getByPlaceholder(/type your answer/i);

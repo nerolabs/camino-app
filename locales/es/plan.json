@@ -45,7 +45,8 @@
   "card": {
     "doneBadge": "✓ Hecho",
     "a11y": "{{title}}. {{status}}. Abre los detalles del paso",
-    "a11yDone": "Hecho"
+    "a11yDone": "Hecho",
+    "conditionalNote": "Se muestra porque preferiste no decirlo — solo aplica si superas la cantidad indicada arriba. Ignóralo si estás seguro de que estás por debajo."
   },
   "overdue": {
     "wasDue": "Atrasado · vencía el {{date}}",
@@ -209,7 +210,7 @@
     "a11y": "Comparte un enlace de solo lectura a tu hoja de ruta",
     "title": "Comparte tu hoja de ruta",
     "body": "Cualquiera con el enlace ve una copia de solo lectura — tus pasos y fechas, tal y como los construye el motor. No puede editar nada y no necesita cuenta.",
-    "caveat": "El propio enlace codifica tus respuestas (nacionalidades, fechas, planes — nunca tus notas). Compártelo solo con quien le contarías esas cosas.",
+    "caveat": "El enlace codifica tus respuestas — nacionalidades, fechas, planes y cualquier dato económico que diste, como las franjas de ingresos o de patrimonio (nunca tus notas de texto libre). Compártelo solo con personas a las que confiarías esa información.",
     "copy": "Copiar enlace",
     "copied": "Copiado ✓",
     "share": "Compartir…",
@@ -234,5 +235,6 @@
     "wealth_scale": "En {{region}}, el impuesto sobre el patrimonio empieza por encima de un mínimo exento de {{exempt}} (más la exención de vivienda habitual), con tipos que suben hasta el {{top}} en lo más alto.",
     "itp_foral": "En {{region}}, los tipos los fija cada territorio histórico (Álava, Bizkaia, Gipuzkoa) — hoy alineados: comprar vivienda usada tributa al {{rate}} en los tres (otros inmuebles al {{general}}), con variantes reducidas para vivienda habitual.",
     "itp_bonif": "En {{region}} se aplica el tipo estatal del {{rate}} con una bonificación del {{bonif}} en la cuota — un {{effective}} efectivo al comprar vivienda usada."
-  }
+  },
+  "scopeNote": "Esta hoja de ruta traza tu itinerario como solicitante principal. Si tu pareja también trabaja, debería hacer su propia entrevista rápida — el camino de cada persona puede variar, y un enlace para compartir facilita la segunda vez."
 }

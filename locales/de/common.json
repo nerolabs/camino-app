@@ -79,11 +79,11 @@
       "step3": "Gehen Sie ihn gemeinsam — er plant um, wenn sich das Leben ändert; eine kurze wöchentliche E-Mail hält Fälliges im Blick."
     },
     "proof": {
-      "title": "Damit gehen Sie nach Hause.",
+      "title": "Das nehmen Sie mit.",
       "free": "100% kostenlos. Ohne Haken.",
       "caption": "Das ist der von Susan & Tom — Rentner auf dem Weg zum Non-Lucrative-Visum. Ihrer wird Ihrer sein.",
       "cta": "Den vollständigen Beispiel-Fahrplan öffnen →",
-      "more": "…27 Schritte, terminiert, jeder offizielle mit seiner offiziellen Quelle"
+      "more": "…{{count}} Schritte, mit Datum, jeder offizielle mit seiner behördlichen Quelle"
     },
     "trust": {
       "title": "Warum Sie ihm vertrauen können",
@@ -99,6 +99,17 @@
     "finalCta": {
       "title": "Bereit? Lolas erste Frage wartet.",
       "sample": "oder sehen Sie sich zuerst das Beispiel an"
+    },
+    "euHook": "EU-Bürger? Deine Liste ist kürzer — aber nie leer. Get Camino erstellt die richtige für dich.",
+    "engineLine": "Die KI stellt die Fragen. Über deine Fristen entscheidet sie nie — das macht eine deterministische Engine, aus offiziellen Quellen.",
+    "cited": {
+      "label": "Ein echter Schritt aus einem Fahrplan",
+      "source": "Offizielle Quelle · {{domain}} · Geprüft {{date}}"
+    },
+    "catch": {
+      "title": "Wo ist der Haken?",
+      "body": "Es gibt keinen — aber es gibt Grenzen. Get Camino zeichnet den Weg und nennt jede offizielle Quelle; es reicht deine Formulare nicht ein und kann keinen persönlichen Grenzfall beurteilen. Dafür brauchst du weiterhin einen Gestor oder einen Anwalt für Ausländerrecht.",
+      "free": "Kostenlos, und du bist nicht das Produkt: keine Werbung, kein Datenverkauf, kein Konto zum Start."
     }
   },
   "footer": {

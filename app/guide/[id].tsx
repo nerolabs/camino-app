@@ -19,6 +19,11 @@ import { capture } from '@/lib/analytics';
 // (invariant 3). The personalized version of this step — with real dates, in order —
 // is the interview CTA. Same pattern as /sample-plan: the payoff before the ask.
 
+// C10a: the bare government host (e.g. "interior.gob.es") — the citation, made visible.
+const sourceDomain = (url: string): string => {
+  try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return ''; }
+};
+
 export function generateStaticParams(): Record<string, string>[] {
   return [...guideById.keys()].map(id => ({ id }));
 }
@@ -96,6 +101,8 @@ export default function GuidePage() {
           {g.source_url && (
             <TouchableOpacity onPress={() => openExternal(g.source_url!)}>
               <Text style={styles.sourceLink}>{t('detail.sourceLink')}</Text>
+              {/* C10a: name the government domain — the citation promise, made visible. */}
+              <Text style={styles.sourceDomain}>{sourceDomain(g.source_url)}</Text>
             </TouchableOpacity>
           )}
 
@@ -158,6 +165,7 @@ const styles = StyleSheet.create({
   factText:   { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, lineHeight: 23, color: palette.indigo },
   depLink:    { fontFamily: 'HankenGrotesk_500Medium', fontSize: 14, lineHeight: 24, color: palette.cobalt },
   sourceLink: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cobalt, marginTop: 16 },
+  sourceDomain: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: palette.muted, marginTop: 2 },
   verified:   { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: palette.muted, marginTop: 10 },
 
   tipCard:    { backgroundColor: '#FBF3E2', borderWidth: 1, borderColor: palette.amber, borderRadius: 14, padding: 18, marginBottom: 14 },

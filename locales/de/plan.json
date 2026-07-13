@@ -45,7 +45,8 @@
   "card": {
     "doneBadge": "✓ Erledigt",
     "a11y": "{{title}}. {{status}}. Öffnet die Schrittdetails",
-    "a11yDone": "Erledigt"
+    "a11yDone": "Erledigt",
+    "conditionalNote": "Wird angezeigt, weil du keine Angabe gemacht hast — es gilt nur, wenn du über dem oben genannten Betrag liegst. Ignoriere es, wenn du sicher darunter liegst."
   },
   "overdue": {
     "wasDue": "Überfällig · fällig am {{date}}",
@@ -209,7 +210,7 @@
     "a11y": "Teile einen schreibgeschützten Link zu deiner Roadmap",
     "title": "Teile deine Roadmap",
     "body": "Wer den Link hat, sieht eine schreibgeschützte Kopie — deine Schritte und Termine, genau wie die Engine sie baut. Nichts ist editierbar, kein Konto nötig.",
-    "caveat": "Der Link selbst kodiert deine Antworten (Nationalitäten, Daten, Pläne — nie deine Notizen). Teile ihn nur mit Menschen, denen du diese Dinge erzählen würdest.",
+    "caveat": "Der Link kodiert deine Antworten — Staatsangehörigkeiten, Daten, Pläne und alle finanziellen Angaben, die du gemacht hast, etwa Einkommens- oder Vermögensspannen (nie deine Freitext-Notizen). Teile ihn nur mit Menschen, denen du das anvertrauen würdest.",
     "copy": "Link kopieren",
     "copied": "Kopiert ✓",
     "share": "Teilen…",
@@ -234,5 +235,6 @@
     "wealth_scale": "In {{region}} greift die Vermögensteuer oberhalb eines Freibetrags von {{exempt}} (plus Hauptwohnsitz-Freibetrag), mit Sätzen bis {{top}} an der Spitze.",
     "itp_foral": "In {{region}} legt jedes territorio histórico (Álava, Bizkaia, Gipuzkoa) die Sätze selbst fest — derzeit gleichauf: der Kauf einer Bestandswohnung wird in allen dreien mit {{rate}} besteuert (übrige Immobilien {{general}}), mit ermäßigten Varianten für den Hauptwohnsitz.",
     "itp_bonif": "In {{region}} gilt der staatliche Satz von {{rate}} mit {{bonif}} Nachlass auf die Steuer — effektiv {{effective}} beim Kauf einer Bestandswohnung."
-  }
+  },
+  "scopeNote": "Dieser Fahrplan bildet deinen Weg als Hauptantragsteller ab. Wenn dein Partner oder deine Partnerin auch arbeitet, sollte er oder sie ein eigenes kurzes Interview machen — jeder Weg kann anders sein, und ein Teilen-Link macht den zweiten Durchlauf leicht."
 }

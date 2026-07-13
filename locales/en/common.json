@@ -78,7 +78,7 @@
       "free": "100% free. No catch.",
       "caption": "This is Susan & Tom's — retirees heading for the non-lucrative visa. Yours will be yours.",
       "cta": "Open the full sample roadmap →",
-      "more": "…27 steps, dated, each official one citing its government source"
+      "more": "…{{count}} steps, dated, each official one citing its government source"
     },
     "trust": {
       "title": "Why trust it",
@@ -94,6 +94,17 @@
     "finalCta": {
       "title": "Ready? Lola's first question is waiting.",
       "sample": "or peek at the sample first"
+    },
+    "euHook": "EU citizen? Your list is shorter — but never empty. Get Camino builds the right one for you.",
+    "engineLine": "AI asks the questions. It never decides your deadlines — a deterministic engine does, from official sources.",
+    "cited": {
+      "label": "One real step from a roadmap",
+      "source": "Official source · {{domain}} · Verified {{date}}"
+    },
+    "catch": {
+      "title": "The catch?",
+      "body": "There isn't one — but there are limits. Get Camino maps the route and cites every official source; it doesn't file your forms, and it can't judge a borderline personal case. For those, you'll still want a gestor or an immigration lawyer.",
+      "free": "Free, and you're not the product: no ads, no data sold, no account needed to start."
     }
   },
   "backToTop": "Back to top",

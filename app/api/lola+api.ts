@@ -6,7 +6,12 @@
  * the key in the browser bundle. Runs on EAS Hosting (Cloudflare Workers), so it uses
  * only Web APIs (fetch), no Node modules.
  *
- * Contract: POST { system?, messages, model?, max_tokens? } -> { text }.
+ * Contract: POST { mode, params, messages } -> { text }.
+ *
+ * C2a LOCKDOWN (council fix, 2026-07-13): the route NO LONGER accepts a caller-supplied
+ * `system` string (nor `model`/`max_tokens`). The client sends a `mode` + typed `params`;
+ * the SERVER builds the system prompt + picks the model/token cap (lib/lolaPrompts.ts). A
+ * stolen URL is then only good for our five Lola personas, never general-purpose Claude.
  *
  * Hardening (so this can't be abused as a free Claude endpoint). These are layered and
  * fail-open so they never block legitimate users:
@@ -23,9 +28,10 @@
 
 import { captureServerError } from '@/lib/sentryServer';
 import { corsPreflight, isAllowedOrigin, volumeGuard } from '@/lib/apiGuard';
+import { buildLolaRequest } from '@/lib/lolaPrompts';
+import { sessionGate } from '@/lib/session';
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
-const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
 
 // Payload limits — generous for real use, tight enough to stop abuse.
 const MAX_TOKENS_CAP = 1024;
@@ -115,26 +121,40 @@ export async function POST(request: Request) {
     if (budgetExceeded()) {
       return Response.json({ error: 'daily capacity reached' }, { status: 429 });
     }
+    // C2b: require a valid Turnstile-derived session token (where Turnstile is configured), before
+    // we parse or process anything from an unauthenticated caller.
+    const gated = await sessionGate(request);
+    if (gated) return gated;
 
     const body = (await request.json()) as {
-      system?: string; messages?: Message[]; model?: string; max_tokens?: number;
+      mode?: string; params?: unknown; messages?: Message[];
     };
 
-    // ── Validate payload shape + size ────────────────────────────────────
+    // ── Validate message shape ───────────────────────────────────────────
     if (!Array.isArray(body.messages) || body.messages.length === 0) {
       return Response.json({ error: 'messages is required' }, { status: 400 });
     }
     if (body.messages.length > MAX_MESSAGES) {
       return Response.json({ error: 'too many messages' }, { status: 400 });
     }
-    let totalChars = (body.system ?? '').length;
+    let messageChars = 0;
     for (const m of body.messages) {
       if (!m || (m.role !== 'user' && m.role !== 'assistant') || typeof m.content !== 'string') {
         return Response.json({ error: 'invalid message' }, { status: 400 });
       }
-      totalChars += m.content.length;
+      messageChars += m.content.length;
     }
-    if (totalChars > MAX_TOTAL_CHARS) {
+
+    // ── Build the prompt SERVER-SIDE from mode + params (C2a) ─────────────
+    // The caller can no longer supply `system`; an unknown mode or catalog-unknown slot 400s.
+    const built = buildLolaRequest(body.mode ?? '', body.params);
+    if ('error' in built) {
+      return Response.json({ error: built.error }, { status: 400 });
+    }
+
+    // Size cap over the BUILT system (which absorbs any caller free-text in params) + messages,
+    // so transcript-stuffing still can't blow past the per-request budget.
+    if (built.system.length + messageChars > MAX_TOTAL_CHARS) {
       return Response.json({ error: 'payload too large' }, { status: 413 });
     }
 
@@ -160,9 +180,9 @@ export async function POST(request: Request) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: body.model ?? DEFAULT_MODEL,
-        max_tokens: Math.min(Number(body.max_tokens) || 512, MAX_TOKENS_CAP),
-        ...(body.system ? { system: body.system } : {}),
+        model: built.model,
+        max_tokens: Math.min(built.max_tokens, MAX_TOKENS_CAP),
+        system: built.system,
         messages: body.messages,
       }),
     });
@@ -171,7 +191,7 @@ export async function POST(request: Request) {
     const upstreamMs = Date.now() - upstreamStart;
     if (upstreamMs > 10_000) {
       await captureServerError(new Error('lola upstream slow (>10s)'), {
-        route: '/api/lola', extra: { ms: upstreamMs, model: body.model ?? DEFAULT_MODEL, status: res.status },
+        route: '/api/lola', extra: { ms: upstreamMs, mode: body.mode, model: built.model, status: res.status },
       });
     }
 

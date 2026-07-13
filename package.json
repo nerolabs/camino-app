@@ -10,6 +10,7 @@
     "deploy:staging": "bash scripts/deploy.sh staging",
     "deploy:production": "bash scripts/deploy.sh production",
     "audit": "npx tsx scripts/audit-catalog.ts",
+    "audit:matrix": "npx tsx scripts/audit-matrix.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

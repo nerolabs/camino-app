@@ -78,7 +78,10 @@ elif [ -z "$DEPLOY_URL" ]; then
 else
   echo "[deploy] Web E2E against ${DEPLOY_URL} ..."
   if [ "$TARGET" = "production" ]; then
-    E2E_BASE_URL="$DEPLOY_URL" npx playwright test --project=public
+    # E2E_TURNSTILE_LIVE=1: production runs the REAL Cloudflare Turnstile, which an automated
+    # browser can't solve — the live interview-turn smoke stops after the page/intro load (the
+    # gated round-trip is covered on staging with test keys + a manual human check on prod). C2b.
+    E2E_TURNSTILE_LIVE=1 E2E_BASE_URL="$DEPLOY_URL" npx playwright test --project=public
   else
     E2E_BASE_URL="$DEPLOY_URL" npx playwright test
     echo "[deploy] API contract tests against ${DEPLOY_URL} ..."

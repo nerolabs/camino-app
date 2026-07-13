@@ -24,6 +24,8 @@
  *     caps (Anthropic Console limit, ElevenLabs plan quota).
  */
 
+import { captureServerError } from '@/lib/sentryServer';
+
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -109,13 +111,22 @@ async function bumpCounter(bucket: string, windowSeconds: number): Promise<numbe
   }
 }
 
+// C2c (council fix): when the GLOBAL daily budget trips, every real user is now being turned
+// away mid-interview — that should page us, not fail silently. But once drained EVERY request
+// trips, so alert only on the first few over-limit requests. The durable counter is global and
+// atomically incremented, so this window fires at most 3 events per route per day (not per
+// isolate) — enough redundancy for delivery, never a storm. Pure so it's unit-tested directly.
+export function shouldAlertBudgetDrain(globalCount: number, limit: number): boolean {
+  return globalCount > limit && globalCount <= limit + 3;
+}
+
 /**
  * The durable volume check. Call AFTER payload validation so malformed junk can't burn the
  * budget — only requests that would actually reach the paid upstream count against it.
  * Returns a 429 Response to send, or null to proceed.
  */
 export async function volumeGuard(
-  route: 'lola' | 'feedback',
+  route: 'lola' | 'feedback' | 'session',
   request: Request,
   limits: { ipPerMinute: number; globalPerDay: number },
 ): Promise<Response | null> {
@@ -132,6 +143,14 @@ export async function volumeGuard(
   }
   if (global !== null && global > limits.globalPerDay) {
     console.log(`[apiGuard] GLOBAL daily budget tripped: ${route} count=${global}`);
+    if (shouldAlertBudgetDrain(global, limits.globalPerDay)) {
+      // Page us on the drain (C2c). Awaited so the envelope flushes before the isolate freezes;
+      // captureServerError never throws, so it can't break the 429 path.
+      await captureServerError(new Error(`/api/${route} global daily budget exhausted`), {
+        route: `/api/${route}`,
+        extra: { kind: 'global-budget-429', count: global, limit: limits.globalPerDay },
+      });
+    }
     return Response.json({ error: 'daily capacity reached' }, { status: 429 });
   }
   return null;

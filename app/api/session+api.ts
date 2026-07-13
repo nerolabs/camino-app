@@ -1,0 +1,86 @@
+/**
+ * Turnstile → session-token exchange (council fix C2b).
+ *
+ * The web client solves a Cloudflare Turnstile challenge at interview start and POSTs the token
+ * here; we siteverify it (server-side, with TURNSTILE_SECRET_KEY) and, on success, mint a
+ * short-lived HMAC session token (lib/session.ts) the client then sends on every /api/lola and
+ * /api/feedback call. So a stolen endpoint URL can't be driven without first passing a challenge.
+ *
+ * Runs on EAS Hosting (Workers runtime) — Web APIs only. Fails safe: if Turnstile isn't
+ * configured, the paid routes don't enforce sessions either (see lib/session.ts sessionGate), so
+ * this route simply reports "not configured" rather than pretending to gate.
+ */
+import { captureServerError } from '@/lib/sentryServer';
+import { corsPreflight, volumeGuard } from '@/lib/apiGuard';
+import { mintSession } from '@/lib/session';
+
+const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+
+// Cloudflare's public always-pass TEST keys. When the deployed site key IS the test key (staging),
+// we verify against the matching test secret — so the E2E gate is deterministic without a real
+// challenge — and never need a per-environment real secret. Production carries the real site key
+// and therefore uses the real TURNSTILE_SECRET_KEY. These constants are public, not secrets.
+const TEST_SITE_KEY = '1x00000000000000000000AA';
+const TEST_SECRET = '1x0000000000000000000000000000000AA';
+
+// The siteverify secret that matches the deployed site key (test↔test, real↔real).
+function turnstileSecret(): string | undefined {
+  if (process.env.EXPO_PUBLIC_TURNSTILE_SITE_KEY === TEST_SITE_KEY) return TEST_SECRET;
+  return process.env.TURNSTILE_SECRET_KEY;
+}
+
+export function OPTIONS(request: Request): Response {
+  return corsPreflight(request);
+}
+
+function clientIp(request: Request): string | null {
+  return request.headers.get('cf-connecting-ip')
+    ?? request.headers.get('x-real-ip')
+    ?? request.headers.get('x-forwarded-for')?.split(',')[0].trim()
+    ?? null;
+}
+
+async function siteverify(secret: string, token: string, ip: string | null): Promise<boolean> {
+  const form = new URLSearchParams({ secret, response: token });
+  if (ip) form.set('remoteip', ip);
+  const res = await fetch(SITEVERIFY_URL, {
+    method: 'POST',
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: form.toString(),
+  });
+  if (!res.ok) return false;
+  const data = (await res.json()) as { success?: boolean };
+  return data?.success === true;
+}
+
+export async function POST(request: Request) {
+  try {
+    // Modest per-IP/day guard so this can't be spun to spam Cloudflare's verify endpoint — a
+    // real solve is required anyway, so the limits are generous.
+    const limited = await volumeGuard('session', request, { ipPerMinute: 30, globalPerDay: 50_000 });
+    if (limited) return limited;
+
+    const signingSecret = process.env.CRON_SECRET;
+    const secret = turnstileSecret();
+    if (!process.env.EXPO_PUBLIC_TURNSTILE_SITE_KEY || !secret || !signingSecret) {
+      // Not configured (e.g. local dev): the paid routes won't be enforcing either.
+      return Response.json({ error: 'not configured' }, { status: 501 });
+    }
+
+    const body = (await request.json()) as { token?: unknown };
+    if (typeof body.token !== 'string' || !body.token) {
+      return Response.json({ error: 'token is required' }, { status: 400 });
+    }
+
+    if (!(await siteverify(secret, body.token, clientIp(request)))) {
+      return Response.json({ error: 'challenge failed' }, { status: 403 });
+    }
+
+    const session = await mintSession(signingSecret);
+    return Response.json({ session });
+  } catch (e) {
+    console.error('session route error', e);
+    await captureServerError(e, { route: '/api/session', method: 'POST' });
+    return Response.json({ error: 'internal error' }, { status: 500 });
+  }
+}

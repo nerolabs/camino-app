@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { QUESTIONS } from '../core/questions';
+import { QUESTIONS, questionBySlug } from '../core/questions';
 import { CATALOG } from '../core/engine-controller';
 
 // The question pages are curated prose — invariant 3's digit rule applies mechanically:
@@ -19,6 +19,15 @@ describe('question pages', () => {
       expect(q.answer.length).toBeGreaterThan(0);
       expect(q.answer.every(p => p.trim().length > 40)).toBe(true);
     }
+  });
+
+  // C10a routing bug: a bare catalog/guide id like "modelo-720" is NOT a question slug, so the
+  // lookup must MISS (the page then shows the not-found dead-end, not the first question). The
+  // real Modelo 720 question lives under its own slug.
+  it('a guide id is not mistaken for a question slug (the /questions/modelo-720 bug)', () => {
+    expect(questionBySlug.get('modelo-720')).toBeUndefined();
+    expect(questionBySlug.get('declare-foreign-assets-modelo-720')).toBeDefined();
+    expect(questionBySlug.get('not-a-real-slug')).toBeUndefined();
   });
 
   it('every related id exists in the catalog', () => {

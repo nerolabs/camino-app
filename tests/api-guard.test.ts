@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isAllowedOrigin, corsPreflight } from '../lib/apiGuard';
+import { isAllowedOrigin, corsPreflight, shouldAlertBudgetDrain } from '../lib/apiGuard';
 
 // The abuse guards for the paid routes (/api/lola). These pure/Web-API functions were
 // previously only verified by live burst tests; unit-testing them locks the CORS/origin logic so
@@ -61,5 +61,22 @@ describe('corsPreflight', () => {
     const res = corsPreflight(opt());
     expect(res.headers.get('access-control-allow-origin')).toBeNull();
     expect(res.headers.get('vary')).toBe('Origin');
+  });
+});
+
+// C2c: page us the moment the GLOBAL daily budget drains (real users being locked out), but
+// only on the first few over-limit requests so a sustained attack can't storm Sentry.
+describe('shouldAlertBudgetDrain', () => {
+  it('stays silent up to and including the limit', () => {
+    expect(shouldAlertBudgetDrain(2000, 2000)).toBe(false);
+    expect(shouldAlertBudgetDrain(1, 2000)).toBe(false);
+  });
+
+  it('fires on the first three over-limit requests, then goes quiet', () => {
+    expect(shouldAlertBudgetDrain(2001, 2000)).toBe(true);
+    expect(shouldAlertBudgetDrain(2002, 2000)).toBe(true);
+    expect(shouldAlertBudgetDrain(2003, 2000)).toBe(true);
+    expect(shouldAlertBudgetDrain(2004, 2000)).toBe(false); // storm guard — attack keeps hitting
+    expect(shouldAlertBudgetDrain(99999, 2000)).toBe(false);
   });
 });

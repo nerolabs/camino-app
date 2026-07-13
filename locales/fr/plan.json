@@ -45,7 +45,8 @@
   "card": {
     "doneBadge": "✓ Fait",
     "a11y": "{{title}}. {{status}}. Ouvre les détails de l’étape",
-    "a11yDone": "Fait"
+    "a11yDone": "Fait",
+    "conditionalNote": "Affiché parce que tu as préféré ne pas répondre — cela ne s'applique que si tu dépasses le montant indiqué ci-dessus. Ignore-le si tu es sûr d'être en dessous."
   },
   "overdue": {
     "wasDue": "En retard · échéance le {{date}}",
@@ -209,7 +210,7 @@
     "a11y": "Partage un lien en lecture seule vers ta feuille de route",
     "title": "Partage ta feuille de route",
     "body": "Toute personne avec le lien voit une copie en lecture seule — tes étapes et tes dates, telles que le moteur les construit. Rien n’est modifiable, aucun compte requis.",
-    "caveat": "Le lien lui-même encode tes réponses (nationalités, dates, projets — jamais tes notes). Partage-le seulement avec des gens à qui tu confierais ces informations.",
+    "caveat": "Le lien encode tes réponses — nationalités, dates, projets et toute information financière que tu as donnée, comme les tranches de revenus ou de patrimoine (jamais tes notes en texte libre). Ne le partage qu’avec des personnes à qui tu confierais ces informations.",
     "copy": "Copier le lien",
     "copied": "Copié ✓",
     "share": "Partager…",
@@ -234,5 +235,6 @@
     "wealth_scale": "En {{region}}, l’impôt sur la fortune démarre au-delà d’un abattement personnel de {{exempt}} (plus l’exonération de la résidence principale), avec des taux montant jusqu’à {{top}}.",
     "itp_foral": "En {{region}}, les taux sont fixés par territorio histórico (Álava, Bizkaia, Gipuzkoa) — aujourd’hui alignés : l’achat d’un logement ancien est taxé à {{rate}} dans les trois (autres biens à {{general}}), avec des variantes réduites pour la résidence principale.",
     "itp_bonif": "En {{region}}, le taux d’État de {{rate}} s’applique avec un abattement de {{bonif}} sur la facture — soit un {{effective}} effectif sur un logement ancien."
-  }
+  },
+  "scopeNote": "Cette feuille de route trace ton parcours en tant que demandeur principal. Si ton ou ta partenaire travaille aussi, il ou elle devrait faire son propre court entretien — le chemin de chacun peut différer, et un lien de partage facilite la deuxième fois."
 }

@@ -5,7 +5,7 @@
     "sub": "Ein Umzug nach Spanien sind hundert kleine Schritte — Visa, Padrón, Steuern, Gesundheit — und sie funktionieren nur in der richtigen Reihenfolge. Ich habe schon anderen bei diesem Schritt geholfen und gehe den Weg mit dir, von Anfang bis Ende.",
     "subQuiet": "Beantworte ein paar Fragen und ich baue deine persönliche Roadmap: echte Schritte, echte Fristen, nichts, was du nicht brauchst.",
     "start": "Los geht’s",
-    "greeting": "Hallo, ich bin Lola. Ich baue Ihren Fahrplan direkt hier auf, während wir sprechen — echte Schritte, echte Fristen, nichts Überflüssiges.",
+    "greeting": "Hallo, ich bin Lola, eine KI-Assistentin. Ich stelle dir ein paar kurze Fragen und baue deinen Fahrplan direkt hier auf, während wir sprechen — echte Schritte, echte Fristen, nichts Überflüssiges. Das ist hilfreiche Orientierung, keine Rechtsberatung.",
     "fromGuide": "Ich sehe, Sie haben sich gerade über {{guide}} informiert — Ihr Fahrplan deckt das ab, und alles, was dazugehört.",
     "welcomeBack": "Willkommen zurück — Ihr Fahrplan ist zu {{pct}}% fertig. Machen wir dort weiter, wo wir aufgehört haben."
   },
@@ -42,7 +42,7 @@
     "partner_is_married": "Spanien behandelt eingetragene Beziehungen beim Familien-Papierkram anders. Ist Ihre rechtlich eingetragen? Ehe oder eingetragene Partnerschaft zählen beide.",
     "has_children": "Kinder bringen die Schulanmeldung in den Plan. Kommen Kinder mit?",
     "intends_long_stay": "Wie viel des Jahres Sie hier verbringen, ändert Ihre Steuersituation und die nötigen Anmeldungen. Werden Sie mehr als sechs Monate im Jahr in Spanien sein?",
-    "arrival_date": "Wie aufregend — der Umzug nach Spanien! Fangen wir mit der wichtigsten Frage an: Wann planen Sie anzukommen? Ein ungefährer Monat genügt mir — er verankert alle Fristen in Ihrem Fahrplan.",
+    "arrival_date": "Beginnen wir mit der wichtigsten Frage: Wann willst du ankommen? Ein ungefährer Monat reicht mir — er verankert jede Frist in deinem Fahrplan.",
     "has_spanish_address": "Und wo werden Sie landen? Eine Adresse schaltet die Rathaus-Anmeldung frei — den padrón — und Kaufen bringt sein eigenes Bündel an Schritten. Wie sieht Ihr Wohnplan aus?",
     "owns_or_drives": "Autofahren kann hier Führerschein-Umtausch bedeuten — oder eine spanische Prüfung —, je nach Land. Wird jemand im Haushalt fahren?",
     "owns_property_in_spain": "Eine Immobilie bringt ihr eigenes Bündel an Schritten — Notar, Register, Steuern. Besitzen Sie eine Immobilie in Spanien — oder planen Sie einen Kauf?",
@@ -53,7 +53,8 @@
     "property_purchase": "Das Kaufdatum verankert die Fristen für Notar, Register und Steuern. Wann wurde (oder wird) der Kauf ungefähr abgeschlossen? Der Monat genügt.",
     "wants_citizenship": "Das entscheidet, ob wir den vollen Weg zur Staatsbürgerschaft planen oder nur Ihre Aufenthaltsverlängerungen. Möchten Sie längerfristig spanische Staatsbürger:in werden?",
     "non_eu_family_member": "Noch eine zu den Pässen — zieht jemand mit, der sich auf einen Pass verlässt, der weder EU noch spanisch ist? Für diese Person gibt es einen eigenen Aufenthaltsschritt.",
-    "has_spanish_company": "Eine Firmen-Frage — ist dein Unternehmen eine spanische Gesellschaft (oder wird es eine)? Wer seine Firma im Ausland behält, überspringt Spaniens Unternehmenserklärungen komplett."
+    "has_spanish_company": "Eine Firmen-Frage — ist dein Unternehmen eine spanische Gesellschaft (oder wird es eine)? Wer seine Firma im Ausland behält, überspringt Spaniens Unternehmenserklärungen komplett.",
+    "children_count": "Wie viele Kinder ziehen mit dir um?"
   },
   "chips": {
     "yes": "Ja",
@@ -102,6 +103,12 @@
       "bought": "Ich besitze ein Zuhause in Spanien",
       "will_buy": "Ich plane zu kaufen",
       "nothing": "Noch nichts geregelt"
+    },
+    "children_count": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4+": "4 oder mehr"
     }
   },
   "roadmap": {
@@ -126,6 +133,14 @@
     "question": "Eine letzte Sache — gibt es sonst noch etwas zu Ihrem Umzug, das ich wissen sollte? Es kann Ihren Fahrplan schärfen. Oder überspringen Sie direkt.",
     "skip": "Überspringen — Fahrplan ansehen",
     "ack": "Notiert — das speichere ich zu deinem Plan. Ich habe alles, was ich brauche.",
-    "countdown": "Deine Roadmap wird vorbereitet — {{n}}…"
+    "countdown": "Deine Roadmap wird vorbereitet — {{n}}…",
+    "noteHint": "Gesundheits- oder Vorstrafendaten musst du hier nicht angeben — Lola braucht sie nicht, und was du schreibst, wird mit deinem Plan gespeichert."
+  },
+  "stakes": {
+    "incomeShortNlv": "Notiert — ein Hinweis: Das liegt unter den {{amount}}/Jahr, die das Nicht-Erwerbs-Visum für einen Haushalt deiner Größe erwartet. Dein Fahrplan weist darauf hin, damit du es einplanen kannst.",
+    "incomeShortDnv": "Notiert — ein Hinweis: Das liegt unter den {{amount}}/Jahr, die das Digitale-Nomaden-Visum für einen Haushalt deiner Größe erwartet. Dein Fahrplan weist darauf hin, damit du es einplanen kannst.",
+    "incomeNoted": "Notiert, danke.",
+    "cantAssess": "Ich habe deine Notiz zu deinem Plan gespeichert. Ehrlich gesagt: Persönliche Fälle wie diesen kann ich nicht beurteilen — das ist eine Frage für dein Konsulat oder einen Anwalt für Ausländerrecht.",
+    "guideCriminal": "Dein Fahrplan enthält den Schritt zum Führungszeugnis, mit offizieller Quelle und dem, was du vorbereiten musst."
   }
 }

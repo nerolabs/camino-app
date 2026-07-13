@@ -19,7 +19,7 @@ you filter by tag.
 | Surface | Module | What |
 |---|---|---|
 | **Web** | `lib/monitoring.ts` (`@sentry/browser`) | JS errors + `browserTracing` (page-load / navigation transactions + Web Vitals: LCP/CLS/INP = "time to load"). `tracesSampleRate` 0.2 prod / 1.0 staging. |
-| **Backend** | `lib/sentryServer.ts` | Minimal event envelope via `fetch` (the Node/Cloudflare SDKs don't fit the EAS Hosting Workers runtime). Wired into the catch + upstream-error paths of `/api/lola`, `/api/feedback`, and the email/account routes, tagged `platform=server`. |
+| **Backend** | `lib/sentryServer.ts` | Minimal event envelope via `fetch` (the Node/Cloudflare SDKs don't fit the EAS Hosting Workers runtime). Wired into the catch + upstream-error paths of `/api/lola`, `/api/feedback`, and the email/account routes, tagged `platform=server`. **Budget-drain alert (C2c, 2026-07-13):** `volumeGuard` fires a server error `"/api/<route> global daily budget exhausted"` (tag `kind=global-budget-429`) the moment the GLOBAL daily budget trips on lola OR feedback — windowed to the first 3 over-limit requests so a sustained attack can't storm Sentry (`shouldAlertBudgetDrain`). Per-IP 429s stay silent (one abuser hitting their own cap ≠ everyone locked out). |
 | **Native** | `lib/monitoring.native.ts` (`@sentry/react-native` + its Expo plugin in `app.config.ts`) | Real `Sentry.init` since build 8 (2026-07-02): crashes, errors, app-start, tagged `platform=ios` + environment. Source maps upload during EAS Build via `SENTRY_AUTH_TOKEN`. |
 
 `initMonitoring()` is called once in `app/_layout.tsx`. `captureError()` is available for manual
@@ -36,6 +36,12 @@ client captures. Both no-op when there's no DSN.
   3 consecutive fails → issue → email. Downtime pages laptop-independently.
 - The **slow-turn alarm** (interview turns slower than they should be) rides the same project
   (added with the family-testing rounds).
+- The **budget-drain alert** (C2c) rides the existing "Server — new production issue" rule:
+  the first drain of a day creates a new server issue → email. NOTE: repeated drains on later
+  days group into the SAME issue (same message), so if we want a page on EVERY incident (not
+  just the first), add a Sentry rule that alerts on issue *recurrence/frequency* for
+  `kind=global-budget-429`, or bump the event level. Deferred — at 25k/day for lola with no
+  active abuse, the first-occurrence alert is what matters.
 - Optional later: backend latency tracing (transaction envelopes), not just error capture.
 
 ## Verifying

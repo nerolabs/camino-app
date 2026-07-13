@@ -8,8 +8,9 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
-import { buildPlan } from '@/core/engine-controller';
+import { buildPlan, CATALOG } from '@/core/engine-controller';
 import { sampleProfile } from '@/core/sample-profile';
+import { verifiedOn } from '@/core/changelog';
 import { displayTitle } from '@/lib/catalogTitles';
 import { dateLocale } from '@/lib/i18n';
 import { useReducedMotion } from '@/lib/useReducedMotion';
@@ -100,6 +101,16 @@ function MiniRoadmap() {
 export default function HomeSections() {
   const { t } = useTranslation();
   const router = useRouter();
+  // C10a: don't hardcode "27 steps" — compute the sample roadmap's real length from the live
+  // engine (same home-strip precedent as the "all N guides" count), so it can never drift.
+  const sampleStepCount = useMemo(() => buildPlan(sampleProfile()).length, []);
+
+  // C10d: a real, verbatim cited step (the NIE) pulled live from the catalog — title, government
+  // domain, and verified date all straight from the source of truth, so it can never go stale.
+  const nie = useMemo(() => CATALOG.find(o => o.id === 'nie')!, []);
+  const NIE_TITLE = displayTitle(nie);
+  const NIE_DOMAIN = (() => { try { return new URL(nie.source_url!).hostname.replace(/^www\./, ''); } catch { return ''; } })();
+  const NIE_VERIFIED = new Date(verifiedOn(nie)).toLocaleDateString(dateLocale(), { month: 'long', year: 'numeric' });
   return (
     <View>
       {/* How it works = the demo */}
@@ -111,6 +122,8 @@ export default function HomeSections() {
           <Text style={s.stepLine}><Text style={s.stepNum}>2 </Text>{t('home.demo.step2')}</Text>
           <Text style={s.stepLine}><Text style={s.stepNum}>3 </Text>{t('home.demo.step3')}</Text>
         </View>
+        {/* C10b: answer the AI skeptic exactly where the AI is on screen. */}
+        <Text style={s.engineLine}>{t('home.engineLine')}</Text>
       </View>
 
       {/* Proof */}
@@ -118,7 +131,7 @@ export default function HomeSections() {
         <Text style={s.h2} accessibilityRole="header">{t('home.proof.title')}</Text>
         <Text style={s.freeLine}>{t('home.proof.free')}</Text>
         <MiniRoadmap />
-        <Text style={s.moreLine}>{t('home.proof.more')}</Text>
+        <Text style={s.moreLine}>{t('home.proof.more', { count: sampleStepCount })}</Text>
         <Text style={s.caption}>{t('home.proof.caption')}</Text>
         <TouchableOpacity onPress={() => router.push('/sample-plan')}>
           <Text style={s.link}>{t('home.proof.cta')}</Text>
@@ -128,6 +141,13 @@ export default function HomeSections() {
       {/* Trust */}
       <View style={s.section}>
         <Text style={s.h2} accessibilityRole="header">{t('home.trust.title')}</Text>
+        {/* C10d: show, don't tell — one REAL cited step from the live catalog, verbatim, with its
+            government source + verified stamp, before the abstract trust bullets. */}
+        <View style={s.citedStep}>
+          <Text style={s.citedLabel}>{t('home.cited.label')}</Text>
+          <Text style={s.citedTitle}>{NIE_TITLE}</Text>
+          <Text style={s.citedSource}>{t('home.cited.source', { domain: NIE_DOMAIN, date: NIE_VERIFIED })}</Text>
+        </View>
         <View style={s.cards}>
           {([1, 2, 3, 4] as const).map(i => (
             <View key={i} style={s.trustCard}>
@@ -138,6 +158,13 @@ export default function HomeSections() {
             </View>
           ))}
         </View>
+      </View>
+
+      {/* C10c: the last objections, answered plainly — the catch, and how it's free. */}
+      <View style={s.section}>
+        <Text style={s.h2} accessibilityRole="header">{t('home.catch.title')}</Text>
+        <Text style={s.catchBody}>{t('home.catch.body')}</Text>
+        <Text style={s.catchFree}>{t('home.catch.free')}</Text>
       </View>
 
       {/* Final CTA */}
@@ -157,6 +184,13 @@ export default function HomeSections() {
 const s = StyleSheet.create({
   section: { paddingVertical: 48, paddingHorizontal: 24, alignItems: 'center', gap: 16 },
   sectionAlt: { backgroundColor: '#F4F0E9' },
+  engineLine: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, lineHeight: 22, color: palette.cobalt, textAlign: 'center', maxWidth: 560, marginTop: 8 },
+  citedStep: { backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E8E4DC', borderLeftWidth: 4, borderLeftColor: palette.cobalt, borderRadius: 12, padding: 16, maxWidth: 560, width: '100%', gap: 6 },
+  citedLabel: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 10, letterSpacing: 1.2, color: palette.muted, textTransform: 'uppercase' },
+  citedTitle: { fontFamily: 'HankenGrotesk_500Medium', fontSize: 15, lineHeight: 22, color: palette.indigo },
+  citedSource: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: palette.muted },
+  catchBody: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 16, lineHeight: 25, color: palette.indigo, textAlign: 'center', maxWidth: 560 },
+  catchFree: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, lineHeight: 21, color: palette.muted, textAlign: 'center', maxWidth: 560 },
   h2: { fontFamily: 'Fraunces_600SemiBold', fontSize: 27, color: palette.indigo, textAlign: 'center' },
   demoWrap: { flexDirection: 'row', gap: 12, width: '100%', maxWidth: 760, alignSelf: 'center' },
   chat: { flex: 1, gap: 8, justifyContent: 'center' },

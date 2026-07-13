@@ -105,6 +105,8 @@ export default function LandingPage() {
           <Text style={styles.heroSub}>
             {t('home.sub')}
           </Text>
+          {/* C10e: open the EU segment right in the hero — their list is real, just shorter. */}
+          <Text style={styles.heroEuHook}>{t('home.euHook')}</Text>
           <TouchableOpacity style={styles.heroCta} onPress={() => router.push('/interview')}>
             <Text style={styles.heroCtaText}>{t('home.cta')}</Text>
           </TouchableOpacity>
@@ -154,7 +156,8 @@ const styles = StyleSheet.create({
   lolaGlyphStar:   { fontSize: 22, color: palette.cal },
   heroEyebrow:     { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.cobalt, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 14 },
   heroHeadline:    { fontFamily: 'Fraunces_600SemiBold', fontSize: 40, color: palette.indigo, lineHeight: 50, marginBottom: 18 },
-  heroSub:         { fontFamily: 'HankenGrotesk_400Regular', fontSize: 16, color: palette.indigo, lineHeight: 26, marginBottom: 32, maxWidth: 460 },
+  heroSub:         { fontFamily: 'HankenGrotesk_400Regular', fontSize: 16, color: palette.indigo, lineHeight: 26, marginBottom: 16, maxWidth: 460 },
+  heroEuHook:      { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 14, color: palette.cobalt, lineHeight: 21, marginBottom: 28, maxWidth: 460 },
   heroCta:         { backgroundColor: palette.cobalt, borderRadius: 12, paddingVertical: 16, paddingHorizontal: 32, marginBottom: 14, alignSelf: 'flex-start' },
   heroCtaText:     { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 16, color: palette.cal },
   heroDisclaimer:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, color: palette.muted },

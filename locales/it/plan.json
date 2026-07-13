@@ -45,7 +45,8 @@
   "card": {
     "doneBadge": "✓ Fatto",
     "a11y": "{{title}}. {{status}}. Apre i dettagli del passo",
-    "a11yDone": "Fatto"
+    "a11yDone": "Fatto",
+    "conditionalNote": "Mostrato perché hai preferito non dirlo — vale solo se superi l'importo indicato sopra. Ignoralo se sei sicuro di essere sotto."
   },
   "overdue": {
     "wasDue": "In ritardo · scadeva il {{date}}",
@@ -209,7 +210,7 @@
     "a11y": "Condividi un link in sola lettura alla tua roadmap",
     "title": "Condividi la tua roadmap",
     "body": "Chi ha il link vede una copia in sola lettura — i tuoi passi e le tue date, esattamente come li costruisce il motore. Niente è modificabile, nessun account richiesto.",
-    "caveat": "Il link stesso codifica le tue risposte (nazionalità, date, piani — mai le tue note). Condividilo solo con chi racconteresti queste cose.",
+    "caveat": "Il link codifica le tue risposte — nazionalità, date, piani e qualsiasi dato finanziario fornito, come le fasce di reddito o di patrimonio (mai le tue note in testo libero). Condividilo solo con persone a cui affideresti queste informazioni.",
     "copy": "Copia link",
     "copied": "Copiato ✓",
     "share": "Condividi…",
@@ -234,5 +235,6 @@
     "wealth_scale": "In {{region}}, l’imposta sul patrimonio parte sopra una franchigia personale di {{exempt}} (più l’esenzione per l’abitazione principale), con aliquote fino al {{top}}.",
     "itp_foral": "In {{region}}, le aliquote le fissa ogni territorio histórico (Álava, Bizkaia, Gipuzkoa) — oggi allineate: comprare una casa usata è tassato al {{rate}} in tutti e tre (altri immobili al {{general}}), con varianti ridotte per l’abitazione principale.",
     "itp_bonif": "In {{region}} si applica l’aliquota statale del {{rate}} con uno sconto del {{bonif}} sull’imposta — un {{effective}} effettivo sull’acquisto di una casa usata."
-  }
+  },
+  "scopeNote": "Questa tabella di marcia traccia il tuo percorso come richiedente principale. Se anche il tuo o la tua partner lavora, dovrebbe fare la propria breve intervista — il percorso di ciascuno può variare, e un link di condivisione rende facile la seconda volta."
 }

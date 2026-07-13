@@ -31,10 +31,16 @@ export default function SharedPlanScreen() {
   const params = useLocalSearchParams<{ d?: string }>();
   const [profile, setProfile] = useState<Profile | null | 'pending'>('pending');
   useEffect(() => {
-    const p = decodeShare(typeof params.d === 'string' ? params.d : undefined);
+    // C4: the payload now rides the URL #fragment (never sent to the server/logs/link-previews).
+    // Read it from location.hash on web; fall back to the ?d= query for links shared before this.
+    const fromHash = typeof window !== 'undefined'
+      ? new URLSearchParams(window.location.hash.replace(/^#/, '')).get('d')
+      : null;
+    const d = fromHash ?? (typeof params.d === 'string' ? params.d : undefined);
+    const p = decodeShare(d ?? undefined);
     setProfile(p);
     if (p) capture('shared_plan_viewed', { steps: buildPlan(p).length });
-    else if (params.d !== undefined) capture('shared_plan_invalid');
+    else if (d != null) capture('shared_plan_invalid');
   }, [params.d]);
 
   const objectives = useMemo<Objective[]>(() => {

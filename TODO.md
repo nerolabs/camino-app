@@ -97,54 +97,79 @@ touch the engine's determinism — they close the seams around it.
       one of three LLM write-paths, and the chat's *tone* contradicts the engine exactly when
       stakes are highest (praised a below-NLV income band; silently "absorbed" a DUI
       question; silently stored volunteered health data). Six pieces:
-      - [ ] **C1a — validate every LLM write-path identically:** extract the interview
-            extras-path slot validator (app/interview.tsx ~428–438) into a shared
-            `sanitizeProfileDelta()` (type/enum/date checks against SLOTS; unknown keys
-            dropped) and run BOTH the plan-page re-model delta (app/plan.tsx ~196) and the
-            final-note distillation delta (app/interview.tsx ~554) through it before
-            merge/persist. Regression test: a garbage delta is rejected field-by-field.
-      - [ ] **C1b — never praise; flag at answer time (deterministic):** ack templates go
-            neutral (no praise adjectives); after each slot commit run the same engine checks
-            the plan uses (income band-top vs NLV/DNV threshold), and a failing answer's ack
-            IS the heads-up — localized template, engine-computed, zero LLM: "Noted —
-            heads-up: that band is below the €X/yr the NLV asks for; your roadmap will flag
-            this." The plan-level warning step stays; the chat stops undermining it.
-      - [ ] **C1c — stakes questions get an honest reply:** detect a question in free/final
-            text (deterministic: `?`/`¿` or interrogative openers) → the reply must carry the
-            can't-assess line + handoff ("I can't assess personal cases — that's one for the
-            consulate or an immigration lawyer. I've saved your note with your plan.") + a
-            guide link when a keyword maps (criminal-record → criminal-record-check guide).
-            Never a bare "Got it" to a question. Regression tests ×5 locales, incl. the
-            probes legal counsel ran live (overstay/disclosure/DUI/health).
-      - [ ] **C1d — first-bubble AI disclosure:** "I'm Lola, an AI assistant — this is
-            guidance, not legal advice." ×5 locales. **WHY (documented per user request):**
-            EU AI Act Art. 50 chatbot transparency applies from **2026-08-02** — i.e. at
-            launch; the same line strengthens the UPL posture (Legal #5) and pre-empts the
-            "AI pretending to be human" PR story. One line, three risks.
-      - [ ] **C1e — free-text microcopy:** at the open note boxes: "No health or
-            criminal-record details, please — Lola doesn't need them and they're stored with
-            your plan." ×5. (Legal #2: volunteered health data is still GDPR Art. 9
-            special-category data once stored.)
-      - [ ] **C1f — free-text OUT of analytics events** (chip/enum events stay) + one privacy-
-            policy paragraph on volunteered sensitive data and its deletion path. (Legal #2.)
+      - [x] **C1a — DONE 2026-07-13:** `lib/profileDelta.ts` = the one validator
+            (`valueOkForSlot` + `sanitizeProfileDelta`, type/enum/date vs SLOTS + known-later
+            anchor dates; unknown keys dropped). All three write-paths route through it: interview
+            extras (`valueOkForSlot`), plan re-model (`app/plan.tsx`), final-note distillation
+            (`app/interview.tsx`). KNOWN_LATER field names single-sourced here → lolaPrompts
+            imports them. +10 vitest (`profile-delta.test.ts`, incl. the garbage-delta
+            field-by-field regression).
+      - [x] **C1b — DONE 2026-07-13:** the income slot's reaction is now engine-computed, not
+            the LLM's — `usesDeterministicAck` gates the `phraseAck` call off and `stakesAck`
+            (via the pure `lib/stakesAck.ts` `incomeAck`) supplies it: a heads-up naming the
+            household threshold when the same conservative check the plan uses fails, a neutral
+            "noted" otherwise. Localized `interview:stakes.*` ×5 ({{amount}} interpolated, no
+            literal digits). The plan-level warning step stays; the chat can no longer praise a
+            flagged band. +4 vitest. (Other slots keep their warm LLM reaction unchanged.)
+      - [x] **C1c — DONE 2026-07-13:** `lib/stakesQuestion.ts` (`isQuestion` — `?`/`¿` or
+            multilingual interrogative openers; `stakesGuideId` — criminal/DUI keywords ×5
+            langs → `criminal-background-check`). The final "anything else?" note that reads as
+            a question now closes with the honest can't-assess handoff (`stakes.cantAssess` ×5)
+            + the covering guide line when it maps — never a bare "thanks, noted". +5 vitest
+            against the live legal-counsel probes (overstay/disclosure/DUI/health).
+      - [x] **C1d — DONE 2026-07-13:** first interview bubble is the AI disclosure
+            (`landing.aiDisclosure` ×5) on every entry (fresh + both resume paths). EU AI Act
+            Art. 50 (2026-08-02) + UPL posture. Greeting bubble unchanged (E2E/Maestro still
+            assert "Hola, I'm Lola" as bubble #2).
+      - [x] **C1e — DONE 2026-07-13:** microcopy under the final-note box (`final.noteHint`
+            ×5): no health/criminal-record details, Lola doesn't need them, saved with your plan.
+      - [x] **C1f — DONE 2026-07-13:** raw free text stripped from the three analytics events
+            (`interview_final_note` → keeps `skipped`+deterministic `is_question`;
+            `interview_other_answered` + `interview_clarify_needed` → field only). Privacy page
+            (EN+ES, date→13 Jul): fixed the now-false "analytics include answer text" claim +
+            added the volunteered-sensitive-data + deletion-path paragraph. **C1 package
+            COMPLETE.**
 - [ ] **C2 — /api/lola lockdown** (converged #5: Tech H2 + Ops #6; user: "BIG ISSUE. PLEASE
       FIX."). **WHY:** proven live as an open unauthenticated Claude proxy honoring a
       caller-supplied system prompt; the origin allowlist is a documented no-op on EAS
       Hosting; an abuser draining the 25k/day budget 429s every real user mid-interview —
       availability, not just cost. Three layers:
-      - [ ] **C2a — server-side system prompts (quick win, kills the open proxy):** the route
-            stops accepting caller `system`; clients send `mode: 'phrase'|'extract'|'coach'|
-            'distill'` and the server builds the prompt. A stolen URL is then only good for
-            OUR personas, not free general-purpose Claude. Contract tests updated.
-      - [ ] **C2b — per-token Turnstile (ABSORBS backlog item 20, already designed):**
-            short-lived HMAC session token (reuse lib/emailTokens.ts) minted on a Turnstile
-            solve at interview start (web); /api/lola requires it; native rides signed
-            app-side counters as today; covers /api/feedback too. **[USER prerequisite:
-            create the Cloudflare Turnstile widget + set site/secret keys in EAS env
-            (`sensitive` visibility!) — Claude never handles secrets.]**
-      - [ ] **C2c — alert before the cliff:** Sentry event when global-budget 429s fire on
-            lola OR feedback — an attack should page us, not silently lock users out.
-- [ ] **C3 — penalty-bearing obligations are NEVER silently dropped** (Legal #6; user:
+      - [x] **C2a — server-side system prompts DONE 2026-07-13 (hard close, user call):** the
+            route no longer accepts caller `system`/`model`/`max_tokens`; clients send
+            `mode: 'extract'|'clarify'|'ack'|'coach'|'change'` + typed `params`, and the server
+            builds the prompt + picks model/token-cap per mode (`lib/lolaPrompts.ts`; slots
+            re-resolved from the catalog by field name so no caller prose reaches the prompt).
+            A stolen URL is now only good for OUR five Lola personas, never general Claude.
+            +11 vitest (`lola-prompts.test.ts`) + api.contract rewired (legacy `system` → 400).
+            **NOTE:** hard close breaks native ≤38's Lola/extraction on prod — Cristina tests
+            Lola/interview on WEB until build 39; all other 38 surfaces unaffected.
+      - [~] **C2b — BUILT + STAGING-VERIFIED 2026-07-13 (prod deploy pending user OK):**
+            `/api/session` siteverifies a Cloudflare Turnstile solve → mints a short-lived HMAC
+            session token (`lib/session.ts`, keyed by CRON_SECRET); web client solves invisibly
+            at first LLM turn (`lib/turnstile.ts`, cached), sends `x-camino-session` on /api/lola
+            + /api/feedback; `sessionGate` requires it wherever `EXPO_PUBLIC_TURNSTILE_SITE_KEY`
+            is set (off in local dev). **Self-configuring env:** staging auto-uses Cloudflare's
+            public test secret because its site key IS the test key — no per-env real secret
+            needed. +9 session vitest + contract 401 case; E2E live interview turn green through
+            the full gate. **Native rides app-side counters as today (its session path lands with
+            the next native build — its Lola is already down post-C2a, so nothing new breaks).**
+            USER did the widget + keys. [Env note: site keys are per-environment (prod=real,
+            staging=test); the secret is one shared var — prod reads the real value, staging
+            ignores it via the test-secret match.]
+      - [x] **C2c — alert before the cliff DONE 2026-07-13:** `volumeGuard` fires a server
+            Sentry error (`kind=global-budget-429`) when the GLOBAL daily budget trips on lola
+            OR feedback — windowed to the first 3 over-limit requests (`shouldAlertBudgetDrain`,
+            unit-tested) so a sustained attack can't storm Sentry; per-IP 429s stay silent.
+            Rides the existing "Server — new production issue" rule (MONITORING.md notes the
+            recurrence-tuning follow-up). +2 api-guard vitest.
+- [x] **C3 — DONE 2026-07-13.** Engine: `conditional_when` + `conditional_gate` on penalty
+      obligations; when the base prerequisite holds but the sensitive gate (`foreign_assets_eur_band`)
+      is unanswered or "prefer not to say", the item is INCLUDED with `conditional: true` (via
+      `gateIsUnknown`) instead of dropped. Modelo 720 + wealth-tax (714) carry it; Modelo 100 is
+      untouched (applies to all tax residents). Titles already state the threshold; plan card shows
+      a "may apply — skip if you're sure you're under" note ×5. A definite under-threshold answer
+      still excludes it. +7 vitest (`conditional-penalty.test.ts`), audit + 181×16 matrix green.
+      _Original spec:_ **penalty-bearing obligations are NEVER silently dropped** (Legal #6; user:
       "Please fix. Assume the worst case situation is Modelo 720"). **WHY:** "Prefer not to
       say" on foreign assets can currently remove Modelo 720 — the most penalty-laden trap in
       the domain — so the privacy-respecting design would cause the worst harm story. **FIX:**
@@ -153,35 +178,45 @@ touch the engine's determinism — they close the seams around it.
       instead of dropped. Audit which catalog items qualify (modelo-720 first, then modelo-720
       cousins: wealth-tax, modelo-100 exposure); conditional-copy variants ×5; test: declined
       foreign-assets still yields modelo-720.
-- [ ] **C4 — share-link payload → `#fragment`** (Legal #7; user: "Please fix"). **WHY:** the
+- [x] **C4 — DONE 2026-07-13.** `lib/shareLink.ts` `shareUrl` emits `/shared#d=…` (fragment,
+      never sent to the server/logs/link-previews); `/shared` reads `location.hash` with the `?d=`
+      query kept as a fallback for already-shared links; the share-dialog caveat now names financial
+      details (income/asset bands) ×5; share-link test asserts the fragment + empty query. _(Privacy
+      page share-links paragraph → folding into the C5 drafting pass.)_ _Original:_ share-link
+      payload → `#fragment` (Legal #7; user: "Please fix"). **WHY:** the
       `?d=` query string (which carries exact figures like `foreign_assets_eur`) lands in
       server logs, browser history, and messenger link-preview fetchers; a `#fragment` never
       leaves the browser. **FIX:** lib/shareLink.ts emits `#d=…`; /shared reads
       `location.hash` (keep the `?d=` read-path for already-shared links); the share modal
       names financial details in its caveat; /privacy gains a share-links paragraph. Tests
       updated.
-- [ ] **C5 — GDPR drafting pass** (Legal #1 + #2 paper half; user: "Please fix"). Privacy
+- [x] **C5 — DRAFTING DONE 2026-07-13** (EU-rep spend deferred → ledger). Privacy policy gained: lawful-basis section (contract→roadmap / consent→emails+free text / Art.9 explicit consent), US-transfer language (DPF + SCCs), concrete retention (30-day anon drafts · account-life profiles · 90-day logs/analytics · support inbox), a share-links paragraph, EN+ES; fr/de/it get a translated short-version via LegalPage `summaries`. _Original:_ **GDPR drafting pass** (Legal #1 + #2 paper half; user: "Please fix"). Privacy
       policy: lawful-basis mapping (contract → roadmap; consent → emails + free text),
       transfer-mechanism language (DPF/SCCs — Anthropic/Supabase/PostHog/Sentry all offer
       them), concrete retention, the volunteered-sensitive-data + share-link paragraphs, date
       bump; translate the legal pages' "short version" summary blocks ×5 (Legal #8, cheap).
-      **[USER decision, spend: appoint an EU-representative service (~€500–1,500/yr) — the
-      one piece drafting can't cover; candidate for the 1000-user ledger if deferred.]**
-- [ ] **C6 — single-source every legal number** (Tech H3; user: agreed + TODO). **WHY:**
+      **[USER decision, spend: appoint an EU-representative service (~€500–1,500/yr) —
+      RULED 2026-07-13: NOT spending now; prove the app in the marketplace first → deferred
+      to the 🗄 post-launch ledger. The rest of C5 (the drafting pass) still proceeds.]**
+- [x] **C6 — DONE 2026-07-13.** `core/legal-figures.ts` registry (value·eur·source_url·verified_at) for €28,800 / €7,200 / €50,000 / €700,000; the engine reads `.value` (derivation + modelo-720/wealth-tax gates), the 4 obligations stamp `verified_at` FROM the registry, and `legal-figures.test.ts` (+3) guards that the titles cite the registry verbatim (+ digit-lint → all locales trace to one source). _Original:_ **single-source every legal number** (Tech H3; user: agreed + TODO). **WHY:**
       €28,800 lives as an engine constant AND hand-typed prose in two obligation titles;
       nothing tests they agree; a budget-law change must be caught in N places today. **FIX:**
       a `core/legal-figures.ts` registry (value + source_url + verified_at per figure — the
       regional-specifics pattern applied to national figures); titles/prose interpolate; test
       asserts every catalog digit traces to the registry; per-figure `verified_at` replaces
       the blanket DEFAULT_VERIFIED on those steps so stamps stop overstating freshness.
-- [ ] **C7 — audit-matrix into CI + real dependent count** (Tech M5 + M7; user: agreed +
+- [x] **C7 — DONE 2026-07-13.** `npm run audit:matrix` (181×16) added to ci.yml. New `children_count` question (gated on has_children; options 1/2/3/4+ ×5) → `family_extra_count` counts real dependents (conservative floor 1 when absent, via COMPUTE_ALSO_READS so it never blocks the threshold); the NLV title already states the per-dependent formula. +1 income-check test proving big families are no longer understated. _Original:_ **audit-matrix into CI + real dependent count** (Tech M5 + M7; user: agreed +
       TODO). **FIX:** add the 181×16 matrix to ci.yml (fast, offline, deterministic — the one
       tool that catches the condition-level bug class that actually recurred); and
       `family_extra_count` gains a real dependent count (children-count question when
       `has_children`, allowNotSure → conservative default of 1) so the NLV threshold stops
       understating for families with 2+ children; the threshold step copy states the
       per-dependent formula.
-- [ ] **C8 — household scope honesty** (Tech H4; user: agreed + TODO). **WHY:** one
+- [x] **C8 — DONE 2026-07-13 (plan header).** A scope note appears on /plan when
+      `has_spouse_or_partner` is true: "This roadmap maps your route as the main applicant… a
+      working partner should run their own quick interview — a share link makes the second run
+      easy" ×5. (Interview-surface twin is a light follow-up; the persistent /plan header is where
+      the second-run decision is made.) _Original:_ **household scope honesty** (Tech H4). **WHY:** one
       `work_situation` per household means a dual-career couple's second route is missing BY
       OMISSION — the least visible failure, hitting exactly the combinatorially complex
       families the purpose statement names. **FIX (near-term honesty, not the rebuild):** a
@@ -192,46 +227,44 @@ touch the engine's determinism — they close the seams around it.
 - [ ] **C9 — the stranger contract (Ops #3/#4) — RULED 2026-07-13 night: (a)+(b) GO;
       (c)+(d) → the 🗄 Post-launch ledger** (user: "(a) and (b) seem more than enough for
       now"). Queue after the C1 package:
-      - [ ] **C9a — auto-ack email on /api/feedback** when the submitter left an address —
-            honest copy: built by one person, typical reply within ~4–5 days, not legal
-            advice, urgent → your consulate's cita-previa page, links to /questions +
-            /changelog. Rides the existing Resend pipeline (lib/serverEmail.ts +
-            lib/emailTemplates.ts), ×5 locales. NOTE: the reply-time line is a personal
-            commitment — the copy carries whatever cadence the user will actually keep.
-      - [ ] **C9b — raise FEEDBACK_GLOBAL_PER_DAY 200 → ~1000** (env change; the C2c
-            Sentry alert covers its 429s, so a hit cap pages instead of silently dropping
-            real feedback). (The Turnstile piece is C2b — user: hold for MID-MORNING
-            2026-07-13, after the widget + keys exist.)
+      - [x] **C9a — DONE 2026-07-13.** `feedbackAckEmail` (lib/emailTemplates.ts) + `feedbackAck`
+            strings ×5 (built by one person, ~four-to-five-day reply, urgent → consulate cita
+            previa, /questions + /changelog links; shell disclaimer carries not-legal-advice). The
+            feedback route sends it fire-and-forget when the submitter left a valid email (follows
+            the `lang` the contact page now sends); +2 route tests + 2 render snapshots (en/es).
+      - [x] **C9b — DONE 2026-07-13.** `FEEDBACK_GLOBAL_PER_DAY` code default raised 200 → 1000
+            (env override still wins — remove/raise any `FEEDBACK_GLOBAL_PER_DAY` set in EAS prod
+            env if present). The C2c budget-drain alert pages on the 429 cliff.
 - [ ] **C10 — Marketing seat, FULLY TRIAGED 2026-07-13 night: all five conversion items
       APPROVED** (user: "1/ yes, 2, yes, 3/ yes, 4/ yes, 5/ yes") **+ the housekeeping
       list under blanket approve**. The council report is now 100% ruled. Sequencing:
       after the C1–C9 queue, except C10a pieces may ride any convenient deploy (the
       modelo-720 routing bug is a real defect — fix early). The /de "Damit gehen Sie
-      nach Hause" line itself is already queued for the FIRST morning deploy.
-      - [ ] **C10a — housekeeping batch (cheap; ride any deploy):** "27 steps" teaser vs
-            actual 32 — compute, don't hardcode (the home-strip precedent) · reconcile
-            guide-index 73 vs 78 sitemap /guide/ URLs (find the orphans) · /guides→/guide
-            redirect + branded 404 · future-dated changelog rendering (13 July shown on
-            12 July — likely timezone) · **/questions/modelo-720 deep-link renders the
-            generic "Do I need a visa?" answer — routing bug + regression test** ·
-            visible government domain on source links (the citation promise is
-            half-delivered in presentation).
-      - [ ] **C10b — deterministic-engine line at the point of AI-doubt** (seat #4):
+      nach Hause" line — **FIXED 2026-07-13** → "Das nehmen Sie mit." (matches EN "You
+      leave with this."; formal-Sie register kept, only the idiom repaired; rode the C2a deploy).
+      - [x] **C10a — DONE 2026-07-13:** ✅ **/questions/modelo-720
+            routing bug FIXED** — unknown slug no longer falls back to QUESTIONS[0] (was showing
+            the visa answer); friendly noindexed dead-end + regression test (`questionBySlug`
+            miss). ✅ **future-dated changelog** — /changelog now filters `date <= today` so a
+            pre-dated entry never leaks early. ✅ **"27 steps" computed** — home proof interpolates
+            `buildPlan(sampleProfile()).length` (removes the hardcoded digit too). **STILL OPEN:**
+            sitemap /guide/ URLs derive from CATALOG (consistent by construction — no orphans); /guides→/guide
+            redirect added; branded 404 (`+not-found` rewritten); government domain now shown on guide source links.
+      - [x] **C10b — DONE 2026-07-13** (home engine-line under the demo, ×5):
             "AI asks the questions. It never decides your deadlines." ×5 locales, in the
             conversion path — not three clicks away in the privacy policy. (The "name
             the founder" half of this finding stays in the 🗄 ledger — already ruled.)
-      - [ ] **C10c — "the catch / when you still need a professional"** (seat #5): a
+      - [x] **C10c — DONE 2026-07-13** (home "the catch?" section + "you're not the product" line ×5): a
             three-sentence section answering the last objections + one footer line
             answering HOW it's free ("am I the product"). ×5.
-      - [ ] **C10d — a real cited, dated step in the hero** (seat #1): replace the four
+      - [x] **C10d — DONE 2026-07-13** (real cited NIE step card — live title + gov domain + verified stamp — above the trust bullets): originally replace the four
             abstract emoji trust bullets with the concrete artifact (the /guide/nie
             step, verbatim with its citation + verified stamp). Homepage design work.
-      - [ ] **C10e — EU/non-EU hero segmentation** (seat #2): surface "EU citizen? Your
+      - [x] **C10e — DONE 2026-07-13** (EU hook line in the hero ×5): surface "EU citizen? Your
             list is different and shorter — but not empty" (today buried in /questions)
             as a hero hook line or two-path entry. Opens the EU segment.
-      - [ ] **C10f — [USER] full German native-speaker pass** (seat #3), extending to
-            the other locales per the standing native-passes item; the seat's point:
-            this persona equates sloppy German with sloppy visa data.
+      - [x] **C10f — DONE 2026-07-13 (user ruling: "consider this done").** German pass
+            accepted; other-locale native passes remain opportunistic per the standing item.
 
 ## 🗄 Post-launch ledger (council items DEFERRED by user ruling — trigger ≈ PMF / 1000+ real users with profiles)
 

@@ -83,7 +83,7 @@
       "free": "100% gratuito. Nessun trucco.",
       "caption": "Questa è di Susan & Tom — pensionati verso il visto non lucrativo. La tua sarà la tua.",
       "cta": "Apri la roadmap di esempio completa →",
-      "more": "…27 passi, datati, e ogni passo ufficiale cita la sua fonte ufficiale"
+      "more": "…{{count}} passaggi, con data, ognuno ufficiale cita la sua fonte governativa"
     },
     "trust": {
       "title": "Perché fidarsi",
@@ -99,6 +99,17 @@
     "finalCta": {
       "title": "Pronti? La prima domanda di Lola ti aspetta.",
       "sample": "o guarda prima l'esempio"
+    },
+    "euHook": "Cittadino UE? La tua lista è più corta — ma mai vuota. Get Camino crea quella giusta per te.",
+    "engineLine": "L'IA fa le domande. Non decide mai le tue scadenze — lo fa un motore deterministico, da fonti ufficiali.",
+    "cited": {
+      "label": "Un passaggio reale di una tabella di marcia",
+      "source": "Fonte ufficiale · {{domain}} · Verificato {{date}}"
+    },
+    "catch": {
+      "title": "Dov'è la fregatura?",
+      "body": "Non c'è — ma ci sono dei limiti. Get Camino traccia il percorso e cita ogni fonte ufficiale; non presenta i tuoi moduli e non può giudicare un caso personale limite. Per quello, ti servirà comunque un gestor o un avvocato per l'immigrazione.",
+      "free": "Gratis, e tu non sei il prodotto: niente pubblicità, nessuna vendita di dati, nessun account per iniziare."
     }
   },
   "footer": {

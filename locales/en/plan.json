@@ -45,7 +45,8 @@
   "card": {
     "doneBadge": "✓ Done",
     "a11y": "{{title}}. {{status}}. Opens step details",
-    "a11yDone": "Done"
+    "a11yDone": "Done",
+    "conditionalNote": "Shown because you preferred not to say — it applies only if you're over the amount named above. Skip it if you're sure you're under."
   },
   "overdue": {
     "wasDue": "Overdue · was due {{date}}",
@@ -209,7 +210,7 @@
     "a11y": "Share a read-only link to your roadmap",
     "title": "Share your roadmap",
     "body": "Anyone with the link sees a read-only copy — your steps and dates, exactly as the engine builds them. They can’t edit anything, and no account is needed.",
-    "caveat": "The link itself encodes your answers (nationalities, dates, plans — never your notes). Share it only with people you’d tell those things to.",
+    "caveat": "The link itself encodes your answers — nationalities, dates, plans, and any financial details you gave, like income or asset bands (never your free-text notes). Share it only with people you’d tell those things to.",
     "copy": "Copy link",
     "copied": "Copied ✓",
     "share": "Share…",
@@ -234,5 +235,6 @@
     "wealth_scale": "In {{region}}, the wealth tax starts above a {{exempt}} personal exemption (plus the primary-home allowance), with rates rising to {{top}} at the top.",
     "itp_foral": "In {{region}}, rates are set per territorio histórico (Álava, Bizkaia, Gipuzkoa) — currently aligned: buying a resale home is taxed at {{rate}} in all three (other property at {{general}}), with reduced variants for a primary residence.",
     "itp_bonif": "In {{region}}, the state transfer-tax rate of {{rate}} applies with a {{bonif}} rebate on the bill — an effective {{effective}} on a resale home."
-  }
+  },
+  "scopeNote": "This roadmap maps your route as the main applicant. If your partner is also working, they should run their own quick interview — each person's path can differ, and a share link makes the second run easy."
 }

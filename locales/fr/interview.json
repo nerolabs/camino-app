@@ -5,7 +5,7 @@
     "sub": "S’installer en Espagne, ce sont cent petites étapes — visas, padrón, impôts, santé — qui ne fonctionnent que dans le bon ordre. J’ai aidé d’autres personnes à franchir le pas, et je ferai la route avec toi du début à la fin.",
     "subQuiet": "Réponds à quelques questions et je construis ta feuille de route personnelle : de vraies étapes, de vraies échéances, rien d’inutile.",
     "start": "C’est parti",
-    "greeting": "Bonjour, je suis Lola. Je vais construire votre feuille de route ici même, au fil de l'entretien — des étapes réelles, des délais réels, rien d'inutile.",
+    "greeting": "Bonjour, je suis Lola, une assistante IA. Je vais te poser quelques questions rapides et construire ta feuille de route ici même, au fil de l'entretien — de vraies étapes, de vrais délais, rien d'inutile. Ce sont des conseils utiles, pas un avis juridique.",
     "fromGuide": "Je vois que vous vous renseigniez sur {{guide}} — votre feuille de route couvrira ce point et tout ce qui l'entoure.",
     "welcomeBack": "Content de vous revoir — votre feuille de route est à {{pct}}%. Reprenons où nous en étions."
   },
@@ -42,7 +42,7 @@
     "partner_is_married": "L'Espagne traite différemment les unions enregistrées pour les démarches familiales. La vôtre est-elle enregistrée ? Un mariage ou un PACS comptent tous les deux.",
     "has_children": "Des enfants ajoutent la scolarisation au plan. Des enfants viennent-ils avec vous ?",
     "intends_long_stay": "La part de l'année passée ici change votre situation fiscale et les démarches applicables. Serez-vous en Espagne plus de six mois par an ?",
-    "arrival_date": "Quelle belle aventure, ce départ pour l'Espagne ! Commençons par la question la plus importante : quand prévoyez-vous d'arriver ? Un mois approximatif me suffit — cela ancre toutes les échéances de votre feuille de route.",
+    "arrival_date": "Commençons par la question la plus importante : quand comptes-tu arriver ? Un mois approximatif me suffit — c'est ce qui ancre chaque échéance de ta feuille de route.",
     "has_spanish_address": "Et maintenant, où allez-vous atterrir ? Une adresse débloque l'inscription en mairie — le padrón — et acheter apporte son propre lot d'étapes. Quel est votre plan logement ?",
     "owns_or_drives": "Conduire ici peut impliquer d'échanger votre permis — ou un examen espagnol — selon votre pays. Quelqu'un du foyer conduira-t-il ?",
     "owns_property_in_spain": "Un bien immobilier apporte son propre lot d'étapes — notaire, registre, impôts. Possédez-vous — ou comptez-vous acheter — un bien en Espagne ?",
@@ -53,7 +53,8 @@
     "property_purchase": "La date d'achat ancre les échéances du notaire, du registre et des impôts. À peu près quand a-t-il été (ou sera-t-il) finalisé ? Le mois suffit.",
     "wants_citizenship": "Cela décide si nous planifions la voie complète vers la nationalité, ou simplement vos renouvellements de résidence. À plus long terme, souhaitez-vous devenir citoyen espagnol ?",
     "non_eu_family_member": "Encore une sur les passeports — quelqu’un du foyer fait-il ce déménagement avec un passeport ni UE ni espagnol ? Il aura sa propre démarche de résidence.",
-    "has_spanish_company": "Une question sur l’entreprise — ta société est-elle (ou deviendra-t-elle) espagnole ? Qui garde une société à l’étranger échappe entièrement aux déclarations d’entreprise espagnoles."
+    "has_spanish_company": "Une question sur l’entreprise — ta société est-elle (ou deviendra-t-elle) espagnole ? Qui garde une société à l’étranger échappe entièrement aux déclarations d’entreprise espagnoles.",
+    "children_count": "Combien d'enfants déménagent avec toi ?"
   },
   "chips": {
     "yes": "Oui",
@@ -102,6 +103,12 @@
       "bought": "Je possède un logement en Espagne",
       "will_buy": "Je compte acheter",
       "nothing": "Rien d’arrangé encore"
+    },
+    "children_count": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4+": "4 ou plus"
     }
   },
   "roadmap": {
@@ -126,6 +133,14 @@
     "question": "Une dernière chose — y a-t-il autre chose sur votre projet que je devrais savoir ? Cela peut affiner votre feuille de route. Ou passez directement.",
     "skip": "Passer — voir ma feuille de route",
     "ack": "C'est noté — je le garde avec ta feuille de route. J'ai tout ce qu'il me faut.",
-    "countdown": "Préparation de ta feuille de route — {{n}}…"
+    "countdown": "Préparation de ta feuille de route — {{n}}…",
+    "noteHint": "Pas besoin de partager des informations de santé ou de casier judiciaire ici — Lola n'en a pas besoin, et ce que tu écris est enregistré avec ton plan."
+  },
+  "stakes": {
+    "incomeShortNlv": "Noté — une précision : c'est en dessous des {{amount}}/an que demande le visa non lucratif pour un foyer de ta taille. Ta feuille de route le signale pour que tu puisses t'y préparer.",
+    "incomeShortDnv": "Noté — une précision : c'est en dessous des {{amount}}/an que demande le visa nomade numérique pour un foyer de ta taille. Ta feuille de route le signale pour que tu puisses t'y préparer.",
+    "incomeNoted": "Noté, merci.",
+    "cantAssess": "J'ai enregistré ta note avec ton plan. En toute honnêteté : je ne peux pas évaluer des cas personnels comme celui-ci — c'est une question pour ton consulat ou un avocat en droit des étrangers.",
+    "guideCriminal": "Ta feuille de route inclut l'étape du casier judiciaire, avec sa source officielle et ce qu'il faut préparer."
   }
 }

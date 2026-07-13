@@ -83,7 +83,7 @@
       "free": "100% gratis. Sin letra pequeña.",
       "caption": "Esta es la de Susana y Tomás — jubilados rumbo a la visa no lucrativa. La tuya será la tuya.",
       "cta": "Abre la hoja de ruta de ejemplo completa →",
-      "more": "…27 pasos, con fechas, y cada paso oficial cita su fuente oficial"
+      "more": "…{{count}} pasos, con fecha, cada uno oficial citando su fuente gubernamental"
     },
     "trust": {
       "title": "Por qué fiarte",
@@ -99,6 +99,17 @@
     "finalCta": {
       "title": "¿Todo listo? La primera pregunta de Lola te espera.",
       "sample": "o mira antes el ejemplo"
+    },
+    "euHook": "¿Ciudadano de la UE? Tu lista es más corta — pero nunca está vacía. Get Camino crea la adecuada para ti.",
+    "engineLine": "La IA hace las preguntas. Nunca decide tus plazos — eso lo hace un motor determinista, a partir de fuentes oficiales.",
+    "cited": {
+      "label": "Un paso real de una hoja de ruta",
+      "source": "Fuente oficial · {{domain}} · Verificado {{date}}"
+    },
+    "catch": {
+      "title": "¿Dónde está la trampa?",
+      "body": "No la hay — pero sí hay límites. Get Camino traza la ruta y cita cada fuente oficial; no presenta tus formularios ni puede juzgar un caso personal límite. Para eso, seguirás necesitando un gestor o un abogado de extranjería.",
+      "free": "Gratis, y tú no eres el producto: sin anuncios, sin venta de datos, sin cuenta para empezar."
     }
   },
   "footer": {

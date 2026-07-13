@@ -83,7 +83,7 @@
       "free": "100% gratuit. Sans piège.",
       "caption": "C'est celle de Susan & Tom — retraités en route vers le visa non lucratif. La vôtre sera la vôtre.",
       "cta": "Ouvrir l'exemple complet →",
-      "more": "…27 étapes, datées, chaque étape officielle citant sa source officielle"
+      "more": "…{{count}} étapes, datées, chacune officielle citant sa source gouvernementale"
     },
     "trust": {
       "title": "Pourquoi s'y fier",
@@ -99,6 +99,17 @@
     "finalCta": {
       "title": "Prêt ? La première question de Lola vous attend.",
       "sample": "ou regardez d'abord l'exemple"
+    },
+    "euHook": "Citoyen de l'UE ? Ta liste est plus courte — mais jamais vide. Get Camino crée la bonne pour toi.",
+    "engineLine": "L'IA pose les questions. Elle ne décide jamais de tes échéances — c'est un moteur déterministe qui le fait, à partir de sources officielles.",
+    "cited": {
+      "label": "Une vraie étape d'une feuille de route",
+      "source": "Source officielle · {{domain}} · Vérifié {{date}}"
+    },
+    "catch": {
+      "title": "Où est le piège ?",
+      "body": "Il n'y en a pas — mais il y a des limites. Get Camino trace le parcours et cite chaque source officielle ; il ne dépose pas tes formulaires et ne peut pas juger un cas personnel limite. Pour cela, il te faudra toujours un gestor ou un avocat en droit des étrangers.",
+      "free": "Gratuit, et tu n'es pas le produit : pas de pub, pas de vente de données, pas de compte pour commencer."
     }
   },
   "footer": {

@@ -19,6 +19,10 @@ function prettyDate(iso: string): string {
 }
 
 export default function Changelog() {
+  // C10a: never surface a pre-dated (future) entry before its day — ISO dates sort lexically, so
+  // a simple string compare against today keeps the public log honest about what's actually live.
+  const today = new Date().toISOString().slice(0, 10);
+  const entries = CHANGELOG.filter(e => e.date <= today);
   return (
     <ScrollView style={styles.flex} contentContainerStyle={styles.scroll}>
       <Seo
@@ -37,7 +41,7 @@ export default function Changelog() {
         </Text>
         <View style={styles.rule} />
 
-        {CHANGELOG.map(entry => (
+        {entries.map(entry => (
           <View key={entry.date + entry.title} style={styles.entry}>
             <Text style={styles.date}>{prettyDate(entry.date)}</Text>
             <Text style={styles.entryTitle}>{entry.title}</Text>

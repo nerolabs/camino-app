@@ -13,15 +13,20 @@ import Footer from '@/components/Footer';
 export type LegalSection = { h?: string; body: string[] };
 export type LegalContent = { title: string; updated: string; intro?: string; sections: LegalSection[] };
 
-export default function LegalPage({ metaTitle, description, canonical, en, es }: {
+export default function LegalPage({ metaTitle, description, canonical, en, es, summaries }: {
   metaTitle: string; description: string; canonical: string;
   en: LegalContent; es: LegalContent;
+  // C5 (Legal #8): a translated "short version" for the fr/de/it pages, shown above the English
+  // body (which stays authoritative). Cheap trust win — the summary is what most people read.
+  summaries?: Record<string, string>;
 }) {
   const { t, i18n } = useTranslation();
   // es has a full courtesy translation; other locales show ENGLISH legal + a one-line native
   // notice (design §7 — industry-normal until each language earns its reviewed translation).
   const { title, updated, intro, sections } = i18n.language === 'es' ? es : en;
   const englishNotice = i18n.language !== 'en' && i18n.language !== 'es';
+  // fr/de/it: prefer the localized summary if provided, else the English intro.
+  const shownIntro = englishNotice ? (summaries?.[i18n.language] ?? intro) : intro;
   return (
     <ScrollView style={styles.scroll}>
       <Seo localized title={metaTitle} description={description} canonical={canonical} />
@@ -30,7 +35,7 @@ export default function LegalPage({ metaTitle, description, canonical, en, es }:
         <Text style={styles.title} accessibilityRole="header">{title}</Text>
         <Text style={styles.updated}>{t('legal.lastUpdated', { date: updated })}</Text>
         {englishNotice && <Text style={styles.intro}>{t('legal.englishNotice')}</Text>}
-        {intro && <Text style={styles.intro}>{intro}</Text>}
+        {shownIntro && <Text style={styles.intro}>{shownIntro}</Text>}
         {sections.map((s, i) => (
           <View key={i} style={styles.section}>
             {s.h && <Text style={styles.h}>{s.h}</Text>}

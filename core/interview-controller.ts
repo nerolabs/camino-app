@@ -1,4 +1,5 @@
 import { REGION_OPTIONS } from './regions';
+import { LEGAL_FIGURES } from './legal-figures';
 
 type Condition =
   | { all: Condition[] } | { any: Condition[] } | { not: Condition }
@@ -140,6 +141,15 @@ export const SLOTS: Slot[] = [
     field: "has_children", type: "bool", input: "yesno", order: 90,
     prompt_hint: "whether school-age children will be making this move",
   },
+  {
+    // C7: the NLV/DNV household threshold rises €7,200/yr per dependent, so "has children" alone
+    // understated it for families with 2+ kids. Ask the count (only when there ARE children); an
+    // unanswered count falls back to a conservative 1 dependent in the derivation.
+    field: "children_count", type: "band", input: "single", order: 91, allowOther: false,
+    required_if: { field: "has_children", op: "eq", value: true },
+    options: ["1", "2", "3", "4+"],
+    prompt_hint: "how many children are making the move — it sets the household income threshold",
+  },
 
   // ── Round 4: life in Spain ──────────────────────────────────────────────────
   {
@@ -267,6 +277,14 @@ const INCOME_BAND_UPPER: Record<string, number> = {
   "€60k+":  Infinity,
 };
 
+// C7: dependents from the children-count answer. Unknown/unanswered but has_children → a
+// conservative floor of 1 (there's at least one), so the threshold never silently understates.
+const CHILDREN_COUNT: Record<string, number> = { "1": 1, "2": 2, "3": 3, "4+": 4 };
+function childrenExtra(p: Profile): number {
+  if (p.has_children !== true) return 0;
+  return CHILDREN_COUNT[p.children_count as string] ?? 1;
+}
+
 const ASSETS_BAND_MIDPOINT: Record<string, number> = {
   "under €50k":       25_000,
   "€50k–€200k":      125_000,
@@ -346,11 +364,15 @@ export const DERIVATIONS: Derivation[] = [
   { field: "annual_income_eur", from: ["annual_income_eur_band"],
     compute: (p) => INCOME_BAND_MIDPOINT[p.annual_income_eur_band as string] ?? 0 },
 
+  // `children_count` is read optionally in childrenExtra (fallback when absent), so it stays OUT
+  // of `from` — a derivation only fires when every `from` field is present, and requiring the
+  // count would block the threshold for anyone who hasn't reached that question yet.
   { field: "family_extra_count", from: ["has_spouse_or_partner", "has_children"],
-    compute: (p) => (p.has_spouse_or_partner ? 1 : 0) + (p.has_children ? 1 : 0) },
+    compute: (p) => (p.has_spouse_or_partner ? 1 : 0) + childrenExtra(p) },
 
   { field: "nlv_income_threshold", from: ["family_extra_count"],
-    compute: (p) => 28_800 + 7_200 * (p.family_extra_count as number) },
+    compute: (p) => LEGAL_FIGURES.nlvIncomeBase.value
+                    + LEGAL_FIGURES.nlvIncomePerDependent.value * (p.family_extra_count as number) },
 
   { field: "dnv_income_threshold", from: ["has_spouse_or_partner", "has_children"],
     compute: (p) => 34_000 + (p.has_spouse_or_partner ? 13_000 : 0) + (p.has_children ? 4_000 : 0) },

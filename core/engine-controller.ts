@@ -3,6 +3,7 @@
  * Given a Profile, produces an ordered list of Objectives with resolved timing.
  * No LLM runs here.
  */
+import { LEGAL_FIGURES } from './legal-figures';
 
 type Severity = 'info' | 'recommended' | 'required' | 'penalty';
 type Category = 'visa' | 'residency' | 'tax' | 'health' | 'mobility' | 'banking' | 'family' | 'property' | 'admin';
@@ -37,6 +38,14 @@ export type Obligation = {
   webinar_url?: string; // original webinar (YouTube) the content was mined from — staff-only, for
                         // cross-checking official vs. webinar; also a future partnership/upsell hook
   applies_if: Condition; depends_on: string[]; timing: Timing;
+  // C3 (council fix): a penalty-bearing obligation must NEVER be silently dropped just because a
+  // sensitive gating field is unanswered or declined ("prefer not to say") — the privacy-
+  // respecting answer would otherwise cause the worst harm (Modelo 720 is the trap). When the
+  // obligation is not definitely applicable but `conditional_when` holds AND `conditional_gate`
+  // is unknown/declined, it's INCLUDED with its (already-conditional) title and marked
+  // `conditional`. The title itself carries the threshold ("…if overseas assets exceed €50,000").
+  conditional_when?: Condition;   // the definite prerequisite (e.g. is_tax_resident == true)
+  conditional_gate?: string;      // the declinable field whose unknown value triggers this (a *_band field)
   // The specifics (rates, allowances, windows) are set per comunidad autónoma — the plan
   // flags these and names the user's region when known. National source stays canonical.
   regional?: boolean;
@@ -66,6 +75,9 @@ export type Objective = {
   done: boolean; completedOn: Date | null;
   regional?: boolean;
   verified_at?: string; // "last verified" stamp override (presentational; see core/changelog.ts)
+  // C3: included because a sensitive gate (e.g. foreign assets) was unknown/declined, not because
+  // it definitely applies — the UI flags it as "may apply" rather than dropping it silently.
+  conditional?: boolean;
 };
 
 const SEV_RANK: Record<Severity, number> = { penalty: 4, required: 3, recommended: 2, info: 1 };
@@ -84,6 +96,13 @@ function evaluate(c: Condition, p: Record<string, unknown>): boolean {
     case 'gt':    return typeof a === 'number' && a > (c.value as number);
     case 'in':    return Array.isArray(c.value) && (c.value as unknown[]).includes(a);
   }
+}
+
+// C3: a gate field (a *_band answer) counts as "unknown" when unanswered (null/undefined) or
+// explicitly declined — so a penalty item is kept conditionally rather than dropped on a guess.
+const DECLINE_SENTINELS = new Set(['prefer not to say', 'not_sure']);
+function gateIsUnknown(v: unknown): boolean {
+  return v == null || (typeof v === 'string' && DECLINE_SENTINELS.has(v));
 }
 
 function topoSort(obs: Obligation[]): Obligation[] {
@@ -287,6 +306,7 @@ export const CATALOG: Obligation[] = [
     title: 'Gather proof of passive income — €28,800/yr for the main applicant plus €7,200/yr per dependent (400% of IPREM; figures track IPREM each year)',
     category: 'visa', severity: 'required',
     source: 'official',
+    verified_at: LEGAL_FIGURES.nlvIncomeBase.verified_at, // C6: stamp tracks the IPREM figures
     applies_if: { field: 'visa_type', op: 'eq', value: 'nlv' },
     depends_on: ['choose-visa-type'],
     timing: { kind: 'relative_to_event', anchor: 'arrival', offset_days: -60 },
@@ -298,7 +318,7 @@ export const CATALOG: Obligation[] = [
     // for the user's own household instead of leaving it to them.
     id: 'nlv-income-check',
     title: 'Heads-up: your income band looks below the NLV requirement — €28,800/yr plus €7,200/yr per dependent (400% of IPREM) for your household. Review how you\'ll evidence sufficient passive means, or talk through alternative routes, before booking the consulate appointment',
-    verified_at: '2026-07-10', // added with the interview redesign (figures verified then)
+    verified_at: LEGAL_FIGURES.nlvIncomeBase.verified_at, // C6: stamp tracks the IPREM figures
     category: 'visa', severity: 'recommended',
     source: 'recommendation',
     applies_if: { all: [
@@ -501,12 +521,17 @@ export const CATALOG: Obligation[] = [
     title: 'File Modelo 720 (foreign-assets declaration) if any category of overseas assets exceeds €50,000 — filed 1 Jan–31 Mar; reformed flat-rate penalties apply since the 2022 EU court ruling struck down the old proportional regime',
     category: 'tax', severity: 'penalty',
     source: 'official',
+    verified_at: LEGAL_FIGURES.modelo720Threshold.verified_at, // C6: stamp tracks the figure
     applies_if: {
       all: [
         { field: 'is_tax_resident', op: 'eq', value: true },
-        { field: 'foreign_assets_eur', op: 'gt', value: 50_000 },
+        { field: 'foreign_assets_eur', op: 'gt', value: LEGAL_FIGURES.modelo720Threshold.value },
       ],
     },
+    // C3: a tax resident who won't/didn't state their foreign assets keeps this — the €50,000
+    // threshold lives in the title, so the conditional include reads correctly. Never dropped.
+    conditional_when: { field: 'is_tax_resident', op: 'eq', value: true },
+    conditional_gate: 'foreign_assets_eur_band',
     depends_on: [],
     timing: { kind: 'absolute_recurring', rrule: 'FREQ=YEARLY;BYMONTH=1,2,3' },
   },
@@ -772,7 +797,7 @@ export const CATALOG: Obligation[] = [
   },
   {
     regional: true, id: 'wealth-tax',
-    verified_at: '2026-07-12', // regional-specifics pass (Madrid + Andalucía reliefs verified)
+    verified_at: LEGAL_FIGURES.wealthTaxAllowance.verified_at, // C6: stamp tracks the figure
     source_url: 'https://sede.agenciatributaria.gob.es/Sede/procedimientoini/G611.shtml',
     webinar_url: 'https://www.youtube.com/watch?v=HP55mfxt52U&t=794s',
     title: 'File annual wealth-tax return (Modelo 714) during the renta period — applies when net assets exceed the €700,000 state allowance (regions vary; e.g. €500k in Catalonia), with a further ~€300k exemption for your main home',
@@ -780,8 +805,12 @@ export const CATALOG: Obligation[] = [
     source: 'official',
     applies_if: { all: [
       { field: 'is_tax_resident', op: 'eq', value: true },
-      { field: 'foreign_assets_eur', op: 'gt', value: 700_000 },
+      { field: 'foreign_assets_eur', op: 'gt', value: LEGAL_FIGURES.wealthTaxAllowance.value },
     ] },
+    // C3: kept conditionally for a tax resident who declined/skipped the assets band (the
+    // €700,000 allowance is stated in the title).
+    conditional_when: { field: 'is_tax_resident', op: 'eq', value: true },
+    conditional_gate: 'foreign_assets_eur_band',
     depends_on: ['residencia'],
     timing: { kind: 'absolute_recurring', rrule: 'FREQ=YEARLY;BYMONTH=4,5,6' },
   },
@@ -1190,7 +1219,19 @@ export function buildPlan(p: Record<string, unknown>): Objective[] {
     const done = actuals.get(obligationId);
     if (done && !pa[anchorField]) pa[anchorField] = done.toISOString();
   }
-  const applicable = CATALOG.filter(o => evaluate(o.applies_if, pa));
+  // C3: a penalty item whose sensitive gate is unknown/declined is INCLUDED conditionally rather
+  // than dropped. Definite non-applicability (a base prerequisite fails, or the gate is answered
+  // BELOW threshold) still excludes it — only genuine uncertainty triggers the conditional include.
+  const conditionalIds = new Set<string>();
+  const applicable = CATALOG.filter(o => {
+    if (evaluate(o.applies_if, pa)) return true;
+    if (o.severity === 'penalty' && o.conditional_when && o.conditional_gate
+        && evaluate(o.conditional_when, pa) && gateIsUnknown(pa[o.conditional_gate])) {
+      conditionalIds.add(o.id);
+      return true;
+    }
+    return false;
+  });
   const ordered = topoSort(applicable);
   const arrival = anchorDate('arrival', pa, today)!.date;
   const resolved = new Map<string, Resolved>();
@@ -1205,6 +1246,7 @@ export function buildPlan(p: Record<string, unknown>): Objective[] {
       verified_at: o.verified_at,
       done: pr?.state === 'done',
       completedOn: pr?.completedOn ? new Date(pr.completedOn) : null,
+      conditional: conditionalIds.has(o.id) || undefined,
     };
   });
 }

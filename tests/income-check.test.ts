@@ -37,6 +37,17 @@ describe('income threshold checks', () => {
       annual_income_eur_band: '€60k+' })).not.toContain('nlv-income-check');
   });
 
+  it('C7: the real dependent count raises the threshold — a big family is no longer understated', () => {
+    const bigFamily: Profile = { ...nlvBase, has_spouse_or_partner: true, partner_is_married: true, has_children: true };
+    // couple + 4 kids → threshold 28,800 + 5×7,200 = 64,800; band top 60k < 64,800 → warns
+    expect(planIds({ ...bigFamily, children_count: '4+', annual_income_eur_band: '€34k–€60k' }))
+      .toContain('nlv-income-check');
+    // the SAME household without a count falls back to 1 dependent → threshold 43,200; 60k clears
+    // it → no warning. That gap (silent for a big family) is exactly what C7 closes.
+    expect(planIds({ ...bigFamily, annual_income_eur_band: '€34k–€60k' }))
+      .not.toContain('nlv-income-check');
+  });
+
   it('DNV: fires below the remote-income threshold, silent above', () => {
     const dnvBase: Profile = { ...nlvBase, work_situation: 'employed_remote', employer_country_is_foreign: true };
     // single → threshold 34,000; band top 28k < 34k → warn

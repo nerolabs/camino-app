@@ -6,6 +6,9 @@
  * set EXPO_PUBLIC_API_URL to the deployed origin so the relative path resolves.
  */
 
+import { type LolaMode, type LolaParams } from '@/lib/lolaPrompts';
+import { getSessionToken } from '@/lib/turnstile';
+
 const API_BASE = process.env.EXPO_PUBLIC_API_URL ?? '';
 
 // A stuck request must never become a stuck spinner (build-28 family finding: 30+s of
@@ -14,19 +17,23 @@ const TIMEOUT_MS = 35_000;
 
 export type LolaMessage = { role: 'user' | 'assistant'; content: string };
 
-export async function askAnthropic(opts: {
-  system?: string;
+// C2a: the client sends a mode + typed params, never a raw `system`/`model`. The server
+// (app/api/lola+api.ts → lib/lolaPrompts.ts) owns the prompt, model, and token cap.
+export async function askAnthropic<M extends LolaMode>(opts: {
+  mode: M;
+  params: LolaParams[M];
   messages: LolaMessage[];
-  model?: string;
-  max_tokens?: number;
 }): Promise<string> {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   try {
+    // C2b: attach the Turnstile-derived session token on web (solved once, cached). null on native
+    // and where Turnstile isn't configured — the server only enforces where it's set up.
+    const session = await getSessionToken();
     const res = await fetch(`${API_BASE}/api/lola`, {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(opts),
+      headers: { 'content-type': 'application/json', ...(session ? { 'x-camino-session': session } : {}) },
+      body: JSON.stringify({ mode: opts.mode, params: opts.params, messages: opts.messages }),
       signal: ctrl.signal,
     });
     if (!res.ok) throw new Error(`lola proxy ${res.status}`);

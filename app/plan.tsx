@@ -21,6 +21,7 @@ import { BackToTop, useBackToTop } from '@/components/BackToTop';
 import { capture } from '@/lib/analytics';
 import EmailSignIn from '@/components/EmailSignIn';
 import { parseProfileChange, askLola, TASK_INTRO, changeHint } from '@/lib/plan-coach';
+import { sanitizeProfileDelta } from '@/lib/profileDelta';
 import { displayTitle } from '@/lib/catalogTitles';
 import {
   diffSummary, plansDiffer, completionLine, formatTiming, timingDetail, openExternal,
@@ -185,7 +186,10 @@ export default function PlanScreen() {
       setChangeNote({ title: t('changeNote.errTitle'), body: t('changeNote.errBody') });
       return;
     }
-    const changes = result.changes;
+    // C1a: sanitize the model's proposed delta to real, type-checked profile fields before it
+    // touches the profile — a hallucinated field name or wrong-typed value never reaches the
+    // engine or the DB. Downstream no-op/remodel logic all keys off the cleaned set.
+    const changes = sanitizeProfileDelta(result.changes);
     setChangeText('');
     setChangeOpen(false);
     setSelected(null);
@@ -293,6 +297,11 @@ export default function PlanScreen() {
               </>
             )}
           </View>
+          {/* C3: a penalty item kept because a sensitive answer was skipped/declined — flagged
+              "may apply" so it's never a silent trap, and never a false certainty either. */}
+          {obj.conditional && !obj.done && (
+            <Text style={styles.conditionalNote}>{t('card.conditionalNote')}</Text>
+          )}
         </View>
       </TouchableOpacity>
     );
@@ -304,6 +313,11 @@ export default function PlanScreen() {
       <NavBar />
       <View style={styles.content}>
         <Text style={styles.heading} accessibilityRole="header">{t('heading')}</Text>
+        {/* C8: honest household scope — Camino models the primary applicant's route, so a working
+            partner needs their own run. Share links make the second interview cheap. */}
+        {profile.has_spouse_or_partner === true && (
+          <Text style={styles.scopeNote}>{t('scopeNote')}</Text>
+        )}
 
         <View style={styles.toolbarRow}>
           <View style={styles.viewToggle}>
@@ -813,6 +827,8 @@ const styles = StyleSheet.create({
   sevBadge:      { borderRadius: 6, paddingHorizontal: 7, paddingVertical: 3, flexShrink: 0 },
   sevBadgeText:  { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 10, letterSpacing: 0.3 },
   cardMeta:      { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  conditionalNote: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, lineHeight: 17, color: palette.muted, marginTop: 8, fontStyle: 'italic' },
+  scopeNote:     { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, lineHeight: 19, color: palette.muted, marginTop: 4, marginBottom: 10, maxWidth: 560 },
   cardTiming:    { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, color: palette.cobalt, flex: 1 },
   cardTimingPenalty: { color: '#C0392B' },
   cardCategory:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11, color: palette.muted,

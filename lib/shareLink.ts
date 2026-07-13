@@ -66,7 +66,11 @@ export function decodeShare(d: string | undefined | null): Profile | null {
   }
 }
 
-/** The full URL to put on the clipboard / share sheet. */
+/** The full URL to put on the clipboard / share sheet.
+ *  C4 (council fix): the payload rides a `#fragment`, NOT a `?query`. A fragment is never sent
+ *  to the server, so the profile (which can include exact figures like foreign_assets_eur) stays
+ *  out of server logs, the browser's address-bar history sync, and messenger link-preview fetchers.
+ *  /shared reads it from `location.hash`, with a `?d=` fallback for links shared before this. */
 export function shareUrl(origin: string, profile: Profile): string {
-  return `${origin}/shared?d=${encodeShare(profile)}`;
+  return `${origin}/shared#d=${encodeShare(profile)}`;
 }

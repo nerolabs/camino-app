@@ -38,10 +38,11 @@ describe('distillFinalNote / parseProfileChange', () => {
     const res = await distillFinalNote('oh and our dog Luna is coming too');
     expect(res).toEqual({ changes: { has_pets: true } });
     // The situational framing differs from the per-step flow — the extractor must know
-    // this is a post-interview note, not a step update.
-    const [{ system }] = askAnthropic.mock.calls[0] as [{ system: string }];
-    expect(system).toContain('finished the interview');
-    expect(system).toContain('anything else I should know');
+    // this is a post-interview note, not a step update. C2a: the framing now travels as a
+    // typed `params.situationKind`, and the server builds the prompt from it.
+    const [{ mode, params }] = askAnthropic.mock.calls[0] as [{ mode: string; params: { situationKind: string } }];
+    expect(mode).toBe('change');
+    expect(params.situationKind).toBe('final');
   });
 
   it('an unmappable note yields empty changes, never invented fields', async () => {
@@ -61,7 +62,9 @@ describe('distillFinalNote / parseProfileChange', () => {
     askAnthropic.mockResolvedValue('{"changes": {"owns_property_in_spain": false}}');
     const res = await parseProfileChange('we decided to rent', 'Pay the property transfer tax');
     expect(res).toEqual({ changes: { owns_property_in_spain: false } });
-    const [{ system }] = askAnthropic.mock.calls[0] as [{ system: string }];
-    expect(system).toContain('Pay the property transfer tax');
+    const [{ mode, params }] = askAnthropic.mock.calls[0] as [{ mode: string; params: { situationKind: string; objTitle: string } }];
+    expect(mode).toBe('change');
+    expect(params.situationKind).toBe('step');
+    expect(params.objTitle).toBe('Pay the property transfer tax');
   });
 });

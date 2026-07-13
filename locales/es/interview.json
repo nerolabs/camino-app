@@ -5,7 +5,7 @@
     "sub": "Mudarse a España son cien pequeños pasos — visados, padrón, impuestos, sanidad — y solo funcionan en el orden correcto. He ayudado a otras personas a dar este salto y lo recorreré contigo de principio a fin.",
     "subQuiet": "Responde unas preguntas y construyo tu hoja de ruta personal: pasos reales, plazos reales, nada que no necesites.",
     "start": "Empecemos",
-    "greeting": "Hola, soy Lola. Iré construyendo tu hoja de ruta aquí mismo mientras hablamos: pasos reales, plazos reales, nada que no necesites.",
+    "greeting": "Hola, soy Lola, una asistente de IA. Te haré unas preguntas rápidas e iré construyendo tu hoja de ruta aquí mismo mientras hablamos: pasos reales, plazos reales, nada que no necesites. Esto es orientación útil, no asesoramiento legal.",
     "fromGuide": "Veo que has estado leyendo sobre {{guide}} — tu hoja de ruta lo cubrirá, junto con todo lo que lo rodea.",
     "welcomeBack": "¡Bienvenido de nuevo! Tu hoja de ruta está al {{pct}}%. Sigamos donde lo dejamos."
   },
@@ -42,7 +42,7 @@
     "partner_is_married": "España trata distinto las relaciones registradas en el papeleo familiar. ¿La vuestra está registrada legalmente? Sirve tanto un matrimonio como una pareja de hecho.",
     "has_children": "Los niños traen la escolarización al plan. ¿Vienen niños contigo?",
     "intends_long_stay": "Cuánto tiempo del año pases aquí cambia tu situación fiscal y qué registros aplican. ¿Estarás en España más de seis meses al año?",
-    "arrival_date": "¡Qué ilusión mudarse a España! Empecemos por la pregunta más importante: ¿cuándo tienes pensado llegar? Con un mes aproximado me basta — ancla todos los plazos de tu hoja de ruta.",
+    "arrival_date": "Empecemos por la pregunta más importante: ¿cuándo tienes previsto llegar? Con un mes aproximado me basta — es lo que fija cada fecha de tu hoja de ruta.",
     "has_spanish_address": "Y ahora, ¿dónde aterrizarás? Una dirección desbloquea el empadronamiento, y comprar trae su propio bloque de pasos. ¿Cuál es tu plan de vivienda?",
     "owns_or_drives": "Conducir aquí puede suponer canjear el carnet — o un examen español — según tu país. ¿Conducirá alguien del hogar?",
     "owns_property_in_spain": "Una propiedad trae su propio bloque de pasos — notaría, registro, impuestos. ¿Tienes —o piensas comprar— una propiedad en España?",
@@ -53,7 +53,8 @@
     "property_purchase": "La fecha de compra ancla los plazos de notaría, registro e impuestos. ¿Más o menos cuándo se completó (o se completará)? Con el mes basta.",
     "wants_citizenship": "Esto decide si planificamos la vía completa de nacionalidad o solo mantenemos al día tus renovaciones de residencia. A largo plazo, ¿te gustaría obtener la nacionalidad española?",
     "non_eu_family_member": "Una más sobre pasaportes — ¿alguien de los que se mudan depende de un pasaporte que no sea de la UE ni español? Tendrá su propio trámite de residencia.",
-    "has_spanish_company": "Una pregunta sobre la empresa — ¿tu negocio es (o va a ser) una sociedad española? Quien mantiene su empresa en el extranjero se salta por completo las declaraciones societarias españolas."
+    "has_spanish_company": "Una pregunta sobre la empresa — ¿tu negocio es (o va a ser) una sociedad española? Quien mantiene su empresa en el extranjero se salta por completo las declaraciones societarias españolas.",
+    "children_count": "¿Cuántos hijos se mudan contigo?"
   },
   "chips": {
     "yes": "Sí",
@@ -102,6 +103,12 @@
       "bought": "Tengo casa en España",
       "will_buy": "Pienso comprar",
       "nothing": "Aún sin arreglar"
+    },
+    "children_count": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4+": "4 o más"
     }
   },
   "roadmap": {
@@ -126,6 +133,14 @@
     "question": "Una última cosa: ¿hay algo más sobre tu mudanza que deba saber? Puede afinar tu hoja de ruta. O sáltatelo y ve directo a ella.",
     "skip": "Saltar — ver mi hoja de ruta",
     "ack": "Anotado — lo guardo con tu plan. Ya tengo todo lo que necesito.",
-    "countdown": "Preparando tu hoja de ruta — {{n}}…"
+    "countdown": "Preparando tu hoja de ruta — {{n}}…",
+    "noteHint": "No hace falta que compartas datos de salud o antecedentes penales aquí — Lola no los necesita, y lo que escribas se guarda con tu plan."
+  },
+  "stakes": {
+    "incomeShortNlv": "Anotado — un aviso: está por debajo de los {{amount}}/año que pide el visado no lucrativo para un hogar de tu tamaño. Tu hoja de ruta lo señala para que puedas preverlo.",
+    "incomeShortDnv": "Anotado — un aviso: está por debajo de los {{amount}}/año que pide el visado de nómada digital para un hogar de tu tamaño. Tu hoja de ruta lo señala para que puedas preverlo.",
+    "incomeNoted": "Anotado, gracias.",
+    "cantAssess": "He guardado tu nota con tu plan. Con honestidad: no puedo valorar casos personales como este — es una consulta para tu consulado o un abogado de extranjería.",
+    "guideCriminal": "Tu hoja de ruta incluye el paso del certificado de antecedentes penales, con su fuente oficial y qué preparar."
   }
 }

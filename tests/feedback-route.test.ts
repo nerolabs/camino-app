@@ -7,12 +7,19 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 const sendEmail = vi.fn();
 const captureServerError = vi.fn();
 const volumeGuard = vi.fn();
-vi.mock('@/lib/serverEmail', () => ({ sendEmail: (...a: unknown[]) => sendEmail(...a) }));
+const sessionGate = vi.fn();
+vi.mock('@/lib/serverEmail', () => ({
+  sendEmail: (...a: unknown[]) => sendEmail(...a),
+  siteOrigin: () => 'https://getcamino.app',
+}));
 vi.mock('@/lib/sentryServer', () => ({ captureServerError: (...a: unknown[]) => captureServerError(...a) }));
 vi.mock('@/lib/apiGuard', () => ({
   volumeGuard: (...a: unknown[]) => volumeGuard(...a),
   corsPreflight: () => new Response(null, { status: 204 }),
 }));
+// C2b gate mocked to pass by default so these tests exercise the route's own logic; one test
+// below flips it to a 401 to prove it runs first.
+vi.mock('@/lib/session', () => ({ sessionGate: (...a: unknown[]) => sessionGate(...a) }));
 
 import { POST } from '../app/api/feedback+api';
 
@@ -28,6 +35,7 @@ beforeEach(() => {
   vi.stubEnv('EXPO_PUBLIC_ENV', 'production');
   sendEmail.mockResolvedValue(undefined);
   volumeGuard.mockResolvedValue(null); // fail-open default, like the real guard
+  sessionGate.mockResolvedValue(null); // gate passes by default
 });
 
 describe('POST /api/feedback', () => {
@@ -55,6 +63,19 @@ describe('POST /api/feedback', () => {
     expect(payload.html).toContain('the drawer won’t scroll');
   });
 
+  it('C9a: auto-acks the sender when they left a valid email — never the report inbox', async () => {
+    await POST(req({ message: 'a question', email: 'user@example.com' }));
+    const acks = sendEmail.mock.calls.map(c => (c[0] as { to: string }).to).filter(to => to === 'user@example.com');
+    expect(acks).toHaveLength(1);
+  });
+
+  it('C9a: no auto-ack when no (or an invalid) email is given', async () => {
+    await POST(req({ message: 'anonymous report' }));
+    await POST(req({ message: 'bad address', email: 'not-an-email' }));
+    const recipients = sendEmail.mock.calls.map(c => (c[0] as { to: string }).to);
+    expect(recipients.every(to => to === 'feedback@getcamino.app')).toBe(true);
+  });
+
   it('HTML-escapes the message (no injection into the email) and caps context fields', async () => {
     const res = await POST(req({ message: '<script>alert(1)</script>', platform: 'z'.repeat(500) }));
     expect(res.status).toBe(200);
@@ -78,7 +99,7 @@ describe('POST /api/feedback', () => {
     expect(volumeGuard).not.toHaveBeenCalled();
     await POST(req({ message: 'legit' }));
     expect(volumeGuard).toHaveBeenCalledWith('feedback', expect.anything(),
-      { ipPerMinute: 5, globalPerDay: 200 });
+      { ipPerMinute: 5, globalPerDay: 1000 }); // C9b: raised 200 → 1000
   });
 
   it('send failure → 500 + Sentry', async () => {
@@ -86,5 +107,13 @@ describe('POST /api/feedback', () => {
     const res = await POST(req({ message: 'hi' }));
     expect(res.status).toBe(500);
     expect(captureServerError).toHaveBeenCalledOnce();
+  });
+
+  it('C2b: the session gate runs FIRST — a challenge failure short-circuits before any work', async () => {
+    sessionGate.mockResolvedValue(Response.json({ error: 'challenge required' }, { status: 401 }));
+    const res = await POST(req({ message: 'hi', platform: 'web' }));
+    expect(res.status).toBe(401);
+    expect(volumeGuard).not.toHaveBeenCalled();
+    expect(sendEmail).not.toHaveBeenCalled();
   });
 });

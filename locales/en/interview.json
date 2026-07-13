@@ -5,7 +5,7 @@
     "sub": "Moving to Spain is a hundred small steps — visas, padrón, taxes, healthcare — and they only work in the right order. I've helped others make this move, and I'll walk it with you the whole way.",
     "subQuiet": "Answer a few questions and I'll build your personal roadmap: real steps, real deadlines, nothing you don't need.",
     "start": "Let's get started",
-    "greeting": "Hola, I'm Lola. I'll build your roadmap right here as we talk — real steps, real deadlines, nothing you don't need.",
+    "greeting": "Hola, I'm Lola, an AI assistant. I'll walk you through a few quick questions and build your roadmap right here as we talk — real steps, real deadlines, nothing you don't need. This is helpful guidance, not legal advice.",
     "fromGuide": "I see you've been reading about {{guide}} — your roadmap will cover that and everything around it.",
     "welcomeBack": "Welcome back — your roadmap is {{pct}}% complete. Let's pick up where we left off."
   },
@@ -42,7 +42,7 @@
     "partner_is_married": "Spain treats registered relationships differently for family paperwork. Is yours legally registered? A marriage or civil partnership both count.",
     "has_children": "Kids bring school enrollment into the plan. Any children coming with you?",
     "intends_long_stay": "How much of the year you'll spend here changes your tax picture and which registrations apply. Will you be in Spain more than six months a year?",
-    "arrival_date": "Very exciting — moving to Spain! Let's start with the most important question: when are you planning to arrive? A rough month is all I need — it anchors every deadline on your roadmap.",
+    "arrival_date": "Let's start with the most important question: when are you planning to arrive? A rough month is all I need — it anchors every deadline on your roadmap.",
     "has_spanish_address": "Now, where will you land? An address unlocks the town-hall registration — the padrón — and buying brings its own cluster of steps. What's your housing plan?",
     "owns_or_drives": "Driving here can mean exchanging your licence — or a Spanish exam — depending on your country. Will anyone in the household be driving?",
     "owns_property_in_spain": "Property brings its own cluster of steps — notary, registry, taxes. Do you own — or plan to buy — property in Spain?",
@@ -53,7 +53,8 @@
     "property_purchase": "The purchase date anchors the notary, registry and tax deadlines. Roughly when did (or will) it complete? A month is enough.",
     "wants_citizenship": "This decides whether we plan the full citizenship track, or just keep your residence renewals tidy. Longer term, are you hoping to become a Spanish citizen?",
     "non_eu_family_member": "One more on passports — is anyone making this move relying on a passport that isn’t EU or Spanish? They’ll have their own residence step.",
-    "has_spanish_company": "One company question — is your business (or will it become) a Spanish company? Owners who keep a foreign company skip Spain’s corporate filings entirely."
+    "has_spanish_company": "One company question — is your business (or will it become) a Spanish company? Owners who keep a foreign company skip Spain’s corporate filings entirely.",
+    "children_count": "How many children are moving with you?"
   },
   "chips": {
     "yes": "Yes",
@@ -102,6 +103,12 @@
       "bought": "I own a home in Spain",
       "will_buy": "Planning to buy",
       "nothing": "Nothing arranged yet"
+    },
+    "children_count": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4+": "4 or more"
     }
   },
   "roadmap": {
@@ -126,6 +133,14 @@
     "question": "One last thing — is there anything else about your move you think I should know? It may shape your roadmap. Or skip straight to it.",
     "skip": "Skip — show my roadmap",
     "ack": "Got it — I've saved that with your plan. That's everything I need.",
-    "countdown": "Getting your roadmap ready — {{n}}…"
+    "countdown": "Getting your roadmap ready — {{n}}…",
+    "noteHint": "No need to share health or criminal-record details here — Lola doesn't need them, and whatever you write is saved with your plan."
+  },
+  "stakes": {
+    "incomeShortNlv": "Noted — one heads-up: that's below the {{amount}}/yr the non-lucrative visa expects for a household your size. Your roadmap flags this so you can plan for it.",
+    "incomeShortDnv": "Noted — one heads-up: that's below the {{amount}}/yr the digital-nomad visa expects for a household your size. Your roadmap flags this so you can plan for it.",
+    "incomeNoted": "Noted, thank you.",
+    "cantAssess": "I've saved your note with your plan. One honest thing: I can't assess personal cases like this — that's a question for your consulate or an immigration lawyer.",
+    "guideCriminal": "Your roadmap includes the criminal-record background-check step, with its official source and what to prepare."
   }
 }

@@ -92,5 +92,15 @@
     "sourcePrefix": "Fuente oficial: ",
     "footerHonesty": "Las fechas estimadas se afinan cuando se confirman fechas reales; los pasos sin fecha empiezan cuando ocurre su hito — Get Camino nunca inventa un plazo.",
     "footerMade": "Hecho con Get Camino (getcamino.app). Solo orientación — no es asesoramiento legal ni fiscal; un gestor firma los papeles."
+  },
+  "feedbackAck": {
+    "subject": "Hemos recibido tu mensaje — Get Camino",
+    "thanks": "Gracias — tu mensaje me ha llegado.",
+    "reply": "Get Camino lo construye y responde una sola persona, así que una respuesta suele tardar unos cuatro o cinco días. Si algo corre prisa, la página de cita previa de tu consulado es la vía más rápida — no puedo ayudar con casos urgentes.",
+    "meantime": "Mientras tanto, quizá esto ya tenga tu respuesta:",
+    "questionsBtn": "Preguntas frecuentes",
+    "changelogLink": "Ver qué ha cambiado últimamente →",
+    "questionsText": "Preguntas frecuentes: {{url}}",
+    "changelogText": "Qué ha cambiado últimamente: {{url}}"
   }
 }

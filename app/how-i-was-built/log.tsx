@@ -649,6 +649,26 @@ const ROWS: Row[] = [
       'The working to-do list got the same treatment as the product: everything actionable above the fold, the done history frozen below it — a tracker you have to archaeology through is a tracker you stop trusting.',
     ],
   },
+  {
+    feature: 'The trust review begins: Lola\'s endpoint, locked to its job',
+    date: '13 Jul 2026',
+    work: 'Five independent reviewers — each starting cold, from tech, legal, PR, marketing, and operations angles — went over the whole product before launch, and their findings became a fix queue. The first one shipped: the server endpoint behind Lola no longer accepts a caller-supplied instruction prompt. The app now sends only a named task — extract this answer, phrase this question, coach this step, distill this note — and the server writes the actual instructions itself, choosing the model and length limit per task. A copied link can no longer be turned into a free, general-purpose AI proxy; it can only ever run Lola\'s five real jobs. Riding the same deploy: a German homepage headline that had drifted into an awkward idiom ("Damit gehen Sie nach Hause") became the clean line it was meant to be ("Das nehmen Sie mit.").',
+    decisions: [
+      'The instructions are the security boundary: the client fills only bounded data holes (the answer text, the step title, a slot the server re-looks-up from the catalog by name), never the instructions themselves — so a stolen endpoint stays inside Lola\'s guardrails.',
+      'An outside review is worth its discomfort: the sharpest findings were the ones the people closest to the code had stopped seeing. The whole queue is being worked in order, hardest-first.',
+      'The prompts moved to one server-side module with a test that pins them to the app\'s five real tasks — the same file the language directive is single-sourced against, so the lockdown can\'t silently drift.',
+    ],
+  },
+  {
+    feature: 'The trust review, fully worked: the whole fix queue cleared',
+    date: '13 Jul 2026',
+    work: 'Every fix the five-seat review raised is now done. Lola stops contradicting the roadmap: one shared validator guards every place the AI can touch your profile, the income question is answered by the engine itself (so a band the plan is about to flag never gets praised), a personal-case question in the final note gets an honest "I can\'t assess that — that\'s for a consulate or a lawyer" instead of a bland "got it," and the opening bubble states plainly that Lola is an AI and this is guidance, not legal advice. The AI endpoint got a Cloudflare human-check (solve once, a short-lived token covers the interview) and a budget-drain alarm. Penalty steps like the Modelo 720 foreign-asset declaration are now kept — flagged "may apply" — when you\'d rather not say, instead of silently vanishing. Share links carry your answers in the URL fragment, which never reaches a server. The national legal figures (the €28,800 income floor and friends) live in one registry, with a test that the prose can\'t drift from it. The income threshold counts your real number of dependents. The privacy policy gained lawful-basis, data-transfer and retention detail. And the home page now shows one real, cited, dated step instead of four abstract trust badges.',
+    decisions: [
+      'Honesty is a property you can test: nearly every fix shipped with a regression — a garbage profile edit rejected field-by-field, a below-threshold income band that must warn, a declined-assets profile that must still surface Modelo 720, the legal figures that must match their prose.',
+      'The paper caught up to the engineering: lawful bases, US-transfer mechanisms (Data Privacy Framework / SCCs) and concrete retention periods are now written down — the trust the code earns, the policy no longer undersells.',
+      'Show, don\'t tell: the strongest trust signal isn\'t a badge that says "sourced," it\'s the actual NIE step with its government domain and verified date, pulled live from the catalog so it can never go stale.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

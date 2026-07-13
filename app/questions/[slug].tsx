@@ -19,7 +19,32 @@ export function generateStaticParams(): Record<string, string>[] {
 export default function QuestionPage() {
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
-  const q = questionBySlug.get(typeof slug === 'string' ? slug : '') ?? QUESTIONS[0];
+  const q = questionBySlug.get(typeof slug === 'string' ? slug : '');
+
+  // C10a: an unknown slug must NOT silently render the first question — /questions/modelo-720
+  // (a guide id, not a question slug) was showing the generic "Do I need a visa?" answer.
+  // Friendly, noindexed dead-end pointing back to the real list.
+  if (!q) {
+    return (
+      <ScrollView style={styles.flex}>
+        <Seo noindex title="Question not found | Get Camino"
+          description="Browse Get Camino's common questions about moving to Spain."
+          canonical="https://getcamino.app/questions" />
+        <NavBar />
+        <View style={styles.column}>
+          <Text style={styles.eyebrow}>MOVING TO SPAIN · QUESTIONS</Text>
+          <Text style={styles.title} accessibilityRole="header">We don't have that one — yet.</Text>
+          <Text style={styles.p}>
+            That page isn't one of our answers. Browse the questions we do cover, or build your own
+            personal roadmap for the real, sourced version.
+          </Text>
+          <Link href="/questions" style={styles.backLink}>All questions →</Link>
+        </View>
+        <Footer />
+      </ScrollView>
+    );
+  }
+
   const related = q.related.map(id => guideById.get(id)).filter(Boolean);
 
   const jsonLd = {

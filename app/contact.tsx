@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 import { useAuth } from '@/core/AuthContext';
 import { capture } from '@/lib/analytics';
+import { getSessionToken } from '@/lib/turnstile';
+import { currentLang } from '@/lib/i18n';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import Seo from '@/components/Seo';
@@ -51,13 +53,16 @@ export default function Contact() {
     if (!text.trim() || busy) return;
     setBusy(true); setErr(null);
     try {
+      // C2b: attach the Turnstile-derived session token on web (solved invisibly, cached).
+      const session = await getSessionToken();
       const request = fetch(`${API_BASE}/api/feedback`, {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', ...(session ? { 'x-camino-session': session } : {}) },
         body: JSON.stringify({
           message: text.trim(),
           topic,
           email: email.trim(),
+          lang: currentLang(), // C9a: the auto-ack email follows the app language
           platform: Platform.OS,
           // nativeBuildVersion reads the built Info.plist / versionCode (EAS remote
           // versioning never writes buildNumber into expoConfig); null on web.

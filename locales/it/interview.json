@@ -5,7 +5,7 @@
     "sub": "Trasferirsi in Spagna sono cento piccoli passi — visti, padrón, tasse, sanità — e funzionano solo nell’ordine giusto. Ho aiutato altre persone a fare questo salto, e farò la strada con te dall’inizio alla fine.",
     "subQuiet": "Rispondi a qualche domanda e costruisco la tua roadmap personale: passi veri, scadenze vere, niente che non ti serva.",
     "start": "Cominciamo",
-    "greeting": "Ciao, sono Lola. Costruirò la tua roadmap proprio qui mentre parliamo: passi reali, scadenze reali, niente di superfluo.",
+    "greeting": "Ciao, sono Lola, un'assistente IA. Ti farò qualche domanda veloce e costruirò la tua tabella di marcia proprio qui mentre parliamo: passi reali, scadenze reali, niente di superfluo. È un orientamento utile, non consulenza legale.",
     "fromGuide": "Vedo che ti stavi informando su {{guide}} — la tua roadmap coprirà quello e tutto ciò che gli sta intorno.",
     "welcomeBack": "Bentornato — la tua roadmap è al {{pct}}%. Riprendiamo da dove eravamo."
   },
@@ -42,7 +42,7 @@
     "partner_is_married": "La Spagna tratta diversamente le relazioni registrate nelle pratiche familiari. La vostra è registrata legalmente? Valgono sia il matrimonio sia l'unione civile.",
     "has_children": "I bambini portano l'iscrizione a scuola nel piano. Vengono bambini con te?",
     "intends_long_stay": "Quanta parte dell'anno passerai qui cambia il tuo quadro fiscale e quali registrazioni servono. Starai in Spagna più di sei mesi all'anno?",
-    "arrival_date": "Che emozione trasferirsi in Spagna! Partiamo dalla domanda più importante: quando pensi di arrivare? Mi basta un mese indicativo — àncora tutte le scadenze della tua roadmap.",
+    "arrival_date": "Iniziamo dalla domanda più importante: quando prevedi di arrivare? Mi basta un mese approssimativo — è ciò che ancora ogni scadenza della tua tabella di marcia.",
     "has_spanish_address": "E ora, dove atterrerai? Un indirizzo sblocca l'iscrizione in comune — il padrón — e comprare porta il suo blocco di passi. Qual è il tuo piano casa?",
     "owns_or_drives": "Guidare qui può voler dire convertire la patente — o un esame spagnolo — a seconda del paese. Qualcuno in famiglia guiderà?",
     "owns_property_in_spain": "Un immobile porta il suo blocco di passi — notaio, registro, tasse. Possiedi — o pensi di comprare — un immobile in Spagna?",
@@ -53,7 +53,8 @@
     "property_purchase": "La data d'acquisto àncora le scadenze di notaio, registro e tasse. Più o meno quando si è conclusa (o si concluderà)? Basta il mese.",
     "wants_citizenship": "Questo decide se pianifichiamo il percorso completo verso la cittadinanza o solo i rinnovi della residenza. A lungo termine, vorresti diventare cittadino spagnolo?",
     "non_eu_family_member": "Un’altra sui passaporti — qualcuno che si trasferisce conta su un passaporto né UE né spagnolo? Avrà il suo passaggio di residenza dedicato.",
-    "has_spanish_company": "Una domanda sull’azienda — la tua impresa è (o diventerà) una società spagnola? Chi tiene la società all’estero salta del tutto le dichiarazioni societarie spagnole."
+    "has_spanish_company": "Una domanda sull’azienda — la tua impresa è (o diventerà) una società spagnola? Chi tiene la società all’estero salta del tutto le dichiarazioni societarie spagnole.",
+    "children_count": "Quanti figli si trasferiscono con te?"
   },
   "chips": {
     "yes": "Sì",
@@ -102,6 +103,12 @@
       "bought": "Ho una casa in Spagna",
       "will_buy": "Penso di comprare",
       "nothing": "Ancora niente di fissato"
+    },
+    "children_count": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4+": "4 o più"
     }
   },
   "roadmap": {
@@ -126,6 +133,14 @@
     "question": "Un'ultima cosa — c'è altro sul tuo trasferimento che dovrei sapere? Può affinare la tua roadmap. Oppure salta e vai diretto.",
     "skip": "Salta — vedi la mia roadmap",
     "ack": "Annotato — lo conservo con il tuo piano. Ho tutto quello che mi serve.",
-    "countdown": "Preparo la tua roadmap — {{n}}…"
+    "countdown": "Preparo la tua roadmap — {{n}}…",
+    "noteHint": "Non serve condividere dati sanitari o penali qui — Lola non ne ha bisogno, e ciò che scrivi viene salvato con il tuo piano."
+  },
+  "stakes": {
+    "incomeShortNlv": "Annotato — un avviso: è sotto i {{amount}}/anno che il visto non lucrativo richiede per un nucleo delle tue dimensioni. La tua tabella di marcia lo segnala così puoi pianificarlo.",
+    "incomeShortDnv": "Annotato — un avviso: è sotto i {{amount}}/anno che il visto per nomadi digitali richiede per un nucleo delle tue dimensioni. La tua tabella di marcia lo segnala così puoi pianificarlo.",
+    "incomeNoted": "Annotato, grazie.",
+    "cantAssess": "Ho salvato la tua nota insieme al tuo piano. In tutta onestà: non posso valutare casi personali come questo — è una domanda per il tuo consolato o un avvocato per l'immigrazione.",
+    "guideCriminal": "La tua tabella di marcia include il passaggio del certificato penale, con la sua fonte ufficiale e cosa preparare."
   }
 }

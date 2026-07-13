@@ -8,7 +8,7 @@
  * At L1, extend with a per-locale snapshot (same fixtures, locale es) — see docs/LOCALIZATION.md.
  */
 import { describe, it, expect } from 'vitest';
-import { welcomeEmail, roundupEmail, nudgeEmail, unsubFooter } from '../lib/emailTemplates';
+import { welcomeEmail, roundupEmail, nudgeEmail, unsubFooter, feedbackAckEmail } from '../lib/emailTemplates';
 import { reportHtml } from '../lib/reportHtml';
 import type { Digest } from '../core/email-digest';
 import type { Objective } from '../core/engine-controller';
@@ -55,6 +55,10 @@ describe('email templates render exactly (localization guard)', () => {
   it('interview nudge', () => {
     expect(nudgeEmail({ interviewUrl: INTERVIEW_URL, unsubHtml: UNSUB })).toMatchSnapshot();
   });
+
+  it('feedback ack (C9a)', () => {
+    expect(feedbackAckEmail({ questionsUrl: 'https://getcamino.app/questions', changelogUrl: 'https://getcamino.app/changelog' })).toMatchSnapshot();
+  });
 });
 
 // es twins (L1): same fixtures, lang 'es' — the digest fixture carries es labels the way
@@ -79,6 +83,10 @@ describe('email templates render exactly — es (L1)', () => {
 
   it('interview nudge (es)', () => {
     expect(nudgeEmail({ interviewUrl: INTERVIEW_URL, unsubHtml: UNSUB, lang: 'es' })).toMatchSnapshot();
+  });
+
+  it('feedback ack (es)', () => {
+    expect(feedbackAckEmail({ questionsUrl: 'https://getcamino.app/questions', changelogUrl: 'https://getcamino.app/changelog', lang: 'es' })).toMatchSnapshot();
   });
 });
 

@@ -54,9 +54,11 @@ describe('share link codec', () => {
     expect(decodeShare(arr)).toBeNull();
   });
 
-  it('shareUrl points at /shared with the payload', () => {
+  it('shareUrl points at /shared with the payload in the # fragment (C4 — never sent to the server)', () => {
     const url = shareUrl('https://getcamino.app', PROFILE);
-    expect(url.startsWith('https://getcamino.app/shared?d=')).toBe(true);
-    expect(decodeShare(new URL(url).searchParams.get('d'))).toEqual(PROFILE);
+    expect(url.startsWith('https://getcamino.app/shared#d=')).toBe(true);
+    expect(new URL(url).search).toBe(''); // nothing in the query string
+    const hash = new URL(url).hash.replace(/^#/, '');
+    expect(decodeShare(new URLSearchParams(hash).get('d'))).toEqual(PROFILE);
   });
 });

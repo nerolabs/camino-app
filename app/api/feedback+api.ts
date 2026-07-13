@@ -5,18 +5,23 @@
  * short payloads only, and the recipient is hardcoded — the caller can never choose
  * where it goes.
  */
-import { sendEmail } from '@/lib/serverEmail';
+import { sendEmail, siteOrigin } from '@/lib/serverEmail';
+import { feedbackAckEmail } from '@/lib/emailTemplates';
+import { resolveEmailLang, type EmailLang } from '@/lib/serverLocale';
 import { captureServerError } from '@/lib/sentryServer';
 import { corsPreflight, volumeGuard } from '@/lib/apiGuard';
+import { sessionGate } from '@/lib/session';
 
 const TEAM_INBOX = 'feedback@getcamino.app';
 const MAX_MESSAGE = 2000;
 const MAX_FIELD = 200;
 // Volume limits (fresh-eyes 2026-07-12: this route had payload caps but unlimited volume —
 // an abuser could flood the team inbox / burn Resend quota). A human files at most a few
-// reports; the global cap bounds a distributed flood at nuisance level.
+// reports; the global cap bounds a distributed flood at nuisance level. C9b: raised 200 → 1000
+// (the C2c budget-drain alert pages on the 429 cliff, so a real spike is noticed, not swallowed).
 const IP_PER_MINUTE = Number(process.env.FEEDBACK_IP_PER_MINUTE ?? 5);
-const GLOBAL_PER_DAY = Number(process.env.FEEDBACK_GLOBAL_PER_DAY ?? 200);
+const GLOBAL_PER_DAY = Number(process.env.FEEDBACK_GLOBAL_PER_DAY ?? 1000);
+const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
 // Strict CORS (same posture as /api/lola): handling OPTIONS ourselves opts out of the
 // platform's permissive default. Same-origin web and native are never preflighted.
@@ -28,6 +33,11 @@ const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 export async function POST(request: Request): Promise<Response> {
+  // C2b: require a valid Turnstile-derived session token where configured (covers the inbox-flood
+  // vector the same way as /api/lola). Native rides its app-side counters as before.
+  const gated = await sessionGate(request);
+  if (gated) return gated;
+
   let body: Record<string, unknown>;
   try {
     body = (await request.json()) as Record<string, unknown>;
@@ -73,6 +83,17 @@ export async function POST(request: Request): Promise<Response> {
       </div>`,
       text: `${message}\n\n—\nFrom: ${ctx.email || '—'}\nPlatform: ${ctx.platform || '—'} · Version: ${ctx.version || '—'} · Route: ${ctx.route || '—'} · Env: ${ctx.env}`,
     });
+
+    // C9a: acknowledge the sender if they left a usable address. Fire-and-forget — a failed ack
+    // must never fail the report itself, and it's bounded by the same volume caps above.
+    if (EMAIL_RE.test(ctx.email)) {
+      const lang: EmailLang = resolveEmailLang(typeof body.lang === 'string' ? { lang: body.lang } : null);
+      const origin = siteOrigin(request);
+      const ack = feedbackAckEmail({ questionsUrl: `${origin}/questions`, changelogUrl: `${origin}/changelog`, lang });
+      sendEmail({ to: ctx.email, subject: ack.subject, html: ack.html, text: ack.text })
+        .catch(e => captureServerError(e, { route: 'feedback', method: 'ack' }));
+    }
+
     return Response.json({ ok: true });
   } catch (e) {
     captureServerError(e, { route: 'feedback' });
