@@ -109,6 +109,8 @@ export default function NavBar() {
             <MenuLink label={t('nav.menu.reportProblem')} onPress={() => go('/contact?topic=problem')} />
             {user && (
               <>
+                {/* Phase 6 #27: the consolidated account home (email prefs + language + delete). */}
+                <MenuLink label={t('nav.menu.account')} onPress={() => go('/account')} />
                 <MenuLink label={t('nav.menu.signOut')} onPress={() => { setMenuOpen(false); signOut(); }} />
                 {/* Apple 5.1.1(v): account deletion must be reachable in-app. Quiet, but here. */}
                 <MenuLink label={t('nav.menu.deleteAccount')} onPress={() => { setMenuOpen(false); setDeleteOpen(true); }} />

@@ -1,6 +1,6 @@
 # THESIS.md — Camino's design thesis & invariants
 
-The canonical design memory for Camino: what it is, the thesis, and the four invariants
+The canonical design memory for Camino: what it is, the thesis, and the five invariants
 you must not break. This was folded in from the original `nerolabs/camino` seed repo
 (now archived) so the app has a single source of truth.
 
@@ -19,7 +19,7 @@ Don't model *journeys* — they're infinite. Model *obligations* — finite, ~10
 units whose combinations generate the 10,000 journeys for free. The catalog is content;
 the engine is small and fixed.
 
-## The four pieces and their invariants
+## The four pieces and their invariants (plus the cross-cutting migration invariant)
 
 These invariants are the whole design. Preserve them. If a change would break one, stop
 and flag it rather than working around it.
@@ -52,6 +52,18 @@ and flag it rather than working around it.
 
 4. **The report (`design/report-prototype.html`).** A pure function of the plan. Honesty as
    UI: one hero step, estimated vs firm dates, dateless pending steps.
+
+5. **The migration invariant — a replan never requires a new interview** (council directive
+   2026-07-13). A catalog/engine change must honor every profile a user already saved.
+   - `nextSlot()` only ever asks a slot that is **unanswered** *and* (conditionally) required —
+     so a completed profile is done, and re-planning it (running `derive` + `buildPlan` again,
+     even after the catalog changed) surfaces **no** new questions of its own.
+   - A new slot ships with **safe unknown-handling** so old profiles still plan correctly
+     without it (the C3 penalty rule — include-with-conditional-copy when a gate is unknown — is
+     the pattern; `derive`/`buildPlan` must never require a field a saved profile lacks).
+   - When new info is *genuinely* required, the interview runs as a **delta**: `nextSlot` asks
+     only the missing slot(s), never re-asking what's already answered. Pinned by
+     `tests/migration-invariant.test.ts`.
 
 ## Where AI runs — and where it must not
 

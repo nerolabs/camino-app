@@ -15,7 +15,8 @@
       "reportProblem": "Problem melden",
       "language": "Sprache",
       "signOut": "Abmelden",
-      "deleteAccount": "Konto löschen"
+      "deleteAccount": "Konto löschen",
+      "account": "Mein Konto"
     }
   },
   "language": {
@@ -192,5 +193,15 @@
     "thanksSub": "Wir lesen jede Nachricht. Wenn du eine E-Mail hinterlassen hast, melden wir uns.",
     "again": "Noch eine Nachricht senden",
     "errSend": "Das Senden ist fehlgeschlagen — versuch es noch einmal."
+  },
+  "account": {
+    "title": "Mein Konto",
+    "signedOut": "Melde dich an, um deine E-Mail-Einstellungen, die Sprache und dein Konto zu verwalten.",
+    "email": "E-Mail",
+    "emailPrefsH": "E-Mail-Einstellungen",
+    "roundup": "Wöchentliche Zusammenfassung per E-Mail",
+    "roundupHint": "Eine kurze wöchentliche Notiz — was überfällig ist und was ansteht. Nie mehr als eine Handvoll Aufgaben.",
+    "languageH": "Sprache",
+    "accountH": "Konto"
   }
 }

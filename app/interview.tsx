@@ -862,6 +862,19 @@ export default function InterviewScreen() {
 
           {!done && ((!slotUsesChips(currentSlot) && currentSlot?.input !== 'typeahead') || otherActive) && (
             <View>
+              {/* Arrival-date quick chips: tap a common timeframe instead of typing. Each submits
+                  its localized phrase through the same language-agnostic extractor (so "next year"
+                  resolves to a real anchor date); the composer stays for a specific month. */}
+              {currentSlot?.field === 'arrival_date' && !otherActive && (
+                <View style={styles.chipsWrap}>
+                  {(['few', 'later', 'next'] as const).map(k => (
+                    <TouchableOpacity key={k} style={styles.chip} disabled={loading}
+                      onPress={() => submitFreeText(t(`arrivalChips.${k}`))} accessibilityRole="button">
+                      <Text style={styles.chipText}>{t(`arrivalChips.${k}`)}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
               {otherActive && (
                 <TouchableOpacity
                   style={styles.otherBack}

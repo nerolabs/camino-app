@@ -127,7 +127,8 @@
     "removed_other": "−{{count}} étapes — plus simple pour toi",
     "removedShort_one": "−{{count}}",
     "removedShort_other": "−{{count}}",
-    "emptyEu": "Bonne nouvelle — avec un passeport de l’UE, aucun dossier de visa à ajouter. Tes étapes apparaîtront à mesure que ton calendrier et ta situation se précisent."
+    "emptyEu": "Bonne nouvelle — avec un passeport de l’UE, aucun dossier de visa à ajouter. Tes étapes apparaîtront à mesure que ton calendrier et ta situation se précisent.",
+    "partnerScope": "Une feuille de route par demandeur principal — si ton ou ta partenaire travaille aussi, il ou elle fait son propre court entretien."
   },
   "final": {
     "question": "Une dernière chose — y a-t-il autre chose sur votre projet que je devrais savoir ? Cela peut affiner votre feuille de route. Ou passez directement.",
@@ -142,5 +143,10 @@
     "incomeNoted": "Noté, merci.",
     "cantAssess": "J'ai enregistré ta note avec ton plan. En toute honnêteté : je ne peux pas évaluer des cas personnels comme celui-ci — c'est une question pour ton consulat ou un avocat en droit des étrangers.",
     "guideCriminal": "Ta feuille de route inclut l'étape du casier judiciaire, avec sa source officielle et ce qu'il faut préparer."
+  },
+  "arrivalChips": {
+    "few": "Dans quelques mois",
+    "later": "Plus tard cette année",
+    "next": "L'année prochaine"
   }
 }

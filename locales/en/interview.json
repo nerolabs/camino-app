@@ -127,7 +127,8 @@
     "removed_other": "−{{count}} steps — simpler for you",
     "removedShort_one": "−{{count}}",
     "removedShort_other": "−{{count}}",
-    "emptyEu": "Good news — with an EU passport there’s no visa paperwork to add. Your steps appear as we pin down your timing and situation."
+    "emptyEu": "Good news — with an EU passport there’s no visa paperwork to add. Your steps appear as we pin down your timing and situation.",
+    "partnerScope": "One roadmap per main applicant — if your partner is also working, they run their own quick interview."
   },
   "final": {
     "question": "One last thing — is there anything else about your move you think I should know? It may shape your roadmap. Or skip straight to it.",
@@ -142,5 +143,10 @@
     "incomeNoted": "Noted, thank you.",
     "cantAssess": "I've saved your note with your plan. One honest thing: I can't assess personal cases like this — that's a question for your consulate or an immigration lawyer.",
     "guideCriminal": "Your roadmap includes the criminal-record background-check step, with its official source and what to prepare."
+  },
+  "arrivalChips": {
+    "few": "In a few months",
+    "later": "Later this year",
+    "next": "Next year"
   }
 }

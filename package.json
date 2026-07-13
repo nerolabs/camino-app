@@ -11,6 +11,7 @@
     "deploy:production": "bash scripts/deploy.sh production",
     "audit": "npx tsx scripts/audit-catalog.ts",
     "audit:matrix": "npx tsx scripts/audit-matrix.ts",
+    "freshness": "npx tsx scripts/freshness-check.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

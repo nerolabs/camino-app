@@ -49,6 +49,12 @@ export default function RoadmapPane({
         </Text>
       </View>
 
+      {/* C8 interview twin: once a partner is in the picture, say plainly this maps the primary
+          applicant — a working partner runs their own quick interview (share links make it cheap). */}
+      {profile.has_spouse_or_partner === true && (
+        <Text style={styles.partnerScope}>{t('roadmap.partnerScope')}</Text>
+      )}
+
       {plan.length === 0 ? (
         <View style={styles.empty}>
           {/* EU passports legitimately zero out the early adders (no visa cluster, no NIE) —
@@ -78,6 +84,7 @@ const styles = StyleSheet.create({
   header:    { paddingHorizontal: 22, paddingTop: 22, paddingBottom: 14, borderBottomWidth: 1, borderBottomColor: '#EFEAE2' },
   title:     { fontFamily: 'Fraunces_600SemiBold', fontSize: 20, color: palette.indigo },
   meta:      { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.muted, marginTop: 4 },
+  partnerScope: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 12, lineHeight: 17, color: palette.muted, paddingHorizontal: 22, paddingTop: 12, fontStyle: 'italic' },
   empty:     { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32 },
   emptyText: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 14, color: palette.muted, textAlign: 'center', lineHeight: 21, maxWidth: 260 },
   list:        { flex: 1 },

@@ -669,6 +669,16 @@ const ROWS: Row[] = [
       'Show, don\'t tell: the strongest trust signal isn\'t a badge that says "sourced," it\'s the actual NIE step with its government domain and verified date, pulled live from the catalog so it can never go stale.',
     ],
   },
+  {
+    feature: 'Pre-launch polish: an account page, a faster arrival question, and a freshness robot',
+    date: '13 Jul 2026',
+    work: 'A batch of polish before the next mobile build. A proper "My account" page pulls email preferences (turn the weekly roundup on or off), language, and account deletion out of the hamburger menu into one clear place. The interview\'s first question got quick chips — "In a few months," "Later this year," "Next year" — so you can tap a timeframe instead of typing one, with the composer still there for a specific month. The household-scope note ("this maps the main applicant; a working partner runs their own quick interview") now shows in the interview too, not just on the finished roadmap. And a monthly "freshness" robot checks every dated official fact against a staleness deadline and pings every government source URL — so the "last verified" stamps stay honest because a machine makes us keep them.',
+    decisions: [
+      'The remembering is the machine\'s job: the freshness check fails (and emails) when any statutory figure is past its ~180-day re-verify window or a source URL stops resolving. The human still re-verifies — but nothing rots silently behind a stamp that says otherwise.',
+      'A fifth invariant, written down and tested: a catalog change must honor every saved profile, so a replan never triggers a new interview; when new information is genuinely needed, the interview asks only the missing question, never the ones already answered.',
+      'The arrival chips reuse the proven date extractor instead of mapping to fixed dates in the app — which would have collided ("in six months" and "next year" landing on the same month depending on today\'s date).',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

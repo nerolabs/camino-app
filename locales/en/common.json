@@ -15,7 +15,8 @@
       "reportProblem": "Report a problem",
       "language": "Language",
       "signOut": "Sign out",
-      "deleteAccount": "Delete my account"
+      "deleteAccount": "Delete my account",
+      "account": "My account"
     }
   },
   "language": {
@@ -192,5 +193,15 @@
     "thanksSub": "We read every message. If you left an email, we'll get back to you.",
     "again": "Send another message",
     "errSend": "That didn’t go through — please try again."
+  },
+  "account": {
+    "title": "My account",
+    "signedOut": "Sign in to manage your email preferences, language, and account.",
+    "email": "Email",
+    "emailPrefsH": "Email preferences",
+    "roundup": "Weekly roundup email",
+    "roundupHint": "A short weekly note — what's overdue and what's coming up. Never more than a handful of tasks.",
+    "languageH": "Language",
+    "accountH": "Account"
   }
 }

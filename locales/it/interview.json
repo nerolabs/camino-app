@@ -127,7 +127,8 @@
     "removed_other": "−{{count}} passi — più semplice per te",
     "removedShort_one": "−{{count}}",
     "removedShort_other": "−{{count}}",
-    "emptyEu": "Buone notizie — con un passaporto UE non c’è burocrazia di visto da aggiungere. I tuoi passi appariranno man mano che tempi e situazione si definiscono."
+    "emptyEu": "Buone notizie — con un passaporto UE non c’è burocrazia di visto da aggiungere. I tuoi passi appariranno man mano che tempi e situazione si definiscono.",
+    "partnerScope": "Una tabella di marcia per richiedente principale — se anche il tuo o la tua partner lavora, fa la propria breve intervista."
   },
   "final": {
     "question": "Un'ultima cosa — c'è altro sul tuo trasferimento che dovrei sapere? Può affinare la tua roadmap. Oppure salta e vai diretto.",
@@ -142,5 +143,10 @@
     "incomeNoted": "Annotato, grazie.",
     "cantAssess": "Ho salvato la tua nota insieme al tuo piano. In tutta onestà: non posso valutare casi personali come questo — è una domanda per il tuo consolato o un avvocato per l'immigrazione.",
     "guideCriminal": "La tua tabella di marcia include il passaggio del certificato penale, con la sua fonte ufficiale e cosa preparare."
+  },
+  "arrivalChips": {
+    "few": "Tra qualche mese",
+    "later": "Più avanti quest'anno",
+    "next": "L'anno prossimo"
   }
 }

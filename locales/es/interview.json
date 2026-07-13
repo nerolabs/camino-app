@@ -127,7 +127,8 @@
     "removed_other": "−{{count}} pasos — más sencillo para ti",
     "removedShort_one": "−{{count}}",
     "removedShort_other": "−{{count}}",
-    "emptyEu": "Buenas noticias — con pasaporte de la UE no hay papeleo de visado que añadir. Tus pasos aparecerán al concretar tu calendario y tu situación."
+    "emptyEu": "Buenas noticias — con pasaporte de la UE no hay papeleo de visado que añadir. Tus pasos aparecerán al concretar tu calendario y tu situación.",
+    "partnerScope": "Una hoja de ruta por solicitante principal — si tu pareja también trabaja, hace su propia entrevista rápida."
   },
   "final": {
     "question": "Una última cosa: ¿hay algo más sobre tu mudanza que deba saber? Puede afinar tu hoja de ruta. O sáltatelo y ve directo a ella.",
@@ -142,5 +143,10 @@
     "incomeNoted": "Anotado, gracias.",
     "cantAssess": "He guardado tu nota con tu plan. Con honestidad: no puedo valorar casos personales como este — es una consulta para tu consulado o un abogado de extranjería.",
     "guideCriminal": "Tu hoja de ruta incluye el paso del certificado de antecedentes penales, con su fuente oficial y qué preparar."
+  },
+  "arrivalChips": {
+    "few": "En unos meses",
+    "later": "Más adelante este año",
+    "next": "El año que viene"
   }
 }

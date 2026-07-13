@@ -15,7 +15,8 @@
       "reportProblem": "Informar de un problema",
       "language": "Idioma",
       "signOut": "Cerrar sesión",
-      "deleteAccount": "Eliminar mi cuenta"
+      "deleteAccount": "Eliminar mi cuenta",
+      "account": "Mi cuenta"
     }
   },
   "language": {
@@ -192,5 +193,15 @@
     "thanksSub": "Leemos todos los mensajes. Si dejaste un correo, te responderemos.",
     "again": "Enviar otro mensaje",
     "errSend": "No se ha enviado — inténtalo otra vez."
+  },
+  "account": {
+    "title": "Mi cuenta",
+    "signedOut": "Inicia sesión para gestionar tus preferencias de correo, el idioma y tu cuenta.",
+    "email": "Correo",
+    "emailPrefsH": "Preferencias de correo",
+    "roundup": "Resumen semanal por correo",
+    "roundupHint": "Una nota semanal breve — qué está vencido y qué se acerca. Nunca más de unas pocas tareas.",
+    "languageH": "Idioma",
+    "accountH": "Cuenta"
   }
 }

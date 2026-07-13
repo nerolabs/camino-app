@@ -1,0 +1,23 @@
+# Freshness alarm (🔁 freshness beat): monthly, checks every dated official fact against its
+# class SLO and HTTP-checks every source_url. A failure = something needs re-verifying at the
+# source; GitHub emails the repo owner on a failed run, and the run log carries the checklist.
+# The human work (re-verifying) stays human — the REMEMBERING is the machine's job.
+name: Freshness
+
+on:
+  schedule:
+    - cron: '0 9 1 * *'   # 09:00 UTC on the 1st of every month
+  workflow_dispatch:
+
+jobs:
+  freshness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # Stamps + live link checks. Non-zero exit (stale stamp or dead URL) fails the job → email.
+      - run: npm run freshness

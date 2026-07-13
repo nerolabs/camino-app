@@ -33,6 +33,35 @@ backlog (catalog 63→73), and five+ production web deploys — all E2E-gated.
       `SUPABASE_SERVICE_ROLE_KEY` appears only as `process.env` reads in API routes). Supabase
       URL/anon key remain the only `EXPO_PUBLIC_` values (public-safe under RLS).
 
+## 🔨 BUILD 39 GATES (user call 2026-07-13 — clear these before cutting the next native build)
+
+The council FIX queue is fully shipped to WEB (commit bf3c1e1). Build 39 carries all the
+native-visible JS from that batch. These items are gated to ride build 39 (user directive — do
+NOT cut the build until they're in, so we don't burn another build):
+
+1. [ ] **Secure mobile / native Lola — the non-spoofable exemption (BLOCKING).** Native Lola is
+       DOWN in prod since C2a (sessionGate 401s native — no Turnstile widget). Decision: exempt
+       native via **device attestation** — `@expo/app-integrity` (Apple App Attest / Google Play
+       Integrity), **zero UX impact** (silent, hardware-backed). Native attests → a session
+       endpoint verifies → mints the SAME HMAC session token → `/api/lola`. **Client turnkey**
+       via the Expo module (⚠️ alpha). **Server verification is custom** (Apple attestation +
+       Google integrity token) and needs a REAL DEVICE to test → build it WITH build 39, not
+       stubbed. **[USER setup, one-time: App Attest capability on the iOS App ID.]** Full
+       findings: chat 2026-07-13. **SCOPE (user 2026-07-13): build 39 is iOS → App Attest ONLY.
+       Play Integrity (Android) DEFERRED to the Android/Play Store track — Google Cloud account
+       not set up yet, out of scope until then.**
+2. [x] **C8 interview twin — DONE** (RoadmapPane partner-scope note ×5) — the household-scope line's lighter half in the interview (the
+       /plan header is done); shown once a partner is present.
+3. [x] **Arrival-date chips — DONE** (few/later/next → language-agnostic extractor; composer kept) (This year / Next year / …) — small interview UX; also parked as a
+       friction fix if Q1's typed+LLM turn shows lag.
+4. [x] **"My account" page — DONE** (app/account.tsx: weekly-roundup toggle + language + sign-out/delete; nav link; ×5) — email prefs + language + delete, out of the hamburger (Phase 6 #27).
+5. [x] **Freshness alarm — DONE** (scripts/freshness-check.ts + npm run freshness + monthly .github/workflows/freshness.yml; 87 facts scanned) — monthly GitHub Action that FAILS on any over-age
+       `verified_at` + HTTP-checks every `source_url`, emailing the checklist. Web/CI, not
+       native-visible — but user wants it before the build.
+6. [x] **Migration invariant — DONE** (THESIS.md #5 + tests/migration-invariant.test.ts ×3) — write into docs/THESIS.md + a test
+       formalizing that `nextSlot` asks ONLY unanswered required slots (a replan never needs a
+       new interview). Small.
+
 ## 📍 NOW (updated 2026-07-12 night — user call: ENGINE AUDIT AHEAD OF EVERYTHING)
 
 0. [x] **⭐ THE FULL ENGINE/CATALOG AUDIT — COMPLETE 2026-07-13** (incl. the sourcing +
