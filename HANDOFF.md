@@ -5,7 +5,82 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-## ⭐ RESUME HERE (2026-07-12 late night — build 38 SUBMITTED; the COUNCIL reported; user triage IN)
+## ⭐ RESUME HERE (2026-07-13 session close — THE OPUS DAY: council queue SHIPPED, build 39 LIVE with native App Attest, release candidate NEXT)
+
+**Where we are in one line: build 39 is on TestFlight and "working amazing"; native Lola is
+LIVE via App Attest; the entire council fix queue is shipped; next session's job is build 40 =
+THE App Store release candidate.** User at close: "getting harder to find bugs… like really
+hard… getting close to release candidate for app store submission!"
+
+**What this day shipped (all committed + pushed; 345 vitest · tsc clean · ~6 prod web deploys,
+each E2E-green):**
+
+1. **The council FIX queue C1–C10: COMPLETE.** C1a–f (Lola honesty: shared delta validator,
+   deterministic income ack, can't-assess handoff, AI disclosure, sensitive-data microcopy,
+   analytics scrub) · C2a–c (server-owned prompts / Turnstile sessions / budget alarm) · C3
+   (conditional penalty items — Modelo 720 never silently dropped) · C4 (share links →
+   #fragment) · C5 drafting · C6 (legal-figures registry) · C7 (children_count + matrix in CI) ·
+   C8 (household scope ×2 surfaces) · C9a/b (feedback ack + cap) · C10a–f (conversion items).
+   TODO.md's queue section carries per-item receipts.
+
+2. **Native security — the day's centerpiece.** iOS **App Attest** end-to-end: capability set
+   on the App ID (Chrome-driven), entitlement, client flow (`lib/nativeAttest.native.ts`),
+   server challenge/attest branches, and the verifier `lib/appAttest.ts`. The chicken-and-egg
+   (verifyChain needs a real attestation; real attestations need build 39) resolved exactly as
+   planned: built flag-gated-OFF → cut build 39 → captured the first real device attestation
+   via Sentry (the hosting log viewer truncates console output) → completed `verifyChain`
+   (Web-Crypto X.509: P-256 leaf ← P-384 intermediate ← pinned Apple Root SPKI) → **the real
+   vector caught a real bug** (App-Attest extension OID length byte 0x0a→0x09 — nonce
+   extraction had silently never worked) → vector committed as a fixture, +5 e2e tests →
+   deployed → user set `NATIVE_ATTESTATION_ENABLED=1` → **device-confirmed: native Lola
+   answers.** Android/Play Integrity stays deferred to the Play Store track.
+
+3. **Build-39 gates, all five:** C8 interview twin · arrival-date chips · /account page
+   (sign-out + delete moved OUT of the hamburger) · freshness alarm (monthly Action,
+   87 dated facts + URL checks) · migration invariant (#5 in THESIS.md + tests).
+
+4. **Evening device-testing fixes (from the user's build-39 shred):**
+   - **Session pre-warm** — the App-Attest/Turnstile exchange ran lazily on the FIRST
+     /api/lola call, so users FELT the gate as a pause after Q1. Now fired on interview
+     mount; the token is cached before the first answer sends.
+   - **The Workers ack bug (real find):** the C9a feedback auto-ack was fire-and-forget, and
+     the Workers runtime KILLS unawaited promises when the handler returns — acks silently
+     never sent (team inbox fine, sender got nothing; user caught it with a valid From
+     address + empty Sentry). Now awaited; +1 regression test that fails on the un-awaited
+     version. **Standing lesson (memory + TEST-COVERAGE): EAS Hosting routes must await
+     background work.**
+   - **Bold-question emphasis** — Lola bubbles bold ONLY the final question sentence
+     (`lib/lolaBubble.ts` — last `?` walked back to a sentence boundary, `¿` aware; verified
+     against the real ×5-locale arrival copy). First attempt bolded the whole paragraph —
+     user caught it; the fix is the sentence-level split. +8 tests.
+
+5. **Rulings on record today:** `/questions` staying English-only is INTENTIONAL (SEO
+   surface; the switcher no-ops there — parked with options in TODO #28, "don't jump to a
+   fix"). NavBar sign-out/delete removal → /account was a user request. Home mini-roadmap
+   now sorts by due date (soonest four).
+
+**NEXT SESSION, in order:**
+1. **Absorb tonight's remaining test findings** (user + Cristina are still testing; "really
+   hard to find bugs" — expect small ones, fix on web immediately).
+2. **Cut build 40 on user command = THE App Store release candidate** — carries the
+   session pre-warm + bold-question + anything from tonight. **e2e-ios gate first — no
+   waiver this time.** Full device pass on 40 = the submission gate.
+3. **ASC Part 3** (runbook: docs/STORE_PAPERWORK.md): trader case check → attach 40 →
+   final page read → **Add for Review** (manual release; expect one rejection cycle).
+   Everything else in ASC is DONE.
+4. After submission: watch ASC 24–48h · PostHog 808581 · the 📈 post-launch health
+   checklist · then the growth thread (Phase 6 #20–28, mod-permission-first channels,
+   the Jerez local angle).
+
+**Standing state to remember:** `NATIVE_ATTESTATION_ENABLED=1` is live in prod EAS env
+(native attest verifies for real — don't remove). The App Attest vector fixture is public
+by design. The post-launch ledger (entity, repo privacy, E&O, bus-factor) stays deferred
+until ≈1000 real users — do not re-litigate. Suite at close: **345 vitest · 10 public +
+5 authed Playwright · 10 contract · matrix 181×16 in CI.**
+
+---
+
+## Prior resume note (2026-07-12 late night — build 38 SUBMITTED; the COUNCIL reported; user triage IN)
 
 1. **Build 38 = v1.0.0 (38), Build ID 4f60d8e0 — built + submitted to App Store Connect**
    (--auto-submit; Apple processing → TestFlight). Cut from 681eea6 with the e2e-ios gate

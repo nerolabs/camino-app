@@ -5,11 +5,18 @@ actionable lives above the fold; the done/historical record is below it** (reorg
 2026-07-12, user request). See `HANDOFF.md` for the fuller picture and `core/SOURCING.md`
 for obligation provenance.
 
-Last updated: 2026-07-13 night (pre-morning rulings: C9 (a)+(b) GO / (c)+(d) → ledger ·
-PROVIDERS migration closed as user-monitored · /de mistranslation fix approved · C2b held
-for mid-morning behind the user's Turnstile setup · **Marketing seat fully triaged — all
-five conversion items + housekeeping approved → C10; the council report is now 100%
-ruled**). Prior state, 2026-07-12 late night:
+Last updated: **2026-07-13 session close (the Opus day).** The council FIX queue C1–C10 is
+FULLY SHIPPED to web; all five build-39 gates cleared; **build 39 cut, device-tested, and
+native Lola is LIVE via App Attest** (verifier completed + proven against a real device
+attestation; `NATIVE_ATTESTATION_ENABLED=1` in prod). Device-testing fixes shipped same
+evening (session pre-warm, the Workers feedback-ack drop, bold-question emphasis). 345
+vitest; ~6 production web deploys, all E2E-green. **NEXT: more build-39 testing → build 40
+= the App Store release candidate** (carries pre-warm + bold-question + everything since
+39) → Cristina/user device pass → ASC Part 3 (trader check → attach 40 → Add for Review).
+User: "getting close to release candidate… really hard to find bugs." Prior state,
+2026-07-13 pre-morning rulings (C9 (a)+(b) GO / (c)+(d) → ledger · PROVIDERS migration
+closed as user-monitored · /de fix approved · Marketing seat fully triaged → C10; the
+council report is 100% ruled). Prior state, 2026-07-12 late night:
 **Build 38 (v1.0.0 (38), Build ID 4f60d8e0) is BUILT +
 SUBMITTED to App Store Connect** (e2e-ios gate skipped under an explicit ONE-TIME user waiver —
 recorded in docs/testing/2026-07-12-build37-triage.md; not a precedent). **The five-seat
@@ -39,21 +46,20 @@ The council FIX queue is fully shipped to WEB (commit bf3c1e1). Build 39 carries
 native-visible JS from that batch. These items are gated to ride build 39 (user directive — do
 NOT cut the build until they're in, so we don't burn another build):
 
-1. [~] **Secure mobile / native Lola — device attestation (CODE BUILT 2026-07-13; on-device
-       completion + enable at build 39).** Native Lola is DOWN in prod since C2a (sessionGate
-       401s native). Exempt native via **iOS App Attest** (`@expo/app-integrity` 56.0.3, zero-UX,
-       hardware-backed) → `/api/session` verifies → mints the SAME HMAC session token → `/api/lola`.
-       **DONE:** App Attest capability on the App ID (Apple Dev portal, user saved 2026-07-13) ·
-       entitlement in app.config.ts · client flow (`lib/nativeAttest.native.ts` + web stub,
-       wired into `getSessionToken`) · server challenge + attest branches on `/api/session` ·
-       verifier `lib/appAttest.ts` (CBOR + authData + nonce/rpIdHash/aaguid/counter/keyId checks) ·
-       +7 vitest (device-independent pieces). **REMAINING (build 39, needs a real device):**
-       (a) finish `verifyChain` — X.509 chain validation to the Apple App Attest Root CA (currently
-       returns false = safe default, so verifyAttestation can't succeed yet); (b) round-trip a real
-       device attestation green; (c) set `NATIVE_ATTESTATION_ENABLED=1` in prod EAS env. **Two
-       safety gates keep native off until then: the flag (501) AND verifyChain (false).**
-       **SCOPE:** iOS only. Play Integrity (Android) deferred to the Play Store track (Google
-       Cloud account not set up). Full findings: chat 2026-07-13.
+1. [x] **Secure mobile / native Lola — DONE + LIVE 2026-07-13 evening (device-confirmed on
+       build 39: "works on build 39!!!").** iOS App Attest (`@expo/app-integrity` 56.0.3,
+       zero-UX, hardware-backed) → `/api/session` verifies → mints the SAME HMAC session token
+       web gets from Turnstile. The chicken-and-egg was solved exactly as planned: build 39's
+       first device attestation was captured (Sentry chunked capture — the hosting log viewer
+       truncates), used as the REAL test vector to (a) complete `verifyChain` (Web-Crypto X.509:
+       P-256 leaf ← P-384 "Apple App Attestation CA 1" ← pinned Apple Root SPKI) and (b) catch
+       a real bug — the App-Attest extension OID had the wrong DER length byte (0x0a→0x09),
+       which silently blocked nonce extraction. Vector committed as a fixture
+       (tests/fixtures/appAttestDeviceVector.ts — attestations are public); +5 end-to-end
+       tests (genuine accept + 4 tamper rejects). Deployed; user set
+       `NATIVE_ATTESTATION_ENABLED=1`; verified live (stale-challenge probe → 403, then Lola
+       answered natively on the phone). **SCOPE:** iOS only. Play Integrity (Android) stays
+       deferred to the Play Store track.
 2. [x] **C8 interview twin — DONE** (RoadmapPane partner-scope note ×5) — the household-scope line's lighter half in the interview (the
        /plan header is done); shown once a partner is present.
 3. [x] **Arrival-date chips — DONE** (few/later/next → language-agnostic extractor; composer kept) (This year / Next year / …) — small interview UX; also parked as a
@@ -73,23 +79,26 @@ NOT cut the build until they're in, so we don't burn another build):
        64 conditions reviewed, matrix tool standing (181×16), regional coverage complete
        for the common regime, and NINE new sourced obligations (work/self-employment/
        student routes, job-seeker honesty, EU-licence clock, married-to-a-Spaniard 1-year
-       citizenship, EHIC, Schengen 90/180) — catalog 64→73, all ×5 locales. OPEN REMNANT:
-       **B6 modelo-200 clarifier** (needs a has_spanish_company question — post-38).
-1. [ ] **Build 38 (v1.0.0 (38)) is ON TESTFLIGHT → Cristina's full device pass = THE
-       submission gate** (share sheet fix — dismiss-then-present, EX-19 + has_spanish_company
-       questions, regional fact cards, verified stamps, changelog, A6 short-stay empty state,
-       contact fixes). Build 37's shred rolled into 38; 38's e2e-ios gate was SKIPPED under
-       the one-time user waiver (docs/testing/2026-07-12-build37-triage.md).
-       **MORNING PLAN (user call at session close): two parallel tracks** — Cristina shreds
-       38 (user relays findings) WHILE we work the 🏛 Council fix queue below, C1 + C2 first.
-       Her fixes + native-visible council fixes ride build 39 if needed; web fixes deploy
-       as they land. Homework-pages row for the 38/council night rides the first deploy.
-2. [ ] **Then ASC Part 3** (runbook, adjusted): trader case check → attach the candidate
-       build → final page read → **Add for Review** (manual release; expect one rejection
-       cycle). All other ASC paperwork is DONE (fields, label, screenshots, review notes).
+       citizenship, EHIC, Schengen 90/180) — catalog 64→73, all ×5 locales. (The B6
+       modelo-200 clarifier remnant closed 2026-07-13 — see the remnants section.)
+1. [ ] **THE RELEASE-CANDIDATE PATH (updated 2026-07-13 session close).** Build 39 is on
+       TestFlight, device-tested, "working amazing" — native Lola live via App Attest, all
+       council fixes aboard. But three client fixes landed AFTER 39 was cut (session
+       pre-warm so the gate isn't felt after Q1 · bold-question emphasis in Lola bubbles ·
+       plus anything from tonight's continued testing), so:
+       **(a)** more build-39 + web testing (user: "getting harder to find bugs — like
+       really hard"); **(b)** on user command, cut **build 40 = THE App Store release
+       candidate** (e2e-ios gate first — no waiver this time); **(c)** full device pass on
+       40 = the submission gate. _Supersedes the build-38 plan: 38 was shredded, 39
+       absorbed the findings + the entire council queue._
+2. [ ] **Then ASC Part 3** (runbook, adjusted): trader case check → attach build 40 →
+       final page read → **Add for Review** (manual release; expect one rejection cycle).
+       All other ASC paperwork is DONE (fields, label, screenshots, review notes).
 3. [ ] After submission: watch ASC status (24–48h); PostHog 808581 (interview-v2 funnel,
        `contact_sent`, the new `share_link_created` / `shared_plan_viewed` /
-       `interview_note_distilled` / `question_cta_clicked`).
+       `interview_note_distilled` / `question_cta_clicked`); the 📈 post-launch health
+       checklist goes live; then the growth thread (Phase 6 items 20–28 —
+       mod-permission-first channels, the Jerez local angle).
 4. [x] ~~Full engine-audit session (original scoping note)~~ — superseded by item 0 above
        (executed 2026-07-12→13; docs/audits/2026-07-12-engine-audit.md is the record).
 5. [x] **[USER] docs/PROVIDERS.md migration checklist — RULED 2026-07-13 night: no
@@ -124,7 +133,7 @@ ledger below, with the user's rationale on record. **Execution order: C1 + C2 fi
 "I would put this bug WAY up there" / "Severe" / "BIG ISSUE. PLEASE FIX."). None of these
 touch the engine's determinism — they close the seams around it.
 
-- [ ] **C1 — The Lola honesty package** (converged finding #1: Tech C1 + PR SEV2×2 +
+- [x] **C1 — COMPLETE. The Lola honesty package** (converged finding #1: Tech C1 + PR SEV2×2 +
       Legal #2/#5 — one coherent fix; user: fix, high priority). **WHY:** the whole trust
       claim is "the LLM never authors plan data," but the schema firewall is enforced at only
       one of three LLM write-paths, and the chat's *tone* contradicts the engine exactly when
@@ -162,7 +171,7 @@ touch the engine's determinism — they close the seams around it.
             (EN+ES, date→13 Jul): fixed the now-false "analytics include answer text" claim +
             added the volunteered-sensitive-data + deletion-path paragraph. **C1 package
             COMPLETE.**
-- [ ] **C2 — /api/lola lockdown** (converged #5: Tech H2 + Ops #6; user: "BIG ISSUE. PLEASE
+- [x] **C2 — COMPLETE (incl. native, 2026-07-13 evening). /api/lola lockdown** (converged #5: Tech H2 + Ops #6; user: "BIG ISSUE. PLEASE
       FIX."). **WHY:** proven live as an open unauthenticated Claude proxy honoring a
       caller-supplied system prompt; the origin allowlist is a documented no-op on EAS
       Hosting; an abuser draining the 25k/day budget 429s every real user mid-interview —
@@ -176,7 +185,7 @@ touch the engine's determinism — they close the seams around it.
             +11 vitest (`lola-prompts.test.ts`) + api.contract rewired (legacy `system` → 400).
             **NOTE:** hard close breaks native ≤38's Lola/extraction on prod — Cristina tests
             Lola/interview on WEB until build 39; all other 38 surfaces unaffected.
-      - [~] **C2b — BUILT + STAGING-VERIFIED 2026-07-13 (prod deploy pending user OK):**
+      - [x] **C2b — DONE (prod-live 2026-07-13; NATIVE path live same evening via App Attest — see Build-39 gates item 1):**
             `/api/session` siteverifies a Cloudflare Turnstile solve → mints a short-lived HMAC
             session token (`lib/session.ts`, keyed by CRON_SECRET); web client solves invisibly
             at first LLM turn (`lib/turnstile.ts`, cached), sends `x-camino-session` on /api/lola
@@ -257,18 +266,23 @@ touch the engine's determinism — they close the seams around it.
       the primary applicant's route; a working partner should run their own 3-minute
       interview" (share links make the second run cheap) ×5 locales. The person-structured
       profile is a post-launch structural bet, not a pre-launch patch.
-- [ ] **C9 — the stranger contract (Ops #3/#4) — RULED 2026-07-13 night: (a)+(b) GO;
+- [x] **C9 — CLOSED ((a)+(b) done; (c)+(d) ledgered by ruling). RULED 2026-07-13 night: (a)+(b) GO;
       (c)+(d) → the 🗄 Post-launch ledger** (user: "(a) and (b) seem more than enough for
       now"). Queue after the C1 package:
       - [x] **C9a — DONE 2026-07-13.** `feedbackAckEmail` (lib/emailTemplates.ts) + `feedbackAck`
             strings ×5 (built by one person, ~four-to-five-day reply, urgent → consulate cita
             previa, /questions + /changelog links; shell disclaimer carries not-legal-advice). The
-            feedback route sends it fire-and-forget when the submitter left a valid email (follows
-            the `lang` the contact page now sends); +2 route tests + 2 render snapshots (en/es).
+            feedback route sends it when the submitter left a valid email (follows the `lang`
+            the contact page now sends); +2 route tests + 2 render snapshots (en/es).
+            **POST-FIX 2026-07-13 evening (device testing):** the ack was fire-and-forget and
+            the Workers runtime KILLS unawaited promises when the handler returns — acks were
+            silently dropped in prod (team inbox fine, sender got nothing). Now awaited
+            (try/catch); +1 regression test that fails on the un-awaited version. Standing
+            lesson: EAS Hosting routes must await background work.
       - [x] **C9b — DONE 2026-07-13.** `FEEDBACK_GLOBAL_PER_DAY` code default raised 200 → 1000
             (env override still wins — remove/raise any `FEEDBACK_GLOBAL_PER_DAY` set in EAS prod
             env if present). The C2c budget-drain alert pages on the 429 cliff.
-- [ ] **C10 — Marketing seat, FULLY TRIAGED 2026-07-13 night: all five conversion items
+- [x] **C10 — COMPLETE 2026-07-13. Marketing seat, FULLY TRIAGED: all five conversion items
       APPROVED** (user: "1/ yes, 2, yes, 3/ yes, 4/ yes, 5/ yes") **+ the housekeeping
       list under blanket approve**. The council report is now 100% ruled. Sequencing:
       after the C1–C9 queue, except C10a pieces may ride any convenient deploy (the
@@ -337,7 +351,7 @@ startup are like an airplane that just took off — getting to altitude is WAY m
 changed between passes, behind a stamp still asserting freshness. The stamps only mean
 something if they move. (Absorbs the standing regional re-verification item below.)
 
-- [ ] **Mechanize the alarm (builds on C6):** a monthly GitHub Action that FAILS when any
+- [x] **Mechanize the alarm — DONE 2026-07-13** (scripts/freshness-check.ts + npm run freshness + monthly .github/workflows/freshness.yml; 87 dated facts + URL checks). _Original:_ a monthly GitHub Action that FAILS when any
       `verified_at` exceeds its class max-age, HTTP-checks every `source_url` (they already
       rot — two replaced in the July click-test), and emails the checklist to the monitored
       inbox. The work stays human; the *remembering* becomes a machine's job.
@@ -346,7 +360,7 @@ something if they move. (Absorbs the standing regional re-verification item belo
       (IPREM/SMI movers) · every ~6 months a full catalog sweep. **Proposed staleness
       metric:** % of official facts within their class SLO (statutory ~180 days · procedural
       ~365 days) + age-of-oldest-stamp; surface both internally first, on /changelog later.
-- [ ] **The migration invariant (user directive — candidate invariant #5 for THESIS.md):**
+- [x] **The migration invariant — DONE 2026-07-13** (THESIS.md invariant #5 + tests/migration-invariant.test.ts ×3). _Original:_
       catalog/engine changes must honor every saved profile — **a replan NEVER requires a new
       interview.** New slots ship with safe unknown-handling (C3's penalty rule is the
       pattern); when new info is truly required, a DELTA-interview asks ONLY the missing
@@ -497,7 +511,12 @@ Playwright · 7 API contract · 3 Maestro flows (pinned 2.6.1).
 26. [ ] **Uniqueness bets**: timeline simulation · move-budget view · cita checklists.
 27. [ ] **"My account" page** (email prefs + language + delete move out of the hamburger).
 28. [ ] **Parked polish**: per-step problem-report link · scout-step prominence · a real blog
-    surface · narrated roadmap-pane removals (see 2026-07-10 follow-ups below).
+    surface · narrated roadmap-pane removals (see 2026-07-10 follow-ups below) ·
+    **/questions localization (ruled intentional 2026-07-13):** the Q&A pages are
+    English-only BY DESIGN (SEO surface for English queries; core/questions.ts documents
+    it) — the language switcher visibly no-ops there. Options when revisited: leave ·
+    localize just the page chrome (cheap, kills the "switcher is broken" read) · full
+    ×5 content pass (expensive, digit-guard applies). User: "don't jump to a fix."
 
 ### Phase 7 — the tail (at revenue / at demand)
 
