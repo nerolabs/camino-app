@@ -84,14 +84,20 @@ export async function POST(request: Request): Promise<Response> {
       text: `${message}\n\n—\nFrom: ${ctx.email || '—'}\nPlatform: ${ctx.platform || '—'} · Version: ${ctx.version || '—'} · Route: ${ctx.route || '—'} · Env: ${ctx.env}`,
     });
 
-    // C9a: acknowledge the sender if they left a usable address. Fire-and-forget — a failed ack
-    // must never fail the report itself, and it's bounded by the same volume caps above.
+    // C9a: acknowledge the sender if they left a usable address. MUST be awaited — on the Workers
+    // runtime any promise still pending when the handler returns its Response is killed, so a
+    // fire-and-forget send silently never reaches Resend (2026-07-13: confirmed acks were being
+    // dropped this way; the team email worked only because it's awaited above). A failed ack must
+    // still never fail the report itself, so it's caught + logged, not thrown.
     if (EMAIL_RE.test(ctx.email)) {
       const lang: EmailLang = resolveEmailLang(typeof body.lang === 'string' ? { lang: body.lang } : null);
       const origin = siteOrigin(request);
       const ack = feedbackAckEmail({ questionsUrl: `${origin}/questions`, changelogUrl: `${origin}/changelog`, lang });
-      sendEmail({ to: ctx.email, subject: ack.subject, html: ack.html, text: ack.text })
-        .catch(e => captureServerError(e, { route: 'feedback', method: 'ack' }));
+      try {
+        await sendEmail({ to: ctx.email, subject: ack.subject, html: ack.html, text: ack.text });
+      } catch (e) {
+        captureServerError(e, { route: 'feedback', method: 'ack' });
+      }
     }
 
     return Response.json({ ok: true });

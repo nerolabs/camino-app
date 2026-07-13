@@ -69,6 +69,25 @@ describe('POST /api/feedback', () => {
     expect(acks).toHaveLength(1);
   });
 
+  it('C9a: the ack is AWAITED before responding — the Workers runtime kills unawaited sends', async () => {
+    // Regression (2026-07-13): the ack was fire-and-forget, so on Cloudflare Workers it was dropped
+    // when the handler returned. This proves the response waits for the ack to settle: 'responded'
+    // must come AFTER the ack send resolves, not before.
+    const order: string[] = [];
+    let releaseAck!: () => void;
+    const ackGate = new Promise<void>(r => { releaseAck = r; });
+    sendEmail.mockImplementation(async (p: { to: string }) => {
+      if (p.to === 'user@example.com') { await ackGate; order.push('ack-settled'); }
+      else order.push('team-sent');
+    });
+    const pending = POST(req({ message: 'q', email: 'user@example.com' })).then(() => order.push('responded'));
+    await new Promise(r => setTimeout(r, 0)); // drain microtasks/timers up to the awaited ack
+    expect(order).toEqual(['team-sent']);      // still awaiting the ack — has NOT responded yet
+    releaseAck();
+    await pending;
+    expect(order).toEqual(['team-sent', 'ack-settled', 'responded']);
+  });
+
   it('C9a: no auto-ack when no (or an invalid) email is given', async () => {
     await POST(req({ message: 'anonymous report' }));
     await POST(req({ message: 'bad address', email: 'not-an-email' }));

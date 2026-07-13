@@ -25,6 +25,8 @@ import { saveProfile as saveProfileDb } from '@/core/profileDb';
 import { saveDraft, loadDraft, clearDraft } from '@/lib/interviewDraft';
 import { TEST_PERSONAS, type Persona } from '@/core/test-personas';
 import { askAnthropic } from '@/lib/lola';
+import { getSessionToken } from '@/lib/turnstile';
+import { splitLolaBubble } from '@/lib/lolaBubble';
 import { parseExtraction, type Extraction } from '@/lib/extractionPrompt';
 import { useTranslation } from 'react-i18next';
 import i18n, { currentLang, dateLocale } from '@/lib/i18n';
@@ -46,6 +48,24 @@ function MicGlyph({ color }: { color: string }) {
       <View style={[styles.micStem, { backgroundColor: color }]} />
       <View style={[styles.micBase, { backgroundColor: color }]} />
     </View>
+  );
+}
+
+// A Lola bubble is assembled as `${preamble}\n\n${question}` (start / handleSend / final-note
+// flows). Render the two as separate lines and emphasize the trailing question — so a skimmer's
+// eye lands on what's actually being asked without reading the whole bubble (user request
+// 2026-07-13). We only bold the last paragraph, and only when it reads as a question (ends "?"),
+// so ack-only bubbles ("Thanks — noted.") and the "done" line stay plain. The split keeps the
+// question its own text node, which the E2E/Maestro substring assertions still match.
+function LolaText({ text }: { text: string }) {
+  const { head, tail, tailIsQuestion } = splitLolaBubble(text);
+  return (
+    <>
+      {!!head && <Text style={styles.lolaText}>{head}</Text>}
+      <Text style={[styles.lolaText, !!head && styles.lolaTailGap, tailIsQuestion && styles.lolaQuestion]}>
+        {tail}
+      </Text>
+    </>
   );
 }
 
@@ -240,6 +260,13 @@ export default function InterviewScreen() {
   // Auto-start: the interview opens directly into the conversation — the standalone "Hola, I'm
   // Lola" intro screen is now Lola's opening bubble (start()). Fires once on mount.
   useEffect(() => { if (!started) start(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, []);
+
+  // Pre-warm the session token the moment the interview opens, so the challenge is already solved
+  // (web: invisible Turnstile; native: App Attest round-trip) by the time the first answer fires
+  // /api/lola. Without this the exchange runs lazily on that first call and users FEEL the gate as
+  // a pause after Q1 (native App Attest finding, build 39). Fire-and-forget; getSessionToken caches
+  // + dedupes, so the real call reuses it. Fails soft — the server still decides whether to gate.
+  useEffect(() => { getSessionToken().catch(() => {}); }, []);
 
   // Switching language mid-interview (user finding 2026-07-05): the chrome re-renders via
   // useTranslation, but the CURRENT question is a stored string, generated in the old language —
@@ -742,7 +769,9 @@ export default function InterviewScreen() {
           {turns.map((turn, i) => (
             <View key={i}>
               <View style={turn.role === 'lola' ? styles.lolaBubble : styles.userBubble}>
-                <Text style={turn.role === 'lola' ? styles.lolaText : styles.userText}>{turn.text}</Text>
+                {turn.role === 'lola'
+                  ? <LolaText text={turn.text} />
+                  : <Text style={styles.userText}>{turn.text}</Text>}
               </View>
               {!!turn.addedSteps && (
                 <View style={styles.answerPill}>
@@ -1006,6 +1035,8 @@ const styles = StyleSheet.create({
     padding: 14, marginBottom: 12, maxWidth: '88%',
   },
   lolaText:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.indigo, lineHeight: 22 },
+  lolaTailGap: { marginTop: 12 },                                  // preserves the old blank-line paragraph break
+  lolaQuestion: { fontFamily: 'HankenGrotesk_600SemiBold' },       // emphasize the trailing question for skimmers
   userText:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.cal,   lineHeight: 22 },
   chipsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12, marginBottom: 4 },
   noteHint: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, lineHeight: 19, color: palette.muted, marginTop: 12, maxWidth: 440 },

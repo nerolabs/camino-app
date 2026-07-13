@@ -689,6 +689,16 @@ const ROWS: Row[] = [
       'Ship dark, flip on purpose: the native path stays switched off behind a flag until the verifier is deployed and deliberately turned on — the safe default is that the phone gets no free pass it hasn\'t earned.',
     ],
   },
+  {
+    feature: 'First device-testing pass: a smoother start, a fixed confirmation, a skimmable interview',
+    date: '13 Jul 2026',
+    work: 'Three fixes straight from testing the real build on a phone. The security handshake now happens the moment the interview opens — quietly, while you\'re reading the first question — instead of pausing Lola\'s first reply while it runs. The contact form\'s confirmation email is fixed: it was being sent in a way the phone\'s server quietly discards the instant it replies to you, so senders never got the "we got it" note even though our inbox did; now it\'s sent properly. And Lola\'s messages now put the actual question in bold, so you can skim the reasoning and still see what\'s being asked.',
+    decisions: [
+      'The gate should never be felt: the honest fix wasn\'t to weaken the check but to run it earlier, hidden behind something you\'re already doing (reading the greeting) — the same trick good apps use to make loading disappear.',
+      'A dropped confirmation is a bug even when nothing errored: the report always arrived, so it looked fine — but the sender got silence. It earned a regression test that fails if the confirmation is ever sent the fire-and-forget way again.',
+      'Emphasis without new copy: the bubbles were already written as "context, then the question," so bolding the question was a rendering choice, not a rewrite — the words are identical, just easier to scan.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {
