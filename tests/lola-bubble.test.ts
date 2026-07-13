@@ -1,46 +1,62 @@
 import { describe, it, expect } from 'vitest';
 import { splitLolaBubble } from '@/lib/lolaBubble';
 
-// The interview emphasizes the trailing question in Lola's bubbles (skim aid, 2026-07-13).
-// These pin the split + the "only bold a real question" rule across the shapes real bubbles take.
+// The interview bolds ONLY the final question sentence so skimmers cut to the chase (2026-07-13).
+// These pin that against the real bubble shapes: context+question in one flow, a helper clause
+// AFTER the question, a colon-led opener, Spanish "¿…?", and the no-question (ack) case.
 
 describe('splitLolaBubble', () => {
-  it('separates the preamble from the trailing question', () => {
-    const r = splitLolaBubble("Perfect, that gives us a solid window.\n\nWhere's your Spanish right now?");
-    expect(r.head).toBe('Perfect, that gives us a solid window.');
-    expect(r.tail).toBe("Where's your Spanish right now?");
-    expect(r.tailIsQuestion).toBe(true);
+  it('bolds only the question, not the context that precedes it', () => {
+    const r = splitLolaBubble(
+      "You can get by in English at first, but real life in Spain runs on Spanish — so it helps to know your starting point. Where's your Spanish right now?",
+    );
+    expect(r.question).toBe("Where's your Spanish right now?");
+    expect(r.pre).toBe('You can get by in English at first, but real life in Spain runs on Spanish — so it helps to know your starting point. ');
+    expect(r.post).toBe('');
   });
 
-  it('treats a single-paragraph question as the question (no preamble)', () => {
+  it('bolds only the question when context leads (passports example)', () => {
+    const r = splitLolaBubble(
+      'Your passports set the route — visas, registrations, even citizenship timelines hang on them. What passports does everyone in your household hold?',
+    );
+    expect(r.question).toBe('What passports does everyone in your household hold?');
+  });
+
+  it('handles a colon-led opener AND a helper clause after the question (real Q1 copy)', () => {
+    const r = splitLolaBubble(
+      "Let's start with the most important question: when are you planning to arrive? A rough month is all I need — it anchors every deadline on your roadmap.",
+    );
+    expect(r.question).toBe('when are you planning to arrive?');
+    expect(r.pre).toBe("Let's start with the most important question: ");
+    expect(r.post).toBe(' A rough month is all I need — it anchors every deadline on your roadmap.');
+  });
+
+  it('keeps the greeting + AI disclosure out of the bold (opening bubble)', () => {
+    const greeting = "Hola, I'm Lola, an AI assistant. This is helpful guidance, not legal advice.";
+    const r = splitLolaBubble(`${greeting}\n\nLet's start: when are you planning to arrive? A rough month is fine.`);
+    expect(r.question).toBe('when are you planning to arrive?');
+    expect(r.pre.startsWith("Hola, I'm Lola")).toBe(true);
+  });
+
+  it('emphasizes a Spanish ¿…? question and starts at the inverted opener', () => {
+    const r = splitLolaBubble('Perfecto, ya casi está. ¿Dónde está tu español ahora?');
+    expect(r.question).toBe('¿Dónde está tu español ahora?');
+  });
+
+  it('bolds the whole thing when the bubble is only a question', () => {
     const r = splitLolaBubble('When are you planning to arrive?');
-    expect(r.head).toBe('');
-    expect(r.tail).toBe('When are you planning to arrive?');
-    expect(r.tailIsQuestion).toBe(true);
+    expect(r.pre).toBe('');
+    expect(r.question).toBe('When are you planning to arrive?');
+    expect(r.post).toBe('');
   });
 
-  it('does not emphasize an ack-only bubble', () => {
-    const r = splitLolaBubble('Thanks — noted.');
-    expect(r.head).toBe('');
-    expect(r.tailIsQuestion).toBe(false);
+  it('emphasizes nothing when there is no question (ack-only / statement)', () => {
+    expect(splitLolaBubble('Thanks — noted.').question).toBe('');
+    expect(splitLolaBubble('Got it.\n\nYour roadmap is ready.').question).toBe('');
   });
 
-  it('does not emphasize a preamble whose last paragraph is a statement', () => {
-    const r = splitLolaBubble('Got it.\n\nYour roadmap is ready.');
-    expect(r.tail).toBe('Your roadmap is ready.');
-    expect(r.tailIsQuestion).toBe(false);
-  });
-
-  it('handles a Spanish ¿…? question (ends with ?)', () => {
-    const r = splitLolaBubble('Perfecto.\n\n¿Dónde está tu español ahora?');
-    expect(r.tail).toBe('¿Dónde está tu español ahora?');
-    expect(r.tailIsQuestion).toBe(true);
-  });
-
-  it('splits on the LAST blank line when the preamble has its own paragraphs', () => {
-    const r = splitLolaBubble("Hi, I'm Lola — an AI assistant.\n\nThis is guidance, not legal advice.\n\nWhen do you arrive?");
-    expect(r.head).toBe("Hi, I'm Lola — an AI assistant.\n\nThis is guidance, not legal advice.");
-    expect(r.tail).toBe('When do you arrive?');
-    expect(r.tailIsQuestion).toBe(true);
+  it('picks the LAST question when several sentences end in "?"', () => {
+    const r = splitLolaBubble('Moving with kids? Wonderful. How many are coming with you?');
+    expect(r.question).toBe('How many are coming with you?');
   });
 });

@@ -51,21 +51,20 @@ function MicGlyph({ color }: { color: string }) {
   );
 }
 
-// A Lola bubble is assembled as `${preamble}\n\n${question}` (start / handleSend / final-note
-// flows). Render the two as separate lines and emphasize the trailing question — so a skimmer's
-// eye lands on what's actually being asked without reading the whole bubble (user request
-// 2026-07-13). We only bold the last paragraph, and only when it reads as a question (ends "?"),
-// so ack-only bubbles ("Thanks — noted.") and the "done" line stay plain. The split keeps the
-// question its own text node, which the E2E/Maestro substring assertions still match.
+// Emphasize the actual question inside a Lola bubble so a skimmer's eye cuts straight to what's
+// being asked (user request 2026-07-13). splitLolaBubble finds the final question sentence — only
+// THAT goes semibold; the surrounding context/helper stays plain. Rendered as one inline flow so
+// the paragraph reads normally; the question is its own text node, which the E2E/Maestro substring
+// assertions still match. No question (ack-only / "done") → whole bubble plain.
 function LolaText({ text }: { text: string }) {
-  const { head, tail, tailIsQuestion } = splitLolaBubble(text);
+  const { pre, question, post } = splitLolaBubble(text);
+  if (!question) return <Text style={styles.lolaText}>{text}</Text>;
   return (
-    <>
-      {!!head && <Text style={styles.lolaText}>{head}</Text>}
-      <Text style={[styles.lolaText, !!head && styles.lolaTailGap, tailIsQuestion && styles.lolaQuestion]}>
-        {tail}
-      </Text>
-    </>
+    <Text style={styles.lolaText}>
+      {pre}
+      <Text style={styles.lolaQuestion}>{question}</Text>
+      {post}
+    </Text>
   );
 }
 
@@ -1035,8 +1034,7 @@ const styles = StyleSheet.create({
     padding: 14, marginBottom: 12, maxWidth: '88%',
   },
   lolaText:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.indigo, lineHeight: 22 },
-  lolaTailGap: { marginTop: 12 },                                  // preserves the old blank-line paragraph break
-  lolaQuestion: { fontFamily: 'HankenGrotesk_600SemiBold' },       // emphasize the trailing question for skimmers
+  lolaQuestion: { fontFamily: 'HankenGrotesk_600SemiBold' },       // emphasize just the question sentence for skimmers
   userText:  { fontFamily: 'HankenGrotesk_400Regular', fontSize: 15, color: palette.cal,   lineHeight: 22 },
   chipsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12, marginBottom: 4 },
   noteHint: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, lineHeight: 19, color: palette.muted, marginTop: 12, maxWidth: 440 },
