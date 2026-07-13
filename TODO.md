@@ -90,8 +90,11 @@ NOT cut the build until they're in, so we don't burn another build):
        2026-07-13 (EAS Update, `runtimeVersion: fingerprint` + `updates.url` in
        app.config.ts; publish = `npm run ota:production`, gated on audit+tests;
        post-launch JS fixes no longer burn an Apple review cycle).**
-       Path: **(a)** e2e-ios gate green — no waiver; **(b)** cut build 40 `--auto-submit`;
-       **(c)** device sanity pass (not a shred) = the submission gate. _Supersedes the
+       Path: **(a)** ✅ e2e-ios gate GREEN first attempt (run 29275935823 — no waiver);
+       **(b)** ✅ **build 40 CUT + SUBMITTED 2026-07-13** (v1.0.0 (40), Build ID
+       8a5a4d79, from 6c109c0; runtime = fingerprint 3435837e…; submission b53b9c20
+       FINISHED → ASC processing → TestFlight); **(c)** device sanity pass (not a
+       shred) = the submission gate. _Supersedes the
        build-38 plan: 38 was shredded, 39 absorbed the findings + the entire council
        queue._ User focus shifts to MARKETING + the Android track (Phase 3 — Redmi
        bought; see 8b's new Play Integrity prerequisite)._

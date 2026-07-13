@@ -100,6 +100,12 @@ cosmetics ride OTA/web. What landed this turn:
   session path, then the growth-asset drafts (Jerez post, mod-DMs, pre-emption paragraph,
   Search Console).
 - Cleanup: stray editor dupes deleted (`lib/appAttest 2.ts`, `docs/TEST-COVERAGE 2.md`).
+- **BUILD 40 CUT + SUBMITTED same turn:** e2e-ios gate green first attempt (run
+  29275935823, no waiver) → v1.0.0 (40), Build ID 8a5a4d79, cut from 6c109c0, runtime =
+  fingerprint `3435837e…` (39's differs — OTA bundles can't cross builds, as designed) →
+  submission b53b9c20 FINISHED → Apple processing → TestFlight. Web deployed the same
+  batch (10/10 public E2E green). **Next: user device sanity pass on 40 (NOT a shred) →
+  ASC Part 3 (trader case check → attach 40 → Add for Review).**
 
 ---
 
