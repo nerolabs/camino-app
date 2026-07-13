@@ -72,7 +72,45 @@ NOT cut the build until they're in, so we don't burn another build):
        formalizing that `nextSlot` asks ONLY unanswered required slots (a replan never needs a
        new interview). Small.
 
-## 📍 NOW (updated 2026-07-12 night — user call: ENGINE AUDIT AHEAD OF EVERYTHING)
+## 🛤 THE THREE TRACKS (user directive 2026-07-13 night, post-submission — this is the working structure now)
+
+**The app is submitted. Work splits three ways; MARKETING is the main proactive focus.**
+
+### Track 1 — 🍎 iOS: REACTIVE ONLY (Apple owns the clock)
+- [ ] Watch ASC (24–48h typical; one rejection cycle priced in as normal). **On any
+      rejection: paste the text verbatim into a session** — fix or reviewer-response
+      drafted same session. Submission ID `4c3b96e5-4b8c-48cb-9242-91f765590173`.
+- [ ] Trader case (Apple identity → AELaboratories) rides in parallel; when it closes:
+      declare Trader → verification → EU storefronts (incl. Spain) unlock. Then align
+      the legal pages' operator identity (STORE_PAPERWORK.md Step 1 note).
+- [ ] On approval: **manual release — the launch moment is coordinated with Track 3**,
+      not clicked reflexively. Post-launch JS fixes ride OTA (`npm run ota:production`).
+
+### Track 2 — 🤖 Android: user starts mornings, dedicated sessions
+- [ ] **[USER, morning] Play Console signup** ($25, personal) — identity verification
+      burns 1–3 days on its own, so start it before anything else (playbook Phase 1).
+- [ ] **[CLAUDE, dedicated session] Play Integrity session path (item 8b below)** — the
+      hard prerequisite before any .aab; spec in docs/ANDROID_LAUNCH.md's ⛔ block.
+- [ ] Then the playbook in order: build → listing/forms → closed test (the 14-day clock)
+      → Redmi verification → fix rounds (JS fixes ride OTA, same production channel).
+
+### Track 3 — 📣 MARKETING: THE MAIN PROACTIVE FOCUS (working doc: docs/GROWTH.md)
+- [ ] **Permission-first channel run** (the soft-launch-#1 lesson): mod-DM → approval →
+      post. Order: Jerez/Cádiz expat FB groups (the local angle) → visa-specific FB
+      groups (NLV/DNV/Beckham) → r/SpainPersonalFinance → r/expats → expat forums →
+      the webinar-creator warm list. Drafts staged in docs/GROWTH.md for user sign-off.
+- [ ] **[USER ~30 min] Google Search Console** — verify getcamino.app, submit the
+      sitemap; SEO is growth channel #1 and compounds with a multi-week lag. (Claude
+      adds the verification tag if the DNS route isn't preferred.)
+- [ ] **The launch-moment kit** (PH/HN, held for approval + trader resolution): the
+      "built by AI in two weeks" pre-emption paragraph (drafted in GROWTH.md) + listing
+      copy. `webinar_url` → user-facing rides a MovingToSpain partnership if it lands.
+- [ ] **Measure what the channels do:** PostHog 808581 funnel by source; grow /questions
+      from real Search Console queries once data exists. The 📈 post-launch health
+      checklist activates at iOS release.
+- Backlog feed: Phase 6 items 20–28 below (25 = the launch moment, 26 = uniqueness bets).
+
+## 📍 NOW — ⚠️ superseded 2026-07-13 night by the THREE TRACKS above (kept as the submission-day record)
 
 0. [x] **⭐ THE FULL ENGINE/CATALOG AUDIT — COMPLETE 2026-07-13** (incl. the sourcing +
        regional backlogs, both user-directed pre-38): 15 findings, 10 condition fixes, all
@@ -105,11 +143,9 @@ NOT cut the build until they're in, so we don't burn another build):
        Trader status rides the open Apple identity case in parallel (EU storefronts,
        incl. Spain, stay withheld until Trader is declared + verified; web serves Spain
        meanwhile).
-3. [ ] After submission: watch ASC status (24–48h); PostHog 808581 (interview-v2 funnel,
-       `contact_sent`, the new `share_link_created` / `shared_plan_viewed` /
-       `interview_note_distilled` / `question_cta_clicked`); the 📈 post-launch health
-       checklist goes live; then the growth thread (Phase 6 items 20–28 —
-       mod-permission-first channels, the Jerez local angle).
+3. [x] ~~After submission: watch ASC / PostHog / growth thread~~ — **restructured
+       2026-07-13 night into the 🛤 THREE TRACKS section above** (iOS reactive ·
+       Android mornings · Marketing = main focus).
 4. [x] ~~Full engine-audit session (original scoping note)~~ — superseded by item 0 above
        (executed 2026-07-12→13; docs/audits/2026-07-12-engine-audit.md is the record).
 5. [x] **[USER] docs/PROVIDERS.md migration checklist — RULED 2026-07-13 night: no

@@ -111,8 +111,15 @@ cosmetics ride OTA/web. What landed this turn:
   `4c3b96e5-4b8c-48cb-9242-91f765590173`. Manual release. Expect 24–48h + one normal
   rejection cycle; paste any rejection verbatim into a session. Trader status rides the
   open Apple identity case in parallel (EU storefronts withheld until declared +
-  verified; web serves Spain meanwhile). **Next session: watch ASC · Play Integrity for
-  Android (TODO 8b) · the growth-asset drafts.**
+  verified; web serves Spain meanwhile).
+- **WORK NOW RUNS ON THREE TRACKS (user directive, same night — TODO's 🛤 section is
+  the structure):** 🍎 iOS = reactive only (Apple's clock; rejection text → session
+  verbatim) · 🤖 Android = user starts Play signup in the morning, then DEDICATED
+  sessions (first job: Play Integrity, TODO 8b) · 📣 **MARKETING = the main proactive
+  focus** — **docs/GROWTH.md is the working doc** (channel ledger, mod-DM + Jerez post
+  EN/ES + visa-group variant + the PH/HN pre-emption paragraph, all drafted 2026-07-13
+  night AWAITING USER SIGN-OFF; permission-first rule stands; Search Console setup is
+  the user-side 30-min item).
 
 ---
 
