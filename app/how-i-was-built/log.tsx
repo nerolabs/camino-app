@@ -679,6 +679,16 @@ const ROWS: Row[] = [
       'The arrival chips reuse the proven date extractor instead of mapping to fixed dates in the app — which would have collided ("in six months" and "next year" landing on the same month depending on today\'s date).',
     ],
   },
+  {
+    feature: 'The iPhone gets the same human-check — invisibly',
+    date: '13 Jul 2026',
+    work: 'On the web, one Cloudflare human-check protects the AI endpoint. The phone can\'t show that puzzle without nagging you, so the native app proves it\'s a genuine, unmodified install a different way: Apple App Attest. The moment you open the app, the iPhone\'s Secure Enclave signs a hardware-backed certificate that our server verifies — no tap, no puzzle, nothing you ever see — and on success you get exactly the same short-lived token the web earns from the check. We built the full verifier (it walks Apple\'s certificate chain up to their published root and confirms the signed challenge is fresh and bound to this exact device) and proved it end-to-end against a real attestation captured from the actual build on a physical iPhone.',
+    decisions: [
+      'The same protection, the right ceremony for each platform: a visible puzzle on the web, an invisible hardware attestation on iOS — both mint the identical server token, so the AI endpoint is guarded everywhere without ever taxing a real user.',
+      'Trust the math, verify against reality: the certificate-chain check is hand-written to run on the same Web-Crypto-only server the web uses, and it isn\'t trusted until it verifies a genuine device attestation in the test suite — which promptly caught a one-byte bug that had silently blocked the security check.',
+      'Ship dark, flip on purpose: the native path stays switched off behind a flag until the verifier is deployed and deliberately turned on — the safe default is that the phone gets no free pass it hasn\'t earned.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

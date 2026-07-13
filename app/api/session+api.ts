@@ -77,17 +77,14 @@ export async function POST(request: Request) {
     }
 
     // ── Native: verify an App Attest attestation → mint the same session token (C2b) ──
-    // FLAG-GATED: until NATIVE_ATTESTATION_ENABLED is set (after on-device validation in build 39),
-    // this reports not-enabled and native stays gated — the current safe state.
+    // The verifier (lib/appAttest.ts) is complete and proven against a real device vector. This stays
+    // FLAG-GATED so the flip to live is one explicit env change (NATIVE_ATTESTATION_ENABLED=1) on the
+    // deploy carrying the verifier — until then native reports not-enabled, the safe default.
     if (body.kind === 'attest') {
       const { keyId, attestation, challenge } = body;
       if (typeof keyId !== 'string' || typeof attestation !== 'string' || typeof challenge !== 'string')
         return Response.json({ error: 'keyId, attestation, challenge required' }, { status: 400 });
       if (process.env.NATIVE_ATTESTATION_ENABLED !== '1') {
-        // BUILD-39 CAPTURE: attestations are public (not secret). Log the real device attestation so
-        // verifyChain can be completed + tested against it, then this capture line + the log are
-        // removed and the flag is flipped on. Retrieve via `eas deploy` logs / the hosting dashboard.
-        console.log('[appAttest:capture]', JSON.stringify({ keyId, challenge, attestation }));
         return Response.json({ error: 'native attestation not enabled' }, { status: 501 });
       }
       if (!(await verifyChallenge(signingSecret, challenge)))

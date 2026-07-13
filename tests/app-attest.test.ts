@@ -1,10 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { decodeCbor, parseAuthData, expectedNonce, b64ToBytes, verifyAttestation } from '@/lib/appAttest';
+import { DEVICE_ATTESTATION as DA } from './fixtures/appAttestDeviceVector';
 
-// C2b native (App Attest). A full attestation can only be produced by a real device, so these
-// cover the DEVICE-INDEPENDENT pieces — the CBOR decoder, the authData parser, the nonce
-// derivation, and the safe-default rejection (verifyAttestation must FAIL until the chain check is
-// finished + device-validated in build 39, so native stays gated).
+// C2b native (App Attest). Two layers: the DEVICE-INDEPENDENT pieces (CBOR decoder, authData
+// parser, nonce derivation, safe-default rejection), and the full end-to-end verification against
+// a REAL device attestation captured from build 39 (fixtures/appAttestDeviceVector.ts) — including
+// the x5c chain-to-Apple-root. This is what proves native is safe to enable.
 
 describe('CBOR decoder (App Attest attestation object shape)', () => {
   it('decodes a map with ints, text, arrays, and byte strings', () => {
@@ -59,6 +60,46 @@ describe('b64ToBytes', () => {
 describe('verifyAttestation — safe default', () => {
   it('rejects a garbage attestation (never throws)', async () => {
     const r = await verifyAttestation({ attestationB64: 'bm90LWNib3I', keyIdB64: 'AQID', challenge: 'x', appId: 'T.b' });
+    expect(r.ok).toBe(false);
+  });
+});
+
+describe('verifyAttestation — real device vector (end-to-end)', () => {
+  const good = { attestationB64: DA.attestationB64, keyIdB64: DA.keyId, challenge: DA.challenge, appId: DA.appId };
+
+  it('accepts a genuine device attestation and returns the leaf P-256 public key', async () => {
+    const r = await verifyAttestation(good);
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      // SPKI DER for an EC P-256 key is 91 bytes (26-byte prefix + 65-byte point).
+      expect(r.publicKeyDer.length).toBe(91);
+    }
+  });
+
+  it('rejects when the challenge differs (nonce binding fails)', async () => {
+    const r = await verifyAttestation({ ...good, challenge: DA.challenge.replace(/.$/, '0') });
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.reason).toBe('nonce mismatch');
+  });
+
+  it('rejects when the appId differs (rpIdHash fails)', async () => {
+    const r = await verifyAttestation({ ...good, appId: 'WRONGTEAM.com.nerolabs.camino' });
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.reason).toBe('rpIdHash mismatch');
+  });
+
+  it('rejects when the claimed keyId is not the attested credentialId', async () => {
+    const r = await verifyAttestation({ ...good, keyIdB64: 'AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=' });
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.reason).toBe('keyId mismatch');
+  });
+
+  it('rejects a tampered certificate chain (leaf byte flipped)', async () => {
+    // Corrupt one byte deep in the CBOR (inside the leaf cert) → chain signature no longer verifies.
+    const bytes = b64ToBytes(DA.attestationB64);
+    bytes[400] ^= 0xff;
+    const b64 = btoa(String.fromCharCode(...bytes));
+    const r = await verifyAttestation({ ...good, attestationB64: b64 });
     expect(r.ok).toBe(false);
   });
 });

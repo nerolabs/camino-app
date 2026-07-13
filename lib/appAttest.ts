@@ -5,11 +5,10 @@
  * hardware-backed); the server verifies it here and, on success, mints the SAME HMAC session
  * token web gets from a Turnstile solve. This is the non-spoofable native equivalent of Turnstile.
  *
- * ⚠️ FLAG-GATED OFF until validated on a real device (App Store / TestFlight build 39). The full
- * X.509 chain-to-Apple-root validation and the end-to-end flow can only be exercised against real
- * device attestations, so `sessionGate`/the native route only trust this when
- * NATIVE_ATTESTATION_ENABLED is set — otherwise native stays gated (401), the current safe state.
- * Do NOT enable the flag until a device attestation round-trips green.
+ * Verification (structure + hash bindings + X.509 chain-to-Apple-root) is COMPLETE and exercised
+ * end-to-end against a real build-39 device attestation (tests/app-attest.test.ts). The native
+ * route stays gated behind NATIVE_ATTESTATION_ENABLED so the flip to live is one explicit env
+ * change after the deploy carrying this verifier — otherwise native reports not-enabled (safe).
  *
  * Verification steps (Apple, "Validating apps that connect to your server"):
  *  1. Decode the CBOR attestation object → { fmt:'apple-appattest', attStmt:{ x5c }, authData }.
@@ -95,9 +94,8 @@ export type AttestResult = { ok: true; publicKeyDer: Uint8Array } | { ok: false;
 
 /**
  * Verify an App Attest attestation. Returns the leaf public key (SPKI DER) on success.
- * NOTE: the x5c chain-to-Apple-root signature validation is the one step that MUST be finished and
- * exercised with real device attestations (build 39) before the NATIVE_ATTESTATION_ENABLED flag is
- * turned on — see verifyChain below. Everything else (structure + hash bindings) is complete here.
+ * All steps are implemented: CBOR/structure, rpIdHash/counter/aaguid/keyId, the nonce binding, and
+ * the x5c chain-to-Apple-root (verifyChain below). Exercised against a real device vector in tests.
  */
 export async function verifyAttestation(input: AttestInput): Promise<AttestResult> {
   try {
@@ -135,11 +133,10 @@ export async function verifyAttestation(input: AttestInput): Promise<AttestResul
 }
 
 // ── DER helpers (minimal, App-Attest-shaped) ─────────────────────────────────────
-// The leaf's App Attest nonce lives in extension OID 1.2.840.113635.100.8.2 as
-// SEQUENCE { [1] EXPLICIT OCTET STRING(SHA-256) }. We locate the OID bytes and read the
-// trailing 32-byte digest. Kept deliberately small; hardened + tested against device vectors in
-// build 39 (this is why the whole native path is flag-gated OFF until then).
-const APP_ATTEST_OID = new Uint8Array([0x06, 0x0a, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x63, 0x64, 0x08, 0x02]);
+// The leaf's App Attest nonce lives in extension OID 1.2.840.113635.100.8.2 (encoded 06 09 …) as
+// OCTET STRING { SEQUENCE { [1] OCTET STRING(SHA-256) } }. We locate the OID bytes and read the
+// trailing 32-byte digest. Verified against a real device vector (tests/app-attest.test.ts).
+const APP_ATTEST_OID = new Uint8Array([0x06, 0x09, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x63, 0x64, 0x08, 0x02]);
 function extractAppAttestNonce(cert: Uint8Array): Uint8Array | null {
   const i = indexOf(cert, APP_ATTEST_OID);
   if (i < 0) return null;
@@ -170,13 +167,113 @@ function indexOf(hay: Uint8Array, needle: Uint8Array): number {
   return -1;
 }
 
+// ── x5c chain validation (Web Crypto ECDSA, no deps) ─────────────────────────────
+// Apple sends a 2-cert chain: leaf → "Apple App Attestation CA 1" (intermediate). The root
+// ("Apple App Attestation Root CA") is NOT in the chain — it's the trust anchor we pin below as a
+// SPKI constant (P-384 public key, from Apple's published root). A forged chain fails at the top
+// link because the intermediate must be signed by THIS key. (Public value, not a secret.)
+const APPLE_ROOT_SPKI = b64ToBytes(
+  'MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAERTHhmLW07ATaFQIEVwTtT4dyctdhNbJhFs/Ii2FdCgAHGbpphY3+d8qjuDngIN3WVhQUBHAoMeQ/cLiP1sOUtgjqK9auYen1mMEvRq9Sk3Jm5X8U62H+xTD3FE9TgS41',
+);
+
+// Minimal DER TLV reader. Returns the element's value span and its total end (short & long form len).
+type Tlv = { tag: number; vStart: number; vEnd: number; start: number; end: number };
+function tlv(buf: Uint8Array, start: number): Tlv {
+  const tag = buf[start];
+  let p = start + 1;
+  let len = buf[p++];
+  if (len & 0x80) {
+    const n = len & 0x7f;
+    len = 0;
+    for (let i = 0; i < n; i++) len = (len << 8) | buf[p++];
+  }
+  return { tag, vStart: p, vEnd: p + len, start, end: p + len };
+}
+
+const OID_ECDSA_SHA256 = [0x2a, 0x86, 0x48, 0xce, 0x3d, 0x04, 0x03, 0x02];
+const OID_ECDSA_SHA384 = [0x2a, 0x86, 0x48, 0xce, 0x3d, 0x04, 0x03, 0x03];
+const OID_P256 = [0x2a, 0x86, 0x48, 0xce, 0x3d, 0x03, 0x01, 0x07];
+const OID_P384 = [0x2b, 0x81, 0x04, 0x00, 0x22];
+function oidAt(buf: Uint8Array, off: number, oid: number[]): boolean {
+  for (let i = 0; i < oid.length; i++) if (buf[off + i] !== oid[i]) return false;
+  return true;
+}
+function findOid(buf: Uint8Array, from: number, to: number, oid: number[]): number {
+  for (let i = from; i + oid.length <= to; i++) if (oidAt(buf, i, oid)) return i;
+  return -1;
+}
+
+type ParsedCert = { tbs: Uint8Array; sigHash: 'SHA-256' | 'SHA-384'; sigDer: Uint8Array; spki: Uint8Array; curve: 'P-256' | 'P-384' };
+function parseCert(der: Uint8Array): ParsedCert {
+  const outer = tlv(der, 0);                    // Certificate SEQUENCE
+  const tbsEl = tlv(der, outer.vStart);         // tbsCertificate SEQUENCE
+  const tbs = der.subarray(tbsEl.start, tbsEl.end);
+  const sigAlg = tlv(der, tbsEl.end);           // signatureAlgorithm
+  const sigVal = tlv(der, sigAlg.end);          // signatureValue BIT STRING
+
+  let sigHash: 'SHA-256' | 'SHA-384';
+  if (findOid(der, sigAlg.vStart, sigAlg.vEnd, OID_ECDSA_SHA256) >= 0) sigHash = 'SHA-256';
+  else if (findOid(der, sigAlg.vStart, sigAlg.vEnd, OID_ECDSA_SHA384) >= 0) sigHash = 'SHA-384';
+  else throw new Error('unknown sig alg');
+
+  // BIT STRING content minus the leading "unused bits" byte → DER-encoded ECDSA signature.
+  const sigDer = der.subarray(sigVal.vStart + 1, sigVal.vEnd);
+
+  // Walk tbs fields to the SubjectPublicKeyInfo: [0]version?, serial, algid, issuer, validity,
+  // subject, spki. Skip the 5 fields between the optional version and the SPKI.
+  let q = tbsEl.vStart;
+  let el = tlv(der, q);
+  if (el.tag === 0xa0) { q = el.end; el = tlv(der, q); } // explicit [0] version
+  for (let i = 0; i < 5; i++) { q = el.end; el = tlv(der, q); }
+  const spki = der.subarray(el.start, el.end);
+
+  let curve: 'P-256' | 'P-384';
+  if (findOid(der, el.vStart, el.vEnd, OID_P256) >= 0) curve = 'P-256';
+  else if (findOid(der, el.vStart, el.vEnd, OID_P384) >= 0) curve = 'P-384';
+  else throw new Error('unknown curve');
+
+  return { tbs, sigHash, sigDer, spki, curve };
+}
+
+// DER ECDSA signature SEQUENCE{r,s} → raw r||s, each left-padded to the curve's field size.
+function derSigToRaw(sigDer: Uint8Array, size: number): Uint8Array {
+  const seq = tlv(sigDer, 0);
+  const r = tlv(sigDer, seq.vStart);
+  const s = tlv(sigDer, r.end);
+  const trim = (t: Tlv): Uint8Array => {
+    let a = sigDer.subarray(t.vStart, t.vEnd);
+    while (a.length > 1 && a[0] === 0x00) a = a.subarray(1);
+    return a;
+  };
+  const pad = (a: Uint8Array): Uint8Array => { const o = new Uint8Array(size); o.set(a, size - a.length); return o; };
+  return concat(pad(trim(r)), pad(trim(s)));
+}
+
+const CURVE_SIZE: Record<'P-256' | 'P-384', number> = { 'P-256': 32, 'P-384': 48 };
+
+// True iff `child`'s signature verifies under the parent's SPKI public key.
+async function certSignedBy(child: ParsedCert, parentSpki: Uint8Array, parentCurve: 'P-256' | 'P-384'): Promise<boolean> {
+  const key = await crypto.subtle.importKey('spki', parentSpki as BufferSource, { name: 'ECDSA', namedCurve: parentCurve }, false, ['verify']);
+  const raw = derSigToRaw(child.sigDer, CURVE_SIZE[parentCurve]);
+  return crypto.subtle.verify({ name: 'ECDSA', hash: child.sigHash }, key, raw as BufferSource, child.tbs as BufferSource);
+}
+
 /**
- * Validate the x5c chain up to Apple's App Attest Root CA.
- * BUILD-39 COMPLETION: full ASN.1 tbs/signature extraction + Web Crypto ECDSA verify against the
- * Apple App Attest Root CA public key, exercised with a REAL device attestation. Until then this
- * returns false, so verifyAttestation never succeeds and native stays gated (safe default).
+ * Validate the x5c chain up to Apple's App Attest Root CA (the pinned trust anchor above).
+ * leaf ← intermediate ← Apple Root. Verified end-to-end against a real build-39 device attestation
+ * (tests/app-attest.test.ts). Anti-replay is enforced separately and more tightly by the signed
+ * challenge nonce (5-min TTL, see lib/session.ts verifyChallenge), so cert expiry isn't re-checked
+ * here — a fresh attestation always carries a fresh Apple-issued cert bound to that nonce.
  */
-async function verifyChain(_x5c: Uint8Array[]): Promise<boolean> {
-  // Intentionally not yet trusted — completed + validated on-device in build 39. See module header.
-  return false;
+async function verifyChain(x5c: Uint8Array[]): Promise<boolean> {
+  try {
+    if (x5c.length < 2) return false;
+    const leaf = parseCert(x5c[0]);
+    const inter = parseCert(x5c[1]);
+    if (!(await certSignedBy(leaf, inter.spki, inter.curve))) return false;   // leaf ← intermediate
+    if (!(await certSignedBy(inter, APPLE_ROOT_SPKI, 'P-384'))) return false; // intermediate ← Apple Root
+    return true;
+  } catch {
+    return false;
+  }
 }
