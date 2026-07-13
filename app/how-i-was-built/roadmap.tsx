@@ -66,7 +66,7 @@ const SECTIONS: Section[] = [
   {
     h: 'In progress',
     items: [
-      { title: 'The iOS App Store submission', note: 'The build is in TestFlight, the paperwork is done, the screenshots are honest (retaken when a fresh-eyes pass caught one still showing a feature we\'d removed). Review takes as long as it takes — release stays manual, for a launch moment we choose. EU storefronts follow a pending trader-status declaration.' },
+      { title: 'The iOS App Store submission — now in Apple\'s queue', note: 'Submitted for review on July 13. The screenshots are honest (retaken when a fresh-eyes pass caught one still showing a feature we\'d removed), the review notes explain exactly what the AI does and doesn\'t decide, and one rejection cycle is priced in as normal. Review takes as long as it takes — release stays manual, for a launch moment we choose. EU storefronts follow a pending trader-status declaration.' },
       { title: 'The languages get their human pass', note: 'Machine-drafted, mechanically linted — and now verified by native speakers, sentence by sentence, before launch. Corrections land as reviewable diffs against frozen snapshots.' },
       { title: 'Real users become the testers', note: 'Family testing ran its course — the last full evening of expert testing found nothing. From here, real users, crash monitoring, and over-the-air fixes are the quality loop; every bug that reaches a person still earns a permanent regression test.' },
     ],

@@ -104,8 +104,15 @@ cosmetics ride OTA/web. What landed this turn:
   29275935823, no waiver) → v1.0.0 (40), Build ID 8a5a4d79, cut from 6c109c0, runtime =
   fingerprint `3435837e…` (39's differs — OTA bundles can't cross builds, as designed) →
   submission b53b9c20 FINISHED → Apple processing → TestFlight. Web deployed the same
-  batch (10/10 public E2E green). **Next: user device sanity pass on 40 (NOT a shred) →
-  ASC Part 3 (trader case check → attach 40 → Add for Review).**
+  batch (10/10 public E2E green).
+- **🚀 SUBMITTED TO THE APP STORE, same night — 2026-07-13 23:11.** Device sanity pass
+  PASSED ("build 40 on iphone looks fantastic") → ASC Part 3 executed → **iOS App 1.0,
+  v1.0.0 (40), WAITING FOR REVIEW.** Submission ID
+  `4c3b96e5-4b8c-48cb-9242-91f765590173`. Manual release. Expect 24–48h + one normal
+  rejection cycle; paste any rejection verbatim into a session. Trader status rides the
+  open Apple identity case in parallel (EU storefronts withheld until declared +
+  verified; web serves Spain meanwhile). **Next session: watch ASC · Play Integrity for
+  Android (TODO 8b) · the growth-asset drafts.**
 
 ---
 

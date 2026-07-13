@@ -93,14 +93,18 @@ NOT cut the build until they're in, so we don't burn another build):
        Path: **(a)** ✅ e2e-ios gate GREEN first attempt (run 29275935823 — no waiver);
        **(b)** ✅ **build 40 CUT + SUBMITTED 2026-07-13** (v1.0.0 (40), Build ID
        8a5a4d79, from 6c109c0; runtime = fingerprint 3435837e…; submission b53b9c20
-       FINISHED → ASC processing → TestFlight); **(c)** device sanity pass (not a
-       shred) = the submission gate. _Supersedes the
+       FINISHED → ASC processing → TestFlight); **(c)** ✅ device sanity pass PASSED
+       (user: "build 40 on iphone looks fantastic"). **ITEM COMPLETE.** _Supersedes the
        build-38 plan: 38 was shredded, 39 absorbed the findings + the entire council
        queue._ User focus shifts to MARKETING + the Android track (Phase 3 — Redmi
        bought; see 8b's new Play Integrity prerequisite)._
-2. [ ] **Then ASC Part 3** (runbook, adjusted): trader case check → attach build 40 →
-       final page read → **Add for Review** (manual release; expect one rejection cycle).
-       All other ASC paperwork is DONE (fields, label, screenshots, review notes).
+2. [x] **🚀 SUBMITTED TO THE APP STORE — 2026-07-13, 23:11.** iOS App 1.0 — v1.0.0 (40),
+       **Waiting for Review**, Submission ID `4c3b96e5-4b8c-48cb-9242-91f765590173`,
+       submitted by Andrew Edmond (screenshot on record). Manual release. Expect 24–48h
+       + one normal rejection cycle — paste any rejection text into a session verbatim.
+       Trader status rides the open Apple identity case in parallel (EU storefronts,
+       incl. Spain, stay withheld until Trader is declared + verified; web serves Spain
+       meanwhile).
 3. [ ] After submission: watch ASC status (24–48h); PostHog 808581 (interview-v2 funnel,
        `contact_sent`, the new `share_link_created` / `shared_plan_viewed` /
        `interview_note_distilled` / `question_cta_clicked`); the 📈 post-launch health
