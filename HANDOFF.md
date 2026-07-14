@@ -153,6 +153,25 @@ cosmetics ride OTA/web. What landed this turn:
   (dedicated session, TODO 8b — do NOT cut an .aab before it) · 📣 support the channel
   run + Search Console; LinkedIn asset requests may arrive from the Desktop workstream.
 
+**SESSION CLOSE (2026-07-14, short check-in session):**
+- **User updates on record:** GROWTH.md uploaded to Claude Desktop — that tool now DRIVES
+  marketing; Code sessions are reactive-only on Track 3 (recorded in TODO Track 3 + the
+  addendum above, commit f381437). Apple still quiet (<24h since submission — normal).
+  User is busy the next few days; opens Android head-space later today / tomorrow.
+- **Health sweep CLEAN:** zero TestFlight crashes + zero feedback submissions
+  (com.nerolabs.camino, checked via ASC API this session). Build 40 is quiet in the wild.
+- **NEXT SESSION = the 🤖 Play Integrity dedicated session (TODO 8b)** when the user opens
+  Android time. Standing offer made: most of 8b can be front-loaded flag-gated-OFF before
+  the Play account exists (the App Attest pattern — client verdict path + /api/session
+  Play Integrity branch + tests against Google's documented token format; the user's only
+  prerequisites are Play Console signup [$25, identity check burns 1–3 days — suggested he
+  start it tonight] and later the Google Cloud service-account key → EAS env `sensitive`).
+  Spec: docs/ANDROID_LAUNCH.md ⛔ block. Also flagged to the user: Search Console (~30 min,
+  user-side) still compounds with lag; and the launch moment is web + non-EU iOS until the
+  trader case unlocks EU storefronts — Desktop-side channel copy should point at
+  getcamino.app, not the App Store, until Spain unlocks.
+- Nothing else in flight; working tree clean at close.
+
 ---
 
 ## Prior resume note (2026-07-12 late night — build 38 SUBMITTED; the COUNCIL reported; user triage IN)
