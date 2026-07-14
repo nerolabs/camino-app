@@ -121,6 +121,32 @@ cosmetics ride OTA/web. What landed this turn:
   night AWAITING USER SIGN-OFF; permission-first rule stands; Search Console setup is
   the user-side 30-min item).
 
+**SESSION CLOSE (2026-07-14):**
+- **iOS: still Waiting for Review** (submitted 2026-07-13 23:11; submission
+  `4c3b96e5-4b8c-48cb-9242-91f765590173`). User will report the outcome — on rejection,
+  he pastes the text verbatim; on approval, release stays MANUAL for the launch moment.
+- **The LinkedIn series is a CLAUDE-DESKTOP-OWNED workstream now.** This session
+  produced the full hand-back for Posts 5–10 (verification of every receipt against the
+  build log with line refs + six drafts in the locked voice + real assets: funnel chart
+  from the recorded 167→42→12 baseline, live matrix run, docs tree). Delivered to the
+  user → taken to Claude Desktop; local `linkedin-drafts/` DELETED on user instruction
+  (the .gitignore guard stays). **Standing flags awaiting Andrew's ruling — a future
+  session may be asked to act on these:** (1) published Post 1 overclaims "Android in
+  review" — a Post-10 self-correction is drafted; (2) the kitten/"Madrid" anecdote is in
+  NEITHER the log nor the essay — if Andrew confirms it happened, add it to the
+  walking-skeleton log entry; (3) canonical corrections: 15 TRANSCRIPTS not hours,
+  mining grew catalog to 54 (60 at grounding, 73 today), the provisioning story is TWO
+  sagas (three-build entitlement saga + the five-build server-side mystery). Possible
+  asset requests: browser captures (CI green, changelog Valencia entry, two-pane
+  interview) + red digit-lint demo (~15 min total).
+- **User began GROWTH.md channel work this morning** (light start on real-human-traffic
+  outreach — Track 3 lives; ledger updates go in docs/GROWTH.md as channels move).
+- Housekeeping this session: stray dupes purged (`lib/appAttest 2.ts`,
+  `docs/TEST-COVERAGE 2.md`, broken git ref `origin/main 2`).
+- **Next session, by track:** 🍎 react to Apple's verdict · 🤖 Play Integrity build
+  (dedicated session, TODO 8b — do NOT cut an .aab before it) · 📣 support the channel
+  run + Search Console; LinkedIn asset requests may arrive from the Desktop workstream.
+
 ---
 
 ## Prior resume note (2026-07-12 late night — build 38 SUBMITTED; the COUNCIL reported; user triage IN)
