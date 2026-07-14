@@ -94,7 +94,12 @@ NOT cut the build until they're in, so we don't burn another build):
 - [ ] Then the playbook in order: build → listing/forms → closed test (the 14-day clock)
       → Redmi verification → fix rounds (JS fixes ride OTA, same production channel).
 
-### Track 3 — 📣 MARKETING: THE MAIN PROACTIVE FOCUS (working doc: docs/GROWTH.md)
+### Track 3 — 📣 MARKETING: moved to CLAUDE DESKTOP (user directive 2026-07-14)
+
+**Code sessions no longer drive this track proactively** — GROWTH.md was uploaded to
+Claude Desktop and the user runs the channel work there, relaying impactful updates back.
+We serve asset/verification requests and keep docs/GROWTH.md current when told (same
+model as the LinkedIn workstream). Claude-side proactive focus = Track 2 (item 8b).
 - [ ] **Permission-first channel run** (the soft-launch-#1 lesson): mod-DM → approval →
       post. Order: Jerez/Cádiz expat FB groups (the local angle) → visa-specific FB
       groups (NLV/DNV/Beckham) → r/SpainPersonalFinance → r/expats → expat forums →

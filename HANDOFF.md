@@ -141,6 +141,12 @@ cosmetics ride OTA/web. What landed this turn:
   interview) + red digit-lint demo (~15 min total).
 - **User began GROWTH.md channel work this morning** (light start on real-human-traffic
   outreach — Track 3 lives; ledger updates go in docs/GROWTH.md as channels move).
+- **📣 MARKETING OWNERSHIP MOVED TO CLAUDE DESKTOP (user directive 2026-07-14):** GROWTH.md
+  was uploaded to Claude Desktop and that tool now drives Track 3. **Code sessions do NOT
+  proactively drive growth** — we react to impactful updates the user relays, keep
+  docs/GROWTH.md current when told, and serve asset/verification requests (same model as
+  the LinkedIn workstream). Claude-side proactive focus shifts to Track 2: Play Integrity
+  (TODO 8b) when the user opens Android time.
 - Housekeeping this session: stray dupes purged (`lib/appAttest 2.ts`,
   `docs/TEST-COVERAGE 2.md`, broken git ref `origin/main 2`).
 - **Next session, by track:** 🍎 react to Apple's verdict · 🤖 Play Integrity build
