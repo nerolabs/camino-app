@@ -52,3 +52,6 @@ test-results/
 # Playwright captured auth state (contains a live staging session)
 tests-e2e/.auth/
 docs/store-assets/clean/
+
+# Unpublished LinkedIn drafts — never commit to the public repo
+linkedin-drafts/
