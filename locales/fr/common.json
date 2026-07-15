@@ -203,5 +203,10 @@
     "roundupHint": "Une courte note chaque semaine — ce qui est en retard et ce qui arrive. Jamais plus de quelques tâches.",
     "languageH": "Langue",
     "accountH": "Compte"
+  },
+  "securityCheck": {
+    "title": "Petite vérification de sécurité",
+    "body": "Touche ci-dessous pour confirmer que tu es humain — et on reprend là où tu en étais.",
+    "cancel": "Pas maintenant"
   }
 }

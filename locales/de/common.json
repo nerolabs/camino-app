@@ -203,5 +203,10 @@
     "roundupHint": "Eine kurze wöchentliche Notiz — was überfällig ist und was ansteht. Nie mehr als eine Handvoll Aufgaben.",
     "languageH": "Sprache",
     "accountH": "Konto"
+  },
+  "securityCheck": {
+    "title": "Kurzer Sicherheitscheck",
+    "body": "Tippe unten, um zu bestätigen, dass du ein Mensch bist — danach geht es genau dort weiter.",
+    "cancel": "Jetzt nicht"
   }
 }

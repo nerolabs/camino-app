@@ -24,12 +24,14 @@ export async function askAnthropic<M extends LolaMode>(opts: {
   params: LolaParams[M];
   messages: LolaMessage[];
 }): Promise<string> {
+  // C2b: attach the Turnstile-derived session token on web (solved once, cached). null on native
+  // and where Turnstile isn't configured — the server only enforces where it's set up.
+  // Acquired BEFORE the abort timer starts: interactive means the visible challenge fallback can
+  // appear here, and however long the user takes to solve it must not count against the fetch.
+  const session = await getSessionToken({ interactive: true });
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   try {
-    // C2b: attach the Turnstile-derived session token on web (solved once, cached). null on native
-    // and where Turnstile isn't configured — the server only enforces where it's set up.
-    const session = await getSessionToken();
     const res = await fetch(`${API_BASE}/api/lola`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', ...(session ? { 'x-camino-session': session } : {}) },

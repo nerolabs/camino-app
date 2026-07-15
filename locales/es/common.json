@@ -203,5 +203,10 @@
     "roundupHint": "Una nota semanal breve — qué está vencido y qué se acerca. Nunca más de unas pocas tareas.",
     "languageH": "Idioma",
     "accountH": "Cuenta"
+  },
+  "securityCheck": {
+    "title": "Comprobación rápida de seguridad",
+    "body": "Toca abajo para confirmar que eres humano — y seguimos justo donde lo dejaste.",
+    "cancel": "Ahora no"
   }
 }

@@ -709,6 +709,16 @@ const ROWS: Row[] = [
       'Playbooks get re-read before they\'re executed: the Android guide was written before the endpoint lockdown existed; replaying it against today\'s code surfaced a step that would have shipped a broken interview to twelve testers.',
     ],
   },
+  {
+    feature: 'The human-check gets a visible fallback — found by watching two real strangers fail',
+    date: '15 Jul 2026',
+    work: 'Error monitoring caught two real visitors — one in Barcelona, one in Slovakia, both arriving through Facebook links — whose interview silently died: every answer waited 20 seconds, then failed. The cause: inside Facebook\'s built-in browser, the invisible "prove you\'re human" check decides it needs the person to actually click something — but the widget was rendered off-screen, where nobody can click it. Now, when the invisible check can\'t pass, a small visible "quick security check" appears once, the person taps it, and the interview continues where it left off. The wait before that fallback dropped from 20 seconds to 8, a browser that has failed once skips straight to the visible check on later turns, and the fix carries five new regression tests.',
+    decisions: [
+      'The security gate stays; it grows a door. Weakening the human-check for awkward browsers would reopen the abuse hole it exists to close — the honest fix is to let a real human prove themselves visibly when the invisible path can\'t.',
+      'In-app browsers are the front door, not an edge case: people arrive from a Facebook or Instagram post inside those apps\' built-in browsers, so "works in Safari and Chrome" isn\'t the bar — the timing of both failures matched the 20-second timeout to the millisecond, which is what pinned the cause.',
+      'Two errors can matter more than two thousand: the event count was tiny, but both were real people from the exact channel the growth plan leans on next — monitoring earns its keep by catching the failures that would otherwise be invisible refusals.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

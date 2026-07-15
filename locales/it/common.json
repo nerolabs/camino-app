@@ -203,5 +203,10 @@
     "roundupHint": "Una breve nota settimanale — cosa è in ritardo e cosa sta arrivando. Mai più di poche attività.",
     "languageH": "Lingua",
     "accountH": "Account"
+  },
+  "securityCheck": {
+    "title": "Rapido controllo di sicurezza",
+    "body": "Tocca qui sotto per confermare che sei umano — poi riprendiamo da dove eri.",
+    "cancel": "Non ora"
   }
 }

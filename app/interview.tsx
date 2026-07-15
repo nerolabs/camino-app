@@ -265,6 +265,8 @@ export default function InterviewScreen() {
   // /api/lola. Without this the exchange runs lazily on that first call and users FEEL the gate as
   // a pause after Q1 (native App Attest finding, build 39). Fire-and-forget; getSessionToken caches
   // + dedupes, so the real call reuses it. Fails soft — the server still decides whether to gate.
+  // Deliberately NOT interactive: a webview that needs the visible challenge gets it on the first
+  // real turn (lib/lola.ts), never as a surprise overlay while the page is still loading.
   useEffect(() => { getSessionToken().catch(() => {}); }, []);
 
   // Switching language mid-interview (user finding 2026-07-05): the chrome re-renders via

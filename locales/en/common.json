@@ -203,5 +203,10 @@
     "roundupHint": "A short weekly note — what's overdue and what's coming up. Never more than a handful of tasks.",
     "languageH": "Language",
     "accountH": "Account"
+  },
+  "securityCheck": {
+    "title": "Quick security check",
+    "body": "Tap below to confirm you're human — then we'll pick up right where you left off.",
+    "cancel": "Not now"
   }
 }
