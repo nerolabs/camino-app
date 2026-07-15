@@ -172,6 +172,33 @@ cosmetics ride OTA/web. What landed this turn:
   getcamino.app, not the App Store, until Spain unlocks.
 - Nothing else in flight; working tree clean at close.
 
+**SESSION CLOSE (2026-07-15 — the first real-user bug, caught and shipped same session):**
+- **Sentry trial ruling:** the "your trial is expiring" email is just the Business-trial
+  upsell — we drop to the free Developer plan (1 seat, ~5K errors/mo) and that's plenty at
+  current scale. **Do NOT pay the $29/mo.** Note: the Sentry org (`camino-ko`, project
+  `camino`) lives under andrewnedmond@gmail.com, not the nerolabs address. If Sentry ever
+  nags about the transactions quota, drop `tracesSampleRate` (0.2 prod) — free fix.
+- **🐛→✅ The Facebook in-app-browser 401 (Sentry CAMINO-8 + CAMINO-D), root-caused, fixed,
+  DEPLOYED (commit 71b7506).** Two real users (Barcelona iPhone + Slovakia Android, both via
+  fbclid links) had a dead interview: FB's webview gets an INTERACTIVE Cloudflare Turnstile
+  challenge, which our offscreen-only widget could never complete → 20s silent timeout →
+  null token → every /api/lola call 401'd. Both events sat exactly at nav+20s — the timeout
+  WAS the fingerprint. Fix in `lib/turnstile.ts`: invisible solve first (8s, was 20s);
+  user-initiated calls (`interactive: true` — lola.ts + contact) fall back to a VISIBLE
+  overlay widget ("quick security check" ×5 locales, cancel = fail-soft); invisible failure
+  remembered 5 min so later turns skip the doomed wait; lola.ts now acquires the session
+  BEFORE its 35s abort timer (human solve time must not eat the fetch budget); interview
+  mount pre-warm stays non-interactive (no surprise overlay on load). +5 vitest
+  (`turnstile-fallback.test.ts`, jsdom — new devDep) · 350 total · deploy E2E 10/10 ·
+  both Sentry issues RESOLVED (a regression re-alerts).
+- **WATCH:** PostHog event `turnstile_visible_challenge` (outcome: solved/dismissed/failed)
+  — fallback frequency vs `interview_completed` tells us how often real users see it; Sentry
+  staying quiet on CAMINO-8/D confirms the fix holds. This matters BEFORE the FB/Jerez
+  channel opens (Desktop-side) — FB in-app browser is that channel's front door.
+- **Tracks unchanged:** 🍎 iOS still Waiting for Review · 🤖 next dedicated session = Play
+  Integrity (TODO 8b) when the user opens Android time · 📣 marketing runs on Claude Desktop
+  (user re-confirmed this session); Code stays reactive on growth.
+
 ---
 
 ## Prior resume note (2026-07-12 late night — build 38 SUBMITTED; the COUNCIL reported; user triage IN)
