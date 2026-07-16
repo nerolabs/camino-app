@@ -199,6 +199,31 @@ cosmetics ride OTA/web. What landed this turn:
   Integrity (TODO 8b) when the user opens Android time · 📣 marketing runs on Claude Desktop
   (user re-confirmed this session); Code stays reactive on growth.
 
+**SESSION CLOSE (2026-07-16 — LinkedIn asset-capture service session for the Desktop
+workstream):**
+- **Seven capture PNGs delivered to `linkedin-drafts/assets/`** (gitignored — NEVER let these
+  into the public repo; Desktop's "save to assets/" was redirected here deliberately):
+  interview-two-pane (staging replay, "+8 new steps" mid-build moment — production was NOT
+  used, a fake interview would inflate the ~2-conversion funnel), ci-green-run (e2e-ios #22,
+  6c109c0, anonymous view), digit-lint-red (real inject-30-into-es → gate FAIL naming
+  `es/common:account.roundupHint`, then reverted; MONOCHROME — vitest 4 emits no ANSI in this
+  sandbox even under a pty, and hand-coloring = fabrication), changelog-valencia (10%→9%
+  entry), deploy-baked-output + deploy-env-names + deploy-e2e-journeys (from a REAL
+  deploy:staging run this session). Reusable tooling lives beside them (local-only,
+  gitignored): `linkedin-drafts/capture-linkedin-assets.mjs` (Playwright, deviceScaleFactor 2)
+  and `render-ansi.mjs` (terminal-output → PNG; WRAP=1 for long lines).
+- **Corrections relayed to Desktop with the assets:** no GitHub Actions page shows "twelve
+  E2E journeys" — the web journeys run in deploy.sh's terminal (deploy-e2e-journeys.png is
+  the honest artifact, 16 named tests green); "last verified" stamps are on guide pages,
+  not /changelog.
+- **Side effects:** the user's Chrome was signed OUT of staging (the Dev-personas staff strip
+  was in frame — the standing capture-signed-out rule) — he needs to sign back in; the
+  staging alias was REDEPLOYED from current main (green: 350 vitest · 16/16 E2E · contract),
+  so staging now carries the 07-15 Turnstile visible-fallback fix.
+- **Capture discipline for future asset requests (learned here):** staging for anything
+  that fires analytics; sign out first; Playwright over the Chrome extension for
+  native-resolution PNGs; crops are separate files, never stitched.
+
 ---
 
 ## Prior resume note (2026-07-12 late night — build 38 SUBMITTED; the COUNCIL reported; user triage IN)
