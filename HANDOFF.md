@@ -199,6 +199,32 @@ cosmetics ride OTA/web. What landed this turn:
   Integrity (TODO 8b) when the user opens Android time · 📣 marketing runs on Claude Desktop
   (user re-confirmed this session); Code stays reactive on growth.
 
+**SESSION 2026-07-21 — APPLE'S FIRST VERDICT: REJECTED → FIXED → RESUBMITTED, same
+session:**
+- **Build 40 REJECTED** (reviewed 2026-07-21 on iPad Air 11" M3 after 8 days; message in
+  ASC Resolution Center, read via Chrome): **Guideline 2.3.10 Accurate Metadata, one item
+  — the landing page's "coming soon to Google Play" pill rendered inside the iOS binary.**
+  Grep confirmed it was the app's ONLY Play reference (`components/StoreBadges.tsx`).
+- **Fix (e08fc90): `StoreBadges` is WEB-ONLY now** — pure `storeBandVisible(os)` guard +2
+  regression vitest (`store-badges.test.ts`); `StyleSheet.create` added to the RN test
+  stub. New homework rows deliberately avoid the literal "Google Play" string (they ship
+  in the binary too); pre-existing "Android" prose was in the reviewed build 40 and not
+  flagged, left alone. Suite 352 vitest · tsc · audit clean; production web deployed
+  (10/10 E2E) with the log/roadmap rows live. Stray `tests/api-guard.test 2.ts` dupe
+  deleted (pre-C2c copy, never matched vitest's glob).
+- **Build 41 = v1.0.0 (41), Build ID 3bc9c687**, cut from e08fc90 on user command after
+  the e2e-ios gate went green first attempt (run 29840472137, no waiver); --auto-submit →
+  ASC processing VALID ~25 min later (polled via ASC API JWT script — pattern in
+  scratchpad, rebuild as needed).
+- **RESUBMITTED 2026-07-21 15:53 UTC** (Chrome: removed build 40 → attached 41 → Save →
+  Add for Review → Submit for Review, final click user-confirmed). **New Submission ID
+  `893c563d-490c-46fe-8d8b-67ec351c0ea8`, version 1.0 WAITING FOR REVIEW.** Old
+  submission `4c3b96e5` reads COMPLETE/Removed — ASC review-submission relationships
+  don't expose Resolution Center text via the public API (404 on
+  `resolutionCenterThreads`); Chrome is the way to read rejection messages.
+- Tracks otherwise unchanged: 🤖 next dedicated session = Play Integrity (TODO 8b) ·
+  📣 marketing on Claude Desktop, Code reactive.
+
 **SESSION CLOSE (2026-07-16 — LinkedIn asset-capture service session for the Desktop
 workstream):**
 - **Seven capture PNGs delivered to `linkedin-drafts/assets/`** (gitignored — NEVER let these

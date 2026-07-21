@@ -83,10 +83,13 @@ NOT cut the build until they're in, so we don't burn another build):
       is web-only now (pure `storeBandVisible` guard + 2 regression vitest). Submission
       `4c3b96e5-…` stays open in ASC — resubmit by attaching the NEW build to the same
       submission (don't cancel it).
-- [ ] **Cut build 41 [USER command] = the resubmission build** (same JS-only fingerprint;
-      e2e-ios gate first) → in ASC swap build 40 → 41 on the rejected version → resubmit.
-      No Resolution Center reply needed — the fix speaks for itself; reply only if
-      rejected again.
+- [x] **RESUBMITTED 2026-07-21 15:53 UTC** — build 41 (Build ID 3bc9c687, cut from
+      e08fc90, e2e-ios gate green run 29840472137 first attempt) attached to version 1.0
+      via Chrome; new Submission ID `893c563d-490c-46fe-8d8b-67ec351c0ea8` — **WAITING
+      FOR REVIEW**. No Resolution Center reply sent (the fix speaks for itself). The
+      original submission `4c3b96e5` reads COMPLETE. Same watch rules as before: on
+      rejection → text verbatim into a session; on approval → manual release, launch
+      moment coordinated with Track 3.
 - [ ] Trader case (Apple identity → AELaboratories) rides in parallel; when it closes:
       declare Trader → verification → EU storefronts (incl. Spain) unlock. Then align
       the legal pages' operator identity (STORE_PAPERWORK.md Step 1 note).
