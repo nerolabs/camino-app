@@ -199,8 +199,16 @@ cosmetics ride OTA/web. What landed this turn:
   Integrity (TODO 8b) when the user opens Android time · 📣 marketing runs on Claude Desktop
   (user re-confirmed this session); Code stays reactive on growth.
 
-**SESSION 2026-07-21 — APPLE'S FIRST VERDICT: REJECTED → FIXED → RESUBMITTED, same
-session:**
+**SESSION CLOSE (2026-07-21 — APPLE'S FIRST VERDICT: REJECTED → FIXED → RESUBMITTED,
+same session; working tree clean at close, all pushed):**
+- **NEXT SESSION: react to Apple's second verdict** (submission `893c563d`, Waiting for
+  Review since 15:53 UTC; up to 48h quoted). Rejection → text verbatim into a session
+  (read it via Chrome in ASC — NOT the API); approval → **manual release, launch moment
+  coordinated with the Desktop marketing track** (web + non-EU iOS until the trader case
+  unlocks EU storefronts — channel copy points at getcamino.app until Spain unlocks).
+  If Apple stays quiet >48h, that's still normal — don't poke before ~4 days.
+- Meanwhile the standing queue is unchanged: 🤖 Play Integrity dedicated session (TODO
+  8b) when the user opens Android time · 📣 serve Desktop-track asset requests reactively.
 - **Build 40 REJECTED** (reviewed 2026-07-21 on iPad Air 11" M3 after 8 days; message in
   ASC Resolution Center, read via Chrome): **Guideline 2.3.10 Accurate Metadata, one item
   — the landing page's "coming soon to Google Play" pill rendered inside the iOS binary.**
