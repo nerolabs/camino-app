@@ -77,9 +77,16 @@ NOT cut the build until they're in, so we don't burn another build):
 **The app is submitted. Work splits three ways; MARKETING is the main proactive focus.**
 
 ### Track 1 — 🍎 iOS: REACTIVE ONLY (Apple owns the clock)
-- [ ] Watch ASC (24–48h typical; one rejection cycle priced in as normal). **On any
-      rejection: paste the text verbatim into a session** — fix or reviewer-response
-      drafted same session. Submission ID `4c3b96e5-4b8c-48cb-9242-91f765590173`.
+- [x] ~~Watch ASC~~ **REJECTED 2026-07-21 (reviewed on iPad Air 11" M3, 8 days in queue)
+      — Guideline 2.3.10 Accurate Metadata, ONE item: the landing page's "coming soon to
+      Google Play" pill rendered inside the iOS binary.** Fixed same day: `StoreBadges`
+      is web-only now (pure `storeBandVisible` guard + 2 regression vitest). Submission
+      `4c3b96e5-…` stays open in ASC — resubmit by attaching the NEW build to the same
+      submission (don't cancel it).
+- [ ] **Cut build 41 [USER command] = the resubmission build** (same JS-only fingerprint;
+      e2e-ios gate first) → in ASC swap build 40 → 41 on the rejected version → resubmit.
+      No Resolution Center reply needed — the fix speaks for itself; reply only if
+      rejected again.
 - [ ] Trader case (Apple identity → AELaboratories) rides in parallel; when it closes:
       declare Trader → verification → EU storefronts (incl. Spain) unlock. Then align
       the legal pages' operator identity (STORE_PAPERWORK.md Step 1 note).

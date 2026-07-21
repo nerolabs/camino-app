@@ -9,6 +9,12 @@ export const Platform = {
     spec.web ?? spec.default,
 };
 
+// Identity create() so component modules (which build styles at module scope) can be
+// imported for their exported pure helpers without rendering anything.
+export const StyleSheet = {
+  create: <T,>(styles: T): T => styles,
+};
+
 export const Linking = {
   openURL: async (_url: string): Promise<void> => {},
   canOpenURL: async (_url: string): Promise<boolean> => true,

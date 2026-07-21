@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Linking, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 
@@ -7,6 +7,13 @@ import { palette } from '@/constants/Colors';
 // guidelines forbid it without a live listing, and a real "Download" badge that can't
 // download would be a lie). When the listings go live, pass iosUrl / androidUrl: the caption
 // flips to "Download on the …" and the pills become links. That's the only change needed.
+
+// WEB-ONLY. App Review rejected build 40 under Guideline 2.3.10 (2026-07-21) for the
+// "Google Play" pill this band shows — no rival-store references may ship in the iOS binary,
+// and inside an installed app the band is redundant anyway.
+export function storeBandVisible(os: typeof Platform.OS): boolean {
+  return os === 'web';
+}
 
 type Props = { iosUrl?: string; androidUrl?: string };
 
@@ -30,6 +37,7 @@ function Badge({ store, url }: { store: string; url?: string }) {
 export default function StoreBadges({ iosUrl, androidUrl }: Props) {
   const { t } = useTranslation();
   const live = !!(iosUrl || androidUrl);
+  if (!storeBandVisible(Platform.OS)) return null;
   return (
     <View style={styles.wrap}>
       <Text style={styles.eyebrow}>{t('storeBadges.eyebrow')}</Text>

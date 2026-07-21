@@ -719,6 +719,16 @@ const ROWS: Row[] = [
       'Two errors can matter more than two thousand: the event count was tiny, but both were real people from the exact channel the growth plan leans on next — monitoring earns its keep by catching the failures that would otherwise be invisible refusals.',
     ],
   },
+  {
+    feature: 'Apple\'s first verdict: rejected — for advertising the rival store',
+    date: '21 Jul 2026',
+    work: 'Eight days after submission, Apple reviewed the app and rejected it on exactly one point: the home screen\'s "coming soon" pill for the other major app store. Their rule (Guideline 2.3.10) is that an iOS app may not carry references to third-party platforms, and the app renders the same landing page the website does — store-availability band included. The fix: that band is now web-only; inside an installed app it was redundant anyway ("download our app" is a strange thing to tell someone already inside it). One platform gate, a regression test so no rival-store copy can quietly return to a native build, and the corrected build heads back to Apple.',
+    decisions: [
+      'Fix rejections at the root, again: no appeal, no reworded pill — the band simply doesn\'t belong inside the binary, so it\'s gone from it.',
+      'Sharing one codebase across web and native means every marketing surface needs a "who is this for?" check — the store band was written for a browser visitor and shipped to the phone unexamined.',
+      'Every bug that reaches a person earns a regression test — including when the person is Apple\'s reviewer.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {
