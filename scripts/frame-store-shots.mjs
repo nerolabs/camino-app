@@ -21,7 +21,9 @@ const CAPTIONS = {
   'interview-screen-mid-point.PNG': 'Answer a few questions —\nyour roadmap builds live.',
   'your-roadmap.PNG': 'Real steps, real deadlines —\nnothing you don’t need.',
   'task-drawer-card.png': 'Every step explained —\nwith the official source.',
-  'sample-plan.PNG': 'Peek at a full sample plan —\nfree, no account needed.',
+  // 2.3.7 (2026-07-23): Apple counts "free" as a price reference — screenshots must not
+  // mention pricing at all. Keep price words out of every caption here.
+  'sample-plan.PNG': 'Peek at a full sample plan —\nno account needed.',
 };
 
 mkdirSync(OUT, { recursive: true });

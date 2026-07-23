@@ -199,6 +199,66 @@ cosmetics ride OTA/web. What landed this turn:
   Integrity (TODO 8b) when the user opens Android time · 📣 marketing runs on Claude Desktop
   (user re-confirmed this session); Code stays reactive on growth.
 
+**SESSION UPDATE (2026-07-23 — APPLE ROUND 3: AI answers accepted-ish, but a NEW 2.3.7
+("free" in screenshot caption) + a phantom-subscription questionnaire; both answered same
+day):**
+- **Apple's response to the AI reply came as FOUR messages** (12:49/12:50/12:52 = the same
+  message resent thrice, a Resolution Center glitch; 1:08 PM = the operative one):
+  **(a) NEW rejection Guideline 2.3.7** — "references to free… are considered a price
+  reference"; their attachment was our framed sample-plan screenshot whose caption read
+  "…free, no account needed." **(b) Guideline 2.1 continues with five boilerplate PAID
+  SUBSCRIPTION questions** — triggered (per their attached device screenshots) by the
+  in-app "Free · about 3 minutes · no account needed to start" microcopy + the "My
+  account" hamburger item pattern-matching to freemium. Camino has no payments at all.
+- **2.3.7 FIXED:** `scripts/frame-store-shots.mjs` caption → "Peek at a full sample plan —
+  no account needed." (comment added: price words NEVER in captions); frames re-rendered;
+  in ASC Media Manager (6.9" set) the old shot was deleted + new uploaded + dragged back
+  to position 3. NOTE: deliberately did NOT scrub the tiny in-app "Free ·" line inside the
+  screenshot content — that's genuine app UI, not metadata; flagged as residual risk.
+- **Reply SENT 2026-07-23 2:10 PM** (drafted by Claude, user clicked Send): flat
+  no-subscriptions/no-IAP/nothing-for-sale answers to all five + explanation that "Free"
+  = the whole product and "My account" = optional save-your-roadmap account with no
+  billing + guide-mentioned costs are government/third-party fees + 2.3.7 remediation
+  note. **"Resubmit to App Review" stayed grayed — the reply IS the path; review
+  proceeds from the thread. Watch for Apple's next message.**
+- **Automation lesson (cost ~30 min):** ASC screenshot upload cannot be driven end-to-end:
+  the harness file_upload tool rejects host paths, ASC's CSP blocks fetch/img injection
+  (localhost CORS server useless), no local .p8 (ASC API key is EAS-cloud-managed), and
+  Terminal lacks macOS Accessibility keystroke permission for the native file dialog.
+  Everything EXCEPT the file-picker click automates fine (delete, reorder-by-drag,
+  Resolution Center text via form_input). Fix for next time: user grants Terminal
+  Accessibility (System Settings → Privacy & Security) → AppleScript can drive the dialog.
+- **Uncommitted at this point:** frame-store-shots.mjs caption + regenerated framed/*.PNG
+  + the 07-22 and 07-23 HANDOFF blocks — commit on user go-ahead.
+
+**SESSION UPDATE (2026-07-22 — APPLE'S SECOND VERDICT: REJECTED with AI QUESTIONS →
+REPLY SUBMITTED same morning; review clock running again):**
+- **Build 41 REJECTED 2026-07-22** (reviewed on iPad Air 11" M3, submission `893c563d`) —
+  **Guideline 2.1 "Information Needed"**, NOT a defect; the 2.3.10 Google Play issue is
+  gone (fix accepted). Apple asked three AI questions verbatim: (1) is the AI built
+  in-house? (2) does it send personal user data to third-party AI providers such as
+  ChatGPT or others? (3) where can users explicitly consent to this in the app?
+- **Reply submitted by the user same morning** (drafted this session, sent as-is via
+  "Reply to App Review"): hybrid architecture (Claude/Anthropic conversational layer,
+  in-house deterministic engine makes ALL step/date decisions) · only Anthropic, never
+  OpenAI; server-to-server proxy sends conversation text ONLY, no name/email/user-ID
+  (verified in lib/lola.ts — `{mode, params, messages}` contract) · consent surfaces =
+  Lola's first-bubble AI disclosure before any input + footer Privacy Policy naming
+  Anthropic + the no-health/criminal noteHint. **A reply resumes review without a new
+  binary — wait for Apple's next move.**
+- **CONTINGENCY if Apple insists on a dedicated consent step:** small JS-only
+  confirmation (one line/button before the first answer sends) → build 42. Do NOT build
+  it preemptively — the reply may be accepted.
+- **Sentry CAMINO-E DECODED (the "new error"): it was Apple's reviewer, not a user.**
+  WatchdogTermination (iOS killed the app, possibly RAM), build 41, iPad15,3 = the exact
+  review device, **Geography Cork, Ireland** (App Review's home), keyboard breadcrumbs =
+  typing in the interview, app foreground, 08:49 UTC in the review window. 1 event /
+  1 user ever; the rejection doesn't mention a crash. **Left UNRESOLVED deliberately to
+  watch for recurrence** — don't chase a RAM fix on one reviewer event (Sentry's watchdog
+  heuristic also has known false positives). Standing recognition rule: Sentry events
+  geolocated Cork, IE on review-window dates = App Review, not real users.
+- Housekeeping: stray gitignored editor dupe `app/interview 2.tsx` deleted again.
+
 **SESSION CLOSE (2026-07-21 — APPLE'S FIRST VERDICT: REJECTED → FIXED → RESUBMITTED,
 same session; working tree clean at close, all pushed):**
 - **NEXT SESSION: react to Apple's second verdict** (submission `893c563d`, Waiting for
