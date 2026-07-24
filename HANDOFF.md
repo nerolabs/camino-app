@@ -199,6 +199,26 @@ cosmetics ride OTA/web. What landed this turn:
   Integrity (TODO 8b) when the user opens Android time · 📣 marketing runs on Claude Desktop
   (user re-confirmed this session); Code stays reactive on growth.
 
+**SESSION UPDATE (2026-07-24 — APPLE SAID RESUBMIT → RESUBMITTED, back to Waiting for
+Review):**
+- **Apple's 7:39 AM message = acceptance of the round-3 answers:** "We appreciate your
+  efforts to comply… Please resubmit the app for review once any necessary adjustments
+  have been made." No new objections; the 2.3.7 screenshot fix was already in place from
+  yesterday.
+- **Resubmitted same morning** (user clicks, Claude navigating): version page → **Update
+  Review** (this is what re-arms the flow; the submission page's "Resubmit to App Review"
+  stays GRAYED until Update Review flips the item to "Ready for Review") → **Resubmit to
+  App Review** → **status verified: Waiting for Review, 1.0.0 (41), red banner gone.**
+  ASC-flow lesson for the record: Update Review (version page, where Add for Review
+  normally sits) FIRST, then Resubmit (submission page) — the gray Resubmit button is not
+  a bug.
+- **NEXT SESSION: react to Apple's next verdict on submission `893c563d`** — round 4.
+  Trajectory is converging (binary pill → AI questions → caption word → resubmit
+  invitation); a reviewer already ran the app end-to-end on-device 07-22. On approval:
+  MANUAL release, launch moment coordinated with the Desktop marketing track (web +
+  non-EU iOS until the trader case unlocks EU storefronts). On rejection: read via
+  Chrome, same drill.
+
 **SESSION UPDATE (2026-07-23 — APPLE ROUND 3: AI answers accepted-ish, but a NEW 2.3.7
 ("free" in screenshot caption) + a phantom-subscription questionnaire; both answered same
 day):**
