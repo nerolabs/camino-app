@@ -212,6 +212,22 @@ Review):**
   ASC-flow lesson for the record: Update Review (version page, where Add for Review
   normally sits) FIRST, then Resubmit (submission page) — the gray Resubmit button is not
   a bug.
+- **ROUND-4 REVIEW OBSERVED LIVE the same morning (reviewer-artifact ledger, ~1h after
+  resubmit):** Sentry **CAMINO-3 "regression"** = the reviewer (Geography **Cupertino US**,
+  build 41) tapping Sign in with Apple → ASAuthorizationError code-1000 "The authorization
+  attempt failed for an unknown reason" — the CLASSIC review-device failure (their devices
+  aren't signed into iCloud). Handled error, visible alert, email/Google still offered;
+  the string maps from expo-apple-authentication; the issue's first event (build 17,
+  3 wks prior) was the known build-16-era investigation. **Ruling: NO code change, leave
+  CAMINO-3 open to watch; only a non-Apple-geography event makes it real.** (Post-launch
+  nicety, OTA-able: friendlier code-1000 copy "Sign in with Apple isn't available on this
+  device — try email.") PostHog replayed the whole session (person 019f9329…,
+  posthog-react-native): Application Installed → Opened → roadmap_sheet_opened →
+  sample_plan_viewed → sample_plan_step_expanded ×4 → **apple_signin_failed** →
+  kept browsing (roadmap sheet + sample plan again) — a focused spot-check of exactly the
+  disputed screens, no interview run (that was the 07-22 pass), no derail after the
+  sign-in alert. **Reviewer-geography recognition rule now covers Cork IE AND
+  Cupertino US.**
 - **NEXT SESSION: react to Apple's next verdict on submission `893c563d`** — round 4.
   Trajectory is converging (binary pill → AI questions → caption word → resubmit
   invitation); a reviewer already ran the app end-to-end on-device 07-22. On approval:
