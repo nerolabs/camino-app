@@ -249,9 +249,18 @@ Store):**
 - **✅ GOOGLE SEARCH CONSOLE DONE (2026-07-25, Claude-driven Chrome):** URL-prefix
   property `https://getcamino.app/` verified via the HTML-file method —
   `public/google9dab117f535d05a5.html` ships with the site (NEVER delete it; deployed
-  with 10/10 E2E) — and `sitemap.xml` submitted ("Sitemap submitted successfully",
-  1 sitemap on record). TODO Track 3's long-open 30-min item is closed; first
-  query/impression data lands within days and should seed /questions growth (#23).
+  with 10/10 E2E) — and `sitemap.xml` submitted. The initial "Couldn't fetch" status
+  was the known new-property placeholder: it flipped to **Success — 424 pages
+  discovered** within minutes (user screenshot on record). Indexing → impressions →
+  clicks now compounds on its own; nothing to do until data accrues.
+  **Reminder set: Google Calendar event Fri 2026-08-08 09:00 (Europe/Madrid)** — check
+  Performance → Queries and bring the real search phrases into a session to mine for
+  /questions entries + guide improvements (TODO Track 3 measurement item).
+- **Scanner cap ruling (user, same evening):** 5/day was moderation-caution, not labor —
+  raised `max_leads_per_day` to 15 with a NEW `max_leads_per_sub: 3` guard (pickLeads
+  spreads the day across communities; concentration, not volume, is the campaign
+  pattern). Suite 367. Watch-flag: at 15/day the 1-in-3 link rule allows ~5 linked
+  comments/day from one account — flip a sub's `no_link` at the first mod grumble.
 
 **SESSION UPDATE (2026-07-24 — APPLE SAID RESUBMIT → RESUBMITTED, back to Waiting for
 Review):**
