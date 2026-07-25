@@ -1,20 +1,48 @@
 {
   "reddit_username": "",
   "subs": [
-    { "name": "GoingToSpain" },
-    { "name": "SpainAuxiliares" },
-    { "name": "askspain" },
-    { "name": "expats" },
-    { "name": "SpainPersonalFinance" },
-    { "name": "ExpatFIRE" },
-    { "name": "digitalnomad" },
-    { "name": "valencia" },
-    { "name": "Malaga" },
-    { "name": "Granada" },
-    { "name": "Barcelona" },
-    { "name": "Madrid" }
+    {
+      "name": "GoingToSpain"
+    },
+    {
+      "name": "SpainAuxiliares"
+    },
+    {
+      "name": "askspain"
+    },
+    {
+      "name": "expats"
+    },
+    {
+      "name": "SpainPersonalFinance"
+    },
+    {
+      "name": "ExpatFIRE"
+    },
+    {
+      "name": "digitalnomad"
+    },
+    {
+      "name": "valencia"
+    },
+    {
+      "name": "Malaga"
+    },
+    {
+      "name": "Granada"
+    },
+    {
+      "name": "Barcelona"
+    },
+    {
+      "name": "Madrid"
+    }
   ],
-  "search_keywords": ["NIE", "padron", "non-lucrative"],
+  "search_keywords": [
+    "NIE",
+    "padron",
+    "non-lucrative"
+  ],
   "alias_seeds": {
     "padrón": "empadronamiento",
     "padron": "empadronamiento",
@@ -42,5 +70,6 @@
     "wealth tax": "wealth-tax"
   },
   "fb_link_groups": [],
-  "max_leads_per_day": 5
+  "max_leads_per_day": 15,
+  "max_leads_per_sub": 3
 }

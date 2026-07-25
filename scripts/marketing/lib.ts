@@ -35,6 +35,8 @@ export type LeadsConfig = {
   alias_seeds: Record<string, string>; // keyword → guide id, or prefix pattern like "nlv-*"
   fb_link_groups: string[];         // FB groups where a link is tolerated (ledger/admin-approved)
   max_leads_per_day: number;
+  max_leads_per_sub?: number;       // spread the day's leads across subs (default 3) — many
+                                    // comments in one sub in one day is the campaign pattern
 };
 
 export function loadConfig(): LeadsConfig {
@@ -120,6 +122,27 @@ export function matchThread(text: string, table: KeywordEntry[]): Map<string, st
     hits.set(guideId, arr);
   }
   return hits;
+}
+
+/**
+ * Take the day's leads from the confidence-sorted keepers, spreading them across subs:
+ * at most `maxPerSub` from any one community, `maxTotal` overall. Concentration in one
+ * sub — not total volume — is what reads as a campaign to a mod queue.
+ */
+export function pickLeads<T>(
+  items: T[], subOf: (t: T) => string, maxTotal: number, maxPerSub: number,
+): T[] {
+  const perSub = new Map<string, number>();
+  const out: T[] = [];
+  for (const it of items) {
+    if (out.length >= maxTotal) break;
+    const s = subOf(it).toLowerCase();
+    const n = perSub.get(s) ?? 0;
+    if (n >= maxPerSub) continue;
+    perSub.set(s, n + 1);
+    out.push(it);
+  }
+  return out;
 }
 
 /**

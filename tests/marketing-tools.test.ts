@@ -8,7 +8,7 @@ import { describe, it, expect } from 'vitest';
 import { CATALOG } from '../core/engine-controller';
 import {
   deriveKeywordTable, resolveAliasTarget, matchThread, parseRssEntries, candidateScore,
-  digitLintDraft, guideOwnText, renderDigest, parseDigest, type Lead,
+  pickLeads, digitLintDraft, guideOwnText, renderDigest, parseDigest, type Lead,
 } from '../scripts/marketing/lib';
 import fs from 'fs';
 import path from 'path';
@@ -57,6 +57,18 @@ describe('keyword table — generated from the catalog, not hardcoded', () => {
     // hits are the strongest signal: three guide hits outrank one hit + a question mark
     expect(candidateScore({ title: 'a', body: '', hitCount: 3 }))
       .toBeGreaterThan(candidateScore({ title: 'b?', body: '', hitCount: 1 }));
+  });
+
+  it('pickLeads spreads the day across subs — per-sub cap holds, order preserved', () => {
+    const items = [
+      { sub: 'a', n: 1 }, { sub: 'a', n: 2 }, { sub: 'a', n: 3 },
+      { sub: 'b', n: 4 }, { sub: 'a', n: 5 }, { sub: 'c', n: 6 },
+    ];
+    const picked = pickLeads(items, i => i.sub, 4, 2);
+    // a is capped at 2, so the third and fourth a's are skipped in favor of b and c
+    expect(picked.map(i => i.n)).toEqual([1, 2, 4, 6]);
+    // total cap binds too
+    expect(pickLeads(items, i => i.sub, 3, 99).length).toBe(3);
   });
 });
 

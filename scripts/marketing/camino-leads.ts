@@ -13,8 +13,8 @@ import fs from 'fs';
 import { CATALOG, type Obligation } from '../../core/engine-controller';
 import {
   loadConfig, deriveKeywordTable, matchThread, draftComment, fetchRss, candidateScore,
-  renderDigest, digestPath, todayStamp, loadSeen, saveSeen, complete, extractJson,
-  openTab, pasteLoop, LEADS_DIR, type Lead, type RssEntry,
+  pickLeads, renderDigest, digestPath, todayStamp, loadSeen, saveSeen, complete,
+  extractJson, openTab, pasteLoop, LEADS_DIR, type Lead, type RssEntry,
 } from './lib';
 
 const CLASSIFY_CHUNK = 40;      // candidates per LLM call
@@ -122,17 +122,19 @@ async function scan(flags: Set<string>): Promise<void> {
     const { post } = toClassify[v.index];
     console.log(`  near miss ${v.confidence.toFixed(2)} r/${post.subreddit} — ${post.title.slice(0, 70)} → ${v.guide_id} (${v.why})`);
   }
-  const runnersUp = kept.slice(cfg.max_leads_per_day, cfg.max_leads_per_day + 5);
-  for (const v of runnersUp) {
-    const { post } = toClassify[v.index];
-    console.log(`  over daily cap ${v.confidence.toFixed(2)} r/${post.subreddit} — ${post.title.slice(0, 70)} → ${v.guide_id}`);
-  }
 
   // Everything classified is "seen" — a rejected thread stays rejected; only posts we
   // never got to (beyond the budget cap) may resurface tomorrow.
   for (const c of toClassify) seen.add(c.post.id);
 
-  const verdicts = kept.slice(0, cfg.max_leads_per_day);
+  const verdicts = pickLeads(
+    kept, v => toClassify[v.index].post.subreddit,
+    cfg.max_leads_per_day, cfg.max_leads_per_sub ?? 3,
+  );
+  for (const v of kept.filter(k => !verdicts.includes(k)).slice(0, 5)) {
+    const { post } = toClassify[v.index];
+    console.log(`  over cap (daily or per-sub) ${v.confidence.toFixed(2)} r/${post.subreddit} — ${post.title.slice(0, 70)} → ${v.guide_id}`);
+  }
   if (verdicts.length === 0) {
     if (!flags.has('--dry-run')) saveSeen(seen);
     console.log('Classifier kept nothing. Zero leads today.');
