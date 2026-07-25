@@ -13,7 +13,7 @@ import { siteJsonLd } from '@/core/guide-content';
 import { CATALOG } from '@/core/engine-controller';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
-import StoreBadges from '@/components/StoreBadges';
+import StoreBadges, { APP_STORE_URL } from '@/components/StoreBadges';
 import HomeSections from '@/components/landing/HomeSections';
 
 // Labels are i18n keys (common:home.photos.*) so captions localize with the rest of the chrome.
@@ -134,7 +134,7 @@ export default function LandingPage() {
           followed by proof, trust, and a final CTA (docs/LANDING-REDESIGN.md). */}
       <HomeSections />
 
-      <StoreBadges />
+      <StoreBadges iosUrl={APP_STORE_URL} />
 
       <Footer />
 

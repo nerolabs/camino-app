@@ -739,6 +739,16 @@ const ROWS: Row[] = [
       'The reviewer is a user too: monitoring caught their sign-in failing on a device with no iCloud account — recognized, ruled harmless, and left on watch rather than chased, the same triage discipline real users get.',
     ],
   },
+  {
+    feature: 'The honest placeholder pays off: the App Store badge becomes a real link',
+    date: '26 Jul 2026',
+    work: 'Last month the home page promised "no official store badge appears until there\'s a real listing behind it — swapping in the link is a one-line change when the apps ship." The day after launch, that line was paid: the App Store pill now says "Download on the App Store" and actually downloads the app, while Google Play keeps its honest "coming soon." The band\'s copy was rewritten in all five languages for the true half-way state — the iPhone app is here, the browser still does everything, Android is next, and the EU storefronts unlock soon.',
+    decisions: [
+      'The component was designed for exactly this moment: each store\'s pill flips independently when its listing URL exists, so a half-launched reality never has to round up to a lie.',
+      'The pre-written "live" copy claimed "on iPhone and Android" — written for the end state, wrong for today. Copy describes the world as it is, per store, per sentence.',
+      'The listing URL was verified resolving via Apple\'s own lookup API before the link shipped — a download badge that 404s is worse than a coming-soon pill.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

@@ -2,11 +2,12 @@ import { View, Text, TouchableOpacity, StyleSheet, Linking, Platform } from 'rea
 import { useTranslation } from 'react-i18next';
 import { palette } from '@/constants/Colors';
 
-// Store-availability band. Until the apps are actually published we render an HONEST
-// "coming soon" stub — deliberately NOT Apple/Google's official badge artwork (their brand
-// guidelines forbid it without a live listing, and a real "Download" badge that can't
-// download would be a lie). When the listings go live, pass iosUrl / androidUrl: the caption
-// flips to "Download on the …" and the pills become links. That's the only change needed.
+// Store-availability band. A store's pill is an honest "coming soon" stub until its listing
+// is actually live, then its URL flips it to a "Download on the …" link (per-pill — iOS went
+// live 2026-07-25, Google Play still pending). Deliberately NOT Apple/Google's official badge
+// artwork: brand guidelines forbid it without a live listing on Google's side, and one visual
+// system for both pills beats mixing official artwork with a custom stub.
+export const APP_STORE_URL = 'https://apps.apple.com/app/get-camino-your-road-to-spain/id6786412055';
 
 // WEB-ONLY. App Review rejected build 40 under Guideline 2.3.10 (2026-07-21) for the
 // "Google Play" pill this band shows — no rival-store references may ship in the iOS binary,
