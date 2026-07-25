@@ -729,6 +729,16 @@ const ROWS: Row[] = [
       'Every bug that reaches a person earns a regression test — including when the person is Apple\'s reviewer.',
     ],
   },
+  {
+    feature: 'Approved — Get Camino is live on the App Store',
+    date: '25 Jul 2026',
+    work: 'Twelve days and four review rounds after the first submission, Apple approved the app — and the release button was pressed the same morning. After the rival-store pill, the dialogue continued in writing: Apple asked whether the AI is built in-house and where users consent to it (answered plainly: the conversational layer is a leading AI provider, every step and date decision is our own deterministic engine, only conversation text ever leaves — no names, no emails — and Lola\'s first bubble discloses all of it). Then a screenshot caption containing the word "free" was ruled a price reference (one caption reworded), alongside a questionnaire about paid subscriptions the app doesn\'t have (answered: nothing is for sale). Round four passed without a word. Approval waited behind a manual-release switch until this morning; the iPhone app is now downloadable worldwide — except the EU storefronts, which unlock when a pending business-identity verification with Apple completes. The web app serves everyone, Spain included, meanwhile.',
+    decisions: [
+      'Answer reviewers in writing before changing code: across three content rounds, the only change the whole dialogue actually demanded was one word in one screenshot caption — everything else was resolved by stating the facts.',
+      'Release is a chosen moment, not a side effect: manual release meant approval could sit until the launch was ready to be deliberate.',
+      'The reviewer is a user too: monitoring caught their sign-in failing on a device with no iCloud account — recognized, ruled harmless, and left on watch rather than chased, the same triage discipline real users get.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

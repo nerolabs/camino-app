@@ -23,6 +23,7 @@ const SECTIONS: Section[] = [
   {
     h: 'Just shipped',
     items: [
+      { title: '🎉 Get Camino is live on the App Store', date: '25 Jul 2026', note: 'Apple approved the app after four review rounds — the first flagged a rival-store mention (fixed same day), the next two were answered in writing (how the AI works and where users consent; a screenshot caption\'s "free" reworded), and the fourth passed clean. Released this morning: the iPhone app is downloadable worldwide, except the EU storefronts, which unlock once a pending business-identity verification with Apple completes — the web app serves everyone, Spain included, meanwhile.' },
       { title: 'Apple\'s first review came back — one fix, resubmitted', date: '21 Jul 2026', note: 'Apple reviewed the app and rejected it on a single point: the home screen still showed the website\'s "coming soon" pill for the other major app store, and App Store rules don\'t allow references to rival stores inside an iOS app. Fair enough — inside an installed app that band was redundant anyway. It\'s now web-only, a regression test makes sure no rival-store copy can sneak back into a native build, and the corrected build heads back into Apple\'s queue.' },
       { title: 'The human-check works inside Facebook\'s browser now', date: '15 Jul 2026', note: 'Error monitoring caught two real visitors — arriving through Facebook links, inside Facebook\'s built-in browser — whose interview silently failed: that browser gets the strict version of the "prove you\'re human" check, which our invisible widget could never let them answer. Now, when the invisible check can\'t pass, a small visible "quick security check" appears once, you tap it, and the interview picks up where you left off — in all five languages, with regression tests. This is the real-users-as-testers loop doing its job: two errors, both from the exact channel we\'re about to grow on, fixed before the channel opens.' },
       { title: 'The release candidate is out — with over-the-air fixes wired in', date: '13 Jul 2026', note: 'Internal bug-hunting hit the point where two expert testers couldn\'t find anything in an evening, so the release-candidate build went out for real. Before it was cut, the app gained over-the-air updates: fixes to logic and copy now reach installed phones on next launch, no new store review needed — and a fingerprint check makes it impossible for an update to land on an app binary it isn\'t compatible with. The Android track moved too: test device in hand, and a re-read of the launch playbook caught that Android needs its own hardware install-proof (the sibling of the iPhone\'s App Attest) before its first test build.' },
@@ -68,7 +69,7 @@ const SECTIONS: Section[] = [
   {
     h: 'In progress',
     items: [
-      { title: 'The iOS App Store submission — one review cycle in', note: 'Submitted July 13; Apple\'s first review came back July 21 with exactly the one rejection cycle we\'d priced in as normal (a rival-store mention the App Store rules don\'t allow — fixed same day, see Just shipped). Resubmission follows with the corrected build. Release stays manual, for a launch moment we choose. EU storefronts follow a pending trader-status declaration.' },
+      { title: 'The EU storefronts (Spain included)', note: 'The iOS app is live worldwide except the EU\'s App Store storefronts, which Apple withholds until a pending business-identity verification completes and the trader declaration is filed. The web app serves Spain and the EU fully in the meantime; the moment the case closes, the storefronts unlock.' },
       { title: 'The languages get their human pass', note: 'Machine-drafted, mechanically linted — and now verified by native speakers, sentence by sentence, before launch. Corrections land as reviewable diffs against frozen snapshots.' },
       { title: 'Real users become the testers', note: 'Family testing ran its course — the last full evening of expert testing found nothing. From here, real users, crash monitoring, and over-the-air fixes are the quality loop; every bug that reaches a person still earns a permanent regression test.' },
     ],
@@ -76,7 +77,7 @@ const SECTIONS: Section[] = [
   {
     h: 'Next',
     items: [
-      { title: 'The public launch — web, iOS, and Android together', note: 'Android moved up from "later": launching on all three. What remains is honest: native-speaker verification of the new languages, more family testing, and the grown-up paperwork.' },
+      { title: 'The Android app', note: 'Web and iOS are live; Android is the remaining leg. The test device is in hand and the launch playbook is written — the first job is the hardware install-proof (the sibling of the iPhone\'s App Attest) so the interview works from the very first test build.' },
       { title: 'Region-by-region specifics', note: 'The rates and windows for each comunidad, verified against each region\'s own official sources — the content pass behind the region flags.' },
     ],
   },

@@ -199,6 +199,31 @@ cosmetics ride OTA/web. What landed this turn:
   Integrity (TODO 8b) when the user opens Android time · 📣 marketing runs on Claude Desktop
   (user re-confirmed this session); Code stays reactive on growth.
 
+**SESSION CLOSE (2026-07-25 — 🎉 APPROVED → RELEASED: Get Camino is LIVE on the App
+Store):**
+- **Round 4 passed silently** — no fifth message on submission `893c563d`; ASC showed
+  **"1.0 Pending Developer Release"** when checked this morning (Chrome session). The
+  12-day arc, complete: 2.3.10 Google-Play pill (→ build 41) → 2.1 AI questions
+  (written reply) → 2.3.7 "free" caption + phantom-subscription questionnaire (caption
+  fix + written reply) → resubmit invitation → **approved, zero further questions.**
+- **User clicked "Release This Version" this session; status verified: 1.0 Ready for
+  Distribution.** Listing propagates ~1–24h →
+  https://apps.apple.com/app/id6786412055. Reach = worldwide MINUS the EU storefronts
+  (trader case still open) — **Spain rides getcamino.app until it closes; Desktop-track
+  channel copy keeps pointing at the web.**
+- **Release-batch homework done this session:** log.tsx gained the approval+release row;
+  roadmap.tsx got the live-on-the-App-Store headliner, the In-progress submission item
+  became the EU-storefronts item, and Next's launch item became the Android app. TODO
+  Track 1 closed out — **the 📈 post-launch health checklist is now ACTIVE.** No test
+  changes → TEST-COVERAGE.md untouched.
+- **FIRST-DAYS WATCH (next sessions):** (1) verify the live listing + first production
+  (non-TestFlight) install on a real device; spot-check Sign in with Apple on a fresh
+  account — closes the CAMINO-3 loop; (2) PostHog 808581 first organic App Store
+  sessions + Sentry (non-Apple-geography events are real users now); (3) ASC
+  ratings/reviews + crash reports; (4) the launch moment stays coordinated with the
+  Desktop marketing track. Standing queue unchanged: 🤖 Play Integrity dedicated
+  session (TODO 8b) · trader case → EU unlock · 📣 reactive asset support.
+
 **SESSION UPDATE (2026-07-24 — APPLE SAID RESUBMIT → RESUBMITTED, back to Waiting for
 Review):**
 - **Apple's 7:39 AM message = acceptance of the round-3 answers:** "We appreciate your

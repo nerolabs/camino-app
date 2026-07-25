@@ -90,11 +90,20 @@ NOT cut the build until they're in, so we don't burn another build):
       original submission `4c3b96e5` reads COMPLETE. Same watch rules as before: on
       rejection → text verbatim into a session; on approval → manual release, launch
       moment coordinated with Track 3.
+- [x] **🎉 APPROVED + RELEASED 2026-07-25.** Round 4 (submission `893c563d`) passed with
+      no further questions — ASC showed "Pending Developer Release" the morning of
+      2026-07-25; the user clicked **Release This Version** same session; status verified
+      **1.0 Ready for Distribution**. Listing propagates within ~1–24h:
+      https://apps.apple.com/app/id6786412055. **The 📈 post-launch health checklist is
+      now ACTIVE** (PostHog 808581 · Sentry · ASC ratings/crashes). First-days watch:
+      production spot-check on a real device (first non-TestFlight install), Sign in with
+      Apple on a fresh account, reviews/ratings. Post-launch JS fixes ride OTA
+      (`npm run ota:production`).
 - [ ] Trader case (Apple identity → AELaboratories) rides in parallel; when it closes:
       declare Trader → verification → EU storefronts (incl. Spain) unlock. Then align
-      the legal pages' operator identity (STORE_PAPERWORK.md Step 1 note).
-- [ ] On approval: **manual release — the launch moment is coordinated with Track 3**,
-      not clicked reflexively. Post-launch JS fixes ride OTA (`npm run ota:production`).
+      the legal pages' operator identity (STORE_PAPERWORK.md Step 1 note). **Until then
+      the App Store listing is live everywhere EXCEPT the EU — channel copy keeps
+      pointing at getcamino.app for Spain.**
 
 ### Track 2 — 🤖 Android: user starts mornings, dedicated sessions
 - [ ] **[USER, morning] Play Console signup** ($25, personal) — identity verification
