@@ -240,6 +240,18 @@ Store):**
   `marketing/leads.config.json` (copied from the committed .example), optional crontab
   line in marketing/README.md. Homework-pages row deliberately NOT shipped for this —
   publicly announcing the comment engine is a strategy call for Andrew/Desktop track.
+  Post-first-run tuning (user feedback: 315→2 felt thin): candidates now rank by match
+  quality not recency, ALL matches classify in chunks of 40 (cap 200/run), the funnel
+  prints its rejects/near-misses, and classified threads are marked seen. **User ruling
+  on FB: opportunistic capture only** — he pastes URLs only when he steps on a question
+  through normal browsing; FB's unit of leverage stays the admin-approved post
+  (Desktop track).
+- **✅ GOOGLE SEARCH CONSOLE DONE (2026-07-25, Claude-driven Chrome):** URL-prefix
+  property `https://getcamino.app/` verified via the HTML-file method —
+  `public/google9dab117f535d05a5.html` ships with the site (NEVER delete it; deployed
+  with 10/10 E2E) — and `sitemap.xml` submitted ("Sitemap submitted successfully",
+  1 sitemap on record). TODO Track 3's long-open 30-min item is closed; first
+  query/impression data lands within days and should seed /questions growth (#23).
 
 **SESSION UPDATE (2026-07-24 — APPLE SAID RESUBMIT → RESUBMITTED, back to Waiting for
 Review):**

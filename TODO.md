@@ -123,9 +123,11 @@ model as the LinkedIn workstream). Claude-side proactive focus = Track 2 (item 8
       post. Order: Jerez/Cádiz expat FB groups (the local angle) → visa-specific FB
       groups (NLV/DNV/Beckham) → r/SpainPersonalFinance → r/expats → expat forums →
       the webinar-creator warm list. Drafts staged in docs/GROWTH.md for user sign-off.
-- [ ] **[USER ~30 min] Google Search Console** — verify getcamino.app, submit the
-      sitemap; SEO is growth channel #1 and compounds with a multi-week lag. (Claude
-      adds the verification tag if the DNS route isn't preferred.)
+- [x] **Google Search Console — DONE 2026-07-25** (Claude-driven Chrome session, user
+      supervising): URL-prefix property `https://getcamino.app/` verified via HTML file
+      (`public/google9dab117f535d05a5.html` — serves at the root, deployed; do NOT
+      delete, verification depends on it) + `sitemap.xml` submitted successfully.
+      Search data starts accruing in days; queries feed /questions growth (below).
 - [ ] **The launch-moment kit** (PH/HN, held for approval + trader resolution): the
       "built by AI in two weeks" pre-emption paragraph (drafted in GROWTH.md) + listing
       copy. `webinar_url` → user-facing rides a MovingToSpain partnership if it lands.
