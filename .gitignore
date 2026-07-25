@@ -55,3 +55,12 @@ docs/store-assets/clean/
 
 # Unpublished LinkedIn drafts — never commit to the public repo
 linkedin-drafts/
+
+# Marketing-assistant artifacts — the lead-gen operation's activity (targeted threads,
+# drafts, posting ledger) must never reach the public repo. Tool code + spec stay public.
+marketing/leads/
+marketing/weekly/
+marketing/state/
+marketing/ledger.csv
+marketing/fb-inbox.txt
+marketing/leads.config.json

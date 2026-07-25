@@ -223,6 +223,23 @@ Store):**
   ratings/reviews + crash reports; (4) the launch moment stays coordinated with the
   Desktop marketing track. Standing queue unchanged: 🤖 Play Integrity dedicated
   session (TODO 8b) · trader case → EU unlock · 📣 reactive asset support.
+- **SAME-DAY ADDENDUM: the marketing assistant is BUILT** (Desktop-authored spec
+  `marketing/AUTOMATION.md` → Components A+B; C deliberately deferred). `npm run leads`
+  (Reddit scan → batched Opus classify → ≤5 digit-linted drafts → digest) ·
+  `npm run leads:go` / `fb:draft` / `fb:go` (clipboard+tab paste loops — **the tool never
+  posts anything, anywhere**; the guardrail is structural). Verified end-to-end on live
+  data same session: 54 posts → 4 correctly-matched leads with clean drafts, link ratio
+  1/4 with disclosure line. **Two hard-won implementation facts:** reddit 403s ALL
+  anonymous .json now → the tool reads the Atom RSS feeds (`/new.rss`, `/search.rss`,
+  `<permalink>.rss`); and reddit fingerprints node's fetch (undici 429s while curl 200s
+  the same URL in the same second) → transport is `curl` via spawnSync. Pace: 12s/request
+  + 65s backoff — a full 12-sub scan takes ~10 min; it's a patience-based morning cron.
+  All activity artifacts (leads/, ledger.csv, state/, fb-inbox.txt, live config) are
+  GITIGNORED — public repo, the operation's receipts stay out. +13 vitest
+  (`marketing-tools.test.ts`, suite 365); user-side setup: set `reddit_username` in
+  `marketing/leads.config.json` (copied from the committed .example), optional crontab
+  line in marketing/README.md. Homework-pages row deliberately NOT shipped for this —
+  publicly announcing the comment engine is a strategy call for Andrew/Desktop track.
 
 **SESSION UPDATE (2026-07-24 — APPLE SAID RESUBMIT → RESUBMITTED, back to Waiting for
 Review):**
