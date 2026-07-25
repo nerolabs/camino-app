@@ -122,6 +122,16 @@ export function matchThread(text: string, table: KeywordEntry[]): Map<string, st
   return hits;
 }
 
+/**
+ * Rank a candidate thread for classification order: distinct guide hits (the strongest
+ * signal), an actual question mark in the title, and a real selftext beat pure recency —
+ * so when volume spikes (cold start, 12 subs) city-sub chatter can't crowd out the good
+ * threads.
+ */
+export function candidateScore(c: { title: string; body: string; hitCount: number }): number {
+  return c.hitCount * 2 + (/[?¿]/.test(c.title) ? 2 : 0) + (c.body.length > 200 ? 1 : 0);
+}
+
 // ---------------------------------------------------------------------------
 // Digit lint — the guide-prose rule applied to drafts (spec §A4): a draft may not
 // contain any number that isn't in the cited guide's own text.

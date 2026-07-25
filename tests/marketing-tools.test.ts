@@ -7,7 +7,7 @@
 import { describe, it, expect } from 'vitest';
 import { CATALOG } from '../core/engine-controller';
 import {
-  deriveKeywordTable, resolveAliasTarget, matchThread, parseRssEntries,
+  deriveKeywordTable, resolveAliasTarget, matchThread, parseRssEntries, candidateScore,
   digitLintDraft, guideOwnText, renderDigest, parseDigest, type Lead,
 } from '../scripts/marketing/lib';
 import fs from 'fs';
@@ -48,6 +48,15 @@ describe('keyword table — generated from the catalog, not hardcoded', () => {
     const table2 = [{ keyword: 'nie', guideId: 'nie-number' }];
     expect(matchThread('my application was denied by my niece', table2).size).toBe(0);
     expect(matchThread('where do I get my NIE?', table2).size).toBe(1);
+  });
+
+  it('candidateScore ranks a real question with substance above bare chatter', () => {
+    const question = candidateScore({ title: '¿NIE before padrón?', body: 'x'.repeat(300), hitCount: 2 });
+    const chatter = candidateScore({ title: 'beach recs', body: 'short', hitCount: 1 });
+    expect(question).toBeGreaterThan(chatter);
+    // hits are the strongest signal: three guide hits outrank one hit + a question mark
+    expect(candidateScore({ title: 'a', body: '', hitCount: 3 }))
+      .toBeGreaterThan(candidateScore({ title: 'b?', body: '', hitCount: 1 }));
   });
 });
 

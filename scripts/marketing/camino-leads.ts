@@ -12,12 +12,14 @@
 import fs from 'fs';
 import { CATALOG, type Obligation } from '../../core/engine-controller';
 import {
-  loadConfig, deriveKeywordTable, matchThread, draftComment, fetchRss,
+  loadConfig, deriveKeywordTable, matchThread, draftComment, fetchRss, candidateScore,
   renderDigest, digestPath, todayStamp, loadSeen, saveSeen, complete, extractJson,
   openTab, pasteLoop, LEADS_DIR, type Lead, type RssEntry,
 } from './lib';
 
-const MAX_CLASSIFY = 40;      // LLM budget bound per run
+const CLASSIFY_CHUNK = 40;      // candidates per LLM call
+const MAX_CLASSIFY_TOTAL = 200; // hard LLM budget bound per run (5 calls) — cold-start protection
+const MIN_CONFIDENCE = 0.6;
 const MAX_AGE_H = 48;
 
 type RedditPost = RssEntry & { subreddit: string };
@@ -86,17 +88,56 @@ async function scan(flags: Set<string>): Promise<void> {
     if (guideHits.size === 0) continue;
     candidates.push({ post, guideHits });
   }
-  candidates.sort((a, b) => b.post.createdUtc - a.post.createdUtc);
-  const toClassify = candidates.slice(0, MAX_CLASSIFY);
+  // Best material first: match quality over recency (recency only breaks ties), so a
+  // volume spike can't push good threads past the classification budget.
+  const scoreOf = (c: Candidate) =>
+    candidateScore({ title: c.post.title, body: c.post.body, hitCount: c.guideHits.size });
+  candidates.sort((a, b) => scoreOf(b) - scoreOf(a) || b.post.createdUtc - a.post.createdUtc);
+  const toClassify = candidates.slice(0, MAX_CLASSIFY_TOTAL);
   console.log(`${posts.size} posts fetched → ${candidates.length} keyword matches → classifying ${toClassify.length}`);
   if (toClassify.length === 0) { console.log('Zero leads today.'); return; }
 
-  // 3. Classify (one batched LLM call)
-  const verdicts = (await classify(toClassify))
-    .filter(v => v.answerable && v.confidence >= 0.6 && guideById.has(v.guide_id))
-    .sort((a, b) => b.confidence - a.confidence)
-    .slice(0, cfg.max_leads_per_day);
-  if (verdicts.length === 0) { console.log('Classifier kept nothing. Zero leads today.'); return; }
+  // 3. Classify — every candidate, in chunks (each chunk is one LLM call)
+  const allVerdicts: Verdict[] = [];
+  for (let off = 0; off < toClassify.length; off += CLASSIFY_CHUNK) {
+    const chunk = toClassify.slice(off, off + CLASSIFY_CHUNK);
+    try {
+      for (const v of await classify(chunk)) allVerdicts.push({ ...v, index: v.index + off });
+    } catch (e) {
+      console.error(`  ! classify chunk @${off} failed: ${(e as Error).message}`);
+    }
+  }
+
+  // The funnel, visible: what the classifier rejected and why, so the daily yield
+  // reads as judgment, not a black box.
+  const notAnswerable = allVerdicts.filter(v => !v.answerable);
+  const badGuide = allVerdicts.filter(v => v.answerable && !guideById.has(v.guide_id));
+  const lowConf = allVerdicts.filter(v => v.answerable && guideById.has(v.guide_id) && v.confidence < MIN_CONFIDENCE);
+  const kept = allVerdicts
+    .filter(v => v.answerable && v.confidence >= MIN_CONFIDENCE && guideById.has(v.guide_id))
+    .sort((a, b) => b.confidence - a.confidence);
+  console.log(`classified ${allVerdicts.length}: ${notAnswerable.length} not answerable · ${lowConf.length} low confidence · ${badGuide.length} no matching guide · ${kept.length} kept${kept.length > cfg.max_leads_per_day ? ` (drafting top ${cfg.max_leads_per_day})` : ''}`);
+  const nearMisses = lowConf.filter(v => v.confidence >= 0.4).sort((a, b) => b.confidence - a.confidence);
+  for (const v of nearMisses.slice(0, 8)) {
+    const { post } = toClassify[v.index];
+    console.log(`  near miss ${v.confidence.toFixed(2)} r/${post.subreddit} — ${post.title.slice(0, 70)} → ${v.guide_id} (${v.why})`);
+  }
+  const runnersUp = kept.slice(cfg.max_leads_per_day, cfg.max_leads_per_day + 5);
+  for (const v of runnersUp) {
+    const { post } = toClassify[v.index];
+    console.log(`  over daily cap ${v.confidence.toFixed(2)} r/${post.subreddit} — ${post.title.slice(0, 70)} → ${v.guide_id}`);
+  }
+
+  // Everything classified is "seen" — a rejected thread stays rejected; only posts we
+  // never got to (beyond the budget cap) may resurface tomorrow.
+  for (const c of toClassify) seen.add(c.post.id);
+
+  const verdicts = kept.slice(0, cfg.max_leads_per_day);
+  if (verdicts.length === 0) {
+    if (!flags.has('--dry-run')) saveSeen(seen);
+    console.log('Classifier kept nothing. Zero leads today.');
+    return;
+  }
 
   // 4. Enforce the link budget (≤1 in 3) + per-sub no_link flags, then draft
   const linkBudget = Math.max(1, Math.floor(verdicts.length / 3));
@@ -120,7 +161,6 @@ async function scan(flags: Set<string>): Promise<void> {
       guideId: v.guide_id, matched: guideHits.get(v.guide_id) ?? [],
       why: v.why, withLink, draft, lintOk, posted: false, skipped: false,
     });
-    seen.add(post.id);
   }
 
   // 5. Digest (+ optional tabs). Dry-run prints and persists nothing.

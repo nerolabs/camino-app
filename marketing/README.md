@@ -24,8 +24,10 @@ npm run leads -- --dry-run   # print the digest, write no state, open no tabs (f
   the engine and guide pages build from) plus the alias seeds in `leads.config.json`
   (`padrón → empadronamiento`, `nlv → nlv-*`, …). A new obligation automatically becomes a
   new listening keyword.
-- **One batched LLM call classifies** candidates (answerable question from a real mover?
-  which guide? confidence); low confidence drops. Threads older than 48h, already-seen
+- **Batched LLM calls classify every match** (answerable question from a real mover?
+  which guide? confidence ≥ 0.6 keeps) — candidates are ranked by match quality first, and
+  the scan prints the funnel (not-answerable / low-confidence / kept) plus near-misses so
+  the yield is inspectable. Threads older than 48h, already-classified
   (`marketing/state/seen.json`), or already carrying your comment are skipped.
 - **Drafts follow the comment-engine rules**: answer fully in the comment first, link as a
   footnote in ≤1/3 of drafts (`?utm_source=rd-<sub>` / `fb-<group>`) with the disclosure
