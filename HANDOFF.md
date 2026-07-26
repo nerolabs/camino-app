@@ -199,6 +199,33 @@ cosmetics ride OTA/web. What landed this turn:
   Integrity (TODO 8b) when the user opens Android time · 📣 marketing runs on Claude Desktop
   (user re-confirmed this session); Code stays reactive on growth.
 
+**SESSION CLOSE (2026-07-26 — launch+1: badge live, LinkedIn consult delivered, scanner
+in Andrew's hands):**
+- **Home store band is LIVE with a real App Store link** (commit 0916d8d, deployed 10/10
+  E2E): `StoreBadges` got `iosUrl` (listing verified resolving via Apple's lookup API
+  first), Google Play pill stays an honest coming-soon, `titleLive`/`subLive` rewritten
+  ×5 for the half-live state incl. the one-clause EU caveat. Build-log row 62 pays off
+  the 4-Jul "swap the link when the apps ship" promise. When Android ships: pass
+  `androidUrl`; when the trader case closes: drop the EU clause from subLive ×5.
+- **LinkedIn series consult DELIVERED** (`linkedin-drafts/consult-memo.md`, gitignored —
+  Desktop editor owns drafting/publishing). PostHog verdict (project 214229 on
+  eu.posthog.com — NOTE: "808581" used throughout this file is a dashboard id, not the
+  project id): ~30 LinkedIn visitors in 3 weeks, 26/28 pageviews went to the build log,
+  2 interview starts, ZERO completions — the series serves credibility only, and the memo
+  says so. Recommended lineup: P8 as packaged (48h decision window on Andrew's personal
+  confirmations, else swap) → P9 = the App Review gauntlet ending "it's live" → P10
+  finale with the arc extended to Jul 25 → optional encore = the council teardown.
+  Killed: the amnesia docs post, the two-Claude workflow as a standalone. Process fix:
+  UTMs on all remaining series links.
+- **Scanner handover:** Andrew now drives `npm run leads` / `leads:go` manually from a
+  dedicated terminal, multiple days/week — NO cron. Caps 15/day + 3/sub live. FB stays
+  opportunistic-capture only.
+- **NEXT SESSIONS:** the 07-25 first-days watch below still stands (production install +
+  Sign in with Apple spot-check, PostHog/Sentry/ASC reviews) · Search Console Performance
+  check is calendared 2026-08-08 · Desktop track may send asset/verification requests for
+  P8–P10 (the gauntlet receipts = log rows 60–62 + commit history) · 🤖 Play Integrity
+  dedicated session when Android time opens.
+
 **SESSION CLOSE (2026-07-25 — 🎉 APPROVED → RELEASED: Get Camino is LIVE on the App
 Store):**
 - **Round 4 passed silently** — no fifth message on submission `893c563d`; ASC showed
