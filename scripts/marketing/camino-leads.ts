@@ -14,7 +14,8 @@ import { CATALOG, type Obligation } from '../../core/engine-controller';
 import {
   loadConfig, deriveKeywordTable, deriveSearchProbes, matchThread, draftComment, fetchRss,
   candidateScore, pickLeads, renderDigest, digestPath, todayStamp, loadSeen, saveSeen,
-  complete, extractJson, openTab, pasteLoop, LEADS_DIR, type Lead, type RssEntry,
+  complete, extractJson, openTab, pasteLoop, LEADS_DIR, RSS_DELAY_SECONDS, logScanStats,
+  type Lead, type RssEntry,
 } from './lib';
 
 const CLASSIFY_CHUNK = 40;      // candidates per LLM call
@@ -26,7 +27,7 @@ type RedditPost = RssEntry & { subreddit: string };
 
 async function alreadyCommented(permalink: string, username: string): Promise<boolean> {
   if (!username) return false;
-  const entries = await fetchRss(`${permalink}.rss`);
+  const { entries } = await fetchRss(`${permalink}.rss`);
   // first entry is the post itself; the rest are comments
   return entries.slice(1).some(e => e.author === username);
 }
@@ -67,10 +68,18 @@ async function scan(flags: Set<string>): Promise<void> {
   const probes = deriveSearchProbes(cfg.alias_seeds, cfg.search_keywords);
   console.log(`search probes (${probes.length}/sub): ${probes.map(p => `[${p}]`).join(' ')}`);
   const posts = new Map<string, RedditPost>();
-  let viaProbe = 0; // posts the search probes surfaced that /new.rss did not
+  let viaProbe = 0;   // posts the search probes surfaced that /new.rss did not
+  let feedsOk = 0;    // feeds that returned a 200
+  let giveUps = 0;    // feeds that never got a 200 — their "0 posts" is a miss, not empty
+  const giveUpFeeds: string[] = []; // "r/sub /new" etc. — so a re-run can target them
+  const t0 = Date.now();
   const active = cfg.subs.filter(s => !s.banned);
+  const feedsPerSub = 1 + probes.length;
+  const totalFeeds = active.length * feedsPerSub;
+  const etaMin = Math.round((totalFeeds * RSS_DELAY_SECONDS) / 60);
+  console.log(`scan plan: ${active.length} subs × ${feedsPerSub} feeds = ${totalFeeds} fetches at ~${RSS_DELAY_SECONDS}s each (~${etaMin} min if no throttling)`);
   for (const [si, sub] of active.entries()) {
-    console.log(`fetching r/${sub.name} (${si + 1}/${active.length}, ${1 + probes.length} feeds at ~12s each) ...`);
+    console.log(`fetching r/${sub.name} (${si + 1}/${active.length}, ${feedsPerSub} feeds) ...`);
     const feeds = [
       { label: '/new', url: `https://www.reddit.com/r/${sub.name}/new.rss?limit=25` },
       ...probes.map((q, i) => ({
@@ -79,15 +88,37 @@ async function scan(flags: Set<string>): Promise<void> {
       })),
     ];
     for (const { label, url } of feeds) {
-      const entries = (await fetchRss(url)).filter(e => e.id.startsWith('t3_'));
+      const { entries: raw, gaveUp } = await fetchRss(url);
+      const entries = raw.filter(e => e.id.startsWith('t3_'));
       let fresh = 0;
       for (const e of entries) {
         if (!posts.has(e.id)) { fresh++; if (label !== '/new') viaProbe++; }
         posts.set(e.id, { ...e, subreddit: sub.name });
       }
-      console.log(`  ${label}: ${entries.length} posts (+${fresh} unseen) · ${posts.size} total`);
+      if (gaveUp) { giveUps++; giveUpFeeds.push(`r/${sub.name} ${label}`); }
+      else feedsOk++;
+      console.log(`  ${label}: ${
+        gaveUp ? '⚠ GAVE UP (throttled — this 0 is a miss, not empty)' : `${entries.length} posts (+${fresh} unseen)`
+      } · ${posts.size} total`);
     }
   }
+  const elapsedMin = (Date.now() - t0) / 60000;
+  console.log(`\nfetch done in ${elapsedMin.toFixed(1)} min · ${feedsOk}/${totalFeeds} feeds OK · ${giveUps} gave up${
+    giveUps ? ` (${(100 * giveUps / totalFeeds).toFixed(0)}% — pacing may need another nudge; RSS_DELAY_MS=${RSS_DELAY_SECONDS}s)` : ''
+  }`);
+  if (giveUps > 0) {
+    console.log(`  ⚠ throttled feeds (their 0s are misses — re-run later to backfill): ${giveUpFeeds.join(', ')}`);
+  }
+  // Append this run to the gitignored tuning diary (marketing/state/scan-log.jsonl). The digest
+  // is what you read; this is history for a future pacing pass. Skipped on --dry-run (persists nothing).
+  const recordScan = (matches: number, classified: number, drafts: number) => {
+    if (dryRun) return;
+    logScanStats({
+      ts: new Date().toISOString(), paceSeconds: RSS_DELAY_SECONDS, elapsedMin: Number(elapsedMin.toFixed(1)),
+      subs: active.length, totalFeeds, feedsOk, giveUps, giveUpFeeds,
+      posts: posts.size, viaProbe, matches, classified, drafts,
+    });
+  };
 
   // 2. Match + filter
   const candidates: Candidate[] = [];
@@ -106,7 +137,8 @@ async function scan(flags: Set<string>): Promise<void> {
   candidates.sort((a, b) => scoreOf(b) - scoreOf(a) || b.post.createdUtc - a.post.createdUtc);
   const toClassify = candidates.slice(0, MAX_CLASSIFY_TOTAL);
   console.log(`${posts.size} posts fetched (${viaProbe} beyond the /new window, via search probes) → ${candidates.length} keyword matches → classifying ${toClassify.length}`);
-  if (toClassify.length === 0) { console.log('Zero leads today.'); return; }
+  if (giveUps > 0) console.log(`⚠ ${giveUps}/${totalFeeds} feeds gave up after throttling — some subs may hold unseen posts; re-run later to backfill.`);
+  if (toClassify.length === 0) { recordScan(candidates.length, 0, 0); console.log('Zero leads today.'); return; }
 
   // 3. Classify — every candidate, in chunks (each chunk is one LLM call)
   const allVerdicts: Verdict[] = [];
@@ -148,6 +180,7 @@ async function scan(flags: Set<string>): Promise<void> {
   }
   if (verdicts.length === 0) {
     if (!flags.has('--dry-run')) saveSeen(seen);
+    recordScan(candidates.length, toClassify.length, 0);
     console.log('Classifier kept nothing. Zero leads today.');
     return;
   }
@@ -188,6 +221,7 @@ async function scan(flags: Set<string>): Promise<void> {
   const file = digestPath(date, 'reddit');
   fs.writeFileSync(file, digest);
   saveSeen(seen);
+  recordScan(candidates.length, toClassify.length, leads.length);
   console.log(`\n${leads.length} lead(s) → ${file}`);
   if (flags.has('--tabs')) for (const l of leads) openTab(l.permalink);
   console.log('Next: `npm run leads:go` for the clipboard walk — you hit POST.');

@@ -264,6 +264,8 @@ const RSS_UA = 'camino-leads/1.0 (rss reader; drafts only, never posts)';
 // burstier than a flat rate — nudge this up further rather than leaning on the backoff.
 const RSS_DELAY_MS = 28000;
 const RSS_BACKOFF_MS = 65000;
+/** The single source of truth for the pacing tune — surfaced so the scanner can print it. */
+export const RSS_DELAY_SECONDS = RSS_DELAY_MS / 1000;
 
 function curlGet(url: string): { status: number; body: string } {
   const res = spawnSync('curl', ['-s', '-w', '\n%{http_code}', '-A', RSS_UA, '--max-time', '30', url], {
@@ -274,14 +276,21 @@ function curlGet(url: string): { status: number; body: string } {
   return { status: Number(out.slice(nl + 1)) || 0, body: out.slice(0, nl) };
 }
 
-/** Polite fetch of one reddit RSS feed: slow pace, one long retry on 403/429, [] on failure. */
-export async function fetchRss(url: string): Promise<RssEntry[]> {
+export type RssFetch = { entries: RssEntry[]; gaveUp: boolean };
+
+/**
+ * Polite fetch of one reddit RSS feed: slow pace, one long retry on 403/429.
+ * Returns `gaveUp: true` when we never got a 200 (double-throttle or network error), so callers
+ * can tell a genuinely-empty feed from a give-up: an empty `entries` is only trustworthy when
+ * `gaveUp` is false. Previously a blind `[]` hid throttled misses behind "0 posts" progress lines.
+ */
+export async function fetchRss(url: string): Promise<RssFetch> {
   for (let attempt = 0; attempt < 2; attempt++) {
     const { status, body } = curlGet(url);
     if (status === 200) {
       const entries = parseRssEntries(body);
       await new Promise(r => setTimeout(r, RSS_DELAY_MS));
-      return entries;
+      return { entries, gaveUp: false };
     }
     const throttled = status === 429 || status === 403;
     console.error(`  ! ${status || 'network error'} ${url}${throttled && attempt === 0 ? ` — backing off ${RSS_BACKOFF_MS / 1000}s` : ''}`);
@@ -289,7 +298,7 @@ export async function fetchRss(url: string): Promise<RssEntry[]> {
     await new Promise(r => setTimeout(r, RSS_BACKOFF_MS));
   }
   await new Promise(r => setTimeout(r, RSS_DELAY_MS));
-  return [];
+  return { entries: [], gaveUp: true };
 }
 
 // ---------------------------------------------------------------------------
@@ -397,6 +406,32 @@ export function loadSeen(): Set<string> {
 export function saveSeen(seen: Set<string>): void {
   fs.mkdirSync(STATE_DIR, { recursive: true });
   fs.writeFileSync(path.join(STATE_DIR, 'seen.json'), JSON.stringify([...seen], null, 1));
+}
+
+// Per-run scan telemetry — one JSON line appended per run to a gitignored log, so a future
+// pacing-tuning pass has HISTORY (give-up rate + timing across runs), not just one scrollback.
+// The digest is what Andrew reads; this file is the tuning diary nobody has to look at live.
+export type ScanStats = {
+  ts: string;            // ISO timestamp of the run
+  paceSeconds: number;   // RSS_DELAY_SECONDS in effect — so a log line explains its own timing
+  elapsedMin: number;
+  subs: number;
+  totalFeeds: number;
+  feedsOk: number;
+  giveUps: number;       // feeds that never got a 200 (throttle/network) — their 0s are misses
+  giveUpFeeds: string[];
+  posts: number;
+  viaProbe: number;      // posts only the search probes surfaced (deep-window payoff)
+  matches: number;
+  classified: number;
+  drafts: number;
+};
+
+export const SCAN_LOG_PATH = path.join(STATE_DIR, 'scan-log.jsonl');
+
+export function logScanStats(stats: ScanStats): void {
+  fs.mkdirSync(STATE_DIR, { recursive: true });
+  fs.appendFileSync(SCAN_LOG_PATH, JSON.stringify(stats) + '\n');
 }
 
 // ---------------------------------------------------------------------------
