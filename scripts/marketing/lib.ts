@@ -31,7 +31,8 @@ export type SubConfig = { name: string; no_link?: boolean; banned?: boolean };
 export type LeadsConfig = {
   reddit_username: string;          // skip threads/comments authored by this account
   subs: SubConfig[];
-  search_keywords: string[];        // extra /search.json probes per sub (keep short — each is a request)
+  search_keywords: string[];        // extra probe terms folded into the OR-group search
+                                    // probes (deriveSearchProbes) alongside the alias-seed keys
   alias_seeds: Record<string, string>; // keyword → guide id, or prefix pattern like "nlv-*"
   fb_link_groups: string[];         // FB groups where a link is tolerated (ledger/admin-approved)
   max_leads_per_day: number;
@@ -98,6 +99,36 @@ export function deriveKeywordTable(
     for (const id of resolveAliasTarget(target, catalog)) add(alias, id);
   }
   return out;
+}
+
+/**
+ * Compress the listening vocabulary into a few OR-group search queries. Reddit search
+ * speaks Lucene, so one probe covers ~6 terms — the whole alias vocabulary reaches the
+ * deep /search.rss window (t=week) without multiplying requests (each probe is one
+ * request per sub at RSS_DELAY_MS pace). Terms are the alias-seed keys plus the
+ * config's extra search_keywords; accent/punctuation variants of the same phrase
+ * collapse to one term because reddit search normalizes them anyway.
+ */
+export function deriveSearchProbes(
+  aliasSeeds: Record<string, string>, extraTerms: string[] = [], groupSize = 6,
+): string[] {
+  const terms: string[] = [];
+  const seen = new Set<string>();
+  for (const raw of [...extraTerms, ...Object.keys(aliasSeeds)]) {
+    const norm = raw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, ' ').trim();
+    if (!norm || seen.has(norm)) continue;
+    seen.add(norm);
+    terms.push(raw.trim());
+  }
+  const probes: string[] = [];
+  for (let i = 0; i < terms.length; i += groupSize) {
+    probes.push(terms.slice(i, i + groupSize)
+      // quote anything with a space or hyphen so OR binds the whole phrase,
+      // not a stray token (lucene reads a bare mid-query "-x" as NOT x)
+      .map(t => (/[^a-z0-9áéíóúüñ]/i.test(t) ? `"${t}"` : t)).join(' OR '));
+  }
+  return probes;
 }
 
 /** Match a thread's text against the table → guide ids with the keywords that hit. */

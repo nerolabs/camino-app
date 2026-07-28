@@ -12,9 +12,9 @@
 import fs from 'fs';
 import { CATALOG, type Obligation } from '../../core/engine-controller';
 import {
-  loadConfig, deriveKeywordTable, matchThread, draftComment, fetchRss, candidateScore,
-  pickLeads, renderDigest, digestPath, todayStamp, loadSeen, saveSeen, complete,
-  extractJson, openTab, pasteLoop, LEADS_DIR, type Lead, type RssEntry,
+  loadConfig, deriveKeywordTable, deriveSearchProbes, matchThread, draftComment, fetchRss,
+  candidateScore, pickLeads, renderDigest, digestPath, todayStamp, loadSeen, saveSeen,
+  complete, extractJson, openTab, pasteLoop, LEADS_DIR, type Lead, type RssEntry,
 } from './lib';
 
 const CLASSIFY_CHUNK = 40;      // candidates per LLM call
@@ -60,21 +60,32 @@ async function scan(flags: Set<string>): Promise<void> {
   const now = Date.now() / 1000;
   const guideById = new Map(CATALOG.map(o => [o.id, o]));
 
-  // 1. Fetch — /new.rss per sub, plus /search.rss for the configured probe keywords
-  // (reddit 403s anonymous .json; the Atom feeds still serve — see lib.ts fetchRss)
+  // 1. Fetch — /new.rss per sub (shallow: newest 25), plus OR-group /search.rss probes
+  // that carry the WHOLE alias vocabulary a week back — /new alone misses anything a
+  // busy sub scrolled past. (reddit 403s anonymous .json; the Atom feeds still serve —
+  // see lib.ts fetchRss)
+  const probes = deriveSearchProbes(cfg.alias_seeds, cfg.search_keywords);
+  console.log(`search probes (${probes.length}/sub): ${probes.map(p => `[${p}]`).join(' ')}`);
   const posts = new Map<string, RedditPost>();
-  for (const sub of cfg.subs) {
-    if (sub.banned) continue;
-    console.log(`fetching r/${sub.name} ...`);
-    const urls = [
-      `https://www.reddit.com/r/${sub.name}/new.rss?limit=25`,
-      ...cfg.search_keywords.map(k =>
-        `https://www.reddit.com/r/${sub.name}/search.rss?q=${encodeURIComponent(k)}&restrict_sr=1&sort=new&t=week`),
+  let viaProbe = 0; // posts the search probes surfaced that /new.rss did not
+  const active = cfg.subs.filter(s => !s.banned);
+  for (const [si, sub] of active.entries()) {
+    console.log(`fetching r/${sub.name} (${si + 1}/${active.length}, ${1 + probes.length} feeds at ~12s each) ...`);
+    const feeds = [
+      { label: '/new', url: `https://www.reddit.com/r/${sub.name}/new.rss?limit=25` },
+      ...probes.map((q, i) => ({
+        label: `probe ${i + 1}`,
+        url: `https://www.reddit.com/r/${sub.name}/search.rss?q=${encodeURIComponent(q)}&restrict_sr=1&sort=new&t=week&limit=100`,
+      })),
     ];
-    for (const url of urls) {
-      for (const e of await fetchRss(url)) {
-        if (e.id.startsWith('t3_')) posts.set(e.id, { ...e, subreddit: sub.name });
+    for (const { label, url } of feeds) {
+      const entries = (await fetchRss(url)).filter(e => e.id.startsWith('t3_'));
+      let fresh = 0;
+      for (const e of entries) {
+        if (!posts.has(e.id)) { fresh++; if (label !== '/new') viaProbe++; }
+        posts.set(e.id, { ...e, subreddit: sub.name });
       }
+      console.log(`  ${label}: ${entries.length} posts (+${fresh} unseen) · ${posts.size} total`);
     }
   }
 
@@ -94,7 +105,7 @@ async function scan(flags: Set<string>): Promise<void> {
     candidateScore({ title: c.post.title, body: c.post.body, hitCount: c.guideHits.size });
   candidates.sort((a, b) => scoreOf(b) - scoreOf(a) || b.post.createdUtc - a.post.createdUtc);
   const toClassify = candidates.slice(0, MAX_CLASSIFY_TOTAL);
-  console.log(`${posts.size} posts fetched → ${candidates.length} keyword matches → classifying ${toClassify.length}`);
+  console.log(`${posts.size} posts fetched (${viaProbe} beyond the /new window, via search probes) → ${candidates.length} keyword matches → classifying ${toClassify.length}`);
   if (toClassify.length === 0) { console.log('Zero leads today.'); return; }
 
   // 3. Classify — every candidate, in chunks (each chunk is one LLM call)

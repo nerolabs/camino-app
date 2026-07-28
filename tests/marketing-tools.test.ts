@@ -7,15 +7,16 @@
 import { describe, it, expect } from 'vitest';
 import { CATALOG } from '../core/engine-controller';
 import {
-  deriveKeywordTable, resolveAliasTarget, matchThread, parseRssEntries, candidateScore,
-  pickLeads, digitLintDraft, guideOwnText, renderDigest, parseDigest, type Lead,
+  deriveKeywordTable, deriveSearchProbes, resolveAliasTarget, matchThread, parseRssEntries,
+  candidateScore, pickLeads, digitLintDraft, guideOwnText, renderDigest, parseDigest, type Lead,
 } from '../scripts/marketing/lib';
 import fs from 'fs';
 import path from 'path';
 
-const SEEDS = JSON.parse(
+const EXAMPLE_CONFIG = JSON.parse(
   fs.readFileSync(path.join(__dirname, '..', 'marketing', 'leads.config.example.json'), 'utf8'),
-).alias_seeds as Record<string, string>;
+) as { alias_seeds: Record<string, string>; search_keywords: string[] };
+const SEEDS = EXAMPLE_CONFIG.alias_seeds;
 
 describe('keyword table — generated from the catalog, not hardcoded', () => {
   const table = deriveKeywordTable(SEEDS);
@@ -69,6 +70,40 @@ describe('keyword table — generated from the catalog, not hardcoded', () => {
     expect(picked.map(i => i.n)).toEqual([1, 2, 4, 6]);
     // total cap binds too
     expect(pickLeads(items, i => i.sub, 3, 99).length).toBe(3);
+  });
+});
+
+describe('search probes — the whole alias vocabulary reaches the deep /search.rss window', () => {
+  const probes = deriveSearchProbes(SEEDS, EXAMPLE_CONFIG.search_keywords);
+  const keptTerms = probes.flatMap(p => p.split(' OR ')).map(t => t.replace(/"/g, ''));
+  const norm = (s: string) =>
+    s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+
+  it('every alias seed and extra search keyword lands in some probe', () => {
+    const covered = new Set(keptTerms.map(norm));
+    for (const term of [...Object.keys(SEEDS), ...EXAMPLE_CONFIG.search_keywords]) {
+      expect(covered.has(norm(term)), `"${term}" reaches no search probe`).toBe(true);
+    }
+  });
+
+  it('accent/spacing variants collapse to one term (padrón/padron, non-lucrative/non lucrative)', () => {
+    const norms = keptTerms.map(norm);
+    expect(norms.length).toBe(new Set(norms).size); // no duplicate work
+    expect(keptTerms.filter(t => /^padr[oó]n$/i.test(t)).length).toBe(1);
+    expect(keptTerms.filter(t => norm(t) === 'non lucrative').length).toBe(1);
+  });
+
+  it('multi-word and hyphenated phrases are quoted so OR binds the whole phrase', () => {
+    const joined = probes.join(' ');
+    expect(joined).toContain('"sworn translation"');
+    expect(joined).toContain('"non-lucrative"'); // a bare mid-query -x reads as NOT x in lucene
+  });
+
+  it('group size caps each probe (one probe = one request per sub)', () => {
+    for (const p of deriveSearchProbes(SEEDS, [], 4)) {
+      expect(p.split(' OR ').length).toBeLessThanOrEqual(4);
+    }
+    expect(probes.length).toBeLessThanOrEqual(Math.ceil(keptTerms.length / 6) + 1);
   });
 });
 

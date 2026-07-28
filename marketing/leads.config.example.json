@@ -40,7 +40,9 @@
   ],
   "search_keywords": [
     "NIE",
+    "TIE",
     "padron",
+    "empadronamiento",
     "non-lucrative"
   ],
   "alias_seeds": {
@@ -60,6 +62,8 @@
     "licence exchange": "dgt-exchange",
     "bring my dog": "pet-import",
     "bring my cat": "pet-import",
+    "pet import": "pet-import",
+    "residence card": "residencia",
     "apostille": "apostille-documents",
     "sworn translation": "sworn-translation",
     "sworn translator": "sworn-translation",
