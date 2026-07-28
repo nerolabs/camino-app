@@ -199,6 +199,41 @@ cosmetics ride OTA/web. What landed this turn:
   Integrity (TODO 8b) when the user opens Android time · 📣 marketing runs on Claude Desktop
   (user re-confirmed this session); Code stays reactive on growth.
 
+**SESSION CLOSE (2026-07-28 — launch health sweep, all green):**
+- **First post-launch health sweep since 07-14 (which was TestFlight-only). Verdict: the
+  live app is healthy in the wild — zero real-user errors, zero crashes, zero negative
+  reviews.** Read via Chrome (ASC + Sentry `camino-ko` + PostHog 214229); no local API
+  keys on disk, so dashboards are the path.
+- **ASC (data through Jul 26):** 1.0 Ready for Distribution, still live. 3 first-time
+  downloads · 1 redownload · 35 impressions · 5 product-page views · 16% conversion.
+  **Crashes by App Version = Not Enough Data (none).** Ratings & Reviews = ZERO. Low
+  volume is BY DESIGN — channel copy points at getcamino.app, not the store, until the
+  trader case unlocks EU.
+- **Sentry — 3 unresolved issues, ALL accounted for, NONE a real production user:**
+  (1) **CAMINO-3** (Sign in with Apple code-1000) — latest event Jul 27, build 41,
+  iPhone 16 Pro / iOS 26.5.2, **Geography = Cupertino, US = Apple.** The standing
+  recognition rule held again; ruling stands (no code change, keep watching; only a
+  non-Apple-geo event makes it real). Now 3 events / 3 users lifetime, all Apple/dev.
+  (2) **CAMINO-A** "lola proxy 401" — the breadcrumb POSTs to
+  `camino--staging.expo.app/api/lola` → **STAGING, Jul 21, 1 event** (own testing / the
+  LinkedIn-capture staging redeploy), not production. (3) **CAMINO-E** WatchdogTermination
+  — the Cork IE reviewer event (07-22), no recurrence. Nothing new resolved or changed.
+- **PostHog:** real web traffic — several distinct anonymous visitors in the last hours
+  (today), landing mostly on `/` and `/how-i-was-built/log`, all `web` lib. Matches the
+  LinkedIn-consult pattern (visitors → build log). No app-session errors. App itself is
+  quiet (3 downloads), as expected.
+- **First-days-watch status:** the Sentry/PostHog/ASC review is DONE and clean. The one
+  remaining item is USER-side and physical: a production (non-TestFlight) install + Sign
+  in with Apple on a fresh account on a real device — the CAMINO-3 evidence says SiwA
+  fails only on Apple review devices (no iCloud), never a real user, so this is
+  confirmation, not a suspected bug.
+- **⚠️ NEXT SESSION — delete the ` 2.ts` editor dupes (user directive 2026-07-28):**
+  `scripts/marketing/lib 2.ts` and `tests/marketing-tools.test 2.ts`. Both are gitignored
+  local-only macOS copy cruft — they DIFFER from their originals but don't match vitest's
+  `*.test.ts` glob and can't reach the repo, so they're harmless; just `rm` them to keep
+  the tree tidy. (Left them this session out of session-close caution since they differ.)
+- Working tree clean; no code changes this session.
+
 **SESSION CLOSE (2026-07-28 — scanner search expansion + staging keepalive):**
 - **The scanner's search mechanism was the limiter, not the vocabulary** (Andrew's catch:
   "just NIE, padron and NLV"). /new.rss covers only the newest 25 posts/sub while the
@@ -208,11 +243,20 @@ cosmetics ride OTA/web. What landed this turn:
   beyond the /new window. +4 vitest → suite 371. New aliases: "residence card" →
   residencia, "pet import"; search extras TIE + empadronamiento (live config updated
   too — gitignored, so no diff).
-- **OPEN: the yield number.** No clean full scan has run with the new probes yet —
-  back-to-back scans from one IP got hard-429'd (reddit's anonymous budget), eating
-  both dry-runs and Andrew's first terminal run. Lesson on record: ONE scan per
-  window; never re-run immediately after a kill. Next `npm run leads` prints
-  "(M beyond the /new window, via search probes)" — that M is the payoff measure.
+- **RESOLVED 2026-07-28: the yield number is in.** First clean full scan with the new
+  probes (Andrew ran it, output reviewed): **348 posts fetched, 48 beyond the /new
+  window via search probes → 116 keyword matches → 88 not-answerable · 20 low-conf ·
+  8 kept → 7 drafts** (2026-07-28.md). **M = 48** — the deep window is paying off and
+  fed real leads (the r/digitalnomad Schengen post + the Valencia EU-family
+  escolarización lead came in through probes, not /new). Draft quality high; link
+  discipline held (2/7 carry links, under the 1-in-3 rule, both UTM+disclosure).
+  **The 429 storm is loud but harmless** — nearly every probe hit `429 → back off 65s →
+  retry → succeed`; the `fetchFeed` retry (`lib.ts:272`) absorbs it and the scan
+  completed in one ~1hr pass. Two notes for later: (1) a double-429 returns `[]`
+  silently, so some `0 posts` lines may be give-ups, not empty results — a blind spot;
+  (2) `RSS_DELAY_MS=12s` doesn't prevent 429s (reddit's anon budget ≈ 1 req/30s), so
+  raising base spacing to ~25–30s could dodge most 65s penalties and roughly halve
+  runtime — an empirical tune, NOT yet done.
 - **Supabase camino-staging auto-paused** (free tier, 7 quiet days; email 2026-07-28).
   Andrew restored it; new `.github/workflows/staging-keepalive.yml` (1c32e9b + 63285e6)
   pings an anon `profiles?select=*&limit=1` Mon+Thu 07:00 UTC — verified green. Gotchas

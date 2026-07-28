@@ -257,7 +257,12 @@ const RSS_UA = 'camino-leads/1.0 (rss reader; drafts only, never posts)';
 // scanner — a slow morning cron, not a crawler. NOTE: the request goes through `curl`, not
 // node's fetch: reddit fingerprints the HTTP client and 403/429s undici even when curl gets
 // a 200 on the same URL in the same second (verified 2026-07-25).
-const RSS_DELAY_MS = 12000;
+// PACING: the 2026-07-28 clean scan 429'd on nearly EVERY request at 12s spacing — each 429
+// cost a 65s backoff, so the 12s wait bought nothing and the run took ~1hr. Reddit's anon
+// budget looks closer to ~1 req/30s, so we space at 28s to preempt most 429s: fewer 65s
+// penalties should net a FASTER, quieter run. If 429s persist at 28s, reddit's limit is
+// burstier than a flat rate — nudge this up further rather than leaning on the backoff.
+const RSS_DELAY_MS = 28000;
 const RSS_BACKOFF_MS = 65000;
 
 function curlGet(url: string): { status: number; body: string } {
