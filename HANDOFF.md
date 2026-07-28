@@ -199,6 +199,29 @@ cosmetics ride OTA/web. What landed this turn:
   Integrity (TODO 8b) when the user opens Android time · 📣 marketing runs on Claude Desktop
   (user re-confirmed this session); Code stays reactive on growth.
 
+**SESSION CLOSE (2026-07-28 — scanner search expansion + staging keepalive):**
+- **The scanner's search mechanism was the limiter, not the vocabulary** (Andrew's catch:
+  "just NIE, padron and NLV"). /new.rss covers only the newest 25 posts/sub while the
+  deep week-back search channel probed 3 terms. Now `deriveSearchProbes()` (commit
+  d693ca7) auto-builds OR-group queries from ALL alias seeds + extras: 26 terms in 5
+  probes/sub, depth 100, per-feed progress lines, and the summary reports posts found
+  beyond the /new window. +4 vitest → suite 371. New aliases: "residence card" →
+  residencia, "pet import"; search extras TIE + empadronamiento (live config updated
+  too — gitignored, so no diff).
+- **OPEN: the yield number.** No clean full scan has run with the new probes yet —
+  back-to-back scans from one IP got hard-429'd (reddit's anonymous budget), eating
+  both dry-runs and Andrew's first terminal run. Lesson on record: ONE scan per
+  window; never re-run immediately after a kill. Next `npm run leads` prints
+  "(M beyond the /new window, via search probes)" — that M is the payoff measure.
+- **Supabase camino-staging auto-paused** (free tier, 7 quiet days; email 2026-07-28).
+  Andrew restored it; new `.github/workflows/staging-keepalive.yml` (1c32e9b + 63285e6)
+  pings an anon `profiles?select=*&limit=1` Mon+Thu 07:00 UTC — verified green. Gotchas
+  learned: the bare /rest/v1/ root 401s new-style publishable keys ("secret API key
+  required"), and a paused project's subdomain doesn't even resolve. A failing keepalive
+  run = staging is down/paused; the failure email is the alert. Key in repo secret
+  STAGING_SUPABASE_ANON_KEY. Prod (oftrp…) unaffected — real traffic + Monday
+  weekly-email cron keep it warm.
+
 **SESSION CLOSE (2026-07-26 — launch+1: badge live, LinkedIn consult delivered, scanner
 in Andrew's hands):**
 - **Home store band is LIVE with a real App Store link** (commit 0916d8d, deployed 10/10
