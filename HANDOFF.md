@@ -121,6 +121,51 @@ cosmetics ride OTA/web. What landed this turn:
   night AWAITING USER SIGN-OFF; permission-first rule stands; Search Console setup is
   the user-side 30-min item).
 
+**SESSION CLOSE (2026-07-29 — 🤖 ANDROID TRACK OPENED: Play account signup submitted + Play
+Integrity code LANDED flag-off; plus an SEO indexing sanity pass and a scanner-run review):**
+- **🤖 THE ANDROID DEDICATED SESSION (TODO 8b) — the hard blocker is now cleared.** Two parallel
+  moves this session:
+  1. **USER started the Play developer account** (guided step-by-step; he's new to the Google
+     ecosystem). Owner account = **andrew@getcamino.app** (his call — the business domain; matches
+     git identity). Account type = **Individual/Yourself** (deliberate — skips the org D-U-N-S
+     hoop). **$25 paid, identity documents SUBMITTED → Google verifying (1–3 days).** Contact-phone
+     verification is gated behind ID approval (greyed until then — nothing to do). Redmi 13 prepped
+     (signed into andrew@getcamino.app, Developer options on). **NEXT USER ACTION: watch
+     andrew@getcamino.app for the approval email**, then verify phone + we create the app listing.
+  2. **CLAUDE built Play Integrity FLAG-OFF (this commit)** — the Android twin of App Attest, the
+     one hard prerequisite (without a session-mint path the interview ships DEAD on Android).
+     Mirrors the App Attest pattern exactly: `lib/playIntegrity.ts` (Google verdict decode via
+     their API + pure `evaluateVerdict`; OAuth via Web-Crypto RS256 JWT, cached), an Android branch
+     in `lib/nativeAttest.native.ts` (SAME `@expo/app-integrity` dep — `prepareIntegrityTokenProvider`
+     + `requestIntegrityCheck`, **no new dependency**), and a `kind:'play-integrity'` branch in
+     `app/api/session+api.ts` gated by **`PLAY_INTEGRITY_ENABLED`**. **Triple-inert:** client
+     no-ops until `EXPO_PUBLIC_GOOGLE_CLOUD_PROJECT_NUMBER` is set, server 501s until the flag is 1,
+     nothing runs on iOS/web. +11 vitest (`play-integrity.test.ts`) → **382**; tsc clean.
+- **The flip procedure YOU do after the account clears is documented in `docs/ANDROID_LAUNCH.md`'s
+  ⛔ block (✅ CODE LANDED note):** link the Play Integrity API + note the Cloud **project number**
+  (→ `EXPO_PUBLIC_GOOGLE_CLOUD_PROJECT_NUMBER`, plaintext), create a **service account** key
+  (→ `GOOGLE_PLAY_INTEGRITY_SA_KEY`, **sensitive**), deploy, flip `PLAY_INTEGRITY_ENABLED=1`, prove
+  on the Redmi via the closed-test install (Play Integrity only returns verdicts for Play installs).
+- **⛔ Still holds: do NOT cut the Android .aab until the flag path is proven** — but the code being
+  in-tree flag-off is exactly the state Phase 2 wanted; the build can happen the moment the account
+  is ready and the env is set.
+- **SEO indexing sanity pass (user flagged "only 8 of 400+ indexed"):** diagnosed via GSC in Chrome
+  — **NOT a bug.** Property verified 2026-07-25 (4 days prior); Sitemaps report = **Success, 424
+  discovered**; Page Indexing = **8 indexed, 0 not-indexed-with-reasons**. Live URL inspection of
+  two guides: `apostille-documents` already **indexed**; `nlv-income-proof` = "Crawled – not
+  indexed" with self-canonical + Google agreeing + fetch OK + indexing allowed — **zero technical
+  defects; the 5-locale duplication is NOT collapsing pages.** It's the normal cold-start curve
+  (queued, not rejected). Requested indexing on `nlv-income-proof` to prime the pump. **Real
+  levers = time + inbound traffic/links** (the Reddit runs feed this). **WATCH: re-check the
+  indexed count ~mid-Aug; if still single/low-double digits, THEN it's a thin/templated-content
+  problem, not technical.**
+- **Scanner run examined (2026-07-29, standing job — memory `examine-scanner-logs-each-run`):**
+  clean run (74min, 72/72 feeds, 0 give-ups, 45 via probe; 345 posts → 96 matches → 5 drafts).
+  5 posted, all logged; link discipline 1/5 (apostille, correct UTM+disclosure). The one ⚠️ DIGIT
+  LINT FAILED (draft #3 dnv-income-proof) was a **false positive on "1099"** (form name, not a
+  stat) — blunt `\d+` regex limitation; content fine. Wealth-tax figures passed lint because
+  they're guide-sourced. Possible future fix: allowlist form tokens (1099/720/714/130) in the lint.
+
 **SESSION CLOSE (2026-07-14):**
 - **iOS: still Waiting for Review** (submitted 2026-07-13 23:11; submission
   `4c3b96e5-4b8c-48cb-9242-91f765590173`). User will report the outcome — on rejection,

@@ -14,9 +14,12 @@ import { captureServerError } from '@/lib/sentryServer';
 import { corsPreflight, volumeGuard } from '@/lib/apiGuard';
 import { mintSession, mintChallenge, verifyChallenge } from '@/lib/session';
 import { verifyAttestation } from '@/lib/appAttest';
+import { verifyIntegrityToken, parseServiceAccount } from '@/lib/playIntegrity';
 
 // Apple App Attest app identity ("<TeamID>.<BundleID>"). Overridable via env for other envs.
 const APP_ATTEST_APP_ID = process.env.APP_ATTEST_APP_ID ?? 'VB9CHJM4AN.com.nerolabs.camino';
+// Android package name for the Play Integrity decode call. Overridable via env.
+const ANDROID_PACKAGE_NAME = process.env.ANDROID_PACKAGE_NAME ?? 'com.nerolabs.camino';
 
 const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
@@ -69,9 +72,12 @@ export async function POST(request: Request) {
 
     const body = (await request.json()) as {
       kind?: string; token?: unknown; keyId?: unknown; attestation?: unknown; challenge?: unknown;
+      integrityToken?: unknown;
     };
 
-    // ── Native: issue an App Attest challenge (a signed nonce; no Turnstile needed) ──
+    // ── Native: issue a challenge (a signed nonce; no Turnstile needed) ──
+    // Shared by App Attest (iOS) and Play Integrity (Android): both bind this nonce into their
+    // attestation/verdict, so the server proves freshness without a DB.
     if (body.kind === 'challenge') {
       return Response.json({ challenge: await mintChallenge(signingSecret) });
     }
@@ -93,6 +99,34 @@ export async function POST(request: Request) {
       if (!r.ok) {
         console.error('[appAttest] verification failed:', r.reason);
         return Response.json({ error: 'attestation failed' }, { status: 403 });
+      }
+      return Response.json({ session: await mintSession(signingSecret) });
+    }
+
+    // ── Native Android: verify a Play Integrity token → mint the same session token (C2b) ──
+    // Twin of the App Attest branch above. FLAG-GATED (PLAY_INTEGRITY_ENABLED) so the flip to live
+    // is one explicit env change once the service-account key exists and it's proven on a real
+    // Play-installed device (Play Integrity only returns verdicts for Play installs — the closed
+    // test is where it's validated). Until then Android reports not-enabled, the safe default.
+    if (body.kind === 'play-integrity') {
+      const { integrityToken, challenge } = body;
+      if (typeof integrityToken !== 'string' || typeof challenge !== 'string')
+        return Response.json({ error: 'integrityToken, challenge required' }, { status: 400 });
+      if (process.env.PLAY_INTEGRITY_ENABLED !== '1') {
+        return Response.json({ error: 'play integrity not enabled' }, { status: 501 });
+      }
+      // Same 5-min signed-nonce freshness the client bound in as the Play Integrity requestHash.
+      if (!(await verifyChallenge(signingSecret, challenge)))
+        return Response.json({ error: 'stale or invalid challenge' }, { status: 403 });
+      const serviceAccount = parseServiceAccount(process.env.GOOGLE_PLAY_INTEGRITY_SA_KEY);
+      if (!serviceAccount) {
+        console.error('[playIntegrity] PLAY_INTEGRITY_ENABLED=1 but GOOGLE_PLAY_INTEGRITY_SA_KEY missing/malformed');
+        return Response.json({ error: 'not configured' }, { status: 501 });
+      }
+      const r = await verifyIntegrityToken({ token: integrityToken, challenge, packageName: ANDROID_PACKAGE_NAME, serviceAccount });
+      if (!r.ok) {
+        console.error('[playIntegrity] verification failed:', r.reason);
+        return Response.json({ error: 'integrity check failed' }, { status: 403 });
       }
       return Response.json({ session: await mintSession(signingSecret) });
     }

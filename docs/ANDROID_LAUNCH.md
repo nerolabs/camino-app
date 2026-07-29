@@ -31,6 +31,26 @@ Test device: **Redmi 13 PURCHASED 2026-07-13 (€85)** — Phase 0 can run any t
 > flip. Note Play Integrity only returns verdicts for apps **installed via Play**, so the
 > closed-test track (a normal Play install) is exactly where it can be proven. Sequence it
 > between Phase 1 (account, has wait time anyway) and Phase 2 (the build).
+>
+> ### ✅ CODE LANDED 2026-07-29 (flag-off, inert — safe to ship before the account exists)
+> The whole path is in the tree, mirroring the App Attest pattern, and cannot affect iOS/web:
+> - **Client** `lib/nativeAttest.native.ts` — Android branch: `prepareIntegrityTokenProviderAsync`
+>   + `requestIntegrityCheckAsync`, using the SAME `@expo/app-integrity` dep as iOS (no new module).
+>   Inert until `EXPO_PUBLIC_GOOGLE_CLOUD_PROJECT_NUMBER` is set.
+> - **Server** `lib/playIntegrity.ts` (verdict decode via Google's API + pure `evaluateVerdict`) and
+>   a `kind:'play-integrity'` branch in `app/api/session+api.ts`, gated by `PLAY_INTEGRITY_ENABLED`.
+> - **Tests** `tests/play-integrity.test.ts` (11) — verdict gate + OAuth JWT signing/caching.
+>
+> **What YOU set once the Play app + Cloud project exist (Phase 3), then we flip:**
+> 1. In Google Cloud (the project auto-linked to the Play app), **link the Play Integrity API** and
+>    note the **project number** → set EAS env `EXPO_PUBLIC_GOOGLE_CLOUD_PROJECT_NUMBER` (plaintext).
+> 2. Create a **service account** with the Play Integrity API role, download its JSON key → set EAS
+>    env `GOOGLE_PLAY_INTEGRITY_SA_KEY` = the whole JSON (**`sensitive` visibility**).
+> 3. (`ANDROID_PACKAGE_NAME` already defaults to `com.nerolabs.camino`; override only if it differs.)
+> 4. Deploy carrying the code, then flip **`PLAY_INTEGRITY_ENABLED=1`** and verify on the Redmi via
+>    the closed-test install (a real Play install — the only place a genuine verdict is returned).
+>    Until step 4 the Android app falls back to no-session and the server returns 501, exactly like
+>    iOS did before its flip.
 
 ---
 
