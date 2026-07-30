@@ -166,7 +166,18 @@ first production .aab BUILDING. [MID-SESSION RECORD — a partial close addendum
   **tablet decision still open**) → flip `PLAY_INTEGRITY_ENABLED=1` + redeploy → verify verdict on Redmi
   (Play Integrity only returns verdicts for Play installs; a fresh upload may return `UNRECOGNIZED_VERSION`
   until processed — propagation, not a bug) → recruit **≥12 testers** → the 14-day clock.
+- **✅ Merged to main + pushed** (`8ee4cab`, then deploy fix `12fea35`), and **prod hosting DEPLOYED**
+  (`npm run deploy:production` — 10/10 public E2E green; server now carries `GOOGLE_PLAY_INTEGRITY_SA_KEY`
+  + the flag-off play-integrity branch). **⚠️ deploy.sh bug fixed:** adding the multi-line SA-key JSON to
+  the prod env broke `source .env.local` (exit 127 before anything shipped) — changed to grep+eval only
+  `EXPO_PUBLIC_*` + `SUPABASE_SERVICE_ROLE_KEY` into the shell (other secrets reach the deploy via
+  `eas deploy` directly). Standing lesson: keep multi-line/JSON secrets OUT of anything that `source`s
+  the pulled env.
 - **User housekeeping done:** deleted the local SA-key JSON from ~/Downloads after it was in EAS.
+- **➡️ NEXT (user-gated, in one sitting to start the 14-day clock):** manual-upload the .aab to a Closed
+  track → install on the Redmi → Claude flips `PLAY_INTEGRITY_ENABLED=1` + redeploys → verify a real
+  verdict on the Redmi → recruit ≥12 testers. Screenshots (phone + tablet decision) run in parallel, not
+  blocking the clock.
 
 **SESSION CLOSE (2026-07-30 — 🤖 PLAY CONSOLE PHASE 3 DONE: account approved, app created,
 package reconciled, ALL declarations + store listing text/graphics in; only screenshots left,
