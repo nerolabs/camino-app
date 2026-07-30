@@ -19,7 +19,7 @@ import { verifyIntegrityToken, parseServiceAccount } from '@/lib/playIntegrity';
 // Apple App Attest app identity ("<TeamID>.<BundleID>"). Overridable via env for other envs.
 const APP_ATTEST_APP_ID = process.env.APP_ATTEST_APP_ID ?? 'VB9CHJM4AN.com.nerolabs.camino';
 // Android package name for the Play Integrity decode call. Overridable via env.
-const ANDROID_PACKAGE_NAME = process.env.ANDROID_PACKAGE_NAME ?? 'com.nerolabs.camino';
+const ANDROID_PACKAGE_NAME = process.env.ANDROID_PACKAGE_NAME ?? 'com.aelaboratories.getcamino';
 
 const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 

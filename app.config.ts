@@ -49,7 +49,10 @@ const config: ExpoConfig = {
     },
   },
   android: {
-    package: 'com.nerolabs.camino',
+    // Android package = the AELaboratories legal entity + brand (the Play app created 2026-07-30).
+    // Deliberately differs from the iOS bundle (com.nerolabs.camino, already live) — the two store
+    // IDs are independent, and iOS can't change post-launch.
+    package: 'com.aelaboratories.getcamino',
     adaptiveIcon: {
       backgroundColor: '#2B5AA3',
       foregroundImage: './assets/images/android-icon-foreground.png',

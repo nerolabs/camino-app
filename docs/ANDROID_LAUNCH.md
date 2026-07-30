@@ -10,7 +10,9 @@ launch — so the entire goal of Phase 1–4 below is **get a build into closed 
 testers opted in, as fast as possible.** Everything else (nice store copy, screenshots) can be
 polished *while the clock runs.*
 
-Bundle / package id: **`com.nerolabs.camino`** · App name: **Get Camino: Your Road to Spain**
+Android package id: **`com.aelaboratories.getcamino`** (set when the Play app was created
+2026-07-30; deliberately differs from the live iOS bundle `com.nerolabs.camino` — the two store IDs
+are independent) · App name: **Get Camino: Your Road to Spain**
 Legal identity: **AELaboratories** (sole proprietor, own SSN — user decision 2026-07-04).
 Test device: **Redmi 13 PURCHASED 2026-07-13 (€85)** — Phase 0 can run any time.
 
@@ -46,7 +48,11 @@ Test device: **Redmi 13 PURCHASED 2026-07-13 (€85)** — Phase 0 can run any t
 >    note the **project number** → set EAS env `EXPO_PUBLIC_GOOGLE_CLOUD_PROJECT_NUMBER` (plaintext).
 > 2. Create a **service account** with the Play Integrity API role, download its JSON key → set EAS
 >    env `GOOGLE_PLAY_INTEGRITY_SA_KEY` = the whole JSON (**`sensitive` visibility**).
-> 3. (`ANDROID_PACKAGE_NAME` already defaults to `com.nerolabs.camino`; override only if it differs.)
+> 3. (`ANDROID_PACKAGE_NAME` already defaults to `com.aelaboratories.getcamino` = the Play app's
+>    package; override only if it ever differs.) ⚠️ **Google Sign-in on Android** needs its own
+>    OAuth **Android client** in the Cloud project keyed to `com.aelaboratories.getcamino` + the
+>    app's signing-cert SHA-1 (EAS-managed keystore) — set that up alongside Play Integrity, or
+>    Google sign-in fails on the Redmi even though iOS works.
 > 4. Deploy carrying the code, then flip **`PLAY_INTEGRITY_ENABLED=1`** and verify on the Redmi via
 >    the closed-test install (a real Play install — the only place a genuine verdict is returned).
 >    Until step 4 the Android app falls back to no-session and the server returns 501, exactly like

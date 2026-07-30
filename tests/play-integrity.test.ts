@@ -7,7 +7,7 @@ import { evaluateVerdict, parseServiceAccount, getAccessToken, _resetTokenCache,
 // getAccessToken() (SA-key JWT → OAuth) is exercised with a generated RSA key + mocked token
 // endpoint so the JWT-signing + caching path is covered without network.
 
-const PKG = 'com.nerolabs.camino';
+const PKG = 'com.aelaboratories.getcamino';
 const CHALLENGE = '1700000000000.abc123.deadbeefcafe';
 
 // A genuine verdict as documented at developer.android.com/google/play/integrity/verdicts.
