@@ -515,17 +515,20 @@ Playwright · 7 API contract · 3 Maestro flows (pinned 2.6.1).
 ### Phase 3 — Android track (user-side; the 14-day clock burns in parallel)
 
 8. [x] **DONE 2026-07-13 — [USER] test device bought: Redmi 13, €85.**
-8b. [ ] **⛔ Play Integrity session path — HARD PREREQUISITE before the first .aab**
-   (found 2026-07-13: `sessionGate` 401s session-less clients in prod and
-   `lib/nativeAttest.native.ts` is iOS-only, so an Android build today ships with
-   Lola/extraction DEAD). Mirror the App Attest flow: client verdict → `/api/session`
-   verifies via Google's Play Integrity API (user-side: Google Cloud service-account key
-   → EAS env, `sensitive`) → same HMAC session token; flag-gated like
-   `NATIVE_ATTESTATION_ENABLED`. Full spec: docs/ANDROID_LAUNCH.md (new ⛔ block).
-9. [ ] **Play developer account** (personal, $25 — sole-prop decision) + first Android build
-   (verify the old preview APK on-device, then a production .aab) + store listing +
-   data-safety form (mirror the Apple nutrition answers — incl. "Other financial info" =
-   income band, playbook corrected 2026-07-13).
+8b. [x] **DONE — Play Integrity session path** (code landed flag-off 2026-07-29; **Cloud
+   setup completed 2026-07-30**). GCP project `get-camino` (number **1008705428602**) →
+   Play Integrity API enabled → **linked in Play Console** (verdicts On) → service account
+   `play-integrity-verifier` + JSON key → EAS `GOOGLE_PLAY_INTEGRITY_SA_KEY` (sensitive) →
+   `EXPO_PUBLIC_GOOGLE_CLOUD_PROJECT_NUMBER` set (build gate) + `app.config.ts` build guard.
+   Hit + cleared the Secure-by-Default org policy blocking SA keys (user set Not enforced).
+   **`PLAY_INTEGRITY_ENABLED` still OFF** — flip after Redmi verify. Also proved: Google
+   sign-in needs NO Android OAuth client (Supabase web-redirect flow). Details in the
+   memory `android-launch-in-flight` + docs/ANDROID_LAUNCH.md.
+9. [~] **Play account DONE** (approved 2026-07-30) + Phase 3 declarations/listing DONE +
+   **first production .aab BUILDING** (build 25449905…, versionCode 2, commit 66e114f,
+   branch `android/play-integrity-cloud-setup`). Remaining: deploy hosting (SA key) → manual
+   upload .aab to a Closed track → install on Redmi → screenshots (phone + **tablet decision
+   still open**) → flip flag + verify.
 10. [ ] **Closed test: 12+ testers × 14 days** (personal-account requirement) — start the
     moment a build installs; calendar time burns in parallel. Recruit from the
     family-testing circle; the English build is fine to start.

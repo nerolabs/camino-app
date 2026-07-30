@@ -121,6 +121,53 @@ cosmetics ride OTA/web. What landed this turn:
   night AWAITING USER SIGN-OFF; permission-first rule stands; Search Console setup is
   the user-side 30-min item).
 
+**SESSION UPDATE (2026-07-30 PM — 🤖 THE BUILD TRACK: Play Integrity Cloud setup DONE end-to-end +
+first production .aab BUILDING. [MID-SESSION RECORD — a partial close addendum follows when work stops.]):**
+- **🟢 Play Integrity Cloud setup COMPLETE** (Claude drove Chrome + `eas` CLI; user on the sensitive
+  clicks). All in the `/u/2/` = andrew@getcamino.app account:
+  1. **GCP project `get-camino`, project number `1008705428602`** (Project ID `get-camino`, no org) —
+     created via console.cloud.google.com/projectcreate.
+  2. **Play Integrity API enabled** on that project.
+  3. **Linked in Play Console** (Protected with Play → Play Integrity API settings → *Enter project number
+     manually* `1008705428602`; the new project didn't show in the picker for ~min due to propagation).
+     Response verdicts On incl. **PLAY_RECOGNIZED** + **MEETS_DEVICE_INTEGRITY** — the fields
+     `evaluateVerdict` gates on.
+  4. Service account **`play-integrity-verifier@get-camino.iam.gserviceaccount.com`** (no IAM roles —
+     decode authorizes via the project link) → JSON key → EAS **`GOOGLE_PLAY_INTEGRITY_SA_KEY`**
+     (sensitive, loaded via `"$(cat file)"` shell-substitution so the key never hit chat; local file
+     deleted by user after).
+  5. **`EXPO_PUBLIC_GOOGLE_CLOUD_PROJECT_NUMBER=1008705428602`** in EAS production (plaintext, build bake).
+- **⚠️ Gotcha (cost ~15 min):** Google's Secure-by-Default org policy
+  `iam.managed.disableServiceAccountKeyCreation` **blocked SA-key creation**. Fix = user set it to **Not
+  enforced** at project level (IAM & Admin → Org Policies → *Manage policy* → Override parent's policy →
+  Enforcement Off). ~2 min propagation, then the key downloaded on the 2nd try. **Toggling that security
+  policy is the USER's action** (security-settings change) — Claude guides but doesn't flip it.
+- **Build guard shipped** (`app.config.ts`): an Android *production* build now **throws/fails fast** if
+  `EXPO_PUBLIC_GOOGLE_CLOUD_PROJECT_NUMBER` is missing (scoped to `EAS_BUILD_PLATFORM=android` +
+  `EAS_BUILD_PROFILE=production` — iOS/web/local/tests untouched). Defends the repeated ⛔ "don't cut the
+  .aab without the project number" hazard. Verified all three cases.
+- **✅ CORRECTION on record:** **Google Sign-in needs NO Android OAuth client / signing SHA-1.** The app
+  uses Supabase `signInWithOAuth({provider:'google'})` **web-redirect** flow (Custom Tabs →
+  `caminoapp://auth-callback`), so Google never sees the Android app; the existing Supabase Google **web**
+  OAuth client serves Android unchanged. A native client is only for `@react-native-google-signin`
+  (unused). Runbook's old "needs its own Android OAuth client + SHA-1" line was WRONG — corrected in
+  docs/ANDROID_LAUNCH.md.
+- **✅ First production .aab BUILT** (25 min, finished 8:57 PM): build
+  **`25449905-da96-42eb-ad26-e514c66baaae`**, versionCode **2**, v1.0.0, distribution=store, from commit
+  **`66e114f`** on branch **`android/play-integrity-cloud-setup`**. First Android build → EAS
+  auto-generated the cloud upload keystore. Guard passed (project number baked in). Artifact:
+  `https://expo.dev/artifacts/eas/f9r2GLsB4XYHedBkldquHsno3zZdKP8BP9xA_eFZ_5I.aab` · fingerprint
+  **`d9ddd56c3ab576eeb1213daaf6b888c67689e38a`** (Android's own, independent of iOS builds).
+- **Suite green pre-build:** 382 vitest · tsc clean (Cloud setup added no test-bearing code; the config
+  guard is exercised via `expo config`, not vitest).
+- **`PLAY_INTEGRITY_ENABLED` STILL OFF** (correct — flip only after a real Redmi verdict). **Remaining
+  flip sequence:** .aab done → **deploy hosting** (`eas deploy` — picks up the SA key already in EAS;
+  flag stays off) → **manual** upload .aab to a Closed track → install on Redmi → screenshots (phone +
+  **tablet decision still open**) → flip `PLAY_INTEGRITY_ENABLED=1` + redeploy → verify verdict on Redmi
+  (Play Integrity only returns verdicts for Play installs; a fresh upload may return `UNRECOGNIZED_VERSION`
+  until processed — propagation, not a bug) → recruit **≥12 testers** → the 14-day clock.
+- **User housekeeping done:** deleted the local SA-key JSON from ~/Downloads after it was in EAS.
+
 **SESSION CLOSE (2026-07-30 — 🤖 PLAY CONSOLE PHASE 3 DONE: account approved, app created,
 package reconciled, ALL declarations + store listing text/graphics in; only screenshots left,
 which are build-gated):**
