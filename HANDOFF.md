@@ -121,6 +121,45 @@ cosmetics ride OTA/web. What landed this turn:
   night AWAITING USER SIGN-OFF; permission-first rule stands; Search Console setup is
   the user-side 30-min item).
 
+**SESSION CLOSE (2026-07-30 — 🤖 PLAY CONSOLE PHASE 3 DONE: account approved, app created,
+package reconciled, ALL declarations + store listing text/graphics in; only screenshots left,
+which are build-gated):**
+- **Account APPROVED** (identity verified 2026-07-30). Owner = **andrew@getcamino.app** — it's the
+  **`/u/2/` account** in the user's Chrome (andrewnedmond@gmail.com = `/u/0/` has NO dev account;
+  watch for landing there). Developer **AELaboratories, Inc** (Personal), ID **7162615225282353306**.
+- **App CREATED + PACKAGE RECONCILED:** the Play app's package is **`com.aelaboratories.getcamino`**
+  (permanent, can't be edited) — codebase updated to match (commit 627e46e: app.config.ts,
+  ANDROID_PACKAGE_NAME, test, doc). iOS bundle stays `com.nerolabs.camino` (live; independent).
+  ⚠️ Android Google-sign-in needs its own OAuth client keyed to the new package + signing SHA-1.
+- **ALL 11 APP-CONTENT DECLARATIONS DONE** (Claude drove Play Console via Chrome; user hit each
+  Save): Privacy policy (getcamino.app/privacy) · App access "nothing restricted / No" · Ads No ·
+  **Content rating** (IARC "All Other App Types"; **Online-content = YES** because Lola generates AI
+  content — a deliberate honest call; all content categories No → **Everyone / PEGI 3**) · Target
+  audience **18+ only** · **Data safety** (no data shared; encrypted in transit; delete-account URL
+  = getcamino.app/privacy; collected = Email / User-IDs / Other-info [optional, App-func/Account/
+  Personalization], Other-financial-info = income band [optional], Crash-logs / Diagnostics /
+  App-interactions [required, Analytics] — mirrors the Apple label exactly) · Government apps No ·
+  Financial features "none" · Health "none" · Advertising ID No.
+- **STORE LISTING (text + graphics) DONE + auto-saved as draft:** app name, short desc ("Your
+  personal, deadline-aware roadmap for moving to Spain."), full description (from docs/APP_STORE.md),
+  **icon 512 + feature graphic 1024×500 uploaded** (docs/store-assets/, commit beface3).
+- **⏳ THE ONLY THING LEFT ON THE LISTING = SCREENSHOTS, and they're BUILD-GATED:** Play marks
+  **Phone (2–8) AND 7"+10" tablet screenshots** as required. All come off the Redmi after the first
+  build+install. **Decision for next session:** generate tablet frames too, OR restrict Android to
+  phones-only (iOS-style) to drop the tablet requirement.
+- **Automation note:** Play Console text/toggles/radios all drive fine via Chrome; **file uploads
+  (icon/feature-graphic/screenshots) need the USER** — native macOS file picker the harness can't
+  drive (same limit as the iOS/ASC lesson). The user uploaded icon + feature graphic himself.
+- **NEXT SESSION = THE BUILD TRACK (dedicated):** (1) Play Integrity Cloud setup — link the Play
+  Integrity API + note the Cloud **project number** (→ EAS env `EXPO_PUBLIC_GOOGLE_CLOUD_PROJECT_NUMBER`,
+  plaintext) + create a **service-account key** (→ `GOOGLE_PLAY_INTEGRITY_SA_KEY`, sensitive); (2)
+  `eas build --platform android --profile production` → `.aab`; (3) **manual** upload to a Closed
+  testing track (no `eas submit` android config yet — deliberate); (4) install on the Redmi via the
+  opt-in link → capture screenshots → add to the listing; (5) recruit **≥12 testers** → start the
+  **14-day clock** (the longest calendar item). Then flip `PLAY_INTEGRITY_ENABLED=1` and verify on
+  the real Play install. **⛔ Don't cut the .aab until the project-number env is set** (it bakes into
+  the client bundle). Full playbook: `docs/ANDROID_LAUNCH.md`.
+
 **SESSION CLOSE (2026-07-29 — 🤖 ANDROID TRACK OPENED: Play account signup submitted + Play
 Integrity code LANDED flag-off; plus an SEO indexing sanity pass and a scanner-run review):**
 - **🤖 THE ANDROID DEDICATED SESSION (TODO 8b) — the hard blocker is now cleared.** Two parallel
