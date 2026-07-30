@@ -1,6 +1,24 @@
 import 'dotenv/config';
 import { ExpoConfig } from 'expo/config';
 
+// Build-time guard for the exact Android launch trap the handoff repeats: an Android *production*
+// build MUST carry EXPO_PUBLIC_GOOGLE_CLOUD_PROJECT_NUMBER, or the Play Integrity path bakes in
+// empty → getNativeSession returns null on Android → sessionGate 401s /api/lola → the interview
+// ships DEAD to the 12 closed-test testers. Fail the cloud build fast (before ~20min of EAS work
+// and a broken .aab) rather than discover it on the Redmi. Scoped to EAS build-server env vars, so
+// it never fires for iOS, web, local dev, `expo start`, or tests. See docs/ANDROID_LAUNCH.md.
+if (
+  process.env.EAS_BUILD_PLATFORM === 'android' &&
+  process.env.EAS_BUILD_PROFILE === 'production' &&
+  !process.env.EXPO_PUBLIC_GOOGLE_CLOUD_PROJECT_NUMBER
+) {
+  throw new Error(
+    'Android production build is missing EXPO_PUBLIC_GOOGLE_CLOUD_PROJECT_NUMBER (Play Integrity). ' +
+      'Set it in the EAS "production" environment (plaintext) before cutting the .aab — otherwise ' +
+      'the interview ships dead on Android. See docs/ANDROID_LAUNCH.md.',
+  );
+}
+
 const config: ExpoConfig = {
   name: 'Get Camino',
   slug: 'camino',

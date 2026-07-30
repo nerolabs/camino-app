@@ -49,10 +49,15 @@ Test device: **Redmi 13 PURCHASED 2026-07-13 (€85)** — Phase 0 can run any t
 > 2. Create a **service account** with the Play Integrity API role, download its JSON key → set EAS
 >    env `GOOGLE_PLAY_INTEGRITY_SA_KEY` = the whole JSON (**`sensitive` visibility**).
 > 3. (`ANDROID_PACKAGE_NAME` already defaults to `com.aelaboratories.getcamino` = the Play app's
->    package; override only if it ever differs.) ⚠️ **Google Sign-in on Android** needs its own
->    OAuth **Android client** in the Cloud project keyed to `com.aelaboratories.getcamino` + the
->    app's signing-cert SHA-1 (EAS-managed keystore) — set that up alongside Play Integrity, or
->    Google sign-in fails on the Redmi even though iOS works.
+>    package; override only if it ever differs.) ✅ **Google Sign-in needs NO Android OAuth client /
+>    SHA-1** (corrected 2026-07-30 after reading the auth code): the app uses Supabase's
+>    `signInWithOAuth({provider:'google'})` **web-redirect** flow in an in-app browser (Custom Tabs),
+>    completing via the `caminoapp://auth-callback` deep link — Google only ever sees Supabase's web
+>    callback, never the Android app, so the package/signing cert are irrelevant. The existing
+>    Supabase Google **web** OAuth client (already live for iOS/web) serves Android unchanged; the
+>    `caminoapp` scheme is registered and the redirect is already allowlisted in Supabase. A native
+>    Android OAuth client + SHA-1 would only be needed if the app used the native Google Sign-In SDK
+>    (`@react-native-google-signin`), which it does NOT.
 > 4. Deploy carrying the code, then flip **`PLAY_INTEGRITY_ENABLED=1`** and verify on the Redmi via
 >    the closed-test install (a real Play install — the only place a genuine verdict is returned).
 >    Until step 4 the Android app falls back to no-session and the server returns 501, exactly like
@@ -105,6 +110,14 @@ We need a **production Android App Bundle (.aab)** to upload to the closed track
 APK — build `a538b9d7` — points at the *staging* DB and is APK not AAB; don't use it for the real
 test.) **⛔ Do not cut this build until the Play Integrity prerequisite above is in the tree**
 (flag-off is fine — that's the App Attest playbook) — otherwise the interview ships dead.
+
+> **Hard prerequisite, now enforced by the build itself:** `EXPO_PUBLIC_GOOGLE_CLOUD_PROJECT_NUMBER`
+> must be set in the EAS **production** environment *before* you cut the .aab — it bakes into the
+> client bundle, and an empty value ships the Android interview dead. `app.config.ts` now **throws
+> and fails the build** if an Android production build starts without it (scoped to
+> `EAS_BUILD_PLATFORM=android` + `EAS_BUILD_PROFILE=production`, so iOS/web/local are unaffected). Set
+> it with `eas env:create --environment production --name EXPO_PUBLIC_GOOGLE_CLOUD_PROJECT_NUMBER
+> --value <number> --visibility plaintext` (or via the EAS dashboard) once the Cloud project exists.
 
 1. **You give the go-ahead** (EAS build credits are only spent on your command). Then Claude runs:
    ```
