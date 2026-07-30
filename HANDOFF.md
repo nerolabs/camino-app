@@ -5,7 +5,32 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-## ⭐ RESUME HERE (2026-07-13 session close — THE OPUS DAY: council queue SHIPPED, build 39 LIVE with native App Attest, release candidate NEXT)
+## ⭐ RESUME HERE (2026-07-30 PM — 🤖 ANDROID BUILD TRACK UNBLOCKED: Play Integrity Cloud setup DONE, first .aab BUILT, prod deployed. NEXT = Closed-track upload + Redmi verify.)
+
+**One line:** iOS is live on the App Store (reactive-only). **Android is the active frontier** and is
+now build-ready end-to-end — Play Integrity fully wired (Cloud project `get-camino`/`1008705428602`,
+API enabled, Play-linked, SA key in EAS), first production **`.aab` built** (versionCode 2, artifact
+`https://expo.dev/artifacts/eas/f9r2GLsB4XYHedBkldquHsno3zZdKP8BP9xA_eFZ_5I.aab`), a build guard added,
+and prod hosting deployed (server carries the SA key; `PLAY_INTEGRITY_ENABLED` still OFF). Main is at
+`d7212dd`, tree clean, all pushed.
+
+**NEXT SESSION, in order (all user-gated until the flip):**
+1. **[USER] Upload the `.aab` to a Closed testing track** in Play Console (manual — the native file
+   picker the harness can't drive) + add **≥12 tester emails** → copy the opt-in link.
+2. **[USER] Install on the Redmi** via that opt-in link.
+3. **[CLAUDE] Flip `PLAY_INTEGRITY_ENABLED=1`** (EAS production env) + **redeploy hosting**
+   (`npm run deploy:production`) → **[USER] run the interview on the Redmi** to confirm a real Play
+   Integrity verdict mints a session (Lola answers). If a verdict fails right after upload it's likely
+   `UNRECOGNIZED_VERSION` = propagation, recheck; a real failure logs `[playIntegrity]` in Sentry.
+4. **[USER] Recruit the 12 testers → the 14-day clock starts** (the longest calendar item).
+5. Parallel, NOT blocking the clock: **screenshots** off the Redmi + the **phone-only vs +tablet
+   decision**; and an Android device shakeout (back gesture / keyboard / Google sign-in / dictation /
+   safe-area) — JS fixes ride OTA (`npm run ota:production`), native fixes need a rebuild.
+
+Full detail: the **SESSION UPDATE (2026-07-30 PM)** block below + memory `android-launch-in-flight` +
+`docs/ANDROID_LAUNCH.md`. _(The 2026-07-13 note just below is historical.)_
+
+## Prior resume note (2026-07-13 session close — THE OPUS DAY: council queue SHIPPED, build 39 LIVE with native App Attest, release candidate NEXT)
 
 **Where we are in one line: build 39 is on TestFlight and "working amazing"; native Lola is
 LIVE via App Attest; the entire council fix queue is shipped; next session's job is build 40 =
