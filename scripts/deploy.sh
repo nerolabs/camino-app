@@ -28,9 +28,16 @@ npx eas-cli env:pull "${EAS_ENV}" --path .env.local --non-interactive
 # environment's values win over the local dev .env (which holds staging), instead of relying on
 # .env-file precedence or a clean Metro cache. Without this, a plain `expo export` could bake the
 # wrong database (observed: prod deployed with the staging Supabase after a back-to-back deploy).
+#
+# Export ONLY the vars this script needs in the shell: every EXPO_PUBLIC_* (Metro export) plus
+# SUPABASE_SERVICE_ROLE_KEY (the staging authed-E2E seed). Do NOT `source` the whole pulled file —
+# it breaks bash on multi-line/JSON secret values (GOOGLE_PLAY_INTEGRITY_SA_KEY is pretty-printed
+# JSON spanning several lines; `source` tried to run a JSON line as a command → exit 127,
+# 2026-07-30). The remaining server secrets are injected into the deployment by `eas deploy`
+# directly from the EAS environment, not from this shell, so leaving them out here is a no-op at
+# runtime. These allowlisted values are single-line and shell-safe, so eval is fine.
 set -a
-# shellcheck source=/dev/null
-source .env.local
+eval "$(grep -E '^(EXPO_PUBLIC_[A-Za-z0-9_]+|SUPABASE_SERVICE_ROLE_KEY)=' .env.local)"
 set +a
 
 echo "[deploy] Baking: EXPO_PUBLIC_ENV=${EXPO_PUBLIC_ENV:-<unset>}  SUPABASE=${EXPO_PUBLIC_SUPABASE_URL:-<unset>}"
