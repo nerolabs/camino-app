@@ -257,6 +257,7 @@
         "fixedFees": "Fixed fees",
         "yourBudget": "+ your budget",
         "youSet": "you set",
+        "addPriceNudge": "Add your home price above to include property taxes and purchase fees.",
         "recurring": "Recurring: {{summary}}"
       },
       "layers": {
@@ -291,6 +292,7 @@
         "oneTime": "one-time",
         "perMonth": "per month",
         "typical": "Others pay ~{{range}} · tap to use",
+        "typicalPerUnit": "Others pay ~{{range}}",
         "save": "Save to my budget",
         "skip": "Skip"
       }

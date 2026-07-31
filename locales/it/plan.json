@@ -257,6 +257,7 @@
         "fixedFees": "Tasse fisse",
         "yourBudget": "+ il tuo budget",
         "youSet": "lo decidi tu",
+        "addPriceNudge": "Aggiungi sopra il prezzo della casa per includere imposte e spese d'acquisto.",
         "recurring": "Ricorrente: {{summary}}"
       },
       "layers": {
@@ -291,6 +292,7 @@
         "oneTime": "una tantum",
         "perMonth": "al mese",
         "typical": "Altri pagano ~{{range}} · tocca per usarlo",
+        "typicalPerUnit": "Altri pagano ~{{range}}",
         "save": "Salva nel mio budget",
         "skip": "Salta"
       }

@@ -31,7 +31,6 @@ export function lineCostDisplay(line: BudgetLine): string {
 export type BudgetHeadline = {
   total: string;      // the sourced one-time move cost, as a range
   firm: string;       // the fixed (firm) portion
-  hasRange: boolean;  // true when low !== high (drives "– X" vs a single figure)
   monthly: string | null;
   annual: string | null;
 };
@@ -41,7 +40,6 @@ export function budgetHeadline(b: Budget): BudgetHeadline {
   return {
     total: formatRange(moveCost.low, moveCost.high),
     firm: formatEur(moveCost.firm),
-    hasRange: moveCost.low !== moveCost.high,
     monthly: monthly.high > 0 ? formatRange(monthly.low, monthly.high) : null,
     annual: annual.high > 0 ? formatRange(annual.low, annual.high) : null,
   };

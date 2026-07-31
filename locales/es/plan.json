@@ -257,6 +257,7 @@
         "fixedFees": "Tasas fijas",
         "yourBudget": "+ tu presupuesto",
         "youSet": "lo pones tú",
+        "addPriceNudge": "Añade arriba el precio de tu vivienda para incluir impuestos y gastos de compra.",
         "recurring": "Recurrente: {{summary}}"
       },
       "layers": {
@@ -291,6 +292,7 @@
         "oneTime": "único",
         "perMonth": "al mes",
         "typical": "Otros pagan ~{{range}} · toca para usarlo",
+        "typicalPerUnit": "Otros pagan ~{{range}}",
         "save": "Guardar en mi presupuesto",
         "skip": "Omitir"
       }

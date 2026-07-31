@@ -158,6 +158,11 @@ export default function BudgetView({
             </Text>
           </View>
         </View>
+        {/* Buying but no home price yet → the biggest one-time costs (ITP, notary, registry) can't be
+            priced and drop out, so the total reads misleadingly cheap. Say why, and point at the input. */}
+        {buying && inputs.homePriceEur == null && (
+          <Text style={styles.totalNudge}>{t('budget.total.addPriceNudge')}</Text>
+        )}
         {recurringSummary !== '' && (
           <Text style={styles.totalFoot}>{t('budget.total.recurring', { summary: recurringSummary })}</Text>
         )}
@@ -231,18 +236,20 @@ export default function BudgetView({
             />
             <Text style={styles.amtUnit}>{sheetCost?.recurring === 'monthly' ? t('budget.sheet.perMonth') : t('budget.sheet.oneTime')}</Text>
           </View>
-          {sheetCost?.typicalEur && (
-            <TouchableOpacity
-              style={styles.hintChip}
-              onPress={() => setSheetAmt(String(sheetCost.typicalEur![0]))}
-            >
-              <Text style={styles.hintChipText}>
-                {t('budget.sheet.typical', {
-                  range: `${formatEur(sheetCost.typicalEur[0])}–${formatEur(sheetCost.typicalEur[1])}${sheetCost.perUnit ? ' ' + sheetCost.perUnit : ''}`,
-                })}
-              </Text>
-            </TouchableOpacity>
-          )}
+          {sheetCost?.typicalEur && (() => {
+            const range = `${formatEur(sheetCost.typicalEur[0])}–${formatEur(sheetCost.typicalEur[1])}${sheetCost.perUnit ? ' ' + sheetCost.perUnit : ''}`;
+            // A per-unit band (e.g. €/page) is NOT a total, so "tap to use" would wrongly fill the unit
+            // price as the whole budget — show it as an informational hint only. Totals stay tappable.
+            return sheetCost.perUnit ? (
+              <View style={styles.hintChip}>
+                <Text style={styles.hintChipText}>{t('budget.sheet.typicalPerUnit', { range })}</Text>
+              </View>
+            ) : (
+              <TouchableOpacity style={styles.hintChip} onPress={() => setSheetAmt(String(sheetCost.typicalEur![0]))}>
+                <Text style={styles.hintChipText}>{t('budget.sheet.typical', { range })}</Text>
+              </TouchableOpacity>
+            );
+          })()}
           <View style={styles.sheetActs}>
             <TouchableOpacity style={styles.saveBtn} onPress={saveSheet}>
               <Text style={styles.saveBtnText}>{t('budget.sheet.save')}</Text>
@@ -293,6 +300,7 @@ const styles = StyleSheet.create({
   totalPartK: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 9.5, letterSpacing: 0.8, color: palette.muted, textTransform: 'uppercase' },
   totalPartV: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 15, color: palette.indigo, marginTop: 3 },
   totalFoot: { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, color: palette.muted, marginTop: 11 },
+  totalNudge: { fontFamily: 'HankenGrotesk_500Medium', fontSize: 12, lineHeight: 17, color: '#8a5f11', marginTop: 11 },
 
   layerLabel: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 18, marginBottom: 8 },
   layerDot: { width: 9, height: 9, borderRadius: 5 },

@@ -14,6 +14,15 @@ describe('buildBudget — the sourced (firm + soft) spine', () => {
     expect(b.moveCost.high).toBe(25.92);
   });
 
+  it('keeps an UNVERIFIED firm estimate out of the certain "Fixed fees" figure, but in the total range', () => {
+    // consulate-appointment is kind:firm but verified:false (a reciprocity-set placeholder, ≈€80).
+    const b = buildBudget([row('residencia'), row('consulate-appointment')]);
+    expect(OBLIGATION_COSTS['consulate-appointment'].verified).toBe(false);
+    expect(b.moveCost.firm).toBe(16.08);   // only the verified TIE tasa — NOT the €80 estimate
+    expect(b.moveCost.low).toBe(96.08);    // the estimate still sits in the one-time total (16.08 + 80)
+    expect(b.moveCost.high).toBe(96.08);
+  });
+
   it('prices a soft cost as a RANGE from the user home price, and pins it with a region rate', () => {
     const range = buildBudget([row('property-transfer-tax')], { homePriceEur: 240_000 });
     const itp = range.sourcedLines.find(l => l.id === 'property-transfer-tax')!;

@@ -42,7 +42,6 @@ describe('budgetHeadline', () => {
     const h = budgetHeadline(b);
     expect(h.firm).toBe('€25.92');            // TIE + NIE (small → cents kept)
     expect(h.total).toBe('€16,826');          // 25.92 + pinned ITP 16,800, rounded whole on a large sum
-    expect(h.hasRange).toBe(false);           // everything pinned/firm
     expect(h.monthly).toBeNull();
     expect(h.annual).toBeNull();
   });

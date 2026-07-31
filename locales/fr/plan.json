@@ -257,6 +257,7 @@
         "fixedFees": "Frais fixes",
         "yourBudget": "+ ton budget",
         "youSet": "à toi de fixer",
+        "addPriceNudge": "Ajoute ci-dessus le prix de ton logement pour inclure les taxes et frais d'achat.",
         "recurring": "Récurrent : {{summary}}"
       },
       "layers": {
@@ -291,6 +292,7 @@
         "oneTime": "unique",
         "perMonth": "par mois",
         "typical": "D'autres paient ~{{range}} · touche pour l'utiliser",
+        "typicalPerUnit": "D'autres paient ~{{range}}",
         "save": "Enregistrer dans mon budget",
         "skip": "Passer"
       }

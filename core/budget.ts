@@ -107,7 +107,11 @@ export function buildBudget(plan: Pick<Objective, 'id' | 'title'>[], inputs: Bud
     const bucket = l.recurring === 'monthly' ? monthly : l.recurring === 'annual' ? annual : moveCost;
     bucket.low = round2(bucket.low + l.low);
     bucket.high = round2(bucket.high + l.high);
-    if (l.recurring == null && l.kind === 'firm') moveCost.firm = round2(moveCost.firm + l.low);
+    // "Fixed fees" is the figure we present as certain, so only VERIFIED firm tasas count toward it.
+    // Unverified firm estimates (the reciprocity-set consulate / work-visa fees) still sit in the
+    // one-time total range above, tagged "estimate" on their card — they're just never summed into
+    // the certain figure, which would otherwise read as precise when part of it is a placeholder.
+    if (l.recurring == null && l.kind === 'firm' && l.verified) moveCost.firm = round2(moveCost.firm + l.low);
   }
 
   const userBudgets = inputs.userBudgets ?? {};

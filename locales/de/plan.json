@@ -257,6 +257,7 @@
         "fixedFees": "Feste Gebühren",
         "yourBudget": "+ dein Budget",
         "youSet": "legst du fest",
+        "addPriceNudge": "Gib oben deinen Immobilienpreis ein, um Kaufsteuern und -gebühren einzubeziehen.",
         "recurring": "Wiederkehrend: {{summary}}"
       },
       "layers": {
@@ -291,6 +292,7 @@
         "oneTime": "einmalig",
         "perMonth": "pro Monat",
         "typical": "Andere zahlen ~{{range}} · zum Übernehmen tippen",
+        "typicalPerUnit": "Andere zahlen ~{{range}}",
         "save": "In meinem Budget speichern",
         "skip": "Überspringen"
       }
