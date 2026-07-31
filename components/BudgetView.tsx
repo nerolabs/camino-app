@@ -11,7 +11,8 @@
  * (budget/budget-inputs/budget-format); this component is the presentation layer over it.
  */
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, Pressable, ScrollView } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, Pressable, ScrollView, Platform } from 'react-native';
 import { palette } from '@/constants/Colors';
 import type { Objective } from '@/core/engine-controller';
 import type { Profile } from '@/core/interview-controller';
@@ -22,13 +23,17 @@ import { formatEur, lineCostDisplay, budgetHeadline } from '@/lib/budgetFormat';
 import { displayTitle } from '@/lib/catalogTitles';
 import { capture } from '@/lib/analytics';
 
-export const BUDGET_ENABLED = process.env.EXPO_PUBLIC_BUDGET_ENABLED === '1';
+// WEB-ONLY turn-on (user directive 2026-07-31: do NOT enable on iOS/Android until we're well into
+// web testing). Gating by platform makes native STRUCTURALLY off — a stray OTA can't arm it — while
+// web is on by default. `EXPO_PUBLIC_BUDGET_ENABLED=0` is a kill switch that needs no code change.
+export const BUDGET_ENABLED = Platform.OS === 'web' && process.env.EXPO_PUBLIC_BUDGET_ENABLED !== '0';
 
 type Patch = (patch: Record<string, unknown>) => void;
 
 const KIND_COLOR = { firm: palette.olive, soft: palette.cobalt, personal: palette.amber } as const;
 
 function SourcedCard({ line }: { line: BudgetLine }) {
+  const { t } = useTranslation('plan');
   return (
     <View style={styles.card}>
       <View style={[styles.bar, { backgroundColor: KIND_COLOR[line.kind] }]} />
@@ -39,12 +44,12 @@ function SourcedCard({ line }: { line: BudgetLine }) {
       <View style={styles.metaRow}>
         <View style={[styles.pill, { backgroundColor: line.kind === 'firm' ? '#EEF1EA' : '#EEF3FA' }]}>
           <Text style={[styles.pillText, { color: line.kind === 'firm' ? '#42573b' : '#274d84' }]}>
-            {line.kind === 'firm' ? 'Firm' : 'Scales with your numbers'}
+            {line.kind === 'firm' ? t('budget.line.firm') : t('budget.line.soft')}
           </Text>
         </View>
-        {line.recurring && <Text style={styles.recTag}>{line.recurring === 'monthly' ? 'per month' : 'per year'}</Text>}
+        {line.recurring && <Text style={styles.recTag}>{line.recurring === 'monthly' ? t('budget.line.perMonth') : t('budget.line.perYear')}</Text>}
         {line.source_url && <View style={styles.srcDot} />}
-        <Text style={styles.estTag}>{line.verified ? 'verified' : 'estimate'}</Text>
+        <Text style={styles.estTag}>{line.verified ? t('budget.line.verified') : t('budget.line.estimate')}</Text>
       </View>
     </View>
   );
@@ -53,12 +58,17 @@ function SourcedCard({ line }: { line: BudgetLine }) {
 export default function BudgetView({
   objectives, profile, onPatch,
 }: { objectives: Objective[]; profile: Profile; onPatch: Patch }) {
+  const { t } = useTranslation('plan');
   useEffect(() => { capture('budget_viewed'); }, []);
 
   const rows = objectives.map(o => ({ id: o.id, title: displayTitle(o) }));
   const inputs = profileToBudgetInputs(profile);
   const budget = buildBudget(rows, inputs);
   const head = budgetHeadline(budget);
+  const recurringSummary = [
+    head.monthly ? head.monthly + t('budget.units.perMoShort') : null,
+    head.annual ? head.annual + t('budget.units.perYrShort') : null,
+  ].filter(Boolean).join(' · ');
   const buying = isBuying(profile);
   const selfEmp = isSelfEmployed(profile);
 
@@ -99,21 +109,19 @@ export default function BudgetView({
       {/* Estimates-in-progress banner — the honesty gate while data is verified:false */}
       <View style={styles.notice}>
         <Text style={styles.noticeText}>
-          <Text style={styles.noticeStrong}>A guide, not a quote.</Text> Official fees marked{' '}
-          <Text style={styles.noticeStrong}>verified</Text> are checked against their government source (dot).
-          Percentages and market prices are researched estimates.
+          <Text style={styles.noticeStrong}>{t('budget.banner.lead')}</Text> {t('budget.banner.body')}
         </Text>
       </View>
 
       {/* Context: the two gates that shape the money (from your answers) */}
       <View style={styles.gates}>
         <View style={styles.gateRow}>
-          <Text style={styles.gateQ}>Buying a home</Text>
-          <Text style={[styles.gateVal, buying && styles.gateOn]}>{buying ? 'Yes' : 'No'}</Text>
+          <Text style={styles.gateQ}>{t('budget.gates.buying')}</Text>
+          <Text style={[styles.gateVal, buying && styles.gateOn]}>{buying ? t('budget.gates.yes') : t('budget.gates.no')}</Text>
         </View>
         {buying && (
           <View style={styles.priceRow}>
-            <Text style={styles.priceLabel}>Home price</Text>
+            <Text style={styles.priceLabel}>{t('budget.gates.homePrice')}</Text>
             <TextInput
               style={styles.priceInput}
               value={priceText}
@@ -128,44 +136,40 @@ export default function BudgetView({
           </View>
         )}
         <View style={styles.gateRow}>
-          <Text style={styles.gateQ}>Working self-employed</Text>
-          <Text style={[styles.gateVal, selfEmp && styles.gateOn]}>{selfEmp ? 'Yes' : 'No'}</Text>
+          <Text style={styles.gateQ}>{t('budget.gates.selfEmployed')}</Text>
+          <Text style={[styles.gateVal, selfEmp && styles.gateOn]}>{selfEmp ? t('budget.gates.yes') : t('budget.gates.no')}</Text>
         </View>
-        <Text style={styles.gateHint}>From your interview answers — change them there to reshape the plan.</Text>
+        <Text style={styles.gateHint}>{t('budget.gates.fromAnswers')}</Text>
       </View>
 
       {/* Total */}
       <View style={styles.total}>
-        <Text style={styles.totalLabel}>YOUR MOVE · SOURCED ESTIMATE</Text>
+        <Text style={styles.totalLabel}>{t('budget.total.label').toUpperCase()}</Text>
         <Text style={styles.totalAmt}>{head.total}</Text>
         <View style={styles.totalSplit}>
           <View style={styles.totalPart}>
-            <Text style={styles.totalPartK}>Fixed fees</Text>
+            <Text style={styles.totalPartK}>{t('budget.total.fixedFees')}</Text>
             <Text style={styles.totalPartV}>{head.firm}</Text>
           </View>
           <View style={styles.totalPart}>
-            <Text style={styles.totalPartK}>+ your budget</Text>
+            <Text style={styles.totalPartK}>{t('budget.total.yourBudget')}</Text>
             <Text style={[styles.totalPartV, { color: palette.amber }]}>
-              {budget.personal.userOneTime > 0 ? formatEur(budget.personal.userOneTime) : 'you set'}
+              {budget.personal.userOneTime > 0 ? formatEur(budget.personal.userOneTime) : t('budget.total.youSet')}
             </Text>
           </View>
         </View>
-        {(head.monthly || head.annual) && (
-          <Text style={styles.totalFoot}>
-            {head.monthly ? `Recurring: ${head.monthly}/mo` : ''}
-            {head.monthly && head.annual ? ' · ' : ''}
-            {head.annual ? `${head.annual}/yr` : ''}
-          </Text>
+        {recurringSummary !== '' && (
+          <Text style={styles.totalFoot}>{t('budget.total.recurring', { summary: recurringSummary })}</Text>
         )}
       </View>
 
       {/* Layer 1 — sourced */}
       {(firmLines.length > 0 || softLines.length > 0) && (
         <>
-          <LayerLabel color={palette.olive} title="Camino-sourced" hint="a source on every line" />
-          {firmLines.length > 0 && <Text style={styles.groupLabel}>FIXED OFFICIAL FEES</Text>}
+          <LayerLabel color={palette.olive} title={t('budget.layers.sourced')} hint={t('budget.layers.sourcedHint')} />
+          {firmLines.length > 0 && <Text style={styles.groupLabel}>{t('budget.layers.fixedFees').toUpperCase()}</Text>}
           {firmLines.map(l => <SourcedCard key={l.id} line={l} />)}
-          {softLines.length > 0 && <Text style={styles.groupLabel}>SCALES WITH YOUR NUMBERS</Text>}
+          {softLines.length > 0 && <Text style={styles.groupLabel}>{t('budget.layers.scales').toUpperCase()}</Text>}
           {softLines.map(l => <SourcedCard key={l.id} line={l} />)}
         </>
       )}
@@ -173,7 +177,7 @@ export default function BudgetView({
       {/* Layer 2 — personal */}
       {budget.personal.lines.length > 0 && (
         <>
-          <LayerLabel color={palette.amber} title="Your budget to set" hint="your figure, not ours" />
+          <LayerLabel color={palette.amber} title={t('budget.layers.personal')} hint={t('budget.layers.personalHint')} />
           {budget.personal.lines.map(l => {
             const saved = userBudgets[l.id];
             return (
@@ -183,10 +187,10 @@ export default function BudgetView({
                   <Text style={styles.cardTitle} numberOfLines={2}>{l.title}</Text>
                   {saved != null
                     ? <Text style={[styles.cardCost, { color: palette.amber }]}>{formatEur(saved)}</Text>
-                    : <View style={styles.addBtn}><Text style={styles.addBtnText}>+ add budget</Text></View>}
+                    : <View style={styles.addBtn}><Text style={styles.addBtnText}>{t('budget.line.addBudget')}</Text></View>}
                 </View>
                 <View style={styles.metaRow}>
-                  <Text style={styles.personalHint}>{saved != null ? 'Your estimate · tap to edit' : l.display}</Text>
+                  <Text style={styles.personalHint}>{saved != null ? t('budget.line.yourEstimate') : l.display}</Text>
                 </View>
               </TouchableOpacity>
             );
@@ -198,7 +202,7 @@ export default function BudgetView({
       {budget.free.count > 0 && (
         <View style={styles.freeRow}>
           <Text style={styles.freeText}>
-            {budget.free.count} step{budget.free.count === 1 ? '' : 's'} in your plan cost nothing
+            {budget.free.count === 1 ? t('budget.free.one') : t('budget.free.many', { count: budget.free.count })}
           </Text>
         </View>
       )}
@@ -209,13 +213,10 @@ export default function BudgetView({
         <Pressable style={StyleSheet.absoluteFill} onPress={() => setSheetId(null)} />
         <View style={styles.sheet}>
           <View style={styles.grab} />
-          <Text style={styles.sheetEyebrow}>YOUR BUDGET</Text>
+          <Text style={styles.sheetEyebrow}>{t('budget.sheet.eyebrow').toUpperCase()}</Text>
           <Text style={styles.sheetTitle}>{sheetTitle}</Text>
           <View style={styles.sheetHonest}>
-            <Text style={styles.sheetHonestText}>
-              There's no official price for this — whatever you enter is yours; we won't guess it, and it
-              stays out of the sourced total.
-            </Text>
+            <Text style={styles.sheetHonestText}>{t('budget.sheet.honest')}</Text>
           </View>
           <View style={styles.amtBox}>
             <Text style={styles.amtCur}>€</Text>
@@ -228,7 +229,7 @@ export default function BudgetView({
               placeholderTextColor={palette.muted}
               autoFocus
             />
-            <Text style={styles.amtUnit}>{sheetCost?.recurring === 'monthly' ? 'per month' : 'one-time'}</Text>
+            <Text style={styles.amtUnit}>{sheetCost?.recurring === 'monthly' ? t('budget.sheet.perMonth') : t('budget.sheet.oneTime')}</Text>
           </View>
           {sheetCost?.typicalEur && (
             <TouchableOpacity
@@ -236,17 +237,18 @@ export default function BudgetView({
               onPress={() => setSheetAmt(String(sheetCost.typicalEur![0]))}
             >
               <Text style={styles.hintChipText}>
-                Others pay ~{formatEur(sheetCost.typicalEur[0])}–{formatEur(sheetCost.typicalEur[1])}
-                {sheetCost.perUnit ? ` ${sheetCost.perUnit}` : ''} · tap to use
+                {t('budget.sheet.typical', {
+                  range: `${formatEur(sheetCost.typicalEur[0])}–${formatEur(sheetCost.typicalEur[1])}${sheetCost.perUnit ? ' ' + sheetCost.perUnit : ''}`,
+                })}
               </Text>
             </TouchableOpacity>
           )}
           <View style={styles.sheetActs}>
             <TouchableOpacity style={styles.saveBtn} onPress={saveSheet}>
-              <Text style={styles.saveBtnText}>Save to my budget</Text>
+              <Text style={styles.saveBtnText}>{t('budget.sheet.save')}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.skipBtn} onPress={() => setSheetId(null)}>
-              <Text style={styles.skipBtnText}>Skip</Text>
+              <Text style={styles.skipBtnText}>{t('budget.sheet.skip')}</Text>
             </TouchableOpacity>
           </View>
         </View>

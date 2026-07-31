@@ -350,7 +350,7 @@ export default function PlanScreen() {
                 style={[styles.viewToggleBtn, view === 'costs' && styles.viewToggleBtnActive]}
                 onPress={() => { setView('costs'); capture('plan_view_toggled', { view: 'costs' }); }}
               >
-                <Text style={[styles.viewToggleText, view === 'costs' && styles.viewToggleTextActive]}>Costs</Text>
+                <Text style={[styles.viewToggleText, view === 'costs' && styles.viewToggleTextActive]}>{t('budget.tab')}</Text>
               </TouchableOpacity>
             )}
           </View>

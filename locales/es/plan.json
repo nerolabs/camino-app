@@ -236,5 +236,63 @@
     "itp_foral": "En {{region}}, los tipos los fija cada territorio histórico (Álava, Bizkaia, Gipuzkoa) — hoy alineados: comprar vivienda usada tributa al {{rate}} en los tres (otros inmuebles al {{general}}), con variantes reducidas para vivienda habitual.",
     "itp_bonif": "En {{region}} se aplica el tipo estatal del {{rate}} con una bonificación del {{bonif}} en la cuota — un {{effective}} efectivo al comprar vivienda usada."
   },
-  "scopeNote": "Esta hoja de ruta traza tu itinerario como solicitante principal. Si tu pareja también trabaja, debería hacer su propia entrevista rápida — el camino de cada persona puede variar, y un enlace para compartir facilita la segunda vez."
+  "scopeNote": "Esta hoja de ruta traza tu itinerario como solicitante principal. Si tu pareja también trabaja, debería hacer su propia entrevista rápida — el camino de cada persona puede variar, y un enlace para compartir facilita la segunda vez.",
+  
+    "budget": {
+      "tab": "Costes",
+      "banner": {
+        "lead": "Una guía, no un presupuesto.",
+        "body": "Las tasas contrastadas con su fuente oficial muestran un punto y «verificado». Los porcentajes y precios de mercado son estimaciones investigadas."
+      },
+      "gates": {
+        "buying": "Comprar vivienda",
+        "selfEmployed": "Trabajar por cuenta propia",
+        "yes": "Sí",
+        "no": "No",
+        "homePrice": "Precio de la vivienda",
+        "fromAnswers": "Según tus respuestas de la entrevista — cámbialas ahí para rehacer el plan."
+      },
+      "total": {
+        "label": "Tu mudanza · estimación con fuentes",
+        "fixedFees": "Tasas fijas",
+        "yourBudget": "+ tu presupuesto",
+        "youSet": "lo pones tú",
+        "recurring": "Recurrente: {{summary}}"
+      },
+      "layers": {
+        "sourced": "Con fuentes",
+        "sourcedHint": "una fuente en cada línea",
+        "fixedFees": "Tasas oficiales fijas",
+        "scales": "Varía según tus cifras",
+        "personal": "Tu presupuesto",
+        "personalHint": "tu cifra, no la nuestra"
+      },
+      "line": {
+        "firm": "Fija",
+        "soft": "Varía según tus cifras",
+        "verified": "verificado",
+        "estimate": "estimación",
+        "perMonth": "al mes",
+        "perYear": "al año",
+        "addBudget": "+ añadir presupuesto",
+        "yourEstimate": "Tu estimación · toca para editar"
+      },
+      "units": {
+        "perMoShort": "/mes",
+        "perYrShort": "/año"
+      },
+      "free": {
+        "one": "1 paso de tu plan no cuesta nada",
+        "many": "{{count}} pasos de tu plan no cuestan nada"
+      },
+      "sheet": {
+        "eyebrow": "Tu presupuesto",
+        "honest": "No hay un precio oficial para esto — lo que pongas es tuyo; no lo adivinamos y queda fuera del total con fuentes.",
+        "oneTime": "único",
+        "perMonth": "al mes",
+        "typical": "Otros pagan ~{{range}} · toca para usarlo",
+        "save": "Guardar en mi presupuesto",
+        "skip": "Omitir"
+      }
+    }
 }
