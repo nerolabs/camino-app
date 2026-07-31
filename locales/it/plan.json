@@ -294,5 +294,32 @@
         "save": "Salva nel mio budget",
         "skip": "Salta"
       }
+    },
+  
+    "timeline": {
+      "tab": "Quando",
+      "title": "Quando dovresti arrivare?",
+      "sub": "Scegli il mese di arrivo — la tua tabella di marcia reale si ricalcola.",
+      "tax": {
+        "eyebrow": "Residenza fiscale",
+        "line": "Se arrivi a {{month}}, sei residente fiscale in Spagna dal {{year}}.",
+        "files": "Presenterai la tua prima dichiarazione in Spagna (Modelo 100) nel {{year}}.",
+        "pivotEarlier": "Arriva il 2 luglio o prima e sarebbe {{year}} — un anno prima.",
+        "pivotLater": "Arrivare dopo il 2 luglio lo sposterebbe al {{year}} — un anno dopo."
+      },
+      "heading": "La tua cronologia",
+      "estimated": "stim.",
+      "milestones": {
+        "visa": "Richiedi il visto",
+        "arrival": "Arrivare in Spagna",
+        "padron": "Registrarti (padrón)",
+        "school": "Iscrivere i figli a scuola",
+        "tie": "Carta di soggiorno (TIE)",
+        "tax_resident": "183 giorni — residente fiscale",
+        "licence": "Convertire la patente"
+      },
+      "schoolOrdinary": "finestra di ammissione ordinaria",
+      "schoolOffCycle": "fuori termine (fuera de plazo)",
+      "note": "Ricalcola la tua tabella di marcia reale con un'altra data di arrivo. Le finestre scolastiche sono un avviso, non una data fissa."
     }
 }
