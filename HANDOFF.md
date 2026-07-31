@@ -19,6 +19,20 @@ web deployed. **The 14-day continuous-testing clock is now the ONLY critical pat
 **(Verified via Chrome 2026-07-31 PM.)** Non-blocking note: the track page flags an Android-15 "edge-to-edge
 deprecated APIs" warning — fold into a future native rebuild, not urgent.
 
+**🔻 RECRUITMENT FUNNEL BUILT + LIVE (2026-07-31 PM, this session) — reciprocal-testing channel:**
+- **Self-serve Google Form** (async, no DMs): **https://forms.gle/CBg6vcPHwkkbbqG9A** — collects the tester's
+  device Gmail (required, email-validated) + an optional "app to test back" field; its confirmation screen
+  auto-hands each signup the opt-in link + "Become a tester" steps. Responses flow to a linked Google Sheet
+  (**col B = device Gmail** to copy into Play). Built under andrew@getcamino.app.
+- **Reddit post LIVE** in **r/AndroidClosedTesting** (as u/nerolabs) pointing at the form — that sub allows
+  only Google/Google-Groups links, so the form fits. **⚠️ Never put the Play Store link in recruitment posts:**
+  for a closed test it 404s for anyone not yet whitelisted (dead link for the audience).
+- **Cross-post DEFERRED** (user call): "one post is enough for now — monitor intake, revisit if too slow."
+  If reviving: use r/AndroidTesting or r/ClosedTestingHelp (form-friendly), NOT r/AndroidAppTesters (its
+  "Official Store Links Only" rule fights our form-based flow). r/AndroidTesting2 does NOT exist.
+- **User will PING when signups roll in;** two test rows in the sheet to ignore/clear.
+- Full detail (form edit URL, sheet URL, sub list) in memory `android-launch-in-flight`.
+
 **What shipped this PM session:**
 - **Phone screenshots (5) framed + uploaded + ordered** (home→interview→roadmap→step-sheet→sample-plan).
   New renderer **`scripts/frame-android-shots.mjs`** (separate from the iOS one): brand cobalt + Fraunces
@@ -38,10 +52,13 @@ deprecated APIs" warning — fold into a future native rebuild, not urgent.
   allowlist, 5 locales). **387 vitest · tsc clean.** Homework pages updated.
 
 **NEXT SESSION (mostly user-gated — the clock is the whole game):**
-1. **[USER] Recruit ≥12 testers.** Watch **feedback@getcamino.app** for signups from the live web band; add
-   each email to the **"Camino internal testers"** list in Play Console → Test and release → Testing → Closed
-   testing → Testers. Send them the closed-track **opt-in link** (on the Testers tab, live once Google approves
-   the release). **The 14-day continuous clock starts when the 12th tester is opted in.**
+1. **[USER pings CLAUDE when signups roll in] Recruit ≥12 testers via the reciprocal funnel.** Signups land in
+   the linked Google Sheet (col B = device Gmail). Once ~11+ real ones are in: **[CLAUDE walks the clicks]**
+   batch-add the emails to the **"Camino internal testers"** list (Play Console → Test and release → Closed
+   testing → Testers → Edit list); testers then self-activate via the form's confirmation-screen opt-in link.
+   Reciprocity is the currency — testing a few of their apps back on the Redmi pulls more signups. **The 14-day
+   continuous clock starts when the 12th tester is opted in.** (The web band at `/contact?topic=android-beta`
+   → feedback@getcamino.app is a second, parallel intake path.)
 2. **[CLAUDE ✅ DONE 2026-07-31 PM] Google's review verdict = APPROVED.** Alpha track Active, opt-in link
    live (above), Publishing overview shows no unpublished changes. Nothing left to watch here.
 3. **Parallel, non-blocking:** an Android device shakeout (back gesture / keyboard / Google sign-in / dictation
