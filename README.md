@@ -44,7 +44,7 @@ apply, in what order, by when — is deterministic, auditable code. Every obliga
 | `core/catalog-audit.ts` | Enforces the catalog↔interview contract (invariant 2) |
 | `app/` | Expo Router screens + server API routes (`app/api/*+api.ts`) |
 | `hooks/`, `lib/` | Platform-split modules (`.native.ts` twins for iOS/Android) |
-| `docs/` | Thesis, staff flag, monitoring, design assets |
+| `docs/` | Design thesis, test-coverage map, monitoring, brand/design assets |
 
 ## Development
 

@@ -72,3 +72,11 @@ AGENTS.md
 HANDOFF.md
 TODO.md
 .claude/
+
+# Internal business + AI-session docs under docs/ — kept LOCAL, not published.
+docs/STRATEGY.md
+docs/GROWTH.md
+docs/STAFF.md
+docs/testing/
+docs/archive/
+docs/audits/
