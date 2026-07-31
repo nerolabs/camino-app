@@ -294,5 +294,32 @@
         "save": "Save to my budget",
         "skip": "Skip"
       }
+    },
+  
+    "timeline": {
+      "tab": "Timing",
+      "title": "When should you land?",
+      "sub": "Pick your arrival month — your real roadmap re-computes.",
+      "tax": {
+        "eyebrow": "Tax residency",
+        "line": "Arrive in {{month}} and you're a Spanish tax resident from {{year}}.",
+        "files": "You'll first file Spanish taxes (Modelo 100) in {{year}}.",
+        "pivotEarlier": "Land on or before 2 July and it's {{year}} instead — a whole year earlier.",
+        "pivotLater": "Arriving after 2 July would push it to {{year}} — a whole year later."
+      },
+      "heading": "Your timeline",
+      "estimated": "est.",
+      "milestones": {
+        "visa": "Apply for your visa",
+        "arrival": "Land in Spain",
+        "padron": "Register (padrón)",
+        "school": "Enroll kids in school",
+        "tie": "Residence card (TIE)",
+        "tax_resident": "183 days — tax resident",
+        "licence": "Exchange your licence"
+      },
+      "schoolOrdinary": "ordinary admission window",
+      "schoolOffCycle": "off-cycle (fuera de plazo)",
+      "note": "Re-runs your real roadmap with a different arrival date. School windows show as a flag, not a fixed date."
     }
 }

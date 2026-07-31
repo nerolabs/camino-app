@@ -779,6 +779,16 @@ const ROWS: Row[] = [
       'Ship it off behind a flag and prove the data first — the same playbook as the phone security work: build the surface, verify every figure against its government source, then turn it on.',
     ],
   },
+  {
+    feature: '“When should I land?” — a timeline that shows the hidden tax-year trap',
+    date: '31 Jul 2026',
+    work: 'A second view that answers a question a checklist never can: when to arrive. Pick an arrival month and your real roadmap re-computes — every deadline shifts with it — because the plan engine already dates everything relative to your arrival. The payoff is a rule almost no one sees coming: Spain treats you as a tax resident for a whole calendar year only if you spend more than 183 days in it, so landing a few weeks either side of early July changes which year Spain first taxes you — and moves your first Spanish tax return by a full year. The screen computes that from your arrival date and says it plainly. Two honesty lines held: the milestone dates that are still estimates stay marked, and school-enrollment windows show as a flag (“ordinary window” vs off-cycle “fuera de plazo”), never a made-up date — because those windows change yearly and we won’t ship them secondhand.',
+    decisions: [
+      'The simulation is a diff of two real engine runs, not new logic — the deadlines you already trust, shifted; nothing invented.',
+      'Surface the 183-day rule as the calendar-year it actually lands in — that’s the insight people pay a gestor to notice.',
+      'Resist modelling school windows precisely: keep them a flag, which is what keeps the feature both honest and cheap.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

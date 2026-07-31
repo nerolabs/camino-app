@@ -294,5 +294,32 @@
         "save": "In meinem Budget speichern",
         "skip": "Überspringen"
       }
+    },
+  
+    "timeline": {
+      "tab": "Timing",
+      "title": "Wann solltest du ankommen?",
+      "sub": "Wähle deinen Ankunftsmonat — dein echter Fahrplan wird neu berechnet.",
+      "tax": {
+        "eyebrow": "Steuerlicher Wohnsitz",
+        "line": "Kommst du im {{month}} an, bist du ab {{year}} in Spanien steuerlich ansässig.",
+        "files": "Deine erste Steuererklärung in Spanien (Modelo 100) machst du {{year}}.",
+        "pivotEarlier": "Komm am 2. Juli oder früher an, dann wäre es {{year}} — ein ganzes Jahr früher.",
+        "pivotLater": "Eine Ankunft nach dem 2. Juli würde es auf {{year}} verschieben — ein ganzes Jahr später."
+      },
+      "heading": "Deine Zeitleiste",
+      "estimated": "gesch.",
+      "milestones": {
+        "visa": "Beantrage dein Visum",
+        "arrival": "In Spanien ankommen",
+        "padron": "Anmelden (padrón)",
+        "school": "Kinder in der Schule anmelden",
+        "tie": "Aufenthaltskarte (TIE)",
+        "tax_resident": "183 Tage — steuerlich ansässig",
+        "licence": "Führerschein umschreiben"
+      },
+      "schoolOrdinary": "reguläres Anmeldefenster",
+      "schoolOffCycle": "außerhalb der Frist (fuera de plazo)",
+      "note": "Berechnet deinen echten Fahrplan mit einem anderen Ankunftsdatum neu. Schulfenster sind ein Hinweis, kein festes Datum."
     }
 }

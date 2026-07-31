@@ -294,5 +294,32 @@
         "save": "Enregistrer dans mon budget",
         "skip": "Passer"
       }
+    },
+  
+    "timeline": {
+      "tab": "Quand",
+      "title": "Quand devrais-tu arriver ?",
+      "sub": "Choisis ton mois d'arrivée — ta feuille de route réelle se recalcule.",
+      "tax": {
+        "eyebrow": "Résidence fiscale",
+        "line": "Si tu arrives en {{month}}, tu es résident fiscal en Espagne à partir de {{year}}.",
+        "files": "Tu feras ta première déclaration en Espagne (Modelo 100) en {{year}}.",
+        "pivotEarlier": "Arrive le 2 juillet ou avant et ce serait {{year}} — un an plus tôt.",
+        "pivotLater": "Arriver après le 2 juillet le repousserait à {{year}} — un an plus tard."
+      },
+      "heading": "Ta chronologie",
+      "estimated": "est.",
+      "milestones": {
+        "visa": "Demande ton visa",
+        "arrival": "Arriver en Espagne",
+        "padron": "T'inscrire (padrón)",
+        "school": "Inscrire les enfants à l'école",
+        "tie": "Carte de séjour (TIE)",
+        "tax_resident": "183 jours — résident fiscal",
+        "licence": "Échanger ton permis"
+      },
+      "schoolOrdinary": "période d'admission ordinaire",
+      "schoolOffCycle": "hors délai (fuera de plazo)",
+      "note": "Recalcule ta feuille de route réelle avec une autre date d'arrivée. Les périodes scolaires sont un repère, pas une date fixe."
     }
 }

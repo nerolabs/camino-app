@@ -294,5 +294,32 @@
         "save": "Guardar en mi presupuesto",
         "skip": "Omitir"
       }
+    },
+  
+    "timeline": {
+      "tab": "Cuándo",
+      "title": "¿Cuándo deberías llegar?",
+      "sub": "Elige tu mes de llegada — tu hoja de ruta real se recalcula.",
+      "tax": {
+        "eyebrow": "Residencia fiscal",
+        "line": "Si llegas en {{month}}, eres residente fiscal en España desde {{year}}.",
+        "files": "Presentarás tu primera declaración en España (Modelo 100) en {{year}}.",
+        "pivotEarlier": "Llega el 2 de julio o antes y sería {{year}} — un año antes.",
+        "pivotLater": "Llegar después del 2 de julio lo llevaría a {{year}} — un año después."
+      },
+      "heading": "Tu cronología",
+      "estimated": "est.",
+      "milestones": {
+        "visa": "Solicita tu visado",
+        "arrival": "Llegar a España",
+        "padron": "Empadronarte",
+        "school": "Matricular a los niños",
+        "tie": "Tarjeta de residencia (TIE)",
+        "tax_resident": "183 días — residente fiscal",
+        "licence": "Canjear tu carné"
+      },
+      "schoolOrdinary": "plazo ordinario de admisión",
+      "schoolOffCycle": "fuera de plazo",
+      "note": "Recalcula tu hoja de ruta real con otra fecha de llegada. Los plazos escolares se muestran como aviso, no como fecha fija."
     }
 }

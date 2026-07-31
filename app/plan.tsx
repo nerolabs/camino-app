@@ -18,6 +18,7 @@ import { regionLabel } from '@/core/regions';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import BudgetView, { BUDGET_ENABLED } from '@/components/BudgetView';
+import TimelineView, { TIMELINE_ENABLED } from '@/components/TimelineView';
 import { BackToTop, useBackToTop } from '@/components/BackToTop';
 import { capture } from '@/lib/analytics';
 import EmailSignIn from '@/components/EmailSignIn';
@@ -126,7 +127,7 @@ export default function PlanScreen() {
   const activeTaskRef = useRef<string | null>(null);
   // "This week" vs the full phased roadmap. Full is the default — the week view is the
   // attention filter you flip to, not a place to hide the plan.
-  const [view, setView] = useState<'week' | 'all' | 'costs'>('all');
+  const [view, setView] = useState<'week' | 'all' | 'costs' | 'timing'>('all');
   // Exact keyboard overlap (same hook as the interview composer — the KAV lesson): the task
   // sheet slides above the keyboard so its inputs stay visible (build-24 family finding).
   const kb = useKeyboardHeight();
@@ -353,6 +354,14 @@ export default function PlanScreen() {
                 <Text style={[styles.viewToggleText, view === 'costs' && styles.viewToggleTextActive]}>{t('budget.tab')}</Text>
               </TouchableOpacity>
             )}
+            {TIMELINE_ENABLED && (
+              <TouchableOpacity
+                style={[styles.viewToggleBtn, view === 'timing' && styles.viewToggleBtnActive]}
+                onPress={() => { setView('timing'); capture('plan_view_toggled', { view: 'timing' }); }}
+              >
+                <Text style={[styles.viewToggleText, view === 'timing' && styles.viewToggleTextActive]}>{t('timeline.tab')}</Text>
+              </TouchableOpacity>
+            )}
           </View>
           {/* The report: a pure function of the plan (THESIS piece 4). Web → print dialog
               ("Save as PDF"); native → real PDF into the share sheet. */}
@@ -419,7 +428,9 @@ export default function PlanScreen() {
 
         <PenaltyBanner objectives={objectives} />
 
-        {view === 'costs' ? (
+        {view === 'timing' ? (
+          <TimelineView profile={profile} />
+        ) : view === 'costs' ? (
           <BudgetView objectives={objectives} profile={profile} onPatch={patchProfile} />
         ) : view === 'week' ? (
           <>
