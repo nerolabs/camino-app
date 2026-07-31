@@ -107,8 +107,26 @@ describe('OBLIGATION_COSTS — registry integrity', () => {
     }
   });
 
-  it('is entirely a researched first pass — no entry is verified to Camino standard yet', () => {
-    expect(entries.every(([, c]) => c.verified === false)).toBe(true);
+  it('a verified entry always has an official source + verified_at (can’t be verified without one)', () => {
+    for (const [id, c] of entries.filter(([, c]) => c.verified)) {
+      expect(c.source_url, id).toBeTruthy();
+      expect(c.verified_at, id).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
+  });
+
+  it('personal entries are never marked verified (Camino asserts nothing of its own to verify)', () => {
+    for (const [id, c] of entries.filter(([, c]) => c.kind === 'personal')) {
+      expect(c.verified, id).toBe(false);
+    }
+  });
+
+  it('the nationality-specific consulate visa fee stays unverified (not one euro)', () => {
+    expect(OBLIGATION_COSTS['consulate-appointment'].verified).toBe(false);
+  });
+
+  it('the firm statutory tasas were verified in the pass (every confidence value is valid)', () => {
+    expect(entries.some(([, c]) => c.verified)).toBe(true);         // the pass did flip some
+    expect(OBLIGATION_COSTS['residencia'].verified).toBe(true);      // TIE tasa, BOE-confirmed
     expect(entries.every(([, c]) => ['high', 'med', 'low'].includes(c.confidence))).toBe(true);
   });
 });

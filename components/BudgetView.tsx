@@ -44,7 +44,7 @@ function SourcedCard({ line }: { line: BudgetLine }) {
         </View>
         {line.recurring && <Text style={styles.recTag}>{line.recurring === 'monthly' ? 'per month' : 'per year'}</Text>}
         {line.source_url && <View style={styles.srcDot} />}
-        <Text style={styles.estTag}>estimate</Text>
+        <Text style={styles.estTag}>{line.verified ? 'verified' : 'estimate'}</Text>
       </View>
     </View>
   );
@@ -99,8 +99,9 @@ export default function BudgetView({
       {/* Estimates-in-progress banner — the honesty gate while data is verified:false */}
       <View style={styles.notice}>
         <Text style={styles.noticeText}>
-          <Text style={styles.noticeStrong}>Estimates in progress.</Text> These figures are researched, not yet
-          verified to our standard — a guide, not a quote. Official fees are shown with a dot.
+          <Text style={styles.noticeStrong}>A guide, not a quote.</Text> Official fees marked{' '}
+          <Text style={styles.noticeStrong}>verified</Text> are checked against their government source (dot).
+          Percentages and market prices are researched estimates.
         </Text>
       </View>
 
