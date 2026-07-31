@@ -204,7 +204,8 @@ export default function BudgetView({
 
       {/* Add-budget sheet */}
       <Modal visible={sheetId != null} transparent animationType="slide" onRequestClose={() => setSheetId(null)}>
-        <Pressable style={styles.scrim} onPress={() => setSheetId(null)} />
+        <View style={styles.modalRoot}>
+        <Pressable style={StyleSheet.absoluteFill} onPress={() => setSheetId(null)} />
         <View style={styles.sheet}>
           <View style={styles.grab} />
           <Text style={styles.sheetEyebrow}>YOUR BUDGET</Text>
@@ -248,6 +249,7 @@ export default function BudgetView({
             </TouchableOpacity>
           </View>
         </View>
+        </View>
       </Modal>
     </View>
   );
@@ -265,7 +267,7 @@ function LayerLabel({ color, title, hint }: { color: string; title: string; hint
 
 const HAIR = 'rgba(21,36,59,0.10)';
 const styles = StyleSheet.create({
-  wrap: { paddingHorizontal: 2, paddingTop: 4 },
+  wrap: { paddingHorizontal: 2, paddingTop: 4, width: '100%', maxWidth: 640, alignSelf: 'center' },
   notice: { backgroundColor: '#FBF3E3', borderColor: 'rgba(189,131,24,0.28)', borderWidth: 1, borderRadius: 12, padding: 12, marginBottom: 14 },
   noticeText: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13, lineHeight: 19, color: palette.indigo },
   noticeStrong: { fontFamily: 'HankenGrotesk_600SemiBold', color: '#8a5f11' },
@@ -313,8 +315,10 @@ const styles = StyleSheet.create({
   freeRow: { backgroundColor: '#EEF0F3', borderColor: HAIR, borderWidth: 1, borderRadius: 12, paddingHorizontal: 13, paddingVertical: 12, marginTop: 6 },
   freeText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 12, color: '#5b6a7e' },
 
-  scrim: { flex: 1, backgroundColor: 'rgba(21,36,59,0.34)' },
-  sheet: { backgroundColor: palette.cal, borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingHorizontal: 20, paddingTop: 10, paddingBottom: 30 },
+  // The Modal renders at the app root, outside /plan's centered column — so anchor + cap the sheet
+  // here or it spans the full desktop-web viewport width.
+  modalRoot: { flex: 1, justifyContent: 'flex-end', alignItems: 'center', backgroundColor: 'rgba(21,36,59,0.34)' },
+  sheet: { width: '100%', maxWidth: 480, backgroundColor: palette.cal, borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingHorizontal: 20, paddingTop: 10, paddingBottom: 30 },
   grab: { width: 38, height: 5, borderRadius: 3, backgroundColor: HAIR, alignSelf: 'center', marginBottom: 14 },
   sheetEyebrow: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 10.5, letterSpacing: 1.2, color: palette.amber },
   sheetTitle: { fontFamily: 'Fraunces_600SemiBold', fontSize: 21, color: palette.indigo, marginTop: 5 },
