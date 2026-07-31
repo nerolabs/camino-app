@@ -8,6 +8,7 @@ import { palette } from '@/constants/Colors';
 import { useProfile } from '@/core/ProfileContext';
 import { useAuth } from '@/core/AuthContext';
 import { saveProfile as saveProfileDb } from '@/core/profileDb';
+import { saveDraft } from '@/lib/interviewDraft';
 import { derive, type Profile } from '@/core/interview-controller';
 import { buildPlan, isOverdue, type Objective, type Progress } from '@/core/engine-controller';
 import { thisWeek } from '@/core/this-week';
@@ -172,12 +173,15 @@ export default function PlanScreen() {
   }
 
   // Move-budget view writes budget-only profile fields (home_price_eur, budget_estimates) — the
-  // plan engine ignores them, so this is the same setProfile + persist path as progress.
+  // plan engine ignores them, so this is the same setProfile + persist path as progress. Signed-in
+  // → the DB; anonymous → the local interview draft (now carries the budget fields), so a signed-out
+  // tester's budget survives a reload/resume instead of vanishing.
   async function patchProfile(patch: Record<string, unknown>) {
     if (!profile) return;
     const next: Profile = { ...profile, ...patch };
     setProfile(next);
     if (user) await saveProfileDb(user.id, next);
+    else saveDraft(next, null);
   }
 
   function markDone(id: string, completedOn?: string) {

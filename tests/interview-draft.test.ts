@@ -40,6 +40,19 @@ describe('interview draft', () => {
     expect('garbage' in d.answers).toBe(false);
   });
 
+  it('persists the /plan budget fields (home price + estimates) so an anonymous budget survives', () => {
+    const s = fakeStorage();
+    // A completed anonymous profile plus budget inputs set on the Costs view; is_eu is derived.
+    saveDraft(
+      { nationalities: ['US'], is_eu: false, home_price_eur: 240000, budget_estimates: { 'scout-where-to-live': 900 } },
+      null, s,
+    );
+    const d = loadDraft(s)!;
+    expect(d.answers.home_price_eur).toBe(240000);
+    expect(d.answers.budget_estimates).toEqual({ 'scout-where-to-live': 900 });
+    expect('is_eu' in d.answers).toBe(false); // derived fields still dropped
+  });
+
   it('returns null for no draft, empty answers, or corrupt JSON', () => {
     const s = fakeStorage();
     expect(loadDraft(s)).toBeNull();               // nothing saved

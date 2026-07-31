@@ -16,6 +16,10 @@ import { interviewCompleteness } from '@/core/completeness';
 
 const KEY = 'camino.interview.draft.v1';
 const SLOT_FIELDS = new Set(SLOTS.map(s => s.field));
+// Non-slot fields the /plan tools let a user set (the Costs view's home price + budget estimates).
+// They aren't interview answers, but an anonymous user's budget should survive a reload/resume just
+// like their answers do — so persist them too. Derived fields are still dropped (recomputed on load).
+const KEEP_EXTRA = new Set(['progress', 'home_price_eur', 'cadastral_value_eur', 'budget_estimates']);
 
 export type InterviewDraft = {
   answers: Profile;            // slot answers only (+ progress)
@@ -38,7 +42,7 @@ function defaultStorage(): SyncStorage | null {
 function pickAnswers(profile: Profile): Profile {
   const out: Profile = {};
   for (const [k, v] of Object.entries(profile))
-    if (SLOT_FIELDS.has(k) || k === 'progress') out[k] = v;
+    if (SLOT_FIELDS.has(k) || KEEP_EXTRA.has(k)) out[k] = v;
   return out;
 }
 
