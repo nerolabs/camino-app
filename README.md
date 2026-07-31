@@ -3,7 +3,10 @@
 An AI-guided relocation planner. Camino turns moving to Spain into a sequenced, personal,
 deadline-aware roadmap, and coaches you through it in the voice of a warm guide named **Lola**.
 
-**Live:** [getcamino.app](https://getcamino.app) · iOS on TestFlight
+**Live:** [getcamino.app](https://getcamino.app) · [iOS on the App Store](https://apps.apple.com/app/id6786412055) · Android in closed testing
+
+**How it was built, in the open:** a running [build log](https://getcamino.app/how-i-was-built/log)
+(every shipped increment + the decisions behind it) and the [roadmap](https://getcamino.app/how-i-was-built/roadmap).
 
 ## The idea
 
@@ -49,11 +52,14 @@ apply, in what order, by when — is deterministic, auditable code. Every obliga
 npm install
 npm run web          # local dev (web)
 npm run typecheck    # strict tsc
+npm test             # unit + integration suite (vitest)
 npm run audit        # catalog↔interview contract + persona smoke tests
+npm run test:e2e     # web end-to-end (Playwright, against a deployed env)
 ```
 
-Deploys are audit-gated: `npm run deploy:staging` / `npm run deploy:production`
-(see `scripts/deploy.sh`). Secrets live in EAS environments — never in the repo.
+Deploys are gated on `npm audit`, the full test suite, and the public E2E run:
+`npm run deploy:staging` / `npm run deploy:production` (see `scripts/deploy.sh`).
+Secrets live in EAS environments — never in the repo.
 
 ## Scope
 
