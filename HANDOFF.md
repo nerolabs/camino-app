@@ -5,7 +5,56 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-## ⭐ RESUME HERE (2026-07-31 PM — 🤖✅ GOOGLE APPROVED THE ANDROID CLOSED TEST → Alpha track ACTIVE, opt-in link LIVE. The whole build/listing/review track is DONE; the only remaining gate is the human one: recruit 12 testers → 14-day clock.)
+## ⭐ RESUME HERE (2026-07-31 EVE — 🚀 BOTH BIG DIFFERENTIATORS BUILT + LOCALIZED + LIVE ON WEB. Next session = ABSORB THE USER+WIFE BUG REPORTS from their thorough test pass. Android testers remain the separate, standing, user-gated critical path — see the Prior resume note below.)
+
+**One line:** the two STRATEGY.md uniqueness bets — a **move-cost estimate** ("Costs" tab) and a
+**timeline simulation** ("Timing" tab) — are built, verified, localized ×5, and **LIVE on getcamino.app
+(WEB ONLY)**. Tree clean; on `main` (`bfe7a23`); pushed; 3 prod deploys this session, all 10/10 E2E.
+**426 vitest · tsc + i18n-lint clean.** iOS/Android are deliberately DARK on these (native gate) until
+we're well into web testing (USER directive).
+
+**What shipped this session (both features, end to end):**
+- **Costs view** (`/plan` → "Costs"): a researched cost registry priced all 73 catalog steps →
+  `core/obligation-costs.ts` (firm/soft/personal/none); the **20 firm statutory tasas are `verified:true`**
+  against official sources (Orden PJC/617/2025 BOE, Instituto Cervantes, DGT, seg-social, RD 576/2013,
+  aranceles) — the rest stay honest `verified:false` estimates. Pure engine `core/budget.ts` (three
+  layers: sourced range / personal / free; one-time vs recurring buckets) + adapter `core/budget-inputs.ts`
+  (ITP pinned to the comunidad's VERIFIED flat rate from `regional-specifics.ts`) + `lib/budgetFormat.ts`
+  (Hermes-safe money) + `components/BudgetView.tsx` (gates, home-price input, Add-budget sheet).
+- **Timing view** (`/plan` → "Timing"): `core/timeline.ts` re-runs the engine with a shifted `arrival_date`;
+  the headline is the **183-day tax-residency YEAR** (which calendar year Spain first taxes you + your first
+  Modelo 100; the ~2 July pivot), computed timezone-free — the engine models it nowhere. School windows are
+  an honest FLAG (ordinary vs "fuera de plazo"), never a fabricated date. `components/TimelineView.tsx` =
+  a month scrubber + the dark tax-insight card + a milestone timeline.
+- **Flags:** `BUDGET_ENABLED`/`TIMELINE_ENABLED = Platform.OS==='web' && env!=='0'`. Native is STRUCTURALLY
+  off (a stray OTA can't arm it). **Kill switches, no code change:** set `EXPO_PUBLIC_BUDGET_ENABLED=0` /
+  `EXPO_PUBLIC_TIMELINE_ENABLED=0` in the EAS **production** env + redeploy to pull either tab.
+- **Localized ×5** (`locales/*/plan.json` → new `budget` + `timeline` blocks; es hand-done, fr/de/it
+  machine-drafted; i18n-lint green). Verified in-app in **English AND Spanish** (Chrome).
+- **Persistence fix (last commit):** a signed-out tester's Costs inputs used to vanish on reload — the local
+  interview draft now carries `home_price_eur`/`budget_estimates` (`lib/interviewDraft.ts` KEEP_EXTRA) and
+  `patchProfile` saves the draft for anonymous users. Signed-in was already correct (whole-profile JSON blob
+  → Supabase; the same proven path as step-progress).
+
+**NEXT SESSION (in order):**
+1. **[USER provides] Absorb the bug reports** from the user + wife's thorough web test pass. Fix each; every
+   bug that reaches a person **earns a regression test** in the layer that owns it (house rule). Cosmetics/JS
+   ride a web redeploy (`npm run deploy:production` — gated on audit+tests+E2E; EAS auth is the robot token).
+2. **Verify signed-in persistence on LIVE** (the one thing localhost couldn't fairly test — likely env/auth
+   there; check Sentry for `saveProfile failed`).
+3. **Known non-blocking follow-ups:** the cost registry's own display strings ("your call", "6–13% of price")
+   are data-layer and still English; the timeline milestone set is a curated 6 + the day-183 marker; the 27
+   soft/personal cost entries stay honest estimates (a future verification pass could firm a few — notary/
+   registry band math). Only if the user prioritizes.
+4. **[STANDING, parallel, USER-gated] Android:** recruiting 12 closed-test testers → the 14-day clock is
+   STILL the separate critical path. Nothing changed there this session — full state in the Prior resume
+   note directly below + memory `android-launch-in-flight`.
+
+**Key files:** `core/{obligation-costs,budget,budget-inputs,timeline}.ts` · `components/{BudgetView,TimelineView}.tsx`
+· `lib/{budgetFormat,interviewDraft}.ts` · `app/plan.tsx` (the 4-tab toggle + `patchProfile`) ·
+`locales/*/plan.json`. Tests: `tests/{budget,budget-inputs,budget-format,timeline,interview-draft}.test.ts`.
+
+## Prior resume note (2026-07-31 PM — 🤖✅ GOOGLE APPROVED THE ANDROID CLOSED TEST → Alpha track ACTIVE, opt-in link LIVE. The whole build/listing/review track is DONE; the only remaining gate is the human one: recruit 12 testers → 14-day clock.)
 
 **One line:** iOS is live on the App Store (reactive-only). **Android's closed-test release (1.0.0,
 versionCode 2 — the build Play Integrity was verified on) is APPROVED + PUBLISHED by Google** (Closed
