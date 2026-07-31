@@ -208,5 +208,13 @@
     "title": "Quick security check",
     "body": "Tap below to confirm you're human — then we'll pick up right where you left off.",
     "cancel": "Not now"
+  },
+  "androidBeta": {
+    "eyebrow": "ANDROID EARLY ACCESS",
+    "title": "Have an Android phone? Help shape the app.",
+    "sub": "The Camino Android app is in early testing before it reaches Google Play. If you are planning a move to Spain, join the beta — you will get it first, and your feedback steers what ships.",
+    "cta": "Join the Android beta",
+    "ctaA11y": "Join the Get Camino Android beta test",
+    "fine": "Free, no obligation — all you need is an Android phone and a Google account."
   }
 }

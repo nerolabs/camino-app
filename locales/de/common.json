@@ -208,5 +208,13 @@
     "title": "Kurzer Sicherheitscheck",
     "body": "Tippe unten, um zu bestätigen, dass du ein Mensch bist — danach geht es genau dort weiter.",
     "cancel": "Jetzt nicht"
+  },
+  "androidBeta": {
+    "eyebrow": "ANDROID FRÜHZUGANG",
+    "title": "Hast du ein Android-Handy? Hilf mit, die App zu gestalten.",
+    "sub": "Die Camino-App für Android ist in der Testphase, bevor sie zu Google Play kommt. Wenn du einen Umzug nach Spanien planst, mach bei der Beta mit: Du bekommst sie zuerst, und dein Feedback bestimmt, was erscheint.",
+    "cta": "Der Android-Beta beitreten",
+    "ctaA11y": "Am Android-Beta-Test von Get Camino teilnehmen",
+    "fine": "Kostenlos und unverbindlich — du brauchst nur ein Android-Handy und ein Google-Konto."
   }
 }

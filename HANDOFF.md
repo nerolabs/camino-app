@@ -5,29 +5,56 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-## ⭐ RESUME HERE (2026-07-30 PM — 🤖 ANDROID BUILD TRACK UNBLOCKED: Play Integrity Cloud setup DONE, first .aab BUILT, prod deployed. NEXT = Closed-track upload + Redmi verify.)
+## ⭐ RESUME HERE (2026-07-31 — 🤖🎉 ANDROID INTERVIEW WORKS ON A REAL DEVICE: Play Integrity VERIFIED on the Redmi (Lola answers). EAS auto-submit wired, .aab on Internal track. NEXT = one Redmi sitting → screenshots → closed track → 12 testers → 14-day clock.)
 
-**One line:** iOS is live on the App Store (reactive-only). **Android is the active frontier** and is
-now build-ready end-to-end — Play Integrity fully wired (Cloud project `get-camino`/`1008705428602`,
-API enabled, Play-linked, SA key in EAS), first production **`.aab` built** (versionCode 2, artifact
-`https://expo.dev/artifacts/eas/f9r2GLsB4XYHedBkldquHsno3zZdKP8BP9xA_eFZ_5I.aab`), a build guard added,
-and prod hosting deployed (server carries the SA key; `PLAY_INTEGRITY_ENABLED` still OFF). Main is at
-`d7212dd`, tree clean, all pushed.
+**One line:** iOS is live on the App Store (reactive-only). **Android's last hard technical unknown is
+CLEARED** — Play Integrity verified end-to-end on the real Redmi (real on-device token → decoded
+server-side → passed `evaluateVerdict` → session minted → **Lola answered on Android**). The flag
+`PLAY_INTEGRITY_ENABLED=1` is **live** in prod. Tree: this session's work is committed + pushed to
+`main`; web redeployed (the dormant Android beta opt-in + homework rows shipped).
 
-**NEXT SESSION, in order (all user-gated until the flip):**
-1. **[USER] Upload the `.aab` to a Closed testing track** in Play Console (manual — the native file
-   picker the harness can't drive) + add **≥12 tester emails** → copy the opt-in link.
-2. **[USER] Install on the Redmi** via that opt-in link.
-3. **[CLAUDE] Flip `PLAY_INTEGRITY_ENABLED=1`** (EAS production env) + **redeploy hosting**
-   (`npm run deploy:production`) → **[USER] run the interview on the Redmi** to confirm a real Play
-   Integrity verdict mints a session (Lola answers). If a verdict fails right after upload it's likely
-   `UNRECOGNIZED_VERSION` = propagation, recheck; a real failure logs `[playIntegrity]` in Sentry.
-4. **[USER] Recruit the 12 testers → the 14-day clock starts** (the longest calendar item).
-5. Parallel, NOT blocking the clock: **screenshots** off the Redmi + the **phone-only vs +tablet
-   decision**; and an Android device shakeout (back gesture / keyboard / Google sign-in / dictation /
-   safe-area) — JS fixes ride OTA (`npm run ota:production`), native fixes need a rebuild.
+**What shipped this session:**
+- **EAS Android auto-submit WIRED** (answered "does Android need a manual upload every build?" — no, it
+  was just an unfilled `eas.json` gap). `eas.json` submit profiles: `production.android.track="alpha"`
+  (Closed testing — the track that counts toward the clock) + a one-off `internal` profile. 2nd SA
+  `eas-play-publisher@get-camino…` (Play Android Developer API) → **key uploaded to EAS-managed
+  credentials**, so every future `eas submit` is one non-interactive command Claude can run via Bash.
+- **`.aab` (build `25449905`, versionCode 2) on the Internal testing track**, installed on the Redmi,
+  interview verified working. Opt-in: `https://play.google.com/apps/internaltest/4701239551951936547`.
+- **`PLAY_INTEGRITY_ENABLED=1` flipped + prod redeployed** → Lola answers on Android.
+- **Web Android-beta opt-in built (DORMANT):** `components/AndroidBetaOptIn.tsx` shows only to Android web
+  visitors, offers closed-beta early access; ships dormant (`ANDROID_BETA_JOIN_URL=''` → renders nothing)
+  until recruitment opens. 5 locales, +5 vitest (**387**), TEST-COVERAGE updated. Recruitment copy (4
+  formats) drafted for the Desktop track (permission-first).
+- **DECIDED: Android ships PHONE-ONLY** (mirrors iOS; drops the 7"+10" tablet screenshot + QA burden).
 
-Full detail: the **SESSION UPDATE (2026-07-30 PM)** block below + memory `android-launch-in-flight` +
+**NEXT SESSION — one Redmi sitting to start the 14-day clock (mostly user-gated):**
+1. **[USER] Capture PHONE screenshots** off the Redmi (2–8), Claude frames/uploads guidance (file
+   upload needs the user — native picker).
+2. **[CLAUDE+USER] Complete the store listing** (screenshots in; set phone-only / exclude tablets — a
+   Play Console distribution setting that drops the tablet screenshot requirement).
+3. **[CLAUDE] `eas submit -p android --profile production`** → promotes to the **closed/alpha** track
+   (auto-submit is wired; the earlier "missing metadata" failure was just the absent screenshots — should
+   pass once the listing's complete).
+4. **Tester list = a Play Console EMAIL LIST** (same as the internal one built this session — add ~12
+   tester emails). **⚠️ NOT a Google Group:** getcamino.app is a Workspace domain that blocks external
+   group members (create-group only offers "anyone in the *organization*"); enabling external members is
+   an org-wide Admin-console security change, not worth it for 12. Collect emails via the recruitment
+   channels/DMs; for the website funnel, point the web band at the existing contact form (`app/contact.tsx`
+   has a `?topic=` deep-link — add an "android-beta" topic → `/contact?topic=android-beta`, visitor leaves
+   email, user adds it) and **flip the band live** by setting `ANDROID_BETA_JOIN_URL`.
+5. **[USER] Recruit ≥12 testers → the 14-day CONTINUOUS clock starts** (Google's production-access gate:
+   12 testers · 14 days · CLOSED track only — internal/open don't count; a tester who drops before 14 days
+   doesn't count even if they rejoin). The longest calendar item.
+6. Parallel, non-blocking: an Android device shakeout (back gesture / keyboard / Google sign-in /
+   dictation / safe-area) — JS fixes ride OTA (`npm run ota:production`), native fixes need a rebuild.
+
+**Install gotcha for the record:** "app unavailable on your device" on the Redmi = the Play Store app's
+active account wasn't the opted-in tester (`andrew@getcamino.app`); switching the Play Store account fixed
+it. Desktop web showed Install because it was on the tester account. A blank Play Store drawer = go through
+the browser opt-in link first.
+
+Full detail: memory `android-launch-in-flight` + the **SESSION UPDATE (2026-07-30 PM)** block below +
 `docs/ANDROID_LAUNCH.md`. _(The 2026-07-13 note just below is historical.)_
 
 ## Prior resume note (2026-07-13 session close — THE OPUS DAY: council queue SHIPPED, build 39 LIVE with native App Attest, release candidate NEXT)

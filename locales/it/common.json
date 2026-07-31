@@ -208,5 +208,13 @@
     "title": "Rapido controllo di sicurezza",
     "body": "Tocca qui sotto per confermare che sei umano — poi riprendiamo da dove eri.",
     "cancel": "Non ora"
+  },
+  "androidBeta": {
+    "eyebrow": "ACCESSO ANTICIPATO ANDROID",
+    "title": "Hai un telefono Android? Aiutaci a plasmare l’app.",
+    "sub": "L’app Camino per Android è in fase di test prima di arrivare su Google Play. Se stai pianificando un trasferimento in Spagna, unisciti alla beta: la avrai per primo e i tuoi feedback guidano ciò che pubblichiamo.",
+    "cta": "Unisciti alla beta Android",
+    "ctaA11y": "Partecipa al test beta Android di Get Camino",
+    "fine": "Gratis e senza impegno — ti bastano un telefono Android e un account Google."
   }
 }

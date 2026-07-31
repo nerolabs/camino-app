@@ -72,12 +72,12 @@ const SECTIONS: Section[] = [
       { title: 'The EU storefronts (Spain included)', note: 'The iOS app is live worldwide except the EU\'s App Store storefronts, which Apple withholds until a pending business-identity verification completes and the trader declaration is filed. The web app serves Spain and the EU fully in the meantime; the moment the case closes, the storefronts unlock.' },
       { title: 'The languages get their human pass', note: 'Machine-drafted, mechanically linted — and now verified by native speakers, sentence by sentence, before launch. Corrections land as reviewable diffs against frozen snapshots.' },
       { title: 'Real users become the testers', note: 'Family testing ran its course — the last full evening of expert testing found nothing. From here, real users, crash monitoring, and over-the-air fixes are the quality loop; every bug that reaches a person still earns a permanent regression test.' },
+      { title: 'The Android app — in testing', note: 'The remaining leg is underway. The hardware install-proof (the sibling of the iPhone\'s App Attest) is built and verified on a real phone, so the interview works from the first build — which is now on Google\'s internal testing track. Next is a short closed test with a dozen real testers, which Google requires for two weeks before an app can go public, then the Play Store. Android ships phone-only, like the iPhone.' },
     ],
   },
   {
     h: 'Next',
     items: [
-      { title: 'The Android app', note: 'Web and iOS are live; Android is the remaining leg. The test device is in hand and the launch playbook is written — the first job is the hardware install-proof (the sibling of the iPhone\'s App Attest) so the interview works from the very first test build.' },
       { title: 'Region-by-region specifics', note: 'The rates and windows for each comunidad, verified against each region\'s own official sources — the content pass behind the region flags.' },
     ],
   },

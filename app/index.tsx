@@ -14,6 +14,7 @@ import { CATALOG } from '@/core/engine-controller';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import StoreBadges, { APP_STORE_URL } from '@/components/StoreBadges';
+import AndroidBetaOptIn from '@/components/AndroidBetaOptIn';
 import HomeSections from '@/components/landing/HomeSections';
 
 // Labels are i18n keys (common:home.photos.*) so captions localize with the rest of the chrome.
@@ -133,6 +134,9 @@ export default function LandingPage() {
       {/* Variant C won the 2026-07-10 landing lab: how-it-works now lives HERE as a live demo,
           followed by proof, trust, and a final CTA (docs/LANDING-REDESIGN.md). */}
       <HomeSections />
+
+      {/* Android-only recruitment for the closed beta (dormant until ANDROID_BETA_JOIN_URL is set). */}
+      <AndroidBetaOptIn />
 
       <StoreBadges iosUrl={APP_STORE_URL} />
 

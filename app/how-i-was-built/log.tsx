@@ -749,6 +749,16 @@ const ROWS: Row[] = [
       'The listing URL was verified resolving via Apple\'s own lookup API before the link shipped — a download badge that 404s is worse than a coming-soon pill.',
     ],
   },
+  {
+    feature: 'Android reaches a real device — the interview works from the first build',
+    date: '31 Jul 2026',
+    work: 'The Android app cleared its hardest gate. Play Integrity — the sibling of the iPhone\'s hardware install-proof — now verifies a genuine Google Play install and mints the short-lived token the interview needs, confirmed on a physical phone (Lola answered). The first production build went up to Google\'s internal testing track through a one-command automated pipeline, installs cleanly, and runs. Android will ship phone-only, matching the iPhone. And an invitation for Android testers was built into the site itself — shown only to Android visitors — so the closed test recruits from people actually moving to Spain, not a rented crowd.',
+    decisions: [
+      'Prove the security path on a real Play install before recruiting anyone: Play Integrity only returns real verdicts for a genuine Google Play download, so the first install doubled as the proof, on a real device.',
+      'Recruit testers from the site\'s own Android visitors, never a paid tester farm — real target users catch real bugs, and the farms are a policy landmine that can burn the account.',
+      'Phone-only for Android, like the iPhone: a moving-to-Spain checklist is a phone product; it drops the tablet burden and stays reversible.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {
