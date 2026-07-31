@@ -35,12 +35,14 @@ export function daysLeftInArrivalYear(arrivalISO: string): number {
 }
 
 /**
- * The first calendar year you're a Spanish tax resident. Arrive with ≥183 days left in the year →
- * resident that year; otherwise your first tax-resident year is the next one (the ~2 July pivot).
+ * The first calendar year you're a Spanish tax resident. The rule (LIRPF art. 9) is *more than*
+ * 183 days in the calendar year — so you need ≥184 days of presence, i.e. arrive on/before ~1 July
+ * (the last day that leaves 184 days in the year). Exactly 183 days left is NOT enough. Otherwise
+ * your first tax-resident year is the next one.
  */
 export function taxResidencyFirstYear(arrivalISO: string): number {
   const { y } = parseISO(arrivalISO);
-  return daysLeftInArrivalYear(arrivalISO) >= 183 ? y : y + 1;
+  return daysLeftInArrivalYear(arrivalISO) >= 184 ? y : y + 1;
 }
 
 /** School-enrollment timing risk — a FLAG, never a fabricated date (invariant: no secondhand school

@@ -304,8 +304,9 @@
         "eyebrow": "Tax residency",
         "line": "Arrive in {{month}} and you're a Spanish tax resident from {{year}}.",
         "files": "You'll first file Spanish taxes (Modelo 100) in {{year}}.",
-        "pivotEarlier": "Land on or before 2 July and it's {{year}} instead — a whole year earlier.",
-        "pivotLater": "Arriving after 2 July would push it to {{year}} — a whole year later."
+        "caveat": "Assumes you're in Spain more than 183 days that year — long trips away can change it.",
+        "pivotEarlier": "Land on or before 1 July and it's {{year}} instead — a whole year earlier.",
+        "pivotLater": "Arriving after 1 July would push it to {{year}} — a whole year later."
       },
       "heading": "Your timeline",
       "estimated": "est.",

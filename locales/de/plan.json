@@ -304,8 +304,9 @@
         "eyebrow": "Steuerlicher Wohnsitz",
         "line": "Kommst du im {{month}} an, bist du ab {{year}} in Spanien steuerlich ansässig.",
         "files": "Deine erste Steuererklärung in Spanien (Modelo 100) machst du {{year}}.",
-        "pivotEarlier": "Komm am 2. Juli oder früher an, dann wäre es {{year}} — ein ganzes Jahr früher.",
-        "pivotLater": "Eine Ankunft nach dem 2. Juli würde es auf {{year}} verschieben — ein ganzes Jahr später."
+        "caveat": "Setzt voraus, dass du in dem Jahr mehr als 183 Tage in Spanien bist; längere Abwesenheiten können das ändern.",
+        "pivotEarlier": "Komm am 1. Juli oder früher an, dann wäre es {{year}} — ein ganzes Jahr früher.",
+        "pivotLater": "Eine Ankunft nach dem 1. Juli würde es auf {{year}} verschieben — ein ganzes Jahr später."
       },
       "heading": "Deine Zeitleiste",
       "estimated": "gesch.",

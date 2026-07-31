@@ -304,8 +304,9 @@
         "eyebrow": "Résidence fiscale",
         "line": "Si tu arrives en {{month}}, tu es résident fiscal en Espagne à partir de {{year}}.",
         "files": "Tu feras ta première déclaration en Espagne (Modelo 100) en {{year}}.",
-        "pivotEarlier": "Arrive le 2 juillet ou avant et ce serait {{year}} — un an plus tôt.",
-        "pivotLater": "Arriver après le 2 juillet le repousserait à {{year}} — un an plus tard."
+        "caveat": "Suppose que tu passes plus de 183 jours en Espagne cette année-là ; de longues absences peuvent le modifier.",
+        "pivotEarlier": "Arrive le 1 juillet ou avant et ce serait {{year}} — un an plus tôt.",
+        "pivotLater": "Arriver après le 1 juillet le repousserait à {{year}} — un an plus tard."
       },
       "heading": "Ta chronologie",
       "estimated": "est.",

@@ -19,9 +19,12 @@ import { capture } from '@/lib/analytics';
 export const TIMELINE_ENABLED = Platform.OS === 'web' && process.env.EXPO_PUBLIC_TIMELINE_ENABLED !== '0';
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
+// The engine and core/timeline build every date as UTC midnight (new Date('YYYY-MM-DD')). Format in
+// UTC too, or a browser west of Greenwich renders each one a day early — a 1 Jul arrival would show
+// "Jun 30" for a US user while the tax card said July. timeZone:'UTC' keeps display == the picked day.
 const monthName = (iso: string, style: 'short' | 'long') =>
-  new Date(iso + 'T00:00:00').toLocaleDateString(dateLocale(), { month: style });
-const fmtDate = (d: Date) => d.toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short', year: 'numeric' });
+  new Date(iso).toLocaleDateString(dateLocale(), { month: style, timeZone: 'UTC' });
+const fmtDate = (d: Date) => d.toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
 
 const MK_DOT: Record<string, string> = {
   arrival: palette.cobalt, tax_resident: palette.amber, visa: palette.olive,
@@ -40,11 +43,17 @@ export default function TimelineView({ profile }: { profile: Profile }) {
   const [selectedISO, setSelectedISO] = useState(`${year}-${pad2(baseMonth)}-01`);
   const scenario = simulateArrival(profile, selectedISO);
   const taxYear = scenario.taxYear;
-  const arrivedByPivot = taxYear === year; // arrived on/before ~2 July → resident this year
+  const selectedYear = Number(selectedISO.slice(0, 4));
+  const arrivedByPivot = taxYear === selectedYear; // arrived on/before ~1 July → resident that same year
 
+  // A rolling 12-month window from the planned month, so the pivot stays explorable ACROSS the year
+  // boundary (a Nov arrival can compare landing next spring). Each month's dot is olive when arriving
+  // then makes you a resident that same calendar year, amber when it slips to the next.
   const months = Array.from({ length: 12 }, (_, i) => {
-    const iso = `${year}-${pad2(i + 1)}-01`;
-    return { iso, label: monthName(iso, 'short'), taxYear: taxResidencyFirstYear(iso) };
+    const idx = baseMonth - 1 + i;
+    const y = year + Math.floor(idx / 12);
+    const iso = `${y}-${pad2((idx % 12) + 1)}-01`;
+    return { iso, label: monthName(iso, 'short'), residentSameYear: taxResidencyFirstYear(iso) === y };
   });
 
   function pick(iso: string) {
@@ -64,7 +73,7 @@ export default function TimelineView({ profile }: { profile: Profile }) {
           return (
             <TouchableOpacity key={m.iso} onPress={() => pick(m.iso)} style={[styles.chip, on && styles.chipOn]} activeOpacity={0.8}>
               <Text style={[styles.chipText, on && styles.chipTextOn]}>{m.label}</Text>
-              <View style={[styles.chipDot, { backgroundColor: m.taxYear === year ? palette.olive : palette.amber }]} />
+              <View style={[styles.chipDot, { backgroundColor: m.residentSameYear ? palette.olive : palette.amber }]} />
             </TouchableOpacity>
           );
         })}
@@ -75,6 +84,7 @@ export default function TimelineView({ profile }: { profile: Profile }) {
         <Text style={styles.taxEyebrow}>{t('timeline.tax.eyebrow').toUpperCase()}</Text>
         <Text style={styles.taxLine}>{t('timeline.tax.line', { month: monthName(selectedISO, 'long'), year: taxYear })}</Text>
         <Text style={styles.taxFiles}>{t('timeline.tax.files', { year: taxYear + 1 })}</Text>
+        <Text style={styles.taxCaveat}>{t('timeline.tax.caveat')}</Text>
         <View style={styles.taxPivot}>
           <Text style={styles.taxPivotText}>
             {arrivedByPivot
@@ -132,6 +142,7 @@ const styles = StyleSheet.create({
   taxEyebrow: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 10.5, letterSpacing: 1.3, color: '#8FB0DA' },
   taxLine: { fontFamily: 'Fraunces_600SemiBold', fontSize: 20, lineHeight: 27, color: palette.white, marginTop: 8 },
   taxFiles: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 13.5, lineHeight: 20, color: '#C4D0E0', marginTop: 10 },
+  taxCaveat: { fontFamily: 'HankenGrotesk_400Regular', fontSize: 11.5, lineHeight: 16, color: '#8FB0DA', marginTop: 8, fontStyle: 'italic' },
   taxPivot: { marginTop: 13, paddingTop: 12, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.14)' },
   taxPivotText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, lineHeight: 19, color: '#E7B24B' },
 

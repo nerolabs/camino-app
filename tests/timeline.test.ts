@@ -16,18 +16,22 @@ function baseProfile(extra: Record<string, unknown> = {}) {
 }
 
 describe('taxResidencyFirstYear — the 183-day pivot', () => {
-  it('arriving with ≥183 days left → resident that year; fewer → next year', () => {
+  it('needs MORE than 183 days present (≥184 left) → that year; otherwise next year', () => {
     expect(taxResidencyFirstYear('2027-03-01')).toBe(2027);
     expect(taxResidencyFirstYear('2027-09-01')).toBe(2028);
   });
-  it('pins the exact pivot: 2 July in a non-leap year', () => {
-    expect(daysLeftInArrivalYear('2027-07-02')).toBe(183);
-    expect(taxResidencyFirstYear('2027-07-02')).toBe(2027);
-    expect(taxResidencyFirstYear('2027-07-03')).toBe(2028);
+  // The rule is >183 days (LIRPF art. 9), so exactly 183 days present is NOT enough. 1 July is the
+  // last arrival that leaves 184 days; 2 July leaves 183 → next year. (Regression: was off by one —
+  // the old `>=183` wrongly made a 2 July arrival resident on exactly 183 days.)
+  it('pins the exact pivot: 1 July qualifies, 2 July does not (non-leap)', () => {
+    expect(daysLeftInArrivalYear('2027-07-01')).toBe(184);
+    expect(taxResidencyFirstYear('2027-07-01')).toBe(2027);
+    expect(daysLeftInArrivalYear('2027-07-02')).toBe(183); // exactly 183 — not MORE than 183
+    expect(taxResidencyFirstYear('2027-07-02')).toBe(2028);
   });
-  it('shifts the pivot by a day in a leap year (2028)', () => {
-    expect(taxResidencyFirstYear('2028-07-02')).toBe(2028); // 183 days left
-    expect(taxResidencyFirstYear('2028-07-03')).toBe(2029); // 182 days left
+  it('holds the same 1 July pivot in a leap year (2028 — the leap day is before July)', () => {
+    expect(taxResidencyFirstYear('2028-07-01')).toBe(2028); // 184 days left
+    expect(taxResidencyFirstYear('2028-07-02')).toBe(2029); // 183 days left → next year
   });
 });
 
@@ -51,6 +55,20 @@ describe('simulateArrival — re-runs the real engine, arrival shifted', () => {
     // milestones are sorted ascending by due date
     const dues = s.milestones.map(m => m.due.getTime());
     expect(dues).toEqual([...dues].sort((a, b) => a - b));
+  });
+
+  // Regression (2026-07-31 review): milestone dates are built as UTC midnight (new Date('YYYY-MM-DD'))
+  // and the view formats them with timeZone:'UTC'. This pins the construction so the day rendered is
+  // exactly the picked day — the old mix (UTC-built dates through a local formatter) showed a 1 Jul
+  // arrival as "Jun 30" for any viewer west of Greenwich, contradicting the tax card on the same screen.
+  it('milestone dates carry the picked calendar day in UTC — no off-by-one drift', () => {
+    const s = simulateArrival(baseProfile(), '2027-07-01');
+    const arrival = s.milestones.find(m => m.key === 'arrival')!;
+    expect(arrival.due.getUTCFullYear()).toBe(2027);
+    expect(arrival.due.getUTCMonth()).toBe(6); // July, 0-indexed
+    expect(arrival.due.getUTCDate()).toBe(1);
+    const tax = s.milestones.find(m => m.key === 'tax_resident')!;
+    expect(Math.round((tax.due.getTime() - arrival.due.getTime()) / 86_400_000)).toBe(182);
   });
 
   it('has no school flag when there are no children in the plan', () => {
