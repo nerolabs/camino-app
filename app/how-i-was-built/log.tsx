@@ -789,6 +789,17 @@ const ROWS: Row[] = [
       'Resist modelling school windows precisely: keep them a flag, which is what keeps the feature both honest and cheap.',
     ],
   },
+  {
+    feature: 'A fresh-eyes pass on the two new views — fixing what the honesty rule caught',
+    date: '31 Jul 2026',
+    work: 'Before real testers arrived, a cold read of the just-shipped Costs and Timing code found a handful of things worth fixing. The tax-residency pivot was off by a day: the rule is MORE than 183 days, so the last arrival that still counts is 1 July, not 2 — corrected in the engine and the copy. The timeline\'s milestone dates were built at midnight UTC but printed in the reader\'s own timezone, so a 1 July arrival showed as “Jun 30” for anyone in the Americas while the headline said July — now printed consistently. The tax card stated residency as a certainty; it now carries a one-line caveat that it assumes you actually stay past 183 days. On the Costs side, the “Fixed fees” total quietly mixed government-checked fees with two nationality-dependent estimates — those estimates now stay in the range but out of the number we present as certain — and a buyer who hasn\'t entered a home price yet gets told why the total looks low instead of being misled.',
+    decisions: [
+      'The honesty invariant applies to arithmetic too: “more than 183 days” means 184, and a one-day-too-generous boundary is still a wrong deadline.',
+      'A date is a fact — render it in one timezone end to end, or two parts of the same screen will disagree.',
+      'Only sum into a figure labelled “fixed” the costs that are actually fixed and checked; let honest estimates ride the range with their “estimate” tag.',
+      'Every fix earned a regression test in the layer that owns it — the boundary, the date construction, and the fees split are all pinned now.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {
