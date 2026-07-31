@@ -759,6 +759,16 @@ const ROWS: Row[] = [
       'Phone-only for Android, like the iPhone: a moving-to-Spain checklist is a phone product; it drops the tablet burden and stays reversible.',
     ],
   },
+  {
+    feature: 'The Android closed test is submitted — and tester recruitment opened',
+    date: '31 Jul 2026',
+    work: 'Everything Google needs to start the two-week closed test is now in and submitted for review. Phone screenshots were captured on a real Android phone and framed to the brand — with a purpose-built renderer that keeps them inside Google\'s exact size rules (a raw phone screenshot is actually too tall to accept, and just under the resolution that qualifies for promotion). The store listing was finished (category, contact), and the verified build was promoted to the closed track — reused, not rebuilt, because Google refuses a re-uploaded version number. And the Android-visitor invitation on the site went live: it points to a short form to leave an email, so we collect testers first, then enrol them.',
+    decisions: [
+      'Promote the already-verified build to the closed track rather than submit a fresh one — the same version number can\'t be uploaded twice, and reusing it keeps the exact binary that passed the security proof on a real phone.',
+      'Frame screenshots to 16:9 and past the 1080px bar on purpose: it clears both the "too tall to accept" rejection and the "eligible for promotion" threshold in one shot.',
+      'Recruit by collecting emails through a contact form, not a self-serve group link: a business-domain Google Group can\'t admit outside members without an org-wide security change, so a form is the honest path for a dozen testers.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

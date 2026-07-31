@@ -52,7 +52,7 @@ export async function POST(request: Request): Promise<Response> {
   const field = (v: unknown) => (typeof v === 'string' ? v.slice(0, MAX_FIELD) : '');
   // Topic comes from the contact page's selector; anything unexpected collapses to 'general'
   // so the subject line can never be attacker-chosen text.
-  const topic = ['general', 'feedback', 'problem'].includes(body.topic as string)
+  const topic = ['general', 'feedback', 'problem', 'android-beta'].includes(body.topic as string)
     ? (body.topic as string) : 'general';
   const ctx = {
     email:    field(body.email),      // optional reply-to, self-reported

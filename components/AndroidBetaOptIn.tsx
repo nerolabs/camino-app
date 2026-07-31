@@ -9,12 +9,14 @@ import { palette } from '@/constants/Colors';
 // target users straight off the site: this band appears ONLY to Android web visitors and offers
 // them early access. iPhone/desktop visitors never see it (they'd get an app they can't install).
 //
-// DORMANT BY DESIGN: with ANDROID_BETA_JOIN_URL === '' the band renders nothing, so this is safe
-// to ship before recruitment opens. Flip it live by setting the URL below to the closed-test
-// join link (Play Console → Closed testing → Testers → "Copy link", or the Google Group join URL)
-// — but ONLY after the interview is proven working on a real Android install (else recruits hit a
-// dead Lola) and the store listing/screenshots are in so the closed release can complete.
-export const ANDROID_BETA_JOIN_URL = '';
+// LIVE 2026-07-31: recruitment opened once Play Integrity was proven on a real Android install and
+// the closed-test release (vc2) was submitted for review. The band points at the contact funnel
+// (?topic=android-beta) rather than the Play "Copy link" opt-in URL, because a Google Workspace
+// domain can't self-serve a Google Group and the opt-in link only enrolls emails already on the
+// tester list — so we COLLECT emails first: the recruit leaves an address, Andrew adds it to the
+// Play Console tester list, then sends them the opt-in link. Switch this to the direct opt-in link
+// later if we ever pre-authorise open enrolment. Set '' again to take the band dormant.
+export const ANDROID_BETA_JOIN_URL = 'https://getcamino.app/contact?topic=android-beta';
 
 // Web-only + this-device-is-Android + recruitment actually open (a join URL is set). joinUrl is a
 // param so both branches are unit-testable; it defaults to the module constant for the real call.

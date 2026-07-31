@@ -25,9 +25,11 @@ describe('androidBetaVisible', () => {
     expect(androidBetaVisible('web', true, '')).toBe(false);
   });
 
-  it('ships dormant by default (ANDROID_BETA_JOIN_URL empty until recruitment opens)', () => {
-    // Tripwire: flipping recruitment live means intentionally setting the URL — update this then.
-    expect(ANDROID_BETA_JOIN_URL).toBe('');
-    expect(androidBetaVisible('web', true)).toBe(false);
+  it('is LIVE (2026-07-31): join URL points at the android-beta contact funnel and the band shows for Android web', () => {
+    // Tripwire: recruitment is open. If the band is ever taken dormant again, set the URL back
+    // to '' and restore the dormant assertion (androidBetaVisible('web', true) === false).
+    expect(ANDROID_BETA_JOIN_URL.length).toBeGreaterThan(0);
+    expect(ANDROID_BETA_JOIN_URL).toContain('/contact?topic=android-beta');
+    expect(androidBetaVisible('web', true)).toBe(true);
   });
 });

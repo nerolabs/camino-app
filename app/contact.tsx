@@ -18,7 +18,11 @@ import Seo from '@/components/Seo';
 // Same transport as before: POST /api/feedback → team inbox via Resend, context attached.
 
 const API_BASE = process.env.EXPO_PUBLIC_API_URL ?? '';
-const TOPICS = ['general', 'feedback', 'problem'] as const;
+// 'android-beta' is the Android closed-beta recruitment funnel: the Android-only web band
+// (components/AndroidBetaOptIn) deep-links here with ?topic=android-beta so a target user can
+// leave their email → Andrew adds it to the Play Console tester list. The topic is on the
+// feedback API's allowlist so these land tagged in the inbox, not collapsed to 'general'.
+const TOPICS = ['general', 'feedback', 'problem', 'android-beta'] as const;
 type Topic = (typeof TOPICS)[number];
 
 // The server answers in <0.5s, but on some devices/networks the fetch stalls on the RESPONSE
@@ -35,7 +39,12 @@ export default function Contact() {
   // useState initializer never sees them (?topic=problem landed on General; caught by
   // smoke #7 on its first run). React to the param instead.
   useEffect(() => {
-    if (TOPICS.includes(params.topic as Topic)) setTopic(params.topic as Topic);
+    if (TOPICS.includes(params.topic as Topic)) {
+      setTopic(params.topic as Topic);
+      // Android-beta recruits arrive via the opt-in band to leave an email; prefill the message
+      // (only while untouched) so the send isn't blocked by an empty box — email is what we need.
+      if (params.topic === 'android-beta') setText(prev => prev || t('contact.androidBetaPrefill'));
+    }
   }, [params.topic]);
   const [email, setEmail] = useState(user?.email ?? '');
   // Auth loads async — same late-hydration class as the topic param above: on a cold

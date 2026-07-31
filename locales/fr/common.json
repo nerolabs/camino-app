@@ -182,8 +182,10 @@
     "topics": {
       "general": "Général",
       "feedback": "Retour d'expérience",
-      "problem": "Signaler un problème"
+      "problem": "Signaler un problème",
+      "android-beta": "Bêta Android"
     },
+    "androidBetaPrefill": "Je souhaite rejoindre la bêta Android — voici mon e-mail pour m'ajouter comme testeur.",
     "emailLabel": "Ton e-mail (facultatif — pour pouvoir te répondre)",
     "emailPlaceholder": "toi@exemple.com",
     "messagePlaceholder": "Écris ton message…",
