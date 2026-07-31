@@ -261,7 +261,7 @@ export default function PlanScreen() {
   // weekly email, all keyed off the engine's single isOverdue predicate.
   const overdueLine = (o: Objective) =>
     o.timing.state === 'scheduled'
-      ? t('overdue.wasDue', { date: o.timing.due.toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short' }) })
+      ? t('overdue.wasDue', { date: o.timing.due.toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short', timeZone: 'UTC' }) })
       : t('overdue.plain');
   const titleById = new Map(objectives.map(o => [o.id, displayTitle(o)]));
   const week = thisWeek(objectives);

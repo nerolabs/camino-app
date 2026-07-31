@@ -88,7 +88,9 @@ function tipFor(o: Objective, lang: DigestLang): string {
 
 const SHORT_DATE_LOCALES: Record<DigestLang, string> = { en: 'en-GB', es: 'es-ES', fr: 'fr-FR', de: 'de-DE', it: 'it-IT' };
 const shortDate = (d: Date, lang: DigestLang) =>
-  d.toLocaleDateString(SHORT_DATE_LOCALES[lang] ?? 'en-GB', { day: 'numeric', month: 'short' });
+  // timeZone:'UTC' — engine dates are UTC-midnight instants; render as that calendar day so the
+  // weekly email agrees with the app for readers in any timezone (a day early west of UTC otherwise).
+  d.toLocaleDateString(SHORT_DATE_LOCALES[lang] ?? 'en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
 
 export function interviewComplete(raw: Profile): boolean {
   const p: Profile = { ...raw };

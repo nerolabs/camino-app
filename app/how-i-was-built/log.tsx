@@ -800,6 +800,16 @@ const ROWS: Row[] = [
       'Every fix earned a regression test in the layer that owns it — the boundary, the date construction, and the fees split are all pinned now.',
     ],
   },
+  {
+    feature: 'A date bug that only showed up an ocean away — found and fixed',
+    date: '1 Aug 2026',
+    work: 'The fresh-eyes pass had flagged one thing to come back to: the same one-day timezone slip it caught in the new timeline probably ran through the whole app. It did. Every date in the app is stored as midnight UTC, but the roadmap, the printable report, and the weekly email printed those dates in the reader\'s own timezone — so anyone west of Britain (most of the Americas) saw every deadline a day early, and a step due today could read as already overdue. It never surfaced in testing because it\'s invisible anywhere at or east of London — which is exactly where the app is built and where the automated tests run. The fix makes the whole engine read and write dates one consistent way, midnight UTC end to end, and the new regression test deliberately pretends to be in Los Angeles so this exact bug can never hide behind the timezone the machine happens to sit in.',
+    decisions: [
+      'A bug that\'s invisible in your own timezone is the dangerous kind — the test now forces a US-West clock so it can\'t pass just because the machine is in Europe.',
+      'Pick one convention and hold it everywhere: dates are built and read as midnight UTC, and every screen prints them the same way — no surface left to drift on its own.',
+      'The same slip, first spotted on one screen, was chased to its root across the whole engine rather than patched only where it showed.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

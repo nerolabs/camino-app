@@ -164,9 +164,13 @@ function anchorDate(a: AnchorKind, p: Record<string, unknown>, today: Date): { d
 function nextYearlyDeadline(rrule: string, today: Date): Date {
   const months = (rrule.match(/BYMONTH=([\d,]+)/)?.[1] ?? '12').split(',').map(Number);
   const endMonth = Math.max(...months);
-  const end = (y: number) => new Date(y, endMonth, 0);
-  const thisYear = end(today.getFullYear());
-  return today <= thisYear ? thisYear : end(today.getFullYear() + 1);
+  // UTC midnight of the last day of endMonth, matching the engine's UTC-midnight convention (so
+  // it renders as the right calendar day under timeZone:'UTC'). `today` arrives pre-pinned to UTC
+  // midnight (buildPlan), so read its year with getUTCFullYear — getFullYear would roll back a year
+  // at the boundary for viewers west of UTC.
+  const end = (y: number) => new Date(Date.UTC(y, endMonth, 0));
+  const thisYear = end(today.getUTCFullYear());
+  return today <= thisYear ? thisYear : end(today.getUTCFullYear() + 1);
 }
 
 function resolveTiming(o: Obligation, p: Record<string, unknown>, today: Date, prior: Map<string, Resolved>, actuals: Map<string, Date>): Resolved {
@@ -1197,17 +1201,27 @@ export const CATALOG: Obligation[] = [
   },
 ];
 
-// True when a scheduled step's due date has passed (date-level, local time) and it isn't done.
+// True when a scheduled step's due date has passed (date-level) and it isn't done.
 // The roadmap's red overdue treatment and the weekly-email digest both key off this one predicate,
 // so "overdue" means exactly the same thing everywhere.
 export function isOverdue(o: Objective, today: Date = new Date()): boolean {
   if (o.done || o.timing.state !== 'scheduled') return false;
-  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  // `due` is a UTC-midnight instant, so compare against UTC midnight of the viewer's LOCAL calendar
+  // day (getFullYear/Month/Date read `today` — a wall-clock instant — in local time). Building this
+  // as local midnight instead would flag items overdue a day early for viewers west of UTC.
+  const startOfToday = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
   return o.timing.due.getTime() < startOfToday.getTime();
 }
 
 export function buildPlan(p: Record<string, unknown>): Objective[] {
-  const today = new Date();
+  // Every engine date is a UTC-midnight instant: profile dates (arrival_date, …) parse as UTC
+  // midnight via `new Date('YYYY-MM-DD')`, and addDays is pure ms math. Pin "today" the same way —
+  // the user's LOCAL calendar day expressed as UTC midnight — so estimate-derived dates land on a
+  // clean date that renders identically in every timezone (all formatters pass timeZone:'UTC').
+  // Without this, estimate dates carried the wall-clock time and drifted a day when rendered.
+  // (Read this instant back with getUTC* — see nextYearlyDeadline.) Regression: tests/timezone.test.ts.
+  const now = new Date();
+  const today = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
   const progress = (p.progress as Record<string, Progress> | undefined) ?? {};
   const actuals = new Map<string, Date>();
   for (const [id, pr] of Object.entries(progress))

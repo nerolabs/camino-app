@@ -88,7 +88,9 @@ function MiniRoadmap() {
     .map(o => ({
       title: displayTitle(o).split('—')[0].trim(),
       due: o.timing.state === 'scheduled'
-        ? o.timing.due.toLocaleDateString(dateLocale(), { month: 'short', year: 'numeric' }) : '',
+        // timeZone:'UTC' — engine dates are UTC-midnight; a Jan-1 due rendered local west of UTC
+        // would show the prior December (wrong month AND year).
+        ? o.timing.due.toLocaleDateString(dateLocale(), { month: 'short', year: 'numeric', timeZone: 'UTC' }) : '',
     })), []);
   return (
     <View style={s.mini}>

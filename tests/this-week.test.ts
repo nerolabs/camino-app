@@ -7,7 +7,9 @@ import { thisWeek } from '../core/this-week';
 import type { Objective } from '../core/engine-controller';
 
 const TODAY = new Date('2026-07-03T15:00:00Z');
-const day = (offset: number) => new Date(2026, 6, 3 + offset); // local-midnight days around TODAY
+// UTC-midnight days around TODAY — the engine only ever produces UTC-midnight dues, and isOverdue/
+// thisWeek compare against UTC midnight of the local calendar day (see engine-date-utc-drift).
+const day = (offset: number) => new Date(Date.UTC(2026, 6, 3 + offset));
 
 function obj(id: string, timing: Objective['timing'], done = false): Objective {
   return {

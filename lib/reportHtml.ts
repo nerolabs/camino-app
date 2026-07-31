@@ -68,7 +68,9 @@ function itemHtml(o: Objective, today: Date, R: R, fmt: (d: Date) => string, tit
 
 export function reportHtml(objectives: Objective[], today: Date = new Date(), lang: EmailLang = 'en'): string {
   const R = emailStrings(lang).report;
-  const fmt = (d: Date) => d.toLocaleDateString(emailDateLocale(lang), { day: 'numeric', month: 'short', year: 'numeric' });
+  // timeZone:'UTC' — engine dates are UTC-midnight instants; render as that calendar day so the PDF
+  // shows the same day the app does, regardless of the reader's timezone.
+  const fmt = (d: Date) => d.toLocaleDateString(emailDateLocale(lang), { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
   const titleOf = (o: Objective) => titleFor(lang, o.id, o.title);
 
   const hero = objectives.find(o => !o.done) ?? null;

@@ -25,7 +25,9 @@ function dueDate(o: Objective): Date | null {
 }
 
 export function thisWeek(objectives: Objective[], today: Date = new Date()): ThisWeek {
-  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+  // UTC midnight of the viewer's local calendar day — engine dues are UTC-midnight instants, so
+  // this must match isOverdue's boundary exactly (else overdue vs. due-soon disagree at the edges).
+  const startOfToday = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate())).getTime();
   const endOfWindow = startOfToday + 8 * DAY_MS; // exclusive bound → today+7 inclusive
 
   const pending = objectives.filter(o => !o.done);

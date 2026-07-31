@@ -92,7 +92,9 @@ describe('email templates render exactly — es (L1)', () => {
 
 describe('printable report renders exactly (localization guard)', () => {
   const TODAY = new Date('2026-07-03T12:00:00Z');
-  const day = (offset: number) => new Date(2026, 6, 3 + offset);
+  // UTC-midnight days — the engine only produces UTC-midnight dues, and reportHtml renders them
+  // with timeZone:'UTC' (see engine-date-utc-drift). Local-midnight fixtures would render a day off.
+  const day = (offset: number) => new Date(Date.UTC(2026, 6, 3 + offset));
 
   function obj(id: string, timing: Objective['timing'], extra: Partial<Objective> = {}): Objective {
     return {
