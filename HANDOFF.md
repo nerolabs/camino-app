@@ -5,7 +5,46 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-## ⭐ RESUME HERE (2026-07-31 — 🤖🎉 ANDROID INTERVIEW WORKS ON A REAL DEVICE: Play Integrity VERIFIED on the Redmi (Lola answers). EAS auto-submit wired, .aab on Internal track. NEXT = one Redmi sitting → screenshots → closed track → 12 testers → 14-day clock.)
+## ⭐ RESUME HERE (2026-07-31 PM — 🤖🚀 ANDROID CLOSED TEST SUBMITTED FOR REVIEW + beta recruitment LIVE. The whole build/listing track is DONE; the only remaining gate is the human one: recruit 12 testers → 14-day clock.)
+
+**One line:** iOS is live on the App Store (reactive-only). **Android's closed-test release (1.0.0,
+versionCode 2 — the build Play Integrity was verified on) is SUBMITTED to Google for review** (Closed
+testing · Alpha track, all 177 countries), and **the Android beta-recruitment band is LIVE on
+getcamino.app**. Tree clean; committed + pushed to `main` (`be8754b`); web deployed. **The 14-day
+continuous-testing clock is now the critical path and it's USER-gated (recruit 12 testers).**
+
+**What shipped this PM session:**
+- **Phone screenshots (5) framed + uploaded + ordered** (home→interview→roadmap→step-sheet→sample-plan).
+  New renderer **`scripts/frame-android-shots.mjs`** (separate from the iOS one): brand cobalt + Fraunces
+  caption, native Android status bar, 24-bit no-alpha PNG, **1128×2004 @ 16:9**. Two Play gotchas baked in:
+  raw Redmi 720×1600 = **2.22:1 gets REJECTED** (must be ≤2:1 / 16:9), and short side must be **≥1080px**
+  for promotion eligibility. Raw + framed in `docs/store-assets/android/`.
+- **Store listing COMPLETE** — category **Travel & Local**, contact **feedback@getcamino.app** + getcamino.app.
+  ⚠️ The tablet-screenshot "requirement" was **NON-blocking** — the listing went green with phone shots only,
+  so the planned phone-only exclusion was **never needed** (Android distribution left at all form factors).
+- **Promoted vc2 → Closed testing (Alpha) and SUBMITTED for review.** ⚠️ Used **Promote release**, NOT
+  `eas submit` — Google rejects re-uploading versionCode 2 (already on Internal); promotion reuses the exact
+  verified artifact. Targeted 177 countries, testers = the existing **"Camino internal testers"** email list
+  (1 user), feedback channel set, release notes added. 15 changes submitted → quick-checks → Google review
+  (typically up to 7 days for a first review).
+- **Android beta recruitment LIVE:** `ANDROID_BETA_JOIN_URL` set → the Android-only web band now funnels
+  tester emails to the contact form (`/contact?topic=android-beta`, new topic + prefill + feedback-API
+  allowlist, 5 locales). **387 vitest · tsc clean.** Homework pages updated.
+
+**NEXT SESSION (mostly user-gated — the clock is the whole game):**
+1. **[USER] Recruit ≥12 testers.** Watch **feedback@getcamino.app** for signups from the live web band; add
+   each email to the **"Camino internal testers"** list in Play Console → Test and release → Testing → Closed
+   testing → Testers. Send them the closed-track **opt-in link** (on the Testers tab, live once Google approves
+   the release). **The 14-day continuous clock starts when the 12th tester is opted in.**
+2. **[CLAUDE] Watch Google's review verdict** on the closed-test release (Publishing overview → Submission
+   activity). On approval the track goes active + the opt-in link works. On rejection, read it via Chrome.
+3. **Parallel, non-blocking:** an Android device shakeout (back gesture / keyboard / Google sign-in / dictation
+   / safe-area). JS fixes ride OTA (`npm run ota:production`); native fixes need a rebuild → new closed release.
+4. After 12 testers × 14 days: **Apply for production access** (Dashboard → Production), then promote to Production.
+
+Full detail: memory `android-launch-in-flight` (kept current). The morning block just below is now historical.
+
+## Prior resume note (2026-07-31 AM — 🤖🎉 ANDROID INTERVIEW WORKS ON A REAL DEVICE: Play Integrity VERIFIED on the Redmi (Lola answers). EAS auto-submit wired, .aab on Internal track. NEXT = one Redmi sitting → screenshots → closed track → 12 testers → 14-day clock.)
 
 **One line:** iOS is live on the App Store (reactive-only). **Android's last hard technical unknown is
 CLEARED** — Play Integrity verified end-to-end on the real Redmi (real on-device token → decoded
