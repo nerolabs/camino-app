@@ -5,13 +5,19 @@ The canonical design memory — thesis, the four invariants — lives at `./docs
 **Read that first.** The living work tracker is `./TODO.md`; obligation provenance is
 `./core/SOURCING.md`.
 
-## ⭐ RESUME HERE (2026-07-31 PM — 🤖🚀 ANDROID CLOSED TEST SUBMITTED FOR REVIEW + beta recruitment LIVE. The whole build/listing track is DONE; the only remaining gate is the human one: recruit 12 testers → 14-day clock.)
+## ⭐ RESUME HERE (2026-07-31 PM — 🤖✅ GOOGLE APPROVED THE ANDROID CLOSED TEST → Alpha track ACTIVE, opt-in link LIVE. The whole build/listing/review track is DONE; the only remaining gate is the human one: recruit 12 testers → 14-day clock.)
 
 **One line:** iOS is live on the App Store (reactive-only). **Android's closed-test release (1.0.0,
-versionCode 2 — the build Play Integrity was verified on) is SUBMITTED to Google for review** (Closed
-testing · Alpha track, all 177 countries), and **the Android beta-recruitment band is LIVE on
-getcamino.app**. Tree clean; committed + pushed to `main` (`be8754b`); web deployed. **The 14-day
-continuous-testing clock is now the critical path and it's USER-gated (recruit 12 testers).**
+versionCode 2 — the build Play Integrity was verified on) is APPROVED + PUBLISHED by Google** (Closed
+testing · Alpha track = **Active**, released Jul 31 1:09 PM, all 177 countries), **the tester opt-in link
+is LIVE**, and the Android beta-recruitment band is live on getcamino.app. Tree clean; on `main` (`80bc14a`);
+web deployed. **The 14-day continuous-testing clock is now the ONLY critical path and it's USER-gated
+(recruit 12 testers).**
+
+**Tester opt-in link (send to recruits, once their email is on the "Camino internal testers" list):**
+`https://play.google.com/apps/testing/com.aelaboratories.getcamino`
+**(Verified via Chrome 2026-07-31 PM.)** Non-blocking note: the track page flags an Android-15 "edge-to-edge
+deprecated APIs" warning — fold into a future native rebuild, not urgent.
 
 **What shipped this PM session:**
 - **Phone screenshots (5) framed + uploaded + ordered** (home→interview→roadmap→step-sheet→sample-plan).
@@ -36,8 +42,8 @@ continuous-testing clock is now the critical path and it's USER-gated (recruit 1
    each email to the **"Camino internal testers"** list in Play Console → Test and release → Testing → Closed
    testing → Testers. Send them the closed-track **opt-in link** (on the Testers tab, live once Google approves
    the release). **The 14-day continuous clock starts when the 12th tester is opted in.**
-2. **[CLAUDE] Watch Google's review verdict** on the closed-test release (Publishing overview → Submission
-   activity). On approval the track goes active + the opt-in link works. On rejection, read it via Chrome.
+2. **[CLAUDE ✅ DONE 2026-07-31 PM] Google's review verdict = APPROVED.** Alpha track Active, opt-in link
+   live (above), Publishing overview shows no unpublished changes. Nothing left to watch here.
 3. **Parallel, non-blocking:** an Android device shakeout (back gesture / keyboard / Google sign-in / dictation
    / safe-area). JS fixes ride OTA (`npm run ota:production`); native fixes need a rebuild → new closed release.
 4. After 12 testers × 14 days: **Apply for production access** (Dashboard → Production), then promote to Production.
