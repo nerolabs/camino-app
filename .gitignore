@@ -53,17 +53,11 @@ test-results/
 tests-e2e/.auth/
 docs/store-assets/clean/
 
-# Unpublished LinkedIn drafts — never commit to the public repo
+# Internal tooling & content — kept local, not published.
 linkedin-drafts/
-
-# Marketing-assistant artifacts — the lead-gen operation's activity (targeted threads,
-# drafts, posting ledger) must never reach the public repo. Tool code + spec stay public.
-marketing/leads/
-marketing/weekly/
-marketing/state/
-marketing/ledger.csv
-marketing/fb-inbox.txt
-marketing/leads.config.json
+marketing/
+scripts/marketing/
+tests/marketing-tools.test.ts
 
 # Internal / AI-session working docs — kept LOCAL, out of the public repo (this repo is a
 # public engineering exhibit). These stay on disk for the dev workflow; they are not published.

@@ -8,8 +8,8 @@ iterate on the running app.
 
 - Interview funnel: **179 visitors → 59 started → 18 completed** (~31% of starters finish;
   ~69% who start never do).
-- Intent split (first-touch): **Reddit ~60% finish, LinkedIn 0/17** — the interview is
-  fine for high-intent traffic and irrelevant to curiosity traffic. Optimize for the former.
+- Intent split (first-touch): **high-intent traffic finishes ~60%, curiosity traffic ~0%** — the
+  interview is fine for high-intent traffic and irrelevant to curiosity traffic. Optimize for the former.
 - Worst questions by `interview_clarify_needed` (extractor fumbles a real answer):
   **work_situation 15 clarifies/10 people (and it's Q2)**, annual_income_eur_band 10/4,
   owns_or_drives 9/7, arrival_date 6/4 — *every one has fixed options or is yes/no but is

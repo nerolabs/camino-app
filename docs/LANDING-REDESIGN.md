@@ -10,7 +10,7 @@ is the design record. Post-verdict tweaks: demo pane never empty (pre-populated,
 3) unsure → sample plan · 4) scroll depth absorbs how-it-works for skeptics/curious · Guides stay
 separate (SEO doorways + `?from=` context into the interview).
 
-**Audience is bimodal** (funnel-proven: Reddit ~60% start→finish, LinkedIn 0/17): the first
+**Audience is bimodal** (funnel-proven — high-intent traffic finishes ~60%, curiosity traffic ~0%): the first
 viewport must let the convinced leave immediately AND give skeptics a reason to scroll.
 
 **Measurement:** stamp `landing_version: 2` (same pattern as `interview_version`); the metric the

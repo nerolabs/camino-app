@@ -18,11 +18,7 @@
     "test:watch": "vitest",
     "test:api": "RUN_API=1 vitest run tests/api.contract.test.ts",
     "test:e2e": "playwright test",
-    "docs:catalog": "npx tsx scripts/gen-catalog-docs.ts",
-    "leads": "npx tsx scripts/marketing/camino-leads.ts scan",
-    "leads:go": "npx tsx scripts/marketing/camino-leads.ts go",
-    "fb:draft": "npx tsx scripts/marketing/camino-fb.ts draft",
-    "fb:go": "npx tsx scripts/marketing/camino-fb.ts go"
+    "docs:catalog": "npx tsx scripts/gen-catalog-docs.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.107.0",
