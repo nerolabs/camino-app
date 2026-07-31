@@ -769,6 +769,16 @@ const ROWS: Row[] = [
       'Recruit by collecting emails through a contact form, not a self-serve group link: a business-domain Google Group can\'t admit outside members without an org-wide security change, so a form is the honest path for a dozen testers.',
     ],
   },
+  {
+    feature: 'A move-cost estimate — built, and gated off until every figure is checked',
+    date: '31 Jul 2026',
+    work: 'The roadmap already knows which steps apply to you and when they\'re due — this adds what each one costs, answering the question every mover asks. A researched pass priced all 73 catalog steps and sorted them four ways: fixed official fees (a set government tasa — the exact euro), costs that scale with a number only you know (property transfer tax as a percent of your home price), personal costs we won\'t put a figure on (a scouting trip, a lawyer — your budget, not ours), and steps that cost nothing (kept, but folded away). It reads as three honest layers behind a new "Costs" tab, with the total always a range, never false precision. It ships switched OFF behind a flag: the fixed government fees have since been checked one by one against their official source (the 2026 BOE tasas order, Instituto Cervantes, the DGT and Seguridad Social schedules) and now show "verified"; the percentages and market prices stay honest "estimates" until they\'re checked too.',
+    decisions: [
+      'Split every cost by how honestly we can state it — a fixed law, a percentage of your number, or your own call — so the interface never blends a sourced fee with a guess.',
+      'The total is a range, and personal costs stay yours: we won\'t fold a guessed lawyer\'s fee into a number that looks authoritative.',
+      'Ship it off behind a flag and prove the data first — the same playbook as the phone security work: build the surface, verify every figure against its government source, then turn it on.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {
