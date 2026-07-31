@@ -236,5 +236,63 @@
     "itp_foral": "In {{region}}, le aliquote le fissa ogni territorio histórico (Álava, Bizkaia, Gipuzkoa) — oggi allineate: comprare una casa usata è tassato al {{rate}} in tutti e tre (altri immobili al {{general}}), con varianti ridotte per l’abitazione principale.",
     "itp_bonif": "In {{region}} si applica l’aliquota statale del {{rate}} con uno sconto del {{bonif}} sull’imposta — un {{effective}} effettivo sull’acquisto di una casa usata."
   },
-  "scopeNote": "Questa tabella di marcia traccia il tuo percorso come richiedente principale. Se anche il tuo o la tua partner lavora, dovrebbe fare la propria breve intervista — il percorso di ciascuno può variare, e un link di condivisione rende facile la seconda volta."
+  "scopeNote": "Questa tabella di marcia traccia il tuo percorso come richiedente principale. Se anche il tuo o la tua partner lavora, dovrebbe fare la propria breve intervista — il percorso di ciascuno può variare, e un link di condivisione rende facile la seconda volta.",
+  
+    "budget": {
+      "tab": "Costi",
+      "banner": {
+        "lead": "Una guida, non un preventivo.",
+        "body": "Le tasse verificate sulla loro fonte ufficiale mostrano un punto e «verificato». Le percentuali e i prezzi di mercato sono stime documentate."
+      },
+      "gates": {
+        "buying": "Comprare casa",
+        "selfEmployed": "Lavorare in proprio",
+        "yes": "Sì",
+        "no": "No",
+        "homePrice": "Prezzo della casa",
+        "fromAnswers": "Dalle tue risposte all'intervista — modificale lì per rifare il piano."
+      },
+      "total": {
+        "label": "Il tuo trasferimento · stima con fonti",
+        "fixedFees": "Tasse fisse",
+        "yourBudget": "+ il tuo budget",
+        "youSet": "lo decidi tu",
+        "recurring": "Ricorrente: {{summary}}"
+      },
+      "layers": {
+        "sourced": "Con fonti",
+        "sourcedHint": "una fonte su ogni riga",
+        "fixedFees": "Tasse ufficiali fisse",
+        "scales": "Varia in base ai tuoi numeri",
+        "personal": "Il tuo budget",
+        "personalHint": "la tua cifra, non la nostra"
+      },
+      "line": {
+        "firm": "Fissa",
+        "soft": "Varia in base ai tuoi numeri",
+        "verified": "verificato",
+        "estimate": "stima",
+        "perMonth": "al mese",
+        "perYear": "all'anno",
+        "addBudget": "+ aggiungi budget",
+        "yourEstimate": "La tua stima · tocca per modificare"
+      },
+      "units": {
+        "perMoShort": "/mese",
+        "perYrShort": "/anno"
+      },
+      "free": {
+        "one": "1 passo del tuo piano non costa nulla",
+        "many": "{{count}} passi del tuo piano non costano nulla"
+      },
+      "sheet": {
+        "eyebrow": "Il tuo budget",
+        "honest": "Non c'è un prezzo ufficiale per questo — quello che inserisci è tuo; non lo indoviniamo e resta fuori dal totale con fonti.",
+        "oneTime": "una tantum",
+        "perMonth": "al mese",
+        "typical": "Altri pagano ~{{range}} · tocca per usarlo",
+        "save": "Salva nel mio budget",
+        "skip": "Salta"
+      }
+    }
 }

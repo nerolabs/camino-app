@@ -236,5 +236,63 @@
     "itp_foral": "In {{region}} legt jedes territorio histórico (Álava, Bizkaia, Gipuzkoa) die Sätze selbst fest — derzeit gleichauf: der Kauf einer Bestandswohnung wird in allen dreien mit {{rate}} besteuert (übrige Immobilien {{general}}), mit ermäßigten Varianten für den Hauptwohnsitz.",
     "itp_bonif": "In {{region}} gilt der staatliche Satz von {{rate}} mit {{bonif}} Nachlass auf die Steuer — effektiv {{effective}} beim Kauf einer Bestandswohnung."
   },
-  "scopeNote": "Dieser Fahrplan bildet deinen Weg als Hauptantragsteller ab. Wenn dein Partner oder deine Partnerin auch arbeitet, sollte er oder sie ein eigenes kurzes Interview machen — jeder Weg kann anders sein, und ein Teilen-Link macht den zweiten Durchlauf leicht."
+  "scopeNote": "Dieser Fahrplan bildet deinen Weg als Hauptantragsteller ab. Wenn dein Partner oder deine Partnerin auch arbeitet, sollte er oder sie ein eigenes kurzes Interview machen — jeder Weg kann anders sein, und ein Teilen-Link macht den zweiten Durchlauf leicht.",
+  
+    "budget": {
+      "tab": "Kosten",
+      "banner": {
+        "lead": "Ein Anhaltspunkt, kein Angebot.",
+        "body": "Gebühren, die an ihrer amtlichen Quelle geprüft wurden, zeigen einen Punkt und „geprüft“. Prozentsätze und Marktpreise sind recherchierte Schätzungen."
+      },
+      "gates": {
+        "buying": "Wohnung kaufen",
+        "selfEmployed": "Selbstständig arbeiten",
+        "yes": "Ja",
+        "no": "Nein",
+        "homePrice": "Kaufpreis",
+        "fromAnswers": "Aus deinen Interview-Antworten — ändere sie dort, um den Plan neu zu formen."
+      },
+      "total": {
+        "label": "Dein Umzug · Schätzung mit Quellen",
+        "fixedFees": "Feste Gebühren",
+        "yourBudget": "+ dein Budget",
+        "youSet": "legst du fest",
+        "recurring": "Wiederkehrend: {{summary}}"
+      },
+      "layers": {
+        "sourced": "Mit Quellen",
+        "sourcedHint": "eine Quelle in jeder Zeile",
+        "fixedFees": "Feste amtliche Gebühren",
+        "scales": "Hängt von deinen Zahlen ab",
+        "personal": "Dein Budget",
+        "personalHint": "deine Zahl, nicht unsere"
+      },
+      "line": {
+        "firm": "Fest",
+        "soft": "Hängt von deinen Zahlen ab",
+        "verified": "geprüft",
+        "estimate": "Schätzung",
+        "perMonth": "pro Monat",
+        "perYear": "pro Jahr",
+        "addBudget": "+ Budget hinzufügen",
+        "yourEstimate": "Deine Schätzung · zum Bearbeiten tippen"
+      },
+      "units": {
+        "perMoShort": "/Mon.",
+        "perYrShort": "/Jahr"
+      },
+      "free": {
+        "one": "1 Schritt in deinem Plan kostet nichts",
+        "many": "{{count}} Schritte in deinem Plan kosten nichts"
+      },
+      "sheet": {
+        "eyebrow": "Dein Budget",
+        "honest": "Dafür gibt es keinen amtlichen Preis — was du einträgst, gehört dir; wir raten nicht, und es bleibt außerhalb der Summe mit Quellen.",
+        "oneTime": "einmalig",
+        "perMonth": "pro Monat",
+        "typical": "Andere zahlen ~{{range}} · zum Übernehmen tippen",
+        "save": "In meinem Budget speichern",
+        "skip": "Überspringen"
+      }
+    }
 }

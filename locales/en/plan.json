@@ -236,5 +236,63 @@
     "itp_foral": "In {{region}}, rates are set per territorio histórico (Álava, Bizkaia, Gipuzkoa) — currently aligned: buying a resale home is taxed at {{rate}} in all three (other property at {{general}}), with reduced variants for a primary residence.",
     "itp_bonif": "In {{region}}, the state transfer-tax rate of {{rate}} applies with a {{bonif}} rebate on the bill — an effective {{effective}} on a resale home."
   },
-  "scopeNote": "This roadmap maps your route as the main applicant. If your partner is also working, they should run their own quick interview — each person's path can differ, and a share link makes the second run easy."
+  "scopeNote": "This roadmap maps your route as the main applicant. If your partner is also working, they should run their own quick interview — each person's path can differ, and a share link makes the second run easy.",
+  
+    "budget": {
+      "tab": "Costs",
+      "banner": {
+        "lead": "A guide, not a quote.",
+        "body": "Fees checked against their government source show a dot and “verified.” Percentages and market prices are researched estimates."
+      },
+      "gates": {
+        "buying": "Buying a home",
+        "selfEmployed": "Working self-employed",
+        "yes": "Yes",
+        "no": "No",
+        "homePrice": "Home price",
+        "fromAnswers": "From your interview answers — change them there to reshape the plan."
+      },
+      "total": {
+        "label": "Your move · sourced estimate",
+        "fixedFees": "Fixed fees",
+        "yourBudget": "+ your budget",
+        "youSet": "you set",
+        "recurring": "Recurring: {{summary}}"
+      },
+      "layers": {
+        "sourced": "Camino-sourced",
+        "sourcedHint": "a source on every line",
+        "fixedFees": "Fixed official fees",
+        "scales": "Scales with your numbers",
+        "personal": "Your budget to set",
+        "personalHint": "your figure, not ours"
+      },
+      "line": {
+        "firm": "Firm",
+        "soft": "Scales with your numbers",
+        "verified": "verified",
+        "estimate": "estimate",
+        "perMonth": "per month",
+        "perYear": "per year",
+        "addBudget": "+ add budget",
+        "yourEstimate": "Your estimate · tap to edit"
+      },
+      "units": {
+        "perMoShort": "/mo",
+        "perYrShort": "/yr"
+      },
+      "free": {
+        "one": "1 step in your plan costs nothing",
+        "many": "{{count}} steps in your plan cost nothing"
+      },
+      "sheet": {
+        "eyebrow": "Your budget",
+        "honest": "There's no official price for this — whatever you enter is yours; we won't guess it, and it stays out of the sourced total.",
+        "oneTime": "one-time",
+        "perMonth": "per month",
+        "typical": "Others pay ~{{range}} · tap to use",
+        "save": "Save to my budget",
+        "skip": "Skip"
+      }
+    }
 }

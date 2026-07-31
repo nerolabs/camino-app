@@ -236,5 +236,63 @@
     "itp_foral": "En {{region}}, les taux sont fixés par territorio histórico (Álava, Bizkaia, Gipuzkoa) — aujourd’hui alignés : l’achat d’un logement ancien est taxé à {{rate}} dans les trois (autres biens à {{general}}), avec des variantes réduites pour la résidence principale.",
     "itp_bonif": "En {{region}}, le taux d’État de {{rate}} s’applique avec un abattement de {{bonif}} sur la facture — soit un {{effective}} effectif sur un logement ancien."
   },
-  "scopeNote": "Cette feuille de route trace ton parcours en tant que demandeur principal. Si ton ou ta partenaire travaille aussi, il ou elle devrait faire son propre court entretien — le chemin de chacun peut différer, et un lien de partage facilite la deuxième fois."
+  "scopeNote": "Cette feuille de route trace ton parcours en tant que demandeur principal. Si ton ou ta partenaire travaille aussi, il ou elle devrait faire son propre court entretien — le chemin de chacun peut différer, et un lien de partage facilite la deuxième fois.",
+  
+    "budget": {
+      "tab": "Coûts",
+      "banner": {
+        "lead": "Un repère, pas un devis.",
+        "body": "Les frais vérifiés auprès de leur source officielle affichent un point et « vérifié ». Les pourcentages et prix du marché sont des estimations recherchées."
+      },
+      "gates": {
+        "buying": "Acheter un logement",
+        "selfEmployed": "Travailler à ton compte",
+        "yes": "Oui",
+        "no": "Non",
+        "homePrice": "Prix du logement",
+        "fromAnswers": "D'après tes réponses à l'entretien — modifie-les là pour refaire le plan."
+      },
+      "total": {
+        "label": "Ton installation · estimation sourcée",
+        "fixedFees": "Frais fixes",
+        "yourBudget": "+ ton budget",
+        "youSet": "à toi de fixer",
+        "recurring": "Récurrent : {{summary}}"
+      },
+      "layers": {
+        "sourced": "Avec sources",
+        "sourcedHint": "une source sur chaque ligne",
+        "fixedFees": "Frais officiels fixes",
+        "scales": "Varie selon tes chiffres",
+        "personal": "Ton budget à fixer",
+        "personalHint": "ton chiffre, pas le nôtre"
+      },
+      "line": {
+        "firm": "Fixe",
+        "soft": "Varie selon tes chiffres",
+        "verified": "vérifié",
+        "estimate": "estimation",
+        "perMonth": "par mois",
+        "perYear": "par an",
+        "addBudget": "+ ajouter un budget",
+        "yourEstimate": "Ton estimation · touche pour modifier"
+      },
+      "units": {
+        "perMoShort": "/mois",
+        "perYrShort": "/an"
+      },
+      "free": {
+        "one": "1 étape de ton plan ne coûte rien",
+        "many": "{{count}} étapes de ton plan ne coûtent rien"
+      },
+      "sheet": {
+        "eyebrow": "Ton budget",
+        "honest": "Il n'y a pas de prix officiel pour cela — ce que tu saisis est à toi ; nous ne le devinons pas, et cela reste hors du total sourcé.",
+        "oneTime": "unique",
+        "perMonth": "par mois",
+        "typical": "D'autres paient ~{{range}} · touche pour l'utiliser",
+        "save": "Enregistrer dans mon budget",
+        "skip": "Passer"
+      }
+    }
 }
