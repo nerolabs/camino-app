@@ -23,12 +23,15 @@ const config: ExpoConfig = {
   name: 'Get Camino',
   slug: 'camino',
   owner: 'nerolabs-team',
-  version: '1.0.0',
+  // Bumped 1.0.0 → 1.0.1 (2026-08-01): once 1.0.0 was released on the App Store, Apple CLOSES that
+  // pre-release "train" (ITMS-90186), so every later TestFlight/App Store build needs a higher
+  // marketing version. Build number stays remote/auto-incremented (eas.json appVersionSource).
+  version: '1.0.1',
   // OTA updates (EAS Update, build 40+): post-launch JS fixes ship without a new binary or an
   // App Review cycle (`npm run ota:production`). The FINGERPRINT policy (not appVersion) is
-  // deliberate: we ship native changes across builds while `version` stays 1.0.0, which is
-  // exactly the appVersion-policy mismatch hazard — fingerprint changes whenever anything
-  // native-affecting changes, so an update can never land on an incompatible binary.
+  // deliberate: it decouples OTA compatibility from `version`, so we can bump `version` (or ship
+  // native changes) freely — fingerprint changes whenever anything native-affecting changes, so an
+  // update can never land on an incompatible binary.
   runtimeVersion: { policy: 'fingerprint' },
   updates: {
     url: 'https://u.expo.dev/5714f767-d3dc-4284-8235-33e6d7e6f381',
