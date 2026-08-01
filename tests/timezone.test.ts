@@ -21,6 +21,7 @@ import { buildPlan, isOverdue, type Objective } from '../core/engine-controller'
 import { derive, type Profile } from '../core/interview-controller';
 import { TEST_PERSONAS } from '../core/test-personas';
 import { formatTiming, completionLine } from '../lib/plan-format';
+import { formatUTCDate } from '../lib/utcDate';
 import { reportHtml } from '../lib/reportHtml';
 
 const ARRIVAL = '2026-07-01';
@@ -61,6 +62,21 @@ describe('engine builds UTC-midnight dates (the convention every formatter depen
     expect(recurring).toBeTruthy();
     const nextDue = (recurring!.timing as { nextDue: Date }).nextDue;
     expect(nextDue.toISOString()).toMatch(/-06-30T00:00:00\.000Z$/);
+  });
+});
+
+describe('formatUTCDate is Hermes-safe (no Intl timeZone option) and drift-free', () => {
+  // The client/native formatters route through this instead of toLocaleDateString({timeZone:'UTC'}),
+  // because the timeZone option is unreliable under Hermes on native. It must still render the UTC
+  // calendar day here (ambient TZ = Los Angeles), proving the reconstitute-as-local approach works.
+  it('renders a UTC-midnight date as its own calendar day, not the day before', () => {
+    const d = new Date('2026-07-01'); // UTC midnight — LA-local would be 30 Jun
+    expect(formatUTCDate(d, { day: 'numeric', month: 'short', year: 'numeric' })).toBe('1 Jul 2026');
+    expect(formatUTCDate(d, { month: 'short', year: 'numeric' })).toBe('Jul 2026');
+  });
+
+  it('holds at a year boundary (a Jan-1 UTC date must not read as the prior December)', () => {
+    expect(formatUTCDate(new Date('2027-01-01'), { month: 'short', year: 'numeric' })).toBe('Jan 2027');
   });
 });
 

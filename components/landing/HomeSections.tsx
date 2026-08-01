@@ -12,7 +12,7 @@ import { buildPlan, CATALOG } from '@/core/engine-controller';
 import { sampleProfile } from '@/core/sample-profile';
 import { verifiedOn } from '@/core/changelog';
 import { displayTitle } from '@/lib/catalogTitles';
-import { dateLocale } from '@/lib/i18n';
+import { formatUTCDate } from '@/lib/utcDate';
 import { useReducedMotion } from '@/lib/useReducedMotion';
 
 /** Scripted ~17s loop of the living interview. The roadmap pane is NEVER empty — it opens
@@ -88,9 +88,9 @@ function MiniRoadmap() {
     .map(o => ({
       title: displayTitle(o).split('—')[0].trim(),
       due: o.timing.state === 'scheduled'
-        // timeZone:'UTC' — engine dates are UTC-midnight; a Jan-1 due rendered local west of UTC
-        // would show the prior December (wrong month AND year).
-        ? o.timing.due.toLocaleDateString(dateLocale(), { month: 'short', year: 'numeric', timeZone: 'UTC' }) : '',
+        // Hermes-safe UTC-day render (lib/utcDate): a Jan-1 due must not read as the prior December
+        // west of UTC (wrong month AND year).
+        ? formatUTCDate(o.timing.due, { month: 'short', year: 'numeric' }) : '',
     })), []);
   return (
     <View style={s.mini}>
@@ -117,7 +117,7 @@ export default function HomeSections() {
   const nie = useMemo(() => CATALOG.find(o => o.id === 'nie')!, []);
   const NIE_TITLE = displayTitle(nie);
   const NIE_DOMAIN = (() => { try { return new URL(nie.source_url!).hostname.replace(/^www\./, ''); } catch { return ''; } })();
-  const NIE_VERIFIED = new Date(verifiedOn(nie)).toLocaleDateString(dateLocale(), { month: 'long', year: 'numeric' });
+  const NIE_VERIFIED = formatUTCDate(new Date(verifiedOn(nie)), { month: 'long', year: 'numeric' });
   return (
     <View>
       {/* How it works = the demo */}

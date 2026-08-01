@@ -23,10 +23,12 @@ import { formatEur, lineCostDisplay, budgetHeadline } from '@/lib/budgetFormat';
 import { displayTitle } from '@/lib/catalogTitles';
 import { capture } from '@/lib/analytics';
 
-// WEB-ONLY turn-on (user directive 2026-07-31: do NOT enable on iOS/Android until we're well into
-// web testing). Gating by platform makes native STRUCTURALLY off — a stray OTA can't arm it — while
-// web is on by default. `EXPO_PUBLIC_BUDGET_ENABLED=0` is a kill switch that needs no code change.
-export const BUDGET_ENABLED = Platform.OS === 'web' && process.env.EXPO_PUBLIC_BUDGET_ENABLED !== '0';
+// Web is on by default; native stays OFF until device-verified (Redmi pass) — arm it by setting
+// EXPO_PUBLIC_BUDGET_NATIVE=1 in that build's EAS env. Native stays STRUCTURALLY dark otherwise: a
+// stray OTA can't arm it (the flag isn't set on existing builds), and web deploys don't touch it.
+// `EXPO_PUBLIC_BUDGET_ENABLED=0` is the web kill switch. (staged 2026-08-01 for native enablement.)
+export const BUDGET_ENABLED = process.env.EXPO_PUBLIC_BUDGET_ENABLED !== '0'
+  && (Platform.OS === 'web' || process.env.EXPO_PUBLIC_BUDGET_NATIVE === '1');
 
 type Patch = (patch: Record<string, unknown>) => void;
 

@@ -11,20 +11,23 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { palette } from '@/constants/Colors';
-import { dateLocale } from '@/lib/i18n';
+import { formatUTCDate } from '@/lib/utcDate';
 import type { Profile } from '@/core/interview-controller';
 import { simulateArrival, taxResidencyFirstYear } from '@/core/timeline';
 import { capture } from '@/lib/analytics';
 
-export const TIMELINE_ENABLED = Platform.OS === 'web' && process.env.EXPO_PUBLIC_TIMELINE_ENABLED !== '0';
+// Web on by default; native OFF until device-verified — arm with EXPO_PUBLIC_TIMELINE_NATIVE=1 in
+// the build's EAS env (same staged-enablement pattern as BUDGET_ENABLED; a stray OTA can't arm it).
+export const TIMELINE_ENABLED = process.env.EXPO_PUBLIC_TIMELINE_ENABLED !== '0'
+  && (Platform.OS === 'web' || process.env.EXPO_PUBLIC_TIMELINE_NATIVE === '1');
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
-// The engine and core/timeline build every date as UTC midnight (new Date('YYYY-MM-DD')). Format in
-// UTC too, or a browser west of Greenwich renders each one a day early — a 1 Jul arrival would show
-// "Jun 30" for a US user while the tax card said July. timeZone:'UTC' keeps display == the picked day.
-const monthName = (iso: string, style: 'short' | 'long') =>
-  new Date(iso).toLocaleDateString(dateLocale(), { month: style, timeZone: 'UTC' });
-const fmtDate = (d: Date) => d.toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+// The engine and core/timeline build every date as UTC midnight (new Date('YYYY-MM-DD')). Render the
+// UTC calendar day, or a viewer west of Greenwich sees each one a day early — a 1 Jul arrival would
+// show "Jun 30" for a US user while the tax card said July. formatUTCDate (lib/utcDate) does this
+// WITHOUT Intl's timeZone option, which is unreliable under Hermes on native.
+const monthName = (iso: string, style: 'short' | 'long') => formatUTCDate(new Date(iso), { month: style });
+const fmtDate = (d: Date) => formatUTCDate(d, { day: 'numeric', month: 'short', year: 'numeric' });
 
 const MK_DOT: Record<string, string> = {
   arrival: palette.cobalt, tax_resident: palette.amber, visa: palette.olive,

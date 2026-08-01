@@ -6,6 +6,7 @@
  */
 import { Platform, Linking } from 'react-native';
 import i18n, { dateLocale } from '@/lib/i18n';
+import { formatUTCDate } from '@/lib/utcDate';
 import { displayTitle } from '@/lib/catalogTitles';
 import { palette } from '@/constants/Colors';
 import { type Objective, type Phase } from '@/core/engine-controller';
@@ -72,9 +73,9 @@ export function formatVerified(iso: string): string {
 // the step's own scheduled due date when there is one.
 export function completionLine(obj: Objective): string {
   const on = obj.completedOn!;
-  // timeZone:'UTC' — engine dates are UTC-midnight instants; render them as that calendar day
-  // regardless of the viewer's timezone (else they show a day early west of UTC).
-  const dateStr = on.toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+  // Engine dates are UTC-midnight instants; render as that calendar day on every engine/timezone
+  // (formatUTCDate is Hermes-safe — no Intl timeZone reliance, so it's correct on native too).
+  const dateStr = formatUTCDate(on, { day: 'numeric', month: 'short', year: 'numeric' });
   if (obj.timing.state !== 'scheduled') return tf('completion.bare', { date: dateStr });
   const delta = daysBetween(on, obj.timing.due);
   const mag = Math.abs(delta);
@@ -139,8 +140,8 @@ export function timingDetail(obj: Objective): string {
 
 export function formatTiming(obj: Objective): string {
   const t = obj.timing;
-  // timeZone:'UTC' — see completionLine: engine dates are UTC-midnight, render as that calendar day.
-  const fmt = (d: Date) => d.toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+  // Hermes-safe UTC-day render — see completionLine / lib/utcDate.
+  const fmt = (d: Date) => formatUTCDate(d, { day: 'numeric', month: 'short', year: 'numeric' });
   if (t.state === 'scheduled') return tf(t.estimated ? 'timing.dueEst' : 'timing.due', { date: fmt(t.due) });
   if (t.state === 'recurring') return tf('timing.nextDue', { date: fmt(t.nextDue) });
   const anchorKey = `timing.anchor.${t.anchor}`;
