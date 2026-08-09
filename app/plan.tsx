@@ -335,58 +335,70 @@ export default function PlanScreen() {
           <Text style={styles.scopeNote}>{t('scopeNote')}</Text>
         )}
 
-        <View style={styles.toolbarRow}>
-          <View style={styles.viewToggle}>
-            <TouchableOpacity
-              style={[styles.viewToggleBtn, view === 'week' && styles.viewToggleBtnActive]}
-              onPress={() => { setView('week'); capture('plan_view_toggled', { view: 'week' }); }}
-            >
-              <Text style={[styles.viewToggleText, view === 'week' && styles.viewToggleTextActive]}>
-                {week.overdue.length > 0 ? t('toolbar.thisWeekOverdue', { count: week.overdue.length }) : t('toolbar.thisWeek')}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.viewToggleBtn, view === 'all' && styles.viewToggleBtnActive]}
-              onPress={() => { setView('all'); capture('plan_view_toggled', { view: 'all' }); }}
-            >
-              <Text style={[styles.viewToggleText, view === 'all' && styles.viewToggleTextActive]}>{t('toolbar.fullRoadmap')}</Text>
-            </TouchableOpacity>
-            {BUDGET_ENABLED && (
+        {/* Two rows so nothing clips on phones (bug bash 2026-08-09): the view tabs live in a
+            horizontal scroller (swipeable, never clips even with "· N overdue" or long locales),
+            and the PDF/Share actions get their own always-visible row below. */}
+        <View style={styles.toolbarCol}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.viewToggleScroll}
+            contentContainerStyle={styles.viewToggleScrollContent}
+          >
+            <View style={styles.viewToggle}>
               <TouchableOpacity
-                style={[styles.viewToggleBtn, view === 'costs' && styles.viewToggleBtnActive]}
-                onPress={() => { setView('costs'); capture('plan_view_toggled', { view: 'costs' }); }}
+                style={[styles.viewToggleBtn, view === 'week' && styles.viewToggleBtnActive]}
+                onPress={() => { setView('week'); capture('plan_view_toggled', { view: 'week' }); }}
               >
-                <Text style={[styles.viewToggleText, view === 'costs' && styles.viewToggleTextActive]}>{t('budget.tab')}</Text>
+                <Text style={[styles.viewToggleText, view === 'week' && styles.viewToggleTextActive]}>
+                  {week.overdue.length > 0 ? t('toolbar.thisWeekOverdue', { count: week.overdue.length }) : t('toolbar.thisWeek')}
+                </Text>
               </TouchableOpacity>
-            )}
-            {TIMELINE_ENABLED && (
               <TouchableOpacity
-                style={[styles.viewToggleBtn, view === 'timing' && styles.viewToggleBtnActive]}
-                onPress={() => { setView('timing'); capture('plan_view_toggled', { view: 'timing' }); }}
+                style={[styles.viewToggleBtn, view === 'all' && styles.viewToggleBtnActive]}
+                onPress={() => { setView('all'); capture('plan_view_toggled', { view: 'all' }); }}
               >
-                <Text style={[styles.viewToggleText, view === 'timing' && styles.viewToggleTextActive]}>{t('timeline.tab')}</Text>
+                <Text style={[styles.viewToggleText, view === 'all' && styles.viewToggleTextActive]}>{t('toolbar.fullRoadmap')}</Text>
               </TouchableOpacity>
-            )}
+              {BUDGET_ENABLED && (
+                <TouchableOpacity
+                  style={[styles.viewToggleBtn, view === 'costs' && styles.viewToggleBtnActive]}
+                  onPress={() => { setView('costs'); capture('plan_view_toggled', { view: 'costs' }); }}
+                >
+                  <Text style={[styles.viewToggleText, view === 'costs' && styles.viewToggleTextActive]}>{t('budget.tab')}</Text>
+                </TouchableOpacity>
+              )}
+              {TIMELINE_ENABLED && (
+                <TouchableOpacity
+                  style={[styles.viewToggleBtn, view === 'timing' && styles.viewToggleBtnActive]}
+                  onPress={() => { setView('timing'); capture('plan_view_toggled', { view: 'timing' }); }}
+                >
+                  <Text style={[styles.viewToggleText, view === 'timing' && styles.viewToggleTextActive]}>{t('timeline.tab')}</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </ScrollView>
+          <View style={styles.toolbarActions}>
+            {/* The report: a pure function of the plan (THESIS piece 4). Web → print dialog
+                ("Save as PDF"); native → real PDF into the share sheet. */}
+            <TouchableOpacity
+              onPress={() => {
+                capture('plan_pdf_exported');
+                exportPdf(reportHtml(objectives, new Date(), currentLang())).catch(() => {});
+              }}
+              accessibilityLabel={t('toolbar.exportA11y')}
+            >
+              <Text style={styles.exportLink}>{t('toolbar.exportPdf')}</Text>
+            </TouchableOpacity>
+            {/* Read-only share link (TODO 24): the dialog carries the privacy caveat —
+                the link encodes the profile (lib/shareLink.ts). */}
+            <TouchableOpacity
+              onPress={() => { setShareCopied(false); setShareOpen(true); }}
+              accessibilityLabel={t('share.a11y')}
+            >
+              <Text style={styles.exportLink}>{t('share.button')}</Text>
+            </TouchableOpacity>
           </View>
-          {/* The report: a pure function of the plan (THESIS piece 4). Web → print dialog
-              ("Save as PDF"); native → real PDF into the share sheet. */}
-          <TouchableOpacity
-            onPress={() => {
-              capture('plan_pdf_exported');
-              exportPdf(reportHtml(objectives, new Date(), currentLang())).catch(() => {});
-            }}
-            accessibilityLabel={t('toolbar.exportA11y')}
-          >
-            <Text style={styles.exportLink}>{t('toolbar.exportPdf')}</Text>
-          </TouchableOpacity>
-          {/* Read-only share link (TODO 24): the dialog carries the privacy caveat —
-              the link encodes the profile (lib/shareLink.ts). */}
-          <TouchableOpacity
-            onPress={() => { setShareCopied(false); setShareOpen(true); }}
-            accessibilityLabel={t('share.a11y')}
-          >
-            <Text style={styles.exportLink}>{t('share.button')}</Text>
-          </TouchableOpacity>
         </View>
 
         <View style={styles.statsRow}>
@@ -784,8 +796,10 @@ const styles = StyleSheet.create({
 
   heading:       { fontFamily: 'Fraunces_600SemiBold', fontSize: 28, color: palette.indigo, marginBottom: 16 },
 
-  toolbarRow:    { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-                   marginBottom: 16, gap: 10 },
+  toolbarCol:    { marginBottom: 16, gap: 8 },
+  viewToggleScroll:        { flexGrow: 0 },
+  viewToggleScrollContent: { paddingRight: 4 },
+  toolbarActions: { flexDirection: 'row', alignItems: 'center', gap: 8, alignSelf: 'flex-end' },
   exportLink:    { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 13, color: palette.cobalt,
                    paddingVertical: 8, paddingHorizontal: 6 },
   viewToggle:    { flexDirection: 'row', backgroundColor: '#EEE9E0', borderRadius: 10, padding: 3,

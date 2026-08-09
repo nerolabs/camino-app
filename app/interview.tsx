@@ -759,7 +759,7 @@ export default function InterviewScreen() {
       <ScrollView
         ref={scrollRef}
         style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, { paddingBottom: 28 + insets.bottom }]}
         // New turns snap flush-bottom in the same frame they render (animated:false) — the
         // animated version let the question paint below the fold and glide up (user finding
         // 2026-07-10 on device: 'doesn't feel good').
@@ -1022,7 +1022,7 @@ const styles = StyleSheet.create({
   scroll:        { flex: 1 },
   scrollContent: { flexGrow: 1, paddingVertical: 28, paddingHorizontal: 16, alignItems: 'center' },
   column:        { width: '100%', maxWidth: 640 },
-  answerPill: { alignSelf: 'flex-end', backgroundColor: palette.olive, borderRadius: 10, paddingHorizontal: 8, paddingVertical: 3, marginTop: -6, marginBottom: 12 },
+  answerPill: { alignSelf: 'flex-end', backgroundColor: palette.olive, borderRadius: 10, paddingHorizontal: 8, paddingVertical: 3, marginTop: 4, marginBottom: 12 },
   answerPillText: { fontFamily: 'HankenGrotesk_600SemiBold', fontSize: 11, color: palette.cal },
   lolaBubble: {
     alignSelf: 'flex-start', backgroundColor: '#FFFFFF',

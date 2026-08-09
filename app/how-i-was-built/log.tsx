@@ -810,6 +810,16 @@ const ROWS: Row[] = [
       'The same slip, first spotted on one screen, was chased to its root across the whole engine rather than patched only where it showed.',
     ],
   },
+  {
+    feature: 'A tester bug bash tightens the small screens — nothing gets clipped',
+    date: '9 Aug 2026',
+    work: 'With real testers now running the Android closed test, the first bugs they found were all about the same thing: content squeezed off the edge of a phone. On the roadmap the row of view tabs (This week / Full roadmap / Costs / Timing) plus the PDF and Share buttons was crammed onto one line, so on a narrow screen the Share button was clipped and — worse on Android, where the system font runs wider — the whole right side vanished. And during the interview, the last row of answer chips could hide behind Android\'s on-screen navigation bar. The fix splits the roadmap controls into two rows: the view tabs now swipe sideways in their own scroller so they never clip no matter the language, and PDF/Share get their own always-visible line beneath. The interview now pads its answers by the exact height of the device\'s bottom navigation bar, so the last chip always clears it.',
+    decisions: [
+      'The people testing the app find the bugs the builder can\'t — the builder\'s screen is never the smallest one, and never has Android\'s gesture bar in the way.',
+      'Ship the fix as an over-the-air update: it\'s all layout, so testers get it automatically on next open, and it never disturbs the 14-day closed-test clock.',
+      'Design for the tightest case on purpose — swipeable tabs and safe-area padding mean long translations and edge-to-edge Android screens can\'t reintroduce the clip.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {
