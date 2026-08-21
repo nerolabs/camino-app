@@ -13,7 +13,7 @@ import { siteJsonLd } from '@/core/guide-content';
 import { CATALOG } from '@/core/engine-controller';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
-import StoreBadges, { APP_STORE_URL } from '@/components/StoreBadges';
+import StoreBadges, { APP_STORE_URL, GOOGLE_PLAY_URL } from '@/components/StoreBadges';
 import AndroidBetaOptIn from '@/components/AndroidBetaOptIn';
 import HomeSections from '@/components/landing/HomeSections';
 
@@ -138,7 +138,7 @@ export default function LandingPage() {
       {/* Android-only recruitment for the closed beta (dormant until ANDROID_BETA_JOIN_URL is set). */}
       <AndroidBetaOptIn />
 
-      <StoreBadges iosUrl={APP_STORE_URL} />
+      <StoreBadges iosUrl={APP_STORE_URL} androidUrl={GOOGLE_PLAY_URL} />
 
       <Footer />
 

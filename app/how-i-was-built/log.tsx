@@ -820,6 +820,16 @@ const ROWS: Row[] = [
       'Design for the tightest case on purpose — swipeable tabs and safe-area padding mean long translations and edge-to-edge Android screens can\'t reintroduce the clip.',
     ],
   },
+  {
+    feature: '🎉 Get Camino is live on Google Play',
+    date: '22 Aug 2026',
+    work: 'The Android app cleared Google\'s review and went live on the Play Store worldwide (all 177 countries), joining the iPhone app and the web. It came after the full closed-testing gauntlet — a dozen real testers running the app for two continuous weeks — and Google\'s production-access review. The first production submission was rejected: a reviewer opened the optional "Sign in" screen and treated it as a required login wall, even though the entire app (interview, roadmap, costs, timing, sharing) works with no account. The fix was to state that plainly in the store\'s reviewer-access declaration — no sign-in required, plus step-by-step instructions to reach every feature without one — and resubmit. Google approved it on the next pass and auto-published it.',
+    decisions: [
+      'Tell the reviewer the truth instead of faking a demo login: the honest declaration ("no account needed, here\'s how to use it") is backed by the actual code — the interview saves locally and the roadmap renders with no signed-in user — so no fabricated credentials were ever submitted to Google.',
+      'Verify the claim before declaring it: a fresh read of the auth flow confirmed sign-in is genuinely optional and dismissible before writing a single word to the declaration.',
+      'Reuse the tester-vetted build, don\'t rebuild: production shipped the exact binary the closed testers ran, so there were no new surprises and no extra build cost.',
+    ],
+  },
 ];
 
 export default function BuildLogScreen() {

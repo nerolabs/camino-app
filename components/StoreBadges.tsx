@@ -4,10 +4,11 @@ import { palette } from '@/constants/Colors';
 
 // Store-availability band. A store's pill is an honest "coming soon" stub until its listing
 // is actually live, then its URL flips it to a "Download on the …" link (per-pill — iOS went
-// live 2026-07-25, Google Play still pending). Deliberately NOT Apple/Google's official badge
-// artwork: brand guidelines forbid it without a live listing on Google's side, and one visual
-// system for both pills beats mixing official artwork with a custom stub.
+// live 2026-07-25, Google Play went live 2026-08-22, so both pills are now real links).
+// Deliberately NOT Apple/Google's official badge artwork: one visual system for both pills beats
+// mixing official artwork with a custom stub.
 export const APP_STORE_URL = 'https://apps.apple.com/app/get-camino-your-road-to-spain/id6786412055';
+export const GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.aelaboratories.getcamino';
 
 // WEB-ONLY. App Review rejected build 40 under Guideline 2.3.10 (2026-07-21) for the
 // "Google Play" pill this band shows — no rival-store references may ship in the iOS binary,

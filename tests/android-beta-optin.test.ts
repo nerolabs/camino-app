@@ -25,11 +25,12 @@ describe('androidBetaVisible', () => {
     expect(androidBetaVisible('web', true, '')).toBe(false);
   });
 
-  it('is LIVE (2026-07-31): join URL points at the android-beta contact funnel and the band shows for Android web', () => {
-    // Tripwire: recruitment is open. If the band is ever taken dormant again, set the URL back
-    // to '' and restore the dormant assertion (androidBetaVisible('web', true) === false).
-    expect(ANDROID_BETA_JOIN_URL.length).toBeGreaterThan(0);
-    expect(ANDROID_BETA_JOIN_URL).toContain('/contact?topic=android-beta');
-    expect(androidBetaVisible('web', true)).toBe(true);
+  it('is DORMANT (2026-08-22): Android launched on Google Play, so closed-beta recruitment is closed', () => {
+    // Tripwire: the app is live, so the recruitment band must NOT show — an Android visitor is
+    // sent to the real Play Store listing (StoreBadges), not a closed-test signup. To reopen
+    // recruitment for a future closed test, set the URL back and restore the live assertion
+    // (androidBetaVisible('web', true) === true).
+    expect(ANDROID_BETA_JOIN_URL).toBe('');
+    expect(androidBetaVisible('web', true)).toBe(false);
   });
 });

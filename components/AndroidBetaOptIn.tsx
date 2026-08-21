@@ -9,14 +9,13 @@ import { palette } from '@/constants/Colors';
 // target users straight off the site: this band appears ONLY to Android web visitors and offers
 // them early access. iPhone/desktop visitors never see it (they'd get an app they can't install).
 //
-// LIVE 2026-07-31: recruitment opened once Play Integrity was proven on a real Android install and
-// the closed-test release (vc2) was submitted for review. The band points at the contact funnel
-// (?topic=android-beta) rather than the Play "Copy link" opt-in URL, because a Google Workspace
-// domain can't self-serve a Google Group and the opt-in link only enrolls emails already on the
-// tester list — so we COLLECT emails first: the recruit leaves an address, Andrew adds it to the
-// Play Console tester list, then sends them the opt-in link. Switch this to the direct opt-in link
-// later if we ever pre-authorise open enrolment. Set '' again to take the band dormant.
-export const ANDROID_BETA_JOIN_URL = 'https://getcamino.app/contact?topic=android-beta';
+// DORMANT again 2026-08-22: the Android app went LIVE on Google Play (public production), so
+// closed-beta recruitment is over — an Android web visitor is now sent to the real Play Store
+// listing by the StoreBadges band below, not to a closed-test signup. The band was LIVE
+// 2026-07-31 → 2026-08-22 pointing at the contact funnel (?topic=android-beta) to collect tester
+// emails during the 14-day closed-test clock. To reopen recruitment for a future closed test,
+// set this back to a join URL (contact funnel or a Play opt-in link).
+export const ANDROID_BETA_JOIN_URL = '';
 
 // Web-only + this-device-is-Android + recruitment actually open (a join URL is set). joinUrl is a
 // param so both branches are unit-testable; it defaults to the module constant for the real call.
