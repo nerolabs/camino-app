@@ -25,7 +25,7 @@ Keep this file honest: if a provider is added or dropped, update it in the same 
 
 | Provider | Role | Watch for |
 |---|---|---|
-| **Supabase** | Auth + database — **TWO projects**: production (`oftrpaleqtmuvolwsocd`) + staging. Don't miss the second | Free-tier inactivity pausing; billing email at org level |
+| **Supabase** | Auth + database — **TWO projects**: production (`oftrpaleqtmuvolwsocd`) + staging (`gsnsgfobfswazqhfcstx`). Don't miss the second | Free-tier inactivity pausing — both projects have a keepalive workflow (`production-keepalive.yml` daily, `staging-keepalive.yml` twice-weekly); a failing run = that project is (about to be) paused. Real long-term fix for the live app: upgrade production to Pro. Billing email at org level |
 | **PostHog** | Product analytics (EU cloud, cookieless on web; dashboard 808581) | 1M events/mo free — launch spikes could cross it |
 | **Sentry** | Error reporting (org `camino-ko`, EU ingest) + 1-min uptime monitor + alert emails | **Alerts go to member emails** — add/route andrew@getcamino.app or incidents go unseen |
 | **Resend** | All app email (welcome, weekly roundup, feedback relay), EU region; domain verified (DKIM + SPF via SES) | 3K emails/mo free tier; the weekly cron scales with users |
